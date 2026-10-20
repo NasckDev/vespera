@@ -38,5 +38,6 @@
   <!-- Dados reais (JSON, fora do LFS) usados pelos testes: o Core lê o mesmo arquivo que o jogo. -->
   <ItemGroup>
     <None Include="..\assets\sprites\atlas\atlas.json" Link="Data\atlas.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\src\Data\maps.json" Link="Data\maps.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>
