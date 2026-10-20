@@ -1,6 +1,11 @@
 # VÉSPERA — contexto do projeto para o Claude Code
 
 Este arquivo é a fonte de verdade do projeto. Leia inteiro antes de criar ou alterar qualquer coisa.
+
+> **Atualização 2026-10-20:** o protótipo **v2** virou a referência de jogo e arte. Antes de implementar, leia
+> [`docs/design/DECISIONS.md`](docs/design/DECISIONS.md) — ele **sobrepõe** este arquivo onde houver conflito
+> (mapas pintados + máscara, 10 selos com SSSS, filtro Linear, dados em JSON, logger `Log`, plugins adiados)
+> e as specs em `docs/design/prototype-v2/`. Playtest automático: `godot --headless --path . -- --smoke-test`.
 Idioma do código: inglês (classes, métodos, variáveis). Idioma de textos do jogo, commits e documentação: português (pt-BR).
 
 ---
