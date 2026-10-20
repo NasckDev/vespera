@@ -1,0 +1,124 @@
+name: Release
+
+# Tag v* → exporta Windows, Linux e macOS, publica no GitHub Releases e (se configurado) no itch.io.
+# Push em main → só gera os builds como artefatos (para testar antes de lançar).
+on:
+  push:
+    tags: ["v*"]
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+env:
+  GODOT_VERSION: 4.7.2
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  export:
+    name: Export ${{ matrix.preset }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - preset: Windows Desktop
+            channel: windows
+            output: build/windows/Vespera.exe
+          - preset: Linux
+            channel: linux
+            output: build/linux/Vespera.x86_64
+          - preset: macOS
+            channel: mac
+            output: build/macos/Vespera.zip
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          lfs: true
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Cache do Godot e templates
+        id: cache-godot
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/godot
+            ~/.local/share/godot/export_templates
+          key: godot-${{ env.GODOT_VERSION }}-mono-linux-templates
+
+      - name: Baixar Godot e export templates
+        if: steps.cache-godot.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ~/godot ~/.local/share/godot/export_templates
+          curl -sSL -o /tmp/godot.zip "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_mono_linux_x86_64.zip"
+          unzip -q /tmp/godot.zip -d ~/godot
+          curl -sSL -o /tmp/templates.tpz "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_mono_export_templates.tpz"
+          unzip -q /tmp/templates.tpz -d /tmp/tpl
+          mv /tmp/tpl/templates ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono
+
+      - name: Configurar caminho do Godot
+        run: echo "GODOT=$HOME/godot/Godot_v${GODOT_VERSION}-stable_mono_linux_x86_64/Godot_v${GODOT_VERSION}-stable_mono_linux.x86_64" >> "$GITHUB_ENV"
+
+      - name: Importar assets
+        run: timeout 600 "$GODOT" --headless --path . --import
+
+      - name: Exportar ${{ matrix.preset }}
+        run: |
+          mkdir -p "$(dirname '${{ matrix.output }}')"
+          timeout 900 "$GODOT" --headless --path . --export-release "${{ matrix.preset }}" "${{ matrix.output }}"
+          test -e "${{ matrix.output }}"
+
+      - name: Copiar licenças para o build
+        run: cp LICENSE LICENSE-ASSETS.md README.md "$(dirname '${{ matrix.output }}')/"
+
+      - name: Compactar
+        run: |
+          VERSION="${GITHUB_REF_NAME//\//-}"
+          cd "$(dirname '${{ matrix.output }}')"
+          zip -qr "$GITHUB_WORKSPACE/Vespera-${VERSION}-${{ matrix.channel }}.zip" .
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: vespera-${{ matrix.channel }}
+          path: Vespera-*-${{ matrix.channel }}.zip
+          retention-days: 14
+
+  publish:
+    name: Publicar release
+    needs: export
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: GitHub Release
+        uses: softprops/action-gh-release@v3
+        with:
+          files: dist/*.zip
+          generate_release_notes: true
+          prerelease: ${{ contains(github.ref_name, '-') }}
+
+      - name: itch.io (butler)
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+          ITCH_TARGET: ${{ vars.ITCH_TARGET }}
+        if: env.BUTLER_API_KEY != '' && env.ITCH_TARGET != ''
+        run: |
+          curl -sSL -o butler.zip https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default
+          unzip -q butler.zip -d butler && chmod +x butler/butler
+          for zip in dist/*.zip; do
+            channel="${zip##*-}"; channel="${channel%.zip}"
+            ./butler/butler push "$zip" "${ITCH_TARGET}:${channel}" --userversion "${GITHUB_REF_NAME}"
+          done
