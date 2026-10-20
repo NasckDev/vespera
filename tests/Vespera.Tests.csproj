@@ -24,6 +24,13 @@
     </PackageReference>
   </ItemGroup>
 
+  <!-- gdUnit4.api traz Godot.SourceGenerators por dependência; aqui não há scripts Godot, então removemos. -->
+  <Target Name="RemoveGodotSourceGenerators" BeforeTargets="CoreCompile">
+    <ItemGroup>
+      <Analyzer Remove="@(Analyzer)" Condition="'%(Filename)' == 'Godot.SourceGenerators'" />
+    </ItemGroup>
+  </Target>
+
   <ItemGroup>
     <ProjectReference Include="..\src\Core\Vespera.Core.csproj" />
   </ItemGroup>
