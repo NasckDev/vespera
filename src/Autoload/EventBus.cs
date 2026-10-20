@@ -104,6 +104,30 @@ public partial class EventBus : Node
     [Signal]
     public delegate void DayPhaseChangedEventHandler(int phase);
 
+    /// <summary>O World trocou de mapa (no meio do fade). Sistemas do mapa anterior devem se limpar.</summary>
+    [Signal]
+    public delegate void MapChangedEventHandler(string mapId, string mapName);
+
+    /// <summary>
+    /// Jogador apertou interagir num ponto do mapa. <paramref name="kind"/> = ação da v2 (<c>talkClerk</c>,
+    /// <c>openBoard</c>, <c>talkSmith</c>, <c>oficiosDialog</c>, <c>portalDialog</c>, <c>talkInn</c>, <c>restDialog</c>,
+    /// <c>talkGaspar</c>, <c>talkVesna</c>, <c>talkIvo</c>, <c>talkAbel</c>); <paramref name="id"/> = id do interagível no maps.json.
+    /// </summary>
+    [Signal]
+    public delegate void InteractionRequestedEventHandler(string kind, string id);
+
+    /// <summary>Jogador entrou andando na área de fuga (<c>back</c>) de uma dungeon: abrir o diálogo "Fugir para Lumeira".</summary>
+    [Signal]
+    public delegate void DungeonEscapeRequestedEventHandler(string mapId);
+
+    /// <summary>Jogador passou pela porta liberada da sala do tema (o World já leva para a Câmara do Núcleo).</summary>
+    [Signal]
+    public delegate void DungeonDoorEnteredEventHandler(string mapId);
+
+    /// <summary>Pede tremor de câmera. Intensidade na escala da v2 (px de tela a 720p; 8 = ruptura/chefe).</summary>
+    [Signal]
+    public delegate void CameraShakeRequestedEventHandler(float amount);
+
     // --- UI ---
     /// <summary>Texto do prompt de interação ("" esconde).</summary>
     [Signal]

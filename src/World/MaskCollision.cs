@@ -8,7 +8,8 @@ namespace Vespera.World;
 /// Gera a colisão de um mapa pintado a partir da máscara (branco = andável, preto = bloqueado).
 /// Cada pixel da máscara cobre <see cref="CellSize"/> pixels do mapa. As células bloqueadas são
 /// mescladas em retângulos (<see cref="WalkGrid.BlockedRects"/>), então o mapa inteiro vira poucas
-/// dezenas/centenas de colisores estáticos.
+/// dezenas/centenas de colisores estáticos. Uma moldura em volta da grade bloqueia o lado de fora
+/// (fora da máscara = bloqueado, DECISIONS D1).
 /// </summary>
 [GlobalClass]
 public partial class MaskCollision : StaticBody2D
@@ -25,24 +26,18 @@ public partial class MaskCollision : StaticBody2D
 
     public WalkGrid Grid { get; private set; } = null!;
 
+    /// <summary>A mesma máscara como área em u (teste de ponto, <c>CanStand</c>, <c>NearestWalkable</c>).</summary>
+    public MaskWalkArea WalkArea { get; private set; } = null!;
+
     public override void _Ready()
     {
         CollisionLayer = 1; // "world"
         CollisionMask = 0;
         Grid = ReadGrid(Mask.GetImage(), WalkableThreshold);
+        WalkArea = new MaskWalkArea(Grid, CellSize);
 
-        var rects = Grid.BlockedRects();
-        foreach (var rect in rects)
-        {
-            var size = new Vector2(rect.Width, rect.Height) * CellSize;
-            AddChild(new CollisionShape2D
-            {
-                Shape = new RectangleShape2D { Size = size },
-                Position = (new Vector2(rect.X, rect.Y) * CellSize) + (size / 2),
-            });
-        }
-
-        Log.Debug($"{Name}: {Grid.Width}x{Grid.Height} células → {rects.Count} colisores.");
+        var count = ShapeCollision.AddRectColliders(this, WalkArea.BlockedRects());
+        Log.Debug($"{Name}: {Grid.Width}x{Grid.Height} células → {count} colisores (com moldura).");
     }
 
     /// <summary>Posição de mundo ajustada para a célula andável mais próxima.</summary>
@@ -56,8 +51,7 @@ public partial class MaskCollision : StaticBody2D
             : localPosition;
     }
 
-    public bool IsWalkableAt(Vector2 localPosition) =>
-        Grid.IsWalkable((int)(localPosition.X / CellSize), (int)(localPosition.Y / CellSize));
+    public bool IsWalkableAt(Vector2 localPosition) => WalkArea.IsWalkable(localPosition.X, localPosition.Y);
 
     private static WalkGrid ReadGrid(Image image, float threshold)
     {

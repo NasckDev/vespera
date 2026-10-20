@@ -28,6 +28,9 @@ O **código** (tudo em `src/`, `tests/`, `tools/`, `scenes/` e arquivos de proje
 |---|---|---|
 | `assets/fonts/PixelifySans.ttf` | The Pixelify Sans Project Authors | SIL Open Font License 1.1 (`assets/fonts/PixelifySans-OFL.txt`) |
 | `assets/fonts/VT323-Regular.ttf` | The VT323 Project Authors | SIL Open Font License 1.1 (`assets/fonts/VT323-OFL.txt`) |
+| `assets/fonts/Cinzel.ttf` (variável, `Cinzel[wght].ttf` do Google Fonts) | The Cinzel Project Authors | SIL Open Font License 1.1 (`assets/fonts/Cinzel-OFL.txt`) |
+
+Arquivos de fonte (`*.ttf`) e seus `*-OFL.txt` **não** estão sob CC BY-NC-SA: seguem a licença OFL de cada projeto.
 
 ## Contribuições
 

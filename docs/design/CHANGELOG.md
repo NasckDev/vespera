@@ -2,6 +2,11 @@
 
 Uma linha por tarefa concluída, mais recente primeiro.
 
+- 2026-10-20 — Smoke do mundo: visita os 13 mapas pelas saídas reais (ida e volta), porta e fuga das Brechas, interagíveis, câmera e sprites, com prints. API em `api-mundo.md`; decisões D18–D24.
+- 2026-10-20 — Jogador com o visual da v2 (`AtlasSprite`, `c_{classe}_*`, sombra, bob), 78 u/s, círculo r=4 no pé, teclado e gamepad.
+- 2026-10-20 — Cena `World`: carrega qualquer mapa por id, colisão por máscara ou formas, saídas/porta/fuga pelo pé, `GoMap` com fade, interagíveis no EventBus, `WorldCamera`; Main → World na Guilda (Lumeira provisória removida).
+- 2026-10-20 — Core do mundo: `AtlasIndex`, `MapCatalog` + `src/Data/maps.json`, `ShapeWalkArea`/`MaskWalkArea`, `WalkPathfinder`, `CameraFraming`, com testes.
+- 2026-10-20 — Assets da v2: mapas, máscaras, atlas, 20 monstros e 36 ícones de `assets/src`, UI e fonte Cinzel; `assets/README.md` e exceções de fontes.
 - 2026-10-20 — Smoke: cenários de progressão (XP → Nível e os 10 Selos), economia (preços com arredondamento JS) e save → load.
 - 2026-10-20 — HUD e RankSeal com 10 Selos (cores de `ranks.json`, SSSS em estrela de oito pontas), Nível e Lumes.
 - 2026-10-20 — GameManager sobre o `GameState`; novos sinais de estado no EventBus; autoload `Database` carrega os JSON.

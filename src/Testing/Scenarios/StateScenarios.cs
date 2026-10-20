@@ -16,7 +16,7 @@ public partial class SmokeTest
     [SmokeScenario("progressão: XP sobe nível e selo", order: 10)]
     private async Task ProgressionRaisesLevelAndSeal()
     {
-        await WaitForScene("Lumeira", timeoutSeconds: 10);
+        await WaitForScene("World", timeoutSeconds: 10);
         var game = GameManager.Instance;
         game.NewGame("Rui", "sword");
         await NextPhysicsFrame();
@@ -76,7 +76,7 @@ public partial class SmokeTest
     [SmokeScenario("economia: comprar e pagar com arredondamento JS", order: 11)]
     private async Task EconomyUsesJsRounding()
     {
-        await WaitForScene("Lumeira", timeoutSeconds: 10);
+        await WaitForScene("World", timeoutSeconds: 10);
         var game = GameManager.Instance;
         game.NewGame("Rui", "sword");
         await NextPhysicsFrame();
@@ -126,7 +126,7 @@ public partial class SmokeTest
     [SmokeScenario("save → load roundtrip", order: 12)]
     private async Task SaveLoadRoundTrip()
     {
-        await WaitForScene("Lumeira", timeoutSeconds: 10);
+        await WaitForScene("World", timeoutSeconds: 10);
         var game = GameManager.Instance;
         game.NewGame("Lia", "bow");
         var state = game.State;

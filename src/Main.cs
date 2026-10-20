@@ -4,10 +4,10 @@ using Vespera.Testing;
 
 namespace Vespera;
 
-/// <summary>Cena de boot. Hoje vai direto para Lumeira; o menu inicial entra aqui depois.</summary>
+/// <summary>Cena de boot. Hoje vai direto para o World (novo jogo da v2: Guilda); o menu inicial entra aqui depois.</summary>
 public partial class Main : Node
 {
-    private const string FirstScene = "res://scenes/World/City/Lumeira.tscn";
+    private const string FirstScene = "res://scenes/World/World.tscn";
 
     public override void _Ready()
     {
