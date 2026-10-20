@@ -2,6 +2,8 @@
 
 Uma linha por tarefa concluída, mais recente primeiro.
 
+- 2026-10-20 — Áudio (correções): música por local sem depender de nomes (D22), crossfade sem cortes (D23), +12 dB no Master (D18), músicas pré-carregadas, `SetBusVolume(persist)` + `SaveSettings`, pitch limitado e cenários de smoke sem depender da cena Lumeira.
+- 2026-10-20 — Áudio: 18 SFX da v2 e 3 músicas em loop gerados por script, barramentos Master/Music/SFX/UI e `AudioManager` com pool, crossfade e volumes persistidos.
 - 2026-10-20 — Smoke do mundo: visita os 13 mapas pelas saídas reais (ida e volta), porta e fuga das Brechas, interagíveis, câmera e sprites, com prints. API em `api-mundo.md`; decisões D18–D24.
 - 2026-10-20 — Jogador com o visual da v2 (`AtlasSprite`, `c_{classe}_*`, sombra, bob), 78 u/s, círculo r=4 no pé, teclado e gamepad.
 - 2026-10-20 — Cena `World`: carrega qualquer mapa por id, colisão por máscara ou formas, saídas/porta/fuga pelo pé, `GoMap` com fade, interagíveis no EventBus, `WorldCamera`; Main → World na Guilda (Lumeira provisória removida).

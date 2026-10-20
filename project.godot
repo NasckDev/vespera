@@ -16,6 +16,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 EventBus="*res://src/Autoload/EventBus.cs"
+AudioManager="*res://src/Autoload/AudioManager.cs"
 SaveService="*res://src/Autoload/SaveService.cs"
 Database="*res://src/Autoload/Database.cs"
 GameManager="*res://src/Autoload/GameManager.cs"
