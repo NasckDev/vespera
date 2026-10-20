@@ -1,0 +1,28 @@
+{
+  "oficios": [
+    {
+      "map": "shop_arm",
+      "name": "Armaria Rubra",
+      "owner": "Gaspar",
+      "desc": "Infusões elementais para suas armas."
+    },
+    {
+      "map": "shop_mag",
+      "name": "Casa dos Feitiços",
+      "owner": "Vesna",
+      "desc": "Afinação de Ecos e grimórios."
+    },
+    {
+      "map": "shop_alq",
+      "name": "Alquimia do Ivo",
+      "owner": "Ivo",
+      "desc": "Poções e destilação de ervas."
+    },
+    {
+      "map": "shop_rel",
+      "name": "Oficina de Relíquias & Lanternas",
+      "owner": "Abel",
+      "desc": "Lanternas, escudos e relíquias."
+    }
+  ]
+}

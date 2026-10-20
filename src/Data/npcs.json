@@ -1,0 +1,232 @@
+{
+  "portraits": {
+    "Odete": "npc_odete_f",
+    "Brás": "npc_bras_f",
+    "Lúcia": "npc_bia_f",
+    "Vesna": "npc_vesna_f",
+    "Ivo": "npc_ivo_f",
+    "Sargento Lauro": "npc_lauro_f",
+    "Marta": "npc_marta_f",
+    "Faísca": "npc_faisca_f"
+  },
+  "walkers": [
+    {
+      "id": "lauro",
+      "name": "Sargento Lauro",
+      "map": "forge",
+      "hourFrom": 17,
+      "hourTo": 27,
+      "speed": 30,
+      "path": [
+        [
+          600,
+          500
+        ],
+        [
+          1100,
+          500
+        ],
+        [
+          1150,
+          640
+        ],
+        [
+          450,
+          560
+        ]
+      ],
+      "lines": [
+        "A Guarda segura a rua. As Brechas, quem segura são vocês.",
+        "Se ouvir o sino, é porque rompeu. Aí não tem Casa nem rank: todo mundo corre pra cá.",
+        "Já fui caçador. Hoje só carrego a lança e a lembrança."
+      ]
+    },
+    {
+      "id": "marta",
+      "name": "Marta",
+      "map": "forge",
+      "hourFrom": 16,
+      "hourTo": 21,
+      "speed": 22,
+      "path": [
+        [
+          250,
+          600
+        ],
+        [
+          420,
+          640
+        ],
+        [
+          300,
+          800
+        ]
+      ],
+      "lines": [
+        "Peixe fresco não tem mais. O Mercado virou Brecha de novo.",
+        "Meu avô dizia que a água do mercado lembra de tudo. Até do que nunca aconteceu.",
+        "Quebra a barbatana do bicho, caçador. Escama abissal paga meu mês."
+      ]
+    },
+    {
+      "id": "faisca",
+      "name": "Faísca",
+      "map": "forge",
+      "hourFrom": 16,
+      "hourTo": 23,
+      "speed": 36,
+      "path": [
+        [
+          590,
+          470
+        ],
+        [
+          960,
+          520
+        ],
+        [
+          1060,
+          350
+        ],
+        [
+          200,
+          420
+        ]
+      ],
+      "lines": [
+        "Eu acendo as lanternas da rua toda véspera. Se eu esquecer uma, alguém não volta.",
+        "O Abel diz que toda lanterna guarda um pedaço de quem a carregou.",
+        "Quando sua lanterna apagar lá dentro, não tenha vergonha. Todo mundo já esperou alguém ir buscar."
+      ]
+    },
+    {
+      "id": "vesna",
+      "name": "Vesna",
+      "map": "guild",
+      "hourFrom": 18,
+      "hourTo": 24,
+      "speed": 24,
+      "path": [
+        [
+          140,
+          410
+        ],
+        [
+          350,
+          410
+        ],
+        [
+          250,
+          330
+        ]
+      ],
+      "lines": [
+        "Ecos não são poderes. São lembranças de monstros que se recusam a ir embora.",
+        "Na Casa dos Feitiços eu afino Ecos. Menos essência, mesmo efeito.",
+        "Dois caçadores do mesmo rank nunca lutam igual. A diferença é o que eles absorveram."
+      ]
+    }
+  ],
+  "dialogue": {
+    "odete": {
+      "greetings": [
+        "Outra véspera, {name}. O mural mostra onde as Brechas abriram.",
+        "Lumeira ainda está de pé. Em parte, por sua causa.",
+        "Feche as Brechas antes que rompam. A cidade é bonita, mas é frágil."
+      ],
+      "lostLantern": [
+        "Sua lanterna ficou lá dentro, não foi? Alguém vai trazer. Sempre trazem."
+      ],
+      "delivered": [
+        "Lanternas de {names}. Eles vão poder voltar à Brecha amanhã. A Guilda paga {lumes} Lumes, e a gratidão vem de graça."
+      ],
+      "rescue": [
+        "Vou mandar alguém da Casa da Maré. Se a Brecha não romper antes, ela volta logo."
+      ],
+      "aboutBrechas": [
+        "Cada Brecha herda o bairro e a estação onde abriu. Se ninguém fecha a tempo, ela rompe: monstros na rua, forja fechada, pão mais caro. A cidade sente tudo o que vocês deixam de fazer."
+      ],
+      "aboutMonsters": [
+        "Eles têm partes. O que você quebra é o que você leva: mandíbula dá Presa, dorso dá Minério. Quebre a Isca de um Abissal e ele não te encanta mais. Ataque pelas costas para chegar nas partes de trás."
+      ],
+      "aboutSeals": [
+        "Seu Selo é {rank}, {title}. {next}Lá no topo existe o Alvor, o caçador que faz amanhecer. Ninguém aqui viu um. Ainda."
+      ],
+      "aboutSealsNext": [
+        "Faltam {xp} de experiência para o Selo {nextRank}. "
+      ],
+      "rankUpChat": [
+        "O Selo de {name} mudou para {rank}. Lumeira agradece."
+      ],
+      "welcomeChat": [
+        "Bem-vindo de volta à Guilda dos Lanterneiros."
+      ],
+      "tutorial": [
+        "Então você é {name}. A lanterna que trouxe era de alguém daqui, sabia? Ela escolheu você. Eu sou Odete, cuido da Guilda dos Lanterneiros.",
+        "Você escolheu a {class}. É para sempre: aqui ninguém troca de arma no meio do caminho. Equipamentos também têm Selo e às vezes classe. O que não for seu fica trancado, mas pode ser desmontado.",
+        "Seu Golpe Supremo, {ultimate}, sai com a tecla F e recarrega com o tempo. Guarde para quando a coisa apertar. O Diário, no menu Esc, mostra o que fazer a seguir. Venha falar comigo no balcão quando quiser."
+      ],
+      "tutorialNote": [
+        "Missão nova no Diário: fale com Odete no balcão."
+      ]
+    },
+    "bras": {
+      "greetings": [
+        "O fogo não pergunta de onde veio o minério. Só se é bom.",
+        "Traga partes, não desculpas. Cada monstro dá o que você arranca dele.",
+        "A Casa da Maré adotou esta rua. Desconto de 10% pra todo mundo, por enquanto."
+      ],
+      "lateNight": [
+        "Devia estar dormindo. Mas o fogo pede, e eu obedeço. O que vai ser?"
+      ],
+      "invasion": [
+        "Agora não! Tem monstro na minha rua. Limpa isso e eu reabro a forja."
+      ],
+      "upgrade": [
+        "Cada nível aumenta o dano em 22%. Lâmina e Adagas pedem Presas; Arco, Vidro-lume; Martelo, Minério; Cajado, Estilhaços."
+      ],
+      "gear": [
+        "Equipamento bom vem de monstro bem quebrado. Escama, corrente, vidro: tudo vira alguma coisa aqui."
+      ],
+      "unlockRefusal": [
+        "Não forjo arma de outra classe pra você. Quem escolhe a {class} vive com ela. Mas posso deixar essa arma mais afiada do que você imagina."
+      ]
+    },
+    "lucia": {
+      "greetings": [
+        "Senta, come alguma coisa. A cidade aguenta mais um pouco.",
+        "Você tá com cara de quem viu um Ceifador. Uma sopa resolve metade disso.",
+        "Os caçadores entram, os caçadores voltam. Eu só mantenho a chaleira quente."
+      ],
+      "invasion": [
+        "Ouviu? Rompeu. Tranquei a porta dos fundos. Se for sair, leva uma poção."
+      ]
+    },
+    "gaspar": {
+      "greetings": [
+        "Cada monstro tem uma luz que o fere e outra que ele bebe. Acerte a fraqueza e o golpe vale meio a mais."
+      ],
+      "weapon": [
+        "Lobos e espectros odeiam o Sol. Besouros apagam na Maré. Golems queimam. O Arauto... dizem que só a Lua o alcança."
+      ]
+    },
+    "vesna": {
+      "greetings": [
+        "Deixa eu ouvir seus Ecos. Dá pra afinar: mesma lembrança, menos essência."
+      ],
+      "noEcos": [
+        "Você ainda não carrega nenhum Eco. Chefes às vezes deixam um quando caem. Volte quando ouvir alguém sussurrando dentro de você."
+      ]
+    },
+    "ivo": {
+      "greetings": [
+        "Erva-de-Véspera, um pouco de brasa e paciência. É tudo o que uma poção precisa. A paciência eu cobro à parte."
+      ]
+    },
+    "abel": {
+      "greetings": [
+        "Toda lanterna guarda um pedaço de quem a carregou. Escolha uma que mereça o seu."
+      ]
+    }
+  }
+}
