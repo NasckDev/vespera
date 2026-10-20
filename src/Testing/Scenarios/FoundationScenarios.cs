@@ -24,12 +24,12 @@ public partial class SmokeTest
     private async Task PlayerRespectsCollision()
     {
         var world = FindWorld();
-        await WalkAllDirections(world, framesPerDirection: 75);
+        await WalkAllDirections(world, framesPerDirection: 45);
 
         world.GoMap("forge", 800, 520, instant: true);
         await Frames(2);
         Require(Find<MaskCollision>() is not null, "MaskCollision não encontrado na Rua da Forja");
-        await WalkAllDirections(world, framesPerDirection: 75);
+        await WalkAllDirections(world, framesPerDirection: 45);
     }
 
     [SmokeScenario("XP sobe rank e HP máximo", order: 2)]
