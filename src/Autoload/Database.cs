@@ -19,6 +19,9 @@ public partial class Database : Node
     /// <summary>Banco de dados do jogo. Carregado no <c>_EnterTree</c> deste autoload.</summary>
     public static GameDatabase Db => _db ?? throw new System.InvalidOperationException("Database ainda não foi carregado (autoload fora de ordem?).");
 
+    /// <summary>False no editor (sem autoloads) ou se a carga falhou.</summary>
+    public static bool IsLoaded => _db is not null;
+
     public override void _EnterTree()
     {
         Instance = this;
