@@ -259,6 +259,12 @@ public partial class World : Node2D
 
         Log.Info($"Mapa: {map.Id} ({map.Name}) em ({Player.GlobalPosition.X:0}, {Player.GlobalPosition.Y:0}).");
         EventBus.Instance.EmitSignal(EventBus.SignalName.MapChanged, map.Id, map.Name);
+        if (map.Dungeon)
+        {
+            // Brechas tocam a música da cidade invertida, com reverb (GDD §6, D36).
+            AudioManager.Instance?.RegisterLocationMusic(map.Name, "brecha", reverb: true);
+        }
+
         EventBus.Instance.EmitSignal(EventBus.SignalName.LocationChanged, map.Name);
     }
 
