@@ -128,6 +128,63 @@ public partial class EventBus : Node
     [Signal]
     public delegate void CameraShakeRequestedEventHandler(float amount);
 
+    // --- Contratos da Fase B (docs/design/contratos-fase-b.md) ---
+    /// <summary>Cidade → todos: um portal de Brecha abriu na véspera (spot do maps.json, tema, rank sorteado).</summary>
+    [Signal]
+    public delegate void PortalOpenedEventHandler(int portalSpot, string themeId, int rank);
+
+    /// <summary>Cidade → todos: o portal fechou (Brecha limpa, ignorada até romper, ou novo dia).</summary>
+    [Signal]
+    public delegate void PortalClosedEventHandler(int portalSpot);
+
+    /// <summary>UI → Combate: o jogador confirmou entrar na Brecha deste portal.</summary>
+    [Signal]
+    public delegate void BrechaStartRequestedEventHandler(int portalSpot);
+
+    /// <summary>Combate → todos: a Brecha começou (mapa de dungeon carregado, ondas vão começar).</summary>
+    [Signal]
+    public delegate void BrechaStartedEventHandler(string themeId, int rank);
+
+    /// <summary>Combate → todos: a Brecha terminou. <paramref name="cleared"/> = chefe derrotado; false = fuga ou morte.</summary>
+    [Signal]
+    public delegate void BrechaEndedEventHandler(string themeId, bool cleared);
+
+    /// <summary>Cidade → Combate: a Brecha ignorada rompeu; monstros invadem a Rua da Forja.</summary>
+    [Signal]
+    public delegate void InvasionRequestedEventHandler(string themeId, int rank);
+
+    /// <summary>Combate → todos: invasão começou/acabou (preços sobem 35% durante, PriceCalculator).</summary>
+    [Signal]
+    public delegate void InvasionStateChangedEventHandler(bool active);
+
+    /// <summary>UI → Combate: o jogador escolheu voltar depois da tela de morte (aplica LanternRules).</summary>
+    [Signal]
+    public delegate void RespawnRequestedEventHandler();
+
+    /// <summary>Combate → HUD: arma ativa trocou (sword, bow, staff, hammer, dag).</summary>
+    [Signal]
+    public delegate void WeaponChangedEventHandler(string weaponId);
+
+    /// <summary>Combate → HUD: Essência (barra do Golpe Supremo).</summary>
+    [Signal]
+    public delegate void EssenceChangedEventHandler(float current, float max);
+
+    /// <summary>Combate → HUD: recarga de uma habilidade (<c>dash</c>, <c>potion</c>, <c>eco0</c>, <c>eco1</c>, <c>ultimate</c>).</summary>
+    [Signal]
+    public delegate void AbilityCooldownChangedEventHandler(string abilityId, float remaining, float total);
+
+    /// <summary>Qualquer sistema → UI: pergunta com opções (ex.: "Fugir para Lumeira?"). A UI responde com <see cref="ChoiceMade"/>.</summary>
+    [Signal]
+    public delegate void ChoiceRequestedEventHandler(string requestId, string speaker, string text, string[] options);
+
+    /// <summary>UI → quem perguntou: opção escolhida (índice em <c>options</c>, ou -1 se cancelou).</summary>
+    [Signal]
+    public delegate void ChoiceMadeEventHandler(string requestId, int optionIndex);
+
+    /// <summary>UI → todos: jogo pausado/despausado (o relógio do dia para; combate congela).</summary>
+    [Signal]
+    public delegate void PauseChangedEventHandler(bool paused);
+
     // --- UI ---
     /// <summary>Texto do prompt de interação ("" esconde).</summary>
     [Signal]
