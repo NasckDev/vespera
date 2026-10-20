@@ -1,0 +1,35 @@
+# Licença dos assets — CC BY-NC-SA 4.0
+
+A arte, os mapas, o áudio, a lore e a identidade visual do **Véspera** são licenciados sob a
+[Creative Commons Atribuição-NãoComercial-CompartilhaIgual 4.0 Internacional](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.pt-br)
+([texto legal completo](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.pt)).
+
+## O que isso cobre
+
+| Caminho | Conteúdo |
+|---|---|
+| `assets/sprites/`, `assets/maps/`, `assets/tilesets/`, `assets/audio/` | Sprites, mapas pintados, máscaras de colisão, sons e músicas |
+| `docs/brand/` | Logo, key art, conceitos de personagem, selos de rank, paleta |
+| `docs/design/` | GDD, lore, personagens, bestiário e textos do jogo |
+| `icon.svg` | Ícone do app |
+
+O **código** (tudo em `src/`, `tests/`, `tools/`, `scenes/` e arquivos de projeto/build) usa a licença **MIT** — veja [`LICENSE`](LICENSE).
+
+## Em resumo
+
+- ✅ Você pode copiar, remixar e criar a partir dos assets.
+- ✅ Dê crédito: "Véspera — arte por Alexandre Nascimento e contribuidores (CC BY-NC-SA 4.0)".
+- ✅ Obras derivadas precisam usar a mesma licença.
+- ❌ Não pode usar os assets para fins comerciais (vender o jogo, os assets ou derivados) sem autorização.
+
+## Exceções (terceiros)
+
+| Arquivo | Autor | Licença |
+|---|---|---|
+| `assets/fonts/PixelifySans.ttf` | The Pixelify Sans Project Authors | SIL Open Font License 1.1 (`assets/fonts/PixelifySans-OFL.txt`) |
+| `assets/fonts/VT323-Regular.ttf` | The VT323 Project Authors | SIL Open Font License 1.1 (`assets/fonts/VT323-OFL.txt`) |
+
+## Contribuições
+
+Ao enviar arte, áudio ou texto para este repositório, você concorda em licenciá-los sob CC BY-NC-SA 4.0
+e declara ter o direito de fazê-lo. Não envie assets de terceiros sem licença compatível.
