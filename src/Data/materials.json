@@ -1,0 +1,389 @@
+{
+  "defaultValue": 3,
+  "materials": [
+    {
+      "id": "estilhaco",
+      "name": "Estilhaço de Brecha",
+      "icon": "i_shard",
+      "rarity": "comum",
+      "value": 3,
+      "desc": "Fragmento cristalizado de uma Brecha. Toda forja de Lumeira compra."
+    },
+    {
+      "id": "presa",
+      "name": "Presa Rubra",
+      "icon": "m_fang",
+      "rarity": "comum",
+      "value": 3,
+      "desc": "Arrancada da mandíbula de um Lobo da Brecha. Só cai se você quebrar a mandíbula."
+    },
+    {
+      "id": "minerio",
+      "name": "Minério Rúnico",
+      "icon": "i_ore",
+      "rarity": "comum",
+      "value": 3,
+      "desc": "Cresce no dorso rachado dos lobos. Quebre o dorso, não a cabeça."
+    },
+    {
+      "id": "vidro",
+      "name": "Vidro-lume",
+      "icon": "m_glass",
+      "rarity": "comum",
+      "value": 3,
+      "desc": "O vidro de uma lanterna-espectro. Ainda guarda um pouco de calor."
+    },
+    {
+      "id": "isca",
+      "name": "Isca Abissal",
+      "icon": "m_lure",
+      "rarity": "comum",
+      "value": 3,
+      "desc": "A luz que o Abissal usa para encantar. Quebrá-la é quebrar o feitiço."
+    },
+    {
+      "id": "escama",
+      "name": "Escama Abissal",
+      "icon": "i_fish",
+      "rarity": "comum",
+      "value": 3,
+      "desc": "Das barbatanas do Abissal. Dura como cais velho."
+    },
+    {
+      "id": "tecido",
+      "name": "Tecido do Ceifador",
+      "icon": "m_hood",
+      "rarity": "comum",
+      "value": 3,
+      "desc": "Retalho do capuz. Sem ele, o Ceifador não some mais nas sombras."
+    },
+    {
+      "id": "corrente",
+      "name": "Corrente Votiva",
+      "icon": "m_chain",
+      "rarity": "comum",
+      "value": 3,
+      "desc": "Elos que prendiam a lanterna do Ceifador."
+    },
+    {
+      "id": "madeira",
+      "name": "Madeira de Cais",
+      "icon": "i_logs",
+      "rarity": "comum",
+      "value": 3,
+      "desc": "Tábuas salvas da água. Boas para cabos e arcos."
+    },
+    {
+      "id": "erva",
+      "name": "Erva-de-Véspera",
+      "icon": "i_leaf",
+      "rarity": "comum",
+      "value": 3,
+      "desc": "Floresce só no fim da tarde, inclusive no dorso dos golems. Ivo destila em poções."
+    },
+    {
+      "id": "brasa",
+      "name": "Brasa Viva",
+      "icon": "m_brasa",
+      "rarity": "comum",
+      "value": 3,
+      "desc": "Arrancada das mandíbulas de um Besouro de Brasa. Nunca esfria por completo."
+    },
+    {
+      "id": "carapaca",
+      "name": "Carapaça de Brasa",
+      "icon": "d_carapaca",
+      "rarity": "comum",
+      "value": 4,
+      "desc": "A casca do besouro. Só cai se você acertar pelas costas."
+    },
+    {
+      "id": "nucleo",
+      "name": "Núcleo de Musgo",
+      "icon": "d_nucleo",
+      "rarity": "incomum",
+      "value": 10,
+      "desc": "O cristal que dá vida ao Golem de Musgo."
+    },
+    {
+      "id": "halo",
+      "name": "Fio de Halo",
+      "icon": "d_halo",
+      "rarity": "comum",
+      "value": 4,
+      "desc": "Um fio dourado do halo de um Escudeiro."
+    },
+    {
+      "id": "estandarte",
+      "name": "Retalho de Estandarte",
+      "icon": "i_banner",
+      "rarity": "comum",
+      "value": 3,
+      "desc": "Do manto do Arauto. O brasão é de uma Casa que ninguém lembra."
+    },
+    {
+      "id": "cera",
+      "name": "Cera Penitente",
+      "icon": "d_cera",
+      "rarity": "comum",
+      "value": 4,
+      "desc": "Derretida de uma Vela Viva. Ainda morna."
+    },
+    {
+      "id": "osso",
+      "name": "Osso Espectral",
+      "icon": "d_osso",
+      "rarity": "comum",
+      "value": 4,
+      "desc": "Leve demais para ser só osso."
+    },
+    {
+      "id": "pavio",
+      "name": "Pavio Vivo",
+      "icon": "d_pavio",
+      "rarity": "comum",
+      "value": 4,
+      "desc": "Se mexe sozinho quando ninguém olha."
+    },
+    {
+      "id": "frasco",
+      "name": "Frasco de Névoa",
+      "icon": "d_frasco",
+      "rarity": "incomum",
+      "value": 10,
+      "desc": "A névoa dentro dele sussurra nomes."
+    },
+    {
+      "id": "medalha",
+      "name": "Medalha Fúnebre",
+      "icon": "d_medalha",
+      "rarity": "incomum",
+      "value": 10,
+      "desc": "Gravada com um nome que a chuva apagou."
+    },
+    {
+      "id": "lapide",
+      "name": "Fragmento de Lápide",
+      "icon": "d_lapide",
+      "rarity": "comum",
+      "value": 4,
+      "desc": "Pedra de túmulo rachada pela Brecha."
+    },
+    {
+      "id": "cinza",
+      "name": "Cinza Consagrada",
+      "icon": "d_cinza",
+      "rarity": "comum",
+      "value": 4,
+      "desc": "Restos de vela de vigília. Abel usa em relíquias."
+    },
+    {
+      "id": "lamento",
+      "name": "Essência de Lamento",
+      "icon": "d_lamento",
+      "rarity": "raro",
+      "value": 25,
+      "desc": "O que sobra do Ceifador quando a corrente quebra."
+    },
+    {
+      "id": "mascara",
+      "name": "Máscara do Ceifador",
+      "icon": "d_mascara",
+      "rarity": "incomum",
+      "value": 10,
+      "desc": "Por baixo dela não havia rosto."
+    },
+    {
+      "id": "parafuso",
+      "name": "Parafuso Antigo",
+      "icon": "d_parafuso",
+      "rarity": "comum",
+      "value": 4,
+      "desc": "Tirado das juntas de um Autômato."
+    },
+    {
+      "id": "escoria",
+      "name": "Escória Endurecida",
+      "icon": "d_escoria",
+      "rarity": "comum",
+      "value": 4,
+      "desc": "Esfriou o bastante para segurar. Quase."
+    },
+    {
+      "id": "fornalha",
+      "name": "Núcleo de Fornalha",
+      "icon": "d_fornalha",
+      "rarity": "incomum",
+      "value": 10,
+      "desc": "O coração de uma Sentinela. Pulsa devagar."
+    },
+    {
+      "id": "engrenagem",
+      "name": "Engrenagem Queimada",
+      "icon": "d_engrenagem",
+      "rarity": "comum",
+      "value": 4,
+      "desc": "Gira mesmo solta."
+    },
+    {
+      "id": "ferro",
+      "name": "Minério de Ferro Negro",
+      "icon": "d_ferro",
+      "rarity": "comum",
+      "value": 4,
+      "desc": "O ferro das minas profundas. Brás paga bem."
+    },
+    {
+      "id": "pepita",
+      "name": "Pepita Rubra",
+      "icon": "d_pepita",
+      "rarity": "incomum",
+      "value": 10,
+      "desc": "Brilha como brasa, mas é pedra."
+    },
+    {
+      "id": "forja",
+      "name": "Essência de Forja",
+      "icon": "d_forja",
+      "rarity": "raro",
+      "value": 25,
+      "desc": "O fogo que movia o Colosso."
+    },
+    {
+      "id": "placa",
+      "name": "Placa Colossal",
+      "icon": "d_placa",
+      "rarity": "raro",
+      "value": 25,
+      "desc": "Uma lasca da armadura do Colosso."
+    },
+    {
+      "id": "semente",
+      "name": "Semente Antiga",
+      "icon": "d_semente",
+      "rarity": "comum",
+      "value": 4,
+      "desc": "Germina em qualquer lugar onde houver Brecha."
+    },
+    {
+      "id": "seiva",
+      "name": "Seiva Rara",
+      "icon": "d_seiva",
+      "rarity": "comum",
+      "value": 4,
+      "desc": "Doce, pegajosa e levemente venenosa."
+    },
+    {
+      "id": "vinha",
+      "name": "Vinha Tensa",
+      "icon": "d_vinha",
+      "rarity": "comum",
+      "value": 4,
+      "desc": "Ainda tenta se enrolar no seu pulso."
+    },
+    {
+      "id": "casulo",
+      "name": "Casulo Verde",
+      "icon": "d_casulo",
+      "rarity": "incomum",
+      "value": 10,
+      "desc": "Algo dentro dele está esperando."
+    },
+    {
+      "id": "polen",
+      "name": "Pólen Luminoso",
+      "icon": "d_polen",
+      "rarity": "comum",
+      "value": 4,
+      "desc": "Brilha no escuro como pó de estrela."
+    },
+    {
+      "id": "espinho",
+      "name": "Folha de Espinho",
+      "icon": "d_espinho",
+      "rarity": "comum",
+      "value": 4,
+      "desc": "Corta como lâmina."
+    },
+    {
+      "id": "essil",
+      "name": "Essência Silvestre",
+      "icon": "d_essil",
+      "rarity": "raro",
+      "value": 25,
+      "desc": "A seiva da Rainha das Raízes."
+    },
+    {
+      "id": "petala",
+      "name": "Pétala Régia",
+      "icon": "d_petala",
+      "rarity": "raro",
+      "value": 25,
+      "desc": "Da coroa de uma flor que comia gente."
+    },
+    {
+      "id": "vitral",
+      "name": "Fragmento de Vitral",
+      "icon": "d_vitral",
+      "rarity": "comum",
+      "value": 4,
+      "desc": "Ainda projeta cores quando pega luz."
+    },
+    {
+      "id": "sino",
+      "name": "Estilhaço de Sino",
+      "icon": "d_sino",
+      "rarity": "comum",
+      "value": 4,
+      "desc": "Toca sozinho quando alguém morre."
+    },
+    {
+      "id": "veu",
+      "name": "Véu Sombrio",
+      "icon": "d_veu",
+      "rarity": "incomum",
+      "value": 10,
+      "desc": "Tecido feito de sombra de vitral."
+    },
+    {
+      "id": "insignia",
+      "name": "Insígnia Consagrada",
+      "icon": "d_insignia",
+      "rarity": "incomum",
+      "value": 10,
+      "desc": "O selo dos cavaleiros do Nártex."
+    },
+    {
+      "id": "nucleolp",
+      "name": "Núcleo da Lanterna Partida",
+      "icon": "d_nucleolp",
+      "rarity": "raro",
+      "value": 25,
+      "desc": "A chama que o Arauto carregava."
+    },
+    {
+      "id": "rosario",
+      "name": "Rosário Partido",
+      "icon": "d_rosario",
+      "rarity": "comum",
+      "value": 4,
+      "desc": "Contas que ninguém mais reza."
+    },
+    {
+      "id": "catedral",
+      "name": "Essência de Catedral",
+      "icon": "d_catedral",
+      "rarity": "raro",
+      "value": 25,
+      "desc": "Luz de vitral destilada."
+    },
+    {
+      "id": "brasao",
+      "name": "Brasão do Arauto",
+      "icon": "d_brasao",
+      "rarity": "raro",
+      "value": 25,
+      "desc": "O brasão de uma Casa esquecida."
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "recipes": [
+    {
+      "gear": "luva2",
+      "cost": {
+        "lumes": 60,
+        "mats": {
+          "minerio": 4,
+          "presa": 2
+        }
+      }
+    },
+    {
+      "gear": "couraca2",
+      "cost": {
+        "lumes": 90,
+        "mats": {
+          "escama": 3,
+          "minerio": 3
+        }
+      }
+    },
+    {
+      "gear": "lant3",
+      "cost": {
+        "lumes": 100,
+        "mats": {
+          "frasco": 2,
+          "isca": 1
+        }
+      }
+    },
+    {
+      "gear": "capa2",
+      "cost": {
+        "lumes": 90,
+        "mats": {
+          "mascara": 1,
+          "cinza": 3
+        }
+      }
+    },
+    {
+      "gear": "bota2",
+      "cost": {
+        "lumes": 120,
+        "mats": {
+          "engrenagem": 2,
+          "ferro": 2
+        }
+      }
+    }
+  ]
+}

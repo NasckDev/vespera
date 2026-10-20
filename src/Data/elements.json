@@ -1,0 +1,75 @@
+{
+  "elements": [
+    {
+      "id": "solar",
+      "name": "Solar",
+      "color": "#F2C541",
+      "infusion": {
+        "lumes": 80,
+        "mats": {
+          "estilhaco": 3,
+          "erva": 2
+        }
+      }
+    },
+    {
+      "id": "lunar",
+      "name": "Lunar",
+      "color": "#86a2ff",
+      "infusion": {
+        "lumes": 80,
+        "mats": {
+          "frasco": 1,
+          "escama": 1
+        }
+      }
+    },
+    {
+      "id": "igneo",
+      "name": "Ígneo",
+      "color": "#ff6a2a",
+      "infusion": {
+        "lumes": 80,
+        "mats": {
+          "brasa": 3
+        }
+      }
+    },
+    {
+      "id": "mare",
+      "name": "Maré",
+      "color": "#3fd6e0",
+      "infusion": {
+        "lumes": 80,
+        "mats": {
+          "escama": 2,
+          "isca": 1
+        }
+      }
+    },
+    {
+      "id": "silvestre",
+      "name": "Silvestre",
+      "color": "#6fd36a",
+      "infusion": {
+        "lumes": 80,
+        "mats": {
+          "erva": 3,
+          "nucleo": 1
+        }
+      }
+    },
+    {
+      "id": "vazio",
+      "name": "Vazio",
+      "color": "#c04cf0",
+      "infusion": {
+        "lumes": 100,
+        "mats": {
+          "estilhaco": 5,
+          "carapaca": 1
+        }
+      }
+    }
+  ]
+}

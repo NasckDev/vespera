@@ -1,0 +1,151 @@
+{
+  "maxLevel": 5,
+  "damageGrowthPerLevel": 0.22,
+  "upgradeLumesPerLevel": 40,
+  "weapons": [
+    {
+      "id": "sword",
+      "name": "Lâmina da Lumeira",
+      "short": "Lâmina",
+      "type": "Espada",
+      "icon": "i_sword",
+      "damage": 12,
+      "cooldown": 0.32,
+      "kind": "melee",
+      "arc": 2.1,
+      "range": 30,
+      "partMult": 1,
+      "color": "#E64A8E",
+      "desc": "Equilibrada. Combo de três golpes; o último corta mais fundo.",
+      "unlock": {
+        "lumes": 50,
+        "mats": {
+          "estilhaco": 2
+        }
+      },
+      "upgradeMaterial": "presa",
+      "upgradeMaterialPerLevel": 1,
+      "elements": [
+        "solar",
+        "lunar",
+        "igneo",
+        "mare",
+        "silvestre",
+        "vazio"
+      ]
+    },
+    {
+      "id": "bow",
+      "name": "Arco do Cais",
+      "short": "Arco",
+      "type": "Arco",
+      "icon": "i_bow",
+      "damage": 10,
+      "cooldown": 0.4,
+      "kind": "bow",
+      "partMult": 0.9,
+      "color": "#F2A541",
+      "desc": "Segure para tensionar. Flechas carregadas atravessam inimigos.",
+      "unlock": {
+        "lumes": 50,
+        "mats": {
+          "estilhaco": 2
+        }
+      },
+      "upgradeMaterial": "pavio",
+      "upgradeMaterialPerLevel": 1,
+      "elements": [
+        "solar",
+        "lunar",
+        "igneo",
+        "mare"
+      ]
+    },
+    {
+      "id": "staff",
+      "name": "Cajado Fendido",
+      "short": "Cajado",
+      "type": "Cajado",
+      "icon": "i_staff",
+      "damage": 16,
+      "cooldown": 0.72,
+      "kind": "orb",
+      "partMult": 1,
+      "color": "#c06cf0",
+      "desc": "Orbes que buscam o alvo e explodem em área.",
+      "unlock": {
+        "lumes": 60,
+        "mats": {
+          "estilhaco": 4
+        }
+      },
+      "upgradeMaterial": "estilhaco",
+      "upgradeMaterialPerLevel": 2,
+      "elements": [
+        "solar",
+        "lunar",
+        "igneo",
+        "vazio"
+      ]
+    },
+    {
+      "id": "hammer",
+      "name": "Martelo de Brás",
+      "short": "Martelo",
+      "type": "Martelo",
+      "icon": "i_hammer",
+      "damage": 30,
+      "cooldown": 0.95,
+      "kind": "smash",
+      "arc": 2.9,
+      "range": 36,
+      "partMult": 2.2,
+      "color": "#F2A541",
+      "desc": "Lento e brutal. Quebra partes com o dobro de força.",
+      "unlock": {
+        "lumes": 80,
+        "mats": {
+          "minerio": 3
+        }
+      },
+      "upgradeMaterial": "minerio",
+      "upgradeMaterialPerLevel": 1,
+      "elements": [
+        "solar",
+        "lunar",
+        "igneo",
+        "vazio"
+      ]
+    },
+    {
+      "id": "dag",
+      "name": "Adagas Gêmeas",
+      "short": "Adagas",
+      "type": "Adagas",
+      "icon": "i_dag",
+      "damage": 6,
+      "cooldown": 0.15,
+      "kind": "melee",
+      "arc": 1.4,
+      "range": 24,
+      "partMult": 0.7,
+      "backstab": 2,
+      "color": "#E64A8E",
+      "desc": "Rápidas. Golpes pelas costas causam dano dobrado.",
+      "unlock": {
+        "lumes": 60,
+        "mats": {
+          "presa": 2
+        }
+      },
+      "upgradeMaterial": "osso",
+      "upgradeMaterialPerLevel": 1,
+      "elements": [
+        "solar",
+        "lunar",
+        "igneo",
+        "vazio"
+      ]
+    }
+  ]
+}
