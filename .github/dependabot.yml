@@ -1,0 +1,17 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: "ci"
+  - package-ecosystem: nuget
+    directory: /
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: "deps"
+    ignore:
+      # Godot.NET.Sdk acompanha a versão da engine; atualize junto com o GODOT_VERSION do CI.
+      - dependency-name: "Godot.NET.Sdk"

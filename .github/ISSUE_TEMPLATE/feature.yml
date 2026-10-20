@@ -1,0 +1,35 @@
+name: 💡 Ideia ou mecânica
+description: Proponha uma mecânica, conteúdo ou melhoria
+labels: ["ideia", "triagem"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Qual experiência você quer criar?
+      placeholder: "Quero que a véspera dê medo: as ruas ficam mais escuras e eu ouço a Brecha antes de ver."
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposta
+      description: Como funcionaria no jogo? Números, controles, telas.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Área
+      multiple: true
+      options: [Combate, Monstros/Guardiões, Cidade/NPCs, Mapas, Progressão/Ranks, Forja/Itens, UI/HUD, Áudio, Arte, Ferramentas/CI]
+  - type: textarea
+    id: gdd
+    attributes:
+      label: Relação com o GDD
+      description: Seção do docs/design/GDD.md que isso toca (ou "nova").
+  - type: checkboxes
+    id: help
+    attributes:
+      label: Contribuição
+      options:
+        - label: Quero implementar isso eu mesmo

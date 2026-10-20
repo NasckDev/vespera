@@ -1,0 +1,52 @@
+name: 🐛 Bug
+description: Algo não funciona como deveria
+labels: ["bug", "triagem"]
+body:
+  - type: markdown
+    attributes:
+      value: Obrigado por reportar! Quanto mais fácil de reproduzir, mais rápido a gente corrige.
+  - type: textarea
+    id: what
+    attributes:
+      label: O que aconteceu?
+      placeholder: "Atravessei a parede da forja andando para cima perto da bigorna."
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Como reproduzir
+      placeholder: |
+        1. Novo jogo
+        2. Ir até o Bairro das Forjas
+        3. Andar para cima encostado na bigorna
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: O que você esperava?
+  - type: input
+    id: version
+    attributes:
+      label: Versão do jogo
+      placeholder: "v0.1.0 (veja no menu inicial) ou commit"
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Plataforma
+      options: [Windows, Linux, macOS, Editor do Godot]
+    validations:
+      required: true
+  - type: dropdown
+    id: input
+    attributes:
+      label: Controle
+      options: [Teclado e mouse, Gamepad Xbox, Gamepad PlayStation, Outro gamepad]
+  - type: textarea
+    id: media
+    attributes:
+      label: Print, vídeo ou log
+      description: Arraste aqui. O log fica em `%APPDATA%/Godot/app_userdata/Véspera/logs` (Windows).

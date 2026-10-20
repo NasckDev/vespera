@@ -1,0 +1,23 @@
+name: 🎨 Arte ou áudio
+description: Peça, entregue ou corrija um asset
+labels: ["arte", "triagem"]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Tipo
+      options: [Sprite de personagem, Sprite de monstro/Guardião, Mapa pintado + máscara, Ícone/item, UI, Efeito (FX), Música, Efeito sonoro]
+    validations:
+      required: true
+  - type: textarea
+    id: spec
+    attributes:
+      label: Especificação
+      description: Tamanho, direções, frames, paleta (docs/brand), onde aparece no jogo.
+    validations:
+      required: true
+  - type: textarea
+    id: refs
+    attributes:
+      label: Referências
+      description: Arraste imagens ou links. Lembre que tudo enviado fica sob CC BY-NC-SA 4.0.
