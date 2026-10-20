@@ -1,0 +1,11 @@
+{
+  "dotnet.defaultSolution": "Vespera.sln",
+  "files.exclude": {
+    "**/.godot": true,
+    "**/bin": true,
+    "**/obj": true
+  },
+  "[csharp]": {
+    "editor.formatOnSave": true
+  }
+}
