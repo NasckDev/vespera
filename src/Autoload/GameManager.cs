@@ -2,56 +2,72 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Godot;
-using Vespera.Core.Combat;
+using Vespera.Core.Common;
+using Vespera.Core.Data;
 using Vespera.Core.Ranks;
 using Vespera.Core.Rules;
 using Vespera.Core.Save;
+using Vespera.Core.State;
 
 namespace Vespera.Autoload;
 
 /// <summary>
-/// Estado da partida (XP, rank, HP, Fragmentos) e troca de cenas com fade.
-/// Mudanças de estado são anunciadas pelo <see cref="EventBus"/>.
+/// Dono da partida: guarda o <see cref="GameState"/> (Core) do save atual e repassa cada mudança para o
+/// <see cref="EventBus"/>. Também troca cenas com fade. Use <see cref="State"/> para as operações completas
+/// (comprar, equipar, forjar…); os atalhos abaixo mantêm a API da fundação.
 /// </summary>
 public partial class GameManager : Node
 {
     private const float FadeSeconds = 0.35f;
     private const int DebugXpGrant = 25;
 
+    /// <summary>Seed fixa no smoke test para o playtest ser reprodutível.</summary>
+    private const int SmokeSeed = 20261020;
+
     private static readonly Color FadeColor = new("#1B1F3B");
 
-    private Progression _progression = null!;
-    private int _totalXp;
-    private SaveData _save = null!;
+    private GameState? _state;
+    private int _lastHp;
     private ColorRect _fade = null!;
     private bool _changingScene;
 
     public static GameManager Instance { get; private set; } = null!;
 
-    public Rank Rank => _progression.RankEnumOf(_totalXp);
+    /// <summary>Estado do jogador (save + sessão). Troca de instância em <see cref="LoadGame"/> e <see cref="NewGame"/>.</summary>
+    public GameState State => _state ?? throw new InvalidOperationException("Nenhuma partida carregada.");
 
-    public int TotalXp => _totalXp;
+    public static GameDatabase Db => Database.Db;
 
-    public float ProgressInRank => _progression.ProgressToNextRank(_totalXp);
+    public Rank Rank => State.Rank;
 
-    public int MaxHp { get; private set; }
+    public int TotalXp => State.Save.Xp;
 
-    public int CurrentHp { get; private set; }
+    /// <summary>Progresso de 0 a 1 até o próximo Selo.</summary>
+    public float ProgressInRank => Db.Progression.ProgressToNextRank(TotalXp);
 
-    public int Fragments { get; private set; }
+    public int MaxHp => State.MaxHp;
 
-    public int WeaponLevel { get; private set; } = 1;
+    public int CurrentHp => State.Hp;
 
-    public int Day { get; private set; } = 1;
+    /// <summary>Estilhaços de Brecha (o "Fragmento" da fundação é o material <c>estilhaco</c> da v2).</summary>
+    public int Fragments => State.Shards;
+
+    public int Lumes => State.Lumes;
+
+    /// <summary>Nível da arma da classe.</summary>
+    public int WeaponLevel => State.Save.WeaponLevel(State.Save.ClassId);
+
+    public int Day => State.Save.Day;
 
     public override void _EnterTree() => Instance = this;
 
     public override void _Ready()
     {
-        _progression = Database.Db.Progression;
         _fade = CreateFadeOverlay();
         LoadGame();
     }
+
+    public override void _ExitTree() => Detach();
 
     public override void _UnhandledInput(InputEvent @event)
     {
@@ -61,108 +77,156 @@ public partial class GameManager : Node
         }
     }
 
+    /// <summary>Carrega o save (ou começa um jogo novo se não houver) e avisa com <c>GameLoaded</c>.</summary>
     public void LoadGame()
     {
-        var data = SaveService.Instance.LoadOrNew();
-        _save = data;
-        _totalXp = data.Xp;
-        Fragments = data.MaterialCount(ShardMaterial);
-        WeaponLevel = data.WeaponLevel(data.ClassId);
-        Day = data.Day;
-        MaxHp = _progression.BaseMaxHp(TotalXp);
-        CurrentHp = MaxHp;
-        Log.Info($"Partida carregada: rank {Rank}, {TotalXp} XP, {Fragments} Fragmentos.");
+        Attach(SaveService.Instance.LoadOrNew());
+        Log.Info($"Partida carregada: Selo {Rank}, Nv. {State.Level.Level}, {TotalXp} XP, {Lumes} Lumes, {Fragments} Estilhaços.");
     }
 
-    public void SaveGame()
+    /// <summary>Começa um jogo novo (classe permanente). Não grava até <see cref="SaveGame"/>.</summary>
+    public void NewGame(string? name, string classId)
     {
-        _save.Xp = TotalXp;
-        _save.Materials[ShardMaterial] = Fragments;
-        _save.Weapons[_save.ClassId] = WeaponLevel;
-        _save.Day = Day;
-        SaveService.Instance.Save(_save);
+        Attach(SaveData.NewGame(Db, name, classId));
+        Log.Info($"Jogo novo: {State.Save.Name} ({classId}).");
     }
 
-    private static string ShardMaterial => Database.Db.Rules.Economy.ShardMaterial;
+    public void SaveGame() => SaveService.Instance.Save(State.Save);
 
-    public void AddXp(int amount)
+    public void AddXp(int amount) => State.GainXp(amount);
+
+    public void AddFragments(int amount) => State.AddMaterial(Db.Rules.Economy.ShardMaterial, amount);
+
+    /// <summary>Gasta Estilhaços se houver saldo. Devolve false (e não gasta nada) se faltar.</summary>
+    public bool TrySpendFragments(int amount) => State.TryRemoveMaterial(Db.Rules.Economy.ShardMaterial, amount);
+
+    public void DamagePlayer(int amount) => State.Damage(amount);
+
+    public void HealPlayer(int amount) => State.Heal(amount);
+
+    public void RestoreFullHealth() => State.RestoreFullHealth();
+
+    public void AdvanceDay() => State.NewDay();
+
+    private void Attach(SaveData save)
     {
-        var result = _progression.Gain(_totalXp, amount);
-        _totalXp = result.TotalXp;
-        EventBus.Instance.EmitSignal(EventBus.SignalName.XpGained, amount, result.TotalXp, ProgressInRank);
-
-        // Selo e Nível somam HP máximo; o HP atual recebe o mesmo delta (combat.js:217).
-        var newMaxHp = _progression.BaseMaxHp(_totalXp);
-        if (newMaxHp != MaxHp)
-        {
-            CurrentHp = Math.Min(newMaxHp, CurrentHp + (newMaxHp - MaxHp));
-            MaxHp = newMaxHp;
-            EventBus.Instance.EmitSignal(EventBus.SignalName.PlayerHealed, CurrentHp, MaxHp);
-        }
-
-        if (!result.RankedUp)
-        {
-            return;
-        }
-
-        Log.Info($"Rank {result.PreviousRank} → {result.NewRank}");
-        EventBus.Instance.EmitSignal(EventBus.SignalName.RankChanged, (int)result.PreviousRank, (int)result.NewRank);
-        SaveGame(); // autosave ao subir de rank (CLAUDE.md, seção 5)
+        Detach();
+        var seed = Testing.SmokeTest.IsRequested() ? SmokeSeed : (int)(Time.GetTicksUsec() & int.MaxValue);
+        _state = new GameState(Db, save, new SeededRandom(seed));
+        _lastHp = _state.Hp;
+        _state.XpGained += OnXpGained;
+        _state.RankChanged += OnRankChanged;
+        _state.LevelChanged += OnLevelChanged;
+        _state.LumesChanged += OnLumesChanged;
+        _state.MaterialChanged += OnMaterialChanged;
+        _state.InventoryChanged += OnInventoryChanged;
+        _state.EquipmentChanged += OnEquipmentChanged;
+        _state.WeaponLevelChanged += OnWeaponLevelChanged;
+        _state.PotionsChanged += OnPotionsChanged;
+        _state.HealthChanged += OnHealthChanged;
+        _state.StatsChanged += OnStatsChanged;
+        _state.LanternChanged += OnLanternChanged;
+        _state.DayChanged += OnDayChanged;
+        _state.EcoChanged += OnEcoChanged;
+        _state.QuestCompleted += OnQuestCompleted;
+        Log.Debug($"GameState com seed {seed}.");
+        EventBus.Instance.EmitSignal(EventBus.SignalName.GameLoaded);
     }
 
-    public void AddFragments(int amount)
+    private void Detach()
     {
-        ArgumentOutOfRangeException.ThrowIfNegative(amount);
-        Fragments += amount;
-        EventBus.Instance.EmitSignal(EventBus.SignalName.FragmentsChanged, Fragments);
-    }
-
-    /// <summary>Gasta Fragmentos se houver saldo. Devolve false (e não gasta nada) se faltar.</summary>
-    public bool TrySpendFragments(int amount)
-    {
-        ArgumentOutOfRangeException.ThrowIfNegative(amount);
-        if (amount > Fragments)
-        {
-            return false;
-        }
-
-        Fragments -= amount;
-        EventBus.Instance.EmitSignal(EventBus.SignalName.FragmentsChanged, Fragments);
-        return true;
-    }
-
-    public void SetWeaponLevel(int level)
-    {
-        WeaponLevel = level;
-        EventBus.Instance.EmitSignal(EventBus.SignalName.WeaponUpgraded, WeaponLevel);
-        SaveGame(); // autosave ao forjar
-    }
-
-    public void DamagePlayer(int amount)
-    {
-        if (CurrentHp == 0)
+        if (_state is null)
         {
             return;
         }
 
-        CurrentHp = DamageCalculator.ApplyDamage(CurrentHp, amount);
-        EventBus.Instance.EmitSignal(EventBus.SignalName.PlayerDamaged, amount, CurrentHp, MaxHp);
-        if (CurrentHp == 0)
+        _state.XpGained -= OnXpGained;
+        _state.RankChanged -= OnRankChanged;
+        _state.LevelChanged -= OnLevelChanged;
+        _state.LumesChanged -= OnLumesChanged;
+        _state.MaterialChanged -= OnMaterialChanged;
+        _state.InventoryChanged -= OnInventoryChanged;
+        _state.EquipmentChanged -= OnEquipmentChanged;
+        _state.WeaponLevelChanged -= OnWeaponLevelChanged;
+        _state.PotionsChanged -= OnPotionsChanged;
+        _state.HealthChanged -= OnHealthChanged;
+        _state.StatsChanged -= OnStatsChanged;
+        _state.LanternChanged -= OnLanternChanged;
+        _state.DayChanged -= OnDayChanged;
+        _state.EcoChanged -= OnEcoChanged;
+        _state.QuestCompleted -= OnQuestCompleted;
+        _state = null;
+    }
+
+    // --- GameState → EventBus ---
+
+    private static EventBus Bus => EventBus.Instance;
+
+    private void OnXpGained(XpGainResult result) =>
+        Bus.EmitSignal(EventBus.SignalName.XpGained, result.Amount, result.TotalXp, ProgressInRank);
+
+    private void OnRankChanged(Rank previous, Rank current)
+    {
+        Log.Info($"Selo {previous} → {current}");
+        Bus.EmitSignal(EventBus.SignalName.RankChanged, (int)previous, (int)current);
+        SaveGame(); // autosave ao subir de Selo (CLAUDE.md, seção 5)
+    }
+
+    private void OnLevelChanged(int previous, int current) => Bus.EmitSignal(EventBus.SignalName.LevelChanged, previous, current);
+
+    private void OnLumesChanged(int total) => Bus.EmitSignal(EventBus.SignalName.LumesChanged, total);
+
+    private void OnMaterialChanged(string materialId, int count)
+    {
+        Bus.EmitSignal(EventBus.SignalName.MaterialChanged, materialId, count);
+        if (materialId == Db.Rules.Economy.ShardMaterial)
         {
-            EventBus.Instance.EmitSignal(EventBus.SignalName.PlayerDied);
+            Bus.EmitSignal(EventBus.SignalName.FragmentsChanged, count);
         }
     }
 
-    public void HealPlayer(int amount)
+    private void OnInventoryChanged() => Bus.EmitSignal(EventBus.SignalName.InventoryChanged);
+
+    private void OnEquipmentChanged(string slotId) => Bus.EmitSignal(EventBus.SignalName.EquipmentChanged, slotId);
+
+    private void OnWeaponLevelChanged(string weaponId, int level)
     {
-        ArgumentOutOfRangeException.ThrowIfNegative(amount);
-        CurrentHp = Math.Min(MaxHp, CurrentHp + amount);
-        EventBus.Instance.EmitSignal(EventBus.SignalName.PlayerHealed, CurrentHp, MaxHp);
+        if (weaponId == State.Save.ClassId)
+        {
+            Bus.EmitSignal(EventBus.SignalName.WeaponUpgraded, level);
+        }
     }
 
-    public void RestoreFullHealth() => HealPlayer(MaxHp);
+    private void OnPotionsChanged(int count) => Bus.EmitSignal(EventBus.SignalName.PotionsChanged, count);
 
-    public void AdvanceDay() => Day++;
+    /// <summary>Traduz a mudança de HP para os sinais da fundação: dano, cura e morte.</summary>
+    private void OnHealthChanged(int hp, int maxHp)
+    {
+        var previous = _lastHp;
+        _lastHp = hp;
+        if (hp < previous)
+        {
+            Bus.EmitSignal(EventBus.SignalName.PlayerDamaged, previous - hp, hp, maxHp);
+            if (hp == 0)
+            {
+                Bus.EmitSignal(EventBus.SignalName.PlayerDied);
+            }
+
+            return;
+        }
+
+        Bus.EmitSignal(EventBus.SignalName.PlayerHealed, hp, maxHp);
+    }
+
+    private void OnStatsChanged(PlayerStats stats) => Bus.EmitSignal(EventBus.SignalName.PlayerStatsChanged);
+
+    private void OnLanternChanged(bool lost) => Bus.EmitSignal(EventBus.SignalName.LanternStateChanged, lost);
+
+    private void OnDayChanged(int day) => Bus.EmitSignal(EventBus.SignalName.DayChanged, day);
+
+    private void OnEcoChanged(string ecoId) => Bus.EmitSignal(EventBus.SignalName.EcoChanged, ecoId);
+
+    private void OnQuestCompleted(QuestDef quest) => Bus.EmitSignal(EventBus.SignalName.QuestCompleted, quest.Id);
 
     // --- Bloqueio de gameplay (diálogo, menus, pausa) ---
     private readonly HashSet<string> _gameplayBlocks = [];

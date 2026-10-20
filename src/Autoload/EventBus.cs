@@ -34,6 +34,49 @@ public partial class EventBus : Node
     [Signal]
     public delegate void WeaponUpgradedEventHandler(int newLevel);
 
+    // --- Estado do jogador (GameState) ---
+    /// <summary>Um save foi carregado ou um jogo novo começou: telas devem reler tudo do GameManager.</summary>
+    [Signal]
+    public delegate void GameLoadedEventHandler();
+
+    /// <summary>Nível (Nv.) mudou; separado do Selo.</summary>
+    [Signal]
+    public delegate void LevelChangedEventHandler(int previousLevel, int newLevel);
+
+    [Signal]
+    public delegate void LumesChangedEventHandler(int total);
+
+    /// <summary>Quantidade de um material mudou (o Estilhaço também dispara <c>FragmentsChanged</c>).</summary>
+    [Signal]
+    public delegate void MaterialChangedEventHandler(string materialId, int count);
+
+    /// <summary>Mochila, materiais, poções ou lanternas carregadas mudaram.</summary>
+    [Signal]
+    public delegate void InventoryChangedEventHandler();
+
+    [Signal]
+    public delegate void EquipmentChangedEventHandler(string slotId);
+
+    [Signal]
+    public delegate void PotionsChangedEventHandler(int count);
+
+    /// <summary>Atributos derivados (ataque, defesa, luz…) foram recalculados.</summary>
+    [Signal]
+    public delegate void PlayerStatsChangedEventHandler();
+
+    /// <summary>A Lanterna ficou na Brecha (true) ou voltou (false).</summary>
+    [Signal]
+    public delegate void LanternStateChangedEventHandler(bool lost);
+
+    [Signal]
+    public delegate void DayChangedEventHandler(int day);
+
+    [Signal]
+    public delegate void EcoChangedEventHandler(string ecoId);
+
+    [Signal]
+    public delegate void QuestCompletedEventHandler(string questId);
+
     // --- Combate e Brecha ---
     [Signal]
     public delegate void EnemyDiedEventHandler(string enemyId, Vector2 globalPosition);
