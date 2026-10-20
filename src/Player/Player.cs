@@ -23,7 +23,19 @@ public partial class Player : CharacterBody2D
     /// <summary>Última direção de movimento; usada para animação e direção do ataque.</summary>
     public Vector2 Facing { get; private set; } = Vector2.Down;
 
+    /// <summary>Andou neste frame de física (input de movimento ativo).</summary>
+    public bool IsMoving { get; private set; }
+
     private Interactable? _focused;
+
+    /// <summary>Coloca o jogador num ponto (troca de mapa), parado e sem foco de interação.</summary>
+    public void Teleport(Vector2 globalPosition)
+    {
+        GlobalPosition = globalPosition;
+        Velocity = Vector2.Zero;
+        IsMoving = false;
+        SetFocused(null);
+    }
 
     public override void _Ready()
     {
@@ -38,6 +50,7 @@ public partial class Player : CharacterBody2D
         if (GameManager.Instance.IsGameplayBlocked)
         {
             Velocity = Vector2.Zero;
+            IsMoving = false;
             return;
         }
 
@@ -48,6 +61,7 @@ public partial class Player : CharacterBody2D
         }
 
         Velocity = direction * MoveSpeed;
+        IsMoving = direction != Vector2.Zero;
         MoveAndSlide();
         SetFocused(FindClosestInteractable());
     }
