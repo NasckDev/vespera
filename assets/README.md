@@ -33,9 +33,8 @@ continua Nearest para a UI pixel; o mundo liga Linear nos próprios nós.
 
 ## Placeholders
 
-| Arquivo | Substitui |
-|---|---|
-| `sprites/player/placeholder_player.png` | sprite provisório da fundação (o jogador já usa o atlas da v2) |
+Nenhum no momento. O `placeholder_player.png` da fundação foi removido: o jogador usa os recortes `c_{classe}_*` do
+atlas. `sprites/player/` fica vazia (os personagens jogáveis estão no atlas).
 
 ## O que falta desenhar ou decidir
 
