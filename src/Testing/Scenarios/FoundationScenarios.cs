@@ -14,6 +14,7 @@ public partial class SmokeTest
         await WaitForScene("Lumeira", timeoutSeconds: 10);
         Require(FindPlayer() is not null, "Player não encontrado na cidade");
         Require(Find<MaskCollision>() is not null, "MaskCollision não encontrado na cidade");
+        await Shot("cidade-inicio");
     }
 
     [SmokeScenario("jogador respeita a máscara do mapa", order: 1)]

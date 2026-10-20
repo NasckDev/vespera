@@ -30,6 +30,9 @@ public partial class SmokeTest : Node
 {
     public const string CommandLineFlag = "--smoke-test";
     private const string FilterPrefix = "--smoke-filter=";
+    private const string ShotsPrefix = "--smoke-shots=";
+
+    private string? _shotsDir;
 
     private readonly List<string> _failures = [];
 
@@ -39,6 +42,7 @@ public partial class SmokeTest : Node
     {
         ProcessMode = ProcessModeEnum.Always;
         var filter = OS.GetCmdlineUserArgs().FirstOrDefault(a => a.StartsWith(FilterPrefix, StringComparison.Ordinal))?[FilterPrefix.Length..];
+        _shotsDir = OS.GetCmdlineUserArgs().FirstOrDefault(a => a.StartsWith(ShotsPrefix, StringComparison.Ordinal))?[ShotsPrefix.Length..];
         Log.Info($"=== SMOKE TEST {(filter is null ? string.Empty : $"(filtro: {filter})")}===");
         var started = Time.GetTicksMsec();
         var ran = 0;
@@ -101,6 +105,24 @@ public partial class SmokeTest : Node
         {
             throw new SmokeFailure(message);
         }
+    }
+
+    /// <summary>
+    /// Salva um print da tela em <c>--smoke-shots=&lt;pasta&gt;</c> (só sem --headless). Use em pontos-chave
+    /// dos cenários para revisão visual: <c>await Shot("forja-aberta")</c>.
+    /// </summary>
+    protected async Task Shot(string name)
+    {
+        if (_shotsDir is null || DisplayServer.GetName() == "headless")
+        {
+            return;
+        }
+
+        await ToSignal(RenderingServer.Singleton, RenderingServer.SignalName.FramePostDraw);
+        DirAccess.MakeDirRecursiveAbsolute(_shotsDir);
+        var path = System.IO.Path.Combine(_shotsDir, $"{name}.png");
+        GetViewport().GetTexture().GetImage().SavePng(path);
+        Log.Info($"SHOT  {path}");
     }
 
     protected async Task NextPhysicsFrame() => await ToSignal(GetTree(), SceneTree.SignalName.PhysicsFrame);
