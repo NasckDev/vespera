@@ -1,0 +1,1023 @@
+{
+  "monsters": [
+    {
+      "id": "wolf",
+      "name": "Lobo da Brecha",
+      "sprite": "wolf",
+      "scale": 1,
+      "hp": 40,
+      "speed": 58,
+      "damage": 12,
+      "xp": 12,
+      "radius": 10,
+      "hitHeight": 16,
+      "ai": "lunger",
+      "weak": [
+        "solar",
+        "igneo"
+      ],
+      "res": [],
+      "parts": [
+        {
+          "id": "jaw",
+          "name": "Mandíbula",
+          "side": "front",
+          "hp": 16,
+          "drop": "presa",
+          "count": 1
+        },
+        {
+          "id": "back",
+          "name": "Dorso Rachado",
+          "side": "back",
+          "hp": 18,
+          "drop": "minerio",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "wolfE",
+      "name": "Alfa da Brecha",
+      "sprite": "wolf",
+      "scale": 1.4,
+      "hp": 130,
+      "speed": 62,
+      "damage": 18,
+      "xp": 45,
+      "radius": 14,
+      "hitHeight": 22,
+      "ai": "lunger",
+      "elite": true,
+      "eco": "uivo",
+      "ecoChance": 0.25,
+      "weak": [
+        "solar",
+        "igneo"
+      ],
+      "res": [],
+      "parts": [
+        {
+          "id": "jaw",
+          "name": "Mandíbula",
+          "side": "front",
+          "hp": 40,
+          "drop": "presa",
+          "count": 2
+        },
+        {
+          "id": "back",
+          "name": "Dorso Rachado",
+          "side": "back",
+          "hp": 45,
+          "drop": "minerio",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "fishm",
+      "name": "Pescador Abissal",
+      "sprite": "fishm",
+      "scale": 1,
+      "hp": 58,
+      "speed": 44,
+      "damage": 14,
+      "xp": 14,
+      "radius": 11,
+      "hitHeight": 18,
+      "ai": "lunger",
+      "weak": [
+        "lunar",
+        "silvestre"
+      ],
+      "res": [
+        "mare"
+      ],
+      "glow": {
+        "light": "a",
+        "radius": 28
+      },
+      "parts": [
+        {
+          "id": "lure",
+          "name": "Isca",
+          "side": "front",
+          "hp": 20,
+          "drop": "isca",
+          "count": 1
+        },
+        {
+          "id": "fins",
+          "name": "Barbatanas",
+          "side": "back",
+          "hp": 24,
+          "drop": "escama",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "angler",
+      "name": "O Abissal do Mercado",
+      "sprite": "anglerB",
+      "scale": 1,
+      "hp": 520,
+      "speed": 34,
+      "damage": 20,
+      "xp": 120,
+      "radius": 24,
+      "hitHeight": 30,
+      "ai": "angler",
+      "boss": true,
+      "eco": "abissal",
+      "ecoChance": 0.45,
+      "summon": "fishm",
+      "weak": [
+        "lunar",
+        "silvestre"
+      ],
+      "res": [
+        "mare"
+      ],
+      "glow": {
+        "light": "a",
+        "radius": 60
+      },
+      "phase2": {
+        "title": "O Abissal chama a maré",
+        "sub": "Pescadores surgem da água."
+      },
+      "parts": [
+        {
+          "id": "lure",
+          "name": "Isca",
+          "side": "front",
+          "hp": 110,
+          "drop": "isca",
+          "count": 2,
+          "toast": "A Isca se partiu. O Abissal não encanta mais."
+        },
+        {
+          "id": "fins",
+          "name": "Barbatanas",
+          "side": "back",
+          "hp": 120,
+          "drop": "escama",
+          "count": 3,
+          "toast": "Barbatanas partidas. O Abissal perdeu a maré."
+        }
+      ]
+    },
+    {
+      "id": "cnev",
+      "name": "Espectro da Névoa",
+      "sprite": "cnev",
+      "scale": 1,
+      "hp": 30,
+      "speed": 44,
+      "damage": 11,
+      "xp": 12,
+      "radius": 10,
+      "ai": "caster",
+      "fly": true,
+      "bolt": "#8fb8ff",
+      "weak": [
+        "solar"
+      ],
+      "res": [
+        "vazio"
+      ],
+      "glow": {
+        "light": "a",
+        "radius": 32
+      },
+      "parts": [
+        {
+          "id": "lamp",
+          "name": "Lanterna",
+          "side": "front",
+          "hp": 12,
+          "drop": "frasco",
+          "count": 1
+        },
+        {
+          "id": "veil",
+          "name": "Véu",
+          "side": "back",
+          "hp": 12,
+          "drop": "cinza",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "coss",
+      "name": "Ossinho Andante",
+      "sprite": "coss",
+      "scale": 1,
+      "hp": 38,
+      "speed": 56,
+      "damage": 12,
+      "xp": 12,
+      "radius": 10,
+      "ai": "lunger",
+      "weak": [
+        "solar",
+        "igneo"
+      ],
+      "res": [],
+      "parts": [
+        {
+          "id": "shield",
+          "name": "Escudo",
+          "side": "front",
+          "hp": 14,
+          "drop": "lapide",
+          "count": 1
+        },
+        {
+          "id": "bones",
+          "name": "Costelas",
+          "side": "back",
+          "hp": 16,
+          "drop": "osso",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cvel",
+      "name": "Vela Viva",
+      "sprite": "cvel",
+      "scale": 1,
+      "hp": 34,
+      "speed": 34,
+      "damage": 11,
+      "xp": 12,
+      "radius": 10,
+      "ai": "spitter",
+      "bolt": "#ffb040",
+      "weak": [
+        "mare"
+      ],
+      "res": [
+        "igneo"
+      ],
+      "glow": {
+        "light": "a",
+        "radius": 36
+      },
+      "parts": [
+        {
+          "id": "wick",
+          "name": "Pavio",
+          "side": "front",
+          "hp": 12,
+          "drop": "pavio",
+          "count": 1
+        },
+        {
+          "id": "wax",
+          "name": "Cera",
+          "side": "back",
+          "hp": 16,
+          "drop": "cera",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cosr",
+      "name": "Ossário Vigia",
+      "sprite": "cosr",
+      "scale": 1,
+      "hp": 160,
+      "speed": 30,
+      "damage": 20,
+      "xp": 45,
+      "radius": 16,
+      "ai": "brute",
+      "elite": true,
+      "weak": [
+        "solar"
+      ],
+      "res": [],
+      "glow": {
+        "light": "a",
+        "radius": 44
+      },
+      "parts": [
+        {
+          "id": "coffin",
+          "name": "Caixão",
+          "side": "front",
+          "hp": 50,
+          "drop": "lapide",
+          "count": 2
+        },
+        {
+          "id": "candles",
+          "name": "Velas",
+          "side": "back",
+          "hp": 45,
+          "drop": "medalha",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "reaper",
+      "name": "O Ceifador",
+      "sprite": "cceif",
+      "scale": 1,
+      "hp": 480,
+      "speed": 40,
+      "damage": 18,
+      "xp": 120,
+      "radius": 22,
+      "ai": "reaper",
+      "boss": true,
+      "fly": true,
+      "eco": "ceifador",
+      "ecoChance": 0.45,
+      "summon": "coss",
+      "bolt": "#8fb8ff",
+      "weak": [
+        "solar"
+      ],
+      "res": [
+        "vazio"
+      ],
+      "glow": {
+        "light": "m",
+        "radius": 64
+      },
+      "phase2": {
+        "title": "O Ceifador chama os seus",
+        "sub": "Ossos se levantam da névoa."
+      },
+      "parts": [
+        {
+          "id": "hood",
+          "name": "Máscara",
+          "side": "front",
+          "hp": 95,
+          "drop": "mascara",
+          "count": 2,
+          "toast": "O Capuz rasgou. O Ceifador não some mais."
+        },
+        {
+          "id": "chain",
+          "name": "Corrente",
+          "side": "back",
+          "hp": 100,
+          "drop": "lamento",
+          "count": 1,
+          "toast": "A Corrente partiu. Ele não puxa mais ninguém."
+        }
+      ]
+    },
+    {
+      "id": "mbes",
+      "name": "Besouro de Brasa",
+      "sprite": "mbes",
+      "scale": 1,
+      "hp": 50,
+      "speed": 36,
+      "damage": 13,
+      "xp": 14,
+      "radius": 11,
+      "ai": "spitter",
+      "bolt": "#ff7a2a",
+      "weak": [
+        "mare",
+        "lunar"
+      ],
+      "res": [
+        "igneo"
+      ],
+      "glow": {
+        "light": "f",
+        "radius": 30
+      },
+      "parts": [
+        {
+          "id": "horn",
+          "name": "Mandíbulas",
+          "side": "front",
+          "hp": 18,
+          "drop": "pepita",
+          "count": 1
+        },
+        {
+          "id": "shell",
+          "name": "Carapaça",
+          "side": "back",
+          "hp": 24,
+          "drop": "carapaca",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "maut",
+      "name": "Autômato Ferrugem",
+      "sprite": "maut",
+      "scale": 1,
+      "hp": 72,
+      "speed": 34,
+      "damage": 16,
+      "xp": 16,
+      "radius": 11,
+      "ai": "brute",
+      "weak": [
+        "mare"
+      ],
+      "res": [],
+      "parts": [
+        {
+          "id": "hammer",
+          "name": "Martelo",
+          "side": "front",
+          "hp": 24,
+          "drop": "engrenagem",
+          "count": 1
+        },
+        {
+          "id": "bolts",
+          "name": "Parafusos",
+          "side": "back",
+          "hp": 24,
+          "drop": "parafuso",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "mesc",
+      "name": "Escória Viva",
+      "sprite": "mesc",
+      "scale": 1,
+      "hp": 44,
+      "speed": 50,
+      "damage": 13,
+      "xp": 13,
+      "radius": 11,
+      "ai": "lunger",
+      "weak": [
+        "mare"
+      ],
+      "res": [
+        "igneo"
+      ],
+      "glow": {
+        "light": "f",
+        "radius": 34
+      },
+      "parts": [
+        {
+          "id": "maw",
+          "name": "Boca",
+          "side": "front",
+          "hp": 16,
+          "drop": "escoria",
+          "count": 1
+        },
+        {
+          "id": "core",
+          "name": "Núcleo",
+          "side": "back",
+          "hp": 18,
+          "drop": "ferro",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "msen",
+      "name": "Sentinela da Bigorna",
+      "sprite": "msen",
+      "scale": 1,
+      "hp": 200,
+      "speed": 28,
+      "damage": 24,
+      "xp": 55,
+      "radius": 16,
+      "ai": "brute",
+      "elite": true,
+      "weak": [
+        "mare"
+      ],
+      "res": [
+        "igneo"
+      ],
+      "glow": {
+        "light": "f",
+        "radius": 50
+      },
+      "parts": [
+        {
+          "id": "furnace",
+          "name": "Fornalha",
+          "side": "front",
+          "hp": 60,
+          "drop": "fornalha",
+          "count": 2
+        },
+        {
+          "id": "plates",
+          "name": "Placas",
+          "side": "back",
+          "hp": 60,
+          "drop": "ferro",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "colosso",
+      "name": "Colosso de Ferro",
+      "sprite": "mcol",
+      "scale": 1,
+      "hp": 820,
+      "speed": 30,
+      "damage": 24,
+      "xp": 150,
+      "radius": 26,
+      "ai": "knight",
+      "boss": true,
+      "summon": "mesc",
+      "bolt": "#ff7a2a",
+      "color": "#ff7a2a",
+      "weak": [
+        "mare"
+      ],
+      "res": [
+        "igneo"
+      ],
+      "glow": {
+        "light": "f",
+        "radius": 95
+      },
+      "phase2": {
+        "title": "O Colosso abre a fornalha",
+        "sub": "Escória viva escorre pelas placas."
+      },
+      "parts": [
+        {
+          "id": "furnace",
+          "name": "Fornalha",
+          "side": "front",
+          "hp": 150,
+          "drop": "forja",
+          "count": 1
+        },
+        {
+          "id": "plates",
+          "name": "Placas",
+          "side": "back",
+          "hp": 160,
+          "drop": "placa",
+          "count": 2
+        },
+        {
+          "id": "pipes",
+          "name": "Chaminés",
+          "side": "any",
+          "hp": 130,
+          "drop": "ferro",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "id": "gbro",
+      "name": "Broto Mordaz",
+      "sprite": "gbro",
+      "scale": 1,
+      "hp": 40,
+      "speed": 62,
+      "damage": 14,
+      "xp": 14,
+      "radius": 10,
+      "ai": "lunger",
+      "weak": [
+        "igneo"
+      ],
+      "res": [
+        "silvestre"
+      ],
+      "parts": [
+        {
+          "id": "maw",
+          "name": "Boca",
+          "side": "front",
+          "hp": 14,
+          "drop": "semente",
+          "count": 1
+        },
+        {
+          "id": "leaves",
+          "name": "Folhas",
+          "side": "back",
+          "hp": 14,
+          "drop": "espinho",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "gsei",
+      "name": "Besouro de Seiva",
+      "sprite": "gsei",
+      "scale": 1,
+      "hp": 60,
+      "speed": 40,
+      "damage": 14,
+      "xp": 15,
+      "radius": 11,
+      "ai": "spitter",
+      "bolt": "#ffa21a",
+      "weak": [
+        "igneo"
+      ],
+      "res": [],
+      "parts": [
+        {
+          "id": "horn",
+          "name": "Chifre",
+          "side": "front",
+          "hp": 20,
+          "drop": "seiva",
+          "count": 1
+        },
+        {
+          "id": "shell",
+          "name": "Carapaça",
+          "side": "back",
+          "hp": 24,
+          "drop": "casulo",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "gmus",
+      "name": "Golem de Musgo",
+      "sprite": "gmus",
+      "scale": 1,
+      "hp": 120,
+      "speed": 28,
+      "damage": 20,
+      "xp": 22,
+      "radius": 14,
+      "ai": "brute",
+      "weak": [
+        "igneo"
+      ],
+      "res": [
+        "silvestre"
+      ],
+      "glow": {
+        "light": "g",
+        "radius": 26
+      },
+      "parts": [
+        {
+          "id": "core",
+          "name": "Núcleo",
+          "side": "front",
+          "hp": 40,
+          "drop": "nucleo",
+          "count": 1
+        },
+        {
+          "id": "moss",
+          "name": "Musgo",
+          "side": "back",
+          "hp": 35,
+          "drop": "polen",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "gflo",
+      "name": "Flor Carnívora Régia",
+      "sprite": "gflo",
+      "scale": 1,
+      "hp": 210,
+      "speed": 22,
+      "damage": 18,
+      "xp": 55,
+      "radius": 17,
+      "ai": "spitter",
+      "elite": true,
+      "triple": true,
+      "bolt": "#ff6aa8",
+      "weak": [
+        "igneo"
+      ],
+      "res": [
+        "silvestre"
+      ],
+      "parts": [
+        {
+          "id": "petals",
+          "name": "Pétalas",
+          "side": "front",
+          "hp": 60,
+          "drop": "petala",
+          "count": 2
+        },
+        {
+          "id": "vines",
+          "name": "Vinhas",
+          "side": "back",
+          "hp": 60,
+          "drop": "vinha",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "rainha",
+      "name": "Rainha das Raízes",
+      "sprite": "grai",
+      "scale": 1,
+      "hp": 900,
+      "speed": 30,
+      "damage": 24,
+      "xp": 160,
+      "radius": 26,
+      "ai": "knight",
+      "boss": true,
+      "summon": "gbro",
+      "bolt": "#ff6aa8",
+      "color": "#6fd36a",
+      "weak": [
+        "igneo"
+      ],
+      "res": [
+        "silvestre"
+      ],
+      "glow": {
+        "light": "g",
+        "radius": 80
+      },
+      "phase2": {
+        "title": "A Rainha abre as vinhas",
+        "sub": "Brotos mordazes rompem o chão."
+      },
+      "parts": [
+        {
+          "id": "crown",
+          "name": "Coroa",
+          "side": "front",
+          "hp": 160,
+          "drop": "essil",
+          "count": 1
+        },
+        {
+          "id": "vines",
+          "name": "Vinhas",
+          "side": "back",
+          "hp": 160,
+          "drop": "vinha",
+          "count": 3
+        },
+        {
+          "id": "flowers",
+          "name": "Flores",
+          "side": "any",
+          "hp": 130,
+          "drop": "petala",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "kesc",
+      "name": "Escudeiro do Halo",
+      "sprite": "kesc",
+      "scale": 1,
+      "hp": 70,
+      "speed": 50,
+      "damage": 16,
+      "xp": 16,
+      "radius": 11,
+      "ai": "lunger",
+      "weak": [
+        "lunar",
+        "vazio"
+      ],
+      "res": [
+        "solar"
+      ],
+      "glow": {
+        "light": "a",
+        "radius": 26
+      },
+      "parts": [
+        {
+          "id": "halo",
+          "name": "Halo",
+          "side": "front",
+          "hp": 22,
+          "drop": "halo",
+          "count": 1
+        },
+        {
+          "id": "armor",
+          "name": "Armadura",
+          "side": "back",
+          "hp": 24,
+          "drop": "rosario",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "ksin",
+      "name": "Sino Vivo",
+      "sprite": "ksin",
+      "scale": 1,
+      "hp": 62,
+      "speed": 30,
+      "damage": 14,
+      "xp": 16,
+      "radius": 11,
+      "ai": "caster",
+      "bolt": "#b06cff",
+      "weak": [
+        "lunar"
+      ],
+      "res": [],
+      "glow": {
+        "light": "m",
+        "radius": 32
+      },
+      "parts": [
+        {
+          "id": "clapper",
+          "name": "Badalo",
+          "side": "front",
+          "hp": 20,
+          "drop": "sino",
+          "count": 1
+        },
+        {
+          "id": "chain",
+          "name": "Corrente",
+          "side": "back",
+          "hp": 20,
+          "drop": "rosario",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "ksom",
+      "name": "Sombra de Vitral",
+      "sprite": "ksom",
+      "scale": 1,
+      "hp": 54,
+      "speed": 62,
+      "damage": 15,
+      "xp": 16,
+      "radius": 10,
+      "ai": "lunger",
+      "weak": [
+        "solar"
+      ],
+      "res": [
+        "vazio"
+      ],
+      "glow": {
+        "light": "m",
+        "radius": 28
+      },
+      "parts": [
+        {
+          "id": "glass",
+          "name": "Vitrais",
+          "side": "front",
+          "hp": 18,
+          "drop": "vitral",
+          "count": 1
+        },
+        {
+          "id": "veil",
+          "name": "Véu",
+          "side": "back",
+          "hp": 18,
+          "drop": "veu",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "kcav",
+      "name": "Cavaleiro do Nártex",
+      "sprite": "kcav",
+      "scale": 1,
+      "hp": 240,
+      "speed": 54,
+      "damage": 24,
+      "xp": 60,
+      "radius": 15,
+      "ai": "lunger",
+      "elite": true,
+      "weak": [
+        "lunar",
+        "vazio"
+      ],
+      "res": [
+        "solar"
+      ],
+      "glow": {
+        "light": "a",
+        "radius": 40
+      },
+      "parts": [
+        {
+          "id": "halo",
+          "name": "Halo",
+          "side": "front",
+          "hp": 70,
+          "drop": "insignia",
+          "count": 2
+        },
+        {
+          "id": "banner",
+          "name": "Estandarte",
+          "side": "back",
+          "hp": 70,
+          "drop": "veu",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "knight",
+      "name": "O Arauto da Lanterna Partida",
+      "sprite": "karr",
+      "scale": 1,
+      "hp": 950,
+      "speed": 30,
+      "damage": 24,
+      "xp": 160,
+      "radius": 24,
+      "ai": "knight",
+      "boss": true,
+      "orbs": true,
+      "eco": "arauto",
+      "ecoChance": 0.6,
+      "summon": "ksom",
+      "bolt": "#5fe0d0",
+      "color": "#E64A8E",
+      "weak": [
+        "lunar",
+        "vazio"
+      ],
+      "res": [
+        "solar"
+      ],
+      "glow": {
+        "light": "a",
+        "radius": 90
+      },
+      "phase2": {
+        "title": "O Arauto ergue as lanternas",
+        "sub": "A segunda chama acendeu. Ele ficou mais rápido."
+      },
+      "parts": [
+        {
+          "id": "halo",
+          "name": "Halo",
+          "side": "front",
+          "hp": 170,
+          "drop": "nucleolp",
+          "count": 1
+        },
+        {
+          "id": "banner",
+          "name": "Estandarte",
+          "side": "back",
+          "hp": 170,
+          "drop": "brasao",
+          "count": 1
+        },
+        {
+          "id": "lamps",
+          "name": "Lanternas",
+          "side": "any",
+          "hp": 140,
+          "drop": "catedral",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

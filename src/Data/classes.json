@@ -1,0 +1,34 @@
+{
+  "classes": [
+    {
+      "id": "sword",
+      "name": "Lâmina",
+      "desc": "Equilibrada. Combo de três golpes, o último corta mais fundo. Boa para aprender a ler os monstros.",
+      "difficulty": "Fácil"
+    },
+    {
+      "id": "bow",
+      "name": "Arco",
+      "desc": "Distância e paciência. Segure para tensionar; flechas carregadas atravessam fileiras.",
+      "difficulty": "Média"
+    },
+    {
+      "id": "staff",
+      "name": "Cajado",
+      "desc": "Orbes que buscam o alvo e explodem em área. Frágil de perto, letal de longe.",
+      "difficulty": "Média"
+    },
+    {
+      "id": "hammer",
+      "name": "Martelo",
+      "desc": "Lento e brutal. Quebra partes com o dobro de força: o melhor para farmar materiais.",
+      "difficulty": "Difícil"
+    },
+    {
+      "id": "dag",
+      "name": "Adagas",
+      "desc": "Rápidas. Golpes pelas costas causam dano dobrado. Exige esquiva constante.",
+      "difficulty": "Difícil"
+    }
+  ]
+}
