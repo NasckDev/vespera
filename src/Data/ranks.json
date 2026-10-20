@@ -1,0 +1,91 @@
+{
+  "baseHp": 100,
+  "hpPerRank": 12,
+  "level": {
+    "baseNeed": 40,
+    "growth": 1.18,
+    "hpPerLevel": 6
+  },
+  "ranks": [
+    {
+      "id": "E",
+      "xp": 0,
+      "title": "Aprendiz",
+      "color": "#a39fae",
+      "icon": "r_E",
+      "look": "look0"
+    },
+    {
+      "id": "D",
+      "xp": 100,
+      "title": "Vigia",
+      "color": "#7cc47f",
+      "icon": "r_D",
+      "look": "look0"
+    },
+    {
+      "id": "C",
+      "xp": 260,
+      "title": "Lanterneiro",
+      "color": "#6b9be6",
+      "icon": "r_C",
+      "look": "look1"
+    },
+    {
+      "id": "B",
+      "xp": 520,
+      "title": "Guardião",
+      "color": "#b07ce6",
+      "icon": "r_B",
+      "look": "look2"
+    },
+    {
+      "id": "A",
+      "xp": 900,
+      "title": "Caçador",
+      "color": "#e6ad4a",
+      "icon": "r_A",
+      "look": "look2"
+    },
+    {
+      "id": "S",
+      "xp": 1500,
+      "title": "Sentinela",
+      "color": "#e0644f",
+      "icon": "r_S",
+      "look": "look3"
+    },
+    {
+      "id": "SS",
+      "xp": 2400,
+      "title": "Arauto",
+      "color": "#dc4e66",
+      "icon": "r_SS",
+      "look": "look3"
+    },
+    {
+      "id": "SSS",
+      "xp": 3600,
+      "title": "Crepuscular",
+      "color": "#c8418f",
+      "icon": "r_SSS",
+      "look": "look4"
+    },
+    {
+      "id": "SSSS",
+      "xp": 5200,
+      "title": "Véspero",
+      "color": "#E64A8E",
+      "icon": "r_SSSS",
+      "look": "look4"
+    },
+    {
+      "id": "ALVOR",
+      "xp": 7500,
+      "title": "Alvor",
+      "color": "#F2A541",
+      "icon": "r_ALVOR",
+      "look": "look4"
+    }
+  ]
+}

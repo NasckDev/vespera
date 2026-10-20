@@ -1,0 +1,188 @@
+{
+  "themes": [
+    {
+      "id": "fish",
+      "bairro": "Mercado de Peixes",
+      "map": "fish2",
+      "boss": "angler",
+      "minRank": 0,
+      "titles": {
+        "primavera": "Maré Florida",
+        "verao": "Mercado Fervente",
+        "outono": "Cais Enevoado",
+        "inverno": "Maré Congelada"
+      },
+      "mobs": [
+        {
+          "monster": "fishm",
+          "weight": 0.55
+        },
+        {
+          "monster": "wolf",
+          "weight": 0.45
+        }
+      ],
+      "extra": "fishm",
+      "elite": "wolfE",
+      "props": [
+        "barrel",
+        "crate",
+        "crate2",
+        "sack",
+        "barrel"
+      ],
+      "propMaterial": "madeira",
+      "stone": false
+    },
+    {
+      "id": "crypt",
+      "bairro": "Cemitério das Velas",
+      "map": "crypt2",
+      "boss": "reaper",
+      "minRank": 1,
+      "titles": {
+        "primavera": "Jardim dos Ossos",
+        "verao": "Cripta Abafada",
+        "outono": "Vigília dos Espectros",
+        "inverno": "Túmulos de Geada"
+      },
+      "mobs": [
+        {
+          "monster": "cnev",
+          "weight": 0.4
+        },
+        {
+          "monster": "coss",
+          "weight": 0.35
+        },
+        {
+          "monster": "cvel",
+          "weight": 0.25
+        }
+      ],
+      "extra": "cvel",
+      "elite": "cosr",
+      "props": [
+        "urn",
+        "urn",
+        "skull",
+        "bones",
+        "candles",
+        "tomb"
+      ],
+      "propMaterial": "cera",
+      "stone": true
+    },
+    {
+      "id": "mines",
+      "bairro": "Minas da Forja",
+      "map": "mine",
+      "boss": "colosso",
+      "minRank": 2,
+      "titles": {
+        "primavera": "Veio Desperto",
+        "verao": "Fornalha Aberta",
+        "outono": "Galeria de Cinzas",
+        "inverno": "Túnel Gelado"
+      },
+      "mobs": [
+        {
+          "monster": "mbes",
+          "weight": 0.4
+        },
+        {
+          "monster": "maut",
+          "weight": 0.3
+        },
+        {
+          "monster": "mesc",
+          "weight": 0.3
+        }
+      ],
+      "extra": "mesc",
+      "elite": "msen",
+      "props": [
+        "barrel",
+        "crate",
+        "crate2",
+        "barrel"
+      ],
+      "propMaterial": "parafuso",
+      "stone": false
+    },
+    {
+      "id": "garden",
+      "bairro": "Estufa Silvestre",
+      "map": "garden",
+      "boss": "rainha",
+      "minRank": 3,
+      "titles": {
+        "primavera": "Floração Voraz",
+        "verao": "Estufa Sufocante",
+        "outono": "Folhas Caídas",
+        "inverno": "Raízes Adormecidas"
+      },
+      "mobs": [
+        {
+          "monster": "gbro",
+          "weight": 0.4
+        },
+        {
+          "monster": "gsei",
+          "weight": 0.3
+        },
+        {
+          "monster": "gmus",
+          "weight": 0.3
+        }
+      ],
+      "extra": "gbro",
+      "elite": "gflo",
+      "props": [
+        "urn",
+        "urn",
+        "candles",
+        "bones"
+      ],
+      "propMaterial": "semente",
+      "stone": true
+    },
+    {
+      "id": "cathedral",
+      "bairro": "Catedral do Arauto",
+      "map": "cath",
+      "boss": "knight",
+      "minRank": 4,
+      "titles": {
+        "primavera": "Vitrais em Flor",
+        "verao": "Nave Ardente",
+        "outono": "Litania das Sombras",
+        "inverno": "Sinos de Geada"
+      },
+      "mobs": [
+        {
+          "monster": "kesc",
+          "weight": 0.35
+        },
+        {
+          "monster": "ksin",
+          "weight": 0.3
+        },
+        {
+          "monster": "ksom",
+          "weight": 0.35
+        }
+      ],
+      "extra": "ksom",
+      "elite": "kcav",
+      "props": [
+        "candles",
+        "urn",
+        "pillar",
+        "candles"
+      ],
+      "propMaterial": "cinza",
+      "stone": true
+    }
+  ]
+}
