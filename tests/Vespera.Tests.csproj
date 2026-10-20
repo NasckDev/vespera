@@ -34,4 +34,9 @@
   <ItemGroup>
     <ProjectReference Include="..\src\Core\Vespera.Core.csproj" />
   </ItemGroup>
+
+  <!-- Os testes carregam os JSON reais do jogo (src/Data) para validar dados e regras juntos. -->
+  <ItemGroup>
+    <None Include="..\src\Data\*.json" Link="Data\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 </Project>
