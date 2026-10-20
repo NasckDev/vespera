@@ -10,12 +10,11 @@ height = 14.0
 [sub_resource type="CircleShape2D" id="Shape_interact"]
 radius = 22.0
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("Camera", "InteractionArea")]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("InteractionArea")]
 collision_layer = 2
 collision_mask = 1
 motion_mode = 1
 script = ExtResource("1_player")
-Camera = NodePath("Camera")
 InteractionArea = NodePath("InteractionArea")
 
 [node name="Sprite" type="Sprite2D" parent="."]
@@ -34,7 +33,3 @@ monitorable = false
 [node name="Shape" type="CollisionShape2D" parent="InteractionArea"]
 position = Vector2(0, -6)
 shape = SubResource("Shape_interact")
-
-[node name="Camera" type="Camera2D" parent="."]
-position_smoothing_enabled = true
-position_smoothing_speed = 8.0

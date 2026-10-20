@@ -13,9 +13,6 @@ public partial class Player : CharacterBody2D
     [Export]
     public float MoveSpeed { get; set; } = 90f;
 
-    [Export]
-    public Camera2D Camera { get; set; } = null!;
-
     /// <summary>Área que detecta Interactables (máscara na camada 6).</summary>
     [Export]
     public Area2D InteractionArea { get; set; } = null!;
