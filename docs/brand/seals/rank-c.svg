@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" shape-rendering="crispEdges">
+  <title>Selo de rank C</title>
+  <polygon points="32.0,4.0 60.0,32.0 32.0,60.0 4.0,32.0" fill="#52E0C4" stroke="#F4E7C6" stroke-width="2"/>
+  <text x="32" y="39.9" text-anchor="middle" font-family="'Pixelify Sans', monospace" font-weight="700" font-size="22" fill="#1B1F3B">C</text>
+</svg>

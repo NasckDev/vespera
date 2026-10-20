@@ -1,0 +1,96 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://src/UI/Hud.cs" id="1_hud"]
+[ext_resource type="Script" path="res://src/UI/RankSeal.cs" id="2_seal"]
+[ext_resource type="FontFile" path="res://assets/fonts/PixelifySans.ttf" id="3_pixelify"]
+
+[node name="Hud" type="CanvasLayer" node_paths=PackedStringArray("RankSeal", "HpBar", "HpLabel", "XpBar", "FragmentsLabel", "LocationLabel", "PromptLabel")]
+layer = 10
+script = ExtResource("1_hud")
+RankSeal = NodePath("Status/Row/RankSeal")
+HpBar = NodePath("Status/Row/Bars/HpRow/HpBar")
+HpLabel = NodePath("Status/Row/Bars/HpRow/HpLabel")
+XpBar = NodePath("Status/Row/Bars/XpBar")
+FragmentsLabel = NodePath("Status/Row/Bars/FragmentsLabel")
+LocationLabel = NodePath("LocationLabel")
+PromptLabel = NodePath("PromptLabel")
+
+[node name="Status" type="PanelContainer" parent="."]
+offset_left = 6.0
+offset_top = 6.0
+offset_right = 170.0
+offset_bottom = 54.0
+mouse_filter = 2
+
+[node name="Row" type="HBoxContainer" parent="Status"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="RankSeal" type="Control" parent="Status/Row"]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("2_seal")
+LabelFont = ExtResource("3_pixelify")
+LabelFontSize = 18
+
+[node name="Bars" type="VBoxContainer" parent="Status/Row"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="HpRow" type="HBoxContainer" parent="Status/Row/Bars"]
+layout_mode = 2
+
+[node name="HpBar" type="ProgressBar" parent="Status/Row/Bars/HpRow"]
+custom_minimum_size = Vector2(80, 8)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_type_variation = &"HpBar"
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="HpLabel" type="Label" parent="Status/Row/Bars/HpRow"]
+layout_mode = 2
+text = "100/100"
+
+[node name="XpBar" type="ProgressBar" parent="Status/Row/Bars"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+theme_type_variation = &"XpBar"
+max_value = 1.0
+step = 0.001
+show_percentage = false
+
+[node name="FragmentsLabel" type="Label" parent="Status/Row/Bars"]
+layout_mode = 2
+text = "Fragmentos: 0"
+
+[node name="LocationLabel" type="Label" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -206.0
+offset_top = 6.0
+offset_right = -8.0
+offset_bottom = 26.0
+grow_horizontal = 0
+horizontal_alignment = 2
+
+[node name="PromptLabel" type="Label" parent="."]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -40.0
+offset_right = 100.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+horizontal_alignment = 1

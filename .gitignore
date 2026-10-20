@@ -1,0 +1,43 @@
+# --- Godot 4 ---
+.godot/
+.import/
+export.cfg
+export_credentials.cfg
+*.translation
+# Mono/.NET gerados pelo Godot
+.mono/
+data_*/
+mono_crash.*.json
+
+# --- .NET ---
+bin/
+obj/
+*.user
+*.suo
+*.userprefs
+TestResults/
+*.trx
+.vs/
+
+# --- IDEs ---
+.idea/
+*.DotSettings.user
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/settings.json
+!.vscode/tasks.json
+
+# --- Builds locais ---
+build/
+dist/
+*.tpz
+
+# --- Sistema ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Ferramentas locais ---
+.remember/
+.claude/settings.local.json

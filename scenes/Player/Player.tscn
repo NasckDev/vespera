@@ -1,0 +1,40 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://src/Player/Player.cs" id="1_player"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/placeholder_player.png" id="2_sprite"]
+
+[sub_resource type="CapsuleShape2D" id="Shape_feet"]
+radius = 6.0
+height = 14.0
+
+[sub_resource type="CircleShape2D" id="Shape_interact"]
+radius = 22.0
+
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("Camera", "InteractionArea")]
+collision_layer = 2
+collision_mask = 1
+motion_mode = 1
+script = ExtResource("1_player")
+Camera = NodePath("Camera")
+InteractionArea = NodePath("InteractionArea")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_sprite")
+offset = Vector2(0, -20)
+
+[node name="Feet" type="CollisionShape2D" parent="."]
+rotation = 1.5708
+shape = SubResource("Shape_feet")
+
+[node name="InteractionArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 32
+monitorable = false
+
+[node name="Shape" type="CollisionShape2D" parent="InteractionArea"]
+position = Vector2(0, -6)
+shape = SubResource("Shape_interact")
+
+[node name="Camera" type="Camera2D" parent="."]
+position_smoothing_enabled = true
+position_smoothing_speed = 8.0

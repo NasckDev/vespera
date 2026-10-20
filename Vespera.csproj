@@ -1,0 +1,20 @@
+<Project Sdk="Godot.NET.Sdk/4.7.2">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>12</LangVersion>
+    <Nullable>enable</Nullable>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <RootNamespace>Vespera</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- src/Core e tests/ são projetos próprios; não compilam dentro do assembly do jogo. -->
+    <Compile Remove="src/Core/**" />
+    <Compile Remove="tests/**" />
+    <None Remove="src/Core/**;tests/**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="src/Core/Vespera.Core.csproj" />
+  </ItemGroup>
+</Project>

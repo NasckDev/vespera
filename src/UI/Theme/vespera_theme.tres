@@ -1,0 +1,100 @@
+[gd_resource type="Theme" format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/VT323-Regular.ttf" id="1_vt323"]
+[ext_resource type="FontFile" path="res://assets/fonts/PixelifySans.ttf" id="2_pixelify"]
+
+[sub_resource type="FontVariation" id="FontVariation_title"]
+base_font = ExtResource("2_pixelify")
+variation_opentype = {
+2003265652: 700
+}
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_panel"]
+content_margin_left = 6.0
+content_margin_top = 4.0
+content_margin_right = 6.0
+content_margin_bottom = 4.0
+bg_color = Color(0.1059, 0.1216, 0.2314, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.9569, 0.9059, 0.7765, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_bar_bg"]
+bg_color = Color(0.1059, 0.1216, 0.2314, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9569, 0.9059, 0.7765, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_hp_fill"]
+bg_color = Color(0.9098, 0.3647, 0.3647, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_xp_fill"]
+bg_color = Color(0.949, 0.6471, 0.2549, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_stamina_fill"]
+bg_color = Color(0.9569, 0.9059, 0.7765, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_boss_fill"]
+bg_color = Color(0.902, 0.2902, 0.5569, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_button"]
+content_margin_left = 8.0
+content_margin_top = 2.0
+content_margin_right = 8.0
+content_margin_bottom = 2.0
+bg_color = Color(0.2902, 0.1725, 0.4196, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.9569, 0.9059, 0.7765, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_button_focus"]
+content_margin_left = 8.0
+content_margin_top = 2.0
+content_margin_right = 8.0
+content_margin_bottom = 2.0
+bg_color = Color(0.2902, 0.1725, 0.4196, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.949, 0.6471, 0.2549, 1)
+
+[resource]
+default_font = ExtResource("1_vt323")
+default_font_size = 16
+Button/colors/font_color = Color(0.9569, 0.9059, 0.7765, 1)
+Button/colors/font_focus_color = Color(0.949, 0.6471, 0.2549, 1)
+Button/colors/font_hover_color = Color(0.949, 0.6471, 0.2549, 1)
+Button/styles/focus = SubResource("StyleBox_button_focus")
+Button/styles/hover = SubResource("StyleBox_button_focus")
+Button/styles/normal = SubResource("StyleBox_button")
+Button/styles/pressed = SubResource("StyleBox_button_focus")
+Label/colors/font_color = Color(0.9569, 0.9059, 0.7765, 1)
+Label/colors/font_outline_color = Color(0.1059, 0.1216, 0.2314, 1)
+Label/constants/outline_size = 4
+PanelContainer/styles/panel = SubResource("StyleBox_panel")
+Panel/styles/panel = SubResource("StyleBox_panel")
+ProgressBar/styles/background = SubResource("StyleBox_bar_bg")
+ProgressBar/styles/fill = SubResource("StyleBox_xp_fill")
+HpBar/base_type = &"ProgressBar"
+HpBar/styles/background = SubResource("StyleBox_bar_bg")
+HpBar/styles/fill = SubResource("StyleBox_hp_fill")
+XpBar/base_type = &"ProgressBar"
+XpBar/styles/background = SubResource("StyleBox_bar_bg")
+XpBar/styles/fill = SubResource("StyleBox_xp_fill")
+StaminaBar/base_type = &"ProgressBar"
+StaminaBar/styles/background = SubResource("StyleBox_bar_bg")
+StaminaBar/styles/fill = SubResource("StyleBox_stamina_fill")
+BossBar/base_type = &"ProgressBar"
+BossBar/styles/background = SubResource("StyleBox_bar_bg")
+BossBar/styles/fill = SubResource("StyleBox_boss_fill")
+TitleLabel/base_type = &"Label"
+TitleLabel/fonts/font = SubResource("FontVariation_title")
+TitleLabel/font_sizes/font_size = 24
+TitleLabel/colors/font_color = Color(0.949, 0.6471, 0.2549, 1)
