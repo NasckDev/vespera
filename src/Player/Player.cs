@@ -116,8 +116,7 @@ public partial class Player : CharacterBody2D
         GlobalPosition = globalPosition;
         Velocity = Vector2.Zero;
         IsMoving = false;
-        _nearby.Clear();
-        SetFocused(null);
+        SetFocused(null); // a lista de próximos segue os sinais da física (entrar/sair), não é zerada aqui
     }
 
     public override void _PhysicsProcess(double delta)
@@ -222,9 +221,16 @@ public partial class Player : CharacterBody2D
     {
         Interactable? closest = null;
         var bestDistance = float.MaxValue;
-        foreach (var candidate in _nearby)
+        for (var i = _nearby.Count - 1; i >= 0; i--)
         {
-            if (!candidate.Enabled || !IsInstanceValid(candidate))
+            var candidate = _nearby[i];
+            if (!IsInstanceValid(candidate) || !candidate.IsInsideTree())
+            {
+                _nearby.RemoveAt(i); // liberado na troca de mapa
+                continue;
+            }
+
+            if (!candidate.Enabled)
             {
                 continue;
             }
