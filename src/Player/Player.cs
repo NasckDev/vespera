@@ -119,6 +119,60 @@ public partial class Player : CharacterBody2D
         SetFocused(null); // a lista de próximos segue os sinais da física (entrar/sair), não é zerada aqui
     }
 
+    /// <summary>Até quantos px o jogador é deslizado de lado para contornar a quina de uma passagem.</summary>
+    private const float CornerNudgeMax = 5f;
+
+    /// <summary>
+    /// Correção de quina (estilo Zelda/Hades): andando reto contra a borda de uma passagem, se um pequeno
+    /// deslocamento lateral libera o caminho, desliza o jogador para lá em vez de travar na face da parede.
+    /// Não aloca: só <see cref="PhysicsBody2D.TestMove"/> com structs.
+    /// </summary>
+    private void ApplyCornerCorrection(Vector2 input, float step)
+    {
+        if (input == Vector2.Zero || step <= 0.05f)
+        {
+            return;
+        }
+
+        // Só em movimento quase reto num eixo; na diagonal o MoveAndSlide já desliza.
+        Vector2 forward;
+        if (Mathf.Abs(input.Y) > 0.9f && Mathf.Abs(input.X) < 0.4f)
+        {
+            forward = new Vector2(0, Mathf.Sign(input.Y));
+        }
+        else if (Mathf.Abs(input.X) > 0.9f && Mathf.Abs(input.Y) < 0.4f)
+        {
+            forward = new Vector2(Mathf.Sign(input.X), 0);
+        }
+        else
+        {
+            return;
+        }
+
+        var probe = forward * Mathf.Max(step, 1f);
+        if (!TestMove(GlobalTransform, probe))
+        {
+            return; // não está bloqueado
+        }
+
+        var side = new Vector2(-forward.Y, forward.X);
+        for (var offset = 1f; offset <= CornerNudgeMax; offset += 1f)
+        {
+            foreach (var sign in CornerSigns)
+            {
+                var shifted = GlobalTransform.Translated(side * (offset * sign));
+                if (!TestMove(GlobalTransform, side * (offset * sign)) && !TestMove(shifted, probe))
+                {
+                    // desliza na velocidade normal, sem teleporte
+                    MoveAndCollide(side * (sign * Mathf.Min(offset, step)));
+                    return;
+                }
+            }
+        }
+    }
+
+    private static readonly float[] CornerSigns = [1f, -1f];
+
     public override void _PhysicsProcess(double delta)
     {
         var dt = MathF.Min(MaxDelta, (float)delta);
@@ -132,7 +186,10 @@ public partial class Player : CharacterBody2D
         // combat.js:78-92 — velocidade instantânea, sem aceleração.
         var speed = MoveSpeed * SpeedMultiplier;
         Velocity = input * speed;
+        var before = GlobalPosition;
         MoveAndSlide();
+        // O deslize de quina usa só o que sobrou do passo do frame: nunca anda mais rápido que a velocidade normal.
+        ApplyCornerCorrection(input, (speed * dt) - GlobalPosition.DistanceTo(before));
 
         IsMoving = input != Vector2.Zero;
         if (IsMoving)

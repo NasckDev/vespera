@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://src/World/AtlasSprite.cs" id="2_atlas"]
 
 [sub_resource type="CircleShape2D" id="Shape_feet"]
-radius = 4.0
+radius = 3.5
 
 [sub_resource type="CircleShape2D" id="Shape_interact"]
 radius = 0.5
