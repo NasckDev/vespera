@@ -28,3 +28,15 @@ O protótipo v2 (HTML/JS, Claude Design) é a referência de *game feel*, conte�
 | D15 | **Smoke test é o playtest automático oficial** (`-- --smoke-test`). Toda mecânica nova ganha um cenário em `src/Testing/Scenarios/`. | Garante que o jogo continua jogável a cada PR. |
 | D16 | **Export Windows gera `Vespera.exe` + pasta `data_Vespera_windows_x86_64`** (o C# do Godot não embute tudo no .exe). O zip de release leva os dois. | Limitação do Godot .NET; corrige a promessa de "um único .exe" do CLAUDE.md §8. |
 | D17 | **Itens do Arsenal (146)** (`Downloads/VESPERA_Arsenal_146_Itens_Assets_Claude.zip`) são o catálogo de equipamentos do jogo; entram depois do port da v2, mapeados para os mesmos `GearDef`. | Pedido do autor: "considerar como arsenais do jogo". |
+
+## 2026-10-20 — Mundo base (frente A2)
+
+| # | Decisão | Motivo |
+|---|---|---|
+| D18 | **Toda chegada passa por `World.CorrectToWalkable`** (`NearestWalkable`, r=4, passos de 2 u, até 96 u). Único caso encontrado: volta da Brecha no spot 1 `(1174, 558)` cai em célula bloqueada e vira `(1174, 532)`. Os demais spawns/chegadas da §9.3 são andáveis (testes do Core para mapas por formas; smoke para os hd). | D6: corrigir o dado ruim, não reproduzi-lo. |
+| D19 | **Interagíveis do `maps.json` ganham `id`** (`odete`, `board`, `bras`, `oficios`, `portal0/1`, `lucia`, `rest`, `gaspar`, `vesna`, `ivo`, `abel`); `kind` do `InteractionRequested` = nome da ação da v2. Portais (com `cond`) começam desligados, rótulo `Brecha · {bairro}` preenchido por quem abre a Brecha. | A spec não dá ids; lojas, diálogos e Brechas precisam de uma chave estável. |
+| D20 | **Fuga (`back`)**: um empurrão de 14 u (não os 28 u acidentais da v2, spec §10) e no máximo um `DungeonEscapeRequested` por segundo. **Porta** só com `World.DoorOpen`. | Sem o modal da v2 pausando o mundo, o pedido repetiria a cada frame. |
+| D21 | **Colisores exatos**: mapas por formas viram faixas horizontais nas bordas dos retângulos (exato); o círculo do Núcleo vira faixas de 2 u com a corda mais estreita (colisor ≥ área bloqueada). Moldura bloqueada de 16 u em volta de todos os mapas (inclui as máscaras: fora da grade = bloqueado). | Não rasterizar formas (spec §9.2) e nunca deixar o jogador num ponto que a regra da v2 considera bloqueado. |
+| D22 | **Tremor de câmera** na escala da v2 (px de tela): amplitude em u = `shake × altura_visível / 720`. | A v2 mede em device px; 720p é a janela padrão do projeto. |
+| D23 | **`maps.json`** tem só os 13 mapas da v2 (sem os legados `fish`/`crypt`), caminhos `res://` e os textos descritivos da spec (`hunters`, `voltaDaBrecha`) mantidos como texto e ignorados pelo parser. | Fidelidade à §9.3 sem inventar formato para regras que são código. |
+| D24 | **Filtro por nó** (Godot 4 não filtra no import): `World/Map` Linear, `World/Entities` Linear com mipmaps; o padrão do projeto continua Nearest para a UI pixel. Câmera do jogador removida em favor da `WorldCamera`. | Aplica D3 sem borrar a UI. |
