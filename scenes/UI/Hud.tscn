@@ -4,22 +4,24 @@
 [ext_resource type="Script" path="res://src/UI/RankSeal.cs" id="2_seal"]
 [ext_resource type="FontFile" path="res://assets/fonts/PixelifySans.ttf" id="3_pixelify"]
 
-[node name="Hud" type="CanvasLayer" node_paths=PackedStringArray("RankSeal", "HpBar", "HpLabel", "XpBar", "FragmentsLabel", "LocationLabel", "PromptLabel")]
+[node name="Hud" type="CanvasLayer" node_paths=PackedStringArray("RankSeal", "LevelLabel", "HpBar", "HpLabel", "XpBar", "LumesLabel", "FragmentsLabel", "LocationLabel", "PromptLabel")]
 layer = 10
 script = ExtResource("1_hud")
 RankSeal = NodePath("Status/Row/RankSeal")
+LevelLabel = NodePath("Status/Row/Bars/LevelLabel")
 HpBar = NodePath("Status/Row/Bars/HpRow/HpBar")
 HpLabel = NodePath("Status/Row/Bars/HpRow/HpLabel")
 XpBar = NodePath("Status/Row/Bars/XpBar")
-FragmentsLabel = NodePath("Status/Row/Bars/FragmentsLabel")
+LumesLabel = NodePath("Status/Row/Bars/Wallet/LumesLabel")
+FragmentsLabel = NodePath("Status/Row/Bars/Wallet/FragmentsLabel")
 LocationLabel = NodePath("LocationLabel")
 PromptLabel = NodePath("PromptLabel")
 
 [node name="Status" type="PanelContainer" parent="."]
 offset_left = 6.0
 offset_top = 6.0
-offset_right = 170.0
-offset_bottom = 54.0
+offset_right = 190.0
+offset_bottom = 66.0
 mouse_filter = 2
 
 [node name="Row" type="HBoxContainer" parent="Status"]
@@ -39,6 +41,10 @@ LabelFontSize = 18
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 2
+
+[node name="LevelLabel" type="Label" parent="Status/Row/Bars"]
+layout_mode = 2
+text = "Nv. 1 · Selo E"
 
 [node name="HpRow" type="HBoxContainer" parent="Status/Row/Bars"]
 layout_mode = 2
@@ -65,9 +71,17 @@ max_value = 1.0
 step = 0.001
 show_percentage = false
 
-[node name="FragmentsLabel" type="Label" parent="Status/Row/Bars"]
+[node name="Wallet" type="HBoxContainer" parent="Status/Row/Bars"]
 layout_mode = 2
-text = "Fragmentos: 0"
+theme_override_constants/separation = 8
+
+[node name="LumesLabel" type="Label" parent="Status/Row/Bars/Wallet"]
+layout_mode = 2
+text = "Lumes: 0"
+
+[node name="FragmentsLabel" type="Label" parent="Status/Row/Bars/Wallet"]
+layout_mode = 2
+text = "Estilhaços: 0"
 
 [node name="LocationLabel" type="Label" parent="."]
 anchors_preset = 1

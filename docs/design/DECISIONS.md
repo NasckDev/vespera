@@ -28,3 +28,15 @@ O protótipo v2 (HTML/JS, Claude Design) é a referência de *game feel*, conte�
 | D15 | **Smoke test é o playtest automático oficial** (`-- --smoke-test`). Toda mecânica nova ganha um cenário em `src/Testing/Scenarios/`. | Garante que o jogo continua jogável a cada PR. |
 | D16 | **Export Windows gera `Vespera.exe` + pasta `data_Vespera_windows_x86_64`** (o C# do Godot não embute tudo no .exe). O zip de release leva os dois. | Limitação do Godot .NET; corrige a promessa de "um único .exe" do CLAUDE.md §8. |
 | D17 | **Itens do Arsenal (146)** (`Downloads/VESPERA_Arsenal_146_Itens_Assets_Claude.zip`) são o catálogo de equipamentos do jogo; entram depois do port da v2, mapeados para os mesmos `GearDef`. | Pedido do autor: "considerar como arsenais do jogo". |
+
+## 2026-10-20 — Dados e núcleo da v2 (frente A1)
+
+| # | Decisão | Motivo |
+|---|---|---|
+| D18 | **Toasts de parte quebrada só nas partes do chefe a que o texto se refere** (`angler` Isca/Barbatanas, `reaper` Capuz/Corrente; campo `toast` da parte). O toast de 50% do Abissal e do Ceifador, que estava no código de IA (`combat.js:306,329`), vira o `phase2` desses chefes nos dados. | No protótipo o texto era por id de parte e disparava também para o Pescador e para a corrente do Sino Vivo (spec 02 §5.10), com frases sobre o chefe. |
+| D19 | **Save v2 (`saveVersion: 2`) com migração do v1 da fundação**: `totalXp` → `xp`; `fragments` → material `estilhaco`; `weaponLevel` → nível da Lâmina (classe padrão `rules.start.defaultClass`); `day` → `day`; `lantern` → Lanterna perdida com os Estilhaços na bolsa. O resto vem do jogo novo. Ids que não existem mais nos dados são descartados ao carregar (com aviso no log). | O v1 só tinha XP, Fragmentos, nível da arma, dia e Lanterna; a v2 é o `G.s` do protótipo. |
+| D20 | **Outono continua sem efeito de jogo** (só o texto "Espectros a mais em cada onda."), como na v2. | A spec não define quantos espectros nem de qual tipo; inventar número viola "não invente". Revisitar com o time. |
+| D21 | **Ondas: se o sorteio por peso não cair em nenhum mob (erro de ponto flutuante), usa o último mob do tema**, não `wolf`. | O fallback `'wolf'` do protótipo (`world.js:87`) colocaria lobos no Cemitério ou na Catedral (D6). |
+| D22 | **Ids de estação ASCII** (`primavera`, `verao`, `outono`, `inverno`) nos JSON e no código; o nome exibido fica em `name`. Raridade ausente vira `comum` e valor ausente vira `3` escritos explicitamente em `materials.json`. | Chaves estáveis sem acento; os defaults da v2 ficam visíveis nos dados. |
+| D23 | **Selos usam as cores da v2 (`ranks.json`)**; as formas continuam as do CLAUDE.md §6 e o **SSSS é uma estrela de oito pontas com anel interno**, entre a estrela do SS/SSS e o sol do Alvor. A barra fina do HUD mostra o progresso do **Nível** (v2), e o rótulo "Nv. N · Selo X". | Pedido da frente: "cores dos dados; SSSS com forma própria". |
+| D24 | **Invasão: `5 + min(4, rk)` mobs e sempre um Alfa** (`alphaAbove: 4` nos dados; com base 5 a condição `n > 4` da v2 é sempre verdadeira). | Fidelidade ao comportamento efetivo; o limiar fica no JSON para o time ajustar. |

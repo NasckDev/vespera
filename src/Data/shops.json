@@ -1,0 +1,158 @@
+{
+  "relics": [
+    {
+      "gear": "ln_lunar",
+      "cost": {
+        "lumes": 110
+      }
+    },
+    {
+      "gear": "ln_solar",
+      "cost": {
+        "lumes": 150,
+        "mats": {
+          "halo": 1
+        }
+      }
+    },
+    {
+      "gear": "ln_vazio",
+      "cost": {
+        "lumes": 150,
+        "mats": {
+          "carapaca": 2
+        }
+      }
+    },
+    {
+      "gear": "sh_lunar",
+      "cost": {
+        "lumes": 90
+      }
+    },
+    {
+      "gear": "sh_solar",
+      "cost": {
+        "lumes": 140,
+        "mats": {
+          "insignia": 1
+        }
+      }
+    },
+    {
+      "gear": "sh_vazio",
+      "cost": {
+        "lumes": 150,
+        "mats": {
+          "nucleo": 2
+        }
+      }
+    },
+    {
+      "gear": "rl_concha",
+      "cost": {
+        "lumes": 90,
+        "mats": {
+          "escama": 2
+        }
+      }
+    },
+    {
+      "gear": "rl_silva",
+      "cost": {
+        "lumes": 120,
+        "mats": {
+          "erva": 4,
+          "nucleo": 1
+        }
+      }
+    },
+    {
+      "gear": "rl_astro",
+      "cost": {
+        "lumes": 160,
+        "mats": {
+          "halo": 1,
+          "vitral": 2
+        }
+      }
+    },
+    {
+      "gear": "rl_vazio",
+      "cost": {
+        "lumes": 150,
+        "mats": {
+          "lamento": 1
+        }
+      }
+    }
+  ],
+  "services": [
+    {
+      "id": "inn_potion",
+      "npc": "Lúcia",
+      "label": "Comprar Poção",
+      "cost": {
+        "lumes": 30
+      },
+      "potions": 1
+    },
+    {
+      "id": "inn_rest",
+      "npc": "Lúcia",
+      "label": "Descansar até a próxima véspera",
+      "cost": {
+        "lumes": 10
+      },
+      "rest": true
+    },
+    {
+      "id": "ivo_potion",
+      "npc": "Ivo",
+      "label": "Poção",
+      "cost": {
+        "lumes": 22
+      },
+      "potions": 1
+    },
+    {
+      "id": "ivo_box",
+      "npc": "Ivo",
+      "label": "Caixa com 3 Poções",
+      "cost": {
+        "lumes": 60
+      },
+      "potions": 3
+    },
+    {
+      "id": "ivo_distill",
+      "npc": "Ivo",
+      "label": "Destilar Erva-de-Véspera",
+      "cost": {
+        "lumes": 6,
+        "mats": {
+          "erva": 2
+        }
+      },
+      "potions": 2
+    },
+    {
+      "id": "vesna_book",
+      "npc": "Vesna",
+      "label": "Comprar Diário da Brecha",
+      "cost": {
+        "lumes": 90
+      },
+      "gear": "livro"
+    },
+    {
+      "id": "odete_rescue",
+      "npc": "Odete",
+      "label": "Pedir resgate da minha Lanterna",
+      "cost": {
+        "lumes": 40
+      },
+      "lanternRescue": true
+    }
+  ]
+}

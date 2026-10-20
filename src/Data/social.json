@@ -1,0 +1,90 @@
+{
+  "hunters": [
+    {
+      "name": "Nina",
+      "rank": "C",
+      "weapon": "bow"
+    },
+    {
+      "name": "Bento",
+      "rank": "D",
+      "weapon": "hammer"
+    },
+    {
+      "name": "Iara",
+      "rank": "B",
+      "weapon": "staff"
+    },
+    {
+      "name": "Tomé",
+      "rank": "E",
+      "weapon": "sword"
+    },
+    {
+      "name": "Luzia",
+      "rank": "C",
+      "weapon": "dag"
+    },
+    {
+      "name": "Rafa",
+      "rank": "D",
+      "weapon": "sword"
+    },
+    {
+      "name": "Jurema",
+      "rank": "A",
+      "weapon": "staff"
+    },
+    {
+      "name": "Caio",
+      "rank": "D",
+      "weapon": "bow"
+    }
+  ],
+  "casas": [
+    "Casa do Alvorecer",
+    "Casa da Maré",
+    "Casa Ferrugem"
+  ],
+  "chat": [
+    "alguém pra Brecha do {b}? levo poção",
+    "vi um Abissal com a Isca inteira, quebrem primeiro",
+    "a forja tá mais barata hoje, a {c} adotou a rua",
+    "perdi minha lanterna de novo, alguém me salva",
+    "vendo Minério Rúnico, chama no privado",
+    "o Ceifador some se o capuz tá inteiro, foca nele",
+    "boa véspera, Lumeira",
+    "quem tá com Eco do Alfa? queria ver",
+    "o pão da Lúcia hoje tá ótimo",
+    "dica: martelo quebra parte muito mais rápido",
+    "fechamos a do {b}, ufa",
+    "a {c} tá recrutando, só rank C+",
+    "alguém viu meu primo? entrou numa Brecha ontem",
+    "tô de arco, cubro quem for de lâmina"
+  ],
+  "chatBairros": [
+    "cemitério",
+    "mercado"
+  ],
+  "rumors": [
+    "Dizem que o Abissal só encanta quem olha pra Isca. Quebre a luz e ele vira só um peixe grande e bravo.",
+    "O Ceifador carrega a lanterna de alguém que ele levou. Quando a corrente quebra, a lanterna fica.",
+    "Quando uma Brecha rompe, Brás fecha a forja e eu dobro o preço do pão. Não é ganância, é medo.",
+    "As Casas brigam por bairro, mas quando a cidade cai, todo brasão sangra igual.",
+    "Ninguém em Lumeira lembra de ter visto um Alvor. Mas todo mundo jura que um vai chegar."
+  ],
+  "idleLines": [
+    "boa véspera",
+    "alguém tem poção?",
+    "vou pro mercado",
+    "cuidado lá fora",
+    "..."
+  ],
+  "randomLines": [
+    "boa véspera",
+    "alguém pra Brecha?",
+    "preciso de Presa Rubra",
+    "...",
+    "cuidado lá fora"
+  ]
+}

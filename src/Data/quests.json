@@ -1,0 +1,203 @@
+{
+  "quests": [
+    {
+      "id": "primeiros_passos",
+      "name": "Primeiros passos",
+      "desc": "Fale com Odete no balcão da Guilda.",
+      "condition": {
+        "kind": "counter",
+        "key": "odete",
+        "target": 1
+      },
+      "reward": {
+        "lumes": 20
+      },
+      "end": {
+        "who": "Odete",
+        "text": "Seu Selo é E. Todo caçador começa assim, com a pele ardendo e a lanterna tremendo. Os bonecos ali embaixo não mordem. Comece por eles."
+      }
+    },
+    {
+      "id": "bonecos",
+      "name": "Bonecos de treino",
+      "desc": "Acerte os bonecos da Guilda 8 vezes. Tente de frente e pelas costas.",
+      "condition": {
+        "kind": "counter",
+        "key": "dummy",
+        "target": 8
+      },
+      "reward": {
+        "potions": 1
+      },
+      "showProgress": true,
+      "end": {
+        "who": "Odete",
+        "text": "Viu? De frente você acerta a mandíbula, pelas costas o dorso. Cada parte guarda um material diferente. Agora vá até a Rua da Forja: a próxima véspera não espera."
+      }
+    },
+    {
+      "id": "primeira_vespera",
+      "name": "A primeira véspera",
+      "desc": "Saia pela porta da Guilda até a Rua da Forja e entre numa Brecha.",
+      "condition": {
+        "kind": "counter",
+        "key": "entered",
+        "target": 1
+      },
+      "reward": {
+        "lumes": 20
+      }
+    },
+    {
+      "id": "golpe_supremo",
+      "name": "Golpe Supremo",
+      "desc": "Use seu Golpe Supremo [F] dentro de uma Brecha.",
+      "condition": {
+        "kind": "counter",
+        "key": "ults",
+        "target": 1
+      },
+      "reward": {
+        "mats": {
+          "estilhaco": 2
+        }
+      }
+    },
+    {
+      "id": "feche_brecha",
+      "name": "Feche a Brecha",
+      "desc": "Vença as ondas, siga para o Núcleo e derrote o chefe.",
+      "condition": {
+        "kind": "counter",
+        "key": "bosses",
+        "target": 1
+      },
+      "reward": {
+        "lumes": 60,
+        "mats": {
+          "estilhaco": 3
+        }
+      },
+      "end": {
+        "who": "Odete",
+        "text": "Uma Brecha a menos. Lumeira dorme melhor hoje, mesmo sem saber o seu nome. Leve os materiais até Brás: ele transforma partes em força."
+      }
+    },
+    {
+      "id": "fogo_bras",
+      "name": "O fogo do Brás",
+      "desc": "Melhore sua arma na forja do Brás, na Rua da Forja.",
+      "condition": {
+        "kind": "weaponLevel",
+        "target": 2
+      },
+      "reward": {
+        "potions": 1
+      }
+    },
+    {
+      "id": "quebra_partes",
+      "name": "Quebra-partes",
+      "desc": "Quebre 12 partes de monstros.",
+      "condition": {
+        "kind": "counter",
+        "key": "broke",
+        "target": 12
+      },
+      "reward": {
+        "lumes": 80
+      },
+      "showProgress": true
+    },
+    {
+      "id": "selo_d",
+      "name": "Selo D",
+      "desc": "Suba seu Selo até D (Vigia).",
+      "condition": {
+        "kind": "rank",
+        "rank": "D"
+      },
+      "reward": {
+        "lumes": 50
+      },
+      "end": {
+        "who": "Odete",
+        "text": "Selo D. A marca vai arder por uns dias. Agora o Cemitério das Velas abre para você. Dizem que o Ceifador some nas sombras enquanto o capuz estiver inteiro."
+      }
+    },
+    {
+      "id": "cemiterio",
+      "name": "Cemitério das Velas",
+      "desc": "Feche uma Brecha do Cemitério das Velas.",
+      "condition": {
+        "kind": "themeClosed",
+        "theme": "crypt"
+      },
+      "reward": {
+        "lumes": 100,
+        "mats": {
+          "estilhaco": 4
+        }
+      }
+    },
+    {
+      "id": "minas",
+      "name": "Minas da Forja",
+      "desc": "Alcance o Selo C e feche uma Brecha das Minas da Forja.",
+      "condition": {
+        "kind": "themeClosed",
+        "theme": "mines"
+      },
+      "reward": {
+        "lumes": 140
+      },
+      "end": {
+        "who": "Brás",
+        "text": "O Colosso caiu? Então era verdade. Aquilo foi forjado aqui, há vinte anos, no Ano Sem Alvor. Fico te devendo uma."
+      }
+    },
+    {
+      "id": "estufa",
+      "name": "Estufa Silvestre",
+      "desc": "Feche uma Brecha da Estufa Silvestre.",
+      "condition": {
+        "kind": "themeClosed",
+        "theme": "garden"
+      },
+      "reward": {
+        "lumes": 180
+      }
+    },
+    {
+      "id": "arauto",
+      "name": "O Arauto da Lanterna Partida",
+      "desc": "Feche a Brecha da Catedral do Arauto.",
+      "condition": {
+        "kind": "themeClosed",
+        "theme": "cathedral"
+      },
+      "reward": {
+        "lumes": 300,
+        "mats": {
+          "estilhaco": 8
+        }
+      },
+      "end": {
+        "who": "Odete",
+        "text": "O Arauto carregava a lanterna da primeira véspera. Você a trouxe de volta. Ninguém em Lumeira chegou tão perto do Alvor. A cidade ainda não amanheceu, mas hoje, pela primeira vez, eu acredito que vai."
+      }
+    },
+    {
+      "id": "rumo_alvor",
+      "name": "Rumo ao Alvor",
+      "desc": "Lumeira está de pé. Suba até o Selo Alvor, o caçador que faz amanhecer.",
+      "condition": {
+        "kind": "rank",
+        "rank": "ALVOR"
+      },
+      "reward": {
+        "lumes": 999
+      }
+    }
+  ]
+}

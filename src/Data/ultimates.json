@@ -1,0 +1,40 @@
+{
+  "initialCooldown": 6,
+  "ultimates": [
+    {
+      "class": "sword",
+      "name": "Fenda Rubra",
+      "cooldown": 40,
+      "color": "#ff4f7b",
+      "desc": "Três investidas cortantes na direção da mira. Você fica invulnerável durante o golpe."
+    },
+    {
+      "class": "bow",
+      "name": "Chuva de Vésperas",
+      "cooldown": 45,
+      "color": "#F2A541",
+      "desc": "Uma chuva de flechas cai sobre a área marcada durante 2,5 segundos."
+    },
+    {
+      "class": "staff",
+      "name": "Lanterna Estelar",
+      "cooldown": 50,
+      "color": "#c06cf0",
+      "desc": "Uma estrela puxa os inimigos próximos e explode, atordoando todos."
+    },
+    {
+      "class": "hammer",
+      "name": "Terremoto da Forja",
+      "cooldown": 45,
+      "color": "#ff8a3a",
+      "desc": "Três ondas de choque partem de você, ferindo e atordoando."
+    },
+    {
+      "class": "dag",
+      "name": "Dança das Sombras",
+      "cooldown": 40,
+      "color": "#d34cff",
+      "desc": "Você some nas sombras e golpeia pelas costas até seis inimigos."
+    }
+  ]
+}

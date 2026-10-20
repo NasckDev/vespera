@@ -1,0 +1,49 @@
+{
+  "tuning": {
+    "maxLevel": 2,
+    "lumesBase": 70,
+    "lumesPerLevel": 60,
+    "material": "estilhaco",
+    "materialBase": 4,
+    "materialPerLevel": 2,
+    "costReductionPerLevel": 10
+  },
+  "ecos": [
+    {
+      "id": "abissal",
+      "name": "Eco do Abissal",
+      "skill": "Isca Hipnótica",
+      "cost": 55,
+      "desc": "Lança uma isca que atrai os inimigos próximos e explode, atordoando.",
+      "source": "angler",
+      "sourceLabel": "O Abissal do Mercado"
+    },
+    {
+      "id": "ceifador",
+      "name": "Eco do Ceifador",
+      "skill": "Corrente Votiva",
+      "cost": 45,
+      "desc": "Arremessa uma corrente que puxa o primeiro inimigo até você e o atordoa.",
+      "source": "reaper",
+      "sourceLabel": "O Ceifador das Velas"
+    },
+    {
+      "id": "uivo",
+      "name": "Eco do Alfa",
+      "skill": "Investida Rubra",
+      "cost": 35,
+      "desc": "Avança como o Alfa, atravessando e ferindo tudo no caminho.",
+      "source": "wolfE",
+      "sourceLabel": "Alfa da Brecha"
+    },
+    {
+      "id": "arauto",
+      "name": "Eco do Arauto",
+      "skill": "Lanternas Votivas",
+      "cost": 60,
+      "desc": "Três lanternas orbitam você por alguns segundos, disparando contra os inimigos próximos.",
+      "source": "knight",
+      "sourceLabel": "O Arauto da Lanterna Partida"
+    }
+  ]
+}

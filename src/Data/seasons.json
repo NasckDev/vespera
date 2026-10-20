@@ -1,0 +1,38 @@
+{
+  "firstSeasonIndex": 2,
+  "daysPerSeason": 3,
+  "clock": {
+    "startMinutes": 990,
+    "newDayAtMinutes": 1800,
+    "newDayStartMinutes": 960,
+    "minutesPerSecond": 1,
+    "vesperaFromHour": 16,
+    "vesperaToHour": 19
+  },
+  "seasons": [
+    {
+      "id": "primavera",
+      "name": "Primavera",
+      "modText": "Baús extras escondidos na Brecha.",
+      "extraChests": 1
+    },
+    {
+      "id": "verao",
+      "name": "Verão",
+      "modText": "Monstros ardentes: +15% de dano.",
+      "monsterDamageMult": 1.15
+    },
+    {
+      "id": "outono",
+      "name": "Outono",
+      "modText": "Espectros a mais em cada onda."
+    },
+    {
+      "id": "inverno",
+      "name": "Inverno",
+      "modText": "Água congelada; golpes inimigos gelam.",
+      "chillOnHitSeconds": 1.6,
+      "ignoresFastZones": true
+    }
+  ]
+}

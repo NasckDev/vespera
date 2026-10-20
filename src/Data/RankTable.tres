@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="RankTableData" format=3]
-
-[ext_resource type="Script" path="res://src/Data/RankTableData.cs" id="1_rank"]
-
-[resource]
-script = ExtResource("1_rank")
-XpThresholds = PackedInt32Array(0, 100, 300, 700, 1500, 3000, 6000, 12000, 25000)
-HpPerRank = 20
-BaseMaxHp = 100
