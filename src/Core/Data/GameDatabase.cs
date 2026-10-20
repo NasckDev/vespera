@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Vespera.Core.Rules;
 
 namespace Vespera.Core.Data;
 
@@ -39,6 +40,9 @@ public sealed partial class GameDatabase
 
     /// <summary>Selos do mais baixo (E) ao mais alto (ALVOR). O índice é o <c>rankIdx</c> do protótipo.</summary>
     public IReadOnlyList<RankDef> Ranks => RankData.Ranks;
+
+    /// <summary>Regras de Selo e Nível sobre <see cref="RankData"/>.</summary>
+    public Progression Progression { get; private init; } = null!;
 
     public SeasonsFile SeasonData { get; private init; } = null!;
 
@@ -119,6 +123,7 @@ public sealed partial class GameDatabase
     {
         ArgumentNullException.ThrowIfNull(readFile);
 
+        var ranks = Parse<RanksFile>(readFile, "ranks.json");
         var themes = Parse<ThemesFile>(readFile, "themes.json").Themes;
         var weapons = Parse<WeaponsFile>(readFile, "weapons.json");
         var materials = Parse<MaterialsFile>(readFile, "materials.json");
@@ -132,7 +137,8 @@ public sealed partial class GameDatabase
         var db = new GameDatabase
         {
             Palette = Parse<PaletteFile>(readFile, "palette.json"),
-            RankData = Parse<RanksFile>(readFile, "ranks.json"),
+            RankData = ranks,
+            Progression = new Progression(ranks),
             SeasonData = Parse<SeasonsFile>(readFile, "seasons.json"),
             ThemeList = themes,
             Themes = Index(themes, t => t.Id, "tema", errors),

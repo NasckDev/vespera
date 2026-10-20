@@ -1,3 +1,5 @@
+using Vespera.Core.Ranks;
+
 namespace Vespera.Core.Data;
 
 /// <summary>Validação de referências cruzadas: todo id citado por um dado aponta para algo que existe.</summary>
@@ -173,6 +175,22 @@ public sealed partial class GameDatabase
             if (Ranks[i].Xp <= Ranks[i - 1].Xp)
             {
                 errors.Add($"ranks: XP de '{Ranks[i].Id}' precisa ser maior que o de '{Ranks[i - 1].Id}'");
+            }
+        }
+
+        var enumNames = Enum.GetNames<Rank>();
+        if (enumNames.Length != Ranks.Count)
+        {
+            errors.Add($"ranks: {Ranks.Count} Selos nos dados, mas o enum Rank tem {enumNames.Length}");
+        }
+        else
+        {
+            for (var i = 0; i < Ranks.Count; i++)
+            {
+                if (!string.Equals(enumNames[i], Ranks[i].Id, StringComparison.OrdinalIgnoreCase))
+                {
+                    errors.Add($"ranks[{i}]: id '{Ranks[i].Id}' não bate com Rank.{enumNames[i]}");
+                }
             }
         }
 

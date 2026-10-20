@@ -30,6 +30,7 @@ public partial class RankSeal : Control
         [Rank.S] = (SealShape.Hexagon, new Color("#E64A8E")),
         [Rank.SS] = (SealShape.Star, new Color("#E64A8E")),
         [Rank.SSS] = (SealShape.Star, new Color("#F2A541")),
+        [Rank.SSSS] = (SealShape.Star, new Color("#E64A8E")),
         [Rank.Alvor] = (SealShape.Sun, new Color("#F2A541")),
     };
 

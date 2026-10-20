@@ -47,6 +47,7 @@ public partial class SmokeTest
         game.AddXp(100);
         await NextPhysicsFrame();
         Require(game.Rank == Core.Ranks.Rank.D, $"100 XP deveria levar a D, está em {game.Rank}");
-        Require(game.MaxHp == hpBefore + 20, $"HP máximo deveria subir 20 (de {hpBefore} para {hpBefore + 20}), está {game.MaxHp}");
+        // v2: +12 pelo Selo D e +12 pelos dois níveis (100 XP = Nv. 3), spec 02 §1.3.
+        Require(game.MaxHp == hpBefore + 24, $"HP máximo deveria subir 24 (de {hpBefore} para {hpBefore + 24}), está {game.MaxHp}");
     }
 }

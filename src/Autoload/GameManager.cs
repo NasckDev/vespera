@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using Godot;
 using Vespera.Core.Combat;
 using Vespera.Core.Ranks;
+using Vespera.Core.Rules;
 using Vespera.Core.Save;
-using Vespera.Data;
 
 namespace Vespera.Autoload;
 
@@ -15,25 +15,23 @@ namespace Vespera.Autoload;
 /// </summary>
 public partial class GameManager : Node
 {
-    private const string RankTablePath = "res://src/Data/RankTable.tres";
     private const float FadeSeconds = 0.35f;
     private const int DebugXpGrant = 25;
 
     private static readonly Color FadeColor = new("#1B1F3B");
 
-    private RankTableData _rankData = null!;
-    private RankTable _rankTable = null!;
-    private XpSystem _xp = null!;
+    private Progression _progression = null!;
+    private int _totalXp;
     private ColorRect _fade = null!;
     private bool _changingScene;
 
     public static GameManager Instance { get; private set; } = null!;
 
-    public Rank Rank => _xp.Rank;
+    public Rank Rank => _progression.RankEnumOf(_totalXp);
 
-    public int TotalXp => _xp.TotalXp;
+    public int TotalXp => _totalXp;
 
-    public float ProgressInRank => _xp.ProgressInRank;
+    public float ProgressInRank => _progression.ProgressToNextRank(_totalXp);
 
     public int MaxHp { get; private set; }
 
@@ -51,8 +49,7 @@ public partial class GameManager : Node
 
     public override void _Ready()
     {
-        _rankData = GD.Load<RankTableData>(RankTablePath);
-        _rankTable = _rankData.ToRankTable();
+        _progression = Database.Db.Progression;
         _fade = CreateFadeOverlay();
         LoadGame();
     }
@@ -68,12 +65,12 @@ public partial class GameManager : Node
     public void LoadGame()
     {
         var data = SaveService.Instance.LoadOrNew();
-        _xp = new XpSystem(_rankTable, data.TotalXp);
+        _totalXp = data.TotalXp;
         Fragments = data.Fragments;
         WeaponLevel = data.WeaponLevel;
         Day = data.Day;
         Lantern = data.Lantern;
-        MaxHp = _rankTable.MaxHpFor(Rank, _rankData.BaseMaxHp);
+        MaxHp = _progression.BaseMaxHp(TotalXp);
         CurrentHp = MaxHp;
         Log.Info($"Partida carregada: rank {Rank}, {TotalXp} XP, {Fragments} Fragmentos.");
     }
@@ -89,19 +86,26 @@ public partial class GameManager : Node
 
     public void AddXp(int amount)
     {
-        var result = _xp.Add(amount);
+        var result = _progression.Gain(_totalXp, amount);
+        _totalXp = result.TotalXp;
         EventBus.Instance.EmitSignal(EventBus.SignalName.XpGained, amount, result.TotalXp, ProgressInRank);
+
+        // Selo e Nível somam HP máximo; o HP atual recebe o mesmo delta (combat.js:217).
+        var newMaxHp = _progression.BaseMaxHp(_totalXp);
+        if (newMaxHp != MaxHp)
+        {
+            CurrentHp = Math.Min(newMaxHp, CurrentHp + (newMaxHp - MaxHp));
+            MaxHp = newMaxHp;
+            EventBus.Instance.EmitSignal(EventBus.SignalName.PlayerHealed, CurrentHp, MaxHp);
+        }
 
         if (!result.RankedUp)
         {
             return;
         }
 
-        MaxHp = _rankTable.MaxHpFor(result.NewRank, _rankData.BaseMaxHp);
-        CurrentHp = MaxHp;
         Log.Info($"Rank {result.PreviousRank} → {result.NewRank}");
         EventBus.Instance.EmitSignal(EventBus.SignalName.RankChanged, (int)result.PreviousRank, (int)result.NewRank);
-        EventBus.Instance.EmitSignal(EventBus.SignalName.PlayerHealed, CurrentHp, MaxHp);
         SaveGame(); // autosave ao subir de rank (CLAUDE.md, seção 5)
     }
 
