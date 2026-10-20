@@ -7,12 +7,24 @@ namespace Vespera.Autoload;
 /// <summary>Lê e grava <see cref="SaveData"/> como JSON em <c>user://save.json</c>.</summary>
 public partial class SaveService : Node
 {
-    public const string SavePath = "user://save.json";
+    public const string DefaultSavePath = "user://save.json";
+    private const string SmokeSavePath = "user://save_smoke.json";
     private const string CorruptedSuffix = ".corrupted";
 
     public static SaveService Instance { get; private set; } = null!;
 
-    public override void _EnterTree() => Instance = this;
+    /// <summary>No smoke test usa um arquivo descartável para nunca tocar no save real.</summary>
+    public string SavePath { get; private set; } = DefaultSavePath;
+
+    public override void _EnterTree()
+    {
+        Instance = this;
+        if (Testing.SmokeTest.IsRequested())
+        {
+            SavePath = SmokeSavePath;
+            DirAccess.RemoveAbsolute(SavePath);
+        }
+    }
 
     public bool HasSave() => FileAccess.FileExists(SavePath);
 
