@@ -78,7 +78,10 @@ jobs:
           test -e "${{ matrix.output }}"
 
       - name: Copiar licenças para o build
-        run: cp LICENSE LICENSE-ASSETS.md README.md "$(dirname '${{ matrix.output }}')/"
+        run: |
+          for f in LICENSE LICENSE-ASSETS.md README.md README.en.md; do
+            if [ -f "$f" ]; then cp "$f" "$(dirname '${{ matrix.output }}')/"; fi
+          done
 
       - name: Compactar
         run: |
