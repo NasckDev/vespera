@@ -22,6 +22,7 @@ public partial class GameManager : Node
 
     private Progression _progression = null!;
     private int _totalXp;
+    private SaveData _save = null!;
     private ColorRect _fade = null!;
     private bool _changingScene;
 
@@ -43,8 +44,6 @@ public partial class GameManager : Node
 
     public int Day { get; private set; } = 1;
 
-    public LanternData? Lantern { get; private set; }
-
     public override void _EnterTree() => Instance = this;
 
     public override void _Ready()
@@ -65,24 +64,26 @@ public partial class GameManager : Node
     public void LoadGame()
     {
         var data = SaveService.Instance.LoadOrNew();
-        _totalXp = data.TotalXp;
-        Fragments = data.Fragments;
-        WeaponLevel = data.WeaponLevel;
+        _save = data;
+        _totalXp = data.Xp;
+        Fragments = data.MaterialCount(ShardMaterial);
+        WeaponLevel = data.WeaponLevel(data.ClassId);
         Day = data.Day;
-        Lantern = data.Lantern;
         MaxHp = _progression.BaseMaxHp(TotalXp);
         CurrentHp = MaxHp;
         Log.Info($"Partida carregada: rank {Rank}, {TotalXp} XP, {Fragments} Fragmentos.");
     }
 
-    public void SaveGame() => SaveService.Instance.Save(new SaveData
+    public void SaveGame()
     {
-        TotalXp = TotalXp,
-        Fragments = Fragments,
-        WeaponLevel = WeaponLevel,
-        Day = Day,
-        Lantern = Lantern,
-    });
+        _save.Xp = TotalXp;
+        _save.Materials[ShardMaterial] = Fragments;
+        _save.Weapons[_save.ClassId] = WeaponLevel;
+        _save.Day = Day;
+        SaveService.Instance.Save(_save);
+    }
+
+    private static string ShardMaterial => Database.Db.Rules.Economy.ShardMaterial;
 
     public void AddXp(int amount)
     {
@@ -160,9 +161,6 @@ public partial class GameManager : Node
     }
 
     public void RestoreFullHealth() => HealPlayer(MaxHp);
-
-    /// <summary>Guarda ou limpa a Lanterna (Fragmentos deixados na Brecha ao morrer).</summary>
-    public void SetLantern(LanternData? lantern) => Lantern = lantern;
 
     public void AdvanceDay() => Day++;
 

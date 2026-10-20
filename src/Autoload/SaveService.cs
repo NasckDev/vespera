@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Godot;
 using Vespera.Core.Save;
 
@@ -43,17 +44,24 @@ public partial class SaveService : Node
         Log.Debug($"Jogo salvo em {ProjectSettings.GlobalizePath(SavePath)}");
     }
 
-    /// <summary>Carrega o save, ou devolve um novo se não existir ou estiver corrompido.</summary>
+    /// <summary>Carrega o save (migrando versões antigas), ou devolve um jogo novo se não existir ou estiver corrompido.</summary>
     public SaveData LoadOrNew()
     {
         if (!HasSave())
         {
-            return new SaveData();
+            return NewGame();
         }
 
         try
         {
-            return SaveSerializer.FromJson(FileAccess.GetFileAsString(SavePath));
+            var warnings = new List<string>();
+            var data = SaveSerializer.FromJson(FileAccess.GetFileAsString(SavePath), Database.Db, warnings);
+            foreach (var warning in warnings)
+            {
+                Log.Warning($"Save: {warning}");
+            }
+
+            return data;
         }
         catch (SaveFormatException ex)
         {
@@ -61,7 +69,10 @@ public partial class SaveService : Node
             var backup = SavePath + CorruptedSuffix;
             DirAccess.RenameAbsolute(SavePath, backup);
             Log.Error($"{ex.Message} O arquivo foi movido para {backup}; começando um jogo novo.");
-            return new SaveData();
+            return NewGame();
         }
     }
+
+    /// <summary>Jogo novo com a classe padrão (a escolha de classe entra com o menu inicial).</summary>
+    private static SaveData NewGame() => SaveData.NewGame(Database.Db, null, Database.Db.Rules.Start.DefaultClass);
 }
