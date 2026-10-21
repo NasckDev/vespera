@@ -9,8 +9,10 @@ A arte, os mapas, o áudio, a lore e a identidade visual do **Véspera** são li
 | Caminho | Conteúdo |
 |---|---|
 | `assets/sprites/`, `assets/maps/`, `assets/tilesets/`, `assets/audio/` | Sprites, mapas pintados, máscaras de colisão, sons e músicas |
+| `assets/sprites/objects/`, `assets/maps/extra/` | Biblioteca de objetos do mundo e mapas candidatos (leva de 2026-10-20, ver `docs/design/catalogo-assets.md`) |
+| `docs/brand/source/` | Folhas-fonte dos objetos (imagens originais do autor) |
 | `docs/brand/` | Logo, key art, conceitos de personagem, selos de rank, paleta |
-| `docs/design/` | GDD, lore, personagens, bestiário e textos do jogo |
+| `docs/design/` | GDD, lore, personagens, bestiário, textos do jogo e imagens do catálogo (`docs/design/catalogo/`) |
 | `icon.svg` | Ícone do app |
 
 O **código** (tudo em `src/`, `tests/`, `tools/`, `scenes/` e arquivos de projeto/build) usa a licença **MIT** — veja [`LICENSE`](LICENSE).
