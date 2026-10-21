@@ -40,6 +40,7 @@ public partial class TownHunter : Node2D
         var w = Brain.Def.Weapon;
         _keys = [$"c_{w}_front", $"c_{w}_back", $"c_{w}_side"];
         AddChild(new AtlasSprite { Name = "Shadow", Key = "shadow", SpriteScale = 0.85f, Position = new Vector2(0, 2), Modulate = Colors.White with { A = 0.35f } });
+        AddChild(TownNpc.PresenceLight());
         _body = new Node2D { Name = "Body" };
         AddChild(_body);
         _sprite = new AtlasSprite { Name = "Sprite", Key = _keys[0], SpriteScale = 0.85f, Material = _tint };

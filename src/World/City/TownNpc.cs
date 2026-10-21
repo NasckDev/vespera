@@ -55,6 +55,7 @@ public partial class TownNpc : Node2D
         AddChild(_body);
         _sprite = new AtlasSprite { Name = "Sprite", Key = _frontKey };
         _body.AddChild(_sprite);
+        AddChild(PresenceLight());
         _interactable = new NpcInteractable { Name = "Talk", Npc = this, Id = Def.Id, Prompt = $"Falar com {Def.Name}", Radius = TalkRadius, Enabled = false };
         AddChild(_interactable);
         if (Labels is not null)
@@ -66,6 +67,20 @@ public partial class TownNpc : Node2D
         Modulate = Colors.White with { A = 0f };
         Visible = false;
     }
+
+    /// <summary>
+    /// Furo fraco e sem glow em volta de quem anda pela rua (B2-D51): com a noite mais escura, o morador continua legível
+    /// sem parecer que carrega uma lanterna.
+    /// </summary>
+    public static LightEmitter PresenceLight() => new()
+    {
+        Name = "Presence",
+        Radius = 20f,
+        Kind = CityLighting.AmberKind,
+        Intensity = 0.55f,
+        GlowBoost = 0f,
+        Position = new Vector2(0, -12),
+    };
 
     public override void _ExitTree()
     {

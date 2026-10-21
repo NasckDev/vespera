@@ -8,8 +8,10 @@ namespace Vespera.World.City;
 /// <summary>
 /// Portal de Brecha na Rua da Forja (spec 01 §4.3, <c>drawPortal</c>, <c>render.js:182-188</c>). Abre com a sequência
 /// do super kit (<c>assets/sprites/fx/portal_open_0..5.png</c>, ~1 s crescendo, D38) e depois pulsa alternando os quadros
-/// abertos a cada 0,28 s, com escala <c>1 + 0,03 sin(2,6t)</c>, glow magenta aditivo 88×44 (alpha <c>0,5 + 0,15 sin(3t)</c>),
-/// partículas subindo e a luz magenta <c>(x, y-30, 90, 'm')</c> na iluminação. Rótulo com bairro e timer em <c>y-92</c>.
+/// abertos a cada 0,28 s, com escala <c>1 + 0,03 sin(2,6t)</c> e rótulo com bairro e timer em <c>y-92</c>.
+/// B2-D51 (a véspera é um evento): poça magenta aditiva 150×56, aura vertical, onda de choque ao abrir, mais faíscas, e
+/// três luzes magenta (a do portal, 125 u, que estoura a 1,7× na abertura, e duas subindo em coluna) que furam a escuridão
+/// e somam glow por cima dela, então o portal se vê da rua inteira à noite.
 /// </summary>
 public partial class PortalVisual : Node2D
 {
@@ -33,10 +35,21 @@ public partial class PortalVisual : Node2D
     private static readonly Color Amber = new("#F2A541");
     private static Texture2D[]? _frames;
     private static Texture2D? _glowTexture;
+    private static Texture2D? _ringTexture;
+
+    /// <summary>Raio da luz do portal aberto (u). A v2 usava 90; ficava discreto demais à noite.</summary>
+    public const float LightRadius = 125f;
+
+    /// <summary>Duração da onda de choque da abertura.</summary>
+    public const float RingSeconds = 0.9f;
     private static CanvasItemMaterial? _additive;
 
     private Sprite2D _sprite = null!;
     private Sprite2D _glow = null!;
+    private Sprite2D _aura = null!;
+    private Sprite2D _ring = null!;
+    private LightEmitter _column0 = null!;
+    private LightEmitter _column1 = null!;
     private CpuParticles2D _particles = null!;
     private LightEmitter _light = null!;
     private Label? _title;
@@ -72,16 +85,38 @@ public partial class PortalVisual : Node2D
         _age = StartAge;
         _additive ??= new CanvasItemMaterial { BlendMode = CanvasItemMaterial.BlendModeEnum.Add };
         _glowTexture ??= CreateGlowTexture();
+        _ringTexture ??= CreateRingTexture();
+
+        _aura = new Sprite2D
+        {
+            Name = "Aura",
+            Texture = _glowTexture,
+            Material = _additive,
+            Position = new Vector2(0, -46),
+            Scale = new Vector2(84f / _glowTexture.GetWidth(), 150f / _glowTexture.GetHeight()),
+            Modulate = Magenta with { A = 0f },
+        };
+        AddChild(_aura);
 
         _glow = new Sprite2D
         {
             Name = "Glow",
             Texture = _glowTexture,
             Material = _additive,
-            Scale = new Vector2(88f / _glowTexture.GetWidth(), 44f / _glowTexture.GetHeight()),
+            Scale = new Vector2(150f / _glowTexture.GetWidth(), 56f / _glowTexture.GetHeight()),
             Modulate = Magenta,
         };
         AddChild(_glow);
+
+        _ring = new Sprite2D
+        {
+            Name = "Shockwave",
+            Texture = _ringTexture,
+            Material = _additive,
+            Visible = StartAge < RingSeconds,
+            Modulate = Magenta with { A = 0f },
+        };
+        AddChild(_ring);
 
         _sprite = new Sprite2D
         {
@@ -95,11 +130,11 @@ public partial class PortalVisual : Node2D
         _particles = new CpuParticles2D
         {
             Name = "Sparks",
-            Amount = 16,
-            Lifetime = 0.8,
+            Amount = 30,
+            Lifetime = 1.1,
             Position = new Vector2(0, -40),
             EmissionShape = CpuParticles2D.EmissionShapeEnum.Rectangle,
-            EmissionRectExtents = new Vector2(16, 30),
+            EmissionRectExtents = new Vector2(20, 36),
             Direction = Vector2.Up,
             Spread = 180f,
             InitialVelocityMin = 15f,
@@ -113,8 +148,12 @@ public partial class PortalVisual : Node2D
         };
         AddChild(_particles);
 
-        _light = new LightEmitter { Name = "Light", Radius = 90f, Kind = CityLighting.MagentaKind, Position = new Vector2(0, -30) };
+        _light = new LightEmitter { Name = "Light", Radius = LightRadius, Kind = CityLighting.MagentaKind, Position = new Vector2(0, -30), GlowBoost = 2.2f };
         AddChild(_light);
+        _column0 = new LightEmitter { Name = "Column0", Radius = 46f, Kind = CityLighting.MagentaKind, Position = new Vector2(0, -105), GlowBoost = 1.8f };
+        AddChild(_column0);
+        _column1 = new LightEmitter { Name = "Column1", Radius = 34f, Kind = CityLighting.MagentaKind, Position = new Vector2(0, -165), GlowBoost = 1.8f };
+        AddChild(_column1);
 
         if (Labels is not null)
         {
@@ -189,9 +228,32 @@ public partial class PortalVisual : Node2D
         }
 
         _sprite.Scale = Vector2.One * (scale * fade / FrameDensity);
-        _glow.Modulate = Magenta with { A = (0.5f + (0.15f * MathF.Sin(_time * 3f))) * 0.9f * open * fade };
+        _glow.Modulate = Magenta with { A = (0.62f + (0.15f * MathF.Sin(_time * 3f))) * open * fade };
+        _aura.Modulate = Magenta with { A = (0.3f + (0.08f * MathF.Sin(_time * 2.2f))) * open * fade };
+
+        // Abertura: a luz estoura (1,7×) e assenta; a onda de choque corre pelo chão.
+        var burst = _age < 1.6f ? 0.7f * MathF.Max(0f, 1f - (MathF.Abs(_age - 0.5f) / 1.1f)) : 0f;
+        var pulse = 1f + (0.05f * MathF.Sin(_time * 2.6f));
         _light.Intensity = open * fade;
-        _light.Radius = 90f * (0.5f + (0.5f * open));
+        _light.Radius = LightRadius * (0.5f + (0.5f * open)) * (pulse + burst);
+        var column = open * fade * (0.75f + (0.25f * MathF.Sin((_time * 1.7f) + 1f)));
+        _column0.Intensity = column;
+        _column1.Intensity = column * 0.8f;
+        if (_ring.Visible)
+        {
+            var t = _age / RingSeconds;
+            if (t >= 1f)
+            {
+                _ring.Visible = false;
+            }
+            else
+            {
+                var size = 24f + (236f * (1f - ((1f - t) * (1f - t))));
+                _ring.Scale = new Vector2(size / _ringTexture!.GetWidth(), size * 0.38f / _ringTexture.GetHeight());
+                _ring.Modulate = Magenta with { A = 0.9f * (1f - t) };
+            }
+        }
+
         Modulate = Colors.White with { A = fade };
     }
 
@@ -252,6 +314,25 @@ public partial class PortalVisual : Node2D
             Gradient = gradient,
             Width = 64,
             Height = 64,
+            Fill = GradientTexture2D.FillEnum.Radial,
+            FillFrom = new Vector2(0.5f, 0.5f),
+            FillTo = new Vector2(1f, 0.5f),
+        };
+    }
+
+    /// <summary>Anel radial (transparente no centro e na borda) para a onda de choque da abertura.</summary>
+    private static GradientTexture2D CreateRingTexture()
+    {
+        var gradient = new Gradient();
+        gradient.SetColor(0, Colors.White with { A = 0f });
+        gradient.SetColor(1, Colors.White with { A = 0f });
+        gradient.AddPoint(0.72f, Colors.White with { A = 0.15f });
+        gradient.AddPoint(0.88f, Colors.White);
+        return new GradientTexture2D
+        {
+            Gradient = gradient,
+            Width = 128,
+            Height = 128,
             Fill = GradientTexture2D.FillEnum.Radial,
             FillFrom = new Vector2(0.5f, 0.5f),
             FillTo = new Vector2(1f, 0.5f),
