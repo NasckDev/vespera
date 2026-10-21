@@ -154,13 +154,14 @@ public partial class TitleScreen : Control
 
     private void BuildMenu()
     {
-        var top = Mathf.Max(20f, 360f * 0.3f) - 22f;
+        // A v2 põe o slogan a 30% da altura; aqui desce 16 px para não encostar no filete do logo da key art.
+        var top = Mathf.Max(20f, 360f * 0.3f) - 6f;
         var slogan = Ui.Text(UiText.Slogan, UiFonts.Body, UiPalette.Body);
         slogan.Position = new Vector2(MenuX, top + 2);
         AddChild(slogan);
 
         _menu = Ui.Column(1);
-        _menu.Position = new Vector2(MenuX - 7, top + 22);
+        _menu.Position = new Vector2(MenuX - 7, top + 20);
         _menu.CustomMinimumSize = new Vector2(MenuWidth, 0);
         AddChild(_menu);
 

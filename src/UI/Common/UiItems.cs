@@ -139,7 +139,8 @@ public static class UiItems
         };
         info.Stats.AddRange(StatRows(g, equipped));
         info.Stats.Add(new StatLine("Classe", state.EquipmentRules.ClassesLabel(g)));
-        info.Stats.Add(new StatLine("Selo mínimo", db.Ranks[state.EquipmentRules.MinRankIndex(g)].Id));
+        var minRank = db.Ranks[state.EquipmentRules.MinRankIndex(g)];
+        info.Stats.Add(new StatLine("Selo mínimo", $"{minRank.Id} · {minRank.Title}")); // a letra sozinha em negrito parece "0"
         return info;
     }
 
