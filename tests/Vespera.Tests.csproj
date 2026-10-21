@@ -39,5 +39,6 @@
   <ItemGroup>
     <None Include="..\src\Data\*.json" Link="Data/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\assets\sprites\atlas\atlas.json" Link="Data/atlas.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\assets\maps\lights.json" Link="Data/lights.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>
