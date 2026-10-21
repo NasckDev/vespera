@@ -15,6 +15,7 @@
     {"rect": [230, 145, 30, 12], "note": "vaso do fundo"},
     {"rect": [250, 145, 166, 72], "note": "mesa da Vesna"},
     {"rect": [418, 160, 28, 38], "note": "pedestal do pergaminho"},
+    {"rect": [416, 145, 34, 16], "note": "haste do pedestal entre o pergaminho e o pé (INTE-3)"},
     {"rect": [449, 145, 28, 12], "note": "pia de chama azul (leste)"},
     {"rect": [479, 145, 114, 17], "note": "estante de grimórios"},
     {"rect": [614, 145, 30, 46], "note": "caixote sobre banco"},
@@ -31,6 +32,7 @@
     {"rect": [584, 206, 20, 16], "note": "banqueta (nordeste da mesa)"},
     {"rect": [540, 266, 24, 28], "note": "banqueta (sul da mesa)"},
     {"rect": [634, 236, 36, 40], "note": "atril com livro"},
+    {"rect": [630, 272, 40, 26], "note": "pé do atril e canto atrás da pilha de livros (INTE-3)"},
     {"rect": [606, 280, 28, 20], "note": "pilha de livros"},
     {"rect": [0, 296, 291, 112], "note": "parede sul (oeste)"},
     {"rect": [382, 296, 312, 112], "note": "parede sul (leste)"}
