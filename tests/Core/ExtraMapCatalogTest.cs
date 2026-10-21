@@ -39,10 +39,13 @@ public class ExtraMapCatalogTest
         var maps = Real.Value.Maps;
         AssertThat(maps.Count).IsEqual(20);
         AssertThat(maps.All(m => !m.HasCollision)).IsTrue();
-        foreach (var m in maps.Where(m => m.Source.EndsWith('L') || m.Source.EndsWith('R')))
+        // Pares 1774×887 cortados no vão entre os dois mapas: as metades somam a largura original.
+        foreach (var source in new[] { "58", "60", "62", "64", "66" })
         {
-            AssertThat(m.ImageWidth).IsEqual(887);
-            AssertThat(m.ImageHeight).IsEqual(887);
+            var halves = maps.Where(m => m.Source.StartsWith(source, StringComparison.Ordinal)).ToList();
+            AssertThat(halves.Count).IsEqual(2);
+            AssertThat(halves.Sum(m => m.ImageWidth)).IsEqual(1774);
+            AssertThat(halves.All(m => m.ImageHeight == 887 && m.ImageWidth is > 700 and < 1100)).IsTrue();
         }
 
         AssertThat(maps.Count(m => m.Source is "58L" or "58R")).IsEqual(2);

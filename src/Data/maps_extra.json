@@ -77,7 +77,7 @@
    "id": "extra_garden_c",
    "image": "res://assets/maps/extra/extra_garden_c/map_extra_garden_c.png",
    "imageSize": [
-    887,
+    886,
     887
    ],
    "source": "66R",
@@ -104,7 +104,7 @@
    "id": "brecha6_library_b",
    "image": "res://assets/maps/extra/brecha6_library_b/map_brecha6_library_b.png",
    "imageSize": [
-    887,
+    1023,
     887
    ],
    "source": "60L",
@@ -132,7 +132,7 @@
    "id": "brecha7_clock_b",
    "image": "res://assets/maps/extra/brecha7_clock_b/map_brecha7_clock_b.png",
    "imageSize": [
-    887,
+    751,
     887
    ],
    "source": "60R",
@@ -146,7 +146,7 @@
    "id": "brecha7_clock_c",
    "image": "res://assets/maps/extra/brecha7_clock_c/map_brecha7_clock_c.png",
    "imageSize": [
-    887,
+    894,
     887
    ],
    "source": "64L",
@@ -174,7 +174,7 @@
    "id": "brecha8_catacombs_b",
    "image": "res://assets/maps/extra/brecha8_catacombs_b/map_brecha8_catacombs_b.png",
    "imageSize": [
-    887,
+    989,
     887
    ],
    "source": "62L",
@@ -188,7 +188,7 @@
    "id": "brecha8_catacombs_c",
    "image": "res://assets/maps/extra/brecha8_catacombs_c/map_brecha8_catacombs_c.png",
    "imageSize": [
-    887,
+    785,
     887
    ],
    "source": "62R",
@@ -202,7 +202,7 @@
    "id": "brecha8_catacombs_d",
    "image": "res://assets/maps/extra/brecha8_catacombs_d/map_brecha8_catacombs_d.png",
    "imageSize": [
-    887,
+    888,
     887
    ],
    "source": "66L",
@@ -230,7 +230,7 @@
    "id": "brecha9_temple_b",
    "image": "res://assets/maps/extra/brecha9_temple_b/map_brecha9_temple_b.png",
    "imageSize": [
-    887,
+    880,
     887
    ],
    "source": "64R",
@@ -258,7 +258,7 @@
    "id": "brecha10_astral_b",
    "image": "res://assets/maps/extra/brecha10_astral_b/map_brecha10_astral_b.png",
    "imageSize": [
-    887,
+    979,
     887
    ],
    "source": "58L",
@@ -272,7 +272,7 @@
    "id": "brecha10_astral_c",
    "image": "res://assets/maps/extra/brecha10_astral_c/map_brecha10_astral_c.png",
    "imageSize": [
-    887,
+    795,
     887
    ],
    "source": "58R",
