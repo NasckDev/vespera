@@ -77,9 +77,6 @@ public partial class Hud : CanvasLayer
     /// <summary>HUD do World atual (para a UI mostrar toasts e notas).</summary>
     public static Hud? Current { get; private set; }
 
-    /// <summary>Subtítulo do próximo toast de dia novo (dormir: "Você dorme…"); padrão "Outra véspera chega a Lumeira." (<c>world.js:139</c>).</summary>
-    public static string? NextDayMessage { get; set; }
-
     /// <summary>Selo desenhado ao lado do Nível.</summary>
     public RankSeal RankSeal { get; private set; } = null!;
 
@@ -764,10 +761,7 @@ public partial class Hud : CanvasLayer
     {
         _dayNumber.Text = day.ToString();
         _shownMinute = -1;
-        UpdateClock();
-        var season = GameManager.Instance.State.Season.Name;
-        Toast($"Dia {day} · {season}", NextDayMessage ?? "Outra véspera chega a Lumeira.", UiPalette.Ambar, null, 4f);
-        NextDayMessage = null;
+        UpdateClock(); // o toast "Dia N · Estação" é da Cidade (api-cidade: reage ao DayChanged), não daqui
     }
 
     private void UpdateClock()

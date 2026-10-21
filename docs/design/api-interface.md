@@ -29,7 +29,7 @@ servem para código da própria UI e para testes. Decisões B3-D39–B3-D57 em [
 | `WeaponChanged(arma)` | Slot selecionado da hotbar e nome da arma. |
 | `WaveStarted(n, total)` | "Onda n de total" no canto superior direito. |
 | `BossSpawned(nome, hp)` / `BossHealthChanged(hp, max)` | Alerta "NOME / Quebre suas partes…" (3,2 s) e barra no topo; some com hp 0 ou `BrechaEnded`. |
-| Estado (`GameLoaded`, `PlayerDamaged`, `LumesChanged`, `MaterialChanged`, `RankChanged`, `DayChanged`…) | HUD, caixa de loot (ganhos), Novo Selo (subida de Selo), toast de dia novo. |
+| Estado (`GameLoaded`, `PlayerDamaged`, `LumesChanged`, `MaterialChanged`, `RankChanged`, `DayChanged`…) | HUD, caixa de loot (ganhos), Novo Selo (subida de Selo), número do dia. O toast "Dia N · Estação" é da Cidade (`api-cidade.md`). |
 
 ## O que a UI emite
 
@@ -49,7 +49,7 @@ Durante qualquer tela modal: `GameManager.BlockGameplay("ui")` (e `"sleep"` no f
 - `GameUi.Current`: `ShowDialog(speaker, text, choices?, next?, cancel?)` com `DialogChoice(label, sub, run, disabled, icon) { Tooltip = () => ItemInfo }`;
   `OpenBoard()`, `OpenInventory()`, `OpenPause()`, `CloseAll()`, `Toast(...)`, `Note(...)`, `GoToMap(mapId)`, `Sleep(serviço)`;
   telas `Dialog`, `Board`, `Inventory`, `Pause`, `Options`, `Journal`, `Death`; `Brechas` (`BrechaTracker`); `Town` (`TownServices`).
-- `Hud.Current`: `Toast(title, sub, color, icon, seconds)`, `Note(text, icon)`, `RefreshBrechas()`, `NextDayMessage`.
+- `Hud.Current`: `Toast(title, sub, color, icon, seconds)`, `Note(text, icon)`, `RefreshBrechas()`.
 - `GameSettings` (Autoload, estático): `Fullscreen`, `ScreenShake`, `QuestHints`, evento `Changed`. Volumes continuam em `AudioManager`.
 - `GameUi.PendingTutorial = true` antes de entrar no World roda o tutorial da Odete (o título faz isso no jogo novo).
 

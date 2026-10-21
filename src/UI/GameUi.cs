@@ -252,7 +252,6 @@ public partial class GameUi : CanvasLayer
         GameManager.Instance.BlockGameplay(SleepBlock);
         FadeThen(() =>
         {
-            Hud.NextDayMessage = "Você dorme. Lá fora, a cidade aguenta.";
             if (state.TryBuyService(rest) == PurchaseResult.Ok)
             {
                 UiSound.Coin();
