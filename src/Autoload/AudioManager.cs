@@ -40,6 +40,9 @@ public partial class AudioManager : Node
     /// <summary>Música de um local sem registro: a cidade (DECISIONS D36).</summary>
     public const string DefaultLocationMusic = "city_day";
 
+    /// <summary>Música da cidade na fase da véspera do ciclo do dia (16:00–19:00, <c>DayPhaseChanged</c>).</summary>
+    public const string VesperaMusic = "vespera";
+
     /// <summary>Players de música: o crossfade entra num player parado (ou no mais baixo), sem cortar quem sai.</summary>
     private const int MusicPlayers = 3;
 
@@ -83,6 +86,8 @@ public partial class AudioManager : Node
     private Tween? _musicTween;
     private string _settingsPath = SettingsPath;
     private bool _released;
+    private bool _vesperaPhase;
+    private string? _lastLocation;
 
     public static AudioManager Instance { get; private set; } = null!;
 
@@ -134,6 +139,7 @@ public partial class AudioManager : Node
         bus.FragmentsChanged += OnFragmentsChanged;
         bus.LocationChanged += OnLocationChanged;
         bus.PortalEntered += OnPortalEntered;
+        bus.DayPhaseChanged += OnDayPhaseChanged;
     }
 
     public override void _ExitTree()
@@ -144,6 +150,7 @@ public partial class AudioManager : Node
         bus.FragmentsChanged -= OnFragmentsChanged;
         bus.LocationChanged -= OnLocationChanged;
         bus.PortalEntered -= OnPortalEntered;
+        bus.DayPhaseChanged -= OnDayPhaseChanged;
         ReleaseStreams();
     }
 
@@ -393,7 +400,7 @@ public partial class AudioManager : Node
     /// <summary>Toca a música do local, como faz <c>LocationChanged</c> (exposto para testes e trocas de área sem o sinal).</summary>
     public void ApplyLocationMusic(string location)
     {
-        var (music, reverb) = _locationMusic.TryGetValue(location, out var entry) ? entry : (DefaultLocationMusic, false);
+        var (music, reverb) = _locationMusic.TryGetValue(location, out var entry) ? entry : (CityMusic, false);
         SetMusicReverb(reverb);
         PlayMusic(music);
     }
@@ -630,7 +637,30 @@ public partial class AudioManager : Node
 
     private void OnFragmentsChanged(int total) => PlaySfx("coin");
 
-    private void OnLocationChanged(string locationName) => ApplyLocationMusic(locationName);
+    /// <summary>Música da cidade agora: <see cref="VesperaMusic"/> na véspera, senão <see cref="DefaultLocationMusic"/>.</summary>
+    public string CityMusic => _vesperaPhase ? VesperaMusic : DefaultLocationMusic;
+
+    private void OnLocationChanged(string locationName)
+    {
+        _lastLocation = locationName;
+        ApplyLocationMusic(locationName);
+    }
+
+    /// <summary>Ciclo do dia (frente Cidade): a véspera troca a música da cidade; Brechas (locais registrados) não mudam.</summary>
+    private void OnDayPhaseChanged(int phase)
+    {
+        var vespera = phase == (int)Core.World.DayPhase.Vespera;
+        if (vespera == _vesperaPhase)
+        {
+            return;
+        }
+
+        _vesperaPhase = vespera;
+        if (_lastLocation is not null && !_locationMusic.ContainsKey(_lastLocation) && CurrentMusic != "brecha")
+        {
+            ApplyLocationMusic(_lastLocation);
+        }
+    }
 
     private void OnPortalEntered(string districtId)
     {
