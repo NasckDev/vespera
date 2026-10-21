@@ -7132,17 +7132,17 @@
    "layer": "entity",
    "source": "61#92",
    "px": [
-    35,
-    81
+    13,
+    30
    ],
    "worldSize": [
-    7.9,
-    19.4
+    2.9,
+    7.1
    ],
-   "density": 4.1667,
+   "density": 4.2088,
    "anchor": [
-    21.5,
-    81.0
+    8.0,
+    30.0
    ],
    "footprint": null,
    "occluder": false,
@@ -9021,23 +9021,23 @@
    "layer": "entity",
    "source": "63#37",
    "px": [
-    53,
-    42
+    25,
+    20
    ],
    "worldSize": [
-    12.6,
-    9.7
+    5.9,
+    4.5
    ],
-   "density": 4.321,
+   "density": 4.4092,
    "anchor": [
-    28.0,
-    42.0
+    13.5,
+    20.0
    ],
    "footprint": [
-    -3.2,
-    -6.3,
-    6.4,
-    6.3
+    -1.5,
+    -2.9,
+    3.0,
+    2.9
    ],
    "occluder": false,
    "sway": false,
@@ -9056,23 +9056,23 @@
    "layer": "entity",
    "source": "63#40",
    "px": [
-    50,
-    44
+    23,
+    21
    ],
    "worldSize": [
-    11.8,
-    10.4
+    5.5,
+    4.9
    ],
-   "density": 4.1474,
+   "density": 4.321,
    "anchor": [
-    23.5,
-    44.0
+    11.5,
+    21.0
    ],
    "footprint": [
-    -4.0,
-    -5.9,
-    8.0,
-    5.9
+    -1.5,
+    -2.8,
+    3.0,
+    2.8
    ],
    "occluder": false,
    "sway": false,
