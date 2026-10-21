@@ -16,7 +16,7 @@ Camera = NodePath("Camera")
 FadeRect = NodePath("Fade/Rect")
 
 [node name="Map" type="Sprite2D" parent="."]
-texture_filter = 2
+texture_filter = 1
 z_index = -10
 centered = false
 

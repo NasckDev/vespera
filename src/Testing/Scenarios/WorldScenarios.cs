@@ -134,12 +134,15 @@ public partial class SmokeTest
 
         world.GoMap("forge", 800, 520, instant: true);
         await WaitMapSettled(world);
-        Require(Mathf.IsEqualApprox(world.Camera.VisibleSize.Y, 400f, 0.5f), $"Rua da Forja deve mostrar 400 u de altura, mostra {world.Camera.VisibleSize.Y}");
+        // D39: zoom 1 e escala inteira da janela; 16:9 mostra a viewport base inteira (640×360 u) em qualquer mapa.
+        var baseHeight = (float)CameraFraming.BaseHeight;
+        Require(Mathf.IsEqualApprox(world.Camera.Zoom.X, 1f), $"zoom deve ser 1, é {world.Camera.Zoom.X}");
+        Require(Mathf.IsEqualApprox(world.Camera.VisibleSize.Y, baseHeight, 0.5f), $"Rua da Forja deve mostrar {baseHeight} u de altura, mostra {world.Camera.VisibleSize.Y}");
 
         world.GoMap("guild", 250, 560, instant: true);
         await WaitMapSettled(world);
         var view = world.Camera.VisibleSize;
-        Require(Mathf.IsEqualApprox(view.Y, 300f, 0.5f), $"Guilda deve mostrar 300 u de altura, mostra {view.Y}");
+        Require(Mathf.IsEqualApprox(view.Y, baseHeight, 0.5f), $"Guilda deve mostrar {baseHeight} u de altura, mostra {view.Y}");
         Require(view.X >= CameraFraming.MinVisibleWidth - 0.5f, $"largura visível {view.X} < 380");
         // Guilda (500 u) é mais estreita que a vista: centralizada com offset negativo.
         Require(Mathf.IsEqualApprox(world.Camera.Position.X, (500f - view.X) / 2f, 0.5f), $"Guilda deveria centralizar em x: câmera em {world.Camera.Position.X}");
