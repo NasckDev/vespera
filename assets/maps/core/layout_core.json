@@ -1,10 +1,46 @@
 {
   "cell": 4,
-  "base": "shapes",
-  "walk": [],
-  "block": [],
-  "occluders": [],
-  "props": [],
-  "chests": [],
-  "decor": []
+  "base": "none",
+  "walk": [
+    {"circle": [250, 505, 140], "note": "arena circular do Núcleo"},
+    {"rect": [214, 620, 72, 394], "note": "escadaria sul"},
+    {"rect": [214, 236, 72, 200], "note": "escadaria norte"},
+    {"poly": [[100, 206], [400, 206], [400, 236], [352, 282], [148, 282], [100, 236]], "note": "patamar do portal"},
+    {"rect": [206, 150, 88, 90], "note": "boca do portal"}
+  ],
+  "block": [
+    {"rect": [148, 244, 46, 48], "note": "braseiro do patamar"},
+    {"rect": [306, 244, 46, 48], "note": "braseiro do patamar"},
+    {"rect": [240, 632, 22, 16], "note": "velas no topo da escadaria"}
+  ],
+  "occluders": [
+    {"poly": [[140, 220], [200, 220], [200, 296], [140, 296]], "baseY": 292, "note": "braseiro do patamar"},
+    {"poly": [[300, 220], [360, 220], [360, 296], [300, 296]], "baseY": 292, "note": "braseiro do patamar"},
+    {"poly": [[148, 760], [212, 760], [212, 900], [148, 900]], "baseY": 838, "note": "braseiro da escadaria"},
+    {"poly": [[288, 760], [352, 760], [352, 900], [288, 900]], "baseY": 838, "note": "braseiro da escadaria"},
+    {"poly": [[176, 40], [324, 40], [324, 150], [176, 150]], "baseY": 152, "note": "arco do portal"},
+    {"poly": [[78, 312], [132, 312], [132, 420], [78, 420]], "baseY": 410, "note": "cristal flutuante"},
+    {"poly": [[368, 320], [422, 320], [422, 420], [368, 420]], "baseY": 410, "note": "cristal flutuante"}
+  ],
+  "water": [],
+  "ambient": [
+    {"kind": "fire", "x": 170, "y": 255, "r": 120},
+    {"kind": "fire", "x": 335, "y": 255, "r": 120},
+    {"kind": "fire", "x": 180, "y": 800, "r": 120},
+    {"kind": "fire", "x": 325, "y": 800, "r": 120},
+    {"kind": "wind", "x": 250, "y": 505, "r": 220}
+  ],
+  "props": [
+    {"kind": "urn", "x": 112, "y": 222},
+    {"kind": "candles", "x": 388, "y": 222},
+    {"kind": "urn", "x": 226, "y": 900},
+    {"kind": "candles", "x": 274, "y": 722}
+  ],
+  "chests": [
+    {"x": 130, "y": 226, "tier": 2},
+    {"x": 370, "y": 226, "tier": 3}
+  ],
+  "decor": [
+    {"kind": "inspect", "x": 250, "y": 246, "r": 26, "label": "Olhar para o portal", "text": "Do outro lado do arco, Lumeira aparece de cabeça para baixo, acesa como numa véspera de festa. O Núcleo pulsa no mesmo ritmo dos sinos."}
+  ]
 }

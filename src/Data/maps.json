@@ -148,6 +148,8 @@
     "id": "core",
     "image": "res://assets/maps/core/map_core.png",
     "imageSize": [496, 1014],
+    "mask": "res://assets/maps/core/walk_core.png",
+    "maskCell": 4,
     "name": "Câmara do Núcleo",
     "dungeon": 1,
     "theme": "core",
