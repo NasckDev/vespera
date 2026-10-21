@@ -69,3 +69,12 @@ O protótipo v2 (HTML/JS, Claude Design) é a referência de *game feel*, conte�
 | # | Decisão | Motivo |
 |---|---|---|
 | D38 | **Do super kit entram só:** (1) a sequência do portal abrindo (`assets/sprites/fx/portal_open_0..5.png`, 6 quadros recortados com base alinhada) para a Brecha abrindo na véspera; (2) `docs/brand/reference/hud-kit.png` como **guia oficial de design da UI** (barras, retrato, números de dano, alerta de chefe, tooltip, caixa de loot, diálogo); (3) o catálogo do Arsenal (`docs/design/arsenal/`, 146 itens) como dados de referência (D17). **Não entram:** os 6 fundos 16:9 (idênticos aos mapas da v2 já no jogo), a folha de monstros (poses já no atlas), os mapas/ilustrações com texto em inglês e nomes divergentes, o painel de objetos das dungeons 6–10 (sem transparência, conteúdo futuro) e as animações do arsenal (qualidade abaixo da arte da v2). | Só o que melhora a jogabilidade sem duplicar arte ou conflitar com a v2. |
+
+## 2026-10-21 — Interiores (frente B4d)
+
+| # | Decisão | Motivo |
+|---|---|---|
+| B4d-D39 | **Guilda, Estalagem e as 4 lojas usam máscara própria** `walk_<id>.png` (células de 4 u, `maskCell: 4` no `maps.json`), gerada de `layout_<id>.json` por `tools/maps/layout.py`. Guilda e Estalagem partem das formas da v2 (`base: shapes`) com refinamentos; as lojas partem do zero (`base: none`), com piso e móveis desenhados sobre a arte. Os `walk`/`block` da v2 continuam no `maps.json` como referência. | As formas da v2 deixavam andar por cima de estantes, mesas e bancadas e bloqueavam piso visível; o dono achou o andar "travado". |
+| B4d-D40 | **Atrás dos balcões não se anda** (Odete, Lúcia, Gaspar, Vesna, Ivo, Abel) e o **quarto leste da Estalagem fica fechado**: a arte não tem porta, e na v2 só se chegava lá atravessando as prateleiras do balcão. Nenhum interagível da v2 fica lá. | Fidelidade à arte (D6: comportamento pretendido, não o acidente da v2). |
+| B4d-D41 | **Baús escondidos**: um na Guilda (canto do mezanino), um na Estalagem (entre as camas) e um na Oficina de Relíquias (vão atrás do armarinho); Armaria, Casa dos Feitiços e Alquimia ficam sem baú, e nenhuma loja tem quebráveis (seria quebrar mercadoria). | Pedido da frente: no máximo um baú por interior, só onde é natural. |
+| B4d-D42 | **Textos de decoração (`decor` `inspect`) são novos**, curtos e no tom do GDD (lareira, estantes, bonecos de treino, vitrines, bola de cristal, alambique, lanternas); o dono revisa. | A v2 não tem esses textos; a frente pediu decoração interativa com lore curta. |

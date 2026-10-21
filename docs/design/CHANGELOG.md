@@ -2,6 +2,7 @@
 
 Uma linha por tarefa concluída, mais recente primeiro.
 
+- 2026-10-21 — Interiores (B4d): colisão da Guilda, Estalagem e das 4 lojas redesenhada sobre a arte (máscaras de 4 u), oclusores, decoração com lore, baús escondidos, sons ambiente e bot que alcança cada NPC, balcão e decoração (B4d-D39–D42).
 - 2026-10-20 — Do super kit: animação do portal, guia de HUD e catálogo do Arsenal como referência (D38).
 - 2026-10-20 — Áudio (correções): música por local sem depender de nomes (D22), crossfade sem cortes (D23), +12 dB no Master (D18), músicas pré-carregadas, `SetBusVolume(persist)` + `SaveSettings`, pitch limitado e cenários de smoke sem depender da cena Lumeira.
 - 2026-10-20 — Áudio: 18 SFX da v2 e 3 músicas em loop gerados por script, barramentos Master/Music/SFX/UI e `AudioManager` com pool, crossfade e volumes persistidos.
