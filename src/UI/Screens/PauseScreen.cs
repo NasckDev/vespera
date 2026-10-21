@@ -10,7 +10,7 @@ namespace Vespera.UI.Screens;
 /// <summary>
 /// Pausa (efetivo <c>uiPause</c>, <c>extra.js:245-258</c>): Continuar · Diário de missões · Como jogar · Controles ·
 /// Opções · Salvar jogo · Voltar ao menu principal (salva antes). Sub-telas voltam para a pausa com a seleção
-/// preservada. A "prévia" de multijogador da v2 fica de fora (DECISIONS D41).
+/// preservada. A "prévia" de multijogador da v2 fica de fora (DECISIONS B3-D41).
 /// </summary>
 public partial class PauseScreen : Screen
 {

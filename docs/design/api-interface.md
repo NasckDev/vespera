@@ -2,7 +2,7 @@
 
 Título, HUD, diálogos, escolhas, lojas/forja, Mural, inventário, pausa/opções, morte e Novo Selo. As outras frentes
 falam com a UI **só pelo `EventBus`** (contratos em [`contratos-fase-b.md`](contratos-fase-b.md)); os atalhos C# abaixo
-servem para código da própria UI e para testes. Decisões D39–D52 em [`DECISIONS.md`](DECISIONS.md).
+servem para código da própria UI e para testes. Decisões B3-D39–B3-D57 em [`DECISIONS.md`](DECISIONS.md).
 
 ## Cenas
 
@@ -37,11 +37,12 @@ servem para código da própria UI e para testes. Decisões D39–D52 em [`DECIS
 |---|---|
 | `BrechaStartRequested(spot)` | O jogador confirmou "Entrar na Brecha" no portal (respeita `BrechaRules.CanEnter`). |
 | `ChoiceMade`, `DialogueFinished`, `RespawnRequested` | Ver acima. |
-| `PauseChanged(bool)` | A pilha de telas passou a ter (ou deixou de ter) tela modal — qualquer uma, não só a pausa (D42). |
+| `PauseChanged(bool)` | A pilha de telas passou a ter (ou deixou de ter) tela modal — qualquer uma, não só a pausa (B3-D42). |
 | `LanternRescueRequested(delaySeconds)` | **Novo.** Pagou a Odete pelo resgate; o Combate agenda a volta da Lanterna. |
 | `CameraShakeRequested(4 / 3)` | Melhorar arma / forjar infusão (v2). |
 
-Durante qualquer tela modal: `GameManager.BlockGameplay("ui")` (e `"sleep"` no fade de dormir).
+Durante qualquer tela modal: `GameManager.BlockGameplay("ui")` (e `"sleep"` no fade de dormir). Telas cheias
+(inventário, pausa, mural) também escondem os painéis do HUD (`Hud.ChromeVisible = false`, B3-D54).
 
 ## Atalhos C# (UI e testes)
 

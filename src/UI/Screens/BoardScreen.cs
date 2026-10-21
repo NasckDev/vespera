@@ -11,7 +11,7 @@ namespace Vespera.UI.Screens;
 /// <summary>
 /// Mural de Contratos da Guilda (<c>uiBoard</c>, <c>ui.js:55-79</c>): até 5 Brechas (mais recentes primeiro) com selo,
 /// "bairro — título", estação e modificador, situação, e Enter para rastrear; ao lado, o contrato atual do Diário
-/// (missão de <c>QuestRules</c>). Sem o timer da v2: a Cidade não publica o tempo restante (DECISIONS D40).
+/// (missão de <c>QuestRules</c>). Sem o timer da v2: a Cidade não publica o tempo restante (DECISIONS B3-D40).
 /// </summary>
 public partial class BoardScreen : Screen
 {

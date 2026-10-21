@@ -2,7 +2,8 @@
 
 Uma linha por tarefa concluída, mais recente primeiro.
 
-- 2026-10-20 — Interface (B3): smoke da interface (título → classe → mundo, tutorial, HUD, escolhas, todas as interações, forja, lojas, inventário, pausa/opções, mural, portal, morte) com input simulado e prints; `api-interface.md`; decisões D39–D52.
+- 2026-10-21 — Interface (B3): polimento jogado nos prints — opções do diálogo não saem mais da tela, HUD some atrás de inventário/pausa/mural, barras segmentadas do hud-kit, mural do tamanho do conteúdo, slots do palco alinhados, avisos no rodapé do inventário; decisões renumeradas para B3-D39…B3-D57.
+- 2026-10-20 — Interface (B3): smoke da interface (título → classe → mundo, tutorial, HUD, escolhas, todas as interações, forja, lojas, inventário, pausa/opções, mural, portal, morte) com input simulado e prints; `api-interface.md`; decisões B3-D39–B3-D52.
 - 2026-10-20 — Interface (B3): inventário (Personagem com palco e 8 slots, grade com filtros e tooltip comparativo, Ecos, Selos), pausa com Diário/Como jogar/Controles/Opções/Salvar/Sair, tela de morte → `RespawnRequested`.
 - 2026-10-20 — Interface (B3): diálogo com máquina de escrever, retrato e escolhas; Odete, Mural, Brás (melhorar, receitas, vender), Rua dos Ofícios, portal → `BrechaStartRequested`, Lúcia/descanso, Gaspar, Vesna, Ivo e Abel com falas verbatim e preços da v2.
 - 2026-10-20 — Interface (B3): HUD da v2 no estilo do hud-kit (retrato, barras com lag, Selo/Nível, hotbar, Supremo, Eco, poção, chefe, onda, relógio, Brechas, toasts, caixa de loot, Novo Selo).

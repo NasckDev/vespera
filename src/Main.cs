@@ -6,7 +6,7 @@ namespace Vespera;
 
 /// <summary>
 /// Cena de boot: abre o título (spec 01 §1.4). No smoke test vai direto para o World, como antes, para os cenários
-/// de todas as frentes começarem no mundo; o cenário do título abre o título por conta própria (DECISIONS D39).
+/// de todas as frentes começarem no mundo; o cenário do título abre o título por conta própria (DECISIONS B3-D39).
 /// </summary>
 public partial class Main : Node
 {
