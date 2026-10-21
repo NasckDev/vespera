@@ -1,10 +1,47 @@
 {
   "cell": 4,
-  "base": "shapes",
-  "walk": [],
-  "block": [],
-  "occluders": [],
+  "base": "none",
+  "walk": [
+    {"rect": [55, 160, 612, 144], "note": "salão da Alquimia"},
+    {"rect": [320, 296, 104, 138], "note": "escada da entrada"}
+  ],
+  "block": [
+    {"rect": [0, 0, 696, 162], "note": "parede do fundo e prateleiras"},
+    {"rect": [0, 0, 62, 434], "note": "parede oeste, lampião e vaso"},
+    {"rect": [62, 162, 152, 142], "note": "alambique, caldeirão verde e bancada (oeste)"},
+    {"rect": [255, 160, 28, 18], "note": "pedestal da lamparina"},
+    {"rect": [277, 160, 188, 70], "note": "balcão do Ivo"},
+    {"rect": [220, 272, 32, 32], "note": "vaso (oeste da escada)"},
+    {"rect": [478, 160, 58, 36], "note": "mesinha de frascos"},
+    {"rect": [546, 160, 80, 82], "note": "armário e caldeirão azul"},
+    {"rect": [518, 214, 30, 30], "note": "mesinha da tigela verde"},
+    {"rect": [530, 242, 106, 62], "note": "bancada da vela e vaso de pedras"},
+    {"rect": [626, 160, 41, 112], "note": "vasos de ervas (leste)"},
+    {"rect": [667, 0, 29, 434], "note": "parede leste"},
+    {"rect": [636, 272, 60, 162], "note": "canto sudeste"},
+    {"rect": [496, 278, 30, 26], "note": "vaso (leste da escada)"},
+    {"rect": [0, 302, 320, 132], "note": "parede sul (oeste)"},
+    {"rect": [424, 302, 272, 132], "note": "parede sul (leste)"}
+  ],
+  "occluders": [
+    {"poly": [[218, 252], [256, 252], [256, 304], [218, 304]], "baseY": 302, "sway": false, "note": "vaso (oeste da escada)"},
+    {"poly": [[476, 130], [536, 130], [536, 196], [476, 196]], "baseY": 194, "sway": false, "note": "mesinha de frascos"},
+    {"poly": [[516, 212], [628, 212], [628, 304], [516, 304]], "baseY": 302, "sway": false, "note": "bancadas do caldeirão azul"},
+    {"poly": [[620, 145], [668, 145], [668, 272], [620, 272]], "baseY": 270, "sway": false, "note": "vasos de ervas (leste)"},
+    {"poly": [[492, 256], [528, 256], [528, 304], [492, 304]], "baseY": 302, "sway": false, "note": "vaso (leste da escada)"},
+    {"poly": [[274, 295], [304, 295], [304, 394], [274, 394]], "baseY": 392, "sway": false, "note": "poste da escada (oeste)"},
+    {"poly": [[440, 295], [470, 295], [470, 394], [440, 394]], "baseY": 392, "sway": false, "note": "poste da escada (leste)"}
+  ],
+  "water": [],
+  "ambient": [
+    {"kind": "fire", "x": 110, "y": 200, "r": 120, "note": "fogareiro do alambique"},
+    {"kind": "fire", "x": 580, "y": 220, "r": 90, "note": "fogareiro do caldeirão azul"}
+  ],
   "props": [],
   "chests": [],
-  "decor": []
+  "decor": [
+    {"kind": "inspect", "x": 214, "y": 192, "r": 22, "label": "Examinar o alambique", "text": "O caldo verde borbulha sem fogo embaixo. O Ivo diz que é só seiva de musgo da Mina; o cheiro diz outra coisa."},
+    {"kind": "inspect", "x": 214, "y": 240, "r": 22, "label": "Examinar o frasco azul", "text": "Um líquido azul que brilha mais forte quando alguém mente perto dele. O Ivo não vende este; usa para negociar."},
+    {"kind": "inspect", "x": 504, "y": 206, "r": 22, "label": "Examinar a mesinha de frascos", "text": "Frascos rotulados à mão: \"para cortes\", \"para medo\", \"para voltar\". O último está vazio há semanas."}
+  ]
 }
