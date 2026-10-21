@@ -134,10 +134,18 @@ public partial class SmokeTest
 
         world.GoMap("forge", 800, 520, instant: true);
         await WaitMapSettled(world);
-        // D39: zoom 1 e escala inteira da janela; 16:9 mostra a viewport base inteira (640×360 u) em qualquer mapa.
-        var baseHeight = (float)CameraFraming.BaseHeight;
+        // D39: zoom 1 e escala inteira da janela: a vista é a viewport (640×360 u numa tela 16:9) em qualquer mapa.
+        var viewport = world.GetViewportRect().Size;
+        var baseHeight = viewport.Y;
         Require(Mathf.IsEqualApprox(world.Camera.Zoom.X, 1f), $"zoom deve ser 1, é {world.Camera.Zoom.X}");
         Require(Mathf.IsEqualApprox(world.Camera.VisibleSize.Y, baseHeight, 0.5f), $"Rua da Forja deve mostrar {baseHeight} u de altura, mostra {world.Camera.VisibleSize.Y}");
+        var window = DisplayServer.WindowGetSize();
+        if (DisplayServer.GetName() != "headless" && window.X * 9 == window.Y * 16)
+        {
+            Require(Mathf.IsEqualApprox(viewport.Y, CameraFraming.BaseHeight, 0.5f), $"janela 16:9 ({window}) deveria mostrar 360 u, mostra {viewport.Y}");
+            Require(Mathf.IsEqualApprox(world.GetViewport().GetStretchTransform().X.X, CameraFraming.IntegerScale(window.X, window.Y)), "escala da janela deveria ser inteira");
+        }
+
 
         world.GoMap("guild", 250, 560, instant: true);
         await WaitMapSettled(world);
@@ -155,7 +163,8 @@ public partial class SmokeTest
         world.Camera.StopShake();
 
         Require(player.Sprite.Key == "c_sword_front", $"pose inicial deveria ser c_sword_front, é {player.Sprite.Key}");
-        Require(Mathf.IsEqualApprox(player.Sprite.Scale.X, 1f / 5.0025f, 0.0001f), $"escala 1/k errada: {player.Sprite.Scale.X}");
+        // D41: escala do atlas × characterScale (rules.json)
+        Require(Mathf.IsEqualApprox(player.Sprite.Scale.X, WorldScale.Character / 5.0025f, 0.0001f), $"escala characterScale/k errada: {player.Sprite.Scale.X}");
         await Hold(InputActions.MoveLeft, 10);
         Require(player.Sprite.Key == "c_sword_side" && player.Body.Scale.X < 0, "andar para a esquerda usa c_sword_side espelhado");
         await Hold(InputActions.MoveUp, 10);
