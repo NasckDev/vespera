@@ -41,3 +41,7 @@ desktop.ini
 # --- Ferramentas locais ---
 .remember/
 .claude/settings.local.json
+
+# Python
+__pycache__/
+*.pyc
