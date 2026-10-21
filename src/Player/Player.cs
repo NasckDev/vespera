@@ -99,6 +99,8 @@ public partial class Player : CharacterBody2D
         InteractionArea.CollisionMask = Interactable.InteractablesLayer;
         InteractionArea.AreaEntered += OnAreaEntered;
         InteractionArea.AreaExited += OnAreaExited;
+        EventBus.Instance.GameLoaded += SyncClassFromSave;
+        SyncClassFromSave();
         UpdatePoseKeys();
         UpdateVisual();
     }
@@ -107,7 +109,17 @@ public partial class Player : CharacterBody2D
     {
         InteractionArea.AreaEntered -= OnAreaEntered;
         InteractionArea.AreaExited -= OnAreaExited;
+        EventBus.Instance.GameLoaded -= SyncClassFromSave;
         SetFocused(null);
+    }
+
+    /// <summary>Visual da classe do save (classe permanente, <c>extra.js:161</c>): jogo novo e Continuar.</summary>
+    private void SyncClassFromSave()
+    {
+        if (GameManager.Instance?.State.Save.ClassId is { Length: > 0 } classId)
+        {
+            ClassId = classId;
+        }
     }
 
     /// <summary>Coloca o jogador num ponto (troca de mapa), parado e sem foco de interação.</summary>
