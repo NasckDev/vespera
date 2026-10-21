@@ -3,6 +3,8 @@
     "id": "guild",
     "image": "res://assets/maps/guild/map_guild.png",
     "imageSize": [500, 896],
+    "mask": "res://assets/maps/guild/walk_guild.png",
+    "maskCell": 4,
     "name": "Guilda dos Lanterneiros",
     "indoor": 1,
     "spawn": [250, 560],

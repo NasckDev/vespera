@@ -35,7 +35,9 @@ public class MapCatalogTest
         AssertThat(guild.Name).IsEqual("Guilda dos Lanterneiros");
         AssertThat(guild.Indoor).IsTrue();
         AssertThat(guild.Hd).IsFalse();
-        AssertThat(guild.HasMask).IsFalse();
+        // Colisão redesenhada sobre a arte (tools/maps/layout.py): máscara de células de 4 u; walk/block da v2 ficam como base.
+        AssertThat(guild.Mask).IsEqual("res://assets/maps/guild/walk_guild.png");
+        AssertThat(guild.MaskCell).IsEqual(4);
         AssertThat(guild.ImageWidth).IsEqual(500);
         AssertThat(guild.ImageHeight).IsEqual(896);
         AssertThat(guild.Spawn).IsEqual(new MapPoint(250, 560));
