@@ -397,7 +397,7 @@ public partial class BossBar : VBoxContainer
         MouseFilter = MouseFilterEnum.Ignore;
         AddThemeConstantOverride("separation", 2);
         _name = Ui.Title(string.Empty, UiFonts.Body, null, HorizontalAlignment.Center);
-        _bar = UiBar.Create("boss", new Vector2(280, 5), lag: true);
+        _bar = UiBar.Create("boss", new Vector2(280, 7), lag: true);
         _bar.SizeFlagsHorizontal = SizeFlags.ShrinkCenter;
         AddChild(_name);
         AddChild(_bar);

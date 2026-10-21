@@ -14,6 +14,8 @@ public partial class UiBar : Control
     private static readonly StringName Background = "background";
     private static readonly Color LagColor = new(244 / 255f, 231 / 255f, 198 / 255f, 0.55f);
     private static readonly Color MarkerColor = new(244 / 255f, 231 / 255f, 198 / 255f, 0.8f);
+    private static readonly Color ShadeColor = new(0f, 0f, 0f, 0.3f);
+    private static readonly Color TickColor = new(0.03f, 0.02f, 0.05f, 0.5f);
 
     private float _ratio = 1f;
     private float _lag = 1f;
@@ -36,6 +38,10 @@ public partial class UiBar : Control
     [Export]
     public bool ShowLag { get; set; }
 
+    /// <summary>Divisões finas no preenchimento (guia hud-kit: barras segmentadas); 0 = lisa.</summary>
+    [Export]
+    public int Segments { get; set; }
+
     /// <summary>Fração 0–1.</summary>
     public float Ratio => _ratio;
 
@@ -48,10 +54,11 @@ public partial class UiBar : Control
         SetProcess(false);
     }
 
-    public static UiBar Create(StringName style, Vector2 size, bool lag = false) => new()
+    public static UiBar Create(StringName style, Vector2 size, bool lag = false, int segments = 0) => new()
     {
         FillStyle = style,
         ShowLag = lag,
+        Segments = segments,
         CustomMinimumSize = size,
         SizeFlagsVertical = SizeFlags.ShrinkCenter,
     };
@@ -104,15 +111,32 @@ public partial class UiBar : Control
     {
         var size = Size;
         DrawStyleBox(GetThemeStylebox(Background, ThemeType), new Rect2(Vector2.Zero, size));
+
+        // Preenchimento dentro da moldura (1 px), para a borda dourada não sumir sob a cor.
+        var inset = size.Y >= 4f ? 1f : 0f;
+        var inner = new Rect2(inset, inset, size.X - (2 * inset), size.Y - (2 * inset));
         if (ShowLag && _lag > _ratio)
         {
-            DrawRect(new Rect2(0, 0, size.X * _lag, size.Y), LagColor);
+            DrawRect(new Rect2(inner.Position, Mathf.Round(inner.Size.X * _lag), inner.Size.Y), LagColor);
         }
 
-        var width = Mathf.Round(size.X * _ratio);
+        var width = Mathf.Round(inner.Size.X * _ratio);
         if (width > 0)
         {
-            DrawStyleBox(GetThemeStylebox(_fillStyle, ThemeType), new Rect2(0, 0, width, size.Y));
+            DrawStyleBox(GetThemeStylebox(_fillStyle, ThemeType), new Rect2(inner.Position, width, inner.Size.Y));
+            if (inner.Size.Y >= 3f)
+            {
+                DrawRect(new Rect2(inner.Position.X, inner.End.Y - 1, width, 1), ShadeColor); // sombra de baixo
+            }
+        }
+
+        if (Segments > 1)
+        {
+            for (var i = 1; i < Segments; i++)
+            {
+                var x = inner.Position.X + Mathf.Round(inner.Size.X * i / Segments);
+                DrawRect(new Rect2(x, inner.Position.Y, 1, inner.Size.Y), TickColor);
+            }
         }
 
         if (_marker >= 0f)

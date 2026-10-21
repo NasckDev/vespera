@@ -265,10 +265,10 @@ public partial class Hud : CanvasLayer
         var identity = Ui.Column(1, _name, Ui.Row(3, RankSeal, LevelLabel, _rankTitle), _levelBar);
         var header = Ui.Row(6, _portrait, identity);
 
-        _hp = UiBar.Create("hp", new Vector2(104, 6), lag: true);
+        _hp = UiBar.Create("hp", new Vector2(104, 7), lag: true, segments: 10);
         _hpText = Ui.Text(string.Empty, UiFonts.Small);
-        _energy = UiBar.Create("energy", new Vector2(78, 4));
-        _essence = UiBar.Create("essence", new Vector2(63, 3));
+        _energy = UiBar.Create("energy", new Vector2(78, 5), segments: 5);
+        _essence = UiBar.Create("essence", new Vector2(63, 4));
         var hpRow = Ui.Row(3, IconRect.Create("ui_hpicon", 11), _hp, _hpText);
         var enRow = Ui.Row(3, IconRect.Create("ui_sticon", 10), _energy);
         var essRow = Ui.Row(3, Ui.Gap(10), _essence, Ui.Text(UiText.HudEssence, UiFonts.Tiny, UiPalette.EcoText));
