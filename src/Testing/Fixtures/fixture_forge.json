@@ -42,10 +42,11 @@
     {"x": 552, "y": 440, "tier": 3}
   ],
   "decor": [
-    {"kind": "lamp", "x": 583, "y": 521, "r": 26},
+    {"kind": "lamp", "x": 568, "y": 528, "r": 26},
     {"kind": "flower", "x": 640, "y": 470, "r": 18},
-    {"kind": "sign", "x": 600, "y": 548, "r": 24, "text": "Rua da Forja. Aqui o ferro aprende a cantar antes de aprender a cortar."},
+    {"kind": "sign", "x": 640, "y": 548, "r": 24, "text": "Rua da Forja. Aqui o ferro aprende a cantar antes de aprender a cortar."},
     {"kind": "inspect", "x": 676, "y": 470, "r": 24, "label": "Olhar o canal", "text": "A água guarda o reflexo das lanternas. Dizem que no Ano Sem Alvor ela não refletia nada."},
+    {"kind": "bench", "x": 720, "y": 470, "r": 22, "text": "Daqui se ouve o martelo do Brás."},
     {"kind": "fishing", "x": 836, "y": 816, "r": 28},
     {"kind": "boat", "x": 846, "y": 790, "r": 26, "to": [946, 716]},
     {"kind": "boat", "x": 946, "y": 716, "r": 26, "to": [846, 790]}

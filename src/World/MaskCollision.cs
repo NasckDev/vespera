@@ -17,6 +17,9 @@ public partial class MaskCollision : StaticBody2D
     [Export]
     public Texture2D Mask { get; set; } = null!;
 
+    /// <summary>Grade pronta (layout sem PNG, D40). Se definida antes do _Ready, a <see cref="Mask"/> é ignorada.</summary>
+    public WalkGrid? PresetGrid { get; set; }
+
     [Export]
     public int CellSize { get; set; } = 8;
 
@@ -33,7 +36,7 @@ public partial class MaskCollision : StaticBody2D
     {
         CollisionLayer = 1; // "world"
         CollisionMask = 0;
-        Grid = ReadGrid(Mask.GetImage(), WalkableThreshold);
+        Grid = PresetGrid ?? ReadGrid(Mask.GetImage(), WalkableThreshold);
         WalkArea = new MaskWalkArea(Grid, CellSize);
 
         var count = ShapeCollision.AddRectColliders(this, WalkArea.BlockedRects());
@@ -53,7 +56,8 @@ public partial class MaskCollision : StaticBody2D
 
     public bool IsWalkableAt(Vector2 localPosition) => WalkArea.IsWalkable(localPosition.X, localPosition.Y);
 
-    private static WalkGrid ReadGrid(Image image, float threshold)
+    /// <summary>Lê a máscara: andável = alpha &gt; 0,5 e brilho ≥ <paramref name="threshold"/>.</summary>
+    public static WalkGrid ReadGrid(Image image, float threshold)
     {
         if (image.IsCompressed())
         {

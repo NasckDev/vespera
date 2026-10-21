@@ -11,6 +11,9 @@ namespace Vespera.World;
 /// porta e fuga pelo ponto do pé do jogador e troca de mapa com <see cref="GoMap(string, Vector2, bool)"/>
 /// (fade da spec 01 §1.2/§1.7). Entidades do mapa (mobs, props, NPCs…) vão em <see cref="Entities"/> (y-sort pelo pé)
 /// e são liberadas na troca de mapa; só o jogador fica.
+/// Motor (frente B4a): lê o <c>layout_&lt;id&gt;.json</c> do mapa (<see cref="Layout"/>): colisão do <c>walk_&lt;id&gt;.png</c>
+/// gerado pela ferramenta (ou das formas do layout), e o <see cref="WorldDressing"/> monta oclusores, água, luzes,
+/// quebráveis, baús, decoração, efeitos e sons ambiente.
 /// </summary>
 public partial class World : Node2D
 {
@@ -29,6 +32,7 @@ public partial class World : Node2D
     private static readonly Color ClearColor = new("#0b0a14"); // render.js:21
     private static readonly Dictionary<string, ShapeWalkArea> ShapeAreas = [];
     private static MapCatalog? _catalog;
+    private static WorldObjectRegistry? _objects;
 
     private readonly Dictionary<string, Interactable> _interactables = [];
     private float _fade;
@@ -60,6 +64,10 @@ public partial class World : Node2D
     [Export]
     public ColorRect FadeRect { get; set; } = null!;
 
+    /// <summary>Monta o que o layout descreve (oclusores, água, luzes, objetos, efeitos, sons). Frente B4a.</summary>
+    [Export]
+    public WorldDressing Dressing { get; set; } = null!;
+
     /// <summary>Mapa inicial (novo jogo da v2: Guilda em (250, 560), <c>main.js:71</c>).</summary>
     [Export]
     public string StartMapId { get; set; } = "guild";
@@ -71,6 +79,21 @@ public partial class World : Node2D
     public static (string MapId, Vector2 Position)? PendingStart { get; set; }
 
     public static MapCatalog Catalog => _catalog ??= MapCatalog.Parse(FileAccess.GetFileAsString(MapsPath));
+
+    /// <summary>Quebráveis quebrados, baús abertos, flores colhidas e lampiões da sessão (voltam no dia seguinte, D45).</summary>
+    public static WorldObjectRegistry Objects => _objects ??= new WorldObjectRegistry();
+
+    /// <summary>
+    /// Layouts trocados por id de mapa (caminho <c>res://</c>). Só o smoke usa (fixtures em <c>src/Testing/Fixtures</c>);
+    /// o jogo lê <c>layout_&lt;id&gt;.json</c> da pasta da pintura.
+    /// </summary>
+    public static Dictionary<string, string> LayoutOverrides { get; } = [];
+
+    /// <summary>Layout do mapa atual (vazio se o mapa não tem).</summary>
+    public MapLayout Layout { get; private set; } = MapLayout.Empty;
+
+    /// <summary>De onde veio a colisão do mapa atual: <c>walk-png</c>, <c>layout</c>, <c>mask</c> ou <c>shapes</c>.</summary>
+    public string CollisionSource { get; private set; } = string.Empty;
 
     public MapDef Map { get; private set; } = null!;
 
@@ -96,6 +119,9 @@ public partial class World : Node2D
         _previousClearColor = RenderingServer.GetDefaultClearColor();
         RenderingServer.SetDefaultClearColor(ClearColor);
         Camera.Target = Player;
+        // o foco fica na mesma altura relativa do corpo que na v2 (−14 u num personagem de 32 u), D41
+        Camera.FocusOffsetY = CameraFraming.FocusOffsetY * WorldScale.Character;
+        EventBus.Instance.DayChanged += OnDayChanged;
 
         var (mapId, position) = PendingStart ?? (StartMapId, StartPosition);
         PendingStart = null;
@@ -106,6 +132,10 @@ public partial class World : Node2D
     {
         RenderingServer.SetDefaultClearColor(_previousClearColor);
         GameManager.Instance?.UnblockGameplay(TransitionBlock);
+        if (EventBus.Instance is { } bus)
+        {
+            bus.DayChanged -= OnDayChanged;
+        }
     }
 
     /// <summary>Troca de mapa. Normal: fade até preto, carrega, fade de volta. <paramref name="instant"/>: já carrega e só clareia.</summary>
@@ -247,6 +277,7 @@ public partial class World : Node2D
         Map = map;
         MapLoads++;
         MapSprite.Texture = GD.Load<Texture2D>(map.Image);
+        Layout = LoadLayout(map);
         BuildCollision(map);
         ClearMapEntities();
         BuildInteractables(map);
@@ -254,6 +285,7 @@ public partial class World : Node2D
         _backCooldown = 0;
 
         Player.Teleport(CorrectToWalkable(at));
+        Dressing.Build(this, map, Layout);
         Camera.SetMap(new Vector2(map.ImageWidth, map.ImageHeight), map.ViewHeight);
         GameManager.Instance.UnblockGameplay(TransitionBlock);
 
@@ -268,6 +300,32 @@ public partial class World : Node2D
         EventBus.Instance.EmitSignal(EventBus.SignalName.LocationChanged, map.Name);
     }
 
+    /// <summary>Caminho do layout do mapa: <c>layout_&lt;id&gt;.json</c> na pasta da pintura (ou o override do smoke).</summary>
+    public static string LayoutPath(MapDef map) =>
+        LayoutOverrides.TryGetValue(map.Id, out var path) ? path : $"{map.Image.GetBaseDir()}/layout_{map.Id}.json";
+
+    /// <summary>Máscara gerada por <c>tools/maps/layout.py build</c> (células de <c>layout.cell</c> u).</summary>
+    public static string WalkMaskPath(MapDef map) => $"{map.Image.GetBaseDir()}/walk_{map.Id}.png";
+
+    private static MapLayout LoadLayout(MapDef map)
+    {
+        var path = LayoutPath(map);
+        if (!FileAccess.FileExists(path))
+        {
+            return MapLayout.Empty;
+        }
+
+        try
+        {
+            return MapLayout.Parse(FileAccess.GetFileAsString(path));
+        }
+        catch (MapFormatException ex)
+        {
+            Log.Error($"{map.Id}: {path} inválido ({ex.Message}); seguindo sem layout.");
+            return MapLayout.Empty;
+        }
+    }
+
     private void BuildCollision(MapDef map)
     {
         foreach (var child in CollisionRoot.GetChildren())
@@ -276,6 +334,29 @@ public partial class World : Node2D
             child.QueueFree();
         }
 
+        // D40: a colisão redesenhada pela frente de mapa ganha da v2. PNG gerado pela ferramenta primeiro; sem PNG,
+        // a mesma conta em C# a partir das formas do layout (fixtures do smoke, layout novo ainda sem build).
+        var overridden = LayoutOverrides.ContainsKey(map.Id);
+        if (!overridden && ResourceLoader.Exists(WalkMaskPath(map)))
+        {
+            var walk = new MaskCollision { Name = "WalkCollision", Mask = GD.Load<Texture2D>(WalkMaskPath(map)), CellSize = Layout.Cell };
+            CollisionRoot.AddChild(walk);
+            WalkArea = walk.WalkArea;
+            CollisionSource = "walk-png";
+            return;
+        }
+
+        if (Layout.Walk.Count > 0 || Layout.Block.Count > 0 || Layout.Base == "none")
+        {
+            var grid = LayoutGrid.Build(map.ImageWidth, map.ImageHeight, BaseWalkArea(map), Layout);
+            var collision = new MaskCollision { Name = "LayoutCollision", PresetGrid = grid, CellSize = Layout.Cell };
+            CollisionRoot.AddChild(collision);
+            WalkArea = collision.WalkArea;
+            CollisionSource = "layout";
+            return;
+        }
+
+        CollisionSource = map.HasMask ? "mask" : "shapes";
         if (map.HasMask)
         {
             var mask = new MaskCollision { Name = "MaskCollision", Mask = GD.Load<Texture2D>(map.Mask), CellSize = map.MaskCell };
@@ -293,6 +374,35 @@ public partial class World : Node2D
             CollisionRoot.AddChild(new ShapeCollision { Name = "ShapeCollision", WalkArea = area });
             WalkArea = area;
         }
+    }
+
+    /// <summary>Base da colisão do layout: máscara da v2, formas do maps.json ou nada (<c>"base"</c>).</summary>
+    private IWalkArea? BaseWalkArea(MapDef map)
+    {
+        // mesma regra do tools/maps/layout.py (build_grid): "mask" só vale com máscara, "shapes" só sem
+        if (Layout.Base == "mask" && map.HasMask)
+        {
+            return new MaskWalkArea(MaskCollision.ReadGrid(GD.Load<Texture2D>(map.Mask!).GetImage(), 0.5f), map.MaskCell);
+        }
+
+        if (Layout.Base != "shapes" || map.HasMask)
+        {
+            return null;
+        }
+
+        if (!ShapeAreas.TryGetValue(map.Id, out var area))
+        {
+            area = map.CreateShapeWalkArea();
+            ShapeAreas[map.Id] = area;
+        }
+
+        return area;
+    }
+
+    private void OnDayChanged(int day)
+    {
+        Objects.NewDay();
+        Dressing.OnNewDay();
     }
 
     private void ClearMapEntities()
@@ -327,6 +437,7 @@ public partial class World : Node2D
                 Radius = def.Radius,
                 Enabled = def.StartsEnabled,
                 Position = new Vector2(def.X, def.Y),
+                PromptHeight = MathF.Max(44f, WorldScale.CharacterHeight + 10f), // acima da cabeça do NPC (D41)
             };
             InteractablesRoot.AddChild(node);
             _interactables[def.Id] = node;
