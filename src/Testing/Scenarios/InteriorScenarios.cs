@@ -52,7 +52,7 @@ public partial class SmokeTest
                     var error = await WalkNear(world, target.At, target.Reach);
                     if (error is null && dressed && target.Prompt is { } wanted && player.FocusedInteractable?.Prompt != wanted)
                     {
-                        error = await WalkNear(world, target.At, target.Reach * 0.5f); // chega mais perto do ponto
+                        _ = await WalkNear(world, target.At, target.Reach * 0.5f); // tenta chegar mais perto; o foco abaixo diz se bastou
                     }
 
                     if (error is not null)

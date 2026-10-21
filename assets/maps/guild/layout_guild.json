@@ -10,7 +10,7 @@
     {"rect": [206, 840, 88, 56], "note": "saída para a Rua da Forja"}
   ],
   "block": [
-    {"rect": [52, 196, 18, 18], "note": "baú escondido (sólido no motor)"},
+    {"rect": [52, 228, 17, 17], "note": "baú escondido (sólido no motor)"},
     {"rect": [0, 0, 52, 896], "note": "parede oeste"},
     {"rect": [442, 0, 58, 896], "note": "parede leste"},
     {"rect": [48, 150, 90, 48], "note": "estante de frascos"},
@@ -66,7 +66,7 @@
     {"kind": "crate2", "x": 112, "y": 612, "note": "depósito do canto sudoeste"}
   ],
   "chests": [
-    {"x": 61, "y": 205, "tier": 0, "note": "canto do mezanino, encostado nas paredes (pé bloqueado na colisão)"}
+    {"x": 60, "y": 236, "tier": 0, "note": "canto sudoeste do mezanino, encostado na parede e longe da estante (pé bloqueado na colisão)"}
   ],
   "decor": [
     {"kind": "inspect", "x": 92, "y": 214, "r": 22, "label": "Examinar a estante", "text": "Óleo de lanterna, pavios de reserva e um caderno de turnos. Na margem, alguém escreveu: \"quem volta sem a Lanterna paga o óleo dos outros\"."},
