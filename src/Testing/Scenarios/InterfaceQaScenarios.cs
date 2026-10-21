@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -91,6 +91,16 @@ public partial class SmokeTest
             if (ui.Dialog.IsOpen)
             {
                 await SkipTyping(ui);
+
+                // Fala verbatim: a primeira fala de quem tem falas no npcs.json tem de ser uma delas (com {name}/{class}).
+                if (Database.Db.Npcs.Dialogue.TryGetValue(id, out var lines))
+                {
+                    var known = lines.Values.SelectMany(l => l).Select(UI.Town.TownServices.Fill).ToHashSet();
+                    if (!known.Contains(ui.Dialog.Text))
+                    {
+                        failures.Add($"{mapId}/{id}: fala fora do npcs.json: '{ui.Dialog.Text}'");
+                    }
+                }
             }
 
             await Shot($"qa-npc-{id}");
@@ -705,6 +715,7 @@ public partial class SmokeTest
         Key[] keys = [Key.E, Key.Space, Key.J, Key.K, Key.Escape, Key.Tab, Key.Enter, Key.Up, Key.Down, Key.Left, Key.Right, Key.W, Key.A, Key.S, Key.D, Key.I, Key.X, Key.Q, Key.R];
         var nodes0 = Performance.GetMonitor(Performance.Monitor.ObjectNodeCount);
         var maxStack = 0;
+        var titleVisits = 0;
         for (var i = 0; i < 800; i++)
         {
             var key = keys[rng.RandiRange(0, keys.Length - 1)];
@@ -715,6 +726,27 @@ public partial class SmokeTest
             }
 
             await QaKey(key, false);
+            if (GetTree().CurrentScene?.Name != "World")
+            {
+                // ↓ + Enter/E na pausa cai em "Voltar ao menu principal" (sem confirmação, mas salva): volta ao jogo.
+                titleVisits++;
+                await WaitUntil(() => GetTree().CurrentScene?.Name.ToString() is "Title" or "World", 10, "troca de cena no spam");
+                if (GetTree().CurrentScene?.Name == "Title")
+                {
+                    await WaitForScene("Title", 10); // espera o fade da troca terminar antes de pedir outra
+                    await WaitSeconds(0.5);
+                    GameManager.Instance.ChangeScene(TitleScreen.WorldScenePath);
+                }
+
+                await WaitForScene("World", 10);
+                world = FindWorld();
+                ui = UiOrFail();
+                world.GoMap("guild", 250, 300, instant: true);
+                await WaitMapSettled(world);
+                await DismissUi();
+                continue;
+            }
+
             maxStack = Math.Max(maxStack, ui.Stack.Count);
             if (key == Key.X && ui.Inventory.IsOpen)
             {
@@ -736,8 +768,24 @@ public partial class SmokeTest
         }
 
         var nodes1 = Performance.GetMonitor(Performance.Monitor.ObjectNodeCount);
-        Log.Info($"qa-spam: 800 teclas, pilha máx {maxStack}, nós {nodes0} → {nodes1}, órfãos {Performance.GetMonitor(Performance.Monitor.ObjectOrphanNodeCount)}");
-        Require(ui.Stack.Count == 0, $"depois do spam, Esc não esvaziou as telas (topo {ui.Stack.Top?.GetType().Name})");
+        Log.Info($"qa-spam: 800 teclas, pilha máx {maxStack}, voltas ao título {titleVisits}, nós {nodes0} → {nodes1}, órfãos {Performance.GetMonitor(Performance.Monitor.ObjectOrphanNodeCount)}");
+        if (ui.Stack.Count > 0)
+        {
+            // Diagnóstico: o que está aberto, quem tem o foco e se a tela aceita entrada.
+            var top = ui.Stack.Top!;
+            var detail = $"topo {top.GetType().Name} (pilha {ui.Stack.Count}, idade {top.Age:0.00} s, pronta {top.InputReady}, visível {top.Visible}, foco {GetViewport().GuiGetFocusOwner()?.GetType().Name ?? "nenhum"}, foco recursivo {top.FocusBehaviorRecursive}, travado {GameManager.Instance.IsGameplayBlocked})";
+            var tries = new List<string>();
+            foreach (var key in new[] { Key.Escape, Key.Escape, Key.Enter })
+            {
+                await WaitSeconds(0.5);
+                await QaKeyTap(key);
+                await WaitSeconds(0.3);
+                tries.Add($"{key}→{ui.Stack.Top?.GetType().Name ?? "vazia"}");
+            }
+
+            throw new SmokeFailure($"depois do spam, Esc não esvaziou as telas: {detail}; novas tentativas: {string.Join(", ", tries)}");
+        }
+
         Require(!GameManager.Instance.IsGameplayBlocked, "depois do spam o jogo ficou travado");
         Require(maxStack <= 4, $"spam empilhou {maxStack} telas");
         Require(nodes1 - nodes0 < 200, $"nós cresceram {nodes1 - nodes0} com o spam");
@@ -751,6 +799,7 @@ public partial class SmokeTest
         var hud = Hud.Current ?? throw new SmokeFailure("sem HUD");
         var failures = new List<string>();
         var samples = new List<double>();
+        var perMap = new Dictionary<string, List<double>>();
         double nodesAt10 = 0;
         for (var i = 0; i < 50; i++)
         {
@@ -770,9 +819,20 @@ public partial class SmokeTest
 
             var nodes = Performance.GetMonitor(Performance.Monitor.ObjectNodeCount);
             samples.Add(nodes);
+            if (!perMap.TryGetValue(id, out var list))
+            {
+                perMap[id] = list = [];
+            }
+
+            list.Add(nodes);
             if (i == 10)
             {
                 nodesAt10 = nodes;
+            }
+
+            if (i % 10 == 0 || i == 49)
+            {
+                Log.Info($"qa-mapas: troca {i} ({id}): {QaNodeBreakdown()}");
             }
         }
 
@@ -780,7 +840,15 @@ public partial class SmokeTest
         Log.Info($"qa-mapas: nós min {samples.Min()} máx {samples.Max()} (troca 10: {nodesAt10}, fim: {samples[^1]}), órfãos {orphans}, memória {Performance.GetMonitor(Performance.Monitor.MemoryStatic) / (1024 * 1024):0.0} MB");
         Require(failures.Count == 0, string.Join("\n  ", failures));
         Require(orphans == 0, $"{orphans} nós órfãos depois de 50 trocas");
-        Require(samples[^1] - nodesAt10 < 150, $"nós cresceram {samples[^1] - nodesAt10} entre a 10ª e a 50ª troca");
+        // Mesmo mapa, visita 2 contra a última: a contagem tem de voltar ao mesmo patamar.
+        var growth = perMap.Where(kv => kv.Value.Count >= 3).Select(kv => (Map: kv.Key, Delta: kv.Value[^1] - kv.Value[1], Trail: string.Join("→", kv.Value))).ToList();
+        foreach (var (map, delta, trail) in growth)
+        {
+            Log.Info($"qa-mapas: {map}: {trail}");
+        }
+
+        var worst = growth.OrderByDescending(g => g.Delta).First();
+        Require(worst.Delta < 40, $"nós crescem a cada volta ao mesmo mapa: {worst.Map} {worst.Trail} (+{worst.Delta})");
     }
 
     [SmokeScenario("estresse: interface (QA) bot de 5 min pela cidade: passeio aleatório e todos os pontos de interesse", order: 92)]
@@ -884,13 +952,23 @@ public partial class SmokeTest
                         continue; // portal sem Brecha aberta
                     }
 
+                    // Encostado na parede o pé não "cabe" (CanStand) e o Core não acha caminho: parte do ponto livre mais perto.
                     var p = player.GlobalPosition;
-                    var from = new MapPoint(p.X, p.Y);
+                    var from = QaNearestStandable(world, p);
                     var path = area is { } rect ? WalkPathfinder.FindPathInto(world.WalkArea, from, rect) : WalkPathfinder.FindPathNear(world.WalkArea, from, point, radius);
                     if (path is null)
                     {
-                        unreachable.Add($"{mapId} {label} a partir de ({p.X:0},{p.Y:0})");
-                        continue;
+                        // Daqui o Core não acha caminho: registra e tenta do spawn (inalcançável de verdade só se falhar de lá também).
+                        Log.Info($"qa-bot: {mapId} {label}: sem caminho a partir de ({p.X:0},{p.Y:0}); tentando do spawn");
+                        player.Teleport(new Vector2(map.Spawn.X, map.Spawn.Y));
+                        await NextPhysicsFrame();
+                        from = new MapPoint(map.Spawn.X, map.Spawn.Y);
+                        path = area is { } rect2 ? WalkPathfinder.FindPathInto(world.WalkArea, from, rect2) : WalkPathfinder.FindPathNear(world.WalkArea, from, point, radius);
+                        if (path is null)
+                        {
+                            unreachable.Add($"{mapId} {label} (nem a partir do spawn {map.Spawn.X:0},{map.Spawn.Y:0})");
+                            continue;
+                        }
                     }
 
                     var loads = world.MapLoads;
@@ -995,6 +1073,50 @@ public partial class SmokeTest
     }
 
     // --- utilidades do QA ---
+
+    /// <summary>Ponto onde o pé cabe mais perto de <paramref name="p"/> (até 12 u), ou o próprio ponto.</summary>
+    private static MapPoint QaNearestStandable(World.World world, Vector2 p)
+    {
+        for (var r = 0f; r <= 12f; r += 2f)
+        {
+            for (var a = 0; a < 16; a++)
+            {
+                var q = p + (Vector2.Right.Rotated(a * Mathf.Tau / 16f) * r);
+                if (world.WalkArea.CanStand(q.X, q.Y))
+                {
+                    return new MapPoint(q.X, q.Y);
+                }
+
+                if (r == 0f)
+                {
+                    break;
+                }
+            }
+        }
+
+        return new MapPoint(p.X, p.Y);
+    }
+
+    /// <summary>Nós por sub-árvore (HUD, GameUi, World sem a UI) para achar onde a contagem cresce.</summary>
+    private string QaNodeBreakdown()
+    {
+        static int Count(Node n)
+        {
+            var total = 1;
+            foreach (var child in n.GetChildren())
+            {
+                total += Count(child);
+            }
+
+            return total;
+        }
+
+        var hud = Hud.Current is { } h ? Count(h) : 0;
+        var gameUi = GameUi.Current is { } g ? Count(g) : 0;
+        var scene = GetTree().CurrentScene is { } s ? Count(s) : 0;
+        var root = Count(GetTree().Root);
+        return $"HUD {hud}, GameUi {gameUi}, cena {scene} (resto {scene - hud - gameUi}), árvore {root}, objetos {Performance.GetMonitor(Performance.Monitor.ObjectNodeCount)}";
+    }
 
     private static int QaPrice(string? sub)
     {
