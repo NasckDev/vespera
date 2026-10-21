@@ -32,13 +32,12 @@ public partial class BoardScreen : Screen
         center.SetAnchorsPreset(LayoutPreset.FullRect);
         AddChild(center);
         var panel = Ui.Ornate();
-        panel.CustomMinimumSize = new Vector2(440, 290);
+        panel.CustomMinimumSize = new Vector2(440, 0); // altura do conteúdo: com poucas Brechas não sobra painel vazio
         center.AddChild(panel);
 
         _subtitle = Ui.Text(string.Empty, UiFonts.Tiny, UiPalette.Sub, wrap: true);
         _list = Ui.Column(4);
         _list.CustomMinimumSize = new Vector2(275, 0);
-        _list.SizeFlagsVertical = SizeFlags.ExpandFill;
 
         _questName = Ui.Title(string.Empty, UiFonts.Body, UiPalette.Ambar);
         _questName.AutowrapMode = TextServer.AutowrapMode.WordSmart;
@@ -67,6 +66,8 @@ public partial class BoardScreen : Screen
     }
 
     public int Count => _rows.Count;
+
+    public override bool HidesHud => true;
 
     protected override Control? DefaultFocus => _rows.Count > 0 ? _rows[0].Row : _focusAnchor;
 

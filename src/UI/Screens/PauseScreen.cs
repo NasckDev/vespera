@@ -45,6 +45,8 @@ public partial class PauseScreen : Screen
 
     public IReadOnlyList<SelectableRow> Rows => _rows;
 
+    public override bool HidesHud => true;
+
     protected override Control? DefaultFocus => _rows[Math.Clamp(_lastFocus, 0, _rows.Count - 1)];
 
     public override bool HandleInput(InputEvent @event)

@@ -31,6 +31,8 @@ public abstract partial class FrameScreen : Screen
 
     public override bool HidesBelow => true;
 
+    public override bool HidesHud => true;
+
     protected OrnatePanel Frame { get; }
 
     protected Label TitleLabel { get; }

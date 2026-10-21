@@ -60,6 +60,8 @@ public partial class InventoryScreen : Screen
     private ItemRef? _selected;
     private string? _selectedSlot;
     private double _time;
+    private Label _status = null!;
+    private float _statusT;
 
     public InventoryScreen()
     {
@@ -90,6 +92,8 @@ public partial class InventoryScreen : Screen
     public IReadOnlyList<(SelectableRow Row, HotbarSlot Art, ItemRef Item)> Cells => _cells;
 
     public SelectableRow? SlotRow(string slotId) => _slots.TryGetValue(slotId, out var s) ? s.Row : null;
+
+    public override bool HidesHud => true;
 
     protected override Control? DefaultFocus => _tab switch
     {
@@ -214,6 +218,12 @@ public partial class InventoryScreen : Screen
     {
         base._Process(delta);
         _time += delta;
+        if (_statusT > 0f)
+        {
+            _statusT = Mathf.Max(0f, _statusT - (float)delta);
+            _status.Modulate = new Color(1, 1, 1, Mathf.Min(1f, _statusT * 2f));
+        }
+
         if (_tab == 0)
         {
             // personagem flutuando (ui.js:139)
@@ -223,6 +233,8 @@ public partial class InventoryScreen : Screen
 
     protected override void OnOpened()
     {
+        _statusT = 0f;
+        _status.Text = string.Empty;
         _filter = "all";
         SelectTab(0);
     }
@@ -264,6 +276,10 @@ public partial class InventoryScreen : Screen
 
     private Control BuildFooter()
     {
+        _status = Ui.Text(string.Empty, UiFonts.Small, UiPalette.Locked, align: HorizontalAlignment.Center);
+        _status.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+        _status.ClipText = true;
+        _status.CustomMinimumSize = new Vector2(40, 0);
         _lumes = Ui.Bold("0", UiFonts.Body, UiPalette.Creme);
         _shards = Ui.Text("0", UiFonts.Body, UiPalette.Creme);
         return Ui.Row(8,
@@ -272,7 +288,7 @@ public partial class InventoryScreen : Screen
             Ui.Hint("Setas", "D-pad", "Navegar"),
             Ui.Hint("E", "A", "Equipar"),
             Ui.Hint("X", "Y", "Desmontar"),
-            Ui.Spacer(),
+            _status,
             IconRect.Create("i_shard", 9), _shards,
             IconRect.Create("i_coin", 10), _lumes);
     }
@@ -299,7 +315,7 @@ public partial class InventoryScreen : Screen
             var (col, rowIndex) = SlotPositions.GetValueOrDefault(slot.Id, (0, 0));
             var x = col switch { 0 => 10f, 1 => 107f, _ => 204f };
             var y = rowIndex switch { -1 => 2f, 3 => 128f, _ => 24f + (rowIndex * 38f) };
-            var art = new HotbarSlot { DrawFrame = false, CustomMinimumSize = new Vector2(Cell, Cell) };
+            var art = new HotbarSlot { DrawFrame = false, CustomMinimumSize = new Vector2(Cell - 4, Cell - 4) }; // + margem do SlotPanel = Cell
             var cell = new SelectableRow { NormalStyle = "SlotPanel", FocusStyle = "SlotFocus", Marker = false, CustomMinimumSize = new Vector2(Cell, Cell), Position = new Vector2(x, y), Size = new Vector2(Cell, Cell) };
             cell.AddChild(art);
             var slotId = slot.Id;
@@ -595,7 +611,7 @@ public partial class InventoryScreen : Screen
         if (state.Equip(item.Index) is { } reason)
         {
             Common.UiSound.Denied(); // extra.js:88
-            Hud.Current?.Note(reason, "i_alert");
+            Flash(reason);
             return;
         }
 
@@ -635,14 +651,25 @@ public partial class InventoryScreen : Screen
                 break;
             case PotionResult.NoPotions:
                 Common.UiSound.Denied();
-                Hud.Current?.Note("Sem poções. Lúcia vende na estalagem.", "ic_potion");
+                Flash("Sem poções. Lúcia vende na estalagem.");
                 break;
             case PotionResult.FullHealth:
                 Common.UiSound.Denied();
-                Hud.Current?.Note("Vida já está cheia.", "ic_potion");
+                Flash("Vida já está cheia.");
                 break;
         }
     }
+
+    /// <summary>Aviso no rodapé (o HUD fica escondido atrás do inventário): some em 3 s.</summary>
+    private void Flash(string message)
+    {
+        _status.Text = message;
+        _statusT = 3f;
+        _status.Modulate = Colors.White;
+    }
+
+    /// <summary>Aviso atual do rodapé (smoke test).</summary>
+    public string StatusText => _statusT > 0f ? _status.Text : string.Empty;
 
     private void FocusCell(int backpackIndex)
     {

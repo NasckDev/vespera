@@ -270,6 +270,11 @@ public partial class GameUi : CanvasLayer
 
     private void OnStackChanged()
     {
+        if (Hud.Current is { } hud)
+        {
+            hud.ChromeVisible = !Stack.HidesHud;
+        }
+
         var block = Stack.BlocksGameplay;
         if (block != _blocked)
         {

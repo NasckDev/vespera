@@ -57,6 +57,7 @@ public partial class Hud : CanvasLayer
     private HBoxContainer _prompt = null!;
     private Label _promptText = null!;
     private ColorRect _flash = null!;
+    private Control _chrome = null!;
     private Banner _locationBanner = null!;
     private Banner _bossBanner = null!;
     private Banner _ultimateBanner = null!;
@@ -129,6 +130,13 @@ public partial class Hud : CanvasLayer
 
     public VBoxContainer BrechaList => _brechaList;
 
+    /// <summary>Painéis do HUD visíveis (falso enquanto uma tela cheia está aberta; toasts e Novo Selo continuam).</summary>
+    public bool ChromeVisible
+    {
+        get => _chrome.Visible;
+        set => _chrome.Visible = value;
+    }
+
     public override void _EnterTree() => Current = this;
 
     public override void _Ready()
@@ -142,24 +150,28 @@ public partial class Hud : CanvasLayer
         _flash = new ColorRect { Color = FlashColor with { A = 0 }, MouseFilter = Control.MouseFilterEnum.Ignore, AnchorRight = 1, AnchorBottom = 1, Visible = false };
         root.AddChild(_flash);
 
-        root.AddChild(BuildStatus());
-        root.AddChild(BuildTopRight());
-        root.AddChild(BuildHotbar());
-        root.AddChild(BuildWallet());
-        root.AddChild(BuildPrompt());
+        // Painéis do HUD num grupo só: telas cheias (inventário, pausa, mural) escondem o grupo e não brigam com ele.
+        _chrome = new Control { MouseFilter = Control.MouseFilterEnum.Ignore };
+        _chrome.SetAnchorsPreset(Control.LayoutPreset.FullRect);
+        root.AddChild(_chrome);
+        _chrome.AddChild(BuildStatus());
+        _chrome.AddChild(BuildTopRight());
+        _chrome.AddChild(BuildHotbar());
+        _chrome.AddChild(BuildWallet());
+        _chrome.AddChild(BuildPrompt());
 
         Loot = new LootFeed { AnchorLeft = 1, AnchorRight = 1, OffsetLeft = -200, OffsetRight = -9, OffsetTop = 120, OffsetBottom = 240 };
-        root.AddChild(Loot);
+        _chrome.AddChild(Loot);
 
         Boss = new BossBar { AnchorLeft = 0.5f, AnchorRight = 0.5f, OffsetLeft = -150, OffsetRight = 150, OffsetTop = 8 };
-        root.AddChild(Boss);
+        _chrome.AddChild(Boss);
 
         _locationBanner = new Banner(108, UiFonts.Title, band: false, rule: true);
         _bossBanner = new Banner(124, UiFonts.Title, band: true, rule: false);
         _ultimateBanner = new Banner(82, UiFonts.Title, band: true, rule: false);
-        root.AddChild(_locationBanner);
-        root.AddChild(_bossBanner);
-        root.AddChild(_ultimateBanner);
+        _chrome.AddChild(_locationBanner);
+        _chrome.AddChild(_bossBanner);
+        _chrome.AddChild(_ultimateBanner);
 
         Toasts = new ToastBox { AnchorLeft = 0.5f, AnchorRight = 0.5f };
         root.AddChild(Toasts);

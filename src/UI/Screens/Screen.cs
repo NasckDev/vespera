@@ -35,6 +35,9 @@ public partial class Screen : Control
     /// <summary>Esconde a tela de baixo enquanto aberta (sub-telas da pausa); o diálogo deixa ver o mundo.</summary>
     public virtual bool HidesBelow => false;
 
+    /// <summary>Tela cheia: esconde os painéis do HUD enquanto aberta (o diálogo e as lojas deixam o HUD à vista).</summary>
+    public virtual bool HidesHud => false;
+
     /// <summary>Trava o jogador e pausa o mundo (todo modal da v2, <c>main.js:91</c>).</summary>
     public virtual bool BlocksGameplay => true;
 

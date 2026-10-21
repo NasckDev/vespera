@@ -46,6 +46,23 @@ public partial class ScreenStack : Control
         }
     }
 
+    /// <summary>Alguma tela aberta é cheia e esconde o HUD.</summary>
+    public bool HidesHud
+    {
+        get
+        {
+            foreach (var screen in _screens)
+            {
+                if (screen.HidesHud)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
+
     /// <summary>Controles que ficam por baixo das telas (o menu do título): perdem o foco enquanto há tela aberta.</summary>
     public Control? BaseLayer { get; set; }
 

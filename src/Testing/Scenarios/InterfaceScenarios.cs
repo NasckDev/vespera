@@ -446,6 +446,11 @@ public partial class SmokeTest
         gibao.Row.GrabFocus();
         await NextPhysicsFrame();
         Require(ui.Inventory.Detail.LockText == "Exclusivo de Adagas / Arco. Sua classe é Lâmina.", $"trava por classe: '{ui.Inventory.Detail.LockText}'");
+        Require(!Hud.Current!.ChromeVisible, "inventário esconde os painéis do HUD");
+        await UiPress("ui_accept");
+        await WaitUntil(() => ui.Inventory.StatusText.Length > 0, 2, $"equipar travado avisar no rodapé (foco: {GetViewport().GuiGetFocusOwner()?.GetType().Name})");
+        Require(ui.Inventory.StatusText == ui.Inventory.Detail.LockText, $"aviso do rodapé: '{ui.Inventory.StatusText}'");
+        Require(state.Save.Backpack.Contains("gibao"), "item travado continua na mochila");
         await Shot("ui-inventario-bloqueado");
         var shards = state.Shards;
         await UiKey(Key.X);
@@ -468,6 +473,7 @@ public partial class SmokeTest
         await Shot("ui-inventario-selos");
         await UiPress("ui_cancel");
         await WaitUntil(() => !ui.Inventory.IsOpen && !GameManager.Instance.IsGameplayBlocked, 2, "inventário fechar");
+        Require(Hud.Current!.ChromeVisible, "HUD volta ao fechar o inventário");
     }
 
     [SmokeScenario("interface: pausa, opções de volume, diário e mural", order: 36)]
@@ -679,6 +685,9 @@ public partial class SmokeTest
     private async Task FocusOption(GameUi ui, string label)
     {
         await WaitUntil(() => ui.Dialog.ChoicesVisible, 2, $"opções para '{label}'");
+        await NextPhysicsFrame();
+        var rect = ui.Dialog.ChoicesRect;
+        Require(new Rect2(0, 0, 640, 360).Encloses(rect), $"painel de opções fora da tela: {rect}");
         var target = -1;
         for (var i = 0; i < ui.Dialog.Options.Count; i++)
         {
