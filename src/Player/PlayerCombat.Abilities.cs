@@ -36,7 +36,7 @@ public sealed partial class PlayerCombat
 
     // --- Ecos ---
 
-    /// <summary>Usa o Eco do slot (0 = Q, 1 = segundo slot; DECISIONS D41).</summary>
+    /// <summary>Usa o Eco do slot (0 = Q, 1 = segundo slot; DECISIONS B1-D41).</summary>
     public void UseEco(int slot)
     {
         var save = Game.Save;

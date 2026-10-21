@@ -343,7 +343,7 @@ public partial class CombatDirector : Node2D, IMonsterWorld
 
     /// <summary>
     /// <c>moveEnt</c> (<c>core.js:249-253</c>): passos de até 3 u, eixo a eixo, contra o mapa. Props sólidos (barris,
-    /// baús) não travam o passo: depois dele o monstro é empurrado para fora da elipse do prop (D46), o que o faz
+    /// baús) não travam o passo: depois dele o monstro é empurrado para fora da elipse do prop (B1-D46), o que o faz
     /// deslizar em volta em vez de empacar encostado (na v2, colado num caixote, o passo de 0,6 u caía na faixa mais
     /// larga da elipse e o monstro ficava parado para sempre).
     /// </summary>
@@ -409,7 +409,7 @@ public partial class CombatDirector : Node2D, IMonsterWorld
         }
     }
 
-    /// <summary>Linha reta bloqueada → segue o campo de perseguição (D43). Voadores vão reto.</summary>
+    /// <summary>Linha reta bloqueada → segue o campo de perseguição (B1-D43). Voadores vão reto.</summary>
     public void ChaseDirection(MonsterBody m, ref double ux, ref double uy)
     {
         if (m.Fly || _chase is null)
@@ -435,7 +435,7 @@ public partial class CombatDirector : Node2D, IMonsterWorld
 
     /// <summary>
     /// O campo aponta para o centro da célula vizinha, mas o monstro pode estar num canto da célula (quina de parede)
-    /// onde nem x nem y andam: gira a direção em passos de 45° até achar uma que ande no <see cref="Move"/> (D46).
+    /// onde nem x nem y andam: gira a direção em passos de 45° até achar uma que ande no <see cref="Move"/> (B1-D46).
     /// </summary>
     private void Unstick(MonsterBody m, ref double ux, ref double uy)
     {
@@ -650,7 +650,7 @@ public partial class CombatDirector : Node2D, IMonsterWorld
 
             if (_chase is not null && !_chase.Reachable(x, y, p.X, p.Y))
             {
-                continue; // D43: só onde dá para chegar a pé até o jogador (ilhas da máscara travariam a onda)
+                continue; // B1-D43: só onde dá para chegar a pé até o jogador (ilhas da máscara travariam a onda)
             }
 
             return new Vector2(x, y);

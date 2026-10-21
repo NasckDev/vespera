@@ -16,7 +16,7 @@ public static class InputActions
     public static readonly StringName Lantern = "lantern";
     public static readonly StringName Pause = "pause";
 
-    // --- Combate (frente B1; DECISIONS D42) ---
+    // --- Combate (frente B1; DECISIONS B1-D42) ---
 
     /// <summary>Próxima/anterior arma da hotbar (roda do mouse, RB/LB). A classe trava a arma (v2).</summary>
     public static readonly StringName WeaponNext = "weapon_next";
@@ -26,7 +26,7 @@ public static class InputActions
     /// <summary>Armas 1–5 da hotbar (<c>sword, bow, staff, hammer, dag</c>).</summary>
     public static readonly StringName[] WeaponSlots = ["weapon_1", "weapon_2", "weapon_3", "weapon_4", "weapon_5"];
 
-    /// <summary>Beber poção (R; Back no gamepad).</summary>
+    /// <summary>Beber poção (R; direcional para cima no gamepad: o Back é do inventário da Interface).</summary>
     public static readonly StringName Potion = "potion";
 
     /// <summary>Usar o Eco do slot 1 (Q; LT) e do slot 2 (C; clique do analógico direito).</summary>

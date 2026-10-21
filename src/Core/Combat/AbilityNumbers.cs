@@ -129,7 +129,7 @@ public static class UltimateNumbers
 }
 
 /// <summary>
-/// Dois slots de Eco no combate (DECISIONS D41): o 1º é o Eco equipado (<c>s.ecoEq</c>, tecla Q da v2); o 2º é o
+/// Dois slots de Eco no combate (DECISIONS B1-D41): o 1º é o Eco equipado (<c>s.ecoEq</c>, tecla Q da v2); o 2º é o
 /// primeiro outro Eco absorvido, na ordem em que foi obtido. Sem campo novo no save.
 /// </summary>
 public static class EcoSlots
@@ -165,7 +165,7 @@ public static class EcoSlots
 public static class LanternPlacement
 {
     /// <summary>
-    /// A Lanterna está nesta sala: mesma Brecha, ou (DECISIONS D40) a próxima Brecha do mesmo tema, já que as Brechas
+    /// A Lanterna está nesta sala: mesma Brecha, ou (DECISIONS B1-D40) a próxima Brecha do mesmo tema, já que as Brechas
     /// não são salvas e o id muda entre sessões.
     /// </summary>
     public static bool IsHere(SaveData save, int brechaId, string themeId, string room)

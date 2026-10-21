@@ -296,7 +296,7 @@ public partial class CombatDirector
 
     /// <summary>
     /// Objetos do grupo <see cref="HittableGroup"/> (barris, caixotes, urnas da cidade e dos interiores). Só pelo grupo e
-    /// pelo método <c>Hit</c>, sem depender da classe da outra frente. A lista é refeita no máximo uma vez por frame e
+    /// pelo método <c>Hit</c>, sem depender da classe da outra frente (DECISIONS B1-D44). A lista é refeita no máximo uma vez por frame e
     /// só quando há golpe (a busca no grupo aloca; nunca roda por frame sem ataque).
     /// </summary>
     public List<Node2D> RefreshHittables()

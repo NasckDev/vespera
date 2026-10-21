@@ -277,7 +277,7 @@ public partial class SmokeTest
             Require(lantern!.Position.DistanceTo(deathAt) < 12, $"Lanterna longe do ponto da morte: {lantern.Position} vs {deathAt}");
             await Shot("combate-lanterna");
             await InteractWithNode(world, lantern.Interaction!);
-            Require(!state.HasLostLantern, "pegar a Lanterna deveria recuperá-la");
+            await WaitUntil(() => !state.HasLostLantern, 2, "pegar a Lanterna deveria recuperá-la");
             Require(state.MaxHp == fullHp, $"HP máximo voltou: {state.MaxHp}/{fullHp}");
             Require(state.Lumes == lumes + 17 && state.MaterialCount("presa") >= 2, "os itens da Lanterna voltaram");
             await FleeRun(world, combat);
@@ -607,6 +607,8 @@ public partial class SmokeTest
         var deadline = Time.GetTicksMsec() + (ulong)(timeoutSeconds * 1000);
         var frame = 0;
         var shotTaken = shotAt is null;
+        // VESPERA_BOT_TRACE=N: log + print a cada N frames (diagnóstico do bot; 1 = a cada 120).
+        var traceEvery = int.TryParse(OS.GetEnvironment("VESPERA_BOT_TRACE"), out var every) ? (every == 1 ? 120 : every) : 0;
         IReadOnlyList<MapPoint>? path = null;
         var pathAge = 0;
         try
@@ -643,7 +645,7 @@ public partial class SmokeTest
                 var clear = ClearShot(combat, p - new Vector2(0, 12), new Vector2((float)target.X, (float)(target.Y - (target.HitHeight * 0.5))));
                 if (!clear && d > 150)
                 {
-                    PressDirection(Vector2.Zero); // longe e atrás de obstáculo: espera o monstro vir (ele contorna, D43)
+                    PressDirection(Vector2.Zero); // longe e atrás de obstáculo: espera o monstro vir (ele contorna, B1-D43)
                 }
                 else if (d > range || (ranged && !clear))
                 {
@@ -680,7 +682,7 @@ public partial class SmokeTest
                     Input.ActionRelease(InputActions.Attack);
                 }
 
-                if (shotAt is not null && frame % 120 == 0 && OS.GetEnvironment("VESPERA_BOT_TRACE") == "1")
+                if (shotAt is not null && traceEvery > 0 && frame % traceEvery == 0)
                 {
                     Log.Info($"bot {frame}: p={p} alvo {target.Def.Id} ({target.X:0},{target.Y:0}) {target.State} hp {target.Hp:0} d={d:0} {combat.DescribeChase(target)}");
                     await Shot($"{shotAt}-{frame}");

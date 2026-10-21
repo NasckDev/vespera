@@ -7,7 +7,7 @@ using Vespera.Core.Rules;
 using Vespera.Tests.Core.Support;
 using static GdUnit4.Assertions;
 
-/// <summary>IA dos monstros (spec 02 §3.10) e golpe no monstro (§3.4), com tempos da v2 e as correções D6/D39.</summary>
+/// <summary>IA dos monstros (spec 02 §3.10) e golpe no monstro (§3.4), com tempos da v2 e as correções D6/B1-D39.</summary>
 [TestSuite]
 public class MonsterAiTest
 {
@@ -65,7 +65,7 @@ public class MonsterAiTest
         Run(wolf, w, 1.0, p);
         AssertThat(w.Hurts[0]).IsEqualApprox(12 * 0.55, 1e-9);
 
-        // D39: o Pescador usa a parte de índice 0 (Isca) no papel da mandíbula; intacta = dano cheio.
+        // B1-D39: o Pescador usa a parte de índice 0 (Isca) no papel da mandíbula; intacta = dano cheio.
         var fishm = Spawn("fishm");
         fishm.Cd = 0;
         var w2 = new FakeWorld();

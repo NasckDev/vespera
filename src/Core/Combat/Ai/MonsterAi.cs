@@ -5,7 +5,7 @@ namespace Vespera.Core.Combat.Ai;
 
 /// <summary>
 /// IA dos monstros da v2 como máquinas de estado puras (<c>updMob</c> + <c>AI</c>, <c>combat.js:258-405</c>; spec 02 §3.10),
-/// com os tempos exatos do protótipo. Correções (DECISIONS D6/D39): parte inexistente não conta como quebrada; as IAs
+/// com os tempos exatos do protótipo. Correções (DECISIONS D6/B1-D39): parte inexistente não conta como quebrada; as IAs
 /// genéricas consultam as partes por índice (0 = a da frente, 1 = a das costas), como o <c>knight</c> já fazia; o
 /// <c>caster</c> usa <c>triple</c> dos dados e só sai de <c>idle</c> com o jogador a ≤ 230 u.
 /// A separação entre monstros fica com quem tem a lista (<see cref="Separate"/>).

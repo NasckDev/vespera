@@ -179,7 +179,7 @@ public sealed class MonsterBody
     public bool IsTargetable => !Dead && SpawnT <= 0 && Alpha >= 0.3;
 
     /// <summary>
-    /// Parte de índice <paramref name="index"/> existe e está quebrada (DECISIONS D6/D39: o <c>broken()</c> da v2
+    /// Parte de índice <paramref name="index"/> existe e está quebrada (DECISIONS D6/B1-D39: o <c>broken()</c> da v2
     /// devolvia true para partes inexistentes).
     /// </summary>
     public bool IsPartBroken(int index) => index >= 0 && index < _broken.Length && _broken[index];

@@ -3,7 +3,7 @@ using Vespera.Core.World;
 namespace Vespera.Core.Combat.Ai;
 
 /// <summary>
-/// Campo de perseguição (DECISIONS D43): BFS em células de 8 u a partir do jogador, para os monstros contornarem
+/// Campo de perseguição (DECISIONS B1-D43): BFS em células de 8 u a partir do jogador, para os monstros contornarem
 /// paredes, água e bancas em vez de empacar em linha reta (na v2 o <c>moveEnt</c> só desliza eixo a eixo e monstros
 /// nascidos atrás de um obstáculo nunca chegam, o que trava a onda). Só é usado quando a linha reta até o jogador
 /// está bloqueada. O BFS cobre o mapa todo, fatiado em alguns frames (<see cref="DefaultBudget"/>) com buffer duplo;

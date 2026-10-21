@@ -5,7 +5,7 @@ using Vespera.Core.Combat.Ai;
 using Vespera.Core.World;
 using static GdUnit4.Assertions;
 
-/// <summary>Campo de perseguição (DECISIONS D43): contorna paredes, ilhas não alcançam, recálculo barato.</summary>
+/// <summary>Campo de perseguição (DECISIONS B1-D43): contorna paredes, ilhas não alcançam, recálculo barato.</summary>
 [TestSuite]
 public class ChaseFieldTest
 {

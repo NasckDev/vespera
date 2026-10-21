@@ -11,7 +11,7 @@ namespace Vespera.World.Dungeon;
 /// <c>world.js:66-72</c>). <c>PlayerDied</c> sai do GameManager quando o HP zera; a Interface mostra a tela de morte e
 /// emite <c>RespawnRequested</c>; aqui se aplica <c>DieInBrecha</c> (a bolsa fica na Lanterna, na posição da morte) ou
 /// <c>DieInCity</c> e o jogador volta à Guilda/estalagem com 1,5 s de i-frames. A Lanterna volta ao ser pega na próxima
-/// Brecha do tema (D40), quando um caçador a traz (<c>R(55, 85)</c> s; 20 s ao carregar um save; 12 s pagando a Odete
+/// Brecha do tema (B1-D40), quando um caçador a traz (<c>R(55, 85)</c> s; 20 s ao carregar um save; 12 s pagando a Odete
 /// com <see cref="ScheduleRescue"/>) ou quando a Brecha dela fecha.
 /// </summary>
 public sealed class LanternKeeper(CombatDirector combat, BrechaController brecha)

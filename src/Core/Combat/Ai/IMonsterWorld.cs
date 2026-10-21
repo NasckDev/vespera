@@ -59,7 +59,7 @@ public interface IMonsterWorld
 
     /// <summary>
     /// Direção para perseguir o jogador: recebe a linha reta (unitária) e pode trocá-la pela do campo de perseguição
-    /// quando a reta está bloqueada (DECISIONS D43).
+    /// quando a reta está bloqueada (DECISIONS B1-D43).
     /// </summary>
     void ChaseDirection(MonsterBody m, ref double ux, ref double uy);
 
