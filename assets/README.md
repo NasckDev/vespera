@@ -31,6 +31,15 @@ continua Nearest para a UI pixel; o mundo liga Linear nos próprios nós.
 | `sprites/items/d_*.png` | 36 ícones de materiais |
 | `sprites/ui/` | `keyart.png` (título), `lumeira_map.png` (história), `logo.png` |
 
+## Leva do dono de 2026-10-20 (frente B5)
+
+| Arquivo | Conteúdo |
+|---|---|
+| `sprites/objects/<tema>/*.png` | 445 objetos do mundo em 9 temas, recortados das folhas de `docs/brand/source/objects/`; tamanho, pé, footprint e luz em `src/Data/objects.json` (gerado por `tools/assets/build_objects.py`). Importados com mipmaps, como os outros sprites |
+| `maps/extra/<id>/map_<id>.png` | 20 mapas candidatos **sem colisão** (salas extras das Brechas e Brechas 6–10), registrados em `src/Data/maps_extra.json` |
+
+Triagem completa das 70 imagens: [`docs/design/catalogo-assets.md`](../docs/design/catalogo-assets.md).
+
 ## Placeholders
 
 Nenhum no momento. O `placeholder_player.png` da fundação foi removido: o jogador usa os recortes `c_{classe}_*` do
