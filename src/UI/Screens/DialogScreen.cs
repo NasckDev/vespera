@@ -353,7 +353,7 @@ public partial class DialogScreen : Screen
         var wanted = 0f;
         foreach (var row in _rows)
         {
-            wanted += row.CustomMinimumSize.Y + 1;
+            wanted += row.GetCombinedMinimumSize().Y + 1; // altura real (texto + margens do estilo), não só o mínimo pedido
         }
 
         _scroll.CustomMinimumSize = new Vector2(246, Mathf.Min(wanted + 2, 196));
