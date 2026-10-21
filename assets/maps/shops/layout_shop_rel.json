@@ -6,6 +6,7 @@
     {"rect": [294, 298, 78, 136], "note": "escada da entrada"}
   ],
   "block": [
+    {"rect": [168, 180, 16, 19], "note": "baú escondido (sólido no motor)"},
     {"rect": [0, 0, 694, 162], "note": "parede do fundo"},
     {"rect": [0, 0, 168, 434], "note": "lanternão, bancada do frasco azul e caixotes (oeste)"},
     {"rect": [112, 0, 90, 178], "note": "prateleira de lanternas"},
@@ -42,7 +43,7 @@
   ],
   "props": [],
   "chests": [
-    {"x": 184, "y": 190, "tier": 0, "note": "no vão entre a prateleira de lanternas e o armarinho"}
+    {"x": 177, "y": 189, "tier": 0, "note": "no fundo do vão entre a prateleira de lanternas e o armarinho (pé bloqueado na colisão)"}
   ],
   "decor": [
     {"kind": "inspect", "x": 510, "y": 190, "r": 24, "label": "Examinar a esfera dourada", "text": "Uma lanterna do tamanho de um homem, presa num globo de latão. O Abel diz que ela já iluminou uma Brecha inteira por dentro, e que ainda lembra o caminho."},

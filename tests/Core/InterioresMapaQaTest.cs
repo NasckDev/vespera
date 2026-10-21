@@ -224,6 +224,39 @@ public class InterioresMapaQaTest
     }
 
     [TestCase]
+    public void TestaBauTemOPeBloqueadoNaMascara()
+    {
+        // No motor (frente mundo-motor, Chest.cs) o baú é sólido: círculo de 8 × propScale 1,25 × 0,8 = 8 u. Se a máscara
+        // deixa o piso dele andável, o caminho do Core passa por dentro do baú e o jogador trava nele (a Guilda travou o
+        // bot em (55, 228), atrás do baú no canto do mezanino). O pé do baú tem que estar bloqueado na máscara.
+        const float solid = 8f;
+        var failures = new List<string>();
+        foreach (var id in Interiors)
+        {
+            var map = Catalog[id];
+            var area = new MaskWalkArea(LoadGrid(map), 4);
+            foreach (var c in Array(LoadLayout(map), "chests"))
+            {
+                var at = Point(c);
+                for (var y = at.Y - solid + 2f; y <= at.Y + solid - 2f; y += 2f)
+                {
+                    for (var x = at.X - solid + 2f; x <= at.X + solid - 2f; x += 2f)
+                    {
+                        if (((x - at.X) * (x - at.X)) + ((y - at.Y) * (y - at.Y)) < (solid - 2f) * (solid - 2f) && area.IsWalkable(x, y))
+                        {
+                            failures.Add($"{id} baú ({at.X}, {at.Y}): piso andável em ({x}, {y}), dentro do corpo do baú");
+                            y = float.MaxValue - 1f;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        AssertThat(string.Join("; ", failures)).IsEqual(string.Empty);
+    }
+
+    [TestCase]
     public void TestaLoreNaoNegaOSomAmbienteAoLado()
     {
         // INTE-4: a lore do alambique dizia "sem fogo embaixo" com um som de fogareiro no mesmo ponto.

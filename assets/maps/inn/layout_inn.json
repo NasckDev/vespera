@@ -11,6 +11,7 @@
     {"rect": [200, 780, 100, 52], "note": "saída para a Rua da Forja"}
   ],
   "block": [
+    {"rect": [138, 116, 18, 17], "note": "baú escondido (sólido no motor)"},
     {"rect": [0, 0, 44, 896], "note": "parede oeste"},
     {"rect": [456, 0, 44, 896], "note": "parede leste"},
     {"rect": [0, 0, 500, 116], "note": "parede do fundo dos quartos"},
@@ -66,7 +67,7 @@
   ],
   "props": [],
   "chests": [
-    {"x": 147, "y": 142, "tier": 0, "note": "entre as camas do quarto oeste, debaixo da lamparina"}
+    {"x": 147, "y": 124, "tier": 0, "note": "entre as camas do quarto oeste, encostado na parede do fundo (pé bloqueado na colisão)"}
   ],
   "decor": [
     {"kind": "inspect", "x": 442, "y": 452, "r": 22, "label": "Olhar a lareira atrás do balcão", "text": "Atrás do balcão, a lareira da Lúcia estala sob uma chaleira que nunca esfria. O calor chega até aqui; por um instante, a véspera parece longe."},
