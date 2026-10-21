@@ -1726,12 +1726,7 @@
     32.0,
     136.0
    ],
-   "footprint": [
-    -5.5,
-    -7.3,
-    11.0,
-    7.3
-   ],
+   "footprint": null,
    "occluder": true,
    "sway": true,
    "light": null,
@@ -1739,7 +1734,8 @@
    "sound": {
     "ambient": null,
     "material": "cloth"
-   }
+   },
+   "note": "dois postes finos: sem corpo (o footprint caía no vão do estandarte)"
   },
   {
    "id": "banner_violet",
@@ -2914,14 +2910,14 @@
    ],
    "density": 1.4109,
    "anchor": [
-    46.5,
+    20.6,
     86.0
    ],
    "footprint": [
-    -11.5,
-    -16.5,
-    23.0,
-    16.5
+    -9.9,
+    -13.2,
+    19.8,
+    13.2
    ],
    "occluder": false,
    "sway": false,
@@ -2929,7 +2925,7 @@
     "color": "#f2a541",
     "radius": 64,
     "offset": [
-     18.4,
+     36.8,
      -28.6
     ]
    },
@@ -2937,7 +2933,8 @@
    "sound": {
     "ambient": null,
     "material": "metal"
-   }
+   },
+   "note": "pé no poste da frente (o mais baixo do desenho); o vão entre os postes não é chão"
   },
   {
    "id": "dock_post",
@@ -5222,23 +5219,23 @@
    "layer": "entity",
    "source": "59#165",
    "px": [
-    147,
-    150
+    146,
+    122
    ],
    "worldSize": [
-    69.4,
+    85.3,
     70.9
    ],
-   "density": 2.06,
+   "density": 1.6649,
    "anchor": [
-    68.0,
-    148.0
+    75.0,
+    120.0
    ],
    "footprint": [
-    -13.6,
-    -34.7,
-    27.2,
-    34.7
+    -29.4,
+    -42.6,
+    58.8,
+    42.6
    ],
    "occluder": true,
    "sway": false,
@@ -13548,7 +13545,7 @@
    ],
    "density": 1.3542,
    "anchor": [
-    44.6,
+    172.4,
     217.0
    ],
    "footprint": [
@@ -13564,7 +13561,8 @@
    "sound": {
     "ambient": null,
     "material": "wood"
-   }
+   },
+   "note": "pé na gaiola, a parte mais baixa do desenho"
   },
   {
    "id": "crate_coal",
@@ -14759,12 +14757,7 @@
     36.5,
     173.0
    ],
-   "footprint": [
-    -7.8,
-    -9.0,
-    15.6,
-    9.0
-   ],
+   "footprint": null,
    "occluder": true,
    "sway": true,
    "light": null,
@@ -14772,7 +14765,8 @@
    "sound": {
     "ambient": null,
     "material": "cloth"
-   }
+   },
+   "note": "haste fina: sem corpo"
   },
   {
    "id": "barrel_common",

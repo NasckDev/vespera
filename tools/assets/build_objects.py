@@ -44,7 +44,8 @@ OUT_DOCS = ROOT / "docs" / "design" / "catalogo"
 ATLAS_PNG = ROOT / "assets" / "sprites" / "atlas" / "atlas.png"
 ATLAS_JSON = ROOT / "assets" / "sprites" / "atlas" / "atlas.json"
 
-FIELDS = ("h", "w", "foot", "layer", "light", "sway", "interaction", "ambient", "material", "occluder", "anchor", "ax", "note")
+FIELDS = ("h", "w", "foot", "layer", "light", "sway", "interaction", "ambient", "material", "occluder", "anchor", "ax", "note",
+          "largest")
 LAYERS = ("entity", "floor", "wall", "overhead", "fx")
 
 
@@ -83,6 +84,48 @@ def light_spot(im: Image.Image, color: str) -> tuple[float, float]:
     return sum(t[1] for t in top) / len(top), sum(t[2] for t in top) / len(top)
 
 
+def drop_islands(im: Image.Image, margin: int, keep: float = 0.08) -> Image.Image:
+    """Apaga as ilhas opacas com menos de `keep` dos pixels opacos (8%, o mesmo limite do teste de QA) e recorta de novo."""
+    w, h = im.size
+    alpha = im.getchannel("A")
+    a = alpha.load()
+    seen = bytearray(w * h)
+    comps: list[list[int]] = []
+    for sy in range(h):
+        for sx in range(w):
+            i0 = sy * w + sx
+            if seen[i0] or a[sx, sy] <= 16:
+                continue
+            seen[i0] = 1
+            stack, comp = [i0], []
+            while stack:
+                i = stack.pop()
+                comp.append(i)
+                x, y = i % w, i // w
+                for dy in (-1, 0, 1):
+                    for dx in (-1, 0, 1):
+                        nx, ny = x + dx, y + dy
+                        if 0 <= nx < w and 0 <= ny < h:
+                            j = ny * w + nx
+                            if not seen[j] and a[nx, ny] > 16:
+                                seen[j] = 1
+                                stack.append(j)
+            comps.append(comp)
+    total = sum(len(c) for c in comps) or 1
+    out = im.copy()
+    o = out.load()
+    for comp in comps:
+        if len(comp) < keep * total:
+            for i in comp:
+                r, g, b, _ = o[i % w, i // w]
+                o[i % w, i // w] = (r, g, b, 0)
+    box = out.getchannel("A").point(lambda v: 255 if v > 16 else 0).getbbox()  # o resto de borda suave da ilha sai junto
+    clean = out.crop(box) if box else out
+    res = Image.new("RGBA", (clean.width + 2 * margin, clean.height + 2 * margin), (0, 0, 0, 0))
+    res.paste(clean, (margin, margin))
+    return res
+
+
 def resolve(kind: str, opts: dict, kinds: dict) -> dict:
     if kind not in kinds:
         raise SystemExit(f"kind desconhecido: {kind}")
@@ -105,6 +148,8 @@ def build_object(name: str, theme: str, kind: str, pieces: list, sheet_id: str, 
                  colors: dict) -> tuple[dict, Image.Image]:
     params = cut_sheet.Params(**CUR["params"])
     im = cut_sheet.extract(SHEET_IMG[sheet_id], pieces, params)
+    if spec.get("largest"):  # a peça da folha trouxe um objeto vizinho solto (ex.: orbe ao pé da piscina)
+        im = drop_islands(im, params.margin)
     ux0, uy0, ux1, uy1 = used_box(im)
     pw, ph = ux1 - ux0, uy1 - uy0
     player = ref["playerHeight"]
