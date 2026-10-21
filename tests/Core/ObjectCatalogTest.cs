@@ -31,8 +31,8 @@ public class ObjectCatalogTest
     [TestCase]
     public void ReferenceIsPlayerAboutDoorHeight()
     {
-        // c_sword_front: 162 px / k 5,0025 (atlas.json) = 32,4 u.
-        AssertThat(Catalog.PlayerHeight).IsEqualApprox(32.4f, 0.1f);
+        // c_sword_front: 162 px / k 5,0025 (atlas.json) = 32,4 u, × characterScale 1,75 do motor (B4a-D41) = 56,7 u.
+        AssertThat(Catalog.PlayerHeight).IsEqualApprox(56.7f, 0.1f);
         var ratio = Catalog.PlayerHeight / Catalog.DoorHeight;
         AssertThat(ratio is > 0.85f and <= 1f).IsTrue();
         var door = Catalog["door_arched"];
@@ -83,8 +83,10 @@ public class ObjectCatalogTest
     {
         foreach (var o in Catalog.Objects)
         {
-            // Sem texturas gigantes: a densidade passa de 4 px/u só pelo arredondamento da redução.
-            AssertThat(o.Density is > 1.5f and <= 4.5f).OverrideFailureMessage($"{o.Id}: {o.Density} px/u").IsTrue();
+            // Sem texturas gigantes: a densidade passa de 4 px/u só pelo arredondamento da redução. Piso de ~1 px/u: com o
+            // jogador em 56,7 u (characterScale do motor), as peças grandes das folhas (mausoléus, portais) não têm mais
+            // resolução que isso; abaixo de 1 px/u o recorte seria ampliado mesmo na escala 1 da pintura.
+            AssertThat(o.Density is > 0.95f and <= 4.5f).OverrideFailureMessage($"{o.Id}: {o.Density} px/u").IsTrue();
             AssertThat(o.PixelWidth <= 512 && o.PixelHeight <= 512).OverrideFailureMessage($"{o.Id}: {o.PixelWidth}×{o.PixelHeight}").IsTrue();
             AssertThat(o.WorldHeight * o.Density <= o.PixelHeight + 1).IsTrue();
         }

@@ -2,10 +2,10 @@
   "_doc": "Curadoria dos recortes das folhas de objetos (docs/brand/source/objects/NN.png). build_objects.py lê este arquivo, recorta com cut_sheet.py (params abaixo; mudar params muda a numeração das peças: confira as folhas de conferência), salva assets/sprites/objects/<tema>/<nome>.png e gera src/Data/objects.json. Objeto: [nome, kind, peça ou [peças], {opções}]. Opções: h (altura em × jogador), w (largura em × jogador, para pisos), ax (pé em fração da largura), anchor (bbox = centro da caixa), foot [largura, profundidade] em fração da largura, layer, light, sway, interaction, ambient, material, occluder, note. Os padrões vêm de kinds.",
   "params": {"seg": 110, "gap": 1, "min_area": 120, "sat_gap": 6, "sat_ratio": 0.12, "panel_tol": 60},
   "reference": {
-    "_doc": "playerHeight = c_sword_front do atlas (162 px / k 5,0025). Porta = 1,12 × jogador (jogador ≈ altura de porta). maxDensity: recortes com mais px/u que isso são reduzidos (sem texturas gigantes; 4 px/u cobre 1440p).",
-    "playerHeight": 32.4,
-    "doorHeight": 36.3,
-    "doorWidth": 24,
+    "_doc": "playerHeight = c_sword_front do atlas (162 px / k 5,0025 = 32,4 u) × rules.world.characterScale 1,75 (B4a-D41: o caçador no mundo mede 56,7 u, 0,875 da porta pintada da Estalagem). Porta = 1,12 × jogador (63,5 u, a porta pintada tem 64 u). maxDensity: recortes com mais px/u que isso são reduzidos (sem texturas gigantes; 4 px/u cobre 1440p).",
+    "playerHeight": 56.7,
+    "doorHeight": 63.5,
+    "doorWidth": 42,
     "maxDensity": 4.0
   },
   "themes": {

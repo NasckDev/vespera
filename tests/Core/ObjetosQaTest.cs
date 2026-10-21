@@ -99,7 +99,7 @@ public class ObjetosQaTest
     [TestCase]
     public void HandHeldThingsAreHandSized()
     {
-        // Ao lado do jogador (32,4 u ≈ 1,8 m), uma chave ou um livro aberto no chão não passam de um palmo e pouco.
+        // Ao lado do jogador (56,7 u ≈ 1,8 m), uma chave ou um livro aberto no chão não passam de um palmo e pouco.
         var h = Catalog.Value.PlayerHeight;
         var wrong = Catalog.Value.Objects
             .Where(o => (o.Id.Contains("key", StringComparison.Ordinal) && o.HeightRatio(h) > 0.3f)
