@@ -193,6 +193,62 @@ public class InterioresMapaQaTest
     }
 
     [TestCase]
+    public void TestaDecoracaoEBauNaoInvademORaioDosDonos()
+    {
+        // O foco do jogador é o interagível mais próximo do pé entre os que o contêm no raio. Uma decoração colada no raio
+        // de um dono (a lareira da Estalagem a 46 u da Lúcia, r 38; o boneco da Armaria a 16 u do Gaspar) disputa o foco
+        // com ele: chegando pela frente, o prompt mostra "Falar com …" (INTE-2/INTE-8). Os raios podem se tocar, não se
+        // sobrepor mais que 4 u.
+        var failures = new List<string>();
+        foreach (var id in Interiors)
+        {
+            var map = Catalog[id];
+            var layout = LoadLayout(map);
+            var spots = Array(layout, "decor").Select(d => (d.GetProperty("label").GetString()!, Point(d), d.GetProperty("r").GetSingle()))
+                .Concat(Array(layout, "chests").Select(c => ("baú", Point(c), 20f))); // Chest.InteractRadius (world.js:197)
+            foreach (var (label, at, radius) in spots)
+            {
+                foreach (var it in map.Interactables)
+                {
+                    var distance = MathF.Sqrt(((it.X - at.X) * (it.X - at.X)) + ((it.Y - at.Y) * (it.Y - at.Y)));
+                    var overlap = radius + it.Radius - distance;
+                    if (overlap > 4f)
+                    {
+                        failures.Add($"{id} '{label}' ({at.X}, {at.Y}): raio invade o de '{it.Label}' em {overlap:0.0} u");
+                    }
+                }
+            }
+        }
+
+        AssertThat(string.Join("; ", failures)).IsEqual(string.Empty);
+    }
+
+    [TestCase]
+    public void TestaLoreNaoNegaOSomAmbienteAoLado()
+    {
+        // INTE-4: a lore do alambique dizia "sem fogo embaixo" com um som de fogareiro no mesmo ponto.
+        string[] denials = ["sem fogo", "nunca acende", "apagad"];
+        var failures = new List<string>();
+        foreach (var id in Interiors)
+        {
+            var layout = LoadLayout(Catalog[id]);
+            var fires = Array(layout, "ambient").Where(a => a.GetProperty("kind").GetString() is "fire" or "forge").Select(Point).ToList();
+            foreach (var d in Array(layout, "decor"))
+            {
+                var text = d.GetProperty("text").GetString()!.ToLowerInvariant();
+                var at = Point(d);
+                var nearFire = fires.Any(f => MathF.Sqrt(((f.X - at.X) * (f.X - at.X)) + ((f.Y - at.Y) * (f.Y - at.Y))) < 140f);
+                if (nearFire && denials.Any(text.Contains))
+                {
+                    failures.Add($"{id} '{d.GetProperty("label").GetString()}': o texto nega fogo ao lado de um som de fogo");
+                }
+            }
+        }
+
+        AssertThat(string.Join("; ", failures)).IsEqual(string.Empty);
+    }
+
+    [TestCase]
     public void TestaNoMaximoUmBauPorInteriorEDecoracaoComLoreCurta()
     {
         var failures = new List<string>();

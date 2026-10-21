@@ -47,7 +47,7 @@
     {"kind": "inspect", "x": 236, "y": 166, "r": 24, "label": "Examinar a forja", "text": "As brasas nunca apagam: o Gaspar diz que uma forja fria atrai Brecha. Ninguém sabe se é verdade, mas ninguém quer testar."},
     {"kind": "inspect", "x": 212, "y": 196, "r": 22, "label": "Examinar a parede de armas", "text": "Espadas, machados e lanças em fileira, cada uma com uma etiqueta: o nome de quem encomendou e o dia em que voltou da Brecha."},
     {"kind": "inspect", "x": 286, "y": 238, "r": 24, "label": "Examinar a vitrine de elmos", "text": "Elmos amassados, polidos até brilhar. Os que voltaram inteiros de uma Brecha são vendidos pelo dobro: dizem que dão sorte."},
-    {"kind": "inspect", "x": 526, "y": 210, "r": 22, "label": "Examinar o boneco de testes", "text": "Gasto de tanto golpe. Quem quer comprar uma lâmina testa nele primeiro; o Gaspar só vende o que ele mesmo aprovou."},
+    {"kind": "inspect", "x": 500, "y": 268, "r": 22, "label": "Examinar o boneco de testes", "text": "Gasto de tanto golpe. Quem quer comprar uma lâmina testa nele primeiro; o Gaspar só vende o que ele mesmo aprovou."},
     {"kind": "inspect", "x": 588, "y": 210, "r": 22, "label": "Examinar a armadura de exposição", "text": "Placas azuis com filetes dourados, feitas para um caçador que nunca veio buscar. O Gaspar mantém a armadura polida, por via das dúvidas."}
   ]
 }

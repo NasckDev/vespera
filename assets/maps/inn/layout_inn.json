@@ -69,7 +69,7 @@
     {"x": 147, "y": 142, "tier": 0, "note": "entre as camas do quarto oeste, debaixo da lamparina"}
   ],
   "decor": [
-    {"kind": "inspect", "x": 431, "y": 440, "r": 28, "label": "Aquecer-se na lareira", "text": "O calor da lareira da Lúcia chega até o balcão. A chaleira em cima dela nunca esfria; por um instante, a véspera parece longe."},
+    {"kind": "inspect", "x": 442, "y": 452, "r": 22, "label": "Olhar a lareira atrás do balcão", "text": "Atrás do balcão, a lareira da Lúcia estala sob uma chaleira que nunca esfria. O calor chega até aqui; por um instante, a véspera parece longe."},
     {"kind": "inspect", "x": 108, "y": 342, "r": 22, "label": "Examinar a porta dos fundos", "text": "Trancada por dentro, com duas trancas novas. A Lúcia fecha esta porta toda vez que uma Brecha rompe."},
     {"kind": "inspect", "x": 104, "y": 196, "r": 20, "label": "Examinar a cama", "text": "Lençóis limpos, cheiro de lavanda e um cobertor remendado com o brasão da Guilda. Quem paga a Lúcia dorme até a próxima véspera."}
   ]

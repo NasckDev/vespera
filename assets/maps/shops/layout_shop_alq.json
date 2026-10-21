@@ -40,7 +40,7 @@
   "props": [],
   "chests": [],
   "decor": [
-    {"kind": "inspect", "x": 214, "y": 192, "r": 22, "label": "Examinar o alambique", "text": "O caldo verde borbulha sem fogo embaixo. O Ivo diz que é só seiva de musgo da Mina; o cheiro diz outra coisa."},
+    {"kind": "inspect", "x": 214, "y": 192, "r": 22, "label": "Examinar o alambique", "text": "O caldo verde borbulha num fogareiro baixo que nunca apaga. O Ivo diz que é só seiva de musgo da Mina; o cheiro diz outra coisa."},
     {"kind": "inspect", "x": 214, "y": 240, "r": 22, "label": "Examinar o frasco azul", "text": "Um líquido azul que brilha mais forte quando alguém mente perto dele. O Ivo não vende este; usa para negociar."},
     {"kind": "inspect", "x": 504, "y": 206, "r": 22, "label": "Examinar a mesinha de frascos", "text": "Frascos rotulados à mão: \"para cortes\", \"para medo\", \"para voltar\". O último está vazio há semanas."}
   ]
