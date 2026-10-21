@@ -21,7 +21,7 @@ continua Nearest para a UI pixel; o mundo liga Linear nos próprios nós.
 
 | Arquivo | Conteúdo |
 |---|---|
-| `maps/city/` | Rua da Forja (`map_city.png` 1672×941 + `mask_city.png` 209×117) |
+| `maps/city/` | Rua da Forja (`map_city.png` 1672×941; colisão em `walk_forge.png` gerada de `layout_forge.json`; `mask_city.png` 209×117 da v2 só como referência) |
 | `maps/fish2/`, `maps/crypt2/`, `maps/mine/`, `maps/garden/`, `maps/cath/` | 5 Brechas hd (mapa 1672×941 + máscara 209×117) |
 | `maps/guild/`, `maps/inn/`, `maps/core/` | Guilda, Estalagem, Câmara do Núcleo (colisão por formas em `src/Data/maps.json`) |
 | `maps/shops/` | 4 lojas da Rua dos Ofícios (Armaria, Feitiços, Alquimia, Relíquias) |

@@ -4,6 +4,7 @@ Uma linha por tarefa concluída, mais recente primeiro.
 
 - 2026-10-21 — Biblioteca de objetos (B5): 445 objetos recortados de 6 folhas em 9 temas, `objects.json` calibrado pelo jogador + `ObjectCatalog`, 20 mapas candidatos (salas extras e Brechas 6–10), galeria de depuração com smoke e triagem das 70 imagens em `catalogo-assets.md` (B5-1 a B5-5).
 - 2026-10-21 — Motor do mundo (B4a): escala inteira e câmera no pixel, andar com aceleração curta e interpolação, caçador do super kit com caminhada procedural, proporção pela porta (1,75×), oclusão translúcida, água/luzes/fumaça/vagalumes, quebráveis, baús, decoração (lampião, flor, balsa, pesca, banco, placas), objetos do catálogo, sons ambiente e minimapa (B4a-D39–D47).
+- 2026-10-21 — Rua da Forja refeita (B4b): colisão de 4 px andável em todas as escadas, pontes, cais e becos, 42 oclusores, água, 15 sons ambiente, 35 quebráveis, 6 baús, 38 decorações com lore, 6 balsas e portas reais para as 4 lojas; smoke `rua da forja` (B4b-D60–D63).
 - 2026-10-20 — Do super kit: animação do portal, guia de HUD e catálogo do Arsenal como referência (D38).
 - 2026-10-20 — Áudio (correções): música por local sem depender de nomes (D22), crossfade sem cortes (D23), +12 dB no Master (D18), músicas pré-carregadas, `SetBusVolume(persist)` + `SaveSettings`, pitch limitado e cenários de smoke sem depender da cena Lumeira.
 - 2026-10-20 — Áudio: 18 SFX da v2 e 3 músicas em loop gerados por script, barramentos Master/Music/SFX/UI e `AudioManager` com pool, crossfade e volumes persistidos.
