@@ -53,6 +53,7 @@ public partial class UiBar : Control
         FillStyle = style,
         ShowLag = lag,
         CustomMinimumSize = size,
+        SizeFlagsVertical = SizeFlags.ShrinkCenter,
     };
 
     /// <summary>Define o valor. Com lag, subir é instantâneo e descer deixa o rastro creme.</summary>

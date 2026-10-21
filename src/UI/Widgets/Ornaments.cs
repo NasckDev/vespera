@@ -108,6 +108,11 @@ public partial class Diamond : Control
     /// <summary>Desenha um losango de raio <paramref name="radius"/> centrado em <paramref name="center"/>.</summary>
     public static void Paint(CanvasItem canvas, Vector2 center, float radius, Color color)
     {
+        if (radius < 0.25f)
+        {
+            return;
+        }
+
         Points[0] = center + new Vector2(0, -radius);
         Points[1] = center + new Vector2(radius, 0);
         Points[2] = center + new Vector2(0, radius);

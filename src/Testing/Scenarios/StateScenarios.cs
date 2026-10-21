@@ -91,7 +91,7 @@ public partial class SmokeTest
             Require(state.TryBuyService(potion) == PurchaseResult.Ok, "não comprou a poção com 60 Lumes");
             await NextPhysicsFrame();
             Require(game.Lumes == 33 && state.Save.Potions == 4, $"depois da poção: {game.Lumes} Lumes e {state.Save.Potions} poções");
-            Require(hud.LumesLabel.Text == "Lumes: 33", $"HUD de Lumes não atualizou: '{hud.LumesLabel.Text}'");
+            Require(hud.LumesLabel.Text == "33", $"HUD de Lumes não atualizou: '{hud.LumesLabel.Text}'");
 
             state.Invasion = true;
             Require(state.CostLumes(30) == 41, $"em invasão 30 Lumes deveria custar 41 (JS), custa {state.CostLumes(30)}");
@@ -114,7 +114,7 @@ public partial class SmokeTest
             game.AddFragments(5);
             Require(state.SellShards() == 20, "5 Estilhaços deveriam render 20 Lumes no Brás");
             await NextPhysicsFrame();
-            Require(hud.FragmentsLabel.Text == "Estilhaços: 0" && hud.LumesLabel.Text == "Lumes: 20", $"HUD: '{hud.LumesLabel.Text}', '{hud.FragmentsLabel.Text}'");
+            Require(hud.FragmentsLabel.Text == "0" && hud.LumesLabel.Text == "20", $"HUD: '{hud.LumesLabel.Text}', '{hud.FragmentsLabel.Text}'");
             await Shot("economia-hud");
         }
         finally
@@ -163,7 +163,7 @@ public partial class SmokeTest
             Require(game.State.Save.Equipment.TryGetValue("cabeca", out var head) && head == "capuz", "equipamento não voltou");
             var hud = Find<Hud>() ?? throw new SmokeFailure("HUD não encontrado na cidade");
             Require(hud.RankSeal.Rank == expectedRank, $"HUD não releu o Selo após o load ({hud.RankSeal.Rank})");
-            Require(hud.LumesLabel.Text == $"Lumes: {game.Lumes}", $"HUD não releu os Lumes após o load ('{hud.LumesLabel.Text}')");
+            Require(hud.LumesLabel.Text == Vespera.UI.Common.Ui.Thousands(game.Lumes), $"HUD não releu os Lumes após o load ('{hud.LumesLabel.Text}')");
             await Shot("save-load");
         }
         finally
