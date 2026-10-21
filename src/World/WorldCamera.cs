@@ -58,8 +58,10 @@ public partial class WorldCamera : Camera2D
         PositionSmoothingEnabled = false;
         LimitEnabled = false;
         Zoom = Vector2.One;
-        // A câmera é posta a cada quadro a partir da posição interpolada do alvo: ela mesma não é interpolada.
-        ProcessCallback = Camera2DProcessCallback.Idle;
+        // A câmera é posta a cada quadro (_Process + ForceUpdateScroll) a partir da posição interpolada do alvo: ela mesma
+        // não é interpolada. Com physics_interpolation o Godot exige o callback de física (só muda quando o Camera2D
+        // atualiza sozinho; aqui o scroll é forçado no quadro).
+        ProcessCallback = Camera2DProcessCallback.Physics;
         PhysicsInterpolationMode = PhysicsInterpolationModeEnum.Off;
         MakeCurrent();
         EventBus.Instance.CameraShakeRequested += Shake;
