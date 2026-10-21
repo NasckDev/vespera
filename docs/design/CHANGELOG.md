@@ -2,6 +2,11 @@
 
 Uma linha por tarefa concluída, mais recente primeiro.
 
+- 2026-10-20 — Cidade viva: smoke da cidade (relógio acelerado, fases, pausa, escuridão, portal abrindo, ruptura, NPCs sem atravessar parede, chat, Mural, clima) com prints; API em `api-cidade.md`; decisões D39–D47.
+- 2026-10-20 — Cidade viva: NPCs com rotina (Lauro, Marta, Faísca, Vesna) com falas verbatim, caçadores ambiente e chat simulado em balões.
+- 2026-10-20 — Cidade viva: Brechas abrem pela `BrechaSchedule` com a animação do portal do super kit, timer, fechamento por Casa e ruptura (`InvasionRequested`); Mural pede a tela `board`.
+- 2026-10-20 — Cidade viva: iluminação da v2 (escuridão por hora e mapa, lâmpadas que acendem às 17h, lanterna do jogador, glow), tintas e clima das estações.
+- 2026-10-20 — Cidade viva: relógio do dia (840 s), `DayPhase` no Core, `DayPhaseChanged`, música da véspera e pausa congelando o tempo.
 - 2026-10-20 — Do super kit: animação do portal, guia de HUD e catálogo do Arsenal como referência (D38).
 - 2026-10-20 — Áudio (correções): música por local sem depender de nomes (D22), crossfade sem cortes (D23), +12 dB no Master (D18), músicas pré-carregadas, `SetBusVolume(persist)` + `SaveSettings`, pitch limitado e cenários de smoke sem depender da cena Lumeira.
 - 2026-10-20 — Áudio: 18 SFX da v2 e 3 músicas em loop gerados por script, barramentos Master/Music/SFX/UI e `AudioManager` com pool, crossfade e volumes persistidos.
