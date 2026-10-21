@@ -2,6 +2,7 @@
 
 Uma linha por tarefa concluída, mais recente primeiro.
 
+- 2026-10-21 — Rua da Forja refeita (B4b): colisão de 4 px andável em todas as escadas, pontes, cais e becos, 42 oclusores, água, 15 sons ambiente, 35 quebráveis, 6 baús, 38 decorações com lore, 6 balsas e portas reais para as 4 lojas; smoke `rua da forja` (B4b-D60–D63).
 - 2026-10-20 — Do super kit: animação do portal, guia de HUD e catálogo do Arsenal como referência (D38).
 - 2026-10-20 — Áudio (correções): música por local sem depender de nomes (D22), crossfade sem cortes (D23), +12 dB no Master (D18), músicas pré-carregadas, `SetBusVolume(persist)` + `SaveSettings`, pitch limitado e cenários de smoke sem depender da cena Lumeira.
 - 2026-10-20 — Áudio: 18 SFX da v2 e 3 músicas em loop gerados por script, barramentos Master/Music/SFX/UI e `AudioManager` com pool, crossfade e volumes persistidos.
