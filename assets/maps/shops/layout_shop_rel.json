@@ -1,10 +1,53 @@
 {
   "cell": 4,
-  "base": "shapes",
-  "walk": [],
-  "block": [],
-  "occluders": [],
+  "base": "none",
+  "walk": [
+    {"rect": [160, 160, 365, 143], "note": "salão da Oficina"},
+    {"rect": [294, 298, 78, 136], "note": "escada da entrada"}
+  ],
+  "block": [
+    {"rect": [168, 180, 16, 19], "note": "baú escondido (sólido no motor)"},
+    {"rect": [0, 0, 694, 162], "note": "parede do fundo"},
+    {"rect": [0, 0, 168, 434], "note": "lanternão, bancada do frasco azul e caixotes (oeste)"},
+    {"rect": [112, 0, 90, 178], "note": "prateleira de lanternas"},
+    {"rect": [202, 0, 24, 166], "note": "urna do fundo"},
+    {"rect": [168, 202, 30, 36], "note": "armarinho"},
+    {"rect": [168, 238, 32, 66], "note": "lanterna de pé (sudoeste)"},
+    {"rect": [205, 272, 26, 30], "note": "relicário roxo"},
+    {"rect": [232, 176, 26, 46], "note": "suporte de lanterna (oeste do balcão)"},
+    {"rect": [252, 160, 170, 84], "note": "balcão do Abel"},
+    {"rect": [422, 150, 44, 66], "note": "armário de relíquias (leste do balcão)"},
+    {"rect": [471, 150, 34, 16], "note": "baú de exposição do fundo"},
+    {"rect": [516, 150, 178, 62], "note": "esfera dourada e mesa da lanterna azul"},
+    {"rect": [501, 212, 93, 94], "note": "bancada do orbe e da lanterna"},
+    {"rect": [594, 205, 100, 229], "note": "estante e parede leste"},
+    {"rect": [479, 250, 24, 56], "note": "tambores"},
+    {"rect": [448, 267, 34, 36], "note": "tábua de runas"},
+    {"rect": [0, 302, 294, 132], "note": "parede sul (oeste)"},
+    {"rect": [372, 302, 322, 132], "note": "parede sul (leste)"}
+  ],
+  "occluders": [
+    {"poly": [[230, 120], [260, 120], [260, 222], [230, 222]], "baseY": 220, "sway": false, "note": "suporte de lanterna (oeste do balcão)"},
+    {"poly": [[420, 110], [466, 110], [466, 216], [420, 216]], "baseY": 214, "sway": false, "note": "armário de relíquias"},
+    {"poly": [[166, 232], [200, 232], [200, 304], [166, 304]], "baseY": 302, "sway": false, "note": "lanterna de pé (sudoeste)"},
+    {"poly": [[203, 262], [233, 262], [233, 302], [203, 302]], "baseY": 300, "sway": false, "note": "relicário roxo"},
+    {"poly": [[499, 212], [596, 212], [596, 306], [499, 306]], "baseY": 304, "sway": false, "note": "bancada do orbe e da lanterna"},
+    {"poly": [[477, 244], [505, 244], [505, 306], [477, 306]], "baseY": 304, "sway": false, "note": "tambores"},
+    {"poly": [[446, 262], [484, 262], [484, 303], [446, 303]], "baseY": 301, "sway": false, "note": "tábua de runas"},
+    {"poly": [[261, 296], [289, 296], [289, 396], [261, 396]], "baseY": 392, "sway": false, "note": "poste da escada (oeste)"},
+    {"poly": [[375, 296], [403, 296], [403, 396], [375, 396]], "baseY": 392, "sway": false, "note": "poste da escada (leste)"}
+  ],
+  "water": [],
+  "ambient": [
+    {"kind": "fire", "x": 340, "y": 200, "r": 110, "note": "velas e lanternas do balcão"}
+  ],
   "props": [],
-  "chests": [],
-  "decor": []
+  "chests": [
+    {"x": 177, "y": 189, "tier": 0, "note": "no fundo do vão entre a prateleira de lanternas e o armarinho (pé bloqueado na colisão)"}
+  ],
+  "decor": [
+    {"kind": "inspect", "x": 510, "y": 190, "r": 24, "label": "Examinar a esfera dourada", "text": "Uma lanterna do tamanho de um homem, presa num globo de latão. O Abel diz que ela já iluminou uma Brecha inteira por dentro, e que ainda lembra o caminho."},
+    {"kind": "inspect", "x": 464, "y": 260, "r": 22, "label": "Examinar a tábua de runas", "text": "Runas gravadas em pedra escura, quentes ao toque. Ninguém traduziu, mas todas as lanternas da oficina tremem quando alguém tenta."},
+    {"kind": "inspect", "x": 245, "y": 230, "r": 22, "label": "Examinar as lanternas", "text": "Lanternas consertadas, cada uma com um nome riscado na base. Quem perde a sua na Brecha encontra aqui uma que já voltou uma vez."}
+  ]
 }

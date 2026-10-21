@@ -35,7 +35,9 @@ public class MapCatalogTest
         AssertThat(guild.Name).IsEqual("Guilda dos Lanterneiros");
         AssertThat(guild.Indoor).IsTrue();
         AssertThat(guild.Hd).IsFalse();
-        AssertThat(guild.HasMask).IsFalse();
+        // Colisão redesenhada sobre a arte (tools/maps/layout.py): máscara de células de 4 u; walk/block da v2 ficam como base.
+        AssertThat(guild.Mask).IsEqual("res://assets/maps/guild/walk_guild.png");
+        AssertThat(guild.MaskCell).IsEqual(4);
         AssertThat(guild.ImageWidth).IsEqual(500);
         AssertThat(guild.ImageHeight).IsEqual(896);
         AssertThat(guild.Spawn).IsEqual(new MapPoint(250, 560));
@@ -123,6 +125,19 @@ public class MapCatalogTest
             var dx = at.X - (door.X + (door.Width / 2));
             var dy = at.Y - (door.Y + (door.Height / 2));
             AssertThat(MathF.Sqrt((dx * dx) + (dy * dy)) < 40f).IsTrue();
+        }
+    }
+
+    [TestCase]
+    public void InteriorsUseTheWalkMasksRedrawnOverTheArt()
+    {
+        // B4d: Guilda, Estalagem e lojas têm a colisão redesenhada (tools/maps/layout.py) em células de 4 u.
+        foreach (var id in new[] { "guild", "inn", "shop_arm", "shop_mag", "shop_alq", "shop_rel" })
+        {
+            var map = Catalog[id];
+            var dir = map.Image[..map.Image.LastIndexOf('/')];
+            AssertThat(map.Mask).OverrideFailureMessage($"{id}: máscara").IsEqual($"{dir}/walk_{id}.png");
+            AssertThat(map.MaskCell).OverrideFailureMessage($"{id}: célula").IsEqual(4);
         }
     }
 

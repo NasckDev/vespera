@@ -1,10 +1,53 @@
 {
   "cell": 4,
-  "base": "shapes",
-  "walk": [],
-  "block": [],
-  "occluders": [],
+  "base": "none",
+  "walk": [
+    {"rect": [200, 150, 450, 148], "note": "salão da armaria"},
+    {"rect": [308, 290, 90, 118], "note": "escada da entrada"}
+  ],
+  "block": [
+    {"rect": [0, 0, 206, 214], "note": "paredes de armas, barril e lampião (oeste)"},
+    {"rect": [0, 214, 200, 94], "note": "estante de espadas e barris (sudoeste)"},
+    {"rect": [200, 0, 120, 152], "note": "forja"},
+    {"rect": [317, 0, 125, 150], "note": "armário e cadeira do fundo"},
+    {"rect": [368, 140, 24, 26], "note": "banquinho ao lado da forja"},
+    {"rect": [436, 0, 144, 188], "note": "balcão do Gaspar"},
+    {"rect": [462, 186, 90, 18], "note": "banquetas do balcão"},
+    {"rect": [578, 0, 72, 190], "note": "estante de lâminas (leste)"},
+    {"rect": [648, 0, 48, 408], "note": "parede leste"},
+    {"rect": [207, 222, 22, 20], "note": "braseiro (pé)"},
+    {"rect": [258, 162, 76, 46], "note": "bigorna e base de pedra"},
+    {"rect": [242, 252, 88, 46], "note": "vitrine de elmos"},
+    {"rect": [508, 256, 34, 22], "note": "boneco de testes (base)"},
+    {"rect": [563, 252, 50, 38], "note": "armadura de exposição (base)"},
+    {"rect": [622, 244, 28, 20], "note": "lampião de chão (base)"},
+    {"rect": [618, 278, 32, 22], "note": "caixote (sudeste)"},
+    {"rect": [464, 284, 30, 16], "note": "caixa de pregos"},
+    {"rect": [0, 296, 308, 112], "note": "parede sul (oeste)"},
+    {"rect": [398, 296, 298, 112], "note": "parede sul (leste)"}
+  ],
+  "occluders": [
+    {"poly": [[205, 192], [230, 192], [230, 242], [205, 242]], "baseY": 241, "sway": false, "note": "braseiro"},
+    {"poly": [[266, 154], [326, 154], [334, 162], [334, 208], [258, 208], [258, 162]], "baseY": 207, "sway": false, "note": "bigorna"},
+    {"poly": [[240, 244], [331, 244], [331, 298], [240, 298]], "baseY": 296, "sway": false, "note": "vitrine de elmos"},
+    {"poly": [[500, 214], [552, 214], [552, 279], [500, 279]], "baseY": 277, "sway": false, "note": "boneco de testes"},
+    {"poly": [[558, 214], [616, 214], [616, 291], [558, 291]], "baseY": 289, "sway": false, "note": "armadura de exposição"},
+    {"poly": [[620, 175], [650, 175], [650, 264], [620, 264]], "baseY": 263, "sway": false, "note": "lampião de chão"},
+    {"poly": [[279, 288], [308, 288], [308, 390], [279, 390]], "baseY": 387, "sway": false, "note": "poste da escada (oeste)"},
+    {"poly": [[399, 288], [428, 288], [428, 390], [399, 390]], "baseY": 387, "sway": false, "note": "poste da escada (leste)"}
+  ],
+  "water": [],
+  "ambient": [
+    {"kind": "forge", "x": 266, "y": 110, "r": 220, "note": "forja da armaria"},
+    {"kind": "fire", "x": 266, "y": 120, "r": 110, "note": "brasas da forja"}
+  ],
   "props": [],
   "chests": [],
-  "decor": []
+  "decor": [
+    {"kind": "inspect", "x": 236, "y": 166, "r": 24, "label": "Examinar a forja", "text": "As brasas nunca apagam: o Gaspar diz que uma forja fria atrai Brecha. Ninguém sabe se é verdade, mas ninguém quer testar."},
+    {"kind": "inspect", "x": 212, "y": 196, "r": 22, "label": "Examinar a parede de armas", "text": "Espadas, machados e lanças em fileira, cada uma com uma etiqueta: o nome de quem encomendou e o dia em que voltou da Brecha."},
+    {"kind": "inspect", "x": 286, "y": 238, "r": 24, "label": "Examinar a vitrine de elmos", "text": "Elmos amassados, polidos até brilhar. Os que voltaram inteiros de uma Brecha são vendidos pelo dobro: dizem que dão sorte."},
+    {"kind": "inspect", "x": 500, "y": 268, "r": 22, "label": "Examinar o boneco de testes", "text": "Gasto de tanto golpe. Quem quer comprar uma lâmina testa nele primeiro; o Gaspar só vende o que ele mesmo aprovou."},
+    {"kind": "inspect", "x": 588, "y": 210, "r": 22, "label": "Examinar a armadura de exposição", "text": "Placas azuis com filetes dourados, feitas para um caçador que nunca veio buscar. O Gaspar mantém a armadura polida, por via das dúvidas."}
+  ]
 }
