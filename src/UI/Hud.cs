@@ -27,7 +27,8 @@ public partial class Hud : CanvasLayer
 
     private readonly List<HotbarSlot> _weaponSlots = [];
     private readonly List<string> _weaponIds = [];
-    private readonly HashSet<string> _seenGear = [];
+    private readonly Dictionary<string, int> _gearCounts = [];
+    private readonly Dictionary<string, int> _gearScratch = [];
     private readonly Dictionary<string, int> _lastMaterials = [];
 
     private PortraitFrame _portrait = null!;
@@ -70,6 +71,7 @@ public partial class Hud : CanvasLayer
     private int _questCounter = -1;
     private int _lastLumes;
     private int _lastPotions;
+    private bool _equipmentMoved;
 
     /// <summary>HUD do World atual (para a UI mostrar toasts e notas).</summary>
     public static Hud? Current { get; private set; }
@@ -424,6 +426,7 @@ public partial class Hud : CanvasLayer
         bus.FragmentsChanged += OnFragmentsChanged;
         bus.MaterialChanged += OnMaterialChanged;
         bus.InventoryChanged += OnInventoryChanged;
+        bus.EquipmentChanged += OnEquipmentChanged;
         bus.PotionsChanged += OnPotionsChanged;
         bus.LocationChanged += OnLocationChanged;
         bus.InteractionPromptChanged += OnInteractionPromptChanged;
@@ -463,6 +466,7 @@ public partial class Hud : CanvasLayer
         bus.FragmentsChanged -= OnFragmentsChanged;
         bus.MaterialChanged -= OnMaterialChanged;
         bus.InventoryChanged -= OnInventoryChanged;
+        bus.EquipmentChanged -= OnEquipmentChanged;
         bus.PotionsChanged -= OnPotionsChanged;
         bus.LocationChanged -= OnLocationChanged;
         bus.InteractionPromptChanged -= OnInteractionPromptChanged;
@@ -508,11 +512,7 @@ public partial class Hud : CanvasLayer
             _lastMaterials[id] = count;
         }
 
-        _seenGear.Clear();
-        foreach (var id in state.Save.Backpack)
-        {
-            _seenGear.Add(id);
-        }
+        CountGear(state.Save.Backpack, notify: false);
 
         _noLantern.Visible = state.HasLostLantern;
         _dayNumber.Text = state.Save.Day.ToString();
@@ -603,14 +603,38 @@ public partial class Hud : CanvasLayer
 
     private void OnInventoryChanged()
     {
-        var save = GameManager.Instance.State.Save;
-        foreach (var id in save.Backpack)
+        // Trocar/desequipar só move itens entre o slot e a mochila: não é loot.
+        CountGear(GameManager.Instance.State.Save.Backpack, notify: !_equipmentMoved);
+        _equipmentMoved = false;
+    }
+
+    private void OnEquipmentChanged(string slotId) => _equipmentMoved = true;
+
+    /// <summary>Recontagem da mochila; com <paramref name="notify"/>, cada cópia nova vira uma linha na caixa de loot.</summary>
+    private void CountGear(List<string> backpack, bool notify)
+    {
+        foreach (var id in _gearCounts.Keys)
         {
-            if (_seenGear.Add(id) && Database.Db.Gear.TryGetValue(id, out var gear))
-            {
-                Loot.Add(gear.Name, gear.Icon, null, 1, UiPalette.FromHex(Database.Db.Rarities[gear.Rarity].Color, UiPalette.Creme));
-            }
+            _gearScratch[id] = 0;
         }
+
+        foreach (var id in backpack)
+        {
+            _gearScratch[id] = _gearScratch.GetValueOrDefault(id) + 1;
+        }
+
+        foreach (var (id, count) in _gearScratch)
+        {
+            var before = _gearCounts.GetValueOrDefault(id);
+            if (notify && count > before && Database.Db.Gear.TryGetValue(id, out var gear))
+            {
+                Loot.Add(gear.Name, gear.Icon, "g:" + id, count - before, UiPalette.FromHex(Database.Db.Rarities[gear.Rarity].Color, UiPalette.Creme));
+            }
+
+            _gearCounts[id] = count;
+        }
+
+        _gearScratch.Clear();
     }
 
     private void OnPotionsChanged(int count)
@@ -700,14 +724,12 @@ public partial class Hud : CanvasLayer
     {
         if (abilityId == "ultimate")
         {
-            // Supremo acabou de ser usado: banner com o nome (extra.js:156).
-            if (remaining >= total - 0.05f && total > 0f && _ultimate.IsReady)
+            // Supremo acabou de ser usado: banner com o nome (extra.js:156). A recarga inicial de 6 s não é uso.
+            var cls = GameManager.Instance.State.Save.ClassId;
+            if (remaining >= total - 0.05f && _ultimate.IsReady && Database.Db.Ultimates.TryGetValue(cls, out var ult)
+                && Mathf.IsEqualApprox(total, (float)ult.Cooldown))
             {
-                var cls = GameManager.Instance.State.Save.ClassId;
-                if (Database.Db.Ultimates.TryGetValue(cls, out var ult))
-                {
-                    _ultimateBanner.Play(ult.Name.ToUpperInvariant(), string.Empty, UiPalette.FromHex(ult.Color, UiPalette.Ambar), 1.4f, 6f, 3f, 40f);
-                }
+                _ultimateBanner.Play(ult.Name.ToUpperInvariant(), string.Empty, UiPalette.FromHex(ult.Color, UiPalette.Ambar), 1.4f, 6f, 3f, 40f);
             }
 
             _ultimate.SetCooldown(remaining, total);
