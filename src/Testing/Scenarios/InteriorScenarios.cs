@@ -38,16 +38,48 @@ public partial class SmokeTest
 
             var targets = InteriorTargets(world, map);
             Require(targets.Count > 1, $"{id}: layout sem nada para visitar");
+            var dressed = LayoutDressingPresent(world, targets);
+            if (!dressed)
+            {
+                Log.Info($"interiores: AVISO {id} sem interagíveis de decoração/baú no mundo (o motor que monta o layout é da frente mundo-motor); conferindo só o alcance deles");
+            }
+
             var shot = 1;
             foreach (var target in targets)
             {
                 using (new SpeedUp(TesterSpeedUp))
                 {
                     var error = await WalkNear(world, target.At, target.Reach);
+                    if (error is null && dressed && target.Prompt is { } wanted && player.FocusedInteractable?.Prompt != wanted)
+                    {
+                        error = await WalkNear(world, target.At, target.Reach * 0.5f); // chega mais perto do ponto
+                    }
+
                     if (error is not null)
                     {
                         failures.Add($"{id} {target.Label}: {error}");
                         continue;
+                    }
+                }
+
+                if (dressed && target.Prompt is { } prompt)
+                {
+                    await NextPhysicsFrame();
+                    var focused = player.FocusedInteractable;
+                    if (focused?.Prompt != prompt)
+                    {
+                        failures.Add($"{id} {target.Label}: em {player.GlobalPosition} o foco é '{focused?.Prompt}', não '{prompt}'");
+                        continue;
+                    }
+
+                    var interacted = false;
+                    void OnInteracted(Node2D _) => interacted = true;
+                    focused.Interacted += OnInteracted;
+                    await PressInteract();
+                    focused.Interacted -= OnInteracted;
+                    if (!interacted)
+                    {
+                        failures.Add($"{id} {target.Label}: interagir não chegou a '{prompt}'");
                     }
                 }
 
@@ -121,7 +153,7 @@ public partial class SmokeTest
         foreach (var def in map.Interactables)
         {
             var it = world.GetInteractable(def.Id) ?? throw new SmokeFailure($"{map.Id}: interagível {def.Id} não foi criado");
-            targets.Add(new InteriorTarget(def.Label, new MapPoint(def.X, def.Y), def.Radius - 2f, it, Shot: true));
+            targets.Add(new InteriorTarget(def.Label, new MapPoint(def.X, def.Y), def.Radius - 2f, it, Shot: true, Prompt: null));
         }
 
         var dir = map.Image[..map.Image.LastIndexOf('/')];
@@ -136,7 +168,7 @@ public partial class SmokeTest
             {
                 var r = d.TryGetProperty("r", out var rv) ? rv.GetSingle() : 24f;
                 var label = d.TryGetProperty("label", out var lv) ? lv.GetString()! : d.GetProperty("kind").GetString()!;
-                targets.Add(new InteriorTarget(label, Point(d), r - 2f, null, Shot: first));
+                targets.Add(new InteriorTarget(label, Point(d), r - 2f, null, Shot: first, Prompt: label));
                 first = false;
             }
         }
@@ -145,7 +177,7 @@ public partial class SmokeTest
         {
             foreach (var c in chests.EnumerateArray())
             {
-                targets.Add(new InteriorTarget("baú", Point(c), 18f, null, Shot: true)); // v2: "Abrir baú" r 20
+                targets.Add(new InteriorTarget("baú", Point(c), 18f, null, Shot: true, Prompt: ChestPrompt)); // v2: "Abrir baú" r 20
             }
         }
 
@@ -153,13 +185,51 @@ public partial class SmokeTest
         {
             foreach (var p in props.EnumerateArray())
             {
-                targets.Add(new InteriorTarget($"prop {p.GetProperty("kind").GetString()}", Point(p), 22f, null, Shot: false)); // alcance de golpe
+                targets.Add(new InteriorTarget($"prop {p.GetProperty("kind").GetString()}", Point(p), 22f, null, Shot: false, Prompt: null)); // alcance de golpe
             }
         }
 
         return targets;
 
         static MapPoint Point(JsonElement e) => new(e.GetProperty("x").GetSingle(), e.GetProperty("y").GetSingle());
+    }
+
+    /// <summary>Prompt do baú do layout (world.js:197).</summary>
+    private const string ChestPrompt = "Abrir baú";
+
+    /// <summary>
+    /// O mundo montou a decoração e os baús do layout como interagíveis (motor da frente mundo-motor)? Procura, uma vez
+    /// por mapa, um <see cref="Interactable"/> com o prompt de alguma decoração/baú. Sem o motor, o cenário confere só o
+    /// alcance; com ele, exige o foco e a interação em cada um.
+    /// </summary>
+    private static bool LayoutDressingPresent(World.World world, List<InteriorTarget> targets)
+    {
+        var prompts = new HashSet<string>();
+        foreach (var t in targets)
+        {
+            if (t.Prompt is { } p)
+            {
+                prompts.Add(p);
+            }
+        }
+
+        var stack = new Stack<Node>();
+        stack.Push(world);
+        while (stack.Count > 0)
+        {
+            var node = stack.Pop();
+            if (node is Interactable it && prompts.Contains(it.Prompt))
+            {
+                return true;
+            }
+
+            foreach (var child in node.GetChildren())
+            {
+                stack.Push(child);
+            }
+        }
+
+        return false;
     }
 
     /// <summary>Anda com input do ponto atual até ficar a <paramref name="reach"/> u do alvo. Null se chegou.</summary>
@@ -249,7 +319,8 @@ public partial class SmokeTest
         return got;
     }
 
-    private sealed record InteriorTarget(string Label, MapPoint At, float Reach, Interactable? Interactable, bool Shot)
+    /// <summary><paramref name="Prompt"/>: o texto que o foco do jogador deve mostrar ali (decoração e baú do layout).</summary>
+    private sealed record InteriorTarget(string Label, MapPoint At, float Reach, Interactable? Interactable, bool Shot, string? Prompt)
     {
         public string Slug
         {
