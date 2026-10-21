@@ -12,7 +12,7 @@
     {"rect": [340, 304, 306, 74], "note": "terraço da estalagem"},
     {"poly": [[552, 402], [646, 348], [664, 348], [664, 394], [608, 446], [552, 446]], "note": "escada de madeira do terraço ao cais"},
     {"rect": [646, 300, 112, 106], "note": "cais oeste (alto)"},
-    {"rect": [830, 342, 128, 52], "note": "cais leste (alto), só de balsa"},
+    {"rect": [852, 342, 106, 52], "note": "cais do guindaste (alto), só de balsa"},
     {"rect": [598, 0, 42, 108], "note": "caminho norte da ponte velha (Casa dos Feitiços)"},
     {"rect": [598, 104, 66, 56], "note": "patamar oeste da ponte velha"},
     {"rect": [660, 106, 250, 42], "note": "ponte velha (tabuleiro)"},
@@ -255,10 +255,10 @@
     {"kind": "crate", "x": 772, "y": 768},
     {"kind": "barrel", "x": 742, "y": 768},
     {"kind": "crate2", "x": 960, "y": 700},
-    {"kind": "barrel", "x": 866, "y": 388}
+    {"kind": "barrel", "x": 950, "y": 386}
   ],
   "chests": [
-    {"x": 950, "y": 352, "tier": 2, "note": "cais leste (alto), só de balsa, sob o guindaste"},
+    {"x": 944, "y": 352, "tier": 2, "note": "cais leste (alto), só de balsa, sob o guindaste"},
     {"x": 1420, "y": 652, "tier": 3, "note": "quintal atrás da casa das lanternas, escondido pelo telhado"},
     {"x": 1284, "y": 846, "tier": 1, "note": "fundo do beco, ao lado do arbusto"},
     {"x": 30, "y": 512, "tier": 1, "note": "sob a copa da árvore grande do mercado"},
@@ -266,9 +266,9 @@
     {"x": 1146, "y": 920, "tier": 2, "note": "pé da escada sudeste, na beira do mapa"}
   ],
   "decor": [
-    {"kind": "boat", "x": 752, "y": 334, "r": 24, "label": "Pegar a balsa para o cais do guindaste", "to": [846, 368]},
+    {"kind": "boat", "x": 752, "y": 334, "r": 24, "label": "Pegar a balsa para o cais do guindaste", "to": [872, 368]},
     {"kind": "boat", "x": 736, "y": 398, "r": 24, "label": "Descer o canal até o cais do mercado", "to": [790, 790]},
-    {"kind": "boat", "x": 838, "y": 384, "r": 24, "label": "Pegar a balsa para o cais da estalagem", "to": [744, 350]},
+    {"kind": "boat", "x": 864, "y": 386, "r": 24, "label": "Pegar a balsa para o cais da estalagem", "to": [744, 350]},
     {"kind": "boat", "x": 930, "y": 390, "r": 24, "label": "Descer o canal sob a ponte grande", "to": [970, 708]},
     {"kind": "boat", "x": 946, "y": 736, "r": 24, "label": "Subir o canal até o cais do guindaste", "to": [900, 372]},
     {"kind": "boat", "x": 822, "y": 812, "r": 24, "label": "Subir o canal até o cais da estalagem", "to": [722, 352]},
