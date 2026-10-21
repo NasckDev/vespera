@@ -24,11 +24,30 @@ public partial class SmokeTest
     [SmokeScenario("interface: título → história → classe → mundo", order: 5)]
     private async Task TitleToWorld()
     {
-        DirAccess.RemoveAbsolute(SaveService.Instance.SavePath);
         await WaitForScene("World", 10); // boot do smoke vai para o World; o título abre daqui
+        DirAccess.RemoveAbsolute(SaveService.Instance.SavePath);
         GameManager.Instance.ChangeScene(TitleScreen.ScenePath);
         await WaitForScene("Title", 10);
-        var title = (TitleScreen)GetTree().CurrentScene;
+        try
+        {
+            await TitleFlow((TitleScreen)GetTree().CurrentScene);
+        }
+        finally
+        {
+            // Falhou no meio do título: volta ao World para os próximos cenários não ficarem presos no menu.
+            if (GetTree().CurrentScene?.Name != "World")
+            {
+                GameManager.Instance.ChangeScene(TitleScreen.WorldScenePath);
+                await WaitForScene("World", 10);
+            }
+        }
+    }
+
+    private string TitleState(TitleScreen title) =>
+        $"topo={title.Stack.Top?.GetType().Name ?? "menu"}, foco={GetViewport().GuiGetFocusOwner()?.GetType().Name ?? "nenhum"}, save={SaveService.Instance.HasSave()}";
+
+    private async Task TitleFlow(TitleScreen title)
+    {
         Require(title.ContinueRow.Disabled, "sem save, Continuar deveria estar desabilitado");
         Require(title.NewGameRow.HasFocus(), "sem save, o foco deveria começar em Novo jogo");
         await Shot("ui-titulo");
@@ -38,7 +57,7 @@ public partial class SmokeTest
         await UiPress("ui_down");
         await UiPress("ui_down");
         await UiPress("ui_accept");
-        await WaitUntil(() => title.Stack.Top == title.Options, 2, "opções do título");
+        await WaitUntil(() => title.Stack.Top == title.Options, 2, $"opções do título ({TitleState(title)})");
         await WaitSeconds(0.2);
         await Shot("ui-titulo-opcoes");
         await UiPress("ui_cancel");
@@ -47,7 +66,7 @@ public partial class SmokeTest
         await WaitSeconds(0.2);
 
         await UiPress("ui_accept");
-        await WaitUntil(() => title.Stack.Top == title.Story, 2, "história abrir");
+        await WaitUntil(() => title.Stack.Top == title.Story, 2, $"história abrir ({TitleState(title)})");
         await WaitSeconds(0.2);
         await Shot("ui-historia");
         for (var i = 0; i < 5; i++)
