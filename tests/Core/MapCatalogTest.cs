@@ -118,6 +118,19 @@ public class MapCatalogTest
     }
 
     [TestCase]
+    public void InteriorsUseTheWalkMasksRedrawnOverTheArt()
+    {
+        // B4d: Guilda, Estalagem e lojas têm a colisão redesenhada (tools/maps/layout.py) em células de 4 u.
+        foreach (var id in new[] { "guild", "inn", "shop_arm", "shop_mag", "shop_alq", "shop_rel" })
+        {
+            var map = Catalog[id];
+            var dir = map.Image[..map.Image.LastIndexOf('/')];
+            AssertThat(map.Mask).OverrideFailureMessage($"{id}: máscara").IsEqual($"{dir}/walk_{id}.png");
+            AssertThat(map.MaskCell).OverrideFailureMessage($"{id}: célula").IsEqual(4);
+        }
+    }
+
+    [TestCase]
     public void ArrivalsNeverLandInsideAnExitOfTheDestination()
     {
         foreach (var map in Catalog.Maps)
