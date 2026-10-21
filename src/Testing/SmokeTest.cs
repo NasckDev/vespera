@@ -31,6 +31,10 @@ public partial class SmokeTest : Node
     public const string CommandLineFlag = "--smoke-test";
     private const string FilterPrefix = "--smoke-filter=";
     private const string ShotsPrefix = "--smoke-shots=";
+    private const string StressFlag = "--smoke-stress";
+
+    /// <summary>Cenários com nome começando assim só rodam com <c>--smoke-stress</c> (longos/pesados, fora do CI rápido).</summary>
+    public const string StressPrefix = "estresse:";
 
     private string? _shotsDir;
 
@@ -54,6 +58,11 @@ public partial class SmokeTest : Node
                 continue;
             }
 
+            if (name.StartsWith(StressPrefix, StringComparison.OrdinalIgnoreCase) && !OS.GetCmdlineUserArgs().Contains(StressFlag))
+            {
+                continue;
+            }
+
             ran++;
             var scenarioStart = Time.GetTicksMsec();
             try
@@ -73,6 +82,10 @@ public partial class SmokeTest : Node
             }
         }
 
+        Log.Info($"STATS nós={Performance.GetMonitor(Performance.Monitor.ObjectNodeCount)} " +
+                 $"órfãos={Performance.GetMonitor(Performance.Monitor.ObjectOrphanNodeCount)} " +
+                 $"memória={Performance.GetMonitor(Performance.Monitor.MemoryStatic) / (1024 * 1024):0.0}MB " +
+                 $"fps={Engine.GetFramesPerSecond():0}");
         var seconds = (Time.GetTicksMsec() - started) / 1000.0;
         Log.Info(_failures.Count == 0
             ? $"=== SMOKE OK: {ran} cenário(s) ({seconds:0.0}s) ==="
