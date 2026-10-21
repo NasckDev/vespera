@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://src/UI/GameUi.cs" id="1_gameui"]
+
+[node name="GameUi" type="CanvasLayer"]
+layer = 20
+script = ExtResource("1_gameui")

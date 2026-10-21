@@ -59,6 +59,7 @@ public partial class TitleScreen : Control
         BuildBackground();
         BuildMenu();
         AddChild(_stack);
+        _stack.Adopt(_help, _controls, _options, _confirm, _story, _class);
         _stack.BaseLayer = _menu;
 
         _story.Finished = OpenClassSelect;

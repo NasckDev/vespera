@@ -200,9 +200,14 @@ public partial class EventBus : Node
     [Signal]
     public delegate void ScreenRequestedEventHandler(string screenId);
 
-    /// <summary>Mensagem curta e passageira no centro da tela (rank up, item, aviso).</summary>
+    /// <summary>Mensagem curta e passageira no centro da tela (rank up, item, aviso). Com quebra de linha: "título" + linha nova + "subtítulo".</summary>
     [Signal]
     public delegate void ToastRequestedEventHandler(string message);
+
+    // --- Interface (frente B3; docs/design/api-interface.md) ---
+    /// <summary>UI → Combate: o jogador pagou a Odete pelo resgate da Lanterna; a volta acontece em <paramref name="delaySeconds"/> (LanternRules.OdeteRescueDelay).</summary>
+    [Signal]
+    public delegate void LanternRescueRequestedEventHandler(double delaySeconds);
 
     public static EventBus Instance { get; private set; } = null!;
 

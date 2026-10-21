@@ -51,6 +51,19 @@ public partial class ScreenStack : Control
 
     public bool Contains(Screen screen) => _screens.Contains(screen);
 
+    /// <summary>Guarda a tela como filha (escondida) para ser aberta depois e liberada junto com a pilha.</summary>
+    public void Adopt(params Screen[] screens)
+    {
+        foreach (var screen in screens)
+        {
+            if (screen.GetParent() != this)
+            {
+                screen.GetParent()?.RemoveChild(screen);
+                AddChild(screen);
+            }
+        }
+    }
+
     /// <summary>Abre a tela no topo (adiciona como filha na primeira vez). Já aberta: vai para o topo.</summary>
     public void Push(Screen screen)
     {

@@ -97,6 +97,9 @@ public partial class Screen : Control
         OnClosed();
     }
 
+    /// <summary>Recomeça a contagem de <see cref="Age"/> (nova fala na mesma tela).</summary>
+    protected void RestartAge() => Age = 0;
+
     protected virtual void OnOpened()
     {
     }
