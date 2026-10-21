@@ -132,9 +132,9 @@ def build_object(name: str, theme: str, kind: str, pieces: list, sheet_id: str, 
     }
     foot = spec.get("foot")
     if foot and spec["layer"] == "entity":
-        fw = foot[0] * width_u
-        fd = min(foot[1] * width_u, height_u)
-        entry["footprint"] = [r1(-fw / 2), r1(-fd), r1(fw), r1(fd)]
+        half = r1(foot[0] * width_u / 2)
+        fd = r1(min(foot[1] * width_u, height_u))
+        entry["footprint"] = [-half, -fd, r1(2 * half), fd]
     else:
         entry["footprint"] = None
     occ = spec.get("occluder")
@@ -309,7 +309,7 @@ def main() -> None:
             OUT_DOCS.mkdir(parents=True, exist_ok=True)
             theme_sheet(theme, CUR["themes"][theme], items, ref).save(OUT_DOCS / f"{theme}.jpg", quality=86)
     if not args.only:
-        OUT_JSON.write_text(text, encoding="utf-8")
+        OUT_JSON.write_bytes(text.encode("utf-8"))
     print(f"{len(objects)} objetos em {len(images)} temas, {total / 1024:.0f} KiB de PNG")
 
 
