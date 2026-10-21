@@ -83,7 +83,22 @@ public sealed class WalkFollower
 
     public float Radius { get; }
 
-    public TownFacing Facing { get; set; } = TownFacing.Down;
+    /// <summary>Para onde o sprite olha. Definir de fora (falar com o jogador, parar) reinicia a direção suavizada.</summary>
+    public TownFacing Facing
+    {
+        get => _facing;
+        set
+        {
+            _facing = value;
+            (_hx, _hy) = value switch
+            {
+                TownFacing.Up => (0f, -1f),
+                TownFacing.Left => (-1f, 0f),
+                TownFacing.Right => (1f, 0f),
+                _ => (0f, 1f),
+            };
+        }
+    }
 
     /// <summary>Tempo andando (anima o passo).</summary>
     public double WalkT { get; private set; }
@@ -139,6 +154,15 @@ public sealed class WalkFollower
     public bool Plan(WalkPlanner planner, MapPoint to)
     {
         ArgumentNullException.ThrowIfNull(planner);
+
+        // Nasceu (ou foi empurrado) onde o corpo não cabe, ex.: sorteado com sondas de 8 u ao lado de um poste de uma
+        // célula. O A* recusa essa partida e o morador ficaria parado para sempre: desencaixa para o ponto de pé mais
+        // perto (até 16 u) antes de planejar.
+        if (!planner.CanStand(X, Y) && planner.Area.NearestWalkable(X, Y, planner.Radius, maxDistance: 16f) is { } free)
+        {
+            Place(free.X, free.Y);
+        }
+
         if (!planner.TryPlan(new MapPoint(X, Y), to, _path))
         {
             ClearPath();
@@ -213,8 +237,7 @@ public sealed class WalkFollower
                     _ghost = GhostSeconds;
                 }
 
-                Face(ux, uy);
-                return WalkStatus.Yielding;
+                return WalkStatus.Yielding; // parado esperando: o sprite não vira para o desvio
             }
 
             moved += Step(area, ux * s, uy * s, s);
@@ -227,7 +250,7 @@ public sealed class WalkFollower
         if (moved > 1e-4f)
         {
             WalkT += dt;
-            Face(fx, fy);
+            Face(fx, fy, dt);
         }
 
         if (!HasPath)
@@ -381,6 +404,98 @@ public sealed class WalkFollower
         return bestAlong < TooClose;
     }
 
-    private void Face(float dx, float dy) =>
-        Facing = MathF.Abs(dx) > MathF.Abs(dy) ? (dx < 0 ? TownFacing.Left : TownFacing.Right) : (dy < 0 ? TownFacing.Up : TownFacing.Down);
+    /// <summary>
+    /// Parado (esperando num ponto da rotina, cedendo a vez): se outro corpo está a menos de <see cref="TooClose"/>, dá
+    /// um passinho para longe (até 12 u/s, sem entrar em parede). Dois moradores que esperam no mesmo ponto da rotina
+    /// ficavam um dentro do outro por segundos.
+    /// </summary>
+    public void Separate(IWalkArea area, IReadOnlyList<MapPoint>? others, int self, double dt)
+    {
+        ArgumentNullException.ThrowIfNull(area);
+        if (others is null)
+        {
+            return;
+        }
+
+        float px = 0, py = 0;
+        for (var k = 0; k < others.Count; k++)
+        {
+            if (k == self)
+            {
+                continue;
+            }
+
+            var rx = X - others[k].X;
+            var ry = Y - others[k].Y;
+            var d = WalkMover.Hypot(rx, ry);
+            if (d >= TooClose)
+            {
+                continue;
+            }
+
+            if (d < 1e-3f)
+            {
+                // mesmo ponto: cada um sai para um lado (pela ordem na lista)
+                (rx, ry, d) = (k < self ? 1f : -1f, 0f, 1f);
+            }
+
+            var w = (TooClose - d) / TooClose;
+            px += rx / d * w;
+            py += ry / d * w;
+        }
+
+        var len = WalkMover.Hypot(px, py);
+        if (len < 1e-4f)
+        {
+            return;
+        }
+
+        var step = SeparateSpeed * (float)dt;
+        var nx = X + (px / len * step);
+        var ny = Y + (py / len * step);
+        if (area.CanStand(nx, ny, Radius))
+        {
+            X = nx;
+            Y = ny;
+        }
+    }
+
+    private const float SeparateSpeed = 12f;
+
+    /// <summary>
+    /// Direção do sprite a partir do passo, suavizada (constante de 0,1 s) e com histerese entre os eixos: o desvio de
+    /// outros corpos entorta o passo frame a frame, e sem isso o sprite piscava entre frente/costas e lado.
+    /// </summary>
+    private void Face(float dx, float dy, double dt)
+    {
+        var len = WalkMover.Hypot(dx, dy);
+        if (len <= 1e-5f)
+        {
+            return;
+        }
+
+        var k = 1f - MathF.Exp(-(float)dt / FacingSmoothSeconds);
+        _hx += ((dx / len) - _hx) * k;
+        _hy += ((dy / len) - _hy) * k;
+        var ax = MathF.Abs(_hx);
+        var ay = MathF.Abs(_hy);
+        var horizontal = _facing is TownFacing.Left or TownFacing.Right;
+        if (horizontal ? ay > ax * FacingHysteresis : ax <= ay * FacingHysteresis)
+        {
+            if (ay > 1e-3f)
+            {
+                _facing = _hy < 0 ? TownFacing.Up : TownFacing.Down;
+            }
+        }
+        else if (ax > 1e-3f)
+        {
+            _facing = _hx < 0 ? TownFacing.Left : TownFacing.Right;
+        }
+    }
+
+    private const float FacingSmoothSeconds = 0.1f;
+    private const float FacingHysteresis = 1.3f;
+    private TownFacing _facing = TownFacing.Down;
+    private float _hx;
+    private float _hy = 1f;
 }

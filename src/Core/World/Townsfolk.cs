@@ -94,6 +94,7 @@ public sealed class TownWalker
         if (Wait > 0)
         {
             Wait -= dt;
+            _body.Separate(area, others, self, dt);
             return;
         }
 
@@ -307,6 +308,7 @@ public sealed class AmbientHunter
         if (Wait > 0)
         {
             Wait -= dt;
+            _body.Separate(area, others, self, dt);
             if (Wait <= 0)
             {
                 var q = WalkMover.RandomPoint(area, mapWidth, mapHeight, _random, X, Y, radius: 6f);
