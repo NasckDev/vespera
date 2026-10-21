@@ -187,6 +187,10 @@ public partial class WorldDressing : Node2D
             if (b.IsBroken)
             {
                 b.Restore();
+                if (_obstacles is { } area && _breakableObstacles.TryGetValue(b, out var id))
+                {
+                    area.SetActive(id, true);
+                }
             }
         }
 
@@ -382,7 +386,101 @@ public partial class WorldDressing : Node2D
         }
     }
 
-    private void OnPropBroken(Breakable b) => World.Objects.MarkSpent(b.Key, CurrentDay, Now);
+    private void OnPropBroken(Breakable b)
+    {
+        World.Objects.MarkSpent(b.Key, CurrentDay, Now);
+        if (_obstacles is { } area && _breakableObstacles.TryGetValue(b, out var id))
+        {
+            area.SetActive(id, false);
+        }
+    }
+
+    // --- obstáculos para quem planeja caminho ---
+
+    private readonly Dictionary<Breakable, int> _breakableObstacles = [];
+    private ObstacleWalkArea? _obstacles;
+
+    /// <summary>
+    /// Carimba na área andável os corpos sólidos montados neste mapa (quebráveis inteiros, baús, objetos com footprint),
+    /// para NPCs, bots e o <c>WalkPathfinder</c> desviarem do que o jogador encontra. Chamado pelo <see cref="World"/>
+    /// logo depois do <see cref="Build"/>.
+    /// </summary>
+    public void StampObstacles(ObstacleWalkArea area)
+    {
+        _obstacles = area;
+        _breakableObstacles.Clear();
+        foreach (var b in _breakables)
+        {
+            var id = StampBodies(area, b);
+            if (id >= 0)
+            {
+                _breakableObstacles[b] = id;
+                area.SetActive(id, !b.IsBroken);
+            }
+        }
+
+        foreach (var c in _chests)
+        {
+            StampBodies(area, c);
+        }
+
+        foreach (var o in _objects)
+        {
+            StampBodies(area, o);
+        }
+    }
+
+    /// <summary>Junta as formas dos <c>StaticBody2D</c> filhos de <paramref name="owner"/> num obstáculo (−1 se não tem).</summary>
+    private static int StampBodies(ObstacleWalkArea area, Node owner)
+    {
+        var first = -1;
+        foreach (var child in owner.GetChildren())
+        {
+            if (child is not StaticBody2D body)
+            {
+                continue;
+            }
+
+            foreach (var shapeNode in body.GetChildren())
+            {
+                var (points, xf) = shapeNode switch
+                {
+                    CollisionPolygon2D cp => (cp.Polygon, cp.GlobalTransform),
+                    CollisionShape2D { Shape: ConvexPolygonShape2D convex } cs => (convex.Points, cs.GlobalTransform),
+                    CollisionShape2D { Shape: CircleShape2D circle } cs => (Circle(circle.Radius), cs.GlobalTransform),
+                    _ => (null, Transform2D.Identity),
+                };
+                if (points is null || points.Length < 3)
+                {
+                    continue;
+                }
+
+                var poly = new MapPoint[points.Length];
+                for (var i = 0; i < points.Length; i++)
+                {
+                    var g = xf * points[i];
+                    poly[i] = new MapPoint(g.X, g.Y);
+                }
+
+                var id = area.Add(poly);
+                first = first < 0 ? id : first;
+            }
+        }
+
+        return first;
+    }
+
+    private static Vector2[] Circle(float r)
+    {
+        var points = new Vector2[12];
+        for (var i = 0; i < points.Length; i++)
+        {
+            var a = MathF.Tau * i / points.Length;
+            points[i] = new Vector2(MathF.Cos(a) * r, MathF.Sin(a) * r);
+        }
+
+        return points;
+    }
 
     private void DropChestLoot(Chest c)
     {

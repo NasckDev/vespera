@@ -291,6 +291,11 @@ public partial class World : Node2D
 
         Player.Teleport(CorrectToWalkable(at));
         Dressing.Build(this, map, Layout);
+
+        // Quem planeja caminho (NPCs da cidade, bots do smoke) enxerga também os corpos sólidos que o motor montou.
+        var obstacles = new ObstacleWalkArea(WalkArea);
+        Dressing.StampObstacles(obstacles);
+        WalkArea = obstacles;
         Camera.SetMap(new Vector2(map.ImageWidth, map.ImageHeight), map.ViewHeight);
         GameManager.Instance.UnblockGameplay(TransitionBlock);
 
