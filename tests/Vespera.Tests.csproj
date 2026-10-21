@@ -43,5 +43,6 @@
     <None Include="..\assets\maps\**\layout_*.json" Link="Layouts/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\src\Testing\Fixtures\fixture_*.json" Link="Layouts/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\src\Testing\Fixtures\objects_*.json" Link="Fixtures/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\assets\maps\lights.json" Link="Data/lights.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://scenes/UI/Hud.tscn" id="4_hud"]
 [ext_resource type="Script" path="res://src/World/Dressing/WorldDressing.cs" id="5_dressing"]
 [ext_resource type="Script" path="res://src/World/Minimap.cs" id="6_minimap"]
+[ext_resource type="Script" path="res://src/World/City/CityLife.cs" id="7_city"]
 
 [node name="World" type="Node2D" node_paths=PackedStringArray("MapSprite", "CollisionRoot", "Entities", "InteractablesRoot", "Player", "Camera", "FadeRect", "Dressing", "Minimap")]
 script = ExtResource("1_world")
@@ -44,6 +45,10 @@ script = ExtResource("2_camera")
 
 [node name="Minimap" type="CanvasLayer" parent="."]
 script = ExtResource("6_minimap")
+
+[node name="City" type="Node" parent="." node_paths=PackedStringArray("World")]
+script = ExtResource("7_city")
+World = NodePath("..")
 
 [node name="Fade" type="CanvasLayer" parent="."]
 layer = 90

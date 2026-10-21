@@ -57,7 +57,7 @@ AudioManager.Instance.PlayMusic("vespera", fadeSeconds: 2f);  // crossfade
 | Id | Quando |
 |---|---|
 | `city_day` | **automático** em todo `LocationChanged` de local sem registro (a cidade inteira: Lumeira, Guilda, Rua da Forja…), com reverb desligado |
-| `vespera` | fase véspera do ciclo do dia. Gancho futuro: o `AudioManager` assina `EventBus.DayPhaseChanged` quando o enum `DayPhase` existir no Core (quem criar o enum acrescenta o mapeamento lá); não chame `PlayMusic("vespera")` de outro lugar |
+| `vespera` | **automático** na fase `DayPhase.Vespera` (16–19 h): o `AudioManager` assina `EventBus.DayPhaseChanged` e troca a música dos locais sem registro (a cidade); `CityMusic` diz qual toca agora. Não chame `PlayMusic("vespera")` de outro lugar |
 | `brecha` | **automático** em `PortalEntered` e em `LocationChanged` de local registrado como Brecha (liga o reverb) |
 
 ### Contrato com a frente Mundo (música por local)

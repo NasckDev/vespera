@@ -200,6 +200,21 @@ public partial class EventBus : Node
     /// </summary>
     [Signal]
     public delegate void WorldObjectUsedEventHandler(string kind, string mapId, int index);
+    // --- Cidade viva (frente B2, docs/design/api-cidade.md) ---
+    /// <summary>
+    /// Cidade → Interface (log de chat, opcional): mensagem do chat simulado de Lumeira (spec 01 §6.3). A cidade já mostra
+    /// o balão sobre o caçador quando ele está no mapa. <paramref name="rank"/> = id do Selo ("C") ou "—".
+    /// </summary>
+    [Signal]
+    public delegate void ChatMessageEventHandler(string who, string rank, string text);
+
+    /// <summary>Cidade → Interface: nota lateral curta da v2 (<c>note(texto, ícone)</c>), ex.: "A Casa da Maré fechou a Brecha do Mercado de Peixes".</summary>
+    [Signal]
+    public delegate void NoteRequestedEventHandler(string text, string icon);
+
+    /// <summary>Cidade → todos: uma Brecha mudou de estado (int de <c>Vespera.Core.World.BrechaStatus</c>). Para o Mural e a lista do HUD.</summary>
+    [Signal]
+    public delegate void BrechaStatusChangedEventHandler(int brechaId, int status);
 
     // --- UI ---
     /// <summary>Texto do prompt de interação ("" esconde).</summary>

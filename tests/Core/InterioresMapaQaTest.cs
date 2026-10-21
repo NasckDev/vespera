@@ -473,7 +473,7 @@ public class InterioresMapaQaTest
         return doc.RootElement.Clone();
     }
 
-    private static WalkGrid LoadGrid(MapDef map)
+    internal static WalkGrid LoadGrid(MapDef map)
     {
         var (width, height, pixels) = ReadGrayPng(ResPath(map.Mask ?? throw new InvalidOperationException($"{map.Id} sem máscara")));
         // Mesmo limiar do MaskCollision (brilho >= 0,5 = andável).
