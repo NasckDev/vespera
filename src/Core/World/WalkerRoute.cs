@@ -3,10 +3,11 @@ using Vespera.Core.Common;
 namespace Vespera.Core.World;
 
 /// <summary>
-/// Percurso de um NPC com rotina, pronto para andar sem atravessar parede (DECISIONS D6/D41). Cada waypoint da v2
-/// que cai em área bloqueada é levado ao ponto andável mais próximo; cada trecho entre dois waypoints é uma linha
-/// reta quando dá, senão o caminho do <see cref="WalkPathfinder"/> (BFS de 4 u) encurtado por "puxar o fio".
-/// Construir custa uma BFS por trecho bloqueado: faça fora do frame (thread) e guarde em cache por mapa.
+/// Percurso de um NPC com rotina, pronto para andar sem atravessar parede (DECISIONS D6/D41/B2-D48), calculado em tempo de
+/// execução sobre a área do mapa carregado (vale para qualquer máscara). Cada waypoint da v2 vai para o ponto "firme" mais
+/// próximo da região ligada comum (<see cref="WalkPlanner.NearestPerRegion"/>); cada trecho entre dois waypoints é uma reta livre ou o A* do
+/// <see cref="WalkPlanner"/> encurtado. Construir custa uma busca por trecho bloqueado: faça fora do frame (thread) e
+/// guarde em cache por mapa. O <see cref="TownWalker"/> replaneja sozinho se travar no caminho.
 /// </summary>
 public sealed class WalkerRoute
 {
@@ -21,84 +22,79 @@ public sealed class WalkerRoute
 
     /// <summary>
     /// <c>Legs[i]</c> = pontos de <c>Waypoints[i]</c> até <c>Waypoints[(i+1) % n]</c> (inclui os dois), ou null se não há
-    /// caminho (o NPC espera e segue para o próximo).
+    /// caminho (o NPC tenta replanejar dali e, se nem assim, espera e segue para o próximo).
     /// </summary>
     public IReadOnlyList<IReadOnlyList<MapPoint>?> Legs { get; }
 
-    public static WalkerRoute Build(IWalkArea area, IReadOnlyList<Point2> path, float radius = WalkMover.NpcRadius)
+    public static WalkerRoute Build(IWalkArea area, IReadOnlyList<Point2> path, float radius = WalkMover.NpcRadius) =>
+        Build(new WalkPlanner(area, radius), path);
+
+    /// <summary>Até onde um waypoint pode ser levado para chegar a um ponto andável (u).</summary>
+    public const float SettleDistance = 160f;
+
+    /// <summary>
+    /// Mesma coisa com um planejador já criado para a área (uma instância por thread). Os waypoints vão todos para a mesma
+    /// região ligada da malha: a que tem ponto livre perto do maior número deles (empate: a maior). Assim um waypoint da v2
+    /// dentro de uma parede não cai num bolsão fechado (um quintal, o miolo de um prédio) de onde o NPC não sai.
+    /// </summary>
+    public static WalkerRoute Build(WalkPlanner planner, IReadOnlyList<Point2> path)
     {
-        ArgumentNullException.ThrowIfNull(area);
+        ArgumentNullException.ThrowIfNull(planner);
         ArgumentNullException.ThrowIfNull(path);
-        var waypoints = new List<MapPoint>(path.Count);
+        planner.Prepare();
+        var near = new List<Dictionary<int, (float DistanceSq, MapPoint Point)>>(path.Count);
+        var votes = new Dictionary<int, int>();
         foreach (var p in path)
         {
-            var fixedPoint = area.NearestWalkable((float)p.X, (float)p.Y, radius, maxDistance: 160f) ?? new MapPoint((float)p.X, (float)p.Y);
-            waypoints.Add(fixedPoint);
+            var candidates = new Dictionary<int, (float DistanceSq, MapPoint Point)>();
+            planner.NearestPerRegion(new MapPoint((float)p.X, (float)p.Y), SettleDistance, candidates);
+            near.Add(candidates);
+            foreach (var region in candidates.Keys)
+            {
+                votes[region] = votes.GetValueOrDefault(region) + 1;
+            }
+        }
+
+        var chosen = 0;
+        foreach (var (region, count) in votes)
+        {
+            if (region == 0)
+            {
+                continue;
+            }
+
+            if (chosen == 0 || count > votes[chosen] || (count == votes[chosen] && planner.RegionSize(region) > planner.RegionSize(chosen)))
+            {
+                chosen = region;
+            }
+        }
+
+        var waypoints = new List<MapPoint>(path.Count);
+        for (var i = 0; i < path.Count; i++)
+        {
+            var raw = new MapPoint((float)path[i].X, (float)path[i].Y);
+            if (planner.CanStandFirmly(raw) && planner.RegionOf(raw) == chosen)
+            {
+                waypoints.Add(raw); // o ponto da v2 serve como está
+            }
+            else if (near[i].TryGetValue(chosen, out var candidate))
+            {
+                waypoints.Add(candidate.Point);
+            }
+            else
+            {
+                waypoints.Add(planner.Settle(raw, SettleDistance) ?? raw);
+            }
         }
 
         var legs = new List<IReadOnlyList<MapPoint>?>(waypoints.Count);
+        var buffer = new List<MapPoint>();
         for (var i = 0; i < waypoints.Count; i++)
         {
-            legs.Add(BuildLeg(area, waypoints[i], waypoints[(i + 1) % waypoints.Count], radius));
+            var ok = planner.TryPlan(waypoints[i], waypoints[(i + 1) % waypoints.Count], buffer);
+            legs.Add(ok ? buffer.ToArray() : null);
         }
 
         return new WalkerRoute(waypoints, legs);
-    }
-
-    private static List<MapPoint>? BuildLeg(IWalkArea area, MapPoint from, MapPoint to, float radius)
-    {
-        if (!area.CanStand(from.X, from.Y, radius) || !area.CanStand(to.X, to.Y, radius))
-        {
-            return null;
-        }
-
-        if (WalkMover.IsClear(area, from, to, radius))
-        {
-            return [from, to];
-        }
-
-        var path = WalkPathfinder.FindPath(area, from, p => WalkMover.Hypot(p.X - to.X, p.Y - to.Y) < 4f, radius: radius);
-        if (path is null)
-        {
-            return null;
-        }
-
-        var points = new List<MapPoint>(path);
-        if (WalkMover.IsClear(area, points[^1], to, radius))
-        {
-            points.Add(to);
-        }
-
-        return Smooth(area, points, radius);
-    }
-
-    /// <summary>
-    /// "Puxa o fio": a partir de cada ponto, avança enquanto a linha reta até o próximo ponto do caminho continua livre.
-    /// O resultado só tem segmentos livres (<see cref="WalkMover.IsClear"/>).
-    /// </summary>
-    public static List<MapPoint> Smooth(IWalkArea area, IReadOnlyList<MapPoint> points, float radius = WalkMover.NpcRadius)
-    {
-        ArgumentNullException.ThrowIfNull(points);
-        var result = new List<MapPoint>();
-        if (points.Count == 0)
-        {
-            return result;
-        }
-
-        var i = 0;
-        result.Add(points[0]);
-        while (i < points.Count - 1)
-        {
-            var next = i + 1;
-            while (next + 1 < points.Count && WalkMover.IsClear(area, points[i], points[next + 1], radius))
-            {
-                next++;
-            }
-
-            result.Add(points[next]);
-            i = next;
-        }
-
-        return result;
     }
 }

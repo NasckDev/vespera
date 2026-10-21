@@ -14,9 +14,11 @@ public enum TownFacing
 
 /// <summary>
 /// NPC com rotina (spec 01 §6.1, <c>updNpcs</c>, <c>world.js:159-168</c>): espera, anda até o próximo waypoint na
-/// velocidade da v2, espera <c>R(2, 5)</c> s e olha para baixo. Diferenças pretendidas (D6/D41): começa num waypoint
-/// sorteado e vai para o seguinte (a v2 sorteava ponto e alvo separados), segue o <see cref="WalkerRoute"/> e anda com
-/// <see cref="WalkMover"/>, então nunca atravessa parede.
+/// velocidade da v2, espera <c>R(2, 5)</c> s e olha para baixo. Diferenças pretendidas (D6/D41/B2-D48): começa num waypoint
+/// sorteado e vai para o seguinte (a v2 sorteava ponto e alvo separados), segue o <see cref="WalkerRoute"/> com o
+/// <see cref="WalkFollower"/> (nunca atravessa parede, desvia de quem está no caminho) e, se travar, replaneja dali com o
+/// <see cref="WalkPlanner"/>; sem caminho depois de <see cref="MaxReplans"/> tentativas, desiste do trecho e segue para
+/// o próximo waypoint.
 /// </summary>
 public sealed class TownWalker
 {
@@ -26,50 +28,67 @@ public sealed class TownWalker
     /// <summary>Falar com o NPC o faz esperar 4 s (<c>c.wait = 4</c>).</summary>
     public const double TalkWaitSeconds = 4;
 
+    /// <summary>Replanejamentos por trecho antes de desistir dele.</summary>
+    public const int MaxReplans = 3;
+
     private static readonly NumRange WaitAtWaypoint = new(2, 5);
     private static readonly NumRange InitialWait = new(0, 2);
 
     private readonly IRandom _random;
-    private int _legPoint;
+    private readonly WalkFollower _body;
+    private bool _legStarted;
+    private int _replans;
 
-    public TownWalker(WalkerDef def, WalkerRoute route, IRandom random)
+    public TownWalker(WalkerDef def, WalkerRoute route, IRandom random, WalkPlanner? planner = null)
     {
         Def = def;
         Route = route;
         _random = random;
+        Planner = planner;
         var n = route.Waypoints.Count;
         var start = n == 0 ? 0 : random.RangeInt(0, n - 1);
         Leg = start;
         var at = n == 0 ? new MapPoint((float)def.Path[0].X, (float)def.Path[0].Y) : route.Waypoints[start];
-        X = at.X;
-        Y = at.Y;
+        _body = new WalkFollower(at.X, at.Y);
         Wait = random.Range(InitialWait);
-        _legPoint = 1;
     }
 
     public WalkerDef Def { get; }
 
     public WalkerRoute Route { get; }
 
-    public float X { get; private set; }
+    /// <summary>Planejador da área atual (criado sob demanda; o diretor compartilha um por mapa).</summary>
+    public WalkPlanner? Planner { get; set; }
 
-    public float Y { get; private set; }
+    public float X => _body.X;
+
+    public float Y => _body.Y;
 
     /// <summary>Trecho atual: de <c>Waypoints[Leg]</c> para o seguinte.</summary>
     public int Leg { get; private set; }
 
     public double Wait { get; private set; }
 
-    public TownFacing Facing { get; private set; } = TownFacing.Down;
+    public TownFacing Facing => _body.Facing;
 
-    public double WalkT { get; private set; }
+    public double WalkT => _body.WalkT;
 
     public bool IsMoving => Wait <= 0;
+
+    /// <summary>Quantas vezes replanejou desde que nasceu (testes).</summary>
+    public int Replans { get; private set; }
+
+    /// <summary>Caminho que está seguindo agora.</summary>
+    public IReadOnlyList<MapPoint> CurrentPath => _body.Path;
 
     /// <summary>Próxima fala (<c>c.line++ % n</c>).</summary>
     public int LineIndex { get; private set; }
 
-    public void Update(IWalkArea area, double dt)
+    /// <summary>
+    /// Um passo. <paramref name="others"/> são as posições dos outros corpos do mapa (moradores e jogador) e
+    /// <paramref name="self"/> o índice deste NPC nela (−1 se não está).
+    /// </summary>
+    public void Update(IWalkArea area, double dt, IReadOnlyList<MapPoint>? others = null, int self = -1)
     {
         ArgumentNullException.ThrowIfNull(area);
         if (Wait > 0)
@@ -78,38 +97,29 @@ public sealed class TownWalker
             return;
         }
 
-        var leg = Route.Legs.Count > 0 ? Route.Legs[Leg] : null;
-        if (leg is null || _legPoint >= leg.Count)
+        if (Route.Waypoints.Count < 2)
         {
-            ArriveAtWaypoint();
+            Wait = _random.Range(WaitAtWaypoint);
             return;
         }
 
-        var target = leg[_legPoint];
-        var dx = target.X - X;
-        var dy = target.Y - Y;
-        var d = WalkMover.Hypot(dx, dy);
-        var isLast = _legPoint == leg.Count - 1;
-        if (d < (isLast ? ArriveDistance : 1f))
+        if (!_legStarted && !StartLeg(area))
         {
-            _legPoint++;
-            if (_legPoint >= leg.Count)
-            {
+            return;
+        }
+
+        switch (_body.Advance(area, (float)Def.Speed, dt, others, self, ArriveDistance))
+        {
+            case WalkStatus.Arrived:
                 ArriveAtWaypoint();
-            }
-
-            return;
+                break;
+            case WalkStatus.Yielding:
+                Wait = WalkFollower.YieldSeconds;
+                break;
+            case WalkStatus.Stuck:
+                Replan(area);
+                break;
         }
-
-        var step = (float)(Def.Speed * dt);
-        if (step > d)
-        {
-            step = d;
-        }
-
-        (X, Y) = WalkMover.Move(area, X, Y, dx / d * step, dy / d * step);
-        WalkT += dt;
-        Facing = MathF.Abs(dx) > MathF.Abs(dy) ? (dx < 0 ? TownFacing.Left : TownFacing.Right) : (dy < 0 ? TownFacing.Up : TownFacing.Down);
     }
 
     /// <summary>
@@ -120,26 +130,94 @@ public sealed class TownWalker
         Wait = Math.Max(Wait, TalkWaitSeconds);
         var dx = playerX - X;
         var dy = playerY - Y;
-        Facing = MathF.Abs(dy) >= MathF.Abs(dx) ? (dy < 0 ? TownFacing.Up : TownFacing.Down) : (dx < 0 ? TownFacing.Left : TownFacing.Right);
+        _body.Facing = MathF.Abs(dy) >= MathF.Abs(dx) ? (dy < 0 ? TownFacing.Up : TownFacing.Down) : (dx < 0 ? TownFacing.Left : TownFacing.Right);
         var line = Def.Lines[LineIndex % Def.Lines.Count];
         LineIndex++;
         return line;
+    }
+
+    private MapPoint Target => Route.Waypoints[(Leg + 1) % Route.Waypoints.Count];
+
+    private WalkPlanner PlannerFor(IWalkArea area)
+    {
+        if (Planner is null || !ReferenceEquals(Planner.Area, area))
+        {
+            Planner = new WalkPlanner(area, _body.Radius);
+        }
+
+        return Planner;
+    }
+
+    /// <summary>
+    /// Começa o trecho: usa o percurso pronto quando dá para pegá-lo daqui em linha reta; senão (desviou, desistiu do
+    /// trecho anterior, o percurso não existe nesta máscara) planeja daqui até o próximo waypoint.
+    /// </summary>
+    private bool StartLeg(IWalkArea area)
+    {
+        _legStarted = true;
+        _replans = 0;
+        if (!area.CanStand(X, Y, _body.Radius) && PlannerFor(area).Settle(new MapPoint(X, Y), 24f) is { } safe)
+        {
+            _body.Place(safe.X, safe.Y); // nunca deveria acontecer; não deixa o NPC preso dentro da parede
+        }
+
+        var leg = Route.Legs[Leg];
+        if (leg is { Count: > 1 })
+        {
+            var here = new MapPoint(X, Y);
+            if (WalkMover.Hypot(leg[0].X - X, leg[0].Y - Y) < 0.5f)
+            {
+                _body.SetPath(leg, 1);
+                return true;
+            }
+
+            var planner = PlannerFor(area);
+            if (planner.IsClear(here, leg[1]))
+            {
+                _body.SetPath(leg, 1);
+                return true;
+            }
+
+            if (planner.IsClear(here, leg[0]))
+            {
+                _body.SetPath(leg, 0);
+                return true;
+            }
+        }
+
+        return Replan(area);
+    }
+
+    /// <summary>Replaneja daqui até o waypoint do trecho; sem caminho (ou travou demais), desiste dele.</summary>
+    private bool Replan(IWalkArea area)
+    {
+        _replans++;
+        Replans++;
+        if (_replans <= MaxReplans && _body.Plan(PlannerFor(area), Target))
+        {
+            return true;
+        }
+
+        ArriveAtWaypoint();
+        return false;
     }
 
     private void ArriveAtWaypoint()
     {
         var n = Math.Max(1, Route.Waypoints.Count);
         Leg = (Leg + 1) % n;
-        _legPoint = 1;
+        _legStarted = false;
+        _body.ClearPath();
         Wait = _random.Range(WaitAtWaypoint);
-        Facing = TownFacing.Down;
+        _body.Facing = TownFacing.Down;
     }
 }
 
 /// <summary>
 /// Caçador ambiente (spec 01 §6.2, <c>updHunters</c>, <c>world.js:169-179</c>, <c>main.js:109</c>): espera, sorteia um
-/// ponto do mapa, anda a 42 u/s deslizando nas paredes; ao chegar espera <c>R(1,5; 5)</c> s e às vezes fala; travado,
-/// espera 0,5 s e sorteia outro ponto. Não é interagível.
+/// ponto do mapa e anda até ele a 42 u/s; ao chegar espera <c>R(1,5; 5)</c> s e às vezes fala; travado, espera 0,5 s e
+/// sorteia outro ponto. Não é interagível. B2-D48: em vez da reta que escorrega na parede (e empacava em toda quina),
+/// vai pelo caminho do <see cref="WalkPlanner"/> com o <see cref="WalkFollower"/> (desvia de quem está na frente).
 /// </summary>
 public sealed class AmbientHunter
 {
@@ -160,22 +238,29 @@ public sealed class AmbientHunter
 
     private readonly IRandom _random;
     private readonly SocialFile _social;
+    private readonly WalkFollower _body;
+    private double _hold;
 
-    public AmbientHunter(HunterDef def, float x, float y, SocialFile social, IRandom random)
+    public AmbientHunter(HunterDef def, float x, float y, SocialFile social, IRandom random, WalkPlanner? planner = null)
     {
         Def = def;
         _social = social;
         _random = random;
-        X = TargetX = x;
-        Y = TargetY = y;
+        Planner = planner;
+        _body = new WalkFollower(x, y);
+        TargetX = x;
+        TargetY = y;
         Wait = random.Range(FirstWait);
     }
 
     public HunterDef Def { get; }
 
-    public float X { get; private set; }
+    /// <summary>Planejador da área atual (criado sob demanda; o diretor compartilha um por mapa).</summary>
+    public WalkPlanner? Planner { get; set; }
 
-    public float Y { get; private set; }
+    public float X => _body.X;
+
+    public float Y => _body.Y;
 
     public float TargetX { get; private set; }
 
@@ -183,11 +268,11 @@ public sealed class AmbientHunter
 
     public double Wait { get; private set; }
 
-    public TownFacing Facing { get; private set; } = TownFacing.Down;
+    public TownFacing Facing => _body.Facing;
 
-    public double WalkT { get; private set; }
+    public double WalkT => _body.WalkT;
 
-    public bool IsMoving => Wait <= 0;
+    public bool IsMoving => Wait <= 0 && _hold <= 0;
 
     /// <summary>Fala atual (null = sem balão).</summary>
     public string? Say { get; private set; }
@@ -201,7 +286,11 @@ public sealed class AmbientHunter
         SayT = SayDuration;
     }
 
-    public void Update(IWalkArea area, float mapWidth, float mapHeight, double dt)
+    /// <summary>
+    /// Um passo. <paramref name="others"/> são as posições dos outros corpos do mapa e <paramref name="self"/> o índice
+    /// deste caçador nela (−1 se não está).
+    /// </summary>
+    public void Update(IWalkArea area, float mapWidth, float mapHeight, double dt, IReadOnlyList<MapPoint>? others = null, int self = -1)
     {
         ArgumentNullException.ThrowIfNull(area);
         SayT -= dt;
@@ -223,37 +312,45 @@ public sealed class AmbientHunter
                 var q = WalkMover.RandomPoint(area, mapWidth, mapHeight, _random, X, Y, radius: 6f);
                 TargetX = q.X;
                 TargetY = q.Y;
+                if (Planner is null || !ReferenceEquals(Planner.Area, area))
+                {
+                    Planner = new WalkPlanner(area, _body.Radius);
+                }
+
+                if (!_body.Plan(Planner, q))
+                {
+                    Wait = StuckWait;
+                }
             }
 
             return;
         }
 
-        var dx = TargetX - X;
-        var dy = TargetY - Y;
-        var d = WalkMover.Hypot(dx, dy);
-        if (d < TownWalker.ArriveDistance)
+        if (_hold > 0)
         {
-            Wait = _random.Range(ArrivedWait);
-            Facing = TownFacing.Down;
-            if (_random.Chance(IdleLineChance))
-            {
-                Speak(_random.Pick(_social.IdleLines));
-            }
-
+            _hold -= dt;
             return;
         }
 
-        var ox = X;
-        var oy = Y;
-        var step = (float)(Speed * dt);
-        (X, Y) = WalkMover.Move(area, X, Y, dx / d * step, dy / d * step);
-        WalkT += dt;
-        if (WalkMover.Hypot(X - ox, Y - oy) < 0.2f * dt * Speed)
+        switch (_body.Advance(area, Speed, dt, others, self, TownWalker.ArriveDistance))
         {
-            Wait = StuckWait;
-        }
+            case WalkStatus.Arrived:
+                Wait = _random.Range(ArrivedWait);
+                _body.Facing = TownFacing.Down;
+                if (_random.Chance(IdleLineChance))
+                {
+                    Speak(_random.Pick(_social.IdleLines));
+                }
 
-        Facing = MathF.Abs(dx) > MathF.Abs(dy) ? (dx < 0 ? TownFacing.Left : TownFacing.Right) : (dy < 0 ? TownFacing.Up : TownFacing.Down);
+                break;
+            case WalkStatus.Yielding:
+                _hold = WalkFollower.YieldSeconds;
+                break;
+            case WalkStatus.Stuck:
+                _body.ClearPath();
+                Wait = StuckWait;
+                break;
+        }
     }
 
     /// <summary>
