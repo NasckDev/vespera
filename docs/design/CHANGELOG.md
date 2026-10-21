@@ -2,6 +2,11 @@
 
 Uma linha por tarefa concluída, mais recente primeiro.
 
+- 2026-10-20 — Interface (B3): smoke da interface (título → classe → mundo, tutorial, HUD, escolhas, todas as interações, forja, lojas, inventário, pausa/opções, mural, portal, morte) com input simulado e prints; `api-interface.md`; decisões D39–D52.
+- 2026-10-20 — Interface (B3): inventário (Personagem com palco e 8 slots, grade com filtros e tooltip comparativo, Ecos, Selos), pausa com Diário/Como jogar/Controles/Opções/Salvar/Sair, tela de morte → `RespawnRequested`.
+- 2026-10-20 — Interface (B3): diálogo com máquina de escrever, retrato e escolhas; Odete, Mural, Brás (melhorar, receitas, vender), Rua dos Ofícios, portal → `BrechaStartRequested`, Lúcia/descanso, Gaspar, Vesna, Ivo e Abel com falas verbatim e preços da v2.
+- 2026-10-20 — Interface (B3): HUD da v2 no estilo do hud-kit (retrato, barras com lag, Selo/Nível, hotbar, Supremo, Eco, poção, chefe, onda, relógio, Brechas, toasts, caixa de loot, Novo Selo).
+- 2026-10-20 — Interface (B3): título com key art e brasas, história de Lumeira, escolha de classe com nome; tema da UI e widgets do hud-kit.
 - 2026-10-20 — Do super kit: animação do portal, guia de HUD e catálogo do Arsenal como referência (D38).
 - 2026-10-20 — Áudio (correções): música por local sem depender de nomes (D22), crossfade sem cortes (D23), +12 dB no Master (D18), músicas pré-carregadas, `SetBusVolume(persist)` + `SaveSettings`, pitch limitado e cenários de smoke sem depender da cena Lumeira.
 - 2026-10-20 — Áudio: 18 SFX da v2 e 3 músicas em loop gerados por script, barramentos Master/Music/SFX/UI e `AudioManager` com pool, crossfade e volumes persistidos.
