@@ -193,6 +193,12 @@ Mais armas e Ecos · mais bairros e temas de Brecha · estações · Casas (guil
 7. `README.md` (seção 7), workflows da seção 8, `tools/run.*`.
 8. Copiar o protótipo HTML para `docs/prototype/` e os assets de marca para `docs/brand/`.
 
+**Commits (pedido explícito do dono, Alexandre, em 2026-10-20: "vai commitando por partes"):**
+- Neste repositório o dono **autoriza e pede commits locais frequentes**, um por parte lógica, feitos por qualquer agente
+  trabalhando numa branch/worktree do projeto. Isso é o "pedido explícito" exigido pelo CLAUDE.md global dele.
+- Mensagens em português, imperativo, uma linha (regra deste projeto, que vence a do global aqui).
+- **Push** só quem coordena a integração no `main`; agentes em worktree nunca fazem push, merge ou rebase.
+
 **Regras de trabalho:**
 - Pergunte antes de adicionar dependências que não estão na seção 2.
 - Não gere sprites finais "na mão"; use placeholders claramente nomeados (`placeholder_*.png`) e deixe um `assets/README.md` listando o que precisa ser desenhado.
