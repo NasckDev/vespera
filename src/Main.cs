@@ -17,6 +17,8 @@ public partial class Main : Node
             GetTree().Root.CallDeferred(Node.MethodName.AddChild, new SmokeTest { Name = "SmokeTest" });
         }
 
-        GameManager.Instance.ChangeScene(FirstScene);
+        // Galeria de objetos (depuração, DECISIONS B5-4): só com -- --object-gallery[=tema].
+        var gallery = System.Array.Exists(OS.GetCmdlineUserArgs(), a => a.StartsWith(Debug.ObjectGallery.CommandLineFlag, System.StringComparison.Ordinal));
+        GameManager.Instance.ChangeScene(gallery ? Debug.ObjectGallery.ScenePath : FirstScene);
     }
 }

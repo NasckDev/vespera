@@ -2,6 +2,7 @@
 
 Uma linha por tarefa concluída, mais recente primeiro.
 
+- 2026-10-21 — Biblioteca de objetos (B5): 445 objetos recortados de 6 folhas em 9 temas, `objects.json` calibrado pelo jogador + `ObjectCatalog`, 20 mapas candidatos (salas extras e Brechas 6–10), galeria de depuração com smoke e triagem das 70 imagens em `catalogo-assets.md` (B5-1 a B5-5).
 - 2026-10-20 — Do super kit: animação do portal, guia de HUD e catálogo do Arsenal como referência (D38).
 - 2026-10-20 — Áudio (correções): música por local sem depender de nomes (D22), crossfade sem cortes (D23), +12 dB no Master (D18), músicas pré-carregadas, `SetBusVolume(persist)` + `SaveSettings`, pitch limitado e cenários de smoke sem depender da cena Lumeira.
 - 2026-10-20 — Áudio: 18 SFX da v2 e 3 músicas em loop gerados por script, barramentos Master/Music/SFX/UI e `AudioManager` com pool, crossfade e volumes persistidos.
