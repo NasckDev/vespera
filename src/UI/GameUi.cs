@@ -57,11 +57,19 @@ public partial class GameUi : CanvasLayer
 
     public BoardScreen Board { get; } = new();
 
+    public InventoryScreen Inventory { get; } = new();
+
+    public PauseScreen Pause { get; private set; } = null!;
+
+    public DeathScreen Death { get; } = new();
+
     public OptionsScreen Options { get; } = new();
 
     public HelpScreen Help { get; } = new();
 
     public ControlsScreen Controls { get; } = new();
+
+    public JournalScreen Journal { get; } = new();
 
     public BrechaTracker Brechas { get; } = new() { Name = "BrechaTracker" };
 
@@ -82,9 +90,10 @@ public partial class GameUi : CanvasLayer
     {
         Layer = 20;
         Town = new TownServices(this);
+        Pause = new PauseScreen(this);
         AddChild(Brechas);
         AddChild(Stack);
-        Stack.Adopt(Dialog, Board, Options, Help, Controls);
+        Stack.Adopt(Dialog, Board, Inventory, Pause, Death, Options, Help, Controls, Journal);
         _fade = new ColorRect { Color = new Color(8 / 255f, 6 / 255f, 14 / 255f, 0f), MouseFilter = Control.MouseFilterEnum.Ignore, AnchorRight = 1, AnchorBottom = 1, Visible = false };
         AddChild(_fade);
 
@@ -94,6 +103,7 @@ public partial class GameUi : CanvasLayer
         bus.DialogueRequested += OnDialogueRequested;
         bus.ChoiceRequested += OnChoiceRequested;
         bus.ScreenRequested += OnScreenRequested;
+        bus.PlayerDied += OnPlayerDied;
         bus.BrechaStarted += OnBrechaStarted;
         bus.LanternStateChanged += OnLanternStateChanged;
         bus.GameLoaded += OnGameLoaded;
@@ -113,6 +123,7 @@ public partial class GameUi : CanvasLayer
         bus.DialogueRequested -= OnDialogueRequested;
         bus.ChoiceRequested -= OnChoiceRequested;
         bus.ScreenRequested -= OnScreenRequested;
+        bus.PlayerDied -= OnPlayerDied;
         bus.BrechaStarted -= OnBrechaStarted;
         bus.LanternStateChanged -= OnLanternStateChanged;
         bus.GameLoaded -= OnGameLoaded;
@@ -130,6 +141,25 @@ public partial class GameUi : CanvasLayer
         }
     }
 
+    public override void _UnhandledInput(InputEvent @event)
+    {
+        if (Stack.Count > 0 || @event.IsEcho() || !CanOpenMenus)
+        {
+            return;
+        }
+
+        if (@event.IsActionPressed(InputActions.Pause))
+        {
+            GetViewport().SetInputAsHandled();
+            OpenPause();
+        }
+        else if (@event.IsActionPressed(InputActions.Inventory))
+        {
+            GetViewport().SetInputAsHandled();
+            OpenInventory();
+        }
+    }
+
     public override void _Process(double delta)
     {
         var dt = Mathf.Min(0.05f, (float)delta);
@@ -139,6 +169,15 @@ public partial class GameUi : CanvasLayer
             if (_tutorialT < 0f)
             {
                 Tutorial();
+            }
+        }
+
+        if (_deathT >= 0f)
+        {
+            _deathT -= dt;
+            if (_deathT < 0f)
+            {
+                OpenDeath();
             }
         }
 
@@ -169,6 +208,18 @@ public partial class GameUi : CanvasLayer
     {
         UiSound.Open();
         Stack.Push(Board);
+    }
+
+    public void OpenInventory()
+    {
+        UiSound.Open();
+        Stack.Push(Inventory);
+    }
+
+    public void OpenPause()
+    {
+        UiSound.Click();
+        Stack.Push(Pause);
     }
 
     /// <summary>Fecha todas as telas (smoke test, troca de cena).</summary>
@@ -285,8 +336,17 @@ public partial class GameUi : CanvasLayer
             case "board":
                 OpenBoard();
                 break;
+            case "inventory":
+                OpenInventory();
+                break;
+            case "pause":
+                OpenPause();
+                break;
             case "options":
                 Stack.Push(Options);
+                break;
+            case "journal":
+                Stack.Push(Journal);
                 break;
             case "help":
                 Stack.Push(Help);
@@ -294,10 +354,33 @@ public partial class GameUi : CanvasLayer
             case "controls":
                 Stack.Push(Controls);
                 break;
+            case "death":
+                OpenDeath();
+                break;
             default:
                 Log.Warning($"ScreenRequested: tela '{screenId}' não existe.");
                 break;
         }
+    }
+
+    private void OnPlayerDied()
+    {
+        if (_deathT >= 0f || Death.IsOpen)
+        {
+            return;
+        }
+
+        _deathInBrecha = Brechas.InsideTheme is not null;
+        _deathTheme = Brechas.InsideTheme;
+        _deathT = DeathDelay;
+    }
+
+    private void OpenDeath()
+    {
+        _deathT = -1f;
+        Stack.Clear();
+        Death.Setup(_deathInBrecha, _deathTheme is null ? null : BrechaTracker.Bairro(_deathTheme));
+        Stack.Push(Death);
     }
 
     private void OnBrechaStarted(string themeId, int rank) => GameManager.Instance.State.CountQuest(QuestCounters.Entered); // extra.js:126
