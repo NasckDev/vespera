@@ -20,6 +20,7 @@ Formato do layout (coordenadas em px do mapa; formas: {"poly": [[x,y],...]}, {"r
   "chests": [ {"x": 0, "y": 0, "tier": 0} ],                                    # baús (atlas pr_chest0..4)
   "decor":  [ {"kind": "lamp|flower|boat|fishing|sign|bench|fountain|stall|inspect", "x": 0, "y": 0,
                "r": 24, "label": "Acender lampião", "text": "...", "to": [x,y]} ]   # interações de decoração
+               #   "boat" com "to": balsa que leva ao ponto "to" (o check conta como alcançável o cais de destino)
 }
 
 Uso:
@@ -161,6 +162,23 @@ def reachable(grid: Image.Image, start: tuple[float, float], cell: int) -> set[t
     return seen
 
 
+def reachable_by_boat(grid: Image.Image, m: dict, layout: dict, cell: int) -> set[tuple[int, int]]:
+    """Alcance a pé a partir do spawn, somado ao que as balsas (decor 'boat' com 'to') levam de um cais alcançável."""
+    seen = reachable(grid, m["spawn"], cell)
+    boats = [d for d in layout.get("decor", []) if d.get("kind") == "boat" and d.get("to")]
+    changed = True
+    while changed:
+        changed = False
+        for b in boats:
+            tx, ty = b["to"]
+            if (int(tx / cell), int(ty / cell)) not in seen and near_reachable(seen, b["x"], b["y"], cell):
+                more = reachable(grid, (tx, ty), cell)
+                if more - seen:
+                    seen |= more
+                    changed = True
+    return seen
+
+
 def points_of_interest(m: dict, layout: dict) -> list[tuple[str, float, float]]:
     pts = [("spawn", *m["spawn"])]
     for e in m.get("exits", []):
@@ -232,7 +250,7 @@ def cmd_check(args, maps):
         layout = load_layout(m)
         cell = layout.get("cell", CELL)
         grid = build_grid(m, layout)
-        seen = reachable(grid, m["spawn"], cell)
+        seen = reachable_by_boat(grid, m, layout, cell)
         walk = sum(grid.histogram()[128:])
         islands = walk - len(seen)
         problems = [f"  ✗ {name} em ({x:.0f},{y:.0f}) inalcançável"
@@ -257,7 +275,7 @@ def render(m: dict, layout: dict, crop, scale: float, grid_step: int) -> Image.I
     img = Image.open(res_path(m["image"])).convert("RGBA")
     cell = layout.get("cell", CELL)
     grid = build_grid(m, layout)
-    seen = reachable(grid, m["spawn"], cell)
+    seen = reachable_by_boat(grid, m, layout, cell)
     over = Image.new("RGBA", img.size, (0, 0, 0, 0))
     po = over.load()
     gp = grid.load()
