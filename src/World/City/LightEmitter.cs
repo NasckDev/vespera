@@ -26,6 +26,10 @@ public partial class LightEmitter : Node2D
     [Export]
     public float Intensity { get; set; } = 1f;
 
+    /// <summary>Multiplica só o glow colorido (não o furo): para luzes que têm que dominar a cena, como o portal (B2-D51).</summary>
+    [Export]
+    public float GlowBoost { get; set; } = 1f;
+
     /// <summary>Emissores dentro da árvore, na ordem em que entraram.</summary>
     public static IReadOnlyList<LightEmitter> Active => ActiveList;
 

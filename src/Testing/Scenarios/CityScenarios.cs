@@ -75,7 +75,7 @@ public partial class SmokeTest
             await WaitUntil(() => state.Save.ClockMinutes >= 23 * 60, 10, "23:00");
             city.TimeScale = 0f;
             await Frames(3);
-            Require(Math.Abs(city.Lighting.CurrentDarkness - 0.372f) < 0.01f, $"noite fechada na Rua da Forja deveria ser 0,372, é {city.Lighting.CurrentDarkness:0.000}");
+            Require(Math.Abs(city.Lighting.CurrentDarkness - 0.713f) < 0.01f, $"noite fechada na Rua da Forja deveria ser 0,713 (B2-D51), é {city.Lighting.CurrentDarkness:0.000}");
             Require(AudioManager.Instance.CurrentMusic == AudioManager.DefaultLocationMusic, $"à noite a cidade volta a city_day, toca {AudioManager.Instance.CurrentMusic}");
             await Shot("cidade-noite");
 
@@ -337,9 +337,9 @@ public partial class SmokeTest
             var speaker = town.Hunters[0];
             player.Teleport(world.CorrectToWalkable(speaker.Position + new Vector2(0, 30)));
             world.Camera.Snap();
-            await Frames(2);
+            await ProcessFrames(3);
             town.Chat(speaker.Brain.Def.Name, speaker.Brain.Def.Rank, "boa véspera, Lumeira");
-            await Frames(2);
+            await ProcessFrames(3); // com janela, frames de física passam sem _Process
             Require(chats.Contains("boa véspera, Lumeira"), "ChatMessage do chat simulado");
             Require(speaker.Bubble == "boa véspera, Lumeira", "o chat deveria aparecer como balão sobre o caçador que falou");
             Require(town.Hunters.Count(h => h.Bubble == "boa véspera, Lumeira") == 1, "só quem falou mostra o balão");

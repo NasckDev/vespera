@@ -22,6 +22,14 @@ public static class CityLighting
 
     public const float HoleAlpha = 0.85f;
 
+    /// <summary>
+    /// Lâmpadas da Rua da Forja (B2-D51): furo menor (1,3× o raio em vez de 1,6×) e mais fraco (0,7). Com dezenas de luzes
+    /// na tela, os furos da v2 apagavam a noite inteira; assim cada lâmpada vira uma poça de luz e a rua fica escura entre elas.
+    /// </summary>
+    public const float StreetLampHoleScale = 1.3f;
+
+    public const float StreetLampHoleAlpha = 0.7f;
+
     public const float MagentaGlowAlpha = 0.22f;
 
     public const float GlowAlpha = 0.14f;
@@ -102,8 +110,51 @@ public static class CityLighting
             return (d * 0.55f) + 0.14f;
         }
 
-        return map.Hd ? d * 0.6f : d;
+        return map.Hd ? d * StreetFactor(d) : d;
     }
+
+    /// <summary>
+    /// Fator da escuridão na Rua da Forja (B2-D51): a v2 usava <c>d·0,6</c> o tempo todo e a noite mal escurecia
+    /// (0,37). Aqui o fator sobe com a escuridão base, de 0,6 (dia, igual à v2: 0,096 às 16h) a 1,15 (noite fechada:
+    /// 0,71), então a véspera vira noite de verdade e as lâmpadas e a lanterna passam a desenhar a rua.
+    /// </summary>
+    public static float StreetFactor(float baseDarkness) =>
+        0.6f + (0.55f * Math.Clamp((baseDarkness - 0.16f) / (0.62f - 0.16f), 0f, 1f));
+
+    /// <summary>
+    /// Cor da hora na rua (B2-D51), multiplicada sobre o mundo antes da escuridão: tarde neutra, véspera dourada e rosada
+    /// (pico às 18h), crepúsculo violeta às 19h, noite azulada a partir das 20h e aurora quente antes das 6h.
+    /// Interiores e Brechas não usam (cor branca).
+    /// </summary>
+    public static LightColor StreetGrade(double clockMinutes)
+    {
+        var h = clockMinutes / 60;
+        for (var i = 1; i < GradeKeys.Length; i++)
+        {
+            if (h <= GradeKeys[i].Hour)
+            {
+                var (h0, c0) = GradeKeys[i - 1];
+                var (h1, c1) = GradeKeys[i];
+                var t = Math.Clamp((h - h0) / (h1 - h0), 0, 1);
+                return new LightColor(Lerp(c0.R, c1.R, t), Lerp(c0.G, c1.G, t), Lerp(c0.B, c1.B, t));
+            }
+        }
+
+        return GradeKeys[^1].Color;
+    }
+
+    private static readonly (double Hour, LightColor Color)[] GradeKeys =
+    [
+        (0, new LightColor(1f, 1f, 1f)),
+        (16.5, new LightColor(1f, 1f, 1f)),
+        (17.25, new LightColor(1f, 0.92f, 0.84f)),
+        (18.25, new LightColor(1f, 0.82f, 0.8f)),
+        (19.25, new LightColor(0.86f, 0.8f, 0.94f)),
+        (20.25, new LightColor(0.78f, 0.84f, 1f)),
+        (29, new LightColor(0.78f, 0.84f, 1f)),
+        (29.6, new LightColor(0.9f, 0.84f, 0.94f)),
+        (30, new LightColor(1f, 0.93f, 0.88f)),
+    ];
 
     /// <summary>Cintilação das luzes do mapa: <c>r · (1 + 0,05 sin(t·(7 + i%3) + i))</c>.</summary>
     public static float Flicker(int index, double seconds) =>

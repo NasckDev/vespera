@@ -35,7 +35,9 @@ public partial class LightingLayer : CanvasLayer
     private Image _data = null!;
     private ImageTexture _texture = null!;
     private ShaderMaterial _material = null!;
-    private ColorRect _rect = null!;
+    private TextureRect _rect = null!;
+    private SubViewport _darkView = null!;
+    private ColorRect _grade = null!;
     private IReadOnlyList<MapLight> _mapLights = [];
     private MapDef? _map;
     private bool _streetLamps;
@@ -53,6 +55,9 @@ public partial class LightingLayer : CanvasLayer
 
     /// <summary>Luzes enviadas ao shader neste frame (visíveis).</summary>
     public int CurrentLightCount { get; private set; }
+
+    /// <summary>Cor da hora multiplicada sobre a rua neste frame (branco fora da rua).</summary>
+    public Color CurrentGrade { get; private set; } = Colors.White;
 
     /// <summary>Lâmpadas da rua acesas (nível ≥ 0,5) neste frame.</summary>
     public int LitStreetLamps { get; private set; }
@@ -72,7 +77,42 @@ public partial class LightingLayer : CanvasLayer
         _material.SetShaderParameter(LightDataParam, _texture);
         var dark = CityLighting.DarkColor;
         _material.SetShaderParameter(DarkColorParam, new Vector3(dark.R, dark.G, dark.B));
-        _rect = new ColorRect { Name = "Darkness", Material = _material, MouseFilter = Control.MouseFilterEnum.Ignore };
+        // Cor da hora na rua (B2-D51): multiplicada sobre o mundo, por baixo da escuridão.
+        _grade = new ColorRect
+        {
+            Name = "Grade",
+            Material = new CanvasItemMaterial { BlendMode = CanvasItemMaterial.BlendModeEnum.Mul },
+            MouseFilter = Control.MouseFilterEnum.Ignore,
+            Color = Colors.White,
+            Visible = false,
+        };
+        _grade.SetAnchorsPreset(Control.LayoutPreset.FullRect);
+        AddChild(_grade);
+        // A escuridão é um campo suave: calculada na resolução base (640×360) numa SubViewport e esticada com filtro
+        // linear, custa ~1/9 de rodar o shader por pixel da janela em 1080p (B2-D51). "Darkness" é quem aparece.
+        _darkView = new SubViewport
+        {
+            Name = "DarknessView",
+            TransparentBg = true,
+            Disable3D = true,
+            HandleInputLocally = false,
+            Size = new Vector2I(640, 360),
+            RenderTargetUpdateMode = SubViewport.UpdateMode.Always,
+        };
+        AddChild(_darkView);
+        var pass = new ColorRect { Name = "DarknessPass", Material = _material, MouseFilter = Control.MouseFilterEnum.Ignore };
+        pass.SetAnchorsPreset(Control.LayoutPreset.FullRect);
+        _darkView.AddChild(pass);
+        _rect = new TextureRect
+        {
+            Name = "Darkness",
+            Texture = _darkView.GetTexture(),
+            ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+            StretchMode = TextureRect.StretchModeEnum.Scale,
+            TextureFilter = CanvasItem.TextureFilterEnum.Linear,
+            Material = new CanvasItemMaterial { BlendMode = CanvasItemMaterial.BlendModeEnum.PremultAlpha },
+            MouseFilter = Control.MouseFilterEnum.Ignore,
+        };
         _rect.SetAnchorsPreset(Control.LayoutPreset.FullRect);
         AddChild(_rect);
         Weather = new WeatherLayer { Name = "Weather", City = City };
@@ -99,10 +139,32 @@ public partial class LightingLayer : CanvasLayer
         var state = GameManager.Instance.State;
         var clock = state.Save.ClockMinutes;
         var view = GetViewport().GetVisibleRect().Size;
+        // Sem a escuridão na tela (testes de custo, menus que a escondem), a SubViewport também para.
+        var showDark = _rect.IsVisibleInTree();
+        var mode = showDark ? SubViewport.UpdateMode.Always : SubViewport.UpdateMode.Disabled;
+        if (_darkView.RenderTargetUpdateMode != mode)
+        {
+            _darkView.RenderTargetUpdateMode = mode;
+        }
+
         if (view != _viewSize)
         {
             _viewSize = view;
+            _darkView.Size = new Vector2I(Math.Max(1, (int)MathF.Ceiling(view.X)), Math.Max(1, (int)MathF.Ceiling(view.Y)));
             _material.SetShaderParameter(ViewSizeParam, view);
+        }
+
+        // Só a rua tem a cor da hora; interiores e Brechas seguem a v2.
+        _grade.Visible = _streetLamps;
+        if (_streetLamps)
+        {
+            var g = CityLighting.StreetGrade(clock);
+            CurrentGrade = new Color(g.R, g.G, g.B);
+            _grade.Color = CurrentGrade;
+        }
+        else
+        {
+            CurrentGrade = Colors.White;
         }
 
         var darkness = CityLighting.Darkness(_map, clock);
@@ -118,7 +180,7 @@ public partial class LightingLayer : CanvasLayer
         var flip = player.Body.Scale.X < 0;
         var playerPos = player.GlobalPosition + new Vector2(flip ? -8f : 8f, -10f);
         PlayerLightRadius = CityLighting.PlayerLightRadius(state.Hp <= 0, state.Stats.Light);
-        count = Push(count, xf, zoom, playerPos, PlayerLightRadius, CityLighting.AmberKind, CityLighting.PlayerHoleAlpha, 1f);
+        count = Push(count, xf, zoom, playerPos, PlayerLightRadius, CityLighting.AmberKind, CityLighting.PlayerHoleAlpha, 1f, CityLighting.HoleRadiusScale);
 
         // Luzes dinâmicas (portais, Combate…).
         var emitters = LightEmitter.Active;
@@ -130,7 +192,7 @@ public partial class LightingLayer : CanvasLayer
                 continue;
             }
 
-            count = Push(count, xf, zoom, e.GlobalPosition, e.Radius, e.Kind, CityLighting.HoleAlpha * e.Intensity, e.Intensity);
+            count = Push(count, xf, zoom, e.GlobalPosition, e.Radius, e.Kind, CityLighting.HoleAlpha * e.Intensity, e.Intensity * e.GlowBoost, CityLighting.HoleRadiusScale);
         }
 
         // Luzes do mapa com cintilação; na rua, cada lâmpada acende no seu minuto.
@@ -154,7 +216,9 @@ public partial class LightingLayer : CanvasLayer
             }
 
             var radius = l.Radius * CityLighting.Flicker(i, _time);
-            count = Push(count, xf, zoom, new Vector2(l.X, l.Y), radius, l.Kind, CityLighting.HoleAlpha * level, level);
+            var holeAlpha = (_streetLamps ? CityLighting.StreetLampHoleAlpha : CityLighting.HoleAlpha) * level;
+            var holeScale = _streetLamps ? CityLighting.StreetLampHoleScale : CityLighting.HoleRadiusScale;
+            count = Push(count, xf, zoom, new Vector2(l.X, l.Y), radius, l.Kind, holeAlpha, level, holeScale);
         }
 
         LitStreetLamps = lit;
@@ -168,7 +232,7 @@ public partial class LightingLayer : CanvasLayer
     }
 
     /// <summary>Grava a luz na coluna <paramref name="index"/> se ela aparece na tela; devolve o próximo índice livre.</summary>
-    private int Push(int index, Transform2D xf, float zoom, Vector2 world, float radius, string kind, float holeAlpha, float glowLevel)
+    private int Push(int index, Transform2D xf, float zoom, Vector2 world, float radius, string kind, float holeAlpha, float glowLevel, float holeScale)
     {
         if (index >= MaxLights)
         {
@@ -176,7 +240,7 @@ public partial class LightingLayer : CanvasLayer
         }
 
         var screen = xf * world;
-        var hole = radius * CityLighting.HoleRadiusScale * zoom;
+        var hole = radius * holeScale * zoom;
         if (screen.X + hole < 0 || screen.Y + hole < 0 || screen.X - hole > _viewSize.X || screen.Y - hole > _viewSize.Y)
         {
             return index;

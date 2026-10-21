@@ -28,11 +28,13 @@ public partial class SmokeTest
             var catalog = World.World.Catalog;
 
             // spec 01 §4.5 (tabela) + D39 (sem o salto das 22h): base 0,16 até 17h; 0,50 às 19h; 0,62 da 22h às 05h;
-            // 0,56 às 05:30. Rua ×0,6; Guilda/Estalagem ×0,55 + 0,14; lojas ×0,45 + 0,12.
+            // 0,56 às 05:30. Rua × (0,6 → 1,15 conforme a base escurece, B2-D51: pedido do dono, a noite da v2 escurecia
+            // pouco); Guilda/Estalagem ×0,55 + 0,14; lojas ×0,45 + 0,12.
+            static float Street(float d) => d * (0.6f + (0.55f * Math.Clamp((d - 0.16f) / 0.46f, 0f, 1f)));
             var cases = new (string Map, double Clock, float Expected, string Shot)[]
             {
-                ("forge", 19 * 60 + 30, 0.6f * (0.50f + (0.12f * 0.5f / 3f)), "t-forja-1930"),
-                ("forge", 29 * 60 + 30, 0.6f * 0.56f, "t-forja-madrugada-0530"),
+                ("forge", 19 * 60 + 30, Street(0.50f + (0.12f * 0.5f / 3f)), "t-forja-1930"),
+                ("forge", 29 * 60 + 30, Street(0.56f), "t-forja-madrugada-0530"),
                 ("inn", 16 * 60 + 30, (0.16f * 0.55f) + 0.14f, "t-estalagem-dia"),
                 ("inn", 26 * 60, (0.62f * 0.55f) + 0.14f, "t-estalagem-noite"),
                 ("shop_arm", 26 * 60, (0.62f * 0.45f) + 0.12f, "t-loja-noite"),

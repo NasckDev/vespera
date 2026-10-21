@@ -69,8 +69,8 @@ public class CityLifeTest
         AssertThat(CityLighting.Darkness(Maps["inn"], 960)).IsEqualApprox(0.228f, 0.0001f);
         AssertThat(CityLighting.Darkness(Maps["shop_arm"], 960)).IsEqualApprox(0.192f, 0.0001f);
 
-        // Noite fechada (0,62).
-        AssertThat(CityLighting.Darkness(Maps["forge"], 24 * 60)).IsEqualApprox(0.372f, 0.0001f);
+        // Noite fechada (0,62). Rua da Forja: 0,62 × 1,15 (B2-D51; a v2 parava em 0,372).
+        AssertThat(CityLighting.Darkness(Maps["forge"], 24 * 60)).IsEqualApprox(0.713f, 0.0001f);
         AssertThat(CityLighting.Darkness(Maps["guild"], 24 * 60)).IsEqualApprox(0.481f, 0.0001f);
         AssertThat(CityLighting.Darkness(Maps["shop_rel"], 24 * 60)).IsEqualApprox(0.399f, 0.0001f);
 
@@ -78,6 +78,31 @@ public class CityLifeTest
         AssertThat(CityLighting.Darkness(Maps["fish2"], 960)).IsEqual(0.26f);
         AssertThat(CityLighting.Darkness(Maps["cath"], 24 * 60)).IsEqual(0.26f);
         AssertThat(CityLighting.Darkness(Maps["core"], 24 * 60)).IsEqual(0.40f);
+    }
+
+    [TestCase]
+    public void StreetNightIsAnEventButStaysContinuous()
+    {
+        // B2-D51: dia igual à v2, véspera escurecendo de verdade, noite fechada 0,713, sem saltos minuto a minuto.
+        var forge = Maps["forge"];
+        AssertThat(CityLighting.Darkness(forge, 16 * 60)).IsEqualApprox(0.096f, 0.0001f);
+        AssertThat(CityLighting.Darkness(forge, 19 * 60)).IsEqualApprox(0.5f * 1.0065f, 0.002f);
+        AssertThat(CityLighting.Darkness(forge, 22 * 60)).IsEqualApprox(0.713f, 0.0001f);
+        for (var m = 16 * 60.0; m < 30 * 60; m += 1)
+        {
+            AssertThat(Math.Abs(CityLighting.Darkness(forge, m + 1) - CityLighting.Darkness(forge, m))).IsLess(0.012f);
+            var a = CityLighting.StreetGrade(m);
+            var b = CityLighting.StreetGrade(m + 1);
+            AssertThat(Math.Abs(a.R - b.R) + Math.Abs(a.G - b.G) + Math.Abs(a.B - b.B)).IsLess(0.02f);
+        }
+
+        // Tarde neutra, véspera quente (mais vermelho que azul), noite fria (mais azul que vermelho).
+        AssertThat(CityLighting.StreetGrade(16 * 60)).IsEqual(new LightColor(1f, 1f, 1f));
+        var vespera = CityLighting.StreetGrade(18 * 60);
+        AssertThat(vespera.R).IsGreater(vespera.B);
+        var night = CityLighting.StreetGrade(23 * 60);
+        AssertThat(night.B).IsGreater(night.R);
+        AssertThat(night.R).IsGreaterEqual(0.75f); // legível: nunca escurece mais que 25% num canal
     }
 
     [TestCase]
