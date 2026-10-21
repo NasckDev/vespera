@@ -11,8 +11,11 @@ Formato do layout (coordenadas em px do mapa; formas: {"poly": [[x,y],...]}, {"r
   "base": "mask" | "shapes" | "none",   # ponto de partida: máscara da v2, formas walk/block do maps.json, ou nada
   "walk":  [ {forma, "note": "escada oeste"} ],      # áreas que PASSAM a ser andáveis (aplicado depois da base)
   "block": [ {forma, "note": "casa"} ],              # áreas que PASSAM a ser bloqueadas (aplicado por último)
-  "occluders": [ {"poly": [...], "baseY": 512, "note": "lampião"} ],   # recortes da arte desenhados NA FRENTE do
-               #   jogador quando o pé dele está acima de baseY (atrás do objeto); ficam translúcidos se cobrirem o jogador
+  "occluders": [ {"poly": [...], "baseY": 512, "sway": false, "note": "lampião"} ],   # recortes da arte desenhados NA
+               #   FRENTE do jogador quando o pé dele está acima de baseY (atrás do objeto); ficam translúcidos se cobrirem o
+               #   jogador. "sway": true = balança com o vento (árvores, bandeiras, toldos).
+  "water":  [ {forma, "note": "canal"} ],          # superfícies de água (brilho animado; balsas navegam aqui)
+  "ambient": [ {"kind": "water|fire|forge|crowd|wind|bells|birds", "x": 0, "y": 0, "r": 160} ],  # sons ambiente posicionais
   "props":  [ {"kind": "barrel|crate|crate2|sack|urn", "x": 0, "y": 0} ],     # quebráveis (atlas pr_*)
   "chests": [ {"x": 0, "y": 0, "tier": 0} ],                                    # baús (atlas pr_chest0..4)
   "decor":  [ {"kind": "lamp|flower|boat|fishing|sign|bench|fountain|stall|inspect", "x": 0, "y": 0,
@@ -199,7 +202,7 @@ def cmd_init(args, maps):
             print(f"{mid}: já existe {p.relative_to(ROOT)}")
             continue
         layout = {"cell": CELL, "base": "mask" if m.get("mask") else "shapes",
-                  "walk": [], "block": [], "occluders": [], "props": [], "chests": [], "decor": []}
+                  "walk": [], "block": [], "occluders": [], "water": [], "props": [], "chests": [], "decor": [], "ambient": []}
         p.write_text(json.dumps(layout, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         print(f"{mid}: criado {p.relative_to(ROOT)}")
 
@@ -272,6 +275,15 @@ def render(m: dict, layout: dict, crop, scale: float, grid_step: int) -> Image.I
     img = Image.alpha_composite(img, over)
     d = ImageDraw.Draw(img)
     f = font(14)
+    for wa in layout.get("water", []):
+        tmp = Image.new("L", img.size, 0)
+        draw_shape(ImageDraw.Draw(tmp), wa, 255, 1)
+        img = Image.composite(Image.new("RGBA", img.size, (0, 140, 255, 255)), img, tmp.point(lambda v: 70 if v else 0))
+        d = ImageDraw.Draw(img)
+    for am in layout.get("ambient", []):
+        x, y, r = am["x"], am["y"], am.get("r", 160)
+        d.ellipse([x - r, y - r, x + r, y + r], outline=(180, 120, 255, 200), width=1)
+        d.text((x + 4, y + 4), f"♪{am['kind']}", fill=(200, 150, 255, 255), font=f)
     for oc in layout.get("occluders", []):
         if "poly" in oc:
             d.line([tuple(p) for p in oc["poly"]] + [tuple(oc["poly"][0])], fill=(0, 230, 255, 255), width=1)
