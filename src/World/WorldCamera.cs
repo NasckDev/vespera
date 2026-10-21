@@ -66,7 +66,8 @@ public partial class WorldCamera : Camera2D
     }
 
     /// <summary>Tremor: mantém o maior entre o atual e <paramref name="amount"/> (<c>G.shake = max(G.shake, n)</c>).</summary>
-    public void Shake(float amount) => _shake = MathF.Max(_shake, amount);
+    /// <summary>Pede tremor (mantém o maior). Desligado na opção "Tremor de tela" (<c>OPT.shake</c>, <c>extra.js:162</c>).</summary>
+    public void Shake(float amount) => _shake = GameSettings.ScreenShake ? MathF.Max(_shake, amount) : 0f;
 
     public void StopShake() => _shake = 0f;
 
