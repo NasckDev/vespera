@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://src/World/WorldCamera.cs" id="2_camera"]
 [ext_resource type="PackedScene" path="res://scenes/Player/Player.tscn" id="3_player"]
 [ext_resource type="PackedScene" path="res://scenes/UI/Hud.tscn" id="4_hud"]
+[ext_resource type="Script" path="res://src/World/City/CityLife.cs" id="5_city"]
 
 [node name="World" type="Node2D" node_paths=PackedStringArray("MapSprite", "CollisionRoot", "Entities", "InteractablesRoot", "Player", "Camera", "FadeRect")]
 script = ExtResource("1_world")
@@ -34,6 +35,10 @@ y_sort_enabled = true
 script = ExtResource("2_camera")
 
 [node name="Hud" parent="." instance=ExtResource("4_hud")]
+
+[node name="City" type="Node" parent="." node_paths=PackedStringArray("World")]
+script = ExtResource("5_city")
+World = NodePath("..")
 
 [node name="Fade" type="CanvasLayer" parent="."]
 layer = 90
