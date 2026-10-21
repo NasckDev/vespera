@@ -429,6 +429,7 @@ public partial class AudioManager : Node
         }
 
         _musicCurrent = _musicPlayers[0];
+        CreateWorldAudio(); // passo e ambiente do mundo (AudioManager.Ambient.cs, frente B4a)
     }
 
     /// <summary>Player que ainda toca <paramref name="stream"/> (saindo num fade), se houver.</summary>
@@ -589,6 +590,8 @@ public partial class AudioManager : Node
             p.Stream = null;
         }
 
+        hadStream |= StopWorldAudio(); // frente B4a
+
         if (hadStream)
         {
             OS.DelayMsec(ExitDrainMs);
@@ -606,6 +609,7 @@ public partial class AudioManager : Node
 
         _sfx.Clear();
         _music.Clear();
+        DisposeWorldAudio(); // frente B4a
     }
 
     private void WarnOnce(string key, string message)
