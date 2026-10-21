@@ -69,3 +69,19 @@ O protótipo v2 (HTML/JS, Claude Design) é a referência de *game feel*, conte�
 | # | Decisão | Motivo |
 |---|---|---|
 | D38 | **Do super kit entram só:** (1) a sequência do portal abrindo (`assets/sprites/fx/portal_open_0..5.png`, 6 quadros recortados com base alinhada) para a Brecha abrindo na véspera; (2) `docs/brand/reference/hud-kit.png` como **guia oficial de design da UI** (barras, retrato, números de dano, alerta de chefe, tooltip, caixa de loot, diálogo); (3) o catálogo do Arsenal (`docs/design/arsenal/`, 146 itens) como dados de referência (D17). **Não entram:** os 6 fundos 16:9 (idênticos aos mapas da v2 já no jogo), a folha de monstros (poses já no atlas), os mapas/ilustrações com texto em inglês e nomes divergentes, o painel de objetos das dungeons 6–10 (sem transparência, conteúdo futuro) e as animações do arsenal (qualidade abaixo da arte da v2). | Só o que melhora a jogabilidade sem duplicar arte ou conflitar com a v2. |
+
+## 2026-10-21 — Combate e Brechas (frente B1)
+
+Números prefixados com a frente (`B1-`) para não colidir com as outras frentes da fase B no merge.
+
+| # | Decisão | Motivo |
+|---|---|---|
+| B1-D39 | **IAs genéricas consultam as partes por índice** (0 = a da frente, 1 = a das costas), como o `knight` da v2 já fazia; parte inexistente não conta como quebrada (D6). O `caster` usa `triple` dos dados e só sai de `idle` com o jogador a ≤ 230 u. | Na v2 o `broken('jaw')` dos monstros sem `jaw` (Pescador: Isca) nunca valia; por índice o efeito da parte funciona em todos. |
+| B1-D40 | **A Lanterna perdida aparece na mesma Brecha ou na próxima Brecha do mesmo tema** (mesma sala, no ponto da morte). | As Brechas não são salvas e o id muda entre sessões; sem isso a Lanterna sumiria ao recarregar. |
+| B1-D41 | **Dois slots de Eco**: o 1º é o Eco equipado (`ecoEq`, Q da v2); o 2º é o primeiro outro Eco absorvido, na ordem em que foi obtido. Sem campo novo no save. | Pedido da fase B (2 slots) sem mudar o save v2. |
+| B1-D42 | **Ações novas** `weapon_next/prev` (roda, RB/LB), `weapon_1..5` (1–5), `potion` (R, direcional ↑), `eco_1` (Q, LT), `eco_2` (C, clique do analógico direito), `ultimate` (F/V, RT), `aim_*` (analógico direito). O Back do gamepad fica com o inventário da Interface. | Teclas da v2 (spec 01 §5.1) + gamepad (D9) sem colidir com as outras frentes. |
+| B1-D43 | **Campo de perseguição** (`ChaseField`, BFS em células de 8 u a partir do jogador, fatiado em ≤ 6000 células por frame): monstros contornam paredes, água e props quando a reta até o jogador está bloqueada; ilhas da máscara são rotuladas e **ondas só nascem onde se chega a pé até o jogador**. | Na v2 o `moveEnt` só desliza eixo a eixo: monstro nascido atrás de uma banca nunca chega e a onda trava. |
+| B1-D44 | **Objetos do mundo apanham pelo grupo `hittable`** com `Hit(int dano, Vector2 origem)` (sem depender da classe do motor): setor do golpe, onda do Martelo, orbe e flechas. A lista do grupo é refeita só em golpe/disparo (no máximo 1× por frame). | Contrato da fase B com a frente do motor; buscar o grupo por frame alocaria. |
+| B1-D45 | **Texto do combate rasterizado no tamanho da janela** (`oversampling` = fator da janela sobre 640×360) e com contorno escuro; números 7/9 u (a v2 usa ~6/7,5). | Sem isso o `DrawString` sai em 6 px e é ampliado em blocos: ilegível em monitor grande. |
+| B1-D46 | **Props sólidos não travam o passo do monstro**: o passo testa só o mapa e depois o monstro é empurrado para fora da elipse do prop (`dx² + 2,2·dy²`, raio do prop + raio de movimento). Encostado numa quina de parede, a direção do campo gira em passos de 45° até achar uma que ande. | Colado num caixote, o passo de ~0,6 u caía na faixa mais larga da elipse e o monstro ficava parado para sempre (onda travada no smoke). |
+| B1-D47 | **Avisos de golpe (telegraphs) em âmbar** (`#F2A541`, contorno `#FFD68C`), com as formas e alfas da v2. | Pedido da frente; o magenta da v2 some nas salas roxas/magenta e no Núcleo. |
