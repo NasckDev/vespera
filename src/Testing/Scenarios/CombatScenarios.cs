@@ -507,6 +507,47 @@ public partial class SmokeTest
         }
     }
 
+    [SmokeScenario("combate: lâmina, flecha e orbe acertam objetos do grupo hittable", order: 70)]
+    private async Task HitsTheHittableGroup()
+    {
+        var (world, combat) = await CombatSetup();
+        foreach (var (cls, distance) in new[] { ("sword", 16f), ("bow", 60f), ("staff", 60f) })
+        {
+            GameManager.Instance.NewGame("Bot", cls);
+            world.GoMap("forge", 800, 520, instant: true);
+            await WaitMapSettled(world);
+            var player = FindPlayer()!;
+            var target = new SmokeHittable { Position = player.GlobalPosition + new Vector2(distance, 0) };
+            world.Entities.AddChild(target);
+            try
+            {
+                SetAim(Vector2.Right);
+                await Frames(2);
+                if (cls == "bow")
+                {
+                    Input.ActionPress(InputActions.Attack);
+                    await WaitUntil(() => combat.PlayerCombat.State.Charge >= PlayerCombatState.FullChargeAt, 2, "carregar o arco");
+                    Input.ActionRelease(InputActions.Attack);
+                }
+                else
+                {
+                    await Tap(InputActions.Attack);
+                }
+
+                await WaitUntil(() => target.Hits > 0, 2, $"{cls} acertar o objeto 'hittable'");
+                Require(target.LastDamage > 0, $"{cls}: dano {target.LastDamage}");
+                Require(target.LastOrigin.X < target.Position.X, $"{cls}: origem do golpe deveria vir do lado do jogador ({target.LastOrigin})");
+                Log.Info($"{cls}: objeto 'hittable' levou {target.LastDamage} de ({target.LastOrigin.X:0},{target.LastOrigin.Y:0})");
+            }
+            finally
+            {
+                SetAim(Vector2.Zero);
+                Input.ActionRelease(InputActions.Attack);
+                target.QueueFree();
+            }
+        }
+    }
+
     // --- utilidades ---
 
     private async Task<(World.World World, CombatDirector Combat)> CombatSetup()
@@ -814,5 +855,24 @@ public partial class SmokeTest
             await _test.WaitSeconds(2.4);
             EventBus.Instance.EmitSignal(EventBus.SignalName.RespawnRequested);
         }
+    }
+}
+
+/// <summary>Objeto do mundo de mentira para o smoke: só o contrato do grupo <c>hittable</c> (<c>Hit(int, Vector2)</c>).</summary>
+internal sealed partial class SmokeHittable : Node2D
+{
+    public int Hits { get; private set; }
+
+    public int LastDamage { get; private set; }
+
+    public Vector2 LastOrigin { get; private set; }
+
+    public override void _Ready() => AddToGroup(CombatDirector.HittableGroup);
+
+    public void Hit(int damage, Vector2 origin)
+    {
+        Hits++;
+        LastDamage = damage;
+        LastOrigin = origin;
     }
 }

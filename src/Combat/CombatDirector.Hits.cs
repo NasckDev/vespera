@@ -287,8 +287,55 @@ public partial class CombatDirector
 
     // --- Props ---
 
-    /// <summary>Props quebráveis no setor do golpe (<c>meleeHit</c>).</summary>
-    public void BreakPropsInSector(Vector2 origin, float aim, float arc, float range)
+    /// <summary>Grupo dos objetos do mundo que aceitam <c>Hit(int dano, Vector2 origem)</c> (frente do motor).</summary>
+    public static readonly StringName HittableGroup = "hittable";
+
+    private static readonly StringName HitMethod = "Hit";
+    private readonly List<Node2D> _hittables = new(64);
+    private ulong _hittablesFrame = ulong.MaxValue;
+
+    /// <summary>
+    /// Objetos do grupo <see cref="HittableGroup"/> (barris, caixotes, urnas da cidade e dos interiores). Só pelo grupo e
+    /// pelo método <c>Hit</c>, sem depender da classe da outra frente. A lista é refeita no máximo uma vez por frame e
+    /// só quando há golpe (a busca no grupo aloca; nunca roda por frame sem ataque).
+    /// </summary>
+    public List<Node2D> RefreshHittables()
+    {
+        var frame = Engine.GetPhysicsFrames();
+        if (frame == _hittablesFrame)
+        {
+            return _hittables;
+        }
+
+        _hittablesFrame = frame;
+        _hittables.Clear();
+        foreach (var node in GetTree().GetNodesInGroup(HittableGroup))
+        {
+            if (node is Node2D n && n.HasMethod(HitMethod))
+            {
+                _hittables.Add(n);
+            }
+        }
+
+        return _hittables;
+    }
+
+    /// <summary>Última lista de <see cref="RefreshHittables"/> (flechas em voo usam a do disparo, sem alocar).</summary>
+    public List<Node2D> CachedHittables => _hittables;
+
+    /// <summary>Ainda vale bater no objeto (não foi liberado nem saiu do grupo ao quebrar).</summary>
+    public static bool IsHittable(Node2D node) => IsInstanceValid(node) && node.IsInsideTree() && node.IsInGroup(HittableGroup);
+
+    /// <summary>Bate no objeto do grupo: <c>Hit(dano, origem)</c>, faíscas e um hitstop curto.</summary>
+    public void HitObject(Node2D node, double damage, Vector2 origin)
+    {
+        node.Call(HitMethod, Math.Max(1, JsMath.Round(damage)), origin);
+        Fx.Burst(node.GlobalPosition - new Vector2(0, 8), 6, CombatPalette.Wood, new BurstOptions { V1 = 60, Up = 30, Gravity = 200 });
+        Clock.AtLeast(0.03);
+    }
+
+    /// <summary>Props quebráveis e objetos do grupo <c>hittable</c> no setor do golpe (<c>meleeHit</c>).</summary>
+    public void BreakPropsInSector(Vector2 origin, float aim, float arc, float range, double damage)
     {
         for (var i = 0; i < _props.Count; i++)
         {
@@ -298,10 +345,26 @@ public partial class CombatDirector
                 BreakProp(pp);
             }
         }
+
+        var objects = RefreshHittables();
+        for (var i = 0; i < objects.Count; i++)
+        {
+            var o = objects[i];
+            if (!IsHittable(o))
+            {
+                continue;
+            }
+
+            var at = o.GlobalPosition;
+            if (CombatMath.PropInSector(origin.X, origin.Y, at.X, at.Y, aim, arc, range))
+            {
+                HitObject(o, damage, origin);
+            }
+        }
     }
 
-    /// <summary>Props quebráveis a menos de <paramref name="radius"/> (orbe).</summary>
-    public void BreakPropsNear(Vector2 at, float radius)
+    /// <summary>Props quebráveis e objetos <c>hittable</c> a menos de <paramref name="radius"/> (orbe, ondas).</summary>
+    public void BreakPropsNear(Vector2 at, float radius, double damage)
     {
         for (var i = 0; i < _props.Count; i++)
         {
@@ -309,6 +372,16 @@ public partial class CombatDirector
             if (pp.Breakable && !pp.Broken && pp.Position.DistanceTo(at) < radius)
             {
                 BreakProp(pp);
+            }
+        }
+
+        var objects = RefreshHittables();
+        for (var i = 0; i < objects.Count; i++)
+        {
+            var o = objects[i];
+            if (IsHittable(o) && (o.GlobalPosition - new Vector2(0, 6)).DistanceTo(at) < radius)
+            {
+                HitObject(o, damage, at);
             }
         }
     }

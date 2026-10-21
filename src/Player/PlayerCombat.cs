@@ -372,7 +372,7 @@ public sealed partial class PlayerCombat : IDisposable
             }
         }
 
-        _combat.BreakPropsInSector(origin, aim, arc, range);
+        _combat.BreakPropsInSector(origin, aim, arc, range, damage);
         if (n > 0)
         {
             _combat.Clock.AtLeast(0.035);

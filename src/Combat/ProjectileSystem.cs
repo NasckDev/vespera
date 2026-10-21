@@ -93,6 +93,10 @@ public partial class ProjectileSystem : Node2D
         q.Source = source;
         q.HitCount = 0;
         _live++;
+        if (kind is ProjectileKind.Arrow or ProjectileKind.PlayerBolt or ProjectileKind.Orb)
+        {
+            _combat.RefreshHittables(); // disparo é evento: a flecha em voo usa esta lista
+        }
     }
 
     public void Step(float dt)
@@ -163,7 +167,7 @@ public partial class ProjectileSystem : Node2D
                     }
                 }
             }
-            else if (HitMonsters(ref q))
+            else if (HitMonsters(ref q) || HitObjects(ref q))
             {
                 Deactivate(ref q);
                 continue;
@@ -318,6 +322,42 @@ public partial class ProjectileSystem : Node2D
         return false;
     }
 
+    /// <summary>
+    /// Flecha/raio do jogador contra objetos do grupo <c>hittable</c> (lista do disparo, sem alocar). O orbe explode;
+    /// os demais param no objeto. True = o projétil acabou.
+    /// </summary>
+    private bool HitObjects(ref Projectile q)
+    {
+        if (q.Kind is not (ProjectileKind.Arrow or ProjectileKind.PlayerBolt or ProjectileKind.Orb))
+        {
+            return false;
+        }
+
+        var objects = _combat.CachedHittables;
+        for (var i = 0; i < objects.Count; i++)
+        {
+            var o = objects[i];
+            if (!CombatDirector.IsHittable(o) || (o.GlobalPosition - new Vector2(0, 6)).DistanceTo(q.Position) >= q.Radius + 7)
+            {
+                continue;
+            }
+
+            if (q.Kind == ProjectileKind.Orb)
+            {
+                OrbBoom(ref q);
+            }
+            else
+            {
+                _combat.HitObject(o, q.Damage, q.Position - (q.Velocity * 0.08f));
+                _combat.Sfx("hit", q.Position);
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
     private static bool HasHit(ref Projectile q, MonsterBody m)
     {
         for (var i = 0; i < q.HitCount; i++)
@@ -346,7 +386,7 @@ public partial class ProjectileSystem : Node2D
             }
         }
 
-        _combat.BreakPropsNear(q.Position, OrbBlastRadius);
+        _combat.BreakPropsNear(q.Position, OrbBlastRadius, q.Damage);
         _combat.Sfx("boom", q.Position);
     }
 
