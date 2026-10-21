@@ -24,6 +24,8 @@ public partial class DialogScreen : Screen
 {
     public const float CharsPerSecond = 75f; // ui.js:30
     private const double ReadyDelay = 0.18; // ui.js:31
+    private const float BoxHeight = 96f; // cabe o retrato 58×70
+    private const float BoxHeightNoPortrait = 66f; // sem retrato (placas, portal, oficinas) a caixa não sobra vazia
 
     private static readonly Color RowText = new("#ddd2e4");
     private static readonly Color SubDisabled = new("#5d5366");
@@ -59,8 +61,9 @@ public partial class DialogScreen : Screen
         _box.AnchorBottom = 1;
         _box.OffsetLeft = -230;
         _box.OffsetRight = 230;
-        _box.OffsetTop = -104;
+        _box.OffsetTop = -8 - BoxHeight;
         _box.OffsetBottom = -8;
+        _box.GrowVertical = GrowDirection.Begin; // texto longo cresce para cima, nunca para fora da tela
         AddChild(_box);
 
         _portrait = IconRect.Create(string.Empty, 0);
@@ -125,6 +128,9 @@ public partial class DialogScreen : Screen
 
     public ItemTooltip Tooltip => _tooltip;
 
+    /// <summary>Retângulo do painel de opções na tela base 640×360 (smoke test).</summary>
+    public Rect2 ChoicesRect => _choicesPanel.GetGlobalRect();
+
     public override bool WasdNavigation => _choicesShown;
 
     protected override Control? DefaultFocus => _choicesShown && _rows.Count > 0 ? _rows[0] : null;
@@ -143,6 +149,7 @@ public partial class DialogScreen : Screen
         var portrait = Database.Db.Npcs.Portraits.TryGetValue(speaker, out var key) ? key : null;
         _portrait.Key = portrait ?? string.Empty;
         _portraitFrame.Visible = portrait is not null;
+        _box.OffsetTop = _box.OffsetBottom - (portrait is null ? BoxHeightNoPortrait : BoxHeight);
         _text.Text = text;
         _total = _text.GetTotalCharacterCount(); // caracteres depois do shaping (o que VisibleCharacters conta)
         _typing = 0;
@@ -351,7 +358,10 @@ public partial class DialogScreen : Screen
 
         _scroll.CustomMinimumSize = new Vector2(246, Mathf.Min(wanted + 2, 196));
         _choicesPanel.Visible = true;
-        _choicesPanel.ResetSize();
+        // Encolhe até o mínimo a partir da base: ResetSize() manteria o topo da lista anterior (mais longa) e a
+        // lista nova subiria para fora da tela.
+        _choicesPanel.OffsetBottom = _box.Position.Y - Size.Y - 6;
+        _choicesPanel.OffsetTop = _choicesPanel.OffsetBottom - _choicesPanel.GetCombinedMinimumSize().Y;
         _rows[0].GrabFocus();
     }
 
