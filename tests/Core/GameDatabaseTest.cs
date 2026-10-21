@@ -17,7 +17,7 @@ public class GameDatabaseTest
         AssertThat(db.ThemeList.Count).IsEqual(5);
         AssertThat(db.WeaponOrder.Count).IsEqual(5);
         AssertThat(db.Elements.Count).IsEqual(6);
-        AssertThat(db.Materials.Count).IsEqual(48);
+        AssertThat(db.Materials.Count).IsEqual(49); // 48 da v2 + peixe (pesca, DECISIONS D46)
         AssertThat(db.Gear.Count).IsEqual(25);
         AssertThat(db.GearSlots.Count).IsEqual(8);
         AssertThat(db.Recipes.Count).IsEqual(5);

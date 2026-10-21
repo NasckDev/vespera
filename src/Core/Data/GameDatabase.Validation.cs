@@ -301,6 +301,14 @@ public sealed partial class GameDatabase
         check.Ref(brecha.FirstTheme, Themes, "rules.brecha.firstTheme");
         check.Ref(brecha.Invasion.Alpha, Monsters, "rules.brecha.invasion.alpha");
         check.RankIndex(brecha.MaxRank, Ranks.Count, "rules.brecha.maxRank");
+
+        var world = Rules.World;
+        check.Ref(world.Flower.Material, Materials, "rules.world.flower.material");
+        check.Ref(world.Fishing.Material, Materials, "rules.world.fishing.material");
+        if (world.CharacterScale <= 0 || world.PropScale <= 0)
+        {
+            errors.Add("rules.world: characterScale e propScale precisam ser positivos");
+        }
     }
 
     private sealed class RefChecker(List<string> errors)

@@ -185,6 +185,22 @@ public partial class EventBus : Node
     [Signal]
     public delegate void PauseChangedEventHandler(bool paused);
 
+    // --- Motor do mundo (frente B4a; docs/design/api-mundo.md) ---
+    /// <summary>Mundo → todos: um quebrável do layout quebrou (<paramref name="kind"/> = barrel, crate, crate2, sack, urn).</summary>
+    [Signal]
+    public delegate void PropBrokenEventHandler(string mapId, string kind, Vector2 position);
+
+    /// <summary>Mundo → todos: um baú do layout abriu (o saque já foi dado).</summary>
+    [Signal]
+    public delegate void ChestOpenedEventHandler(string mapId, int tier, Vector2 position);
+
+    /// <summary>
+    /// Mundo → todos: o jogador usou uma decoração do layout (<paramref name="kind"/> = lamp, flower, boat, fishing, sign,
+    /// bench, fountain, stall, inspect; <paramref name="index"/> = posição na lista <c>decor</c>). Missões e conquistas escutam aqui.
+    /// </summary>
+    [Signal]
+    public delegate void WorldObjectUsedEventHandler(string kind, string mapId, int index);
+
     // --- UI ---
     /// <summary>Texto do prompt de interação ("" esconde).</summary>
     [Signal]

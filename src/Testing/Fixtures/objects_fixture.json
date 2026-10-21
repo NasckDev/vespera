@@ -1,0 +1,30 @@
+{
+  "note": "Catálogo de teste da frente B4a (motor do mundo), só para o smoke enquanto o src/Data/objects.json da frente B5 não chega. Sprites do atlas da v2.",
+  "objects": {
+    "fx_brazier": {
+      "name": "Braseiro de teste",
+      "sprite": "atlas:pr_brazier",
+      "footprint": {"ellipse": [6, 3]},
+      "occluder": true,
+      "light": {"kind": "f", "r": 40, "y": -16}
+    },
+    "fx_crystal": {
+      "name": "Cristal de teste",
+      "sprite": "atlas:pr_crys1",
+      "footprint": {"circle": [0, 0, 4]},
+      "occluder": true,
+      "sway": true
+    },
+    "fx_signpost": {
+      "name": "Placa de teste",
+      "sprite": "atlas:pr_sign",
+      "footprint": {"rect": [-4, -2, 8, 3]},
+      "interact": {"kind": "sign", "text": "Placa de teste do motor do mundo: objetos do catálogo funcionam."}
+    },
+    "fx_barrel": {
+      "name": "Barril de teste",
+      "sprite": "atlas:pr_barrel",
+      "breakable": "barrel"
+    }
+  }
+}

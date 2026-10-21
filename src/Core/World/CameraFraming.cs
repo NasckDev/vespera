@@ -68,5 +68,34 @@ public static class CameraFraming
     public static float ShakeAmplitude(float shake, float viewHeight) =>
         shake > 0.3f ? shake * viewHeight / ShakeReferenceScreenHeight : 0f;
 
+    /// <summary>Viewport base do projeto (u visíveis a zoom 1 numa tela 16:9 com escala inteira).</summary>
+    public const int BaseWidth = 640;
+
+    public const int BaseHeight = 360;
+
+    /// <summary>
+    /// Escala inteira da janela (DECISIONS D39): quantos px de tela por u. 3 em 1080p, 4 em 1440p, 6 em 4K; nunca abaixo de 1.
+    /// É a conta do Godot com <c>scale_mode=integer</c> e <c>aspect=expand</c>.
+    /// </summary>
+    public static int IntegerScale(int windowWidth, int windowHeight, int baseWidth = BaseWidth, int baseHeight = BaseHeight) =>
+        Math.Max(1, Math.Min(windowWidth / baseWidth, windowHeight / baseHeight));
+
+    /// <summary>Arredonda ao px de tela (1/<paramref name="pixelsPerUnit"/> u), como <c>floor(x + 0,5)</c>.</summary>
+    public static float SnapToPixel(float value, float pixelsPerUnit) =>
+        pixelsPerUnit <= 0f ? value : MathF.Floor((value * pixelsPerUnit) + 0.5f) / pixelsPerUnit;
+
+    /// <summary>
+    /// Fator de seguimento independente do FPS: <c>1 − e^(−taxa·dt)</c>. A 60 FPS e taxa 7 dá 0,110 (a v2 usava
+    /// <c>min(1, dt·7)</c> = 0,117); a 144 FPS o movimento é o mesmo, só que em mais passos.
+    /// </summary>
+    public static float SmoothFactor(float dt, float rate = FollowRate) => dt <= 0f ? 0f : 1f - MathF.Exp(-rate * dt);
+
+    /// <summary>Foco com deslocamento vertical próprio (personagens maiores que o da v2 olham mais alto, D41).</summary>
+    public static MapPoint Focus(MapPoint player, MapPoint? boss, float focusOffsetY)
+    {
+        var f = Focus(new MapPoint(player.X, player.Y - FocusOffsetY + focusOffsetY), boss);
+        return f;
+    }
+
     private static float Lerp(float a, float b, float t) => a + ((b - a) * t);
 }

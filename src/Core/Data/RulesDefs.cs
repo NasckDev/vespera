@@ -24,6 +24,9 @@ public sealed record RulesFile
     public required LootRules Loot { get; init; }
 
     public required BrechaRulesDef Brecha { get; init; }
+
+    /// <summary>Motor do mundo (frente B4a): proporção, movimento, oclusão, objetos e pesca. Não vem da v2 (DECISIONS D39–D47).</summary>
+    public required WorldRules World { get; init; }
 }
 
 /// <summary>Jogo novo (<c>newSave</c>, <c>core.js:208-212</c>).</summary>
@@ -298,4 +301,111 @@ public sealed record WaveRules
     public required IntRange RandomExtra { get; init; }
 
     public required double EliteChance { get; init; }
+}
+
+/// <summary>Motor do mundo (frente B4a, DECISIONS D39–D47). Números novos, fora da v2, ajustáveis pelo time.</summary>
+public sealed record WorldRules
+{
+    /// <summary>Escala de jogador, NPCs e monstros sobre o tamanho do atlas (D41: medida na porta da Estalagem).</summary>
+    public required double CharacterScale { get; init; }
+
+    /// <summary>Escala dos objetos do atlas (<c>pr_*</c>) sobre o tamanho do atlas (D41: medida nos barris pintados).</summary>
+    public required double PropScale { get; init; }
+
+    /// <summary>Medições que justificam as escalas (documentação viva; um teste confere a conta).</summary>
+    public required ProportionMeasure Calibration { get; init; }
+
+    public required MovementRules Movement { get; init; }
+
+    public required OcclusionRulesDef Occlusion { get; init; }
+
+    public required PropRules Props { get; init; }
+
+    public required FlowerRules Flower { get; init; }
+
+    public required FishingRules Fishing { get; init; }
+
+    /// <summary>Golpe provisório do jogador nos quebráveis enquanto o combate não assume (D45).</summary>
+    public required FallbackAttackRules FallbackAttack { get; init; }
+}
+
+/// <summary>Porta da Rua da Forja e barril pintado medidos no <c>map_city.png</c> (D41).</summary>
+public sealed record ProportionMeasure
+{
+    /// <summary>Altura da porta da Estalagem (u = px do mapa).</summary>
+    public required double DoorHeight { get; init; }
+
+    /// <summary>Altura do jogador sobre a altura da porta.</summary>
+    public required double PlayerToDoor { get; init; }
+
+    /// <summary>Altura opaca do <c>c_sword_front</c> no atlas (u, escala 1).</summary>
+    public required double SpriteHeight { get; init; }
+
+    public required double PaintedBarrelWidth { get; init; }
+
+    /// <summary>Largura opaca do <c>pr_barrel</c> no atlas (u, escala 1).</summary>
+    public required double BarrelSpriteWidth { get; init; }
+}
+
+/// <summary>Aceleração e frenagem do jogador (D42): curtas para responder na hora sem patinar.</summary>
+public sealed record MovementRules
+{
+    /// <summary>Segundos de parado até a velocidade máxima.</summary>
+    public required double AccelSeconds { get; init; }
+
+    /// <summary>Segundos da velocidade máxima até parar.</summary>
+    public required double DecelSeconds { get; init; }
+}
+
+public sealed record OcclusionRulesDef
+{
+    /// <summary>Opacidade do recorte quando ele cobre o jogador.</summary>
+    public required double CoveredAlpha { get; init; }
+
+    /// <summary>Velocidade do fade (1/s, aproximação exponencial).</summary>
+    public required double FadeRate { get; init; }
+}
+
+public sealed record PropRules
+{
+    /// <summary>Vida por tipo de quebrável (em pontos de dano; a Lâmina tira 12).</summary>
+    public required IReadOnlyDictionary<string, int> Hp { get; init; }
+
+    public required int FallbackHp { get; init; }
+}
+
+public sealed record FlowerRules
+{
+    public required string Material { get; init; }
+
+    public required int Amount { get; init; }
+
+    /// <summary>Segundos até a flor colhida crescer de novo (também volta no dia seguinte).</summary>
+    public required double RegrowSeconds { get; init; }
+}
+
+public sealed record FishingRules
+{
+    public required string Material { get; init; }
+
+    /// <summary>Espera até o peixe morder (s).</summary>
+    public required NumRange BiteDelay { get; init; }
+
+    /// <summary>Largura da faixa certa na barra (0–1).</summary>
+    public required double ZoneWidth { get; init; }
+
+    /// <summary>Segundos de uma ida da agulha de uma ponta à outra.</summary>
+    public required double SweepSeconds { get; init; }
+
+    /// <summary>Idas da agulha até o peixe escapar.</summary>
+    public required int MaxSweeps { get; init; }
+}
+
+public sealed record FallbackAttackRules
+{
+    /// <summary>Alcance (u) para armas sem <c>range</c> nos dados.</summary>
+    public required double Range { get; init; }
+
+    /// <summary>Arco (rad) para armas sem <c>arc</c> nos dados.</summary>
+    public required double Arc { get; init; }
 }

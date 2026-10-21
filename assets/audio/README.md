@@ -8,6 +8,7 @@ Os scripts em `tools/audio/` são código do projeto (licença MIT) e foram escr
 |---|---|---|
 | `sfx/` | 18 efeitos, WAV 16-bit 44.1 kHz mono | `tools/audio/gen_sfx.py` |
 | `music/` | 3 loops (`city_day`, `vespera`, `brecha`), WAV 16-bit 44.1 kHz mono | `tools/audio/gen_music.py` |
+| `sfx/step.wav`, `ambient/` | passo do jogador e 7 loops de ambiente posicionais (`water`, `fire`, `forge`, `crowd`, `wind`, `bells`, `birds`), frente B4a | `tools/audio/gen_world.py` |
 
 ## Regenerar
 
@@ -16,10 +17,11 @@ Python 3, só biblioteca padrão (sem numpy). Saída determinística (seed fixa)
 ```bash
 python tools/audio/gen_sfx.py      # ~5 s
 python tools/audio/gen_music.py    # ~3 min em Python puro (--only city_day,brecha para gerar só algumas)
+python tools/audio/gen_world.py    # ~15 s: step + loops de ambiente
 "$GODOT" --headless --path . --import
 ```
 
-Não apague os `.wav.import`: os de `music/` ligam o loop (`edit/loop_mode=2`, Forward, do início ao fim).
+Não apague os `.wav.import`: os de `music/` e `ambient/` ligam o loop (`edit/loop_mode=2`, Forward, do início ao fim).
 
 ## Efeitos (`sfx/`)
 

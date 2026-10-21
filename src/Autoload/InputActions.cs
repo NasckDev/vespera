@@ -16,6 +16,9 @@ public static class InputActions
     public static readonly StringName Lantern = "lantern";
     public static readonly StringName Pause = "pause";
 
+    /// <summary>Minimapa em tela cheia: M, Tab ou Back do gamepad (frente B4a, DECISIONS D47).</summary>
+    public static readonly StringName Map = "map";
+
     /// <summary>Só em build de debug: concede XP para testar HUD e ranks.</summary>
     public static readonly StringName DebugGrantXp = "debug_grant_xp";
 }

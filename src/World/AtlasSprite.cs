@@ -4,7 +4,9 @@ namespace Vespera.World;
 
 /// <summary>
 /// Sprite da v2 por nome (spec 01 §9.1): textura do recorte, <c>offset = -âncora</c> (pivô no pé) e
-/// <c>scale = SpriteScale / k</c>, então o nó fica na posição do pé em u. Para espelhar, use <c>scale.x = -1</c> num
+/// <c>scale = SpriteScale × escala global / k</c>, então o nó fica na posição do pé em u. A escala global
+/// (<see cref="WorldScale"/>, DECISIONS D41) vem da <see cref="ScaleClass"/>: personagens (<c>c_*</c>, <c>npc_*</c>, monstros,
+/// sombra) × <c>characterScale</c>, objetos (<c>pr_*</c>) × <c>propScale</c>, o resto × 1. Para espelhar, use <c>scale.x = -1</c> num
 /// <see cref="Node2D"/> pai (gira em torno da âncora, como <c>ctx.scale(-1, 1)</c>). Trocar <see cref="Key"/> só
 /// troca a textura/offset; não aloca se a chave for a mesma.
 /// </summary>
@@ -13,6 +15,7 @@ public partial class AtlasSprite : Sprite2D
 {
     private string _key = string.Empty;
     private float _spriteScale = 1f;
+    private SpriteScaleClass _scaleClass = SpriteScaleClass.Auto;
 
     /// <summary>Nome do recorte (ex.: <c>c_sword_front</c>, <c>shadow</c>, <c>cnev_f</c>).</summary>
     [Export]
@@ -49,6 +52,21 @@ public partial class AtlasSprite : Sprite2D
         }
     }
 
+    /// <summary>Escala global aplicada (D41). <c>Auto</c> decide pela chave.</summary>
+    [Export]
+    public SpriteScaleClass ScaleClass
+    {
+        get => _scaleClass;
+        set
+        {
+            _scaleClass = value;
+            if (IsNodeReady())
+            {
+                Apply();
+            }
+        }
+    }
+
     /// <summary>Densidade (px por u) do recorte atual; 1 sem recorte.</summary>
     public float Density { get; private set; } = 1f;
 
@@ -66,6 +84,6 @@ public partial class AtlasSprite : Sprite2D
         Centered = false;
         Offset = -frame.Anchor;
         Density = frame.Density;
-        Scale = Vector2.One * (_spriteScale / frame.Density);
+        Scale = Vector2.One * (_spriteScale * WorldScale.For(_key, _scaleClass) / frame.Density);
     }
 }

@@ -384,6 +384,14 @@
       "rarity": "raro",
       "value": 25,
       "desc": "O brasão de uma Casa esquecida."
+    },
+    {
+      "id": "peixe",
+      "name": "Peixe do Canal",
+      "icon": "i_fish",
+      "rarity": "comum",
+      "value": 3,
+      "desc": "Pescado nos cais da Rua da Forja na hora em que as lanternas acendem. Lúcia frita com erva."
     }
   ]
 }
