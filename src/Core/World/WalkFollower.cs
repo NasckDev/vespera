@@ -55,11 +55,20 @@ public sealed class WalkFollower
     /// <summary>Sem progresso por tanto tempo = travado.</summary>
     public const double StuckSeconds = 0.3;
 
+    /// <summary>
+    /// Andando sem chegar mais perto do próximo ponto (ir e voltar numa quina, escorregar de um lado para o outro) por
+    /// tanto tempo também é travado.
+    /// </summary>
+    public const double NoApproachSeconds = 1.5;
+
     private readonly List<MapPoint> _path = [];
     private int _index;
     private double _noProgress;
     private double _yielded;
     private double _ghost;
+    private int _watchIndex = -1;
+    private float _bestDistance;
+    private double _sinceBest;
 
     public WalkFollower(float x, float y, float radius = WalkMover.NpcRadius)
     {
@@ -108,6 +117,7 @@ public sealed class WalkFollower
         _path.Clear();
         _index = 0;
         _noProgress = 0;
+        _watchIndex = -1;
     }
 
     /// <summary>Copia <paramref name="points"/> a partir de <paramref name="startIndex"/> como caminho atual.</summary>
@@ -122,6 +132,7 @@ public sealed class WalkFollower
 
         _index = 0;
         _noProgress = 0;
+        _watchIndex = -1;
     }
 
     /// <summary>Planeja daqui até <paramref name="to"/>. False = não há caminho (o atual é descartado).</summary>
@@ -136,6 +147,7 @@ public sealed class WalkFollower
 
         _index = _path.Count > 1 ? 1 : 0;
         _noProgress = 0;
+        _watchIndex = -1;
         return true;
     }
 
@@ -230,12 +242,27 @@ public sealed class WalkFollower
             _yielded = Math.Max(0, _yielded - dt);
         }
 
-        if (_noProgress < StuckSeconds)
+        // Vigia: a distância até o ponto da vez tem que cair de vez em quando.
+        var next = _path[_index];
+        var distance = WalkMover.Hypot(next.X - X, next.Y - Y);
+        if (_watchIndex != _index || distance < _bestDistance - 0.5f)
+        {
+            _watchIndex = _index;
+            _bestDistance = distance;
+            _sinceBest = 0;
+        }
+        else
+        {
+            _sinceBest += dt;
+        }
+
+        if (_noProgress < StuckSeconds && _sinceBest < NoApproachSeconds)
         {
             return WalkStatus.Moving;
         }
 
         _noProgress = 0;
+        _watchIndex = -1;
         if (_index == _path.Count - 1 && WalkMover.Hypot(_path[^1].X - X, _path[^1].Y - Y) < arriveDistance)
         {
             _index = _path.Count; // perto o bastante do fim (d < 3 da v2)
