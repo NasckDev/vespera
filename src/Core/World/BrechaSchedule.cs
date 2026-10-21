@@ -176,16 +176,16 @@ public sealed class BrechaSchedule
         return null;
     }
 
-    /// <summary>A Brecha que rompeu e ainda não foi resolvida, ou null.</summary>
+    /// <summary>A Brecha da invasão em curso: a última que rompeu e ainda não foi resolvida (<c>G.invasion.b</c>), ou null.</summary>
     public BrechaInstance? Ruptured
     {
         get
         {
-            foreach (var b in _brechas)
+            for (var i = _brechas.Count - 1; i >= 0; i--)
             {
-                if (b.Status == BrechaStatus.Ruptured)
+                if (_brechas[i].Status == BrechaStatus.Ruptured)
                 {
-                    return b;
+                    return _brechas[i];
                 }
             }
 
@@ -314,8 +314,12 @@ public sealed class BrechaSchedule
         return run;
     }
 
-    /// <summary>Invasão resolvida (<c>resolveInvasion</c>): a Brecha rompida fecha; a próxima abre em até <c>R(35, 55)</c> s.</summary>
-    public BrechaInstance? ResolveInvasion()
+    /// <summary>
+    /// Invasão resolvida (<c>resolveInvasion</c>): fecha a Brecha da invasão e toda outra que tenha rompido enquanto
+    /// ela durava (a Rua da Forja ficou limpa; na v2 a anterior ficava "rompida" para sempre, B2-D49). A próxima abre em
+    /// até <c>R(35, 55)</c> s. Devolve a Brecha da invasão; todas as que fecharam vão para <paramref name="closed"/>.
+    /// </summary>
+    public BrechaInstance? ResolveInvasion(List<BrechaInstance>? closed = null)
     {
         var ruptured = Ruptured;
         if (ruptured is null)
@@ -323,7 +327,15 @@ public sealed class BrechaSchedule
             return null;
         }
 
-        ruptured.Status = BrechaStatus.Closed;
+        foreach (var b in _brechas)
+        {
+            if (b.Status == BrechaStatus.Ruptured)
+            {
+                b.Status = BrechaStatus.Closed;
+                closed?.Add(b);
+            }
+        }
+
         NextOpenIn = Math.Min(NextOpenIn, _random.Range(AfterInvasion));
         return ruptured;
     }
@@ -345,11 +357,18 @@ public sealed class BrechaSchedule
             }
         }
 
-        // slice(-5): sai a mais antiga, mas nunca uma aberta, rompida ou a da caçada em curso.
+        // slice(-5): sai a mais antiga, mas nunca uma aberta, a da caçada em curso ou a da invasão em curso (a última
+        // que rompeu). Rompidas antes dela já não têm portal nem invasão própria: saem depois das fechadas (B2-D49).
+        TrimOldest(BrechaStatus.Closed, null);
+        TrimOldest(BrechaStatus.Ruptured, Ruptured);
+    }
+
+    private void TrimOldest(BrechaStatus status, BrechaInstance? keep)
+    {
         for (var i = 0; i < _brechas.Count && _brechas.Count > MaxListed;)
         {
             var b = _brechas[i];
-            if (b.Status == BrechaStatus.Closed && b != Running)
+            if (b.Status == status && b != Running && b != keep)
             {
                 _brechas.RemoveAt(i);
             }

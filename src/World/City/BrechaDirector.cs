@@ -24,6 +24,7 @@ public sealed class BrechaDirector(CityLife city)
 
     private readonly List<BrechaEvent> _events = new(8);
     private readonly PortalVisual?[] _visuals = new PortalVisual?[2];
+    private readonly List<BrechaInstance> _resolved = new(4);
     private BrechaSchedule? _schedule;
     private bool _invasion;
 
@@ -294,9 +295,13 @@ public sealed class BrechaDirector(CityLife city)
     private void OnInvasionStateChanged(bool active)
     {
         _invasion = active;
-        if (!active && Schedule.ResolveInvasion() is { } resolved)
+        _resolved.Clear();
+        if (!active && Schedule.ResolveInvasion(_resolved) is not null)
         {
-            EventBus.Instance.EmitSignal(EventBus.SignalName.BrechaStatusChanged, resolved.Id, (int)resolved.Status);
+            foreach (var b in _resolved)
+            {
+                EventBus.Instance.EmitSignal(EventBus.SignalName.BrechaStatusChanged, b.Id, (int)b.Status);
+            }
         }
     }
 }
