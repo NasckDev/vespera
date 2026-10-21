@@ -1073,6 +1073,93 @@ public partial class SmokeTest
         }
     }
 
+    [SmokeScenario("cidade (qa): invasão deixa a Rua da Forja visivelmente rosada, de dia e de noite", order: 80)]
+    private async Task QaInvasionTintVisible()
+    {
+        if (DisplayServer.GetName() == "headless")
+        {
+            Log.Info("cidade (qa): tinta da invasão só com janela (lê os pixels da tela)");
+            return;
+        }
+
+        var (world, city) = await StartCity("forge", new Vector2(800, 520), 16 * 60 + 30);
+        var bus = EventBus.Instance;
+        try
+        {
+            city.TimeScale = 0f;
+            city.SetSimulationEnabled(false); // sem moradores andando entre os dois prints
+            var player = FindPlayer()!;
+            var report = new List<string>();
+            var problems = new List<string>();
+            foreach (var (clock, name) in new[] { (16.0 * 60 + 30, "dia"), (22.0 * 60, "noite") })
+            {
+                GameManager.Instance.State.Save.ClockMinutes = clock;
+                player.Teleport(world.CorrectToWalkable(new Vector2(800, 520)));
+                world.Camera.Snap();
+                bus.EmitSignal(EventBus.SignalName.InvasionStateChanged, false);
+                await WaitSeconds(0.3);
+                var calm = await MeanScreenColor();
+                bus.EmitSignal(EventBus.SignalName.InvasionStateChanged, true);
+                Require(city.Brechas.InvasionActive, "InvasionStateChanged(true) deveria ligar a invasão");
+                await WaitSeconds(0.6); // pico do pulso 0,06 + 0,04 sin(3t) passa em 0,5 s
+                var best = 0f;
+                var invaded = calm;
+                for (var k = 0; k < 6; k++)
+                {
+                    var c = await MeanScreenColor();
+                    var pink = Pink(c) - Pink(calm);
+                    if (pink > best)
+                    {
+                        best = pink;
+                        invaded = c;
+                    }
+
+                    await WaitSeconds(0.17);
+                }
+
+                await Shot($"qa-invasao-{name}");
+                bus.EmitSignal(EventBus.SignalName.InvasionStateChanged, false);
+                report.Add($"{name}: calma {calm}, invadida {invaded}, rosa +{best * 255:0.0}/255");
+                if (best * 255 < 4f)
+                {
+                    problems.Add($"{name}: com invasão a rua fica só +{best * 255:0.0}/255 mais rosada (média da tela), não dá para ver");
+                }
+            }
+
+            Log.Info($"cidade (qa): tinta da invasão — {string.Join(" | ", report)}");
+            Require(problems.Count == 0, string.Join("; ", problems));
+        }
+        finally
+        {
+            bus.EmitSignal(EventBus.SignalName.InvasionStateChanged, false);
+            StopCity(city);
+        }
+    }
+
+    /// <summary>"Rosado": vermelho e azul acima do verde (a tinta da v2 é rgb(230, 74, 142)).</summary>
+    private static float Pink(Color c) => ((c.R + c.B) / 2f) - c.G;
+
+    private async Task<Color> MeanScreenColor()
+    {
+        await ToSignal(RenderingServer.Singleton, RenderingServer.SignalName.FramePostDraw);
+        var image = GetViewport().GetTexture().GetImage();
+        double r = 0, g = 0, b = 0;
+        var n = 0;
+        for (var y = 0; y < image.GetHeight(); y += 6)
+        {
+            for (var x = 0; x < image.GetWidth(); x += 6)
+            {
+                var c = image.GetPixel(x, y);
+                r += c.R;
+                g += c.G;
+                b += c.B;
+                n++;
+            }
+        }
+
+        return new Color((float)(r / n), (float)(g / n), (float)(b / n));
+    }
+
     [SmokeScenario("estresse: cidade (qa): 50 trocas de mapa com a cidade ligada não vazam nós, rótulos nem luzes", order: 201)]
     private async Task QaFiftyMapChanges()
     {
