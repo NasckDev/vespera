@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://src/World/WorldCamera.cs" id="2_camera"]
 [ext_resource type="PackedScene" path="res://scenes/Player/Player.tscn" id="3_player"]
 [ext_resource type="PackedScene" path="res://scenes/UI/Hud.tscn" id="4_hud"]
+[ext_resource type="Script" path="res://src/Combat/CombatDirector.cs" id="5_combat"]
 
 [node name="World" type="Node2D" node_paths=PackedStringArray("MapSprite", "CollisionRoot", "Entities", "InteractablesRoot", "Player", "Camera", "FadeRect")]
 script = ExtResource("1_world")
@@ -29,6 +30,11 @@ texture_filter = 4
 y_sort_enabled = true
 
 [node name="Player" parent="Entities" instance=ExtResource("3_player")]
+
+[node name="Combat" type="Node2D" parent="." node_paths=PackedStringArray("World")]
+texture_filter = 4
+script = ExtResource("5_combat")
+World = NodePath("..")
 
 [node name="Camera" type="Camera2D" parent="."]
 script = ExtResource("2_camera")
