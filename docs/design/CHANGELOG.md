@@ -2,6 +2,7 @@
 
 Uma linha por tarefa concluída, mais recente primeiro.
 
+- 2026-10-21 — Motor do mundo (B4a): escala inteira e câmera no pixel, andar com aceleração curta e interpolação, caçador do super kit com caminhada procedural, proporção pela porta (1,75×), oclusão translúcida, água/luzes/fumaça/vagalumes, quebráveis, baús, decoração (lampião, flor, balsa, pesca, banco, placas), objetos do catálogo, sons ambiente e minimapa (B4a-D39–D47).
 - 2026-10-20 — Do super kit: animação do portal, guia de HUD e catálogo do Arsenal como referência (D38).
 - 2026-10-20 — Áudio (correções): música por local sem depender de nomes (D22), crossfade sem cortes (D23), +12 dB no Master (D18), músicas pré-carregadas, `SetBusVolume(persist)` + `SaveSettings`, pitch limitado e cenários de smoke sem depender da cena Lumeira.
 - 2026-10-20 — Áudio: 18 SFX da v2 e 3 músicas em loop gerados por script, barramentos Master/Music/SFX/UI e `AudioManager` com pool, crossfade e volumes persistidos.
