@@ -22,9 +22,12 @@ public static class CombatPalette
     public static readonly Color Cyan = new("#5fe0d0");
     public static readonly Color Orb = new("#c06cf0");
 
-    /// <summary>Telegraph no chão: preenchimento e contorno magenta (<c>render.js:98-103</c>).</summary>
-    public static readonly Color TelegraphFill = new(230 / 255f, 74 / 255f, 142 / 255f);
-    public static readonly Color TelegraphLine = new(1f, 140 / 255f, 190 / 255f);
+    /// <summary>
+    /// Telegraph no chão (<c>render.js:98-103</c>, formas e alfas da v2) em âmbar (DECISIONS B1-D47): o magenta da v2 some
+    /// nas salas roxas/magenta das Brechas e no Núcleo; o âmbar lê como "atenção" em todos os temas.
+    /// </summary>
+    public static readonly Color TelegraphFill = new(242 / 255f, 165 / 255f, 65 / 255f);
+    public static readonly Color TelegraphLine = new(1f, 214 / 255f, 140 / 255f);
     public static readonly Color SlamFill = new(110 / 255f, 230 / 255f, 90 / 255f);
     public static readonly Color LureFill = new(242 / 255f, 165 / 255f, 65 / 255f);
 

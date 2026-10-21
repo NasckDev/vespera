@@ -12,8 +12,8 @@ namespace Vespera.Combat;
 public partial class CombatOverlay : Node2D
 {
     public const int MaxFloats = 96;
-    private const int SmallFont = 6;
-    private const int BigFont = 8;
+    private const int SmallFont = 7;
+    private const int BigFont = 9;
     private const float RedFlashSeconds = 0.35f;
 
     private readonly Floater[] _floats = new Floater[MaxFloats];
@@ -91,11 +91,22 @@ public partial class CombatOverlay : Node2D
         QueueRedraw();
     }
 
+    /// <summary>
+    /// Fator da janela sobre a base 640×360 (stretch <c>canvas_items</c>, aspecto <c>keep</c>): o texto é rasterizado
+    /// nesse tamanho e fica nítido em 1080p/4K (DECISIONS B1-D45; sem ele o <c>DrawString</c> sai na base e é ampliado em blocos).
+    /// </summary>
+    private float Oversampling()
+    {
+        var window = GetTree().Root.Size;
+        return MathF.Max(1, MathF.Min(window.X / 640f, window.Y / 360f));
+    }
+
     public override void _Draw()
     {
         var view = GetViewportRect().Size;
         var xf = GetViewport().GetCanvasTransform();
-        DrawBars(xf);
+        var os = Oversampling();
+        DrawBars(xf, os);
         for (var i = 0; i < MaxFloats; i++)
         {
             ref var f = ref _floats[i];
@@ -109,8 +120,9 @@ public partial class CombatOverlay : Node2D
             var a = (1 - (MathF.Max(0, k - 0.6f) / 0.4f)) * f.Alpha;
             var size = (int)((f.Big ? BigFont : SmallFont) * (f.T < 0.08f ? 1.3f : 1f));
             var at = xf * f.World;
-            DrawString(_font, at + new Vector2(-60, 0), f.Text, HorizontalAlignment.Center, 120, size + 1, new Color(0.03f, 0.02f, 0.06f, a * 0.8f));
-            DrawString(_font, at + new Vector2(-60, -0.5f), f.Text, HorizontalAlignment.Center, 120, size, f.Color with { A = a });
+            var pos = at + new Vector2(-60, 0);
+            DrawStringOutline(_font, pos, f.Text, HorizontalAlignment.Center, 120, size, 2, new Color(0.03f, 0.02f, 0.06f, a * 0.85f), oversampling: os);
+            DrawString(_font, pos, f.Text, HorizontalAlignment.Center, 120, size, f.Color with { A = a }, oversampling: os);
         }
 
         if (_red > 0)
@@ -125,7 +137,7 @@ public partial class CombatOverlay : Node2D
     }
 
     /// <summary>Barra 26U (elite ×1,4) acima da cabeça, losangos das partes, nome da elite.</summary>
-    private void DrawBars(Transform2D xf)
+    private void DrawBars(Transform2D xf, float os)
     {
         var enemies = _combat.Enemies;
         for (var i = 0; i < enemies.Count; i++)
@@ -139,10 +151,10 @@ public partial class CombatOverlay : Node2D
             var q = xf * new Vector2((float)m.X, (float)(m.Y - (m.HitHeight * m.Def.Scale) - 8));
             var bw = MathF.Round(13 * (m.IsElite ? 1.4f : 1f));
             var x0 = q.X - (bw / 2);
-            DrawRect(new Rect2(x0 - 0.5f, q.Y - 0.5f, bw + 1, 2.5f), new Color(0.03f, 0.02f, 0.05f, 1));
-            DrawRect(new Rect2(x0, q.Y, bw, 1.5f), new Color(0.11f, 0.09f, 0.15f, 1));
+            DrawRect(new Rect2(x0 - 0.5f, q.Y - 0.5f, bw + 1, 3f), new Color(0.03f, 0.02f, 0.05f, 1));
+            DrawRect(new Rect2(x0, q.Y, bw, 2f), new Color(0.11f, 0.09f, 0.15f, 1));
             var frac = (float)Math.Clamp(m.Hp / m.MaxHp, 0, 1);
-            DrawRect(new Rect2(x0, q.Y, bw * frac, 1.5f), CombatPalette.HpBarTop);
+            DrawRect(new Rect2(x0, q.Y, bw * frac, 2f), CombatPalette.HpBarTop);
             for (var p = 0; p < m.Def.Parts.Count; p++)
             {
                 var color = m.IsPartBroken(p) ? CombatPalette.PartBroken : CombatPalette.Brecha;
@@ -151,7 +163,8 @@ public partial class CombatOverlay : Node2D
 
             if (m.IsElite)
             {
-                DrawString(_font, new Vector2(q.X - 60, q.Y - 4), m.Def.Name, HorizontalAlignment.Center, 120, 5, CombatPalette.Brecha);
+                DrawStringOutline(_font, new Vector2(q.X - 60, q.Y - 4), m.Def.Name, HorizontalAlignment.Center, 120, 6, 2, new Color(0.03f, 0.02f, 0.06f, 0.85f), oversampling: os);
+                DrawString(_font, new Vector2(q.X - 60, q.Y - 4), m.Def.Name, HorizontalAlignment.Center, 120, 6, CombatPalette.Brecha, oversampling: os);
             }
         }
     }
