@@ -80,8 +80,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     -0.2,
-     -10.2
+     -0.6,
+     -11.2
     ]
    },
    "interaction": null,
@@ -122,8 +122,8 @@
     "color": "#ffc46b",
     "radius": 36,
     "offset": [
-     -4.0,
-     -25.8
+     -2.9,
+     -24.2
     ]
    },
    "interaction": "inspect",
@@ -159,8 +159,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     0.4,
-     -8.0
+     -0.5,
+     -7.5
     ]
    },
    "interaction": null,
@@ -196,8 +196,8 @@
     "color": "#ffc46b",
     "radius": 32,
     "offset": [
-     1.0,
-     -9.0
+     5.7,
+     -6.6
     ]
    },
    "interaction": null,
@@ -233,8 +233,8 @@
     "color": "#ffc46b",
     "radius": 32,
     "offset": [
-     0.9,
-     -9.7
+     4.6,
+     -10.3
     ]
    },
    "interaction": null,
@@ -340,8 +340,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     -7.6,
-     -13.8
+     -8.7,
+     -8.3
     ]
    },
    "interaction": null,
@@ -418,8 +418,8 @@
     "color": "#ffc46b",
     "radius": 20,
     "offset": [
-     10.5,
-     -15.3
+     13.0,
+     -13.2
     ]
    },
    "interaction": "inspect",
@@ -460,8 +460,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     7.1,
-     -12.4
+     10.8,
+     -8.6
     ]
    },
    "interaction": "inspect",
@@ -502,8 +502,8 @@
     "color": "#ffc46b",
     "radius": 20,
     "offset": [
-     9.0,
-     -13.5
+     9.9,
+     -11.5
     ]
    },
    "interaction": "inspect",
@@ -544,8 +544,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     11.4,
-     -14.2
+     12.1,
+     -16.1
     ]
    },
    "interaction": "inspect",
@@ -586,8 +586,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     9.9,
-     -13.4
+     9.0,
+     -11.0
     ]
    },
    "interaction": "inspect",
@@ -628,8 +628,8 @@
     "color": "#ffc46b",
     "radius": 28,
     "offset": [
-     3.5,
-     -10.2
+     -2.4,
+     -8.4
     ]
    },
    "interaction": "inspect",
@@ -670,8 +670,8 @@
     "color": "#ffc46b",
     "radius": 32,
     "offset": [
-     -3.4,
-     -13.7
+     -5.8,
+     -8.3
     ]
    },
    "interaction": "inspect",
@@ -782,8 +782,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     -8.6,
-     -12.7
+     -10.3,
+     -9.1
     ]
    },
    "interaction": "inspect",
@@ -824,8 +824,8 @@
     "color": "#f2a541",
     "radius": 64,
     "offset": [
-     31.4,
-     -38.3
+     34.0,
+     -36.5
     ]
    },
    "interaction": "lamp",
@@ -866,8 +866,8 @@
     "color": "#f2a541",
     "radius": 40,
     "offset": [
-     -0.3,
-     -10.9
+     -1.9,
+     -12.9
     ]
    },
    "interaction": "lamp",
@@ -908,8 +908,8 @@
     "color": "#f2a541",
     "radius": 40,
     "offset": [
-     -1.1,
-     -11.4
+     -0.9,
+     -11.2
     ]
    },
    "interaction": "lamp",
@@ -950,8 +950,8 @@
     "color": "#ffc46b",
     "radius": 36,
     "offset": [
-     -1.5,
-     -30.1
+     -9.3,
+     -17.9
     ]
    },
    "interaction": null,
@@ -992,7 +992,7 @@
     "color": "#ffc46b",
     "radius": 36,
     "offset": [
-     2.3,
+     -2.2,
      -39.2
     ]
    },
@@ -1034,8 +1034,8 @@
     "color": "#ffc46b",
     "radius": 36,
     "offset": [
-     15.0,
-     -41.4
+     4.5,
+     -19.6
     ]
    },
    "interaction": null,
@@ -1076,8 +1076,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     -6.1,
-     -27.6
+     -6.2,
+     -27.7
     ]
    },
    "interaction": null,
@@ -1188,8 +1188,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     6.6,
-     -49.4
+     10.6,
+     -23.3
     ]
    },
    "interaction": "inspect",
@@ -1230,8 +1230,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     3.2,
-     -53.0
+     15.0,
+     -20.5
     ]
    },
    "interaction": "inspect",
@@ -1272,8 +1272,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     3.7,
-     -38.6
+     8.0,
+     -9.4
     ]
    },
    "interaction": "inspect",
@@ -1314,8 +1314,8 @@
     "color": "#ffc46b",
     "radius": 28,
     "offset": [
-     -5.6,
-     -16.6
+     -7.5,
+     -10.3
     ]
    },
    "interaction": null,
@@ -1356,8 +1356,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     -6.2,
-     -17.6
+     -7.6,
+     -8.7
     ]
    },
    "interaction": null,
@@ -1398,8 +1398,8 @@
     "color": "#ffc46b",
     "radius": 20,
     "offset": [
-     -4.6,
-     -30.3
+     1.2,
+     -27.0
     ]
    },
    "interaction": null,
@@ -1440,8 +1440,8 @@
     "color": "#f2a541",
     "radius": 40,
     "offset": [
-     -16.1,
-     -59.7
+     8.2,
+     -20.0
     ]
    },
    "interaction": null,
@@ -1517,8 +1517,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     13.5,
-     -18.5
+     10.8,
+     -13.7
     ]
    },
    "interaction": null,
@@ -1625,7 +1625,7 @@
     "radius": 36,
     "offset": [
      -0.1,
-     -11.0
+     -12.0
     ]
    },
    "interaction": null,
@@ -1661,8 +1661,8 @@
     "color": "#9b6bd6",
     "radius": 36,
     "offset": [
-     0.7,
-     -9.4
+     3.0,
+     -7.6
     ]
    },
    "interaction": null,
@@ -2324,7 +2324,7 @@
     "color": "#f2a541",
     "radius": 40,
     "offset": [
-     0.3,
+     -0.1,
      -9.2
     ]
    },
@@ -2366,8 +2366,8 @@
     "color": "#f2a541",
     "radius": 40,
     "offset": [
-     0.2,
-     -8.2
+     2.9,
+     -8.9
     ]
    },
    "interaction": "lamp",
@@ -2723,8 +2723,8 @@
     "color": "#ff8a3d",
     "radius": 28,
     "offset": [
-     1.4,
-     -13.2
+     1.2,
+     -15.6
     ]
    },
    "interaction": null,
@@ -2925,8 +2925,8 @@
     "color": "#f2a541",
     "radius": 64,
     "offset": [
-     36.8,
-     -28.6
+     43.3,
+     -18.2
     ]
    },
    "interaction": "lamp",
@@ -3358,8 +3358,8 @@
     "color": "#e64a8e",
     "radius": 36,
     "offset": [
-     -0.4,
-     -52.0
+     2.2,
+     -50.2
     ]
    },
    "interaction": null,
@@ -3395,8 +3395,8 @@
     "color": "#e64a8e",
     "radius": 48,
     "offset": [
-     -15.1,
-     -68.6
+     -23.6,
+     -64.0
     ]
    },
    "interaction": null,
@@ -3531,8 +3531,8 @@
     "color": "#e64a8e",
     "radius": 32,
     "offset": [
-     1.6,
-     -49.6
+     0.5,
+     -43.8
     ]
    },
    "interaction": "inspect",
@@ -3573,8 +3573,8 @@
     "color": "#e64a8e",
     "radius": 44,
     "offset": [
-     0.4,
-     -56.0
+     1.3,
+     -62.1
     ]
    },
    "interaction": "inspect",
@@ -3995,8 +3995,8 @@
     "color": "#e64a8e",
     "radius": 40,
     "offset": [
-     -0.1,
-     -15.7
+     0.3,
+     -27.1
     ]
    },
    "interaction": "inspect",
@@ -4037,8 +4037,8 @@
     "color": "#e64a8e",
     "radius": 40,
     "offset": [
-     -0.1,
-     -14.4
+     -7.2,
+     -7.2
     ]
    },
    "interaction": "inspect",
@@ -4074,8 +4074,8 @@
     "color": "#e64a8e",
     "radius": 40,
     "offset": [
-     5.8,
-     -56.9
+     5.6,
+     -57.3
     ]
    },
    "interaction": "inspect",
@@ -4116,8 +4116,8 @@
     "color": "#e64a8e",
     "radius": 40,
     "offset": [
-     2.0,
-     -34.4
+     1.6,
+     -37.5
     ]
    },
    "interaction": "inspect",
@@ -4158,8 +4158,8 @@
     "color": "#e64a8e",
     "radius": 40,
     "offset": [
-     3.6,
-     -57.7
+     3.4,
+     -70.4
     ]
    },
    "interaction": "inspect",
@@ -4200,8 +4200,8 @@
     "color": "#9b6bd6",
     "radius": 32,
     "offset": [
-     1.4,
-     -16.9
+     -1.3,
+     -19.9
     ]
    },
    "interaction": "inspect",
@@ -4382,8 +4382,8 @@
     "color": "#5b8def",
     "radius": 36,
     "offset": [
-     -1.2,
-     -26.0
+     -2.9,
+     -36.0
     ]
    },
    "interaction": "fountain",
@@ -4424,8 +4424,8 @@
     "color": "#5b8def",
     "radius": 28,
     "offset": [
-     -0.1,
-     -21.1
+     2.9,
+     -23.1
     ]
    },
    "interaction": "fountain",
@@ -4466,8 +4466,8 @@
     "color": "#5b8def",
     "radius": 40,
     "offset": [
-     6.1,
-     -34.5
+     7.8,
+     -59.1
     ]
    },
    "interaction": "fountain",
@@ -4613,8 +4613,8 @@
     "color": "#ff8a3d",
     "radius": 40,
     "offset": [
-     0.7,
-     -64.7
+     11.4,
+     -60.2
     ]
    },
    "interaction": null,
@@ -4655,8 +4655,8 @@
     "color": "#e64a8e",
     "radius": 36,
     "offset": [
-     3.1,
-     -52.4
+     1.8,
+     -44.0
     ]
    },
    "interaction": null,
@@ -4732,8 +4732,8 @@
     "color": "#f2a541",
     "radius": 40,
     "offset": [
-     -2.2,
-     -14.5
+     -8.7,
+     -14.9
     ]
    },
    "interaction": "lamp",
@@ -4774,8 +4774,8 @@
     "color": "#f2a541",
     "radius": 40,
     "offset": [
-     0.6,
-     -26.1
+     0.0,
+     -42.1
     ]
    },
    "interaction": "lamp",
@@ -4816,8 +4816,8 @@
     "color": "#f2a541",
     "radius": 40,
     "offset": [
-     -0.3,
-     -28.9
+     -1.8,
+     -18.0
     ]
    },
    "interaction": "lamp",
@@ -4893,8 +4893,8 @@
     "color": "#e64a8e",
     "radius": 36,
     "offset": [
-     1.4,
-     -63.1
+     2.2,
+     -67.1
     ]
    },
    "interaction": null,
@@ -4966,8 +4966,8 @@
     "color": "#e64a8e",
     "radius": 36,
     "offset": [
-     1.8,
-     -94.8
+     2.6,
+     -99.1
     ]
    },
    "interaction": null,
@@ -5278,8 +5278,8 @@
     "color": "#e64a8e",
     "radius": 72,
     "offset": [
-     -1.2,
-     -23.2
+     -12.8,
+     -47.1
     ]
    },
    "interaction": "inspect",
@@ -5320,8 +5320,8 @@
     "color": "#e64a8e",
     "radius": 72,
     "offset": [
-     1.5,
-     -14.7
+     -10.0,
+     -27.3
     ]
    },
    "interaction": "inspect",
@@ -5362,8 +5362,8 @@
     "color": "#e64a8e",
     "radius": 72,
     "offset": [
-     -3.5,
-     -57.7
+     -2.5,
+     -60.6
     ]
    },
    "interaction": "inspect",
@@ -5569,8 +5569,8 @@
     "color": "#e64a8e",
     "radius": 40,
     "offset": [
-     15.3,
-     -46.1
+     31.3,
+     -41.2
     ]
    },
    "interaction": null,
@@ -5636,8 +5636,8 @@
     "color": "#e64a8e",
     "radius": 32,
     "offset": [
-     0.7,
-     -19.5
+     1.0,
+     -22.7
     ]
    },
    "interaction": null,
@@ -5673,8 +5673,8 @@
     "color": "#f2a541",
     "radius": 32,
     "offset": [
-     5.1,
-     -81.7
+     2.5,
+     -86.9
     ]
    },
    "interaction": null,
@@ -5910,8 +5910,8 @@
     "color": "#e64a8e",
     "radius": 32,
     "offset": [
-     -0.4,
-     -40.7
+     2.9,
+     -46.1
     ]
    },
    "interaction": null,
@@ -7213,8 +7213,8 @@
     "color": "#f2a541",
     "radius": 40,
     "offset": [
-     0.0,
-     -20.2
+     -1.9,
+     -12.9
     ]
    },
    "interaction": "lamp",
@@ -7255,8 +7255,8 @@
     "color": "#f2a541",
     "radius": 40,
     "offset": [
-     0.4,
-     -20.1
+     -1.2,
+     -13.3
     ]
    },
    "interaction": "lamp",
@@ -8447,8 +8447,8 @@
     "color": "#ffc46b",
     "radius": 40,
     "offset": [
-     0.6,
-     -41.6
+     15.8,
+     -45.5
     ]
    },
    "interaction": "inspect",
@@ -8489,8 +8489,8 @@
     "color": "#ffc46b",
     "radius": 44,
     "offset": [
-     -0.1,
-     -38.1
+     -16.2,
+     -39.9
     ]
    },
    "interaction": "inspect",
@@ -8531,8 +8531,8 @@
     "color": "#ffc46b",
     "radius": 44,
     "offset": [
-     -0.7,
-     -39.3
+     -17.3,
+     -42.1
     ]
    },
    "interaction": "inspect",
@@ -8573,8 +8573,8 @@
     "color": "#ffc46b",
     "radius": 44,
     "offset": [
-     0.4,
-     -41.7
+     -19.4,
+     -41.5
     ]
    },
    "interaction": "inspect",
@@ -9352,8 +9352,8 @@
     "color": "#ffc46b",
     "radius": 40,
     "offset": [
-     0.2,
-     -33.1
+     7.0,
+     -30.8
     ]
    },
    "interaction": null,
@@ -9394,8 +9394,8 @@
     "color": "#ffc46b",
     "radius": 40,
     "offset": [
-     -0.5,
-     -42.9
+     -0.3,
+     -44.4
     ]
    },
    "interaction": null,
@@ -9431,8 +9431,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     1.2,
-     -11.3
+     -0.9,
+     -8.3
     ]
    },
    "interaction": null,
@@ -9468,8 +9468,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     0.4,
-     -10.2
+     -1.4,
+     -9.5
     ]
    },
    "interaction": null,
@@ -9505,8 +9505,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     0.9,
-     -11.0
+     0.3,
+     -8.8
     ]
    },
    "interaction": null,
@@ -9547,8 +9547,8 @@
     "color": "#ffc46b",
     "radius": 40,
     "offset": [
-     0.1,
-     -37.1
+     0.2,
+     -32.8
     ]
    },
    "interaction": null,
@@ -9649,8 +9649,8 @@
     "color": "#ffc46b",
     "radius": 56,
     "offset": [
-     -1.0,
-     -21.0
+     -9.8,
+     -21.4
     ]
    },
    "interaction": null,
@@ -9686,8 +9686,8 @@
     "color": "#ffc46b",
     "radius": 56,
     "offset": [
-     -4.4,
-     -30.2
+     11.7,
+     -29.9
     ]
    },
    "interaction": null,
@@ -9973,8 +9973,8 @@
     "color": "#ffc46b",
     "radius": 32,
     "offset": [
-     7.7,
-     -38.0
+     -13.3,
+     -44.2
     ]
    },
    "interaction": null,
@@ -10475,8 +10475,8 @@
     "color": "#5b8def",
     "radius": 24,
     "offset": [
-     -2.3,
-     -68.2
+     -3.2,
+     -67.3
     ]
    },
    "interaction": null,
@@ -11072,8 +11072,8 @@
     "color": "#f2a541",
     "radius": 28,
     "offset": [
-     7.5,
-     -60.3
+     4.7,
+     -62.0
     ]
    },
    "interaction": "inspect",
@@ -11114,8 +11114,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     -9.1,
-     -77.9
+     -10.7,
+     -81.1
     ]
    },
    "interaction": "inspect",
@@ -11481,8 +11481,8 @@
     "color": "#52e0c4",
     "radius": 40,
     "offset": [
-     -1.3,
-     -30.8
+     -2.0,
+     -27.7
     ]
    },
    "interaction": null,
@@ -11995,8 +11995,8 @@
     "color": "#5b8def",
     "radius": 28,
     "offset": [
-     2.2,
-     -25.4
+     5.0,
+     -26.1
     ]
    },
    "interaction": "flower",
@@ -12032,8 +12032,8 @@
     "color": "#9b6bd6",
     "radius": 28,
     "offset": [
-     0.1,
-     -22.9
+     -6.5,
+     -21.1
     ]
    },
    "interaction": "flower",
@@ -12069,8 +12069,8 @@
     "color": "#9b6bd6",
     "radius": 28,
     "offset": [
-     1.8,
-     -22.8
+     9.0,
+     -19.8
     ]
    },
    "interaction": "flower",
@@ -12206,8 +12206,8 @@
     "color": "#5b8def",
     "radius": 28,
     "offset": [
-     -1.5,
-     -32.7
+     -2.5,
+     -34.7
     ]
    },
    "interaction": "fountain",
@@ -12318,8 +12318,8 @@
     "color": "#f2a541",
     "radius": 64,
     "offset": [
-     -9.0,
-     -101.5
+     -21.1,
+     -113.1
     ]
    },
    "interaction": null,
@@ -12360,8 +12360,8 @@
     "color": "#f2a541",
     "radius": 56,
     "offset": [
-     -8.2,
-     -72.7
+     5.3,
+     -44.2
     ]
    },
    "interaction": null,
@@ -12402,8 +12402,8 @@
     "color": "#f2a541",
     "radius": 64,
     "offset": [
-     -8.1,
-     -87.0
+     67.9,
+     -108.1
     ]
    },
    "interaction": null,
@@ -12509,8 +12509,8 @@
     "color": "#5b8def",
     "radius": 28,
     "offset": [
-     1.0,
-     -27.8
+     1.9,
+     -29.5
     ]
    },
    "interaction": null,
@@ -12551,8 +12551,8 @@
     "color": "#9b6bd6",
     "radius": 28,
     "offset": [
-     -1.2,
-     -18.2
+     -11.4,
+     -9.5
     ]
    },
    "interaction": null,
@@ -12838,8 +12838,8 @@
     "color": "#5b8def",
     "radius": 28,
     "offset": [
-     -0.3,
-     -30.2
+     -2.3,
+     -28.3
     ]
    },
    "interaction": "fountain",
@@ -12880,8 +12880,8 @@
     "color": "#5b8def",
     "radius": 32,
     "offset": [
-     -0.7,
-     -36.6
+     2.0,
+     -34.6
     ]
    },
    "interaction": "fountain",
@@ -13062,8 +13062,8 @@
     "color": "#f2a541",
     "radius": 32,
     "offset": [
-     -1.6,
-     -39.2
+     -0.2,
+     -35.9
     ]
    },
    "interaction": null,
@@ -13104,8 +13104,8 @@
     "color": "#f2a541",
     "radius": 36,
     "offset": [
-     0.6,
-     -53.0
+     0.5,
+     -54.9
     ]
    },
    "interaction": null,
@@ -13211,8 +13211,8 @@
     "color": "#f2a541",
     "radius": 36,
     "offset": [
-     -1.3,
-     -22.3
+     -1.7,
+     -18.5
     ]
    },
    "interaction": null,
@@ -13388,8 +13388,8 @@
     "color": "#ff8a3d",
     "radius": 60,
     "offset": [
-     -0.5,
-     -21.1
+     -1.4,
+     -20.5
     ]
    },
    "interaction": null,
@@ -13771,8 +13771,8 @@
     "color": "#9b6bd6",
     "radius": 36,
     "offset": [
-     1.4,
-     -22.4
+     3.3,
+     -16.9
     ]
    },
    "interaction": "inspect",
@@ -13813,8 +13813,8 @@
     "color": "#ff8a3d",
     "radius": 72,
     "offset": [
-     -8.9,
-     -51.0
+     -14.1,
+     -37.9
     ]
    },
    "interaction": null,
@@ -13855,8 +13855,8 @@
     "color": "#ff8a3d",
     "radius": 72,
     "offset": [
-     9.4,
-     -45.4
+     19.1,
+     -20.4
     ]
    },
    "interaction": null,
@@ -13897,8 +13897,8 @@
     "color": "#ff8a3d",
     "radius": 72,
     "offset": [
-     -3.1,
-     -32.1
+     0.9,
+     -31.8
     ]
    },
    "interaction": null,
@@ -14044,8 +14044,8 @@
     "color": "#ff5a2a",
     "radius": 40,
     "offset": [
-     7.3,
-     -21.9
+     7.1,
+     -22.6
     ]
    },
    "interaction": null,
@@ -14086,8 +14086,8 @@
     "color": "#ff8a3d",
     "radius": 72,
     "offset": [
-     -1.4,
-     -23.3
+     -2.9,
+     -24.2
     ]
    },
    "interaction": null,
@@ -14128,8 +14128,8 @@
     "color": "#f2a541",
     "radius": 64,
     "offset": [
-     0.0,
-     -65.5
+     -1.1,
+     -27.1
     ]
    },
    "interaction": "lamp",
@@ -14170,8 +14170,8 @@
     "color": "#ff5a2a",
     "radius": 48,
     "offset": [
-     1.2,
-     -20.3
+     9.0,
+     -21.5
     ]
    },
    "interaction": null,
@@ -14212,8 +14212,8 @@
     "color": "#ff5a2a",
     "radius": 48,
     "offset": [
-     0.8,
-     -19.1
+     -5.2,
+     -16.5
     ]
    },
    "interaction": null,
@@ -14254,8 +14254,8 @@
     "color": "#9b6bd6",
     "radius": 28,
     "offset": [
-     2.3,
-     -29.7
+     0.1,
+     -29.3
     ]
    },
    "interaction": "break",
@@ -14331,8 +14331,8 @@
     "color": "#ff5a2a",
     "radius": 36,
     "offset": [
-     0.9,
-     -28.0
+     -0.2,
+     -30.5
     ]
    },
    "interaction": "break",
@@ -14373,8 +14373,8 @@
     "color": "#ff5a2a",
     "radius": 40,
     "offset": [
-     2.9,
-     -15.6
+     7.2,
+     -8.2
     ]
    },
    "interaction": "inspect",
@@ -14580,8 +14580,8 @@
     "color": "#ff5a2a",
     "radius": 80,
     "offset": [
-     -19.3,
-     -49.5
+     -21.3,
+     -57.3
     ]
    },
    "interaction": null,
@@ -14692,8 +14692,8 @@
     "color": "#e64a8e",
     "radius": 36,
     "offset": [
-     -5.9,
-     -35.9
+     0.0,
+     -35.6
     ]
    },
    "interaction": "inspect",
@@ -14865,8 +14865,8 @@
     "color": "#ff8a3d",
     "radius": 60,
     "offset": [
-     0.9,
-     -47.0
+     -5.0,
+     -48.4
     ]
    },
    "interaction": null,
@@ -14907,8 +14907,8 @@
     "color": "#ffc46b",
     "radius": 40,
     "offset": [
-     -1.2,
-     -28.7
+     -0.6,
+     -33.8
     ]
    },
    "interaction": null,
@@ -14944,8 +14944,8 @@
     "color": "#ffc46b",
     "radius": 32,
     "offset": [
-     -0.4,
-     -10.5
+     0.4,
+     -10.4
     ]
    },
    "interaction": null,
@@ -15056,8 +15056,8 @@
     "color": "#e64a8e",
     "radius": 28,
     "offset": [
-     -1.6,
-     -13.9
+     -7.5,
+     -21.8
     ]
    },
    "interaction": "chest",
@@ -15234,7 +15234,7 @@
     "radius": 40,
     "offset": [
      -0.6,
-     -41.1
+     -46.4
     ]
    },
    "interaction": "inspect",
@@ -15275,8 +15275,8 @@
     "color": "#e64a8e",
     "radius": 40,
     "offset": [
-     10.0,
-     -24.8
+     -1.8,
+     -26.8
     ]
    },
    "interaction": "inspect",
@@ -15317,8 +15317,8 @@
     "color": "#e64a8e",
     "radius": 40,
     "offset": [
-     -1.1,
-     -15.7
+     -4.6,
+     -13.7
     ]
    },
    "interaction": "inspect",
@@ -15354,8 +15354,8 @@
     "color": "#e64a8e",
     "radius": 32,
     "offset": [
-     10.7,
-     -31.1
+     5.0,
+     -41.9
     ]
    },
    "interaction": null,
@@ -15466,8 +15466,8 @@
     "color": "#f2a541",
     "radius": 64,
     "offset": [
-     19.7,
-     -52.3
+     19.1,
+     -61.1
     ]
    },
    "interaction": "lamp",

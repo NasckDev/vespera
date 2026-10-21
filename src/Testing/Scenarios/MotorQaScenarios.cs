@@ -25,7 +25,14 @@ public partial class SmokeTest
     [SmokeScenario("motor (qa): anda até cada interagível da Rua da Forja vestida e usa", order: 60)]
     private async Task QaWalkToEveryInteractable()
     {
-        var world = await MotorWorld("forge", new Vector2(600, 540));
+        // Integração v0.1: a Rua da Forja tem layout real (frente B4b); a fixture do motor foi desenhada para a máscara
+        // antiga e punha decorações sobrepostas. A Rua "vestida" de verdade é a do layout_forge.json.
+        await WaitForScene("World", timeoutSeconds: 10);
+        var world = FindWorld();
+        world.GoMap("forge", new Vector2(600, 540), instant: true);
+        await WaitMapSettled(world);
+        FindPlayer()!.Teleport(world.CorrectToWalkable(new Vector2(600, 540)));
+        await Frames(2);
         var d = world.Dressing;
         var player = FindPlayer()!;
         var failures = new List<string>();
@@ -74,6 +81,13 @@ public partial class SmokeTest
                 }
 
                 var error = await QaWalkToFocus(world, it);
+                if (error is not null && QaOnlyByBoat(world, it))
+                {
+                    // B4b-D62: três cais da Rua da Forja são só de balsa; o bot não embarca no meio do caminho.
+                    report.Add($"{label} '{it.Prompt}': só de balsa (B4b-D62), alcançável a partir do destino de uma balsa");
+                    continue;
+                }
+
                 if (error is not null)
                 {
                     failures.Add($"{label} '{it.Prompt}': {error}");
@@ -101,6 +115,12 @@ public partial class SmokeTest
             {
                 var label = $"quebrável {b.Kind} ({b.Position.X},{b.Position.Y})";
                 var path = WalkPathfinder.FindPathNear(world.WalkArea, new MapPoint(player.GlobalPosition.X, player.GlobalPosition.Y), new MapPoint(b.GlobalPosition.X, b.GlobalPosition.Y), 16f);
+                if (path is null && QaOnlyByBoat(world, b.GlobalPosition, 16f))
+                {
+                    report.Add($"{label}: só de balsa (B4b-D62)");
+                    continue;
+                }
+
                 if (path is null)
                 {
                     failures.Add($"{label}: sem caminho até 16 u");
@@ -943,6 +963,32 @@ public partial class SmokeTest
     // ---------------------------------------------------------------- utilidades do tester
 
     /// <summary>Anda (input real) até o <paramref name="target"/> ficar em foco. Devolve null se conseguiu.</summary>
+    /// <summary>Sem caminho a pé daqui, mas com caminho a partir do destino de alguma balsa do mapa.</summary>
+    private bool QaOnlyByBoat(World.World world, Interactable target) =>
+        QaOnlyByBoat(world, target.GlobalPosition, MathF.Max(5f, target.Radius * 0.7f));
+
+    private bool QaOnlyByBoat(World.World world, Vector2 at, float reach)
+    {
+        var player = FindPlayer()!;
+        var c = new MapPoint(at.X, at.Y);
+        if (WalkPathfinder.FindPathNear(world.WalkArea, new MapPoint(player.GlobalPosition.X, player.GlobalPosition.Y), c, reach) is not null)
+        {
+            return false;
+        }
+
+        foreach (var spot in world.Dressing.Decor)
+        {
+            if (spot.Def is { Kind: "boat", To: { } to }
+                && world.WalkArea.NearestWalkable(to.X, to.Y) is { } dock
+                && WalkPathfinder.FindPathNear(world.WalkArea, dock, c, reach + 8f) is not null)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private async Task<string?> QaWalkToFocus(World.World world, Interactable target, float timeoutGameSeconds = 40f)
     {
         var player = FindPlayer()!;

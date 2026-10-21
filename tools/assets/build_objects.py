@@ -81,6 +81,11 @@ def light_spot(im: Image.Image, color: str) -> tuple[float, float]:
         return im.width / 2, im.height / 2
     scores.sort(reverse=True)
     top = scores[: max(4, len(scores) // 40)]
+    # só o aglomerado da chama mais forte: com duas lanternas (árvore com lanternas penduradas) o centroide de todas
+    # cairia no vão entre elas, fora do desenho
+    sx, sy = top[0][1], top[0][2]
+    rad = max(4.0, 0.08 * max(im.width, im.height))
+    top = [t for t in top if (t[1] - sx) ** 2 + (t[2] - sy) ** 2 <= rad * rad]
     return sum(t[1] for t in top) / len(top), sum(t[2] for t in top) / len(top)
 
 

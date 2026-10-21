@@ -34,7 +34,7 @@ public class ObstacleWalkAreaTest
         AssertThat(area.IsWalkable(50, 50)).IsFalse(); // o segundo ainda cobre
         area.SetActive(b, false);
         AssertThat(area.IsWalkable(50, 50)).IsTrue();
-        area.SetActive(b, false); // desligar duas vezes não estraga a contagem
+        area.SetActive(b, false); // desligar duas vezes não muda nada
         area.SetActive(a, true);
         AssertThat(area.IsWalkable(50, 50)).IsFalse();
     }

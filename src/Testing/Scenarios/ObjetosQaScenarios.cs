@@ -194,21 +194,36 @@ public partial class SmokeTest
         var failures = new List<string>();
         var notes = new List<string>();
 
-        // Área livre para a "praça de testes": 300 × 150 u andáveis numa grade de 8 u.
+        // Área livre para a "praça de testes" numa grade de 8 u: largura da fileira mais larga, 150 u de fundo.
+        // Integração v0.1: com o caçador em 56,7 u os objetos ficaram 1,75× maiores e os mapas redesenhados não têm
+        // praça vazia desse tamanho; sem área natural, a Rua da Forja vira um chão liso (fixture) só para este cenário.
+        var rowWidth = QaSandboxBatches.Max(batch => batch.Sum(id => catalog[id].WorldWidth + 26f)) + 32f;
         (string Map, Vector2 Origin)? site = null;
         foreach (var id in new[] { "forge", "guild", "garden", "core", "fish2", "crypt2", "cath", "mine" })
         {
             var map = World.World.Catalog[id];
             world.GoMap(id, map.Spawn.X, map.Spawn.Y, instant: true);
             await WaitMapSettled(world);
-            if (QaFindFreeArea(world.WalkArea, map, 300f, 150f) is { } origin)
+            if (QaFindFreeArea(world.WalkArea, map, rowWidth, 150f) is { } origin)
             {
                 site = (id, origin);
                 break;
             }
         }
 
-        Require(site is not null, "nenhum mapa tem 300 × 150 u livres para a praça de testes");
+        if (site is null)
+        {
+            World.World.LayoutOverrides["forge"] = "res://src/Testing/Fixtures/sandbox_forge.json";
+            var forge = World.World.Catalog["forge"];
+            world.GoMap("forge", forge.Spawn.X, forge.Spawn.Y, instant: true);
+            await WaitMapSettled(world);
+            if (QaFindFreeArea(world.WalkArea, forge, rowWidth, 150f) is { } origin)
+            {
+                site = ("forge", origin);
+            }
+        }
+
+        Require(site is not null, $"nenhum mapa tem {rowWidth:0} × 150 u livres para a praça de testes");
         var (siteMap, siteOrigin) = site!.Value;
         Log.Info($"objetos (tester): praça de testes em {siteMap} ({siteOrigin.X:0}, {siteOrigin.Y:0})");
 
@@ -334,6 +349,12 @@ public partial class SmokeTest
             foreach (var n in spawned)
             {
                 n.QueueFree();
+            }
+
+            if (World.World.LayoutOverrides.Remove("forge"))
+            {
+                world.GoMap("forge", 1500, 250, instant: true);
+                await WaitMapSettled(world);
             }
         }
 

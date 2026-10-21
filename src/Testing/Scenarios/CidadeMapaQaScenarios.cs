@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -151,10 +152,20 @@ public partial class SmokeTest
     {
         var player = FindPlayer()!;
         var stucks = new List<string>();
+        // o motor anda com aceleração/frenagem (B4a-D42): para antes de planejar, senão o embalo do trecho anterior
+        // (que pode ter terminado na soleira de uma porta) leva o pé para dentro da saída
+        PressDirection(Vector2.Zero);
+        for (var i = 0; i < 8; i++)
+        {
+            await NextPhysicsFrame();
+        }
+
         var start = new MapPoint(player.GlobalPosition.X, player.GlobalPosition.Y);
         // o corpo (r=3,5) encosta mais na parede que o CanStand do Core (r=4): parte do ponto de pé mais próximo
         start = world.WalkArea.NearestWalkable(start.X, start.Y, maxDistance: 8f) ?? start;
-        var path = WalkPathfinder.FindPathNear(world.WalkArea, start, target, near);
+        // Um jogador contorna a soleira das portas que não quer usar: planeja sem as saídas (e com elas, se for o único jeito).
+        var path = WalkPathfinder.FindPathNear(new QaExitAvoidingArea(world.WalkArea, world.Map.Exits, target, start), start, target, near)
+                   ?? WalkPathfinder.FindPathNear(world.WalkArea, start, target, near);
         if (path is null)
         {
             return new QaWalkResult(false, $"sem caminho a pé de {QaAt(player.GlobalPosition)}", stucks, 0);
@@ -346,6 +357,15 @@ public partial class SmokeTest
         {
             var nodeName = node.Name.ToString();
             if (nodeName.Contains("boat", StringComparison.OrdinalIgnoreCase) || nodeName.Contains("balsa", StringComparison.OrdinalIgnoreCase))
+            {
+                ferries++;
+            }
+        }
+
+        // Integração v0.1: a balsa do motor (B4a-D46) é decoração do WorldDressing, não um nó de InteractablesRoot.
+        foreach (var spot in world.Dressing.Decor)
+        {
+            if (spot.Def.Kind == "boat" && spot.Def.To is not null)
             {
                 ferries++;
             }
@@ -881,4 +901,41 @@ public partial class SmokeTest
         Log.Info($"qa forja: janela {size}, viewport {GetViewport().GetVisibleRect().Size}, zoom {world.Camera.Zoom}");
         _ = player;
     }
+}
+
+/// <summary>Área andável sem as saídas do mapa (com 6 u de folga), menos as que contêm o alvo ou a partida.</summary>
+internal sealed class QaExitAvoidingArea(IWalkArea inner, IReadOnlyList<MapExit> exits, MapPoint target, MapPoint start) : IWalkArea
+{
+    private const float Margin = 6f;
+
+    public float Width => inner.Width;
+
+    public float Height => inner.Height;
+
+    public bool IsWalkable(float x, float y)
+    {
+        if (!inner.IsWalkable(x, y))
+        {
+            return false;
+        }
+
+        foreach (var e in exits)
+        {
+            var r = new MapRect(e.Area.X - Margin, e.Area.Y - Margin, e.Area.Width + (2 * Margin), e.Area.Height + (2 * Margin));
+            if (r.Contains(target.X, target.Y))
+            {
+                continue;
+            }
+
+            // a folga só vale se a partida não está nela (senão a partida seria "bloqueada"); a soleira sempre vale
+            if (r.Contains(start.X, start.Y) ? e.Area.Contains(x, y) : r.Contains(x, y))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public IReadOnlyList<MapRect> BlockedRects() => inner.BlockedRects();
 }

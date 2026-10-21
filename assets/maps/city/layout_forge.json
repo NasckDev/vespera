@@ -287,7 +287,7 @@
     {"kind": "flower", "x": 664, "y": 490, "r": 24, "label": "Ver as flores", "text": "Flores brancas na cabeceira da ponte: costume antigo para quem não voltou do Avesso."},
     {"kind": "flower", "x": 610, "y": 668, "r": 24, "label": "Ver as flores", "text": "Um vaso que sobreviveu a três invasões. A dona jura que é teimosia."},
     {"kind": "sign", "x": 1118, "y": 214, "r": 24, "label": "Ler a placa", "text": "Armaria Rubra — lâminas, arcos e o que mais o Avesso pedir."},
-    {"kind": "sign", "x": 1376, "y": 884, "r": 24, "label": "Ler a placa", "text": "Oficina de Relíquias — consertamos o que voltou de lá."},
+    {"kind": "sign", "x": 1402, "y": 886, "r": 24, "label": "Ler a placa", "text": "Oficina de Relíquias — consertamos o que voltou de lá."},
     {"kind": "sign", "x": 107, "y": 40, "r": 24, "label": "Ler a placa", "text": "Escada da Alquimia — suba sem pressa, os frascos não fogem."},
     {"kind": "sign", "x": 619, "y": 40, "r": 24, "label": "Ler a placa", "text": "Casa dos Feitiços, logo acima. Bata antes de entrar; às vezes a porta responde."},
     {"kind": "sign", "x": 1497, "y": 226, "r": 24, "label": "Ler a placa", "text": "Guilda dos Lanterneiros — o Mural de missões fica lá dentro."},
