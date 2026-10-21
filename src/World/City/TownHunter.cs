@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Godot;
 using Vespera.Autoload;
 using Vespera.Core.World;
@@ -65,9 +66,9 @@ public partial class TownHunter : Node2D
         _name = _rank = _bubble = null;
     }
 
-    public void Step(IWalkArea area, float mapWidth, float mapHeight, double dt)
+    public void Step(IWalkArea area, float mapWidth, float mapHeight, double dt, IReadOnlyList<MapPoint>? others = null, int self = -1)
     {
-        Brain.Update(area, mapWidth, mapHeight, dt);
+        Brain.Update(area, mapWidth, mapHeight, dt, others, self);
         Position = new Vector2(Brain.X, Brain.Y);
     }
 
@@ -94,7 +95,10 @@ public partial class TownHunter : Node2D
         WorldLabels.PlaceCentered(_name, head + new Vector2(-((_rank.Size.X + 2f) / 2f), 0));
         _rank.Position = new Vector2(_name.Position.X + nameWidth + 1, _name.Position.Y);
 
-        if (Brain.Say is { } say)
+        // Balão só com o caçador na tela: fora dela, o balão preso na borda parecia fala de ninguém (B2-D50).
+        var view = _bubble.GetViewportRect().Size;
+        var headOnScreen = head.X >= 0f && head.X <= view.X && head.Y >= 0f && head.Y <= view.Y + 40f;
+        if (Brain.Say is { } say && headOnScreen)
         {
             if (!ReferenceEquals(say, _shownSay))
             {

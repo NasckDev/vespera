@@ -333,11 +333,16 @@ public partial class SmokeTest
             }
 
             // Chat simulado: balão sobre um caçador do mapa.
-            town.Chat("Nina", "C", "boa véspera, Lumeira");
+            // B2-D50: o balão sai só na boca de quem fala, e só com ele na tela.
+            var speaker = town.Hunters[0];
+            player.Teleport(world.CorrectToWalkable(speaker.Position + new Vector2(0, 30)));
+            world.Camera.Snap();
+            await Frames(2);
+            town.Chat(speaker.Brain.Def.Name, speaker.Brain.Def.Rank, "boa véspera, Lumeira");
             await Frames(2);
             Require(chats.Contains("boa véspera, Lumeira"), "ChatMessage do chat simulado");
-            Require(town.Hunters.Any(h => h.Bubble == "boa véspera, Lumeira"), "o chat deveria aparecer como balão sobre um caçador");
-            player.Teleport(world.CorrectToWalkable(town.Hunters[0].Position + new Vector2(0, 30)));
+            Require(speaker.Bubble == "boa véspera, Lumeira", "o chat deveria aparecer como balão sobre o caçador que falou");
+            Require(town.Hunters.Count(h => h.Bubble == "boa véspera, Lumeira") == 1, "só quem falou mostra o balão");
             await Frames(10);
             await Shot("chat-balao");
 

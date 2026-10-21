@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Godot;
 using Vespera.Autoload;
@@ -79,8 +80,11 @@ public partial class TownNpc : Node2D
         _interactable.Enabled = false;
     }
 
-    /// <summary>Passo de simulação (o diretor só chama com o mundo andando).</summary>
-    public void Step(IWalkArea area, double dt, IRandom random)
+    /// <summary>
+    /// Passo de simulação (o diretor só chama com o mundo andando). <paramref name="others"/> são as posições dos corpos
+    /// do mapa (jogador e moradores) e <paramref name="self"/> o índice deste NPC nela, para ele desviar de quem está no caminho.
+    /// </summary>
+    public void Step(IWalkArea area, double dt, IRandom random, IReadOnlyList<MapPoint>? others = null, int self = -1, WalkPlanner? planner = null)
     {
         if (Walker is null)
         {
@@ -89,13 +93,13 @@ public partial class TownNpc : Node2D
                 return;
             }
 
-            Walker = new TownWalker(Def, Route.Result, random);
+            Walker = new TownWalker(Def, Route.Result, random, planner);
             Position = new Vector2(Walker.X, Walker.Y);
             Visible = true;
             _interactable.Enabled = !_leaving;
         }
 
-        Walker.Update(area, dt);
+        Walker.Update(area, dt, others, self);
         Position = new Vector2(Walker.X, Walker.Y);
     }
 

@@ -17,11 +17,18 @@ namespace Vespera.World.City;
 /// </summary>
 public sealed class TownsfolkDirector(CityLife city)
 {
-    /// <summary>Percursos já calculados (ou em cálculo) por mapa e NPC; valem a sessão inteira.</summary>
+    /// <summary>
+    /// Percursos já calculados (ou em cálculo) por mapa, máscara e NPC, sempre sobre a área andável carregada (outra
+    /// máscara = outro percurso; nada depende de waypoints pensados para uma máscara específica).
+    /// </summary>
     private static readonly Dictionary<string, Task<WalkerRoute>> Routes = [];
 
     private readonly List<TownNpc> _npcs = [];
     private readonly List<TownHunter> _hunters = [];
+
+    /// <summary>Posições dos corpos do mapa neste frame: 0 = jogador, depois NPCs, depois caçadores (reaproveitada).</summary>
+    private readonly List<MapPoint> _bodies = new(16);
+    private WalkPlanner? _planner;
     private double _chatT = TownChat.FirstDelay;
     private MapDef? _map;
 
@@ -43,6 +50,12 @@ public sealed class TownsfolkDirector(CityLife city)
 
         var state = GameManager.Instance.State;
         var world = city.World;
+        if (_planner is null || !ReferenceEquals(_planner.Area, world.WalkArea))
+        {
+            _planner = new WalkPlanner(world.WalkArea); // replanejamento no frame (A* com buffers reaproveitados)
+            _planner.Prepare(); // rotula as regiões já na troca de mapa (~10 ms), não no meio do passeio
+        }
+
         var count = AmbientHunter.CountFor(map, state.Save.BrechasClosed, Random);
         var player = world.Player.GlobalPosition;
         foreach (var def in AmbientHunter.Pick(GameManager.Db.Social, state.Save.ClassId, count, Random))
@@ -51,7 +64,7 @@ public sealed class TownsfolkDirector(CityLife city)
             var hunter = new TownHunter
             {
                 Name = $"Hunter_{def.Name}",
-                Brain = new AmbientHunter(def, at.X, at.Y, GameManager.Db.Social, Random),
+                Brain = new AmbientHunter(def, at.X, at.Y, GameManager.Db.Social, Random, _planner),
                 Labels = city.Labels,
             };
             world.Entities.AddChild(hunter);
@@ -114,26 +127,42 @@ public sealed class TownsfolkDirector(CityLife city)
         var area = city.World.WalkArea;
         for (var i = _npcs.Count - 1; i >= 0; i--)
         {
-            var npc = _npcs[i];
-            if (!GodotObject.IsInstanceValid(npc) || npc.IsQueuedForDeletion())
+            if (!GodotObject.IsInstanceValid(_npcs[i]) || _npcs[i].IsQueuedForDeletion())
             {
                 _npcs.RemoveAt(i);
-                continue;
             }
-
-            npc.Step(area, dt, Random);
         }
 
         for (var i = _hunters.Count - 1; i >= 0; i--)
         {
-            var hunter = _hunters[i];
-            if (!GodotObject.IsInstanceValid(hunter))
+            if (!GodotObject.IsInstanceValid(_hunters[i]))
             {
                 _hunters.RemoveAt(i);
-                continue;
             }
+        }
 
-            hunter.Step(area, _map.ImageWidth, _map.ImageHeight, dt);
+        // Quem está onde no começo do frame: cada um desvia dos outros e do jogador (B2-D48).
+        _bodies.Clear();
+        var player = city.World.Player.GlobalPosition;
+        _bodies.Add(new MapPoint(player.X, player.Y));
+        foreach (var npc in _npcs)
+        {
+            _bodies.Add(new MapPoint(npc.Position.X, npc.Position.Y));
+        }
+
+        foreach (var hunter in _hunters)
+        {
+            _bodies.Add(new MapPoint(hunter.Position.X, hunter.Position.Y));
+        }
+
+        for (var i = 0; i < _npcs.Count; i++)
+        {
+            _npcs[i].Step(area, dt, Random, _bodies, 1 + i, _planner);
+        }
+
+        for (var i = 0; i < _hunters.Count; i++)
+        {
+            _hunters[i].Step(area, _map.ImageWidth, _map.ImageHeight, dt, _bodies, 1 + _npcs.Count + i);
         }
 
         // world.js:154 — chat simulado.
@@ -147,8 +176,9 @@ public sealed class TownsfolkDirector(CityLife city)
     }
 
     /// <summary>
-    /// Uma mensagem do chat de Lumeira: balão sobre o caçador com esse nome (ou outro caçador do mapa) e o sinal
-    /// <c>ChatMessage</c>.
+    /// Uma mensagem do chat de Lumeira: o sinal <c>ChatMessage</c> (log) e, se quem fala é um caçador presente neste mapa,
+    /// o balão sobre ele. Fala de quem não está aqui (a Lúcia na Estalagem, um caçador em outro bairro) não sai na boca
+    /// de outro (B2-D50).
     /// </summary>
     public void Chat(string who, string rank, string text)
     {
@@ -161,11 +191,6 @@ public sealed class TownsfolkDirector(CityLife city)
                 speaker = h;
                 break;
             }
-        }
-
-        if (speaker is null && _hunters.Count > 0)
-        {
-            speaker = _hunters[Random.RangeInt(0, _hunters.Count - 1)];
         }
 
         if (speaker is not null && GodotObject.IsInstanceValid(speaker))
@@ -209,10 +234,10 @@ public sealed class TownsfolkDirector(CityLife city)
         return false;
     }
 
-    /// <summary>Percurso do NPC neste mapa: calculado uma vez, numa thread (BFS da máscara), e reaproveitado.</summary>
+    /// <summary>Percurso do NPC neste mapa: calculado uma vez por área andável, numa thread (A* sobre a área carregada), e reaproveitado.</summary>
     private Task<WalkerRoute> RouteFor(MapDef map, WalkerDef def)
     {
-        var key = map.Id + ":" + def.Id;
+        var key = $"{map.Id}:{map.Mask}:{map.MaskCell}:{def.Id}";
         if (!Routes.TryGetValue(key, out var task) || task.IsFaulted || task.IsCanceled)
         {
             var area = city.World.WalkArea;
