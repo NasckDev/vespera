@@ -1,10 +1,76 @@
 {
   "cell": 4,
   "base": "shapes",
-  "walk": [],
-  "block": [],
-  "occluders": [],
+  "walk": [
+    {"rect": [76, 116, 184, 84], "note": "quarto oeste (duas camas)"},
+    {"rect": [188, 196, 76, 36], "note": "passagem do quarto para a escada"},
+    {"rect": [136, 228, 128, 104], "note": "escada interna e patamar"},
+    {"rect": [44, 324, 412, 280], "note": "salão"},
+    {"rect": [200, 580, 72, 124], "note": "escada da entrada"},
+    {"rect": [100, 700, 276, 84], "note": "alpendre"},
+    {"rect": [200, 780, 100, 52], "note": "saída para a Rua da Forja"}
+  ],
+  "block": [
+    {"rect": [0, 0, 44, 896], "note": "parede oeste"},
+    {"rect": [456, 0, 44, 896], "note": "parede leste"},
+    {"rect": [0, 0, 500, 116], "note": "parede do fundo dos quartos"},
+    {"rect": [0, 0, 80, 210], "note": "parede oeste do quarto"},
+    {"rect": [80, 88, 48, 96], "note": "cama 1"},
+    {"rect": [166, 88, 50, 96], "note": "cama 2"},
+    {"rect": [216, 88, 42, 60], "note": "vaso do quarto"},
+    {"rect": [258, 0, 242, 228], "note": "parede entre quartos e quarto leste (sem porta na arte)"},
+    {"rect": [0, 196, 188, 32], "note": "viga do mezanino"},
+    {"rect": [40, 196, 100, 88], "note": "parede e lampião (oeste)"},
+    {"rect": [44, 280, 38, 48], "note": "cadeira encostada (oeste)"},
+    {"rect": [82, 208, 56, 124], "note": "porta dos fundos (nicho)"},
+    {"rect": [122, 216, 16, 116], "note": "pilar da escada (oeste)"},
+    {"rect": [248, 262, 16, 70], "note": "pilar da escada (leste)"},
+    {"rect": [262, 200, 44, 84], "note": "parede com lampião (balcão)"},
+    {"rect": [264, 284, 40, 44], "note": "barril"},
+    {"rect": [302, 220, 154, 202], "note": "balcão, prateleiras e lareira da Lúcia"},
+    {"rect": [334, 420, 122, 26], "note": "banquetas do balcão"},
+    {"rect": [420, 476, 36, 36], "note": "vaso (pé)"},
+    {"rect": [40, 340, 16, 62], "note": "vão estreito atrás da cadeira azul"},
+    {"rect": [40, 400, 18, 44], "note": "lampião de parede"},
+    {"rect": [40, 448, 28, 62], "note": "armário de parede"},
+    {"poly": [[56, 352], [78, 350], [124, 350], [142, 352], [150, 370], [156, 392], [156, 428], [140, 432], [118, 444], [96, 444], [86, 440], [58, 440], [54, 398]], "note": "mesa redonda 1 com cadeiras"},
+    {"poly": [[72, 472], [92, 468], [136, 468], [154, 470], [160, 490], [168, 510], [168, 546], [150, 552], [132, 568], [110, 568], [98, 560], [72, 560], [68, 526], [70, 508]], "note": "mesa redonda 2 com cadeiras"},
+    {"poly": [[310, 472], [328, 468], [374, 468], [392, 472], [396, 500], [402, 520], [402, 554], [380, 560], [360, 570], [337, 570], [327, 558], [300, 556], [300, 516], [308, 506]], "note": "mesa redonda 3 com cadeiras"},
+    {"rect": [40, 504, 32, 100], "note": "canto atrás da mesa 2"},
+    {"rect": [54, 556, 40, 48], "note": "caixote (sudoeste)"},
+    {"rect": [400, 556, 56, 48], "note": "caixote de bestas (sudeste)"},
+    {"rect": [0, 600, 201, 100], "note": "parede sul (oeste)"},
+    {"rect": [136, 584, 65, 16], "note": "pilar da entrada (oeste)"},
+    {"rect": [270, 584, 68, 16], "note": "pilar da entrada (leste)"},
+    {"rect": [270, 600, 230, 100], "note": "parede sul (leste)"},
+    {"rect": [100, 690, 44, 30], "note": "estandarte (oeste)"},
+    {"rect": [334, 690, 44, 30], "note": "estandarte (leste)"},
+    {"rect": [176, 696, 26, 18], "note": "pé do pilar da escada (oeste)"},
+    {"rect": [268, 696, 32, 18], "note": "pé do pilar da escada (leste)"},
+    {"rect": [142, 696, 36, 48], "note": "base do poste (oeste)"},
+    {"rect": [300, 696, 36, 48], "note": "base do poste (leste)"},
+    {"rect": [0, 690, 100, 206], "note": "jardim (oeste)"},
+    {"rect": [376, 690, 124, 206], "note": "jardim (leste)"},
+    {"rect": [0, 784, 200, 112], "note": "escuro (oeste)"},
+    {"rect": [300, 784, 200, 112], "note": "escuro (leste)"}
+  ],
+  "occluders": [
+    {"poly": [[122, 216], [138, 216], [138, 332], [122, 332]], "baseY": 331, "sway": false, "note": "pilar da escada (oeste)"},
+    {"poly": [[247, 262], [263, 262], [263, 332], [247, 332]], "baseY": 331, "sway": false, "note": "pilar da escada (leste)"},
+    {"poly": [[431, 449], [437, 452], [449, 458], [454, 468], [452, 482], [448, 484], [448, 508], [440, 511], [428, 511], [422, 506], [422, 484], [416, 480], [413, 470], [416, 460], [423, 454]], "baseY": 510, "sway": false, "note": "vaso ao lado do balcão"}
+  ],
+  "water": [],
+  "ambient": [
+    {"kind": "crowd", "x": 230, "y": 470, "r": 230, "note": "salão"},
+    {"kind": "fire", "x": 425, "y": 290, "r": 170, "note": "lareira atrás do balcão"}
+  ],
   "props": [],
-  "chests": [],
-  "decor": []
+  "chests": [
+    {"x": 147, "y": 142, "tier": 0, "note": "entre as camas do quarto oeste, debaixo da lamparina"}
+  ],
+  "decor": [
+    {"kind": "inspect", "x": 431, "y": 440, "r": 28, "label": "Aquecer-se na lareira", "text": "O calor da lareira da Lúcia chega até o balcão. A chaleira em cima dela nunca esfria; por um instante, a véspera parece longe."},
+    {"kind": "inspect", "x": 108, "y": 342, "r": 22, "label": "Examinar a porta dos fundos", "text": "Trancada por dentro, com duas trancas novas. A Lúcia fecha esta porta toda vez que uma Brecha rompe."},
+    {"kind": "inspect", "x": 104, "y": 196, "r": 20, "label": "Examinar a cama", "text": "Lençóis limpos, cheiro de lavanda e um cobertor remendado com o brasão da Guilda. Quem paga a Lúcia dorme até a próxima véspera."}
+  ]
 }

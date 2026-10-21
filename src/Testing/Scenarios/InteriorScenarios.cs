@@ -17,7 +17,7 @@ namespace Vespera.Testing;
 /// </summary>
 public partial class SmokeTest
 {
-    private static readonly string[] InteriorMapIds = ["guild"];
+    private static readonly string[] InteriorMapIds = ["guild", "inn"];
 
     [SmokeScenario("interiores: bot alcança NPCs, balcões, decoração e baús", order: 30)]
     private async Task InteriorsReachEverything()
