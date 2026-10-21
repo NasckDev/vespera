@@ -2,6 +2,7 @@
 
 Uma linha por tarefa concluída, mais recente primeiro.
 
+- 2026-10-21 — Cidade viva (correção e QA): moradores por A\* sobre a área carregada com replanejamento e desvio (sem travar em nenhuma máscara), invasão resolve todas as rompidas e Mural em 5, balão só na boca de quem fala, noite e portal da véspera mais fortes, escuridão em resolução base (B2-D48–D51).
 - 2026-10-20 — Cidade viva: smoke da cidade (relógio acelerado, fases, pausa, escuridão, portal abrindo, ruptura, NPCs sem atravessar parede, chat, Mural, clima) com prints; API em `api-cidade.md`; decisões D39–D47.
 - 2026-10-20 — Cidade viva: NPCs com rotina (Lauro, Marta, Faísca, Vesna) com falas verbatim, caçadores ambiente e chat simulado em balões.
 - 2026-10-20 — Cidade viva: Brechas abrem pela `BrechaSchedule` com a animação do portal do super kit, timer, fechamento por Casa e ruptura (`InvasionRequested`); Mural pede a tela `board`.

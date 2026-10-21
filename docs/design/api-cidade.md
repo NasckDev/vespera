@@ -2,7 +2,7 @@
 
 Relógio do dia, véspera e Brechas, iluminação/estações/clima, NPCs com rotina, caçadores ambiente e chat simulado.
 Specs: [`prototype-v2/01-mundo-render-fluxo.md`](prototype-v2/01-mundo-render-fluxo.md) §1.9, §4.5–4.6, §6, §7 e
-[`prototype-v2/02-dados-combate-ui.md`](prototype-v2/02-dados-combate-ui.md) §1.4, §1.17–1.18. Decisões D39–D47.
+[`prototype-v2/02-dados-combate-ui.md`](prototype-v2/02-dados-combate-ui.md) §1.4, §1.17–1.18. Decisões D39–D47 e B2-D48–D51.
 
 A cidade é o nó `City` (`CityLife`) da cena `World`: vive enquanto o World existir (como o `G` da v2) e fala com as
 outras frentes pelo `EventBus`. Acesso direto, para leitura: `CityLife.Instance` (null fora do World).
@@ -61,15 +61,28 @@ Escuridão e furos de luz da v2 numa passada de tela cheia (`city_lighting.gdsha
 AddChild(new LightEmitter { Radius = 100, Kind = "m", Position = new Vector2(0, -30) }); // portal de saída da v2
 ```
 
-`Kind` = `a` âmbar, `f` fogo, `m` magenta, `c` ciano, `g` verde; `Intensity` 0–1 apaga sem tirar do registro. Até 64 luzes
-visíveis por frame (jogador primeiro, depois os emissores, depois as do mapa). Lanterna do jogador = 72 × `Stats.Light`
-(40 morto). `Lighting.CurrentDarkness`, `CurrentLightCount`, `LitStreetLamps` servem para testes.
+`Kind` = `a` âmbar, `f` fogo, `m` magenta, `c` ciano, `g` verde; `Intensity` 0–1 apaga sem tirar do registro; `GlowBoost`
+multiplica só o glow colorido (o portal usa 2,2 para dominar a noite). Até 64 luzes visíveis por frame (jogador primeiro,
+depois os emissores, depois as do mapa). Lanterna do jogador = 72 × `Stats.Light` (40 morto).
+`Lighting.CurrentDarkness`, `CurrentGrade` (cor da hora na rua), `CurrentLightCount`, `LitStreetLamps` servem para testes.
+
+Rua da Forja (B2-D51): escuridão `CityLighting.Darkness` = base × `StreetFactor` (0,096 de dia, 0,713 de noite), cor da hora
+`CityLighting.StreetGrade(clock)` multiplicada sobre o mundo e lâmpadas com poças menores. A escuridão é desenhada na
+resolução base numa SubViewport (o nó visível continua se chamando `Darkness`; escondê-lo também para a SubViewport).
 
 ## Moradores (`CityLife.Instance.Townsfolk`)
 
-`Npcs` (`TownNpc`, com `Walker` do Core) e `Hunters` (`TownHunter`, com `Brain`). `Chat(quem, selo, texto)` mostra um balão
-sobre um caçador do mapa e emite `ChatMessage` — útil para outras frentes ("limpo! valeu {nome}" ao resolver a invasão,
-"gg {nome}…" na volta da Brecha). Falar com um NPC emite `DialogueRequested(nome, [fala])` com as falas verbatim da v2, em ordem.
+`Npcs` (`TownNpc`, com `Walker` do Core) e `Hunters` (`TownHunter`, com `Brain`). `Chat(quem, selo, texto)` emite
+`ChatMessage` e, se `quem` é um caçador presente no mapa e na tela, mostra o balão sobre ele (B2-D50) — útil para outras
+frentes ("limpo! valeu {nome}" ao resolver a invasão, "gg {nome}…" na volta da Brecha). Falar com um NPC emite
+`DialogueRequested(nome, [fala])` com as falas verbatim da v2, em ordem.
+
+Andar (B2-D48, Core): `WalkPlanner` (A\* sobre qualquer `IWalkArea`, uma instância por thread; `TryPlan`, `IsClear`,
+`RegionOf`, `Prepare`), `WalkFollower` (segue um caminho sem entrar em parede, desvia de corpos e avisa `Stuck`),
+`WalkerRoute.Build` (waypoints da v2 levados para a região comum + trechos planejados) e `TownWalker`/`AmbientHunter`,
+que replanejam sozinhos. As rotas são calculadas numa thread sobre a área andável do mapa carregado, então valem para a
+máscara nova de 4 px da Rua da Forja sem mudar nada. O diretor passa a cada passo as posições do jogador e dos moradores
+(`TownNpc.Step(area, dt, random, corpos, índice, planner)`), sem alocar.
 
 ## Sinais novos (bloco "Cidade viva" do `EventBus`)
 
