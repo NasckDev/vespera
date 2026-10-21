@@ -90,6 +90,9 @@ public class MapCatalogTest
         {
             AssertThat(Catalog[id].Dungeon).IsTrue();
             AssertThat(Catalog[id].Exits.Count).IsEqual(0);
+            // Colisão redesenhada sobre a arte (tools/maps/layout.py, frente B4c): máscara de células de 4 u.
+            AssertThat(Catalog[id].Mask).IsEqual($"res://assets/maps/{id}/walk_{id}.png");
+            AssertThat(Catalog[id].MaskCell).IsEqual(4);
         }
     }
 
