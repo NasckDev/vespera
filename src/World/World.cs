@@ -68,6 +68,10 @@ public partial class World : Node2D
     [Export]
     public WorldDressing Dressing { get; set; } = null!;
 
+    /// <summary>Minimapa do canto (M / Tab / Back em tela cheia). Frente B4a.</summary>
+    [Export]
+    public Minimap Minimap { get; set; } = null!;
+
     /// <summary>Mapa inicial (novo jogo da v2: Guilda em (250, 560), <c>main.js:71</c>).</summary>
     [Export]
     public string StartMapId { get; set; } = "guild";
@@ -121,6 +125,7 @@ public partial class World : Node2D
         Camera.Target = Player;
         // o foco fica na mesma altura relativa do corpo que na v2 (−14 u num personagem de 32 u), D41
         Camera.FocusOffsetY = CameraFraming.FocusOffsetY * WorldScale.Character;
+        Minimap.World = this;
         EventBus.Instance.DayChanged += OnDayChanged;
 
         var (mapId, position) = PendingStart ?? (StartMapId, StartPosition);

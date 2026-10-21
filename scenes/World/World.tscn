@@ -5,8 +5,9 @@
 [ext_resource type="PackedScene" path="res://scenes/Player/Player.tscn" id="3_player"]
 [ext_resource type="PackedScene" path="res://scenes/UI/Hud.tscn" id="4_hud"]
 [ext_resource type="Script" path="res://src/World/Dressing/WorldDressing.cs" id="5_dressing"]
+[ext_resource type="Script" path="res://src/World/Minimap.cs" id="6_minimap"]
 
-[node name="World" type="Node2D" node_paths=PackedStringArray("MapSprite", "CollisionRoot", "Entities", "InteractablesRoot", "Player", "Camera", "FadeRect", "Dressing")]
+[node name="World" type="Node2D" node_paths=PackedStringArray("MapSprite", "CollisionRoot", "Entities", "InteractablesRoot", "Player", "Camera", "FadeRect", "Dressing", "Minimap")]
 script = ExtResource("1_world")
 MapSprite = NodePath("Map")
 CollisionRoot = NodePath("Collision")
@@ -16,6 +17,7 @@ Player = NodePath("Entities/Player")
 Camera = NodePath("Camera")
 FadeRect = NodePath("Fade/Rect")
 Dressing = NodePath("Dressing")
+Minimap = NodePath("Minimap")
 
 [node name="Map" type="Sprite2D" parent="."]
 texture_filter = 1
@@ -39,6 +41,9 @@ y_sort_enabled = true
 script = ExtResource("2_camera")
 
 [node name="Hud" parent="." instance=ExtResource("4_hud")]
+
+[node name="Minimap" type="CanvasLayer" parent="."]
+script = ExtResource("6_minimap")
 
 [node name="Fade" type="CanvasLayer" parent="."]
 layer = 90
