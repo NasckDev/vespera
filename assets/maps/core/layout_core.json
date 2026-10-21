@@ -11,7 +11,11 @@
   "block": [
     {"rect": [148, 244, 46, 48], "note": "braseiro do patamar"},
     {"rect": [306, 244, 46, 48], "note": "braseiro do patamar"},
-    {"rect": [240, 632, 22, 16], "note": "velas no topo da escadaria"}
+    {"rect": [240, 632, 22, 16], "note": "velas no topo da escadaria"},
+    {"rect": [140, 272, 8, 4], "note": "estreito ou isolado"},
+    {"rect": [352, 276, 8, 4], "note": "estreito ou isolado"},
+    {"rect": [144, 276, 4, 4], "note": "estreito ou isolado"},
+    {"rect": [352, 280, 4, 4], "note": "estreito ou isolado"}
   ],
   "occluders": [
     {"poly": [[140, 220], [200, 220], [200, 296], [140, 296]], "baseY": 292, "note": "braseiro do patamar"},
