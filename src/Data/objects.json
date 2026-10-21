@@ -39,9 +39,9 @@
     80.0
    ],
    "footprint": [
-    -12.4,
+    -12.1,
     -9.6,
-    24.8,
+    24.2,
     9.6
    ],
    "occluder": false,
@@ -80,8 +80,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     0.0,
-     -6.4
+     -0.2,
+     -6.2
     ]
    },
    "interaction": null,
@@ -122,8 +122,8 @@
     "color": "#ffc46b",
     "radius": 36,
     "offset": [
-     -2.4,
-     -14.4
+     -2.3,
+     -14.7
     ]
    },
    "interaction": "inspect",
@@ -159,8 +159,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     0.1,
-     -6.4
+     0.0,
+     -4.5
     ]
    },
    "interaction": null,
@@ -196,8 +196,8 @@
     "color": "#ffc46b",
     "radius": 32,
     "offset": [
-     -0.5,
-     -5.9
+     -0.1,
+     -5.3
     ]
    },
    "interaction": null,
@@ -223,7 +223,7 @@
    ],
    "density": 4.1474,
    "anchor": [
-    19.5,
+    20.0,
     44.0
    ],
    "footprint": null,
@@ -233,8 +233,8 @@
     "color": "#ffc46b",
     "radius": 32,
     "offset": [
-     -0.4,
-     -5.2
+     0.1,
+     -5.6
     ]
    },
    "interaction": null,
@@ -333,19 +333,14 @@
     53.5,
     135.0
    ],
-   "footprint": [
-    -15.7,
-    -5.0,
-    31.4,
-    5.0
-   ],
+   "footprint": null,
    "occluder": true,
    "sway": false,
    "light": {
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     -4.3,
+     -4.4,
      -7.9
     ]
    },
@@ -353,7 +348,8 @@
    "sound": {
     "ambient": null,
     "material": "metal"
-   }
+   },
+   "note": "portão aberto: passa pelo meio; pilares no layout"
   },
   {
    "id": "grave_flowers",
@@ -372,7 +368,7 @@
    ],
    "density": 3.8066,
    "anchor": [
-    34.0,
+    34.5,
     76.0
    ],
    "footprint": [
@@ -407,7 +403,7 @@
    ],
    "density": 3.1893,
    "anchor": [
-    35.5,
+    36.0,
     64.0
    ],
    "footprint": [
@@ -422,8 +418,8 @@
     "color": "#ffc46b",
     "radius": 20,
     "offset": [
-     5.7,
-     -9.2
+     6.0,
+     -8.7
     ]
    },
    "interaction": "inspect",
@@ -464,8 +460,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     5.1,
-     -7.5
+     4.2,
+     -7.1
     ]
    },
    "interaction": "inspect",
@@ -507,7 +503,7 @@
     "radius": 20,
     "offset": [
      5.1,
-     -8.0
+     -7.7
     ]
    },
    "interaction": "inspect",
@@ -533,7 +529,7 @@
    ],
    "density": 3.7294,
    "anchor": [
-    41.5,
+    41.0,
     89.0
    ],
    "footprint": [
@@ -549,7 +545,7 @@
     "radius": 24,
     "offset": [
      6.5,
-     -8.9
+     -8.1
     ]
    },
    "interaction": "inspect",
@@ -590,8 +586,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     5.1,
-     -8.1
+     5.6,
+     -7.7
     ]
    },
    "interaction": "inspect",
@@ -632,8 +628,8 @@
     "color": "#ffc46b",
     "radius": 28,
     "offset": [
-     2.4,
-     -6.5
+     2.0,
+     -6.2
     ]
    },
    "interaction": "inspect",
@@ -674,8 +670,8 @@
     "color": "#ffc46b",
     "radius": 32,
     "offset": [
-     -2.1,
-     -7.9
+     -2.0,
+     -8.1
     ]
    },
    "interaction": "inspect",
@@ -701,7 +697,7 @@
    ],
    "density": 3.7763,
    "anchor": [
-    35.0,
+    34.5,
     106.0
    ],
    "footprint": [
@@ -736,7 +732,7 @@
    ],
    "density": 3.8721,
    "anchor": [
-    32.5,
+    33.0,
     71.0
    ],
    "footprint": [
@@ -771,7 +767,7 @@
    ],
    "density": 4.0564,
    "anchor": [
-    42.5,
+    42.0,
     139.0
    ],
    "footprint": [
@@ -786,8 +782,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     -5.5,
-     -7.7
+     -4.7,
+     -7.4
     ]
    },
    "interaction": "inspect",
@@ -813,7 +809,7 @@
    ],
    "density": 2.7678,
    "anchor": [
-    50.5,
+    31.5,
     141.0
    ],
    "footprint": [
@@ -828,7 +824,7 @@
     "color": "#f2a541",
     "radius": 64,
     "offset": [
-     11.6,
+     18.0,
      -21.9
     ]
    },
@@ -897,7 +893,7 @@
    ],
    "density": 4.0361,
    "anchor": [
-    15.5,
+    16.0,
     87.0
    ],
    "footprint": [
@@ -912,8 +908,8 @@
     "color": "#f2a541",
     "radius": 40,
     "offset": [
-     -0.2,
-     -6.9
+     -0.6,
+     -6.7
     ]
    },
    "interaction": "lamp",
@@ -954,8 +950,8 @@
     "color": "#ffc46b",
     "radius": 36,
     "offset": [
-     -3.3,
-     -16.1
+     -0.9,
+     -17.2
     ]
    },
    "interaction": null,
@@ -996,8 +992,8 @@
     "color": "#ffc46b",
     "radius": 36,
     "offset": [
-     0.9,
-     -26.4
+     1.3,
+     -22.4
     ]
    },
    "interaction": null,
@@ -1038,8 +1034,8 @@
     "color": "#ffc46b",
     "radius": 36,
     "offset": [
-     7.0,
-     -26.1
+     8.6,
+     -23.7
     ]
    },
    "interaction": null,
@@ -1065,7 +1061,7 @@
    ],
    "density": 3.0864,
    "anchor": [
-    26.5,
+    27.0,
     112.0
    ],
    "footprint": [
@@ -1080,8 +1076,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     -3.4,
-     -15.6
+     -3.5,
+     -15.8
     ]
    },
    "interaction": null,
@@ -1192,8 +1188,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     3.6,
-     -32.1
+     3.8,
+     -28.2
     ]
    },
    "interaction": "inspect",
@@ -1234,8 +1230,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     2.3,
-     -31.2
+     1.8,
+     -30.3
     ]
    },
    "interaction": "inspect",
@@ -1276,8 +1272,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     1.7,
-     -26.5
+     2.1,
+     -22.1
     ]
    },
    "interaction": "inspect",
@@ -1303,7 +1299,7 @@
    ],
    "density": 3.858,
    "anchor": [
-    50.0,
+    51.0,
     102.0
    ],
    "footprint": [
@@ -1318,8 +1314,8 @@
     "color": "#ffc46b",
     "radius": 28,
     "offset": [
-     -3.5,
-     -7.5
+     -3.2,
+     -9.5
     ]
    },
    "interaction": null,
@@ -1360,8 +1356,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     -3.8,
-     -8.5
+     -3.5,
+     -10.0
     ]
    },
    "interaction": null,
@@ -1387,7 +1383,7 @@
    ],
    "density": 1.9951,
    "anchor": [
-    69.0,
+    79.5,
     183.0
    ],
    "footprint": [
@@ -1402,8 +1398,8 @@
     "color": "#ffc46b",
     "radius": 20,
     "offset": [
-     2.7,
-     -17.4
+     -2.6,
+     -17.3
     ]
    },
    "interaction": null,
@@ -1429,7 +1425,7 @@
    ],
    "density": 1.9511,
    "anchor": [
-    75.0,
+    81.5,
     179.0
    ],
    "footprint": [
@@ -1444,8 +1440,8 @@
     "color": "#f2a541",
     "radius": 40,
     "offset": [
-     -5.7,
-     -33.7
+     -9.2,
+     -34.1
     ]
    },
    "interaction": null,
@@ -1521,8 +1517,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     6.9,
-     -11.9
+     7.7,
+     -10.6
     ]
    },
    "interaction": null,
@@ -1583,7 +1579,7 @@
    ],
    "density": 3.5714,
    "anchor": [
-    70.0,
+    68.5,
     164.0
    ],
    "footprint": [
@@ -1628,8 +1624,8 @@
     "color": "#9b6bd6",
     "radius": 36,
     "offset": [
-     -0.7,
-     -3.7
+     -0.6,
+     -5.9
     ]
    },
    "interaction": null,
@@ -1665,8 +1661,8 @@
     "color": "#9b6bd6",
     "radius": 36,
     "offset": [
-     -0.7,
-     -3.7
+     0.6,
+     -5.6
     ]
    },
    "interaction": null,
@@ -1692,7 +1688,7 @@
    ],
    "density": 3.2489,
    "anchor": [
-    33.0,
+    32.5,
     102.0
    ],
    "footprint": [
@@ -1727,7 +1723,7 @@
    ],
    "density": 2.9541,
    "anchor": [
-    33.0,
+    32.0,
     136.0
    ],
    "footprint": [
@@ -1792,7 +1788,7 @@
    ],
    "density": 3.9781,
    "anchor": [
-    24.0,
+    24.5,
     60.0
    ],
    "footprint": [
@@ -1862,13 +1858,13 @@
    ],
    "density": 4.2622,
    "anchor": [
-    36.0,
+    32.5,
     58.0
    ],
    "footprint": [
-    -7.7,
+    -6.7,
     -10.2,
-    15.4,
+    13.4,
     10.2
    ],
    "occluder": false,
@@ -1897,13 +1893,13 @@
    ],
    "density": 4.1975,
    "anchor": [
-    37.5,
+    41.0,
     68.0
    ],
    "footprint": [
-    -8.1,
+    -7.4,
     -10.7,
-    16.2,
+    14.8,
     10.7
    ],
    "occluder": false,
@@ -1932,7 +1928,7 @@
    ],
    "density": 4.2438,
    "anchor": [
-    25.5,
+    25.0,
     55.0
    ],
    "footprint": [
@@ -1967,13 +1963,13 @@
    ],
    "density": 3.7037,
    "anchor": [
-    27.5,
+    29.5,
     38.0
    ],
    "footprint": [
-    -6.2,
+    -5.5,
     -8.3,
-    12.4,
+    11.0,
     8.3
    ],
    "occluder": false,
@@ -2037,7 +2033,7 @@
    ],
    "density": 2.7998,
    "anchor": [
-    66.0,
+    65.0,
     129.0
    ],
    "footprint": [
@@ -2072,7 +2068,7 @@
    ],
    "density": 2.9541,
    "anchor": [
-    80.5,
+    81.0,
     136.0
    ],
    "footprint": [
@@ -2107,13 +2103,13 @@
    ],
    "density": 2.8549,
    "anchor": [
-    67.5,
+    65.5,
     76.0
    ],
    "footprint": [
-    -20.6,
+    -20.1,
     -11.5,
-    41.2,
+    40.2,
     11.5
    ],
    "occluder": false,
@@ -2142,13 +2138,13 @@
    ],
    "density": 4.1667,
    "anchor": [
-    40.5,
+    37.5,
     82.0
    ],
    "footprint": [
-    -8.7,
+    -8.0,
     -9.7,
-    17.4,
+    16.0,
     9.7
    ],
    "occluder": false,
@@ -2177,7 +2173,7 @@
    ],
    "density": 4.1304,
    "anchor": [
-    46.0,
+    45.5,
     92.0
    ],
    "footprint": [
@@ -2212,13 +2208,13 @@
    ],
    "density": 4.1152,
    "anchor": [
-    72.0,
+    55.5,
     120.0
    ],
    "footprint": [
-    -14.9,
+    -13.0,
     -15.7,
-    29.8,
+    26.0,
     15.7
    ],
    "occluder": false,
@@ -2247,13 +2243,13 @@
    ],
    "density": 4.1564,
    "anchor": [
-    60.0,
+    48.5,
     101.0
    ],
    "footprint": [
-    -12.3,
+    -11.2,
     -13.1,
-    24.6,
+    22.4,
     13.1
    ],
    "occluder": false,
@@ -2317,7 +2313,7 @@
    ],
    "density": 4.2088,
    "anchor": [
-    17.0,
+    17.5,
     75.0
    ],
    "footprint": [
@@ -2332,7 +2328,7 @@
     "color": "#f2a541",
     "radius": 40,
     "offset": [
-     -0.1,
+     0.0,
      -5.5
     ]
    },
@@ -2359,7 +2355,7 @@
    ],
    "density": 4.2088,
    "anchor": [
-    15.0,
+    15.5,
     75.0
    ],
    "footprint": [
@@ -2374,8 +2370,8 @@
     "color": "#f2a541",
     "radius": 40,
     "offset": [
-     0.1,
-     -5.0
+     0.0,
+     -4.9
     ]
    },
    "interaction": "lamp",
@@ -2401,7 +2397,7 @@
    ],
    "density": 2.7435,
    "anchor": [
-    28.0,
+    26.0,
     82.0
    ],
    "footprint": [
@@ -2611,7 +2607,7 @@
    ],
    "density": 2.3369,
    "anchor": [
-    26.0,
+    27.0,
     55.0
    ],
    "footprint": [
@@ -2646,7 +2642,7 @@
    ],
    "density": 2.6177,
    "anchor": [
-    121.5,
+    128.0,
     231.0
    ],
    "footprint": [
@@ -2681,7 +2677,7 @@
    ],
    "density": 2.7778,
    "anchor": [
-    17.5,
+    18.0,
     56.0
    ],
    "footprint": [
@@ -2731,8 +2727,8 @@
     "color": "#ff8a3d",
     "radius": 28,
     "offset": [
-     0.1,
-     -7.5
+     0.8,
+     -7.6
     ]
    },
    "interaction": null,
@@ -2758,7 +2754,7 @@
    ],
    "density": 3.2922,
    "anchor": [
-    16.5,
+    16.0,
     50.0
    ],
    "footprint": [
@@ -2918,7 +2914,7 @@
    ],
    "density": 2.4691,
    "anchor": [
-    48.5,
+    46.5,
     86.0
    ],
    "footprint": [
@@ -2933,8 +2929,8 @@
     "color": "#f2a541",
     "radius": 64,
     "offset": [
-     10.7,
-     -16.2
+     10.5,
+     -16.3
     ]
    },
    "interaction": "lamp",
@@ -3175,7 +3171,7 @@
    ],
    "density": 2.9492,
    "anchor": [
-    16.0,
+    15.5,
     45.0
    ],
    "footprint": [
@@ -3210,7 +3206,7 @@
    ],
    "density": 2.716,
    "anchor": [
-    20.0,
+    16.0,
     90.0
    ],
    "footprint": [
@@ -3249,9 +3245,9 @@
     42.0
    ],
    "footprint": [
-    -4.1,
+    -3.9,
     -5.1,
-    8.2,
+    7.8,
     5.1
    ],
    "occluder": false,
@@ -3280,13 +3276,13 @@
    ],
    "density": 3.0453,
    "anchor": [
-    60.5,
+    76.5,
     150.0
    ],
    "footprint": [
-    -15.4,
+    -13.6,
     -19.2,
-    30.8,
+    27.2,
     19.2
    ],
    "occluder": true,
@@ -3315,13 +3311,13 @@
    ],
    "density": 2.9721,
    "anchor": [
-    64.5,
+    81.0,
     132.0
    ],
    "footprint": [
-    -16.8,
+    -15.1,
     -21.0,
-    33.6,
+    30.2,
     21.0
    ],
    "occluder": true,
@@ -3350,13 +3346,13 @@
    ],
    "density": 3.2628,
    "anchor": [
-    64.5,
+    65.0,
     150.0
    ],
    "footprint": [
-    -13.4,
+    -12.9,
     -15.3,
-    26.8,
+    25.8,
     15.3
    ],
    "occluder": true,
@@ -3365,8 +3361,8 @@
     "color": "#e64a8e",
     "radius": 36,
     "offset": [
-     -0.5,
-     -31.4
+     -0.2,
+     -29.7
     ]
    },
    "interaction": null,
@@ -3395,27 +3391,23 @@
     88.0,
     204.0
    ],
-   "footprint": [
-    -33.1,
-    -13.2,
-    66.2,
-    13.2
-   ],
+   "footprint": null,
    "occluder": true,
    "sway": false,
    "light": {
     "color": "#e64a8e",
     "radius": 48,
     "offset": [
-     -0.4,
-     -45.7
+     -8.6,
+     -39.2
     ]
    },
    "interaction": null,
    "sound": {
     "ambient": null,
     "material": "stone"
-   }
+   },
+   "note": "passagem: a colisão dos pilares vai no layout do mapa"
   },
   {
    "id": "arch_stone",
@@ -3437,12 +3429,7 @@
     46.0,
     153.0
    ],
-   "footprint": [
-    -17.0,
-    -6.8,
-    34.0,
-    6.8
-   ],
+   "footprint": null,
    "occluder": true,
    "sway": false,
    "light": null,
@@ -3450,7 +3437,8 @@
    "sound": {
     "ambient": null,
     "material": "stone"
-   }
+   },
+   "note": "passagem: a colisão dos pilares vai no layout do mapa"
   },
   {
    "id": "arch_stone_square",
@@ -3472,12 +3460,7 @@
     51.5,
     152.0
    ],
-   "footprint": [
-    -18.7,
-    -7.5,
-    37.4,
-    7.5
-   ],
+   "footprint": null,
    "occluder": true,
    "sway": false,
    "light": null,
@@ -3485,7 +3468,8 @@
    "sound": {
     "ambient": null,
     "material": "stone"
-   }
+   },
+   "note": "passagem: a colisão dos pilares vai no layout do mapa"
   },
   {
    "id": "arch_vines",
@@ -3507,12 +3491,7 @@
     87.5,
     155.0
    ],
-   "footprint": [
-    -41.6,
-    -16.7,
-    83.2,
-    16.7
-   ],
+   "footprint": null,
    "occluder": true,
    "sway": true,
    "light": null,
@@ -3520,7 +3499,8 @@
    "sound": {
     "ambient": null,
     "material": "stone"
-   }
+   },
+   "note": "passagem: a colisão dos pilares vai no layout do mapa"
   },
   {
    "id": "armillary_crystal",
@@ -3539,13 +3519,13 @@
    ],
    "density": 3.2007,
    "anchor": [
-    51.5,
+    51.0,
     142.0
    ],
    "footprint": [
-    -9.3,
+    -8.1,
     -12.4,
-    18.6,
+    16.2,
     12.4
    ],
    "occluder": true,
@@ -3554,8 +3534,8 @@
     "color": "#e64a8e",
     "radius": 32,
     "offset": [
-     1.5,
-     -27.1
+     0.9,
+     -28.4
     ]
    },
    "interaction": "inspect",
@@ -3581,13 +3561,13 @@
    ],
    "density": 3.1046,
    "anchor": [
-    80.0,
+    74.0,
     173.0
    ],
    "footprint": [
-    -15.1,
+    -10.0,
     -20.1,
-    30.2,
+    20.0,
     20.1
    ],
    "occluder": true,
@@ -3596,8 +3576,8 @@
     "color": "#e64a8e",
     "radius": 44,
     "offset": [
-     -1.7,
-     -30.5
+     0.2,
+     -32.0
     ]
    },
    "interaction": "inspect",
@@ -3623,13 +3603,13 @@
    ],
    "density": 3.4512,
    "anchor": [
-    43.5,
+    42.5,
     125.0
    ],
    "footprint": [
-    -7.2,
+    -6.8,
     -9.6,
-    14.4,
+    13.6,
     9.6
    ],
    "occluder": false,
@@ -3658,13 +3638,13 @@
    ],
    "density": 3.1928,
    "anchor": [
-    57.0,
+    57.5,
     152.0
    ],
    "footprint": [
-    -10.3,
+    -10.2,
     -13.8,
-    20.6,
+    20.4,
     13.8
    ],
    "occluder": true,
@@ -3728,13 +3708,13 @@
    ],
    "density": 2.5132,
    "anchor": [
-    29.5,
+    30.0,
     59.0
    ],
    "footprint": [
-    -9.3,
+    -6.4,
     -10.9,
-    18.6,
+    12.8,
     10.9
    ],
    "occluder": false,
@@ -3763,13 +3743,13 @@
    ],
    "density": 3.9609,
    "anchor": [
-    43.0,
+    63.0,
     79.0
    ],
    "footprint": [
-    -9.3,
+    -4.0,
     -7.2,
-    18.6,
+    8.0,
     7.2
    ],
    "occluder": false,
@@ -3798,7 +3778,7 @@
    ],
    "density": 2.3148,
    "anchor": [
-    32.5,
+    33.0,
     122.0
    ],
    "footprint": [
@@ -3833,7 +3813,7 @@
    ],
    "density": 2.7901,
    "anchor": [
-    33.5,
+    34.5,
     115.0
    ],
    "footprint": [
@@ -3898,13 +3878,13 @@
    ],
    "density": 2.1262,
    "anchor": [
-    29.5,
+    40.0,
     64.0
    ],
    "footprint": [
-    -10.3,
+    -7.1,
     -11.6,
-    20.6,
+    14.2,
     11.6
    ],
    "occluder": false,
@@ -3933,13 +3913,13 @@
    ],
    "density": 4.2622,
    "anchor": [
-    25.0,
+    23.5,
     58.0
    ],
    "footprint": [
-    -5.2,
+    -4.8,
     -6.9,
-    10.4,
+    9.6,
     6.9
    ],
    "occluder": false,
@@ -3968,13 +3948,13 @@
    ],
    "density": 3.351,
    "anchor": [
-    20.5,
+    18.5,
     40.0
    ],
    "footprint": [
-    -5.0,
+    -4.6,
     -6.6,
-    10.0,
+    9.2,
     6.6
    ],
    "occluder": false,
@@ -4003,7 +3983,7 @@
    ],
    "density": 2.9321,
    "anchor": [
-    23.0,
+    22.5,
     59.0
    ],
    "footprint": [
@@ -4018,8 +3998,8 @@
     "color": "#e64a8e",
     "radius": 40,
     "offset": [
-     -0.1,
-     -6.5
+     0.0,
+     -9.0
     ]
    },
    "interaction": "inspect",
@@ -4045,7 +4025,7 @@
    ],
    "density": 2.9321,
    "anchor": [
-    22.5,
+    23.0,
     59.0
    ],
    "footprint": [
@@ -4061,7 +4041,7 @@
     "radius": 40,
     "offset": [
      0.0,
-     -6.2
+     -8.2
     ]
    },
    "interaction": "inspect",
@@ -4087,7 +4067,7 @@
    ],
    "density": 3.1636,
    "anchor": [
-    23.0,
+    16.5,
     125.0
    ],
    "footprint": null,
@@ -4097,8 +4077,8 @@
     "color": "#e64a8e",
     "radius": 40,
     "offset": [
-     0.1,
-     -16.3
+     3.3,
+     -32.5
     ]
    },
    "interaction": "inspect",
@@ -4124,7 +4104,7 @@
    ],
    "density": 3.1636,
    "anchor": [
-    32.5,
+    30.0,
     84.0
    ],
    "footprint": [
@@ -4139,8 +4119,8 @@
     "color": "#e64a8e",
     "radius": 40,
     "offset": [
-     -0.5,
-     -14.8
+     1.1,
+     -19.7
     ]
    },
    "interaction": "inspect",
@@ -4166,7 +4146,7 @@
    ],
    "density": 3.1305,
    "anchor": [
-    43.5,
+    42.5,
     144.0
    ],
    "footprint": [
@@ -4181,8 +4161,8 @@
     "color": "#e64a8e",
     "radius": 40,
     "offset": [
-     -0.2,
-     -21.3
+     2.0,
+     -33.0
     ]
    },
    "interaction": "inspect",
@@ -4208,7 +4188,7 @@
    ],
    "density": 3.1379,
    "anchor": [
-    16.5,
+    17.0,
     63.0
    ],
    "footprint": [
@@ -4223,8 +4203,8 @@
     "color": "#9b6bd6",
     "radius": 32,
     "offset": [
-     -0.1,
-     -5.3
+     0.8,
+     -9.6
     ]
    },
    "interaction": "inspect",
@@ -4285,13 +4265,13 @@
    ],
    "density": 2.729,
    "anchor": [
-    37.0,
+    47.5,
     86.0
    ],
    "footprint": [
-    -11.5,
+    -7.9,
     -12.8,
-    23.0,
+    15.8,
     12.8
    ],
    "occluder": false,
@@ -4320,13 +4300,13 @@
    ],
    "density": 2.9721,
    "anchor": [
-    62.5,
+    69.0,
     132.0
    ],
    "footprint": [
-    -18.3,
+    -16.8,
     -20.4,
-    36.6,
+    33.6,
     20.4
    ],
    "occluder": true,
@@ -4390,7 +4370,7 @@
    ],
    "density": 2.3868,
    "anchor": [
-    34.5,
+    34.0,
     60.0
    ],
    "footprint": [
@@ -4405,8 +4385,8 @@
     "color": "#5b8def",
     "radius": 36,
     "offset": [
-     -0.3,
-     -12.9
+     -0.7,
+     -14.9
     ]
    },
    "interaction": "fountain",
@@ -4432,7 +4412,7 @@
    ],
    "density": 2.3868,
    "anchor": [
-    33.5,
+    33.0,
     60.0
    ],
    "footprint": [
@@ -4447,8 +4427,8 @@
     "color": "#5b8def",
     "radius": 28,
     "offset": [
-     -0.4,
-     -12.7
+     0.0,
+     -12.1
     ]
    },
    "interaction": "fountain",
@@ -4489,8 +4469,8 @@
     "color": "#5b8def",
     "radius": 40,
     "offset": [
-     3.6,
-     -21.5
+     3.5,
+     -19.7
     ]
    },
    "interaction": "fountain",
@@ -4516,7 +4496,7 @@
    ],
    "density": 3.3788,
    "anchor": [
-    38.0,
+    37.5,
     106.0
    ],
    "footprint": [
@@ -4586,13 +4566,13 @@
    ],
    "density": 2.924,
    "anchor": [
-    33.0,
+    27.0,
     92.0
    ],
    "footprint": [
-    -7.4,
+    -4.4,
     -8.5,
-    14.8,
+    8.8,
     8.5
    ],
    "occluder": false,
@@ -4621,13 +4601,13 @@
    ],
    "density": 2.9721,
    "anchor": [
-    38.0,
+    43.5,
     132.0
    ],
    "footprint": [
-    -8.5,
+    -5.9,
     -9.7,
-    17.0,
+    11.8,
     9.7
    ],
    "occluder": true,
@@ -4636,8 +4616,8 @@
     "color": "#ff8a3d",
     "radius": 40,
     "offset": [
-     2.3,
-     -35.7
+     0.4,
+     -36.9
     ]
    },
    "interaction": null,
@@ -4663,13 +4643,13 @@
    ],
    "density": 2.8292,
    "anchor": [
-    33.5,
+    31.5,
     112.0
    ],
    "footprint": [
-    -7.8,
+    -6.9,
     -8.9,
-    15.6,
+    13.8,
     8.9
    ],
    "occluder": true,
@@ -4678,8 +4658,8 @@
     "color": "#e64a8e",
     "radius": 36,
     "offset": [
-     0.6,
-     -28.7
+     1.8,
+     -29.9
     ]
    },
    "interaction": null,
@@ -4709,9 +4689,9 @@
     174.0
    ],
    "footprint": [
-    -19.1,
+    -18.6,
     -21.8,
-    38.2,
+    37.2,
     21.8
    ],
    "occluder": true,
@@ -4740,7 +4720,7 @@
    ],
    "density": 2.3457,
    "anchor": [
-    19.5,
+    19.0,
     59.0
    ],
    "footprint": [
@@ -4755,8 +4735,8 @@
     "color": "#f2a541",
     "radius": 40,
     "offset": [
-     0.0,
-     -8.0
+     -1.3,
+     -8.3
     ]
    },
    "interaction": "lamp",
@@ -4782,7 +4762,7 @@
    ],
    "density": 2.3717,
    "anchor": [
-    17.0,
+    15.0,
     75.0
    ],
    "footprint": [
@@ -4797,8 +4777,8 @@
     "color": "#f2a541",
     "radius": 40,
     "offset": [
-     -1.1,
-     -14.7
+     0.3,
+     -14.9
     ]
    },
    "interaction": "lamp",
@@ -4824,7 +4804,7 @@
    ],
    "density": 2.4074,
    "anchor": [
-    19.0,
+    22.0,
     80.0
    ],
    "footprint": [
@@ -4839,8 +4819,8 @@
     "color": "#f2a541",
     "radius": 40,
     "offset": [
-     0.8,
-     -14.0
+     -0.2,
+     -16.5
     ]
    },
    "interaction": "lamp",
@@ -4866,7 +4846,7 @@
    ],
    "density": 2.7615,
    "anchor": [
-    35.0,
+    34.5,
     172.0
    ],
    "footprint": [
@@ -4901,7 +4881,7 @@
    ],
    "density": 3.0407,
    "anchor": [
-    35.5,
+    34.5,
     135.0
    ],
    "footprint": [
@@ -4916,8 +4896,8 @@
     "color": "#e64a8e",
     "radius": 36,
     "offset": [
-     0.1,
-     -33.7
+     0.8,
+     -36.1
     ]
    },
    "interaction": null,
@@ -4946,12 +4926,7 @@
     93.5,
     151.0
    ],
-   "footprint": [
-    -45.8,
-    -18.3,
-    91.6,
-    18.3
-   ],
+   "footprint": null,
    "occluder": true,
    "sway": true,
    "light": null,
@@ -4959,7 +4934,8 @@
    "sound": {
     "ambient": null,
     "material": "stone"
-   }
+   },
+   "note": "passagem: a colisão dos pilares vai no layout do mapa"
   },
   {
    "id": "pillar_crystal",
@@ -4978,7 +4954,7 @@
    ],
    "density": 2.9077,
    "anchor": [
-    38.5,
+    39.0,
     181.0
    ],
    "footprint": [
@@ -4993,8 +4969,8 @@
     "color": "#e64a8e",
     "radius": 36,
     "offset": [
-     0.9,
-     -51.4
+     1.0,
+     -54.2
     ]
    },
    "interaction": null,
@@ -5055,7 +5031,7 @@
    ],
    "density": 2.963,
    "anchor": [
-    43.0,
+    43.5,
     194.0
    ],
    "footprint": [
@@ -5125,7 +5101,7 @@
    ],
    "density": 4.0404,
    "anchor": [
-    34.5,
+    34.0,
     73.0
    ],
    "footprint": [
@@ -5190,13 +5166,13 @@
    ],
    "density": 2.8549,
    "anchor": [
-    56.0,
+    51.5,
     113.0
    ],
    "footprint": [
-    -13.2,
+    -11.0,
     -15.1,
-    26.4,
+    22.0,
     15.1
    ],
    "occluder": true,
@@ -5255,13 +5231,13 @@
    ],
    "density": 3.6049,
    "anchor": [
-    73.5,
+    68.0,
     148.0
    ],
    "footprint": [
-    -16.9,
+    -7.8,
     -19.8,
-    33.8,
+    15.6,
     19.8
    ],
    "occluder": true,
@@ -5305,8 +5281,8 @@
     "color": "#e64a8e",
     "radius": 72,
     "offset": [
-     1.4,
-     -11.5
+     -0.7,
+     -13.2
     ]
    },
    "interaction": "inspect",
@@ -5347,8 +5323,8 @@
     "color": "#e64a8e",
     "radius": 72,
     "offset": [
-     0.7,
-     -6.8
+     0.8,
+     -8.4
     ]
    },
    "interaction": "inspect",
@@ -5374,7 +5350,7 @@
    ],
    "density": 2.6235,
    "anchor": [
-    64.0,
+    64.5,
     189.0
    ],
    "footprint": [
@@ -5389,8 +5365,8 @@
     "color": "#e64a8e",
     "radius": 72,
     "offset": [
-     0.2,
-     -30.9
+     -2.0,
+     -33.0
     ]
    },
    "interaction": "inspect",
@@ -5596,8 +5572,8 @@
     "color": "#e64a8e",
     "radius": 40,
     "offset": [
-     -12.8,
-     -26.5
+     8.8,
+     -26.4
     ]
    },
    "interaction": null,
@@ -5663,8 +5639,8 @@
     "color": "#e64a8e",
     "radius": 32,
     "offset": [
-     0.1,
-     -13.5
+     0.4,
+     -11.1
     ]
    },
    "interaction": null,
@@ -5700,8 +5676,8 @@
     "color": "#f2a541",
     "radius": 32,
     "offset": [
-     3.0,
-     -43.8
+     2.9,
+     -46.7
     ]
    },
    "interaction": null,
@@ -5817,7 +5793,7 @@
    ],
    "density": 3.0501,
    "anchor": [
-    35.0,
+    37.0,
     170.0
    ],
    "footprint": [
@@ -5852,7 +5828,7 @@
    ],
    "density": 3.1036,
    "anchor": [
-    39.0,
+    37.5,
     183.0
    ],
    "footprint": [
@@ -5937,8 +5913,8 @@
     "color": "#e64a8e",
     "radius": 32,
     "offset": [
-     -0.4,
-     -22.9
+     -0.2,
+     -23.3
     ]
    },
    "interaction": null,
@@ -5964,13 +5940,13 @@
    ],
    "density": 3.427,
    "anchor": [
-    73.0,
+    60.0,
     163.0
    ],
    "footprint": [
-    -12.4,
+    -9.6,
     -16.6,
-    24.8,
+    19.2,
     16.6
    ],
    "occluder": true,
@@ -6034,7 +6010,7 @@
    ],
    "density": 2.7521,
    "anchor": [
-    30.0,
+    29.5,
     109.0
    ],
    "footprint": [
@@ -6104,13 +6080,13 @@
    ],
    "density": 2.5781,
    "anchor": [
-    27.5,
+    27.0,
     73.0
    ],
    "footprint": [
-    -8.9,
+    -5.4,
     -9.9,
-    17.8,
+    10.8,
     9.9
    ],
    "occluder": false,
@@ -6139,13 +6115,13 @@
    ],
    "density": 2.9412,
    "anchor": [
-    29.5,
+    28.0,
     83.0
    ],
    "footprint": [
-    -6.5,
+    -5.1,
     -9.4,
-    13.0,
+    10.2,
     9.4
    ],
    "occluder": false,
@@ -6174,7 +6150,7 @@
    ],
    "density": 3.0556,
    "anchor": [
-    24.5,
+    23.5,
     101.0
    ],
    "footprint": [
@@ -6272,12 +6248,7 @@
     68.5,
     90.0
    ],
-   "footprint": [
-    -29.4,
-    -11.8,
-    58.8,
-    11.8
-   ],
+   "footprint": null,
    "occluder": true,
    "sway": true,
    "light": null,
@@ -6285,7 +6256,8 @@
    "sound": {
     "ambient": null,
     "material": "stone"
-   }
+   },
+   "note": "passagem: a colisão dos pilares vai no layout do mapa"
   },
   {
    "id": "balustrade",
@@ -6403,9 +6375,9 @@
     61.0
    ],
    "footprint": [
-    -4.3,
+    -4.0,
     -5.6,
-    8.6,
+    8.0,
     5.6
    ],
    "occluder": false,
@@ -6434,13 +6406,13 @@
    ],
    "density": 3.2407,
    "anchor": [
-    53.0,
+    52.5,
     170.0
    ],
    "footprint": [
-    -12.6,
+    -11.9,
     -9.4,
-    25.2,
+    23.8,
     9.4
    ],
    "occluder": true,
@@ -6499,7 +6471,7 @@
    ],
    "density": 3.1954,
    "anchor": [
-    23.0,
+    23.5,
     90.0
    ],
    "footprint": [
@@ -6534,13 +6506,13 @@
    ],
    "density": 3.2267,
    "anchor": [
-    45.5,
+    45.0,
     117.0
    ],
    "footprint": [
-    -10.8,
+    -7.7,
     -8.1,
-    21.6,
+    15.4,
     8.1
    ],
    "occluder": false,
@@ -6694,7 +6666,7 @@
    ],
    "density": 2.754,
    "anchor": [
-    39.5,
+    39.0,
     118.0
    ],
    "footprint": [
@@ -6729,7 +6701,7 @@
    ],
    "density": 2.8504,
    "anchor": [
-    36.0,
+    35.5,
     159.0
    ],
    "footprint": [
@@ -6764,7 +6736,7 @@
    ],
    "density": 3.0864,
    "anchor": [
-    29.5,
+    30.5,
     177.0
    ],
    "footprint": [
@@ -6899,13 +6871,13 @@
    ],
    "density": 2.794,
    "anchor": [
-    37.5,
+    44.0,
     88.0
    ],
    "footprint": [
-    -10.8,
+    -9.3,
     -11.4,
-    21.6,
+    18.6,
     11.4
    ],
    "occluder": false,
@@ -6934,7 +6906,7 @@
    ],
    "density": 2.7497,
    "anchor": [
-    73.0,
+    77.5,
     100.0
    ],
    "footprint": [
@@ -7004,7 +6976,7 @@
    ],
    "density": 3.215,
    "anchor": [
-    48.5,
+    50.0,
     127.0
    ],
    "footprint": [
@@ -7039,13 +7011,13 @@
    ],
    "density": 2.7778,
    "anchor": [
-    70.0,
+    74.0,
     101.0
    ],
    "footprint": [
-    -20.8,
+    -18.4,
     -22.0,
-    41.6,
+    36.8,
     22.0
    ],
    "occluder": false,
@@ -7074,13 +7046,13 @@
    ],
    "density": 2.9394,
    "anchor": [
-    34.5,
+    24.0,
     102.0
    ],
    "footprint": [
-    -9.4,
+    -6.5,
     -10.0,
-    18.8,
+    13.0,
     10.0
    ],
    "occluder": false,
@@ -7169,7 +7141,7 @@
    ],
    "density": 4.1667,
    "anchor": [
-    17.5,
+    21.5,
     81.0
    ],
    "footprint": null,
@@ -7244,8 +7216,8 @@
     "color": "#f2a541",
     "radius": 40,
     "offset": [
-     -0.1,
-     -12.2
+     0.0,
+     -11.5
     ]
    },
    "interaction": "lamp",
@@ -7286,8 +7258,8 @@
     "color": "#f2a541",
     "radius": 40,
     "offset": [
-     -0.1,
-     -11.9
+     0.2,
+     -11.5
     ]
    },
    "interaction": "lamp",
@@ -7348,7 +7320,7 @@
    ],
    "density": 3.0285,
    "anchor": [
-    25.5,
+    24.0,
     159.0
    ],
    "footprint": [
@@ -7383,7 +7355,7 @@
    ],
    "density": 3.1085,
    "anchor": [
-    40.0,
+    37.5,
     143.0
    ],
    "footprint": [
@@ -7418,7 +7390,7 @@
    ],
    "density": 3.4763,
    "anchor": [
-    37.0,
+    29.5,
     109.0
    ],
    "footprint": [
@@ -7518,7 +7490,7 @@
    ],
    "density": 3.0466,
    "anchor": [
-    39.0,
+    40.5,
     155.0
    ],
    "footprint": [
@@ -7553,7 +7525,7 @@
    ],
    "density": 3.0466,
    "anchor": [
-    47.5,
+    48.0,
     155.0
    ],
    "footprint": [
@@ -7588,13 +7560,13 @@
    ],
    "density": 3.3565,
    "anchor": [
-    39.0,
+    23.0,
     89.0
    ],
    "footprint": [
-    -7.7,
+    -6.0,
     -8.8,
-    15.4,
+    12.0,
     8.8
    ],
    "occluder": false,
@@ -7623,13 +7595,13 @@
    ],
    "density": 3.2317,
    "anchor": [
-    46.0,
+    24.0,
     91.0
    ],
    "footprint": [
-    -9.5,
+    -5.6,
     -10.9,
-    19.0,
+    11.2,
     10.9
    ],
    "occluder": false,
@@ -7693,7 +7665,7 @@
    ],
    "density": 3.3951,
    "anchor": [
-    77.5,
+    67.5,
     90.0
    ],
    "footprint": [
@@ -7728,13 +7700,13 @@
    ],
    "density": 3.4392,
    "anchor": [
-    40.5,
+    59.5,
     119.0
    ],
    "footprint": [
-    -7.8,
+    -5.7,
     -9.0,
-    15.6,
+    11.4,
     9.0
    ],
    "occluder": false,
@@ -7763,13 +7735,13 @@
    ],
    "density": 3.4877,
    "anchor": [
-    61.0,
+    60.0,
     115.0
    ],
    "footprint": [
-    -11.8,
+    -4.9,
     -13.5,
-    23.6,
+    9.8,
     13.5
    ],
    "occluder": false,
@@ -7798,13 +7770,13 @@
    ],
    "density": 3.2764,
    "anchor": [
-    34.0,
+    33.0,
     71.0
    ],
    "footprint": [
-    -8.8,
+    -6.1,
     -9.8,
-    17.6,
+    12.2,
     9.8
    ],
    "occluder": false,
@@ -7868,13 +7840,13 @@
    ],
    "density": 3.6596,
    "anchor": [
-    52.0,
+    44.5,
     85.0
    ],
    "footprint": [
-    -11.6,
+    -11.3,
     -12.3,
-    23.2,
+    22.6,
     12.3
    ],
    "occluder": false,
@@ -8008,13 +7980,13 @@
    ],
    "density": 3.5185,
    "anchor": [
-    51.0,
+    46.0,
     116.0
    ],
    "footprint": [
-    -12.5,
+    -6.0,
     -13.9,
-    25.0,
+    12.0,
     13.9
    ],
    "occluder": false,
@@ -8043,13 +8015,13 @@
    ],
    "density": 3.3608,
    "anchor": [
-    33.5,
+    34.0,
     100.0
    ],
    "footprint": [
-    -8.4,
+    -4.2,
     -9.4,
-    16.8,
+    8.4,
     9.4
    ],
    "occluder": false,
@@ -8078,13 +8050,13 @@
    ],
    "density": 3.8066,
    "anchor": [
-    30.0,
+    30.5,
     76.0
    ],
    "footprint": [
-    -5.1,
+    -4.3,
     -6.6,
-    10.2,
+    8.6,
     6.6
    ],
    "occluder": false,
@@ -8117,9 +8089,9 @@
     75.0
    ],
    "footprint": [
-    -5.8,
+    -5.1,
     -7.4,
-    11.6,
+    10.2,
     7.4
    ],
    "occluder": false,
@@ -8148,13 +8120,13 @@
    ],
    "density": 3.8462,
    "anchor": [
-    30.5,
+    31.0,
     83.0
    ],
    "footprint": [
-    -5.2,
+    -4.4,
     -6.7,
-    10.4,
+    8.8,
     6.7
    ],
    "occluder": false,
@@ -8478,8 +8450,8 @@
     "color": "#ffc46b",
     "radius": 40,
     "offset": [
-     0.6,
-     -23.1
+     0.4,
+     -23.8
     ]
    },
    "interaction": "inspect",
@@ -8521,7 +8493,7 @@
     "radius": 44,
     "offset": [
      -0.1,
-     -22.0
+     -21.8
     ]
    },
    "interaction": "inspect",
@@ -8562,8 +8534,8 @@
     "color": "#ffc46b",
     "radius": 44,
     "offset": [
-     0.2,
-     -22.2
+     -0.4,
+     -22.5
     ]
    },
    "interaction": "inspect",
@@ -8604,8 +8576,8 @@
     "color": "#ffc46b",
     "radius": 44,
     "offset": [
-     -0.4,
-     -23.4
+     0.2,
+     -23.8
     ]
    },
    "interaction": "inspect",
@@ -8634,12 +8606,7 @@
     61.0,
     130.0
    ],
-   "footprint": [
-    -23.9,
-    -9.6,
-    47.8,
-    9.6
-   ],
+   "footprint": null,
    "occluder": true,
    "sway": false,
    "light": null,
@@ -8647,7 +8614,8 @@
    "sound": {
     "ambient": null,
     "material": "stone"
-   }
+   },
+   "note": "passagem: a colisão dos pilares vai no layout do mapa"
   },
   {
    "id": "arch_skulls",
@@ -8669,12 +8637,7 @@
     92.0,
     159.0
    ],
-   "footprint": [
-    -40.9,
-    -16.3,
-    81.8,
-    16.3
-   ],
+   "footprint": null,
    "occluder": true,
    "sway": false,
    "light": null,
@@ -8682,7 +8645,8 @@
    "sound": {
     "ambient": null,
     "material": "stone"
-   }
+   },
+   "note": "passagem: a colisão dos pilares vai no layout do mapa"
   },
   {
    "id": "armillary_brass",
@@ -8856,7 +8820,7 @@
    ],
    "density": 3.6476,
    "anchor": [
-    26.0,
+    25.5,
     67.0
    ],
    "footprint": [
@@ -8891,13 +8855,13 @@
    ],
    "density": 3.6265,
    "anchor": [
-    24.0,
+    21.5,
     49.0
    ],
    "footprint": [
-    -5.2,
+    -5.1,
     -6.7,
-    10.4,
+    10.2,
     6.7
    ],
    "occluder": false,
@@ -8996,13 +8960,13 @@
    ],
    "density": 2.9321,
    "anchor": [
-    44.0,
+    49.0,
     135.0
    ],
    "footprint": [
-    -11.5,
+    -10.6,
     -8.6,
-    23.0,
+    21.2,
     8.6
    ],
    "occluder": true,
@@ -9031,7 +8995,7 @@
    ],
    "density": 2.6749,
    "anchor": [
-    27.0,
+    26.5,
     54.0
    ],
    "footprint": [
@@ -9066,13 +9030,13 @@
    ],
    "density": 4.321,
    "anchor": [
-    26.5,
+    28.0,
     42.0
    ],
    "footprint": [
-    -5.0,
+    -3.2,
     -6.3,
-    10.0,
+    6.4,
     6.3
    ],
    "occluder": false,
@@ -9101,13 +9065,13 @@
    ],
    "density": 4.1474,
    "anchor": [
-    25.0,
+    23.5,
     44.0
    ],
    "footprint": [
-    -4.7,
+    -4.0,
     -5.9,
-    9.4,
+    8.0,
     5.9
    ],
    "occluder": false,
@@ -9136,7 +9100,7 @@
    ],
    "density": 2.7778,
    "anchor": [
-    56.5,
+    56.0,
     182.0
    ],
    "footprint": [
@@ -9241,7 +9205,7 @@
    ],
    "density": 4.1667,
    "anchor": [
-    28.0,
+    27.5,
     55.0
    ],
    "footprint": [
@@ -9276,7 +9240,7 @@
    ],
    "density": 2.5166,
    "anchor": [
-    32.0,
+    31.5,
     108.0
    ],
    "footprint": [
@@ -9341,13 +9305,13 @@
    ],
    "density": 2.7107,
    "anchor": [
-    42.0,
+    42.5,
     103.0
    ],
    "footprint": [
-    -13.3,
+    -12.7,
     -8.9,
-    26.6,
+    25.4,
     8.9
    ],
    "occluder": true,
@@ -9376,7 +9340,7 @@
    ],
    "density": 3.858,
    "anchor": [
-    25.5,
+    25.0,
     102.0
    ],
    "footprint": [
@@ -9391,8 +9355,8 @@
     "color": "#ffc46b",
     "radius": 40,
     "offset": [
-     -1.8,
-     -19.7
+     0.1,
+     -18.9
     ]
    },
    "interaction": null,
@@ -9433,8 +9397,8 @@
     "color": "#ffc46b",
     "radius": 40,
     "offset": [
-     -0.7,
-     -24.9
+     -0.3,
+     -24.5
     ]
    },
    "interaction": null,
@@ -9470,8 +9434,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     0.1,
-     -6.4
+     1.0,
+     -7.6
     ]
    },
    "interaction": null,
@@ -9507,8 +9471,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     -0.1,
-     -6.5
+     0.1,
+     -6.1
     ]
    },
    "interaction": null,
@@ -9534,7 +9498,7 @@
    ],
    "density": 4.1975,
    "anchor": [
-    14.0,
+    12.0,
     35.0
    ],
    "footprint": null,
@@ -9544,8 +9508,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     0.2,
-     -6.1
+     0.6,
+     -6.0
     ]
    },
    "interaction": null,
@@ -9586,8 +9550,8 @@
     "color": "#ffc46b",
     "radius": 40,
     "offset": [
-     0.1,
-     -22.6
+     0.0,
+     -21.2
     ]
    },
    "interaction": null,
@@ -9688,8 +9652,8 @@
     "color": "#ffc46b",
     "radius": 56,
     "offset": [
-     -0.2,
-     -12.1
+     -0.6,
+     -12.0
     ]
    },
    "interaction": null,
@@ -9725,8 +9689,8 @@
     "color": "#ffc46b",
     "radius": 56,
     "offset": [
-     -3.3,
-     -17.7
+     -2.5,
+     -17.2
     ]
    },
    "interaction": null,
@@ -9752,7 +9716,7 @@
    ],
    "density": 4.1975,
    "anchor": [
-    37.0,
+    37.5,
     68.0
    ],
    "footprint": [
@@ -9822,7 +9786,7 @@
    ],
    "density": 3.3069,
    "anchor": [
-    36.0,
+    35.0,
     47.0
    ],
    "footprint": [
@@ -9857,7 +9821,7 @@
    ],
    "density": 3.3951,
    "anchor": [
-    31.5,
+    34.0,
     68.0
    ],
    "footprint": [
@@ -9892,7 +9856,7 @@
    ],
    "density": 3.5665,
    "anchor": [
-    28.5,
+    29.0,
     54.0
    ],
    "footprint": [
@@ -9927,7 +9891,7 @@
    ],
    "density": 2.3895,
    "anchor": [
-    22.0,
+    21.5,
     122.0
    ],
    "footprint": [
@@ -9997,13 +9961,13 @@
    ],
    "density": 3.0864,
    "anchor": [
-    55.0,
+    54.5,
     92.0
    ],
    "footprint": [
-    -15.5,
+    -14.7,
     -17.2,
-    31.0,
+    29.4,
     17.2
    ],
    "occluder": false,
@@ -10012,8 +9976,8 @@
     "color": "#ffc46b",
     "radius": 32,
     "offset": [
-     6.0,
-     -22.6
+     4.4,
+     -21.7
     ]
    },
    "interaction": null,
@@ -10329,13 +10293,13 @@
    ],
    "density": 3.0864,
    "anchor": [
-    34.0,
+    37.5,
     57.0
    ],
    "footprint": [
-    -8.8,
+    -8.6,
     -9.3,
-    17.6,
+    17.2,
     9.3
    ],
    "occluder": false,
@@ -10394,7 +10358,7 @@
    ],
    "density": 3.4763,
    "anchor": [
-    35.0,
+    35.5,
     109.0
    ],
    "footprint": [
@@ -10429,7 +10393,7 @@
    ],
    "density": 2.754,
    "anchor": [
-    33.0,
+    34.0,
     118.0
    ],
    "footprint": [
@@ -10464,7 +10428,7 @@
    ],
    "density": 2.7663,
    "anchor": [
-    24.0,
+    23.5,
     123.0
    ],
    "footprint": [
@@ -10499,7 +10463,7 @@
    ],
    "density": 2.6828,
    "anchor": [
-    23.5,
+    23.0,
     115.0
    ],
    "footprint": [
@@ -10514,8 +10478,8 @@
     "color": "#5b8def",
     "radius": 24,
     "offset": [
-     -2.1,
-     -36.2
+     -1.3,
+     -39.0
     ]
    },
    "interaction": null,
@@ -10541,7 +10505,7 @@
    ],
    "density": 2.7435,
    "anchor": [
-    24.5,
+    24.0,
     122.0
    ],
    "footprint": [
@@ -10576,13 +10540,13 @@
    ],
    "density": 4.1564,
    "anchor": [
-    50.5,
+    74.0,
     101.0
    ],
    "footprint": [
-    -11.5,
+    -5.8,
     -8.5,
-    23.0,
+    11.6,
     8.5
    ],
    "occluder": false,
@@ -10611,7 +10575,7 @@
    ],
    "density": 3.7037,
    "anchor": [
-    50.5,
+    51.0,
     92.0
    ],
    "footprint": [
@@ -10646,13 +10610,13 @@
    ],
    "density": 2.8395,
    "anchor": [
-    29.0,
+    43.5,
     71.0
    ],
    "footprint": [
-    -6.7,
+    -4.1,
     -7.6,
-    13.4,
+    8.2,
     7.6
    ],
    "occluder": false,
@@ -10716,7 +10680,7 @@
    ],
    "density": 2.716,
    "anchor": [
-    26.0,
+    28.5,
     46.0
    ],
    "footprint": [
@@ -10751,7 +10715,7 @@
    ],
    "density": 2.6749,
    "anchor": [
-    28.0,
+    28.5,
     54.0
    ],
    "footprint": [
@@ -10971,7 +10935,7 @@
    ],
    "density": 3.2922,
    "anchor": [
-    57.0,
+    57.5,
     162.0
    ],
    "footprint": [
@@ -11111,8 +11075,8 @@
     "color": "#f2a541",
     "radius": 28,
     "offset": [
-     2.9,
-     -36.2
+     4.3,
+     -34.5
     ]
    },
    "interaction": "inspect",
@@ -11153,8 +11117,8 @@
     "color": "#ffc46b",
     "radius": 24,
     "offset": [
-     -5.4,
-     -44.4
+     -5.2,
+     -44.5
     ]
    },
    "interaction": "inspect",
@@ -11215,7 +11179,7 @@
    ],
    "density": 3.0683,
    "anchor": [
-    46.5,
+    44.0,
     171.0
    ],
    "footprint": [
@@ -11320,7 +11284,7 @@
    ],
    "density": 3.3238,
    "anchor": [
-    61.5,
+    61.0,
     142.0
    ],
    "footprint": [
@@ -11355,13 +11319,13 @@
    ],
    "density": 3.5151,
    "anchor": [
-    16.5,
+    17.0,
     43.0
    ],
    "footprint": [
-    -2.9,
+    -2.8,
     -4.1,
-    5.8,
+    5.6,
     4.1
    ],
    "occluder": false,
@@ -11520,8 +11484,8 @@
     "color": "#52e0c4",
     "radius": 40,
     "offset": [
-     -0.7,
-     -18.6
+     -0.8,
+     -17.6
     ]
    },
    "interaction": null,
@@ -11580,12 +11544,7 @@
     48.0,
     100.0
    ],
-   "footprint": [
-    -24.3,
-    -9.7,
-    48.6,
-    9.7
-   ],
+   "footprint": null,
    "occluder": true,
    "sway": true,
    "light": null,
@@ -11593,7 +11552,8 @@
    "sound": {
     "ambient": null,
     "material": "plant"
-   }
+   },
+   "note": "passagem: a colisão dos pilares vai no layout do mapa"
   },
   {
    "id": "arch_vines_round",
@@ -11615,12 +11575,7 @@
     55.0,
     127.0
    ],
-   "footprint": [
-    -24.7,
-    -9.9,
-    49.4,
-    9.9
-   ],
+   "footprint": null,
    "occluder": true,
    "sway": true,
    "light": null,
@@ -11628,7 +11583,8 @@
    "sound": {
     "ambient": null,
     "material": "plant"
-   }
+   },
+   "note": "passagem: a colisão dos pilares vai no layout do mapa"
   },
   {
    "id": "birdbath",
@@ -11651,9 +11607,9 @@
     92.0
    ],
    "footprint": [
-    -9.2,
+    -8.7,
     -10.8,
-    18.4,
+    17.4,
     10.8
    ],
    "occluder": false,
@@ -11752,7 +11708,7 @@
    ],
    "density": 3.3069,
    "anchor": [
-    43.5,
+    41.0,
     77.0
    ],
    "footprint": [
@@ -11787,7 +11743,7 @@
    ],
    "density": 2.8807,
    "anchor": [
-    41.5,
+    42.5,
     58.0
    ],
    "footprint": [
@@ -11822,7 +11778,7 @@
    ],
    "density": 3.2922,
    "anchor": [
-    52.5,
+    54.0,
     66.0
    ],
    "footprint": [
@@ -11892,7 +11848,7 @@
    ],
    "density": 2.8965,
    "anchor": [
-    33.5,
+    33.0,
     63.0
    ],
    "footprint": [
@@ -11927,13 +11883,13 @@
    ],
    "density": 3.4156,
    "anchor": [
-    51.0,
+    62.5,
     85.0
    ],
    "footprint": [
-    -11.5,
+    -10.1,
     -12.9,
-    23.0,
+    20.2,
     12.9
    ],
    "occluder": false,
@@ -11962,13 +11918,13 @@
    ],
    "density": 3.5273,
    "anchor": [
-    32.0,
+    31.5,
     82.0
    ],
    "footprint": [
-    -7.7,
+    -6.4,
     -8.5,
-    15.4,
+    12.8,
     8.5
    ],
    "occluder": false,
@@ -11997,7 +11953,7 @@
    ],
    "density": 3.9815,
    "anchor": [
-    88.0,
+    85.5,
     131.0
    ],
    "footprint": [
@@ -12032,7 +11988,7 @@
    ],
    "density": 3.4231,
    "anchor": [
-    26.0,
+    25.5,
     63.0
    ],
    "footprint": null,
@@ -12042,8 +11998,8 @@
     "color": "#5b8def",
     "radius": 28,
     "offset": [
-     0.5,
-     -14.0
+     1.2,
+     -14.5
     ]
    },
    "interaction": "flower",
@@ -12069,7 +12025,7 @@
    ],
    "density": 3.5354,
    "anchor": [
-    25.5,
+    25.0,
     65.0
    ],
    "footprint": null,
@@ -12079,8 +12035,8 @@
     "color": "#9b6bd6",
     "radius": 28,
     "offset": [
-     0.2,
-     -12.5
+     0.1,
+     -13.1
     ]
    },
    "interaction": "flower",
@@ -12106,7 +12062,7 @@
    ],
    "density": 3.7037,
    "anchor": [
-    31.5,
+    32.5,
     68.0
    ],
    "footprint": null,
@@ -12116,7 +12072,7 @@
     "color": "#9b6bd6",
     "radius": 28,
     "offset": [
-     0.9,
+     1.0,
      -13.0
     ]
    },
@@ -12143,7 +12099,7 @@
    ],
    "density": 4.2622,
    "anchor": [
-    35.0,
+    34.5,
     58.0
    ],
    "footprint": null,
@@ -12173,7 +12129,7 @@
    ],
    "density": 4.2622,
    "anchor": [
-    29.5,
+    30.0,
     58.0
    ],
    "footprint": null,
@@ -12253,8 +12209,8 @@
     "color": "#5b8def",
     "radius": 28,
     "offset": [
-     0.0,
-     -16.4
+     -0.9,
+     -18.7
     ]
    },
    "interaction": "fountain",
@@ -12315,7 +12271,7 @@
    ],
    "density": 2.7263,
    "anchor": [
-    48.0,
+    48.5,
     108.0
    ],
    "footprint": [
@@ -12365,8 +12321,8 @@
     "color": "#f2a541",
     "radius": 64,
     "offset": [
-     -4.5,
-     -59.5
+     -5.2,
+     -58.0
     ]
    },
    "interaction": null,
@@ -12407,8 +12363,8 @@
     "color": "#f2a541",
     "radius": 56,
     "offset": [
-     -4.8,
-     -50.2
+     -4.7,
+     -41.5
     ]
    },
    "interaction": null,
@@ -12449,8 +12405,8 @@
     "color": "#f2a541",
     "radius": 64,
     "offset": [
-     -3.9,
-     -56.2
+     -4.7,
+     -49.7
     ]
    },
    "interaction": null,
@@ -12541,7 +12497,7 @@
    ],
    "density": 3.3951,
    "anchor": [
-    28.5,
+    25.0,
     68.0
    ],
    "footprint": [
@@ -12556,8 +12512,8 @@
     "color": "#5b8def",
     "radius": 28,
     "offset": [
-     0.2,
-     -15.2
+     0.6,
+     -15.9
     ]
    },
    "interaction": null,
@@ -12598,8 +12554,8 @@
     "color": "#9b6bd6",
     "radius": 28,
     "offset": [
-     -0.8,
-     -10.7
+     -0.7,
+     -10.4
     ]
    },
    "interaction": null,
@@ -12695,7 +12651,7 @@
    ],
    "density": 2.8395,
    "anchor": [
-    31.5,
+    30.5,
     71.0
    ],
    "footprint": [
@@ -12730,7 +12686,7 @@
    ],
    "density": 3.5494,
    "anchor": [
-    27.5,
+    30.0,
     117.0
    ],
    "footprint": [
@@ -12765,7 +12721,7 @@
    ],
    "density": 3.7037,
    "anchor": [
-    42.5,
+    43.0,
     62.0
    ],
    "footprint": [
@@ -12835,7 +12791,7 @@
    ],
    "density": 2.9565,
    "anchor": [
-    38.0,
+    37.5,
     93.0
    ],
    "footprint": [
@@ -12870,13 +12826,13 @@
    ],
    "density": 2.8549,
    "anchor": [
-    45.5,
+    45.0,
     76.0
    ],
    "footprint": [
-    -13.0,
+    -11.9,
     -15.2,
-    26.0,
+    23.8,
     15.2
    ],
    "occluder": false,
@@ -12885,8 +12841,8 @@
     "color": "#5b8def",
     "radius": 28,
     "offset": [
-     -1.0,
-     -16.4
+     -0.2,
+     -17.3
     ]
    },
    "interaction": "fountain",
@@ -12912,13 +12868,13 @@
    ],
    "density": 3.5073,
    "anchor": [
-    70.0,
+    70.5,
     127.0
    ],
    "footprint": [
-    -16.5,
+    -15.8,
     -19.4,
-    33.0,
+    31.6,
     19.4
    ],
    "occluder": false,
@@ -12927,8 +12883,8 @@
     "color": "#5b8def",
     "radius": 32,
     "offset": [
-     -0.3,
-     -18.7
+     -0.4,
+     -20.9
     ]
    },
    "interaction": "fountain",
@@ -12954,7 +12910,7 @@
    ],
    "density": 3.7037,
    "anchor": [
-    28.5,
+    26.5,
     86.0
    ],
    "footprint": [
@@ -12989,7 +12945,7 @@
    ],
    "density": 3.0864,
    "anchor": [
-    44.5,
+    43.5,
     127.0
    ],
    "footprint": [
@@ -13109,8 +13065,8 @@
     "color": "#f2a541",
     "radius": 32,
     "offset": [
-     -0.6,
-     -21.3
+     -0.9,
+     -22.4
     ]
    },
    "interaction": null,
@@ -13151,8 +13107,8 @@
     "color": "#f2a541",
     "radius": 36,
     "offset": [
-     0.0,
-     -30.1
+     0.4,
+     -30.3
     ]
    },
    "interaction": null,
@@ -13213,7 +13169,7 @@
    ],
    "density": 2.989,
    "anchor": [
-    23.5,
+    24.0,
     186.0
    ],
    "footprint": [
@@ -13258,8 +13214,8 @@
     "color": "#f2a541",
     "radius": 36,
     "offset": [
-     -0.6,
-     -13.8
+     -0.7,
+     -12.7
     ]
    },
    "interaction": null,
@@ -13315,13 +13271,13 @@
    ],
    "density": 3.4792,
    "anchor": [
-    34.0,
+    31.0,
     64.0
    ],
    "footprint": [
-    -7.8,
+    -7.2,
     -9.2,
-    15.6,
+    14.4,
     9.2
    ],
    "occluder": false,
@@ -13350,13 +13306,13 @@
    ],
    "density": 4.1152,
    "anchor": [
-    46.5,
+    42.5,
     100.0
    ],
    "footprint": [
-    -9.5,
+    -9.1,
     -11.2,
-    19.0,
+    18.2,
     11.2
    ],
    "occluder": false,
@@ -13385,7 +13341,7 @@
    ],
    "density": 4.1152,
    "anchor": [
-    24.5,
+    25.0,
     61.0
    ],
    "footprint": [
@@ -13436,7 +13392,7 @@
     "radius": 60,
     "offset": [
      -0.3,
-     -12.2
+     -12.1
     ]
    },
    "interaction": null,
@@ -13522,7 +13478,7 @@
    ],
    "density": 3.6351,
    "anchor": [
-    47.5,
+    45.5,
     108.0
    ],
    "footprint": [
@@ -13557,7 +13513,7 @@
    ],
    "density": 3.2548,
    "anchor": [
-    42.0,
+    41.0,
     60.0
    ],
    "footprint": [
@@ -13592,14 +13548,14 @@
    ],
    "density": 2.3699,
    "anchor": [
-    108.5,
+    44.6,
     217.0
    ],
    "footprint": [
-    -22.5,
-    -22.5,
-    45.0,
-    22.5
+    -12.6,
+    -19.8,
+    25.2,
+    19.8
    ],
    "occluder": true,
    "sway": false,
@@ -13627,13 +13583,13 @@
    ],
    "density": 4.2622,
    "anchor": [
-    31.5,
+    32.5,
     58.0
    ],
    "footprint": [
-    -6.6,
+    -5.5,
     -8.9,
-    13.2,
+    11.0,
     8.9
    ],
    "occluder": false,
@@ -13662,13 +13618,13 @@
    ],
    "density": 4.2622,
    "anchor": [
-    33.0,
+    36.0,
     58.0
    ],
    "footprint": [
-    -7.1,
+    -5.4,
     -9.4,
-    14.2,
+    10.8,
     9.4
    ],
    "occluder": false,
@@ -13767,7 +13723,7 @@
    ],
    "density": 3.2526,
    "anchor": [
-    47.5,
+    51.0,
     139.0
    ],
    "footprint": [
@@ -13802,7 +13758,7 @@
    ],
    "density": 3.4392,
    "anchor": [
-    45.0,
+    47.5,
     80.0
    ],
    "footprint": [
@@ -13817,8 +13773,8 @@
     "color": "#9b6bd6",
     "radius": 36,
     "offset": [
-     1.5,
-     -11.0
+     0.8,
+     -12.8
     ]
    },
    "interaction": "inspect",
@@ -13844,7 +13800,7 @@
    ],
    "density": 2.7263,
    "anchor": [
-    86.0,
+    85.5,
     214.0
    ],
    "footprint": [
@@ -13859,8 +13815,8 @@
     "color": "#ff8a3d",
     "radius": 72,
     "offset": [
-     -6.9,
-     -26.1
+     -5.1,
+     -29.1
     ]
    },
    "interaction": null,
@@ -13902,7 +13858,7 @@
     "radius": 72,
     "offset": [
      5.4,
-     -26.1
+     -25.9
     ]
    },
    "interaction": null,
@@ -13943,8 +13899,8 @@
     "color": "#ff8a3d",
     "radius": 72,
     "offset": [
-     -1.7,
-     -16.5
+     -1.8,
+     -18.3
     ]
    },
    "interaction": null,
@@ -13970,13 +13926,13 @@
    ],
    "density": 2.2634,
    "anchor": [
-    55.5,
+    56.0,
     90.0
    ],
    "footprint": [
-    -23.6,
+    -23.0,
     -9.5,
-    47.2,
+    46.0,
     9.5
    ],
    "occluder": true,
@@ -14005,13 +13961,13 @@
    ],
    "density": 2.8807,
    "anchor": [
-    41.5,
+    45.0,
     86.0
    ],
    "footprint": [
-    -11.7,
+    -10.4,
     -12.3,
-    23.4,
+    20.8,
     12.3
    ],
    "occluder": false,
@@ -14040,13 +13996,13 @@
    ],
    "density": 4.2328,
    "anchor": [
-    33.5,
+    35.0,
     48.0
    ],
    "footprint": [
-    -6.4,
+    -5.0,
     -7.2,
-    12.8,
+    10.0,
     7.2
    ],
    "occluder": false,
@@ -14075,13 +14031,13 @@
    ],
    "density": 3.8889,
    "anchor": [
-    39.0,
+    28.5,
     65.0
    ],
    "footprint": [
-    -8.6,
+    -6.6,
     -9.5,
-    17.2,
+    13.2,
     9.5
    ],
    "occluder": false,
@@ -14090,8 +14046,8 @@
     "color": "#ff5a2a",
     "radius": 40,
     "offset": [
-     -0.3,
-     -11.7
+     4.2,
+     -12.5
     ]
    },
    "interaction": null,
@@ -14117,7 +14073,7 @@
    ],
    "density": 2.3516,
    "anchor": [
-    31.5,
+    31.0,
     82.0
    ],
    "footprint": [
@@ -14132,8 +14088,8 @@
     "color": "#ff8a3d",
     "radius": 72,
     "offset": [
-     -0.6,
-     -12.1
+     -0.8,
+     -13.3
     ]
    },
    "interaction": null,
@@ -14174,8 +14130,8 @@
     "color": "#f2a541",
     "radius": 64,
     "offset": [
-     0.1,
-     -38.7
+     0.0,
+     -37.4
     ]
    },
    "interaction": "lamp",
@@ -14201,7 +14157,7 @@
    ],
    "density": 2.8807,
    "anchor": [
-    33.5,
+    33.0,
     58.0
    ],
    "footprint": [
@@ -14216,8 +14172,8 @@
     "color": "#ff5a2a",
     "radius": 48,
     "offset": [
-     -0.1,
-     -12.0
+     0.7,
+     -11.6
     ]
    },
    "interaction": null,
@@ -14243,7 +14199,7 @@
    ],
    "density": 2.866,
    "anchor": [
-    33.5,
+    34.0,
     67.0
    ],
    "footprint": [
@@ -14258,8 +14214,8 @@
     "color": "#ff5a2a",
     "radius": 48,
     "offset": [
-     0.3,
-     -12.0
+     0.5,
+     -10.9
     ]
    },
    "interaction": null,
@@ -14285,13 +14241,13 @@
    ],
    "density": 3.8462,
    "anchor": [
-    42.0,
+    40.0,
     83.0
    ],
    "footprint": [
-    -8.8,
+    -8.6,
     -10.4,
-    17.6,
+    17.2,
     10.4
    ],
    "occluder": false,
@@ -14300,8 +14256,8 @@
     "color": "#9b6bd6",
     "radius": 28,
     "offset": [
-     0.2,
-     -16.3
+     1.3,
+     -17.0
     ]
    },
    "interaction": "break",
@@ -14327,7 +14283,7 @@
    ],
    "density": 3.7987,
    "anchor": [
-    41.0,
+    39.5,
     82.0
    ],
    "footprint": [
@@ -14362,7 +14318,7 @@
    ],
    "density": 3.8462,
    "anchor": [
-    41.5,
+    40.0,
     83.0
    ],
    "footprint": [
@@ -14377,8 +14333,8 @@
     "color": "#ff5a2a",
     "radius": 36,
     "offset": [
-     0.4,
-     -16.4
+     0.5,
+     -16.0
     ]
    },
    "interaction": "break",
@@ -14404,7 +14360,7 @@
    ],
    "density": 3.5273,
    "anchor": [
-    44.0,
+    42.5,
     82.0
    ],
    "footprint": [
@@ -14419,8 +14375,8 @@
     "color": "#ff5a2a",
     "radius": 40,
     "offset": [
-     1.0,
-     -9.4
+     1.7,
+     -8.9
     ]
    },
    "interaction": "inspect",
@@ -14481,7 +14437,7 @@
    ],
    "density": 2.6852,
    "anchor": [
-    51.0,
+    59.0,
     263.0
    ],
    "footprint": [
@@ -14611,7 +14567,7 @@
    ],
    "density": 2.8097,
    "anchor": [
-    93.0,
+    89.0,
     266.0
    ],
    "footprint": [
@@ -14626,8 +14582,8 @@
     "color": "#ff5a2a",
     "radius": 80,
     "offset": [
-     -10.4,
-     -32.5
+     -11.0,
+     -28.3
     ]
    },
    "interaction": null,
@@ -14653,13 +14609,13 @@
    ],
    "density": 3.3951,
    "anchor": [
-    34.0,
+    36.5,
     57.0
    ],
    "footprint": [
-    -8.0,
+    -7.2,
     -8.5,
-    16.0,
+    14.4,
     8.5
    ],
    "occluder": false,
@@ -14688,7 +14644,7 @@
    ],
    "density": 2.3081,
    "anchor": [
-    32.5,
+    31.0,
     88.0
    ],
    "footprint": [
@@ -14723,13 +14679,13 @@
    ],
    "density": 3.6062,
    "anchor": [
-    48.0,
+    56.0,
     113.0
    ],
    "footprint": [
-    -11.5,
+    -10.3,
     -10.2,
-    23.0,
+    20.6,
     10.2
    ],
    "occluder": false,
@@ -14738,8 +14694,8 @@
     "color": "#e64a8e",
     "radius": 36,
     "offset": [
-     1.6,
-     -20.7
+     -3.4,
+     -20.5
     ]
    },
    "interaction": "inspect",
@@ -14765,13 +14721,13 @@
    ],
    "density": 4.2088,
    "anchor": [
-    50.5,
+    55.0,
     75.0
    ],
    "footprint": [
-    -10.4,
+    -7.6,
     -12.2,
-    20.8,
+    15.2,
     12.2
    ],
    "occluder": false,
@@ -14800,7 +14756,7 @@
    ],
    "density": 3.5185,
    "anchor": [
-    47.0,
+    36.5,
     173.0
    ],
    "footprint": [
@@ -14839,9 +14795,9 @@
     61.0
    ],
    "footprint": [
-    -5.2,
+    -5.1,
     -6.7,
-    10.4,
+    10.2,
     6.7
    ],
    "occluder": false,
@@ -14900,7 +14856,7 @@
    ],
    "density": 3.9843,
    "anchor": [
-    32.0,
+    31.5,
     144.0
    ],
    "footprint": [
@@ -14915,8 +14871,8 @@
     "color": "#ff8a3d",
     "radius": 60,
     "offset": [
-     -0.2,
-     -24.8
+     0.5,
+     -26.8
     ]
    },
    "interaction": null,
@@ -14957,8 +14913,8 @@
     "color": "#ffc46b",
     "radius": 40,
     "offset": [
-     -0.4,
-     -17.1
+     -0.8,
+     -16.2
     ]
    },
    "interaction": null,
@@ -14984,7 +14940,7 @@
    ],
    "density": 4.0895,
    "anchor": [
-    16.0,
+    16.5,
     54.0
    ],
    "footprint": null,
@@ -14994,8 +14950,8 @@
     "color": "#ffc46b",
     "radius": 32,
     "offset": [
-     -0.6,
-     -6.5
+     -0.4,
+     -6.2
     ]
    },
    "interaction": null,
@@ -15021,7 +14977,7 @@
    ],
    "density": 4.1838,
    "anchor": [
-    36.5,
+    36.0,
     61.0
    ],
    "footprint": [
@@ -15091,7 +15047,7 @@
    ],
    "density": 4.1838,
    "anchor": [
-    35.5,
+    36.0,
     61.0
    ],
    "footprint": [
@@ -15106,8 +15062,8 @@
     "color": "#e64a8e",
     "radius": 28,
     "offset": [
-     -0.9,
-     -7.7
+     -0.8,
+     -8.0
     ]
    },
    "interaction": "chest",
@@ -15133,7 +15089,7 @@
    ],
    "density": 4.1152,
    "anchor": [
-    33.0,
+    32.5,
     80.0
    ],
    "footprint": [
@@ -15168,7 +15124,7 @@
    ],
    "density": 4.1887,
    "anchor": [
-    29.0,
+    34.0,
     38.0
    ],
    "footprint": null,
@@ -15198,7 +15154,7 @@
    ],
    "density": 4.1887,
    "anchor": [
-    27.0,
+    27.5,
     57.0
    ],
    "footprint": [
@@ -15268,7 +15224,7 @@
    ],
    "density": 3.4321,
    "anchor": [
-    43.5,
+    44.0,
     141.0
    ],
    "footprint": [
@@ -15283,8 +15239,8 @@
     "color": "#e64a8e",
     "radius": 40,
     "offset": [
-     0.0,
-     -27.2
+     -0.3,
+     -23.5
     ]
    },
    "interaction": "inspect",
@@ -15310,7 +15266,7 @@
    ],
    "density": 3.74,
    "anchor": [
-    50.5,
+    50.0,
     105.0
    ],
    "footprint": [
@@ -15325,8 +15281,8 @@
     "color": "#e64a8e",
     "radius": 40,
     "offset": [
-     6.4,
-     -14.1
+     5.7,
+     -14.2
     ]
    },
    "interaction": "inspect",
@@ -15352,7 +15308,7 @@
    ],
    "density": 3.6712,
    "anchor": [
-    41.5,
+    39.5,
     115.0
    ],
    "footprint": [
@@ -15367,8 +15323,8 @@
     "color": "#e64a8e",
     "radius": 40,
     "offset": [
-     -1.0,
-     -9.6
+     -0.6,
+     -9.0
     ]
    },
    "interaction": "inspect",
@@ -15466,7 +15422,7 @@
    ],
    "density": 4.1581,
    "anchor": [
-    41.5,
+    45.0,
     97.0
    ],
    "footprint": [
@@ -15501,7 +15457,7 @@
    ],
    "density": 3.4144,
    "anchor": [
-    44.0,
+    28.0,
     179.0
    ],
    "footprint": [
@@ -15516,8 +15472,8 @@
     "color": "#f2a541",
     "radius": 64,
     "offset": [
-     6.4,
-     -29.6
+     11.3,
+     -29.9
     ]
    },
    "interaction": "lamp",
@@ -15543,7 +15499,7 @@
    ],
    "density": 3.0864,
    "anchor": [
-    55.0,
+    54.5,
     132.0
    ],
    "footprint": [
@@ -15613,7 +15569,7 @@
    ],
    "density": 4.1526,
    "anchor": [
-    31.5,
+    30.5,
     74.0
    ],
    "footprint": [
@@ -15648,7 +15604,7 @@
    ],
    "density": 3.4512,
    "anchor": [
-    31.0,
+    31.5,
     125.0
    ],
    "footprint": [
@@ -15718,7 +15674,7 @@
    ],
    "density": 4.1667,
    "anchor": [
-    24.5,
+    23.0,
     54.0
    ],
    "footprint": null,
@@ -15783,13 +15739,13 @@
    ],
    "density": 4.0858,
    "anchor": [
-    89.0,
+    107.5,
     140.0
    ],
    "footprint": [
-    -19.7,
+    -16.5,
     -21.8,
-    39.4,
+    33.0,
     21.8
    ],
    "occluder": false,
@@ -15923,7 +15879,7 @@
    ],
    "density": 3.2716,
    "anchor": [
-    78.5,
+    79.0,
     161.0
    ],
    "footprint": [

@@ -11,8 +11,9 @@ recorta as folhas de `docs/brand/source/objects/NN.png` com `cut_sheet.py` e gra
                                               de uma porta (com --docs)
 
 Calibração: a altura (ou a largura, nos pisos) de cada objeto vem do kind (`kinds.<kind>.h` × altura do jogador) ou da
-opção `h`/`w` do objeto. Âncora = centro da base do recorte (pé, como DECISIONS D10). Footprint = retângulo em u
-relativo à âncora (largura e profundidade em fração da largura do objeto). Luz: cor/raio do kind; posição = centroide dos
+opção `h`/`w` do objeto. Âncora = base do recorte, no centro do que toca o chão (faixa de baixo, 25% da altura; `anchor: bbox` usa a caixa toda).
+Footprint = retângulo em u relativo à âncora (largura e profundidade em fração da largura do objeto, sem passar da
+largura da base). Luz: cor/raio do kind; posição = centroide dos
 pixels mais claros do recorte (a chama/o cristal).
 
 Uso:
@@ -43,7 +44,7 @@ OUT_DOCS = ROOT / "docs" / "design" / "catalogo"
 ATLAS_PNG = ROOT / "assets" / "sprites" / "atlas" / "atlas.png"
 ATLAS_JSON = ROOT / "assets" / "sprites" / "atlas" / "atlas.json"
 
-FIELDS = ("h", "w", "foot", "layer", "light", "sway", "interaction", "ambient", "material", "occluder", "note")
+FIELDS = ("h", "w", "foot", "layer", "light", "sway", "interaction", "ambient", "material", "occluder", "anchor", "ax", "note")
 LAYERS = ("entity", "floor", "wall", "overhead", "fx")
 
 
@@ -62,19 +63,23 @@ def resize_premultiplied(im: Image.Image, size: tuple[int, int]) -> Image.Image:
     return im.convert("RGBa").resize(size, Image.LANCZOS).convert("RGBA")
 
 
-def light_spot(im: Image.Image) -> tuple[float, float]:
-    """Centroide (px) dos pixels mais claros e opacos: onde fica a chama, o cristal ou a água brilhante."""
+def light_spot(im: Image.Image, color: str) -> tuple[float, float]:
+    """Centroide (px) dos pixels claros e opacos com a cor da luz: a chama, o cristal ou a água brilhante."""
+    lr, lg, lb = (int(color[i:i + 2], 16) for i in (1, 3, 5))
+    ln = math.sqrt(lr * lr + lg * lg + lb * lb) or 1.0
     px = im.load()
-    lums = []
+    scores = []
     for y in range(im.height):
         for x in range(im.width):
             r, g, b, a = px[x, y]
             if a > 200:
-                lums.append((max(r, g, b) + (r + g + b) / 3, x, y))
-    if not lums:
+                n = math.sqrt(r * r + g * g + b * b) or 1.0
+                sim = (r * lr + g * lg + b * lb) / (n * ln)
+                scores.append((max(r, g, b) * sim ** 6, x, y))
+    if not scores:
         return im.width / 2, im.height / 2
-    lums.sort(reverse=True)
-    top = lums[: max(4, len(lums) // 40)]
+    scores.sort(reverse=True)
+    top = scores[: max(4, len(scores) // 40)]
     return sum(t[1] for t in top) / len(top), sum(t[2] for t in top) / len(top)
 
 
@@ -117,7 +122,18 @@ def build_object(name: str, theme: str, kind: str, pieces: list, sheet_id: str, 
         ux0, uy0, ux1, uy1 = used_box(im)
         pw, ph = ux1 - ux0, uy1 - uy0
         density = ph / height_u
-    ax, ay = ux0 + pw / 2, uy1
+    # pé = centro do que toca o chão: a faixa de baixo do recorte (poste com balde, guindaste com base de pedra) e
+    # não o centro da caixa inteira, que cai no ar em objetos assimétricos
+    # (pernas de mesa em alturas diferentes cabem na faixa de 25%). Estruturas largas (anchor "bbox": casas, muros,
+    # cercas, barracas, pisos) apoiam a largura toda no chão e ficam no centro da caixa.
+    band = max(3, round(ph * 0.25))
+    bb = im.getchannel("A").crop((0, uy1 - band, im.width, uy1)).point(lambda v: 255 if v > 128 else 0).getbbox()
+    bx0, bx1 = (bb[0], bb[2]) if bb and spec.get("anchor") != "bbox" and spec["layer"] == "entity" else (ux0, ux1)
+    if spec.get("ax") is not None:  # pé escolhido à mão (fração da largura), ex.: guindaste com a carga pendurada na frente
+        cx = ux0 + spec["ax"] * pw
+        bx0, bx1 = cx - pw / 2, cx + pw / 2
+    ax, ay = (bx0 + bx1) / 2, uy1
+    base_u = (bx1 - bx0) / density
     entry: dict = {
         "id": name,
         "file": f"res://assets/sprites/objects/{theme}/{name}.png",
@@ -132,7 +148,7 @@ def build_object(name: str, theme: str, kind: str, pieces: list, sheet_id: str, 
     }
     foot = spec.get("foot")
     if foot and spec["layer"] == "entity":
-        half = r1(foot[0] * width_u / 2)
+        half = r1(min(foot[0] * width_u, base_u) / 2)
         fd = r1(min(foot[1] * width_u, height_u))
         entry["footprint"] = [-half, -fd, r1(2 * half), fd]
     else:
@@ -145,7 +161,7 @@ def build_object(name: str, theme: str, kind: str, pieces: list, sheet_id: str, 
     light = spec.get("light")
     if light:
         color, radius = light
-        lx, ly = light_spot(im)
+        lx, ly = light_spot(im, colors[color])
         entry["light"] = {
             "color": colors[color],
             "radius": radius,
