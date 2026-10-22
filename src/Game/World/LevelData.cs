@@ -39,6 +39,43 @@ public sealed class LevelData
     public List<ZoneData> Zones { get; set; } = [];
 
     public List<string> Grid { get; set; } = [];
+
+    /// <summary>Sala de Brecha: ondas, saída selada, baú, Guardião (null na cidade).</summary>
+    public RiftRoomData? Rift { get; set; }
+}
+
+/// <summary>Conteúdo de uma sala de Brecha (camada 3): ondas de monstros, saída que só abre com a sala limpa.</summary>
+public sealed class RiftRoomData
+{
+    public string Title { get; set; } = string.Empty;
+
+    /// <summary>Saída por passagem: barreira [x, y, w, h] que sela e o gatilho [x, y, w, h] além dela.</summary>
+    public RiftExitData? Exit { get; set; }
+
+    /// <summary>Ondas em ordem; a próxima entra quando a anterior morre toda.</summary>
+    public List<List<SpawnData>> Waves { get; set; } = [];
+
+    /// <summary>Pé do baú [x, y], se houver.</summary>
+    public float[]? Chest { get; set; }
+
+    public SpawnData? Boss { get; set; }
+
+    /// <summary>Fenda de saída [x, y] que abre quando a sala acaba (sem passagem pintada).</summary>
+    public float[]? ExitPortal { get; set; }
+}
+
+public sealed class RiftExitData
+{
+    public float[] Barrier { get; set; } = [0, 0, 0, 0];
+
+    public float[] Trigger { get; set; } = [0, 0, 0, 0];
+}
+
+public sealed class SpawnData
+{
+    public string Type { get; set; } = string.Empty;
+
+    public float[] At { get; set; } = [0, 0];
 }
 
 public sealed class GroundData

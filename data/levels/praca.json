@@ -50,6 +50,13 @@
   ],
   "zones": [
     {
+      "kind": "brecha",
+      "at": [1118, 478],
+      "radius": 46,
+      "prompt": "Entrar na Brecha",
+      "text": "Esgotos do Mercado · Rank E"
+    },
+    {
       "kind": "exit",
       "at": [836, 24],
       "radius": 40,
