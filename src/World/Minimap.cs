@@ -9,7 +9,7 @@ namespace Vespera.World;
 /// <summary>
 /// Minimapa (frente B4a, DECISIONS B4a-D47): no canto superior direito, abaixo do nome do local, a pintura do mapa
 /// reduzida com a vista da câmera, o jogador (seta na direção em que olha), saídas, portas de loja, NPCs, portais
-/// abertos e baús já vistos. <c>M</c>, <c>Tab</c> ou <c>Back</c> do gamepad abrem em tela cheia (com legenda; o jogo
+/// abertos e baús já vistos. <c>M</c> ou o clique do analógico esquerdo abrem em tela cheia (com legenda; o jogo
 /// para por baixo) e fecham. A pintura reduzida é feita uma vez por mapa (Lanczos + mipmaps); o desenho do canto é
 /// refeito a 20 Hz, sem alocar.
 /// </summary>
@@ -282,7 +282,7 @@ public partial class MinimapView : Control
             x = DrawLegend(x, y, ShopColor, square: false, "lojas");
             x = DrawLegend(x, y, PortalColor, square: false, "Brechas");
             x = DrawLegend(x, y, ChestColor, square: true, "baús vistos");
-            DrawLabel(new Vector2(x + 12f, y + 3f), "M / Tab / Back: fechar", Frame with { A = 0.7f });
+            DrawLabel(new Vector2(x + 12f, y + 3f), "M / L3: fechar", Frame with { A = 0.7f });
         }
     }
 

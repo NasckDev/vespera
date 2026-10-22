@@ -173,6 +173,23 @@ public partial class EventBus : Node
     [Signal]
     public delegate void AbilityCooldownChangedEventHandler(string abilityId, float remaining, float total);
 
+    // --- Combate (frente B1; docs/design/api-combate.md) ---
+    /// <summary>Combate → HUD: item coletado (<c>kind</c> = lume, mat, gear, potion, eco, lantern, mylantern; id do item ou "").</summary>
+    [Signal]
+    public delegate void LootCollectedEventHandler(string kind, string itemId, int amount);
+
+    /// <summary>Combate → HUD: parte de monstro quebrou (barra do chefe mostra "— quebrada").</summary>
+    [Signal]
+    public delegate void MonsterPartBrokenEventHandler(string monsterId, string partId, string partName, bool boss);
+
+    /// <summary>Combate e Cidade → HUD: nota curta lateral da v2 (<c>note</c>: "Sem poções…", "+1 Presa Rubra", "A Casa X fechou a Brecha"). <paramref name="icon"/> = chave do atlas.</summary>
+    [Signal]
+    public delegate void NoteRequestedEventHandler(string message, string icon);
+
+    /// <summary>Combate → todos: o chefe da Brecha caiu (antes do portal de saída).</summary>
+    [Signal]
+    public delegate void BossDefeatedEventHandler(string bossId);
+
     /// <summary>Qualquer sistema → UI: pergunta com opções (ex.: "Fugir para Lumeira?"). A UI responde com <see cref="ChoiceMade"/>.</summary>
     [Signal]
     public delegate void ChoiceRequestedEventHandler(string requestId, string speaker, string text, string[] options);
@@ -208,9 +225,8 @@ public partial class EventBus : Node
     [Signal]
     public delegate void ChatMessageEventHandler(string who, string rank, string text);
 
-    /// <summary>Cidade → Interface: nota lateral curta da v2 (<c>note(texto, ícone)</c>), ex.: "A Casa da Maré fechou a Brecha do Mercado de Peixes".</summary>
-    [Signal]
-    public delegate void NoteRequestedEventHandler(string text, string icon);
+    // NoteRequested(text, icon) também é emitido pela Cidade ("A Casa da Maré fechou a Brecha do Mercado de Peixes"):
+    // as duas frentes criaram o mesmo sinal com a mesma assinatura; fica um só, no bloco do Combate.
 
     /// <summary>Cidade → todos: uma Brecha mudou de estado (int de <c>Vespera.Core.World.BrechaStatus</c>). Para o Mural e a lista do HUD.</summary>
     [Signal]

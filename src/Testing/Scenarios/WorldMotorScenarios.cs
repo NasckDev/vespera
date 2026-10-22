@@ -514,7 +514,7 @@ public partial class SmokeTest
             Log.Info($"motor: mapa em {e.AsText()}");
         }
 
-        Require(InputMap.ActionGetEvents(InputActions.Map).Count >= 3, "M, Tab e Back do gamepad");
+        Require(InputMap.ActionGetEvents(InputActions.Map).Count >= 2, "M e L3 do gamepad (Tab/Back são do inventário, INT-D3)");
         EndMotor();
     }
 

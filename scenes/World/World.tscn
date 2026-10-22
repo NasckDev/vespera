@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://src/World/Dressing/WorldDressing.cs" id="5_dressing"]
 [ext_resource type="Script" path="res://src/World/Minimap.cs" id="6_minimap"]
 [ext_resource type="Script" path="res://src/World/City/CityLife.cs" id="7_city"]
+[ext_resource type="Script" path="res://src/Combat/CombatDirector.cs" id="8_combat"]
 
 [node name="World" type="Node2D" node_paths=PackedStringArray("MapSprite", "CollisionRoot", "Entities", "InteractablesRoot", "Player", "Camera", "FadeRect", "Dressing", "Minimap")]
 script = ExtResource("1_world")
@@ -37,6 +38,11 @@ texture_filter = 4
 y_sort_enabled = true
 
 [node name="Player" parent="Entities" instance=ExtResource("3_player")]
+
+[node name="Combat" type="Node2D" parent="." node_paths=PackedStringArray("World")]
+texture_filter = 4
+script = ExtResource("8_combat")
+World = NodePath("..")
 
 [node name="Camera" type="Camera2D" parent="."]
 script = ExtResource("2_camera")

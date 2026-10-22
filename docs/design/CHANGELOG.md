@@ -12,6 +12,9 @@ Uma linha por tarefa concluída, mais recente primeiro.
 - 2026-10-20 — Cidade viva: Brechas abrem pela `BrechaSchedule` com a animação do portal do super kit, timer, fechamento por Casa e ruptura (`InvasionRequested`); Mural pede a tela `board`.
 - 2026-10-20 — Cidade viva: iluminação da v2 (escuridão por hora e mapa, lâmpadas que acendem às 17h, lanterna do jogador, glow), tintas e clima das estações.
 - 2026-10-20 — Cidade viva: relógio do dia (840 s), `DayPhase` no Core, `DayPhaseChanged`, música da véspera e pausa congelando o tempo.
+- 2026-10-21 — Combate (B1): objetos do grupo `hittable` apanham de golpes, flechas e orbes; texto de combate nítido; telegraphs em âmbar; monstros não empacam em props (B1-D44–D47).
+- 2026-10-21 — Combate (B1): smoke que joga a Brecha com as 5 armas, esquiva com i-frames, parte quebrada, drops, chefe, morte e Lanterna, fuga, invasão, bonecos, Ecos/Supremo e orçamento de 15 monstros.
+- 2026-10-21 — Combate e Brechas (B1): 5 armas, esquiva, poção, Ecos, Supremo, monstros com as IAs da v2, partes, projéteis e números em pool, drops com ímã, ondas → porta → Núcleo → chefe → saída, fuga, morte/Lanterna e invasão. API em `api-combate.md`; decisões B1-D39–B1-D43.
 - 2026-10-20 — Do super kit: animação do portal, guia de HUD e catálogo do Arsenal como referência (D38).
 - 2026-10-20 — Áudio (correções): música por local sem depender de nomes (D22), crossfade sem cortes (D23), +12 dB no Master (D18), músicas pré-carregadas, `SetBusVolume(persist)` + `SaveSettings`, pitch limitado e cenários de smoke sem depender da cena Lumeira.
 - 2026-10-20 — Áudio: 18 SFX da v2 e 3 músicas em loop gerados por script, barramentos Master/Music/SFX/UI e `AudioManager` com pool, crossfade e volumes persistidos.
