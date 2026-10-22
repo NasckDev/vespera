@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Vespera.Core.Advancement;
 using Vespera.Core.Data;
 
 namespace Vespera.Core.Save;
@@ -22,7 +23,7 @@ public static class SaveSerializer
         return JsonSerializer.Serialize(data, Options);
     }
 
-    /// <summary>Lê um save de qualquer versão suportada (1 ou 2) e devolve no formato atual.</summary>
+    /// <summary>Lê um save de qualquer versão suportada (1, 2 ou 3) e devolve no formato atual.</summary>
     public static SaveData FromJson(string json, GameDatabase db) => FromJson(json, db, warnings: null);
 
     /// <summary>Como <see cref="FromJson(string, GameDatabase)"/>; <paramref name="warnings"/> recebe o que foi descartado ao sanear.</summary>
@@ -37,10 +38,16 @@ public static class SaveSerializer
             var data = version switch
             {
                 1 => MigrateFromV1(Deserialize<SaveDataV1>(json), db),
-                SaveData.CurrentVersion => Deserialize<SaveData>(json),
+                2 or SaveData.CurrentVersion => Deserialize<SaveData>(json),
                 > SaveData.CurrentVersion => throw new SaveFormatException($"Save da versão {version} é mais novo que o jogo (versão {SaveData.CurrentVersion})."),
                 _ => throw new SaveFormatException($"Versão de save desconhecida: {version}."),
             };
+
+            if (version < 3)
+            {
+                // v1 e v2 não tinham o bloco da progressão da v2: aproveita só XP e Lumes (DECISIONS v2: progressão recomeça).
+                data.Hunter = HunterProgress.FromLegacy(data.Xp, data.Lumes);
+            }
 
             data.SaveVersion = SaveData.CurrentVersion;
             Sanitize(data, db, warnings ?? []);
@@ -114,6 +121,7 @@ public static class SaveSerializer
         data.Infusions ??= [];
         data.ActiveInfusion ??= [];
         data.CarriedLanterns ??= [];
+        data.Hunter ??= new HunterProgress();
         data.Quests ??= new QuestProgress();
         data.Quests.Counters ??= [];
         data.Quests.ClosedThemes ??= [];

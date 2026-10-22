@@ -1,3 +1,4 @@
+using Vespera.Core.Advancement;
 using Vespera.Core.Data;
 
 namespace Vespera.Core.Save;
@@ -9,7 +10,7 @@ namespace Vespera.Core.Save;
 /// </summary>
 public sealed class SaveData
 {
-    public const int CurrentVersion = 2;
+    public const int CurrentVersion = 3;
 
     public int SaveVersion { get; set; } = CurrentVersion;
 
@@ -75,6 +76,13 @@ public sealed class SaveData
     public bool FirstBrechaDone { get; set; }
 
     public QuestProgress Quests { get; set; } = new();
+
+    /// <summary>
+    /// Progressão da v2 (XP, Fragmentos, materiais, peças, nível da arma, Ecos, conquistas, Lanterna). Veio com a versão 3 do save;
+    /// os campos <c>Xp</c>, <c>Lumes</c>, <c>Materials</c>, <c>Backpack</c>, <c>Equipment</c>, <c>Weapons</c> e <c>Ecos</c> acima são da v0.1
+    /// e a v2 não os usa mais (a migração 2→3 só copia XP e Lumes para cá).
+    /// </summary>
+    public HunterProgress Hunter { get; set; } = new();
 
     public DateTimeOffset SavedAt { get; set; }
 
