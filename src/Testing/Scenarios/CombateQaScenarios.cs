@@ -792,6 +792,7 @@ public partial class SmokeTest
             ReleaseAllActions();
             PressDirection(Vector2.Zero);
             SetAim(Vector2.Zero);
+            UI.GameUi.Current?.CloseAll(); // o Interact do spam pode abrir uma fala/olhar: a tela trava o jogador de propósito, quem joga fecha
             await WaitSeconds(1.2);
             var st = combat.PlayerCombat.State;
             Require(!combat.PlayerDead, $"{cls}: morreu no spam (HP era restaurado)");
