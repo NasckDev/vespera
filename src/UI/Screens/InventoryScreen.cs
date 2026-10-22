@@ -44,6 +44,7 @@ public partial class InventoryScreen : Screen
     private readonly Dictionary<string, (SelectableRow Row, HotbarSlot Art)> _slots = [];
     private readonly List<SelectableRow> _filterRows = [];
     private readonly List<(SelectableRow Card, int Index)> _ecoCards = [];
+    private readonly VBoxContainer _root;
     private GridContainer _grid = null!;
     private ItemTooltip _detail = null!;
     private VBoxContainer _actions = null!;
@@ -69,7 +70,7 @@ public partial class InventoryScreen : Screen
         var center = new CenterContainer { MouseFilter = MouseFilterEnum.Ignore };
         center.SetAnchorsPreset(LayoutPreset.FullRect);
         AddChild(center);
-        var root = Ui.Column(4);
+        var root = _root = Ui.Column(4);
         root.CustomMinimumSize = new Vector2(606, 340);
         center.AddChild(root);
 
@@ -81,6 +82,9 @@ public partial class InventoryScreen : Screen
         AddPage(pages, _sealsPage = new VBoxContainer { MouseFilter = MouseFilterEnum.Ignore });
         root.AddChild(BuildFooter());
     }
+
+    /// <summary>Tamanho que o inventário precisa (u): a escala da interface para antes de ele sair da janela (POLI-2).</summary>
+    public override Vector2 DesignSize => _root.GetCombinedMinimumSize() + new Vector2(16, 16);
 
     public int Tab => _tab;
 
@@ -286,7 +290,7 @@ public partial class InventoryScreen : Screen
             Ui.Hint("Esc", "B", "Fechar"),
             Ui.Hint("Tab", "LB/RB", "Aba"),
             Ui.Hint("Setas", "D-pad", "Navegar"),
-            Ui.Hint("E", "A", "Equipar"),
+            Ui.ActionHint(InputActions.Interact, "Equipar"),
             Ui.Hint("X", "Y", "Desmontar"),
             _status,
             IconRect.Create("i_shard", 9), _shards,
@@ -326,7 +330,7 @@ public partial class InventoryScreen : Screen
                 PrimaryAction();
             };
             stage.AddChild(cell);
-            var label = Ui.Title(slot.Name.ToUpperInvariant(), UiFonts.Tiny - 1, UiPalette.SubLight, HorizontalAlignment.Center);
+            var label = Ui.Title(slot.Name.ToUpperInvariant(), UiFonts.Tiny, UiPalette.SubLight, HorizontalAlignment.Center);
             label.Position = new Vector2(x - 12, y + Cell + 1);
             label.Size = new Vector2(Cell + 24, 8);
             stage.AddChild(label);
@@ -560,7 +564,7 @@ public partial class InventoryScreen : Screen
             case ItemKind.Gear:
                 if (info.Locked is null)
                 {
-                    AddAction("E", "A", "Equipar", () => Equip(item));
+                    AddInteractAction("Equipar", () => Equip(item));
                 }
 
                 AddAction("X", "Y", "Desmontar (+2 Estilhaços)", DismantleSelected);
@@ -590,13 +594,21 @@ public partial class InventoryScreen : Screen
         }
 
         _detail.ShowInfo(UiItems.Gear(state, gearId, compareEquipped: false));
-        AddAction("E", "A", "Desequipar", () => Unequip(slotId));
+        AddInteractAction("Desequipar", () => Unequip(slotId));
     }
 
     private void AddAction(string key, string pad, string label, Action run)
     {
         var row = new SelectableRow { Marker = false, OnActivate = run, CustomMinimumSize = new Vector2(0, 13) };
         row.AddChild(Ui.Hint(key, pad, label, UiFonts.Small, UiPalette.Creme));
+        _actions.AddChild(row);
+    }
+
+    /// <summary>Ação que a linha executa com o botão de interagir: a dica segue o remapeamento (POLI-4).</summary>
+    private void AddInteractAction(string label, Action run)
+    {
+        var row = new SelectableRow { Marker = false, OnActivate = run, CustomMinimumSize = new Vector2(0, 13) };
+        row.AddChild(Ui.ActionHint(InputActions.Interact, label, UiFonts.Small, UiPalette.Creme));
         _actions.AddChild(row);
     }
 
@@ -716,7 +728,7 @@ public partial class InventoryScreen : Screen
             if (owned)
             {
                 column.AddChild(Ui.Text($"Custo: {state.EcoCost(eco.Id)} de Essência{(tuned ? " (afinado)" : string.Empty)}", UiFonts.Tiny, UiPalette.Sub));
-                column.AddChild(Ui.Text(equipped ? "Equipado em [Q]" : "[E] Equipar", UiFonts.Tiny, equipped ? UiPalette.Ambar : UiPalette.Creme));
+                column.AddChild(Ui.Text(KeyText.Expand(equipped ? "Equipado em [{key:eco_1}]" : "[{key:interact}] Equipar"), UiFonts.Tiny, equipped ? UiPalette.Ambar : UiPalette.Creme));
             }
 
             var card = new SelectableRow
@@ -772,7 +784,7 @@ public partial class InventoryScreen : Screen
             };
             var cell = Ui.Column(2, seal,
                 Ui.Text(r.Title, UiFonts.Tiny, got ? UiPalette.FromHex(r.Color, UiPalette.Creme) : UiPalette.Disabled, align: HorizontalAlignment.Center),
-                Ui.Text($"{r.Xp} XP", UiFonts.Tiny - 1, UiPalette.Dim, align: HorizontalAlignment.Center));
+                Ui.Text($"{r.Xp} XP", UiFonts.Tiny, UiPalette.Dim, align: HorizontalAlignment.Center));
             cell.CustomMinimumSize = new Vector2(57, 52);
             cell.Alignment = BoxContainer.AlignmentMode.End;
             seals.AddChild(cell);

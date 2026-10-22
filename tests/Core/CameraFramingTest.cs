@@ -52,6 +52,22 @@ public class CameraFramingTest
     }
 
     [TestCase]
+    public void BottomMarginLetsTheCameraPastTheMapEdge()
+    {
+        // Mapa de 1000 u de altura numa vista de 360 u: sem folga a câmera para em 640; com 60 u de hotbar vai a 700.
+        AssertThat(CameraFraming.AxisTarget(1000, 360, 990)).IsEqual(640f);
+        AssertThat(CameraFraming.AxisTarget(1000, 360, 990, 60)).IsEqual(700f);
+        // Longe da borda a folga não muda nada.
+        AssertThat(CameraFraming.AxisTarget(1000, 360, 400, 60)).IsEqual(220f);
+        // Mapa que cabe inteiro acima do HUD continua centralizado; o que só cabe sem a folga passa a rolar.
+        AssertThat(CameraFraming.AxisTarget(280, 360, 10, 60)).IsEqual(-40f);
+        AssertThat(CameraFraming.AxisTarget(350, 360, 340, 60)).IsEqual(50f);
+        AssertThat(CameraFraming.AxisTarget(350, 360, 10, 60)).IsEqual(0f);
+        AssertThat(CameraFraming.AxisTarget(1000, 360, 990, -20)).IsEqual(640f); // folga negativa é ignorada
+        AssertThat(CameraFraming.Target(500, 1000, 640, 360, new MapPoint(250, 990), 60).Y).IsEqual(700f);
+    }
+
+    [TestCase]
     public void FollowFactorIsCappedAtOne()
     {
         AssertThat(CameraFraming.FollowFactor(0.1f)).IsEqual(0.7f);

@@ -182,7 +182,8 @@ public partial class SmokeTest
                     }
 
                     // Tentar sair da Brecha pelo "back" empurra 14 u para cima (world.js:115): é mecânica, não atravessar parede.
-                    var pushedBackFromEscape = world.Map.Back is { } back && back.Contains(previous.X, previous.Y)
+                    // C1-D3: a zona de fuga inclui o trecho andável abaixo do retângulo.
+                    var pushedBackFromEscape = world.Map.Back is { } back && EscapeIntent.InZone(back, previous.X, previous.Y)
                         && p.Y < previous.Y && previous.Y - p.Y <= 14f + maxStep;
                     var mid = (p + previous) / 2;
                     if (!pushedBackFromEscape && (p.DistanceTo(previous) > maxStep || !world.WalkArea.IsWalkable(mid.X, mid.Y)))

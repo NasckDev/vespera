@@ -193,7 +193,11 @@ public partial class MinimapView : Control
         }
         else
         {
-            panel = new MapRect(screen.X - Margin - CornerWidth, TopOffset, CornerWidth, CornerHeight);
+            // C1-D7: o HUD reserva o lugar do minimapa (cresce com a escala da interface); sem HUD, o canto padrão.
+            var slot = UI.Common.HudZones.MinimapSlot;
+            panel = slot.Size.X > 0
+                ? new MapRect(slot.Position.X, slot.Position.Y, slot.Size.X, slot.Size.Y)
+                : new MapRect(screen.X - Margin - CornerWidth, TopOffset, CornerWidth, CornerHeight);
         }
 
         var proj = new MinimapProjection(map.ImageWidth, map.ImageHeight, panel);

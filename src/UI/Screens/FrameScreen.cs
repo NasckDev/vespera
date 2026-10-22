@@ -29,6 +29,9 @@ public abstract partial class FrameScreen : Screen
         Frame.AddChild(Ui.Margin(6, 2, 6, 2, column));
     }
 
+    /// <summary>A moldura inteira com folga (C1-D4: a escala da interface nunca corta a moldura).</summary>
+    public override Vector2 DesignSize => Frame.CustomMinimumSize + new Vector2(16, 16);
+
     public override bool HidesBelow => true;
 
     public override bool HidesHud => true;

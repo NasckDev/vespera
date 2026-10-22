@@ -169,7 +169,7 @@ public partial class ClassSelectScreen : Screen
             Ui.Gap(0, 2),
             desc,
             Ui.Spacer(horizontal: false),
-            Ui.Text(UiText.ClassUltimate, UiFonts.Tiny, UiPalette.Sub),
+            Ui.Text(KeyText.Expand(UiText.ClassUltimate), UiFonts.Tiny, UiPalette.Sub),
             Ui.Title(ultimate?.Name ?? string.Empty, UiFonts.Small, UiPalette.FromHex(ultimate?.Color, UiPalette.Ambar)));
 
         var card = new SelectableRow

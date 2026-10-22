@@ -346,6 +346,11 @@ public partial class SmokeTest
     private void RequireStandingAt(World.World world, MapPoint expected)
     {
         var p = FindPlayer()!.GlobalPosition;
+        if (world.Map.Back is { } back)
+        {
+            expected = EscapeIntent.KeepAway(expected, back); // C1-D3: chegadas longe da borda de fuga
+        }
+
         Require(world.WalkArea.CanStand(p.X, p.Y), $"{world.MapId}: chegada em ponto onde não dá para ficar ({p})");
         Require(p.DistanceTo(new Vector2(expected.X, expected.Y)) < 16f, $"{world.MapId}: chegada em {p}, esperava ~({expected.X}, {expected.Y})");
     }

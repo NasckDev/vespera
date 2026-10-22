@@ -43,6 +43,20 @@ public sealed class BrechaRules(GameDatabase db)
         return Math.Clamp(Math.Max(theme.MinRank, playerRankIndex) + bonus, 0, _rules.MaxRank);
     }
 
+    /// <summary>
+    /// Rank com a proteção do novato (DECISIONS C1-D2): enquanto o jogador fechou menos de <c>noviceBrechas</c>
+    /// Brechas, o rank sorteado não passa do que o Selo deixa entrar (<see cref="CanEnter"/>). O sorteio consome o
+    /// <see cref="IRandom"/> igual ao <see cref="RollRank(ThemeDef, int, bool, IRandom)"/>.
+    /// </summary>
+    public int RollRank(ThemeDef theme, int playerRankIndex, bool first, bool novice, IRandom random)
+    {
+        var rank = RollRank(theme, playerRankIndex, first, random);
+        return novice ? Math.Min(rank, Math.Max(0, playerRankIndex) + _rules.EntryMargin) : rank;
+    }
+
+    /// <summary>Ainda é novato (as primeiras Brechas respeitam o Selo): fechou menos de <c>noviceBrechas</c>.</summary>
+    public bool IsNovice(int brechasClosed) => brechasClosed < _rules.NoviceBrechas;
+
     /// <summary>Tempo até romper: 300 s na primeira, senão <c>R(210, 270)</c>.</summary>
     public double RollTimer(bool first, IRandom random) => first ? _rules.FirstTimer : random.Range(_rules.Timer);
 

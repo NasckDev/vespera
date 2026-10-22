@@ -1,4 +1,5 @@
 using Godot;
+using Vespera.Autoload;
 using Vespera.UI.Common;
 
 namespace Vespera.UI.Widgets;
@@ -13,6 +14,7 @@ public partial class KeyCap : PanelContainer
     private readonly Label _label = new();
     private string _keyboard = string.Empty;
     private string _gamepad = string.Empty;
+    private string? _action;
 
     public KeyCap()
     {
@@ -51,12 +53,37 @@ public partial class KeyCap : PanelContainer
         Refresh();
     }
 
-    public void SetAction(string action) =>
+    public void SetAction(string action)
+    {
+        _action = action;
         SetKeys(InputHints.LabelFor(action, gamepad: false), InputHints.LabelFor(action, gamepad: true));
+    }
 
-    public override void _EnterTree() => InputHints.DeviceChanged += Refresh;
+    /// <summary>Ação mostrada (null quando os rótulos são fixos).</summary>
+    public string? Action => _action;
 
-    public override void _ExitTree() => InputHints.DeviceChanged -= Refresh;
+    /// <summary>Texto mostrado agora (smoke test).</summary>
+    public string Text => _label.Text;
+
+    public override void _EnterTree()
+    {
+        InputHints.DeviceChanged += Refresh;
+        InputBindings.Changed += OnBindingsChanged;
+    }
+
+    public override void _ExitTree()
+    {
+        InputHints.DeviceChanged -= Refresh;
+        InputBindings.Changed -= OnBindingsChanged;
+    }
+
+    private void OnBindingsChanged()
+    {
+        if (_action is not null)
+        {
+            SetAction(_action);
+        }
+    }
 
     private void Refresh() => _label.Text = InputHints.UsingGamepad ? _gamepad : _keyboard;
 }

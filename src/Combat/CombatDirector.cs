@@ -246,6 +246,52 @@ public partial class CombatDirector : Node2D, IMonsterWorld
         Mark(4, ref started);
         LastStepMs = _sectionMs[0] + _sectionMs[1] + _sectionMs[2] + _sectionMs[3] + _sectionMs[4];
         LastStepBytes = GC.GetAllocatedBytesForCurrentThread() - allocated;
+        CheckOffscreenDanger(realDt);
+    }
+
+    private const float DangerCaptionEvery = 1.5f;
+
+    /// <summary>"[Perigo ←]" com a seta para o lado de onde vem (8 direções, textos fixos: nada aloca).</summary>
+    private static readonly string[] DangerCaptions = ["[Perigo →]", "[Perigo ↘]", "[Perigo ↓]", "[Perigo ↙]", "[Perigo ←]", "[Perigo ↖]", "[Perigo ↑]", "[Perigo ↗]"];
+
+    private float _dangerCheckT;
+    private float _dangerCaptionCooldown;
+
+    /// <summary>
+    /// C1-D12: legenda para perigo fora da tela — um monstro preparando golpe (o mesmo aviso do chão) fora da vista da
+    /// câmera. Só com "Legendas de sons" ligada; no máximo uma a cada 1,5 s; checa 4× por segundo.
+    /// </summary>
+    private void CheckOffscreenDanger(float dt)
+    {
+        _dangerCaptionCooldown = MathF.Max(0, _dangerCaptionCooldown - dt);
+        _dangerCheckT += dt;
+        if (_dangerCheckT < 0.25f || !GameSettings.Captions || World?.Camera is not { } cam)
+        {
+            return;
+        }
+
+        _dangerCheckT = 0;
+        if (_dangerCaptionCooldown > 0)
+        {
+            return;
+        }
+
+        var view = new Rect2(cam.Position, cam.VisibleSize);
+        var foot = PlayerFoot;
+        for (var i = 0; i < _enemies.Count; i++)
+        {
+            var m = _enemies[i].Body;
+            var at = new Vector2((float)m.X, (float)m.Y);
+            if (!TelegraphActive(m) || view.HasPoint(at) || at.DistanceTo(foot) > 260f)
+            {
+                continue;
+            }
+
+            var octant = (int)MathF.Round((at - foot).Angle() / (MathF.PI / 4f));
+            EventBus.Instance.EmitSignal(EventBus.SignalName.CaptionRequested, DangerCaptions[((octant % 8) + 8) % 8]);
+            _dangerCaptionCooldown = DangerCaptionEvery;
+            return;
+        }
     }
 
     private readonly double[] _sectionMs = new double[5];
@@ -772,6 +818,9 @@ public partial class CombatDirector : Node2D, IMonsterWorld
     }
 
     public void Sfx(string id, Vector2 at) => AudioManager.Instance?.PlaySfx(id, at);
+
+    /// <summary>Efeito com tom base e variação próprios (acerto do golpe final do combo, POLI-15).</summary>
+    public void Sfx(string id, Vector2 at, float basePitch, float jitter) => AudioManager.Instance?.PlaySfx(id, at, jitter, basePitch);
 
     // --- Eventos ---
 

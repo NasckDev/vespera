@@ -28,7 +28,7 @@ servem para código da própria UI e para testes. Decisões B3-D39–B3-D57 em [
 | `AbilityCooldownChanged(id, restante, total)` | `ultimate` → botão do Supremo (e banner com o nome quando `restante ≈ total`); `potion` → véu do slot R; ids que começam com `eco` → slot Q. A UI conta o tempo sozinha entre um sinal e outro. |
 | `WeaponChanged(arma)` | Slot selecionado da hotbar e nome da arma. |
 | `WaveStarted(n, total)` | "Onda n de total" no canto superior direito. |
-| `BossSpawned(nome, hp)` / `BossHealthChanged(hp, max)` | Alerta "NOME / Quebre suas partes…" (3,2 s) e barra no topo; some com hp 0 ou `BrechaEnded`. |
+| `BossSpawned(nome, hp)` / `BossHealthChanged(hp, max)` | Alerta "NOME / Quebre suas partes…" (2 s, no vão do alto) e barra na coluna do canto superior direito; some com hp 0 ou `BrechaEnded`. |
 | Estado (`GameLoaded`, `PlayerDamaged`, `LumesChanged`, `MaterialChanged`, `RankChanged`, `DayChanged`…) | HUD, caixa de loot (ganhos), Novo Selo (subida de Selo), número do dia. O toast "Dia N · Estação" é da Cidade (`api-cidade.md`). |
 
 ## O que a UI emite
@@ -61,3 +61,24 @@ Tema `src/UI/Theme/vespera_theme.tres` (fonte padrão Pixelify Sans 8 px base): 
 `NumberLabel`; barras `UiBar/hp|energy|essence|xp|boss`. Widgets prontos em `src/UI/Widgets` (`OrnatePanel`, `IconRect`,
 `KeyCap`, `UiBar`, `SelectableRow`, `ItemTooltip`) e atalhos em `UI.Common.Ui`. Cores em `UiPalette`. Números de dano no
 mundo (Combate) devem definir a própria fonte/tamanho: o padrão do tema é pequeno.
+
+## Polimento e acessibilidade (frente C1, DECISIONS C1-D1 a C1-D13)
+
+- `GameSettings` (estático): além de `Fullscreen`/`QuestHints`, `ShakeIntensity` (0–1; `ScreenShake` = > 0), `UiScale`
+  (1/1,25/1,5), `TextScale` (1/1,15/1,3), `DialogSpeed` (`DialogCharsPerSecond`), `ReduceFlashes` (`FlashScale`),
+  `HighContrast`, `Captions`, `BowToggle`, `AimAssist`. Seção `[access]` do `settings.cfg`; evento `Changed`.
+- `InputBindings` (estático): `Remappable`, `Primary(ação, pad)`, `Label(ação, pad)` (rótulo curto já remapeado),
+  `Assign(ação, pad, evento, out outra)` → `RemapResult` (`Ok`/`Swapped`/`Conflict`/`Invalid`), `RestoreDefaults()`,
+  evento `Changed`. Seções `[input_keys]`/`[input_pad]`. Telas: Opções → "Teclas e controle" (`KeybindScreen`).
+  `Reserved` são as teclas fixas do jogo (armas 1–5, roda, RB, mira, F2): remapear para elas dá `Conflict`; `Labels(ação, pad)`
+  lista todas as teclas da ação.
+- `KeyText.Expand(texto)`: troca `{key:ação}`, `{keys:ação}` e `{keyPhrase:ação}` pela tecla do dispositivo em uso e do remapeamento
+  (falas de `npcs.json`, missões, "Como jogar", classe). Use marcadores em vez de escrever "F" ou "Esc" no texto.
+- `WindowFit` (autoload de fato: `Main` chama `Attach`) escolhe a escala inteira da janela (`CameraFraming.FitScale`, ≥ 600×330 u
+  visíveis); `UiScaling.WindowFactor` lê o fator real. A barra do chefe fica na coluna do canto superior direito.
+- Sinal novo `CaptionRequested(text)`: legenda curta de som importante (só aparece com `GameSettings.Captions`).
+- `UiScaling.Reading(label)` marca texto de leitura (segue "Tamanho do texto"); `Screen.DesignSize` limita a escala de
+  uma tela; `HudZones` tem os retângulos ocupados pelo HUD (textos no mundo em espaço de tela devem evitá-los) e o
+  lugar do minimapa.
+- HUD: `Hud.Captions` (legendas), `Hud.Onboarding` (dicas da primeira vez, `OnboardingHints.ResetProgress()`),
+  `Hud.ExpandQuest()` (abre a descrição da missão por 8 s).

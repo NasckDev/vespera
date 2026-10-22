@@ -61,6 +61,16 @@ public sealed partial class PlayerCombat : IDisposable
     /// <summary>Ângulo de mira atual (rad, 0 = direita).</summary>
     public float Aim { get; private set; } = MathF.PI / 2;
 
+    private bool _bowLatched;
+
+    private Vector2 _lastHitAt;
+
+    /// <summary>Tom do "hit" no golpe final do combo (POLI-15): 0,8 = quase uma terça menor, soa pesado sem virar outro som.</summary>
+    public const float HitPitchBig = 0.8f;
+
+    /// <summary>Arco carregando por alternância (smoke test).</summary>
+    public bool BowLatched => _bowLatched;
+
     /// <summary>Investida Rubra (Eco do Alfa) em curso: imune e sem outras ações.</summary>
     public bool ChargingEco => _uivoT > 0;
 
@@ -100,6 +110,7 @@ public sealed partial class PlayerCombat : IDisposable
     public void OnMapChanged()
     {
         _knock = Vector2.Zero;
+        _bowLatched = false;
         _pullT = 0;
         _uivoT = 0;
         _state.CancelActions();
@@ -118,9 +129,20 @@ public sealed partial class PlayerCombat : IDisposable
         }
     }
 
-    /// <summary>Gameplay bloqueado (UI/pausa): nada anda.</summary>
-    public void Frozen()
+    /// <summary>Gameplay bloqueado (UI/pausa): nada anda. A carga alternada do arco termina (POLI-14).</summary>
+    public void Frozen() => ReleaseBowLatch();
+
+    /// <summary>
+    /// POLI-14: a carga do arco no modo "alternar" só vale enquanto o jogador tem o controle; ao pausar, abrir diálogo, morrer,
+    /// trocar de mapa ou sofrer um Supremo/transição ela é cancelada (sem soltar flecha), em vez de voltar armada depois.
+    /// </summary>
+    private void ReleaseBowLatch()
     {
+        if (_bowLatched)
+        {
+            _bowLatched = false;
+            _state.CancelActions();
+        }
     }
 
     public void Step(float dt)
@@ -130,6 +152,7 @@ public sealed partial class PlayerCombat : IDisposable
         _potionCd = MathF.Max(0, _potionCd - dt);
         if (Dead)
         {
+            ReleaseBowLatch();
             _deadT += dt;
             Player.MovementLocked = true;
             Player.Body.Rotation = -MathF.PI / 2 * MathF.Min(1, _deadT * 3);
@@ -152,6 +175,7 @@ public sealed partial class PlayerCombat : IDisposable
 
         if (_uivoT > 0)
         {
+            ReleaseBowLatch();
             StepUivo(dt);
             Player.MovementLocked = true;
             Player.AttackPose = true;
@@ -186,6 +210,10 @@ public sealed partial class PlayerCombat : IDisposable
             StepAttack(dt, stats);
             StepActions();
         }
+        else
+        {
+            ReleaseBowLatch();
+        }
 
         Player.AttackPose = _state.AttackTime > 0 || _state.IsCharging || _state.IsWindingUp;
         StepUltimate(dt);
@@ -213,12 +241,12 @@ public sealed partial class PlayerCombat : IDisposable
         if (stick.LengthSquared() > 0.35f * 0.35f)
         {
             _moveAngle = stick.Angle();
-            return stick.Angle();
+            return Assisted(stick.Angle());
         }
 
         if (_moveAngle is { } a)
         {
-            return a;
+            return Assisted(a);
         }
 
         return Player.Direction switch
@@ -228,6 +256,53 @@ public sealed partial class PlayerCombat : IDisposable
             FacingDirection.Up => -MathF.PI / 2,
             _ => MathF.PI / 2,
         };
+    }
+
+    /// <summary>Ângulo máximo (rad) que a mira assistida corrige e quanto dele puxa (C1-D12).</summary>
+    public const float AimAssistCone = 0.38f;
+
+    public const float AimAssistPull = 0.6f;
+
+    public const float AimAssistRange = 150f;
+
+    /// <summary>
+    /// Mira assistida leve (opção, só no controle): se um monstro está a até 150 u e a menos de ~22° da mira, a mira
+    /// gira 60% do caminho até ele. Mouse nunca é corrigido. Percorre a lista de monstros sem alocar.
+    /// </summary>
+    private float Assisted(float aim)
+    {
+        if (!GameSettings.AimAssist || !UI.Common.InputHints.UsingGamepad)
+        {
+            return aim;
+        }
+
+        var p = Foot - new Vector2(0, 10);
+        var best = AimAssistCone;
+        var target = aim;
+        var enemies = _combat.Enemies;
+        for (var i = 0; i < enemies.Count; i++)
+        {
+            var m = enemies[i].Body;
+            if (!m.IsTargetable)
+            {
+                continue;
+            }
+
+            var to = new Vector2((float)m.X - p.X, (float)(m.Y - (m.HitHeight * 0.5)) - p.Y);
+            if (to.LengthSquared() > AimAssistRange * AimAssistRange)
+            {
+                continue;
+            }
+
+            var diff = MathF.Abs(Mathf.AngleDifference(aim, to.Angle()));
+            if (diff < best)
+            {
+                best = diff;
+                target = to.Angle();
+            }
+        }
+
+        return Mathf.LerpAngle(aim, target, AimAssistPull);
     }
 
     // --- Ataques ---
@@ -241,9 +316,21 @@ public sealed partial class PlayerCombat : IDisposable
         {
             case WeaponKind.Bow:
             {
+                if (GameSettings.BowToggle)
+                {
+                    // C1-D12: "Carga do arco: alternar" — apertar começa a carregar, apertar de novo solta a flecha.
+                    if (pressed)
+                    {
+                        _bowLatched = !_bowLatched;
+                    }
+
+                    held = _bowLatched;
+                }
+
                 if (_state.IsDashing)
                 {
                     held = false;
+                    _bowLatched = false;
                 }
 
                 var shot = _state.UpdateBow(w, dt, held, stats.Atk);
@@ -301,7 +388,14 @@ public sealed partial class PlayerCombat : IDisposable
                 _combat.Sfx("swing", p);
                 if (n > 0)
                 {
-                    _combat.Sfx("hit", p);
+                    // POLI-15: o som do acerto sai de onde o golpe pegou (não do jogador); o golpe final do combo é mais grave e pesado.
+                    _combat.Sfx("hit", _lastHitAt, swing.Big ? HitPitchBig : 1f, swing.Big ? 0.04f : 0.07f);
+                    if (swing.Big)
+                    {
+                        // C1-D10: o golpe final do combo pesa mais (pausa e tremor um pouco maiores que o acerto comum).
+                        _combat.Clock.AtLeast(0.07);
+                        _combat.Shake(3);
+                    }
                 }
 
                 break;
@@ -367,6 +461,11 @@ public sealed partial class PlayerCombat : IDisposable
 
             if (CombatMath.InSector(origin.X, origin.Y, m.X, m.Y - (m.HitHeight * 0.5), m.Radius, aim, arc, range))
             {
+                if (n == 0)
+                {
+                    _lastHitAt = new Vector2((float)m.X, (float)(m.Y - (m.HitHeight * 0.5)));
+                }
+
                 _combat.HitMob(m, damage, origin, new HitOptions(w.PartMult, w.Backstab ?? 0, knockback, element));
                 n++;
             }
@@ -375,7 +474,7 @@ public sealed partial class PlayerCombat : IDisposable
         _combat.BreakPropsInSector(origin, aim, arc, range, damage);
         if (n > 0)
         {
-            _combat.Clock.AtLeast(0.035);
+            _combat.Clock.AtLeast(0.05); // C1-D10: era 0,035 s — o acerto da Lâmina "escorregava"
             _combat.Shake(2);
         }
 
@@ -526,6 +625,7 @@ public sealed partial class PlayerCombat : IDisposable
     private void Die()
     {
         Dead = true;
+        _bowLatched = false;
         _deadT = 0;
         _state.CancelActions();
         EndUltimate();
@@ -622,7 +722,7 @@ public sealed partial class PlayerCombat : IDisposable
     {
         var blink = _state.Invulnerable > 0 && ((int)(_combat.Time * 18) % 2) == 1;
         Player.Body.Modulate = new Color(1, 1, 1, blink ? 0.5f : 1);
-        var flash = (float)Math.Min(1, _state.HurtTime * 3);
+        var flash = (float)Math.Min(1, _state.HurtTime * 3) * GameSettings.HitFlashScale; // POLI-7: reduzir flashes
         if (!Mathf.IsEqualApprox(flash, _lastFlash))
         {
             _lastFlash = flash;

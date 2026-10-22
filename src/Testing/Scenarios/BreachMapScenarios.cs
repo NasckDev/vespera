@@ -59,6 +59,19 @@ public partial class SmokeTest
                     walked += length;
                     if (error is not null)
                     {
+                        // C1: a ordem dos alvos depende de onde o bot está (o spawn mudou com a C1-D3); um trecho que
+                        // trava numa quina de um ponto intermediário é tentado de novo saindo do spawn antes de falhar.
+                        // O caminho do Core testa o pé com a sonda da v2 (±2,4 u na vertical) e às vezes raspa a elipse
+                        // de um prop que o corpo r=4 não passa; a 2ª tentativa planeja com folga de 6 u.
+                        Log.Info($"brechas: {id} {target.Label}: {error} — tentando de novo do spawn com folga");
+                        player.Teleport(world.CorrectToWalkable(new Vector2(map.Spawn.X, map.Spawn.Y)));
+                        await NextPhysicsFrame();
+                        (error, length) = await BreachWalkNear(world, target.At, target.Reach, clearance: 6f);
+                        walked += length;
+                    }
+
+                    if (error is not null)
+                    {
                         failures.Add($"{id} {target.Label} ({target.At.X:0}, {target.At.Y:0}): {error}");
                         // Volta ao spawn para o resto da varredura não herdar o problema.
                         player.Teleport(new Vector2(map.Spawn.X, map.Spawn.Y));
@@ -251,7 +264,7 @@ public partial class SmokeTest
     }
 
     /// <summary>Anda com input do ponto atual até ficar a <paramref name="reach"/> u do alvo. Erro null se chegou.</summary>
-    private async Task<(string? Error, float Length)> BreachWalkNear(World.World world, MapPoint target, float reach)
+    private async Task<(string? Error, float Length)> BreachWalkNear(World.World world, MapPoint target, float reach, float clearance = WalkAreaExtensions.PlayerRadius)
     {
         var player = FindPlayer()!;
         var goal = new Vector2(target.X, target.Y);
@@ -261,7 +274,10 @@ public partial class SmokeTest
         }
 
         var start = new MapPoint(player.GlobalPosition.X, player.GlobalPosition.Y);
-        var path = WalkPathfinder.FindPathNear(world.WalkArea, start, target, reach);
+        var path = clearance > WalkAreaExtensions.PlayerRadius
+            ? WalkPathfinder.FindPath(world.WalkArea, start, p => MathF.Sqrt(((p.X - target.X) * (p.X - target.X)) + ((p.Y - target.Y) * (p.Y - target.Y))) <= reach, 4f, clearance)
+                ?? WalkPathfinder.FindPathNear(world.WalkArea, start, target, reach)
+            : WalkPathfinder.FindPathNear(world.WalkArea, start, target, reach);
         if (path is null)
         {
             return ($"inalcançável a {reach:0} u saindo de ({start.X:0}, {start.Y:0})", 0f);
@@ -304,7 +320,7 @@ public partial class SmokeTest
                 }
 
                 // A fuga empurra 14 u para cima ao andar dentro de "back" (world.js:115): é mecânica, não atravessar parede.
-                var pushedBack = world.Map.Back is { } back && back.Contains(previous.X, previous.Y) && p.Y < previous.Y;
+                var pushedBack = world.Map.Back is { } back && EscapeIntent.InZone(back, previous.X, previous.Y) && p.Y < previous.Y; // C1-D3
                 if (!pushedBack && p.DistanceTo(previous) > maxStep)
                 {
                     error = $"salto {previous} → {p} (direção {i * 45}°)";

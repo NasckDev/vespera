@@ -15,6 +15,7 @@ namespace Vespera.UI.Screens;
 /// </summary>
 public partial class BoardScreen : Screen
 {
+    private readonly OrnatePanel _panel;
     private readonly Label _subtitle;
     private readonly VBoxContainer _list;
     private readonly Label _closed;
@@ -31,7 +32,7 @@ public partial class BoardScreen : Screen
         var center = new CenterContainer { MouseFilter = MouseFilterEnum.Ignore };
         center.SetAnchorsPreset(LayoutPreset.FullRect);
         AddChild(center);
-        var panel = Ui.Ornate();
+        var panel = _panel = Ui.Ornate();
         panel.CustomMinimumSize = new Vector2(440, 0); // altura do conteúdo: com poucas Brechas não sobra painel vazio
         center.AddChild(panel);
 
@@ -64,6 +65,9 @@ public partial class BoardScreen : Screen
         _focusAnchor = new Control { FocusMode = FocusModeEnum.All, MouseFilter = MouseFilterEnum.Ignore };
         AddChild(_focusAnchor);
     }
+
+    /// <summary>Tamanho que o mural precisa (u): a escala da interface para antes de ele sair da janela (POLI-2).</summary>
+    public override Vector2 DesignSize => _panel.GetCombinedMinimumSize() + new Vector2(16, 16);
 
     public int Count => _rows.Count;
 
@@ -116,7 +120,7 @@ public partial class BoardScreen : Screen
 
         var quest = state.CurrentQuest;
         _questName.Text = quest?.Name ?? string.Empty;
-        _questDesc.Text = quest?.Desc ?? string.Empty;
+        _questDesc.Text = KeyText.Expand(quest?.Desc ?? string.Empty);
         _questProgress.Text = quest is null ? string.Empty : state.QuestRules.ProgressText(quest, state.Save) ?? string.Empty;
         _questReward.Text = quest is null ? string.Empty : state.QuestRules.RewardText(quest);
     }

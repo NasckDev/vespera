@@ -47,13 +47,22 @@ public static class CameraFraming
         return new MapPoint(fx, fy);
     }
 
-    /// <summary>Por eixo: mapa menor (ou igual) à vista → centraliza (offset negativo); senão limita às bordas.</summary>
-    public static float AxisTarget(float imageSize, float viewSize, float focus) =>
-        imageSize <= viewSize ? (imageSize - viewSize) / 2f : Math.Clamp(focus - (viewSize / 2f), 0f, imageSize - viewSize);
+    /// <summary>
+    /// Por eixo: mapa menor (ou igual) à vista → centraliza (offset negativo); senão limita às bordas.
+    /// <paramref name="endMargin"/> (u) é uma faixa no fim do eixo coberta pelo HUD (a hotbar embaixo): a câmera pode
+    /// passar da borda do mapa por essa folga, para o jogador que anda até a borda não ficar escondido atrás dela (POLI-9).
+    /// </summary>
+    public static float AxisTarget(float imageSize, float viewSize, float focus, float endMargin = 0f)
+    {
+        var margin = Math.Max(0f, endMargin);
+        return imageSize + margin <= viewSize
+            ? (imageSize - viewSize) / 2f
+            : Math.Clamp(focus - (viewSize / 2f), 0f, imageSize - viewSize + margin);
+    }
 
-    /// <summary>Canto superior esquerdo alvo da câmera.</summary>
-    public static MapPoint Target(float imageWidth, float imageHeight, float viewWidth, float viewHeight, MapPoint focus) =>
-        new(AxisTarget(imageWidth, viewWidth, focus.X), AxisTarget(imageHeight, viewHeight, focus.Y));
+    /// <summary>Canto superior esquerdo alvo da câmera (com folga no pé da vista para o HUD, <paramref name="bottomMargin"/>).</summary>
+    public static MapPoint Target(float imageWidth, float imageHeight, float viewWidth, float viewHeight, MapPoint focus, float bottomMargin = 0f) =>
+        new(AxisTarget(imageWidth, viewWidth, focus.X), AxisTarget(imageHeight, viewHeight, focus.Y, bottomMargin));
 
     public static float FollowFactor(float dt) => MathF.Min(1f, dt * FollowRate);
 
@@ -79,6 +88,43 @@ public static class CameraFraming
     /// </summary>
     public static int IntegerScale(int windowWidth, int windowHeight, int baseWidth = BaseWidth, int baseHeight = BaseHeight) =>
         Math.Max(1, Math.Min(windowWidth / baseWidth, windowHeight / baseHeight));
+
+    /// <summary>Menor área visível (u) que a escala inteira aceita: no máximo ~6% menos largura e ~8% menos altura que 640×360.</summary>
+    public const float MinVisibleFitWidth = 600f;
+
+    public const float MinVisibleFitHeight = 330f;
+
+    /// <summary>
+    /// Escala inteira que a janela usa (POLI-11): a maior N com área visível ≥ 600×330 u. A conta pura do Godot
+    /// (<see cref="IntegerScale"/>) cai para 2× numa janela de 1920×1061 (a de 1080p com barra de título), renderiza em
+    /// 1302×720 e deixa metade da tela preta; aqui ela fica em 3× e a vista encolhe de 360 para 353 u.
+    /// </summary>
+    public static int FitScale(int windowWidth, int windowHeight)
+    {
+        var n = 1;
+        while (windowWidth / (float)(n + 1) >= MinVisibleFitWidth && windowHeight / (float)(n + 1) >= MinVisibleFitHeight)
+        {
+            n++;
+        }
+
+        return n;
+    }
+
+    /// <summary>
+    /// Tamanho base (u) a pedir ao Godot para a escala inteira ser <paramref name="scale"/>: um pouco menor que
+    /// janela ÷ escala, para a divisão da janela pelo base ficar sempre acima da escala e abaixo da seguinte.
+    /// </summary>
+    public static (int Width, int Height) ContentSizeFor(int windowWidth, int windowHeight, int scale)
+    {
+        var n = Math.Max(1, scale);
+        if (windowWidth % n == 0 && windowHeight % n == 0)
+        {
+            return (windowWidth / n, windowHeight / n); // janela múltipla exata (1280×720, 1920×1080…): sem faixa nenhuma, como antes
+        }
+
+        var divisor = n + 0.02f;
+        return (Math.Max(1, (int)MathF.Floor(windowWidth / divisor)), Math.Max(1, (int)MathF.Floor(windowHeight / divisor)));
+    }
 
     /// <summary>Arredonda ao px de tela (1/<paramref name="pixelsPerUnit"/> u), como <c>floor(x + 0,5)</c>.</summary>
     public static float SnapToPixel(float value, float pixelsPerUnit) =>

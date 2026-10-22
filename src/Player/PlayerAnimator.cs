@@ -192,7 +192,7 @@ public partial class PlayerAnimator : Node
 
         UpdateSteps(moving, speed01, velocity);
         UpdatePose(speed01, moving, velocity);
-        _flashMaterial.SetShaderParameter(FlashParam, _hurtT >= 0f ? MathF.Max(0f, 1f - (_hurtT / HurtSeconds)) * 0.85f : 0f);
+        _flashMaterial.SetShaderParameter(FlashParam, (_hurtT >= 0f ? MathF.Max(0f, 1f - (_hurtT / HurtSeconds)) * 0.85f : 0f) * GameSettings.HitFlashScale); // POLI-7
     }
 
     private static void Advance(ref float t, float dt, float duration)

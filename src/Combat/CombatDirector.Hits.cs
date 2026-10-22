@@ -43,6 +43,7 @@ public partial class CombatDirector
 
         Glow.Burst(new Vector2(hx, hy), hit.Crit ? 10 : 6, hit.Crit ? CombatPalette.Crit : CombatPalette.Hit,
             new BurstOptions { V1 = hit.Crit ? 130 : 90, Gravity = 20, L1 = 0.35f });
+        ImpactFeedback(new Vector2(hx, hy), source, hit.Crit);
 
         if (m.IsDummy)
         {
@@ -74,6 +75,19 @@ public partial class CombatDirector
     }
 
     private const Core.Data.PartSide PartSideFront = Core.Data.PartSide.Front;
+
+    /// <summary>
+    /// C1-D10: peso do acerto sem exagero — faíscas saindo na direção do golpe (do jogador para o monstro) e um anel
+    /// curto no ponto de impacto. "Reduzir flashes" deixa o anel quase invisível. Sem alocação (pools do FxLayer).
+    /// </summary>
+    private void ImpactFeedback(Vector2 at, Vector2 source, bool crit)
+    {
+        var dir = at - source;
+        var angle = dir.LengthSquared() > 0.01f ? dir.Angle() : 0f;
+        Fx.Burst(at, crit ? 9 : 5, CombatPalette.Crit, new BurstOptions { Angle = angle, Spread = 0.45f, V0 = 70, V1 = crit ? 170 : 135, Gravity = 140, L0 = 0.12f, L1 = 0.26f, Size = 1.4f });
+        var ring = (crit ? CombatPalette.Ambar : CombatPalette.Creme) with { A = 0.75f * Autoload.GameSettings.FlashScale };
+        Glow.Ring(at, 2f, crit ? 15f : 10f, 0.13f, ring);
+    }
 
     /// <summary><c>breakPart</c>: drops do material, "Quebrou: nome", hitstop ≥ 0,09, tremor ≥ 4, toast das partes de chefe.</summary>
     private void BreakPart(MonsterBody m, int index)
@@ -247,7 +261,7 @@ public partial class CombatDirector
                 PlayerCombat.FillEssence();
                 Sfx("eco", at);
                 var eco = _db.Ecos[k.Id];
-                Toast($"Eco absorvido: {eco.Name}", $"{eco.Skill} — {eco.Desc} [Q]");
+                Toast($"Eco absorvido: {eco.Name}", UI.Common.KeyText.Expand($"{eco.Skill} — {eco.Desc} [{{key:eco_1}}]")); // POLI-4: tecla do remapeamento
                 Glow.Burst(at, 40, CombatPalette.Eco, new BurstOptions { V1 = 140 });
                 GameManager.Instance.SaveGame();
                 break;

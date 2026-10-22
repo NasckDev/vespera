@@ -72,10 +72,7 @@ public sealed class TownServices(GameUi ui)
     public void TalkClerk()
     {
         var state = State;
-        if (state.Save.Quests.Counter(QuestCounters.Odete) == 0)
-        {
-            state.CountQuest(QuestCounters.Odete); // qc.odete = true (extra.js:128)
-        }
+        GameUi.CountOdeteTalk(state); // qc.odete = true (extra.js:128)
 
         var options = new List<DialogChoice>();
         if (state.Save.CarriedLanterns.Count > 0)
@@ -249,7 +246,7 @@ public sealed class TownServices(GameUi ui)
                 {
                     UiSound.Play("boom");
                     var rarity = UiItems.Rarity(gear.Rarity);
-                    ui.Toast($"Forjado: {gear.Name}", $"{rarity.Name} · equipe no inventário [Tab]", UiItems.RarityColor(gear.Rarity), gear.Icon);
+                    ui.Toast($"Forjado: {gear.Name}", $"{rarity.Name} · equipe no inventário [{KeyText.Expand("{key:inventory}")}]", UiItems.RarityColor(gear.Rarity), gear.Icon);
                     GameManager.Instance.SaveGame();
                 }
 
@@ -529,7 +526,7 @@ public sealed class TownServices(GameUi ui)
                 {
                     UiSound.Open();
                     var rarity = UiItems.Rarity(gear.Rarity);
-                    ui.Toast(gear.Name, $"{rarity.Name} · equipe no inventário [Tab]", UiItems.RarityColor(gear.Rarity), gear.Icon);
+                    ui.Toast(gear.Name, $"{rarity.Name} · equipe no inventário [{KeyText.Expand("{key:inventory}")}]", UiItems.RarityColor(gear.Rarity), gear.Icon);
                     GameManager.Instance.SaveGame();
                 }
 
@@ -572,9 +569,10 @@ public sealed class TownServices(GameUi ui)
     {
         var state = State;
         var cls = state.Save.ClassId;
-        return text
+        var filled = text
             .Replace("{name}", state.Save.Name, StringComparison.Ordinal)
             .Replace("{class}", state.EquipmentRules.ClassName(cls), StringComparison.Ordinal)
             .Replace("{ultimate}", Db.Ultimates.TryGetValue(cls, out var ult) ? ult.Name : string.Empty, StringComparison.Ordinal);
+        return KeyText.Expand(filled); // POLI-4: teclas do dispositivo e do remapeamento
     }
 }

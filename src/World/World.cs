@@ -39,6 +39,7 @@ public partial class World : Node2D
     private float _fadeTo;
     private Action? _fadeCallback;
     private double _backCooldown;
+    private readonly EscapeIntent _escape = new(); // C1-D3: só pergunta "Saída da Brecha" com intenção
     private Color _previousClearColor;
 
     [Export]
@@ -268,13 +269,29 @@ public partial class World : Node2D
             return;
         }
 
-        // world.js:115 — andando dentro de back: empurra para cima e pede o diálogo de fuga.
-        if (Map.Back is { } back && back.Contains(foot.X, foot.Y) && Player.IsMoving && _backCooldown <= 0)
+        // world.js:115 — andando dentro de back: empurra para cima e pede o diálogo de fuga. C1-D3: só depois de
+        // insistir 0,5 s para fora da sala (um passo no meio da onda não abre mais o diálogo) ou de interagir com a saída.
+        if (Map.Back is { } back)
         {
-            _backCooldown = BackCooldownSeconds;
-            Player.MoveAndCollide(new Vector2(0, -BackPushUp));
-            EventBus.Instance.EmitSignal(EventBus.SignalName.DungeonEscapeRequested, MapId);
+            var pushing = Player.IsMoving && EscapeIntent.IsPushingOut(Player.Facing.Y);
+            if (_escape.Update(EscapeIntent.InZone(back, foot.X, foot.Y), pushing, delta) && _backCooldown <= 0)
+            {
+                RequestEscape();
+            }
         }
+    }
+
+    /// <summary>Pede a fuga (empurra o jogador para dentro da sala e emite <c>DungeonEscapeRequested</c>).</summary>
+    private void RequestEscape()
+    {
+        if (IsTransitioning || _backCooldown > 0 || Map.Back is null)
+        {
+            return;
+        }
+
+        _backCooldown = BackCooldownSeconds;
+        Player.MoveAndCollide(new Vector2(0, -BackPushUp));
+        EventBus.Instance.EmitSignal(EventBus.SignalName.DungeonEscapeRequested, MapId);
     }
 
     private void Load(MapDef map, Vector2 at)
@@ -288,6 +305,13 @@ public partial class World : Node2D
         BuildInteractables(map);
         DoorOpen = false;
         _backCooldown = 0;
+        _escape.Reset();
+        if (map.Back is { } fleeEdge)
+        {
+            // C1-D3: nenhuma chegada colada na borda de fuga (o Mercado de Peixes nascia 20 u acima dela).
+            var away = EscapeIntent.KeepAway(new MapPoint(at.X, at.Y), fleeEdge);
+            at = new Vector2(away.X, away.Y);
+        }
 
         Player.Teleport(CorrectToWalkable(at));
         Dressing.Build(this, map, Layout);
@@ -452,7 +476,27 @@ public partial class World : Node2D
             InteractablesRoot.AddChild(node);
             _interactables[def.Id] = node;
         }
+
+        if (map.Back is { } back)
+        {
+            // C1-D3: a borda de fuga também é uma saída com prompt ("[E] Sair da Brecha"): interagir pergunta na hora.
+            var exit = new Interactable
+            {
+                Name = EscapeInteractableId,
+                Id = EscapeInteractableId,
+                Prompt = "Sair da Brecha",
+                Radius = MathF.Max(14f, back.Height * 0.5f + 8f),
+                Position = new Vector2(back.Center.X, back.Center.Y),
+                PromptHeight = MathF.Max(44f, WorldScale.CharacterHeight + 10f),
+            };
+            exit.Interacted += _ => RequestEscape();
+            InteractablesRoot.AddChild(exit);
+            _interactables[EscapeInteractableId] = exit;
+        }
     }
+
+    /// <summary>Id do interagível da borda de fuga das Brechas (C1-D3).</summary>
+    public const string EscapeInteractableId = "flee";
 
     private void ApplyFade()
     {

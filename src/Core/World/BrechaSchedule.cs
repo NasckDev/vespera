@@ -117,6 +117,12 @@ public sealed class BrechaSchedule
         NextOpenIn = _rules.InitialOpenDelay(newGame: !firstDone);
     }
 
+    /// <summary>
+    /// Jogador novato (fechou menos de <c>noviceBrechas</c>): as Brechas que abrem respeitam o Selo dele
+    /// (DECISIONS C1-D2). Quem roda a cidade atualiza a partir do save.
+    /// </summary>
+    public bool Novice { get; set; }
+
     /// <summary>Segundos de sessão (<c>G.t</c>) contados pelo <see cref="Tick"/>.</summary>
     public double Time { get; private set; }
 
@@ -268,7 +274,7 @@ public sealed class BrechaSchedule
         var first = !FirstDone;
         var theme = _rules.ChooseTheme(playerRankIndex, _openThemes, first, _random);
         var season = _calendar.SeasonOf(day);
-        var rank = _rules.RollRank(theme, playerRankIndex, first, _random);
+        var rank = _rules.RollRank(theme, playerRankIndex, first, Novice, _random);
         var timer = _rules.RollTimer(first, _random);
         var npcAt = _rules.RollNpcCloseAt(first, _random);
         var brecha = new BrechaInstance

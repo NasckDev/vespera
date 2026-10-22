@@ -9,7 +9,7 @@ namespace Vespera.Autoload;
 public partial class SaveService : Node
 {
     public const string DefaultSavePath = "user://save.json";
-    private const string SmokeSavePath = "user://save_smoke.json";
+    private const string SmokeSavePrefix = "user://save_smoke_";
     private const string CorruptedSuffix = ".corrupted";
 
     public static SaveService Instance { get; private set; } = null!;
@@ -22,8 +22,18 @@ public partial class SaveService : Node
         Instance = this;
         if (Testing.SmokeTest.IsRequested())
         {
-            SavePath = SmokeSavePath;
+            // POLI-16: um arquivo por processo, para rodadas de smoke em paralelo (outros worktrees) não se pisarem.
+            SavePath = SmokeSavePrefix + OS.GetProcessId() + ".json";
             DirAccess.RemoveAbsolute(SavePath);
+        }
+    }
+
+    public override void _ExitTree()
+    {
+        if (SavePath != DefaultSavePath)
+        {
+            DirAccess.RemoveAbsolute(SavePath);
+            DirAccess.RemoveAbsolute(SavePath + CorruptedSuffix);
         }
     }
 

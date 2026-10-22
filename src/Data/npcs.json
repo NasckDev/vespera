@@ -164,7 +164,7 @@
       "tutorial": [
         "Então você é {name}. A lanterna que trouxe era de alguém daqui, sabia? Ela escolheu você. Eu sou Odete, cuido da Guilda dos Lanterneiros.",
         "Você escolheu a {class}. É para sempre: aqui ninguém troca de arma no meio do caminho. Equipamentos também têm Selo e às vezes classe. O que não for seu fica trancado, mas pode ser desmontado.",
-        "Seu Golpe Supremo, {ultimate}, sai com a tecla F e recarrega com o tempo. Guarde para quando a coisa apertar. O Diário, no menu Esc, mostra o que fazer a seguir. Venha falar comigo no balcão quando quiser."
+        "Seu Golpe Supremo, {ultimate}, sai com {keyPhrase:ultimate} e recarrega com o tempo. Guarde para quando a coisa apertar. O Diário, no menu {key:pause}, mostra o que fazer a seguir. Venha falar comigo no balcão quando quiser."
       ],
       "tutorialNote": [
         "Missão nova no Diário: fale com Odete no balcão."

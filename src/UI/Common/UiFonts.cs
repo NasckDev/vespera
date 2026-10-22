@@ -11,7 +11,7 @@ namespace Vespera.UI.Common;
 public static class UiFonts
 {
     /// <summary>Texto miúdo (sub-rótulos, teclas).</summary>
-    public const int Tiny = 6;
+    public const int Tiny = 7; // POLI-10: mínimo legível (14 px em 720p); eram 6 e 5
 
     public const int Small = 7;
 

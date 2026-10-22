@@ -12,8 +12,8 @@ namespace Vespera.Combat;
 public partial class CombatOverlay : Node2D
 {
     public const int MaxFloats = 96;
-    private const int SmallFont = 7;
-    private const int BigFont = 9;
+    private const int SmallFont = 8; // C1-D10: era 7 (B1-D45); números legíveis no sofá
+    private const int BigFont = 11; // C1-D10: era 9; crítico e fraqueza saltam mais
     private const float RedFlashSeconds = 0.35f;
 
     private readonly Floater[] _floats = new Floater[MaxFloats];
@@ -95,11 +95,7 @@ public partial class CombatOverlay : Node2D
     /// Fator da janela sobre a base 640×360 (stretch <c>canvas_items</c>, aspecto <c>keep</c>): o texto é rasterizado
     /// nesse tamanho e fica nítido em 1080p/4K (DECISIONS B1-D45; sem ele o <c>DrawString</c> sai na base e é ampliado em blocos).
     /// </summary>
-    private float Oversampling()
-    {
-        var window = GetTree().Root.Size;
-        return MathF.Max(1, MathF.Min(window.X / 640f, window.Y / 360f));
-    }
+    private float Oversampling() => UI.Common.UiScaling.WindowFactor(this); // POLI-11: a escala inteira real da janela
 
     public override void _Draw()
     {
@@ -118,7 +114,7 @@ public partial class CombatOverlay : Node2D
             var max = f.Big ? 1.1f : 0.8f;
             var k = f.T / max;
             var a = (1 - (MathF.Max(0, k - 0.6f) / 0.4f)) * f.Alpha;
-            var size = (int)((f.Big ? BigFont : SmallFont) * (f.T < 0.08f ? 1.3f : 1f));
+            var size = (int)((f.Big ? BigFont : SmallFont) * (f.T < 0.1f ? 1.35f : 1f)); // "pulo" do número no acerto
             var at = xf * f.World;
             var pos = at + new Vector2(-60, 0);
             DrawStringOutline(_font, pos, f.Text, HorizontalAlignment.Center, 120, size, 2, new Color(0.03f, 0.02f, 0.06f, a * 0.85f), oversampling: os);
@@ -127,7 +123,7 @@ public partial class CombatOverlay : Node2D
 
         if (_red > 0)
         {
-            DrawRect(new Rect2(Vector2.Zero, view), new Color(180 / 255f, 20 / 255f, 50 / 255f, _red * 0.5f));
+            DrawRect(new Rect2(Vector2.Zero, view), new Color(180 / 255f, 20 / 255f, 50 / 255f, _red * 0.5f * Autoload.GameSettings.FlashScale)); // C1-D9: reduzir flashes
         }
 
         if (_charm > 0)

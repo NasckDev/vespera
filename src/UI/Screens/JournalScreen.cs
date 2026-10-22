@@ -49,7 +49,7 @@ public partial class JournalScreen : FrameScreen
             var column = Ui.Column(2, header);
             if (isCurrent)
             {
-                column.AddChild(Ui.Text(quest.Desc, UiFonts.Small, UiPalette.Body, wrap: true));
+                column.AddChild(Ui.Text(KeyText.Expand(quest.Desc), UiFonts.Small, UiPalette.Body, wrap: true));
             }
 
             var card = Ui.Panel(isCurrent ? "TabFocus" : "SoftPanel", column);

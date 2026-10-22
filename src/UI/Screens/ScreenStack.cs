@@ -22,6 +22,39 @@ public partial class ScreenStack : Control
         SetProcess(false);
     }
 
+    public override void _EnterTree()
+    {
+        GameSettings.Changed += ApplyScaleToOpen;
+        GetViewport().SizeChanged += ApplyScaleToOpen;
+    }
+
+    public override void _ExitTree()
+    {
+        GameSettings.Changed -= ApplyScaleToOpen;
+        if (GetViewport() is { } viewport)
+        {
+            viewport.SizeChanged -= ApplyScaleToOpen;
+        }
+    }
+
+    /// <summary>Escala da interface (C1-D4) aplicada a cada tela aberta, até o <see cref="Screen.DesignSize"/> caber.</summary>
+    public static float ScaleFor(Screen screen) => UiScaling.Fitting(screen, GameSettings.UiScale, screen.DesignSize);
+
+    private void ApplyScale(Screen screen)
+    {
+        UiScaling.Fit(screen, ScaleFor(screen));
+        UiScaling.ApplyText(screen);
+        UiScaling.ApplyOversampling(this);
+    }
+
+    private void ApplyScaleToOpen()
+    {
+        foreach (var screen in _screens)
+        {
+            ApplyScale(screen);
+        }
+    }
+
     /// <summary>Disparado depois de abrir ou fechar uma tela. Quem assina remove em _ExitTree.</summary>
     public event Action? Changed;
 
@@ -113,6 +146,7 @@ public partial class ScreenStack : Control
         screen.Stack = this;
         screen.FocusBehaviorRecursive = FocusBehaviorRecursiveEnum.Inherited;
         MoveChild(screen, -1);
+        ApplyScale(screen);
         screen.NotifyOpened();
         SetProcess(true);
         Changed?.Invoke();

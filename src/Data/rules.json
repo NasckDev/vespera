@@ -162,6 +162,7 @@
       120
     ],
     "entryMargin": 1,
+    "noviceBrechas": 3,
     "bossBonusBase": 40,
     "bossBonusPerRank": 25,
     "bossXp": 60,

@@ -256,6 +256,14 @@ public partial class EventBus : Node
     [Signal]
     public delegate void LanternRescueRequestedEventHandler(double delaySeconds);
 
+    // --- Polimento e acessibilidade (frente C1; DECISIONS C1-D12) ---
+    /// <summary>
+    /// Qualquer sistema → HUD: legenda curta de um som importante ("[Rugido do chefe]", "[Perigo →]"). Só aparece com
+    /// a opção "Legendas de sons" ligada; quem emite pode checar <c>GameSettings.Captions</c> antes para não gastar.
+    /// </summary>
+    [Signal]
+    public delegate void CaptionRequestedEventHandler(string text);
+
     public static EventBus Instance { get; private set; } = null!;
 
     public override void _EnterTree() => Instance = this;
