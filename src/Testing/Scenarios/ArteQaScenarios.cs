@@ -1705,8 +1705,8 @@ public partial class SmokeTest
                     await Shot($"arteqa-alfa-{state}");
                 }
 
-                // Wind/Lunge/morte caem no atlas do lobo: o designer não entregou golpe nem morte do Alfa (conhecido, só registrado)
-                if (!alpha.UsesArt && state is MonsterState.Idle or MonsterState.Chase or MonsterState.Rec)
+                // o designer só entregou frente e costas do Alfa: golpe, bote e morte ficam na frente com o corpo vivo, nunca no atlas
+                if (!alpha.UsesArt)
                 {
                     failures.Add($"Alfa em {state}: a arte com cristas some e o lobo comum do atlas aparece no lugar");
                 }
@@ -1717,6 +1717,10 @@ public partial class SmokeTest
             body.DeadT = 0.4;
             alpha.Sync(2f, origin);
             shown.Add($"morto={(alpha.UsesArt ? alpha.ArtPose : "atlas")}");
+            if (!alpha.UsesArt)
+            {
+                failures.Add("Alfa morto: a arte com cristas some e o lobo comum do atlas aparece no lugar");
+            }
             var sizes = new List<string>();
             foreach (var key in new[] { "wolf_f", "wolf_a", "wolf_d" })
             {

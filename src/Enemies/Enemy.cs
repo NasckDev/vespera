@@ -197,13 +197,19 @@ public partial class Enemy : Node2D
                 CreaturePoseKind.Back => PoseBack,
                 _ => PoseFront,
             };
-            // pose não desenhada: especial → ataque, costas → frente (como o atlas sem _b); a morte de um chefe sem pose de
-            // morte fica na frente afundando (o atlas teria outra pintura); ataque/morte do Alfa caem no atlas do lobo
+            // pose não desenhada: especial → ataque; o que ainda faltar (costas, ataque, morte) fica na pose da frente com o
+            // corpo vivo (antecipação, estalo, afundar). Nunca cai no atlas: a pintura e o tamanho seriam outros (o Alfa tem
+            // só frente e costas; o atlas do lobo é 12 u mais baixo e sem as cristas)
             if (!art.Has(anim))
             {
-                anim = anim == PoseSpecial && art.Has(PoseAttack) ? PoseAttack
-                    : anim == PoseBack || (anim == PoseDeath && m.IsBoss) ? PoseFront
-                    : anim;
+                if (anim == PoseSpecial && art.Has(PoseAttack))
+                {
+                    anim = PoseAttack;
+                }
+                else if (!art.Has(anim) && art.Has(PoseFront))
+                {
+                    anim = PoseFront;
+                }
             }
 
             var drawn = art.Has(anim);
