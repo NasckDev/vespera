@@ -392,6 +392,14 @@
       "rarity": "comum",
       "value": 3,
       "desc": "Pescado nos cais da Rua da Forja na hora em que as lanternas acendem. Lúcia frita com erva."
+    },
+    {
+      "id": "gel_lodo",
+      "name": "Gel de Lodo",
+      "icon": "d_gel_lodo",
+      "rarity": "incomum",
+      "value": 8,
+      "desc": "Núcleo morno da Lodo-Mãe. Ainda tem louça presa dentro, e às vezes um botão de casaco."
     }
   ]
 }
