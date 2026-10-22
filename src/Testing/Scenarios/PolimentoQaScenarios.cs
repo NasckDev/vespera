@@ -1766,6 +1766,7 @@ public partial class SmokeTest
                 ("controles", async () => { EventBus.Instance.EmitSignal(EventBus.SignalName.ScreenRequested, "controls"); await Task.CompletedTask; }),
                 ("opcoes", async () => { EventBus.Instance.EmitSignal(EventBus.SignalName.ScreenRequested, "options"); await Task.CompletedTask; }),
                 ("teclas", async () => { EventBus.Instance.EmitSignal(EventBus.SignalName.ScreenRequested, "options"); await WaitSeconds(0.3); ui.Options.KeybindsRow.Activate(); }),
+                ("morte", async () => { EventBus.Instance.EmitSignal(EventBus.SignalName.ScreenRequested, "death"); await Task.CompletedTask; }),
                 ("dialogo-bras", async () => { EventBus.Instance.EmitSignal(EventBus.SignalName.InteractionRequested, "talkSmith", "bras"); await Task.CompletedTask; }),
             };
             foreach (var scale in new[] { 1f, 1.25f, 1.5f })
