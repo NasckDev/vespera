@@ -226,7 +226,9 @@ public partial class SmokeTest
                 e.Body.T = 0.5;
                 e.Sync(3.1f, foot);
                 e.Sync(3.1f, foot);
-                Require(e.Body.Def.Id == "wolfE" ? !e.UsesArt : e.ArtPose == "attack", $"{e.Body.Def.Id}: golpe deveria mostrar 'attack' (Alfa: atlas), está '{e.ArtPose}'");
+                // o Alfa só tem frente e costas desenhadas: o golpe fica na frente com o corpo vivo (C2-D11), nunca no atlas
+                var strike = e.Body.Def.Id == "wolfE" ? "front" : "attack";
+                Require(e.UsesArt && e.ArtPose == strike, $"{e.Body.Def.Id}: golpe deveria mostrar '{strike}', está '{(e.UsesArt ? e.ArtPose : "atlas")}'");
             }
 
             await Shot("arte-chefes-golpe");
@@ -247,11 +249,8 @@ public partial class SmokeTest
                 e.Body.Kill();
                 e.Body.DeadT = 0.3;
                 e.Sync(3.5f, foot);
-                if (e.Body.IsBoss)
-                {
-                    var expected = e.Body.Def.Id == "angler" ? "front" : "death";
-                    Require(e.ArtPose == expected, $"{e.Body.Def.Id}: morte deveria mostrar '{expected}', está '{e.ArtPose}'");
-                }
+                var expected = e.Body.Def.Id is "angler" or "wolfE" ? "front" : "death";
+                Require(e.UsesArt && e.ArtPose == expected, $"{e.Body.Def.Id}: morte deveria mostrar '{expected}', está '{(e.UsesArt ? e.ArtPose : "atlas")}'");
             }
 
             await Shot("arte-chefes-morte");

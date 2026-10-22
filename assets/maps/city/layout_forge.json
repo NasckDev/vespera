@@ -306,7 +306,7 @@
     {"kind": "inspect", "x": 440, "y": 448, "r": 24, "label": "Observar", "text": "Pedras do largo gastas em círculo. É aqui que uma Brecha costuma abrir na véspera."}
   ],
   "objects": [
-    {"id": "notice_board", "x": 470, "y": 468},
+    {"id": "notice_board", "x": 470, "y": 468, "label": "Ler o quadro de avisos", "text": "Quadro de avisos da Guilda: caçadores procurados, ferro vendido por peso e um aviso novo, sem assinatura, sobre a véspera."},
     {"id": "brazier_stand", "x": 1075, "y": 440},
     {"id": "lamp_post_common", "x": 330, "y": 470}
   ]

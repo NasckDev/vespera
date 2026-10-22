@@ -21,9 +21,10 @@ Formato do layout (coordenadas em px do mapa; formas: {"poly": [[x,y],...]}, {"r
   "decor":  [ {"kind": "lamp|flower|boat|fishing|sign|bench|fountain|stall|inspect", "x": 0, "y": 0,
                "r": 24, "label": "Acender lampião", "text": "...", "to": [x,y]} ]   # interações de decoração
                #   "boat" com "to": balsa que leva ao ponto "to" (o check conta como alcançável o cais de destino)
-  "objects": [ {"id": "lamp_post_common", "x": 0, "y": 0, "flip": false} ]   # objetos do catálogo (src/Data/objects.json),
+  "objects": [ {"id": "lamp_post_common", "x": 0, "y": 0, "flip": false, "label": "...", "text": "..."} ]   # objetos do catálogo (src/Data/objects.json),
                #   pé do objeto em (x,y). Lampião, braseiro, flores, alavanca, porta e quadro de avisos ganham a arte de
-               #   estados do designer (DECISIONS C2-D5). O check exige o pé a até 28 px de chão alcançável.
+               #   estados do designer (DECISIONS C2-D5). O check exige o pé a até 28 px de chão alcançável. "label" e "text"
+               #   (opcionais) trocam o rótulo e a fala da interação: quadro de avisos, alavanca e porta sem texto não dizem nada.
 }
 
 Uso:

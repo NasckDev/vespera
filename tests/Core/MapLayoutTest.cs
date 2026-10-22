@@ -25,7 +25,7 @@ public class MapLayoutTest
         {"kind": "sign", "x": 10, "y": 10, "text": "Rua dos Ofícios"}
       ],
       "fx": [ {"kind": "smoke", "x": 260, "y": 60} ],
-      "objects": [ {"id": "lampiao_ferro", "x": 400, "y": 500, "flip": true}, {"id": "banca", "x": 1, "y": 2} ]
+      "objects": [ {"id": "lampiao_ferro", "x": 400, "y": 500, "flip": true}, {"id": "banca", "x": 1, "y": 2, "text": "Preços do dia.", "label": "Ler"} ]
     }
     """;
 
@@ -48,6 +48,9 @@ public class MapLayoutTest
         AssertThat(layout.Fx[0].Kind).IsEqual("smoke");
         AssertThat(layout.Objects[0]).IsEqual(new LayoutObject("lampiao_ferro", 400, 500, true));
         AssertThat(layout.Objects[1].Flip).IsFalse();
+        AssertThat(layout.Objects[0].Text).IsNull();
+        AssertThat(layout.Objects[1].Text).IsEqual("Preços do dia.");
+        AssertThat(layout.Objects[1].Label).IsEqual("Ler");
     }
 
     [TestCase]

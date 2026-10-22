@@ -1663,6 +1663,14 @@ public partial class SmokeTest
         await WaitMapSettled(world);
         var board = world.Dressing.Objects.FirstOrDefault(x => x.ArtRole == PropArtRole.Board) ?? throw new SmokeFailure("forge: sem quadro de avisos");
         Require(board.ArtState == "board", $"quadro de avisos real com a arte nova, está '{board.ArtState}'");
+        // o quadro de avisos é alto (73 u): o cartão com o texto fica 80 u acima do pé e tem que continuar na tela com o jogador de pé na frente
+        var boardSpot = world.Dressing.Decor.FirstOrDefault(x => x.Object == board) ?? throw new SmokeFailure("forge: quadro de avisos sem interação");
+        await FocusDecor(world, boardSpot);
+        await TapInteract();
+        await Frames(4);
+        Require(world.Dressing.Lore.Text.Contains("Quadro de avisos", StringComparison.Ordinal), $"ler o quadro de avisos deveria mostrar o texto do layout, mostra '{world.Dressing.Lore.Text}'");
+        await Shot("arteqa-real-board-forge");
+        world.Dressing.Lore.HideCard();
         var brazier = world.Dressing.Objects.FirstOrDefault(x => x.ArtRole == PropArtRole.Brazier) ?? throw new SmokeFailure("forge: sem braseiro");
         Require(brazier.ArtState is "on" or "off", $"braseiro real com a arte nova, está '{brazier.ArtState}'");
     }

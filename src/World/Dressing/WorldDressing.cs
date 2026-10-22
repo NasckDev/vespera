@@ -366,7 +366,7 @@ public partial class WorldDressing : Node2D
 
             if (def.Interact is { } interact)
             {
-                var decor = new LayoutDecor(interact.Kind, placed.X, placed.Y, interact.Radius, interact.Label, interact.Text, null);
+                var decor = new LayoutDecor(interact.Kind, placed.X, placed.Y, interact.Radius, placed.Label ?? interact.Label, placed.Text ?? interact.Text, null);
                 var spot = AddDecor(map, decor, layout.Decor.Count + i, key, MathF.Max(24f, o.Bounds.Height + 6f));
                 spot.Object = o;
             }
