@@ -9,6 +9,7 @@ using Vespera.UI;
 using Vespera.UI.Common;
 using Vespera.UI.HudKit;
 using Vespera.UI.Screens;
+using Vespera.UI.Widgets;
 using Vespera.Core.Rules;
 using Vespera.Core.World;
 using Vespera.World.City;
@@ -1204,6 +1205,497 @@ public partial class SmokeTest
             GameUi.AutoCompleteQuests = auto;
             PqResetPlayerSettings();
             ui.CloseAll();
+        }
+    }
+
+    // --- sensação do combate: luta de verdade com a Lâmina na Brecha (prints + números) ---
+
+    [SmokeScenario("polimento (qa): a Lâmina nos primeiros 30 s de luta de verdade na Brecha tem peso e a telegrafia aparece", order: 1030)]
+    private async Task PqBladeFirst30Seconds()
+    {
+        var (world, combat) = await CombatSetup();
+        GameManager.Instance.NewGame("Bot", "sword");
+        GameSettings.ResetAccessibility();
+        world.GoMap("forge", 800, 520, instant: true);
+        await WaitMapSettled(world);
+        GameUi.Current?.CloseAll();
+        OS.SetEnvironment("VESPERA_BOT_TRACE", "24");
+        var running = true;
+        var hitstopFrames = 0;
+        var frames = 0;
+        var peakShake = 0f;
+        var telegraphFrames = 0;
+        var maxMonsters = 0;
+        var kills = 0;
+        void OnDied(string id, Vector2 at) => kills++;
+        EventBus.Instance.EnemyDied += OnDied;
+        try
+        {
+            await EnterBrecha(world, combat, spot: 0, theme: "fish", rank: 0);
+            async Task Sampler()
+            {
+                while (running)
+                {
+                    await NextPhysicsFrame();
+                    frames++;
+                    hitstopFrames += combat.Clock.Hitstop > 0 ? 1 : 0;
+                    peakShake = Mathf.Max(peakShake, world.Camera.CurrentShake);
+                    foreach (var e in combat.Enemies)
+                    {
+                        if (CombatDirector.TelegraphActive(e.Body))
+                        {
+                            telegraphFrames++;
+                            break;
+                        }
+                    }
+
+                    maxMonsters = Math.Max(maxMonsters, combat.AliveMonsters);
+                }
+            }
+
+            _ = Sampler();
+            var t0 = Time.GetTicksMsec();
+            await Bot(combat, () => (Time.GetTicksMsec() - t0) > 30000 || combat.Brecha.Run is null || kills >= 12, 60, "30 s de luta com a Lâmina", shotAt: "qa-luta");
+            running = false;
+            await NextPhysicsFrame();
+            var seconds = (Time.GetTicksMsec() - t0) / 1000.0;
+            Log.Info($"qa-luta: {seconds:0} s, {kills} mortes, {maxMonsters} monstros no máx., hitstop em {hitstopFrames} de {frames} quadros ({100.0 * hitstopFrames / Math.Max(1, frames):0.0}%), tremor máx. {peakShake:0.0}, telegrafia em {telegraphFrames} quadros");
+            Require(kills > 0, "a Lâmina não matou nada em 30 s");
+            Require(hitstopFrames >= 10, $"pouco hitstop em 30 s de luta: {hitstopFrames} quadros");
+            Require(telegraphFrames > 0, "nenhum monstro mostrou telegrafia em 30 s de luta");
+            Require(100.0 * hitstopFrames / Math.Max(1, frames) < 35.0, $"hitstop demais: {hitstopFrames}/{frames} quadros parados");
+        }
+        finally
+        {
+            running = false;
+            EventBus.Instance.EnemyDied -= OnDied;
+            OS.SetEnvironment("VESPERA_BOT_TRACE", string.Empty);
+            await FleeRun(world, combat);
+        }
+    }
+
+    // --- resoluções ---
+
+    [SmokeScenario("polimento (qa): informa o tamanho real da janela e da área visível e tira prints do HUD em 100/125/150%", order: 1040)]
+    private async Task PqResolutionShots()
+    {
+        await PqFreshWorld();
+        var world = await FreshGame("sword");
+        var hud = Hud.Current!;
+        PqResetPlayerSettings();
+        try
+        {
+            world.GoMap("forge", 800, 520, instant: true);
+            await WaitMapSettled(world);
+            await DismissUi();
+            // VESPERA_QA_WINDOW=1920x1080: janela sem borda no canto da tela, para o fator inteiro da escala valer (a janela com moldura perde ~50 px de altura e cai para 2×).
+            if (OS.GetEnvironment("VESPERA_QA_WINDOW") is { Length: > 0 } wanted && wanted.Split('x') is { Length: 2 } wh && int.TryParse(wh[0], out var ww) && int.TryParse(wh[1], out var hh) && DisplayServer.GetName() != "headless")
+            {
+                DisplayServer.WindowSetFlag(DisplayServer.WindowFlags.Borderless, true);
+                DisplayServer.WindowSetPosition(Vector2I.Zero);
+                DisplayServer.WindowSetSize(new Vector2I(ww, hh));
+                await WaitSeconds(0.8);
+            }
+
+            var win = DisplayServer.WindowGetSize();
+            var root = GetTree().Root;
+            Log.Info($"qa-res: janela {win}, raiz {root.Size}, visível {GetViewport().GetVisibleRect()}, escala da tela {DisplayServer.ScreenGetScale()}, fator inteiro {UiScaling.WindowFactor(hud)}");
+            foreach (var scale in GameSettings.UiScales)
+            {
+                GameSettings.UiScale = scale;
+                await WaitSeconds(0.5);
+                var view = GetViewport().GetVisibleRect();
+                foreach (var block in new Control[] { hud.HpBar, hud.LocationLabel, hud.PotionSlot })
+                {
+                    Require(view.Grow(1).Encloses(block.GetGlobalRect()), $"{win} escala {scale}: {block.Name} fora da tela ({block.GetGlobalRect()} em {view})");
+                }
+
+                await Shot($"qa-res-{win.X}x{win.Y}-hud-{scale * 100:0}");
+            }
+
+            GameSettings.UiScale = 1f;
+            GameSettings.TextScale = 1.3f;
+            GameUi.Current!.OpenPause();
+            await WaitSeconds(0.4);
+            await Shot($"qa-res-{win.X}x{win.Y}-pausa");
+            EventBus.Instance.EmitSignal(EventBus.SignalName.ScreenRequested, "options");
+            await WaitSeconds(0.5);
+            await Shot($"qa-res-{win.X}x{win.Y}-opcoes");
+        }
+        finally
+        {
+            GameUi.Current?.CloseAll();
+            PqResetPlayerSettings();
+        }
+    }
+
+    // --- opções: todas as linhas aparecem, o foco acompanha e nada vaza ---
+
+    /// <summary>Linhas (SelectableRow) da tela de opções, na ordem em que aparecem.</summary>
+    private static List<SelectableRow> PqRows(Control screen) =>
+        screen.FindChildren("*", nameof(SelectableRow), true, false).OfType<SelectableRow>().Where(r => r.IsVisibleInTree()).ToList();
+
+    [SmokeScenario("polimento (qa): Opções mostra a primeira linha e o foco acompanha cada linha até o fim em todas as escalas", order: 1050)]
+    private async Task PqOptionsAllRowsReachable()
+    {
+        await PqFreshWorld();
+        await FreshGame("sword");
+        var ui = UiOrFail();
+        PqResetPlayerSettings();
+        var problems = new List<string>();
+        try
+        {
+            foreach (var (ui_scale, text_scale) in new[] { (1f, 1f), (1.25f, 1.15f), (1.5f, 1.3f) })
+            {
+                GameSettings.UiScale = ui_scale;
+                GameSettings.TextScale = text_scale;
+                ui.OpenPause();
+                await WaitSeconds(0.3);
+                EventBus.Instance.EmitSignal(EventBus.SignalName.ScreenRequested, "options");
+                await WaitUntil(() => ui.Options.IsOpen, 2, "opções abrirem");
+                await WaitSeconds(0.4);
+                var rows = PqRows(ui.Options);
+                var scroll = ui.Options.FindChildren("*", nameof(ScrollContainer), true, false).OfType<ScrollContainer>().First();
+                var first = rows[0];
+                var firstLabel = ((Label)((HBoxContainer)first.GetChild(0)).GetChild(0)).Text;
+                var view = scroll.GetGlobalRect();
+                var firstRect = first.GetGlobalRect();
+                var focusOwner = GetViewport().GuiGetFocusOwner();
+                Log.Info($"qa-opcoes: UI {ui_scale * 100:0}% texto {text_scale * 100:0}%: {rows.Count} linhas, primeira '{firstLabel}' em {firstRect}, área rolável {view}, foco em '{(focusOwner as SelectableRow is { } fr ? ((Label)((HBoxContainer)fr.GetChild(0)).GetChild(0)).Text : focusOwner?.Name)}', rolagem {scroll.ScrollVertical}");
+                await Shot($"qa-opcoes-{ui_scale * 100:0}-{text_scale * 100:0}-abertas");
+                if (firstLabel != UiText.OptionMaster || !view.Grow(1).Encloses(firstRect))
+                {
+                    problems.Add($"UI {ui_scale * 100:0}%: a primeira linha ('{UiText.OptionMaster}') não está visível ao abrir (primeira visível '{firstLabel}' {firstRect}, rolagem {scroll.ScrollVertical}, área {view})");
+                }
+
+                // Desce com o teclado até o fim: o foco tem de estar sempre visível dentro da área rolável.
+                var hidden = 0;
+                for (var i = 0; i < rows.Count + 2; i++)
+                {
+                    var owner = GetViewport().GuiGetFocusOwner();
+                    if (owner is SelectableRow row && !view.Grow(2).Encloses(row.GetGlobalRect()))
+                    {
+                        hidden++;
+                    }
+
+                    await UiPress("ui_down");
+                }
+
+                if (hidden > 0)
+                {
+                    problems.Add($"UI {ui_scale * 100:0}%: o foco ficou fora da área visível em {hidden} passo(s) descendo pelas opções");
+                }
+
+                await Shot($"qa-opcoes-{ui_scale * 100:0}-{text_scale * 100:0}-fim");
+                ui.CloseAll();
+                await WaitSeconds(0.3);
+            }
+        }
+        finally
+        {
+            ui.CloseAll();
+            PqResetPlayerSettings();
+        }
+
+        Require(problems.Count == 0, "Opções com linha escondida ou foco perdido:" + (char)10 + "  " + string.Join((char)10 + "  ", problems));
+    }
+
+    [SmokeScenario("estresse: polimento (qa): abrir e fechar Opções e Teclas 100× mexendo em tudo não vaza nós nem perde o foco", order: 1051)]
+    private async Task PqOptionsStress()
+    {
+        await PqFreshWorld();
+        await FreshGame("sword");
+        var ui = UiOrFail();
+        PqResetPlayerSettings();
+        // Aquecimento: as telas de Opções e de Teclas são criadas sob demanda (um custo único de nós), fora da medida.
+        ui.OpenPause();
+        await Frames(3);
+        EventBus.Instance.EmitSignal(EventBus.SignalName.ScreenRequested, "options");
+        await Frames(3);
+        ui.Options.KeybindsRow.Activate();
+        await Frames(3);
+        ui.CloseAll();
+        await WaitSeconds(0.6);
+        var nodes0 = Performance.GetMonitor(Performance.Monitor.ObjectNodeCount);
+        var orphans0 = Performance.GetMonitor(Performance.Monitor.ObjectOrphanNodeCount);
+        var mem0 = Performance.GetMonitor(Performance.Monitor.MemoryStatic);
+        var noFocus = 0;
+        var started = Time.GetTicksMsec();
+        try
+        {
+            for (var round = 0; round < 100; round++)
+            {
+                ui.OpenPause();
+                await Frames(2);
+                EventBus.Instance.EmitSignal(EventBus.SignalName.ScreenRequested, "options");
+                await Frames(3);
+                Require(ui.Options.IsOpen, $"rodada {round}: opções não abriram");
+                if (GetViewport().GuiGetFocusOwner() is null)
+                {
+                    noFocus++;
+                }
+
+                // mexe em tudo: ← → em 6 linhas, e uma troca de escala por rodada.
+                for (var i = 0; i < 6; i++)
+                {
+                    await UiPress(i % 2 == 0 ? "ui_right" : "ui_left");
+                    await UiPress("ui_down");
+                }
+
+                GameSettings.UiScale = GameSettings.UiScales[round % 3];
+                GameSettings.TextScale = GameSettings.TextScales[(round / 3) % 3];
+                if (round % 10 == 0)
+                {
+                    ui.Options.KeybindsRow.Activate();
+                    await Frames(3);
+                    Require(ui.Options.Keybinds.IsOpen, $"rodada {round}: teclas não abriram");
+                }
+
+                ui.CloseAll();
+                await Frames(2);
+                if (round == 5)
+                {
+                    // Depois das primeiras rodadas (pools de som e telas já criados) começa a medida de crescimento.
+                    nodes0 = Performance.GetMonitor(Performance.Monitor.ObjectNodeCount);
+                    orphans0 = Performance.GetMonitor(Performance.Monitor.ObjectOrphanNodeCount);
+                    mem0 = Performance.GetMonitor(Performance.Monitor.MemoryStatic);
+                }
+            }
+
+            GameSettings.ResetAccessibility();
+            await WaitSeconds(0.6);
+            var nodes1 = Performance.GetMonitor(Performance.Monitor.ObjectNodeCount);
+            var orphans1 = Performance.GetMonitor(Performance.Monitor.ObjectOrphanNodeCount);
+            var mem1 = Performance.GetMonitor(Performance.Monitor.MemoryStatic);
+            Log.Info($"qa-opcoes-estresse: 100 rodadas em {(Time.GetTicksMsec() - started) / 1000.0:0} s; nós {nodes0}→{nodes1}, órfãos {orphans0}→{orphans1}, memória {mem0 / (1024 * 1024):0.0}→{mem1 / (1024 * 1024):0.0} MB, sem foco ao abrir em {noFocus} rodadas");
+            Require(nodes1 - nodes0 <= 20, $"nós cresceram {nodes0}→{nodes1}");
+            Require(orphans1 - orphans0 <= 5, $"órfãos cresceram {orphans0}→{orphans1}");
+            Require(mem1 - mem0 < 20 * 1024 * 1024, $"memória cresceu {(mem1 - mem0) / (1024 * 1024):0.0} MB");
+            Require(noFocus == 0, $"as opções abriram sem foco em {noFocus} de 100 rodadas");
+        }
+        finally
+        {
+            ui.CloseAll();
+            PqResetPlayerSettings();
+        }
+    }
+
+    // --- estresse: trocar teclado↔controle no meio da luta, remapear sem parar, desempenho com a acessibilidade ligada ---
+
+    [SmokeScenario("estresse: polimento (qa): trocar teclado↔controle a cada 0,2 s durante uma luta de verdade não quebra dicas, mira nem HUD", order: 1060)]
+    private async Task PqDeviceSwitchMidFight()
+    {
+        var (world, combat) = await CombatSetup();
+        GameManager.Instance.NewGame("Bot", "sword");
+        PqResetPlayerSettings();
+        world.GoMap("forge", 800, 520, instant: true);
+        await WaitMapSettled(world);
+        GameUi.Current?.CloseAll();
+        var switches = 0;
+        void OnDevice() => switches++;
+        InputHints.DeviceChanged += OnDevice;
+        var running = true;
+        var kills = 0;
+        void OnDied(string id, Vector2 at) => kills++;
+        EventBus.Instance.EnemyDied += OnDied;
+        var nodes0 = 0.0;
+        try
+        {
+            GameSettings.AimAssist = true;
+            GameSettings.Captions = true;
+            await EnterBrecha(world, combat, spot: 0, theme: "fish", rank: 0);
+            nodes0 = Performance.GetMonitor(Performance.Monitor.ObjectNodeCount);
+            var hud = Hud.Current!;
+            async Task Toggler()
+            {
+                var pad = false;
+                while (running)
+                {
+                    pad = !pad;
+                    if (pad)
+                    {
+                        // botão sem função: só avisa a UI que o jogador pegou o controle
+                        Input.ParseInputEvent(new InputEventJoypadButton { ButtonIndex = JoyButton.Guide, Pressed = true });
+                        Input.ParseInputEvent(new InputEventJoypadButton { ButtonIndex = JoyButton.Guide, Pressed = false });
+                    }
+                    else
+                    {
+                        PqNoopKey();
+                    }
+
+                    await WaitSeconds(0.2);
+                }
+            }
+
+            _ = Toggler();
+            var t0 = Time.GetTicksMsec();
+            await Bot(combat, () => (Time.GetTicksMsec() - t0) > 20000 || combat.Brecha.Run is null, 40, "luta com troca de dispositivo");
+            running = false;
+            await WaitSeconds(0.3);
+            var nodes1 = Performance.GetMonitor(Performance.Monitor.ObjectNodeCount);
+            Log.Info($"qa-dispositivo: {switches} trocas teclado↔controle em 20 s de luta, {kills} mortes, nós {nodes0}→{nodes1}");
+            await Shot("qa-dispositivo-fim");
+            Require(switches >= 20, $"só {switches} trocas de dispositivo foram detectadas");
+            Require(kills > 0, "a luta parou de funcionar com a troca de dispositivo");
+            Require(nodes1 - nodes0 <= 60, $"nós cresceram {nodes0}→{nodes1} durante as trocas");
+            Require(hud.PotionSlot.IsInsideTree() && GameManager.Instance.State.Hp > 0, "HUD/jogador em estado inválido");
+        }
+        finally
+        {
+            running = false;
+            InputHints.DeviceChanged -= OnDevice;
+            EventBus.Instance.EnemyDied -= OnDied;
+            PqResetPlayerSettings();
+            await FleeRun(world, combat);
+        }
+    }
+
+    private static void PqNoopKey() => Input.ParseInputEvent(new InputEventKey { PhysicalKeycode = Key.Shift, Keycode = Key.Shift, Pressed = false });
+
+    [SmokeScenario("estresse: polimento (qa): 400 remapeamentos aleatórios (com conflitos) nunca deixam ação sem tecla, tecla duplicada nem arquivo inconsistente", order: 1061)]
+    private async Task PqRemapFuzz()
+    {
+        await FreshGame("sword");
+        InputBindings.RestoreDefaults();
+        var rng = new Random(1234);
+        var keys = new[]
+        {
+            Key.A, Key.B, Key.C, Key.D, Key.E, Key.F, Key.G, Key.H, Key.I, Key.J, Key.K, Key.L, Key.M, Key.N, Key.O, Key.P, Key.Q, Key.R, Key.S, Key.T, Key.U, Key.V, Key.W, Key.X, Key.Y, Key.Z,
+            Key.Space, Key.Shift, Key.Tab, Key.Up, Key.Down, Key.Left, Key.Right, Key.Key1, Key.F2, Key.Escape, Key.Enter, Key.Backspace,
+        };
+        var buttons = new[]
+        {
+            JoyButton.A, JoyButton.B, JoyButton.X, JoyButton.Y, JoyButton.Back, JoyButton.Start, JoyButton.LeftStick, JoyButton.RightStick, JoyButton.LeftShoulder, JoyButton.RightShoulder,
+            JoyButton.DpadUp, JoyButton.DpadDown, JoyButton.DpadLeft, JoyButton.DpadRight,
+        };
+        var problems = new List<string>();
+        var results = new Dictionary<RemapResult, int>();
+        try
+        {
+            for (var i = 0; i < 400; i++)
+            {
+                var r = InputBindings.Remappable[rng.Next(InputBindings.Remappable.Length)];
+                var pad = r.Pad && rng.Next(2) == 0;
+                InputEvent e = pad
+                    ? new InputEventJoypadButton { ButtonIndex = buttons[rng.Next(buttons.Length)] }
+                    : new InputEventKey { PhysicalKeycode = keys[rng.Next(keys.Length)] };
+                var result = InputBindings.Assign(r.Action, pad, e, out _);
+                results[result] = results.GetValueOrDefault(result) + 1;
+
+                // Invariantes: toda ação remapeável tem tecla principal; nenhuma tecla principal repetida entre duas ações.
+                var seen = new Dictionary<string, string>();
+                foreach (var a in InputBindings.Remappable)
+                {
+                    var kb = InputBindings.Label(a.Action, false);
+                    if (kb is null)
+                    {
+                        problems.Add($"passo {i}: '{a.Label}' ficou sem tecla de teclado");
+                    }
+                    else if (seen.TryGetValue("k:" + kb, out var who))
+                    {
+                        problems.Add($"passo {i}: '{a.Label}' e '{who}' usam a mesma tecla '{kb}'");
+                    }
+                    else
+                    {
+                        seen["k:" + kb] = a.Label;
+                    }
+
+                    if (a.Pad)
+                    {
+                        var pb = InputBindings.Label(a.Action, true);
+                        if (pb is null)
+                        {
+                            problems.Add($"passo {i}: '{a.Label}' ficou sem botão de controle");
+                        }
+                        else if (seen.TryGetValue("p:" + pb, out var who2))
+                        {
+                            problems.Add($"passo {i}: '{a.Label}' e '{who2}' usam o mesmo botão '{pb}'");
+                        }
+                        else
+                        {
+                            seen["p:" + pb] = a.Label;
+                        }
+                    }
+                }
+
+                if (problems.Count > 5)
+                {
+                    break;
+                }
+            }
+
+            Log.Info($"qa-remap-fuzz: resultados {string.Join(", ", results.Select(kv => $"{kv.Key}={kv.Value}"))}; problemas {problems.Count}");
+            InputBindings.RestoreDefaults();
+            foreach (var a in InputBindings.Remappable)
+            {
+                if (InputBindings.Label(a.Action, false) is null)
+                {
+                    problems.Add($"depois de restaurar: '{a.Label}' sem tecla");
+                }
+            }
+
+            var cfg = new ConfigFile();
+            cfg.Load(AudioManager.Instance.SettingsFile);
+            if (cfg.HasSection("input_keys") && cfg.GetSectionKeys("input_keys").Length > 0)
+            {
+                problems.Add($"restaurar padrão deixou {cfg.GetSectionKeys("input_keys").Length} tecla(s) no settings.cfg");
+            }
+        }
+        finally
+        {
+            InputBindings.RestoreDefaults();
+        }
+
+        await Task.CompletedTask;
+        Require(problems.Count == 0, "remapeamento inconsistente:" + (char)10 + "  " + string.Join((char)10 + "  ", problems.Take(8)));
+    }
+
+    [SmokeScenario("estresse: polimento (qa): tempo de frame (média e p95) numa luta com UI 150%, texto 130%, alto contraste e legendas", order: 1062)]
+    private async Task PqFrameTimeWithAccessibility()
+    {
+        var (world, combat) = await CombatSetup();
+        GameManager.Instance.NewGame("Bot", "sword");
+        PqResetPlayerSettings();
+        world.GoMap("forge", 800, 520, instant: true);
+        await WaitMapSettled(world);
+        GameUi.Current?.CloseAll();
+        try
+        {
+            GameSettings.UiScale = 1.5f;
+            GameSettings.TextScale = 1.3f;
+            GameSettings.HighContrast = true;
+            GameSettings.Captions = true;
+            await EnterBrecha(world, combat, spot: 0, theme: "cathedral", rank: 0);
+            var deltas = new List<double>();
+            var last = Time.GetTicksUsec();
+            var memory0 = Performance.GetMonitor(Performance.Monitor.MemoryStatic);
+            var running = true;
+            async Task Sampler()
+            {
+                while (running)
+                {
+                    await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+                    var now = Time.GetTicksUsec();
+                    deltas.Add((now - last) / 1000.0);
+                    last = now;
+                }
+            }
+
+            _ = Sampler();
+            var t0 = Time.GetTicksMsec();
+            await Bot(combat, () => (Time.GetTicksMsec() - t0) > 15000 || combat.Brecha.Run is null, 30, "luta de 15 s com a acessibilidade no máximo");
+            running = false;
+            await NextPhysicsFrame();
+            deltas.Sort();
+            var avg = deltas.Average();
+            var p95 = deltas[(int)(deltas.Count * 0.95)];
+            Log.Info($"qa-frame-a11y: {deltas.Count} quadros, média {avg:0.00} ms, p95 {p95:0.00} ms, máx {deltas[^1]:0.00} ms; memória {memory0 / (1024 * 1024):0.0}→{Performance.GetMonitor(Performance.Monitor.MemoryStatic) / (1024 * 1024):0.0} MB; combate {combat.LastStepMs:0.00} ms/passo, {combat.LastStepBytes} B/passo");
+            Require(p95 <= 20.0, $"p95 de {p95:0.0} ms > 20 ms (média {avg:0.0} ms)");
+        }
+        finally
+        {
+            PqResetPlayerSettings();
+            await FleeRun(world, combat);
         }
     }
 }
