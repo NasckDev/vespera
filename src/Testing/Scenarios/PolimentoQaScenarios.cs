@@ -1380,6 +1380,10 @@ public partial class SmokeTest
                     }
 
                     await UiPress("ui_down");
+                    // A GUI processa o evento e o ScrollContainer rola no quadro de desenho, não no tick de física: com a máquina
+                    // cheia (25–30 fps) dois ticks passam antes disso e o foco parecia um passo fora da área visível.
+                    await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+                    await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
                 }
 
                 if (hidden > 0)
