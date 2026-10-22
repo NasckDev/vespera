@@ -1635,6 +1635,38 @@ public partial class SmokeTest
         Require(missing.Count == 0, $"famílias aprovadas do designer que nenhum mapa real usa (só existem no fixture do smoke): {string.Join(", ", missing)}");
     }
 
+    [SmokeScenario("arte (qa): testa usar o lampião, a flor, a alavanca, a porta e o quadro reais dos mapas muda o desenho", order: 169)]
+    private async Task ArteQaRealObjectsChangeStateWhenUsed()
+    {
+        await WaitForScene("World", timeoutSeconds: 10);
+        var world = FindWorld();
+        GameManager.Instance.NewGame("Bot", "sword");
+        foreach (var (mapId, role) in new[] { ("forge", PropArtRole.Lamp), ("garden", PropArtRole.Flower), ("mine", PropArtRole.Lever), ("cath", PropArtRole.Door) })
+        {
+            var map = World.World.Catalog[mapId];
+            world.GoMap(mapId, map.Spawn.X, map.Spawn.Y, instant: true);
+            await WaitMapSettled(world);
+            var d = world.Dressing;
+            var o = d.Objects.FirstOrDefault(x => x.ArtRole == role) ?? throw new SmokeFailure($"{mapId}: sem {role} do catálogo no mapa real");
+            var spot = d.Decor.FirstOrDefault(x => x.Object == o) ?? throw new SmokeFailure($"{mapId}: {role} sem interação");
+            var before = o.ArtState;
+            await FocusDecor(world, spot);
+            await TapInteract();
+            await WaitSeconds(0.5);
+            Require(o.ArtState != before, $"{mapId}: usar o {role} real não mudou o desenho (continua '{before}')");
+            Log.Info($"arte qa: {mapId}: {role} real {before} → {o.ArtState}");
+            await Shot($"arteqa-real-{role.ToString().ToLowerInvariant()}-{mapId}");
+            world.Dressing.Lore.HideCard();
+        }
+
+        world.GoMap("forge", 800, 520, instant: true);
+        await WaitMapSettled(world);
+        var board = world.Dressing.Objects.FirstOrDefault(x => x.ArtRole == PropArtRole.Board) ?? throw new SmokeFailure("forge: sem quadro de avisos");
+        Require(board.ArtState == "board", $"quadro de avisos real com a arte nova, está '{board.ArtState}'");
+        var brazier = world.Dressing.Objects.FirstOrDefault(x => x.ArtRole == PropArtRole.Brazier) ?? throw new SmokeFailure("forge: sem braseiro");
+        Require(brazier.ArtState is "on" or "off", $"braseiro real com a arte nova, está '{brazier.ArtState}'");
+    }
+
     [SmokeScenario("arte (qa): testa Alfa mantém a arte com cristas parado e perseguindo e o tamanho perto do lobo do atlas", order: 167)]
     private async Task ArteQaAlphaKeepsArtInEveryState()
     {

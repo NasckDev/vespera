@@ -21,6 +21,9 @@ Formato do layout (coordenadas em px do mapa; formas: {"poly": [[x,y],...]}, {"r
   "decor":  [ {"kind": "lamp|flower|boat|fishing|sign|bench|fountain|stall|inspect", "x": 0, "y": 0,
                "r": 24, "label": "Acender lampião", "text": "...", "to": [x,y]} ]   # interações de decoração
                #   "boat" com "to": balsa que leva ao ponto "to" (o check conta como alcançável o cais de destino)
+  "objects": [ {"id": "lamp_post_common", "x": 0, "y": 0, "flip": false} ]   # objetos do catálogo (src/Data/objects.json),
+               #   pé do objeto em (x,y). Lampião, braseiro, flores, alavanca, porta e quadro de avisos ganham a arte de
+               #   estados do designer (DECISIONS C2-D5). O check exige o pé a até 28 px de chão alcançável.
 }
 
 Uso:
@@ -201,6 +204,8 @@ def points_of_interest(m: dict, layout: dict) -> list[tuple[str, float, float]]:
         pts.append(("baú", c["x"], c["y"]))
     for d in layout.get("decor", []):
         pts.append((f"decor {d['kind']}", d["x"], d["y"]))
+    for o in layout.get("objects", []):
+        pts.append((f"objeto {o['id']}", o["x"], o["y"]))
     return pts
 
 
@@ -313,6 +318,8 @@ def render(m: dict, layout: dict, crop, scale: float, grid_step: int) -> Image.I
         d.text((x, y - 12), f"→{e['to']}", fill=(0, 255, 90, 255), font=f)
     for name, x, y in points_of_interest(m, layout):
         col = (255, 230, 0, 255) if name.startswith(("prop", "baú", "decor")) else (255, 255, 255, 255)
+        if name.startswith("objeto"):
+            col = (120, 255, 160, 255)
         d.ellipse([x - 3, y - 3, x + 3, y + 3], outline=col, width=2)
         if not name.startswith(("prop", "baú")):
             d.text((x + 5, y - 6), name.replace("interagível ", ""), fill=col, font=f)

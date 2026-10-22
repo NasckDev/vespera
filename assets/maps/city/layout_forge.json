@@ -304,5 +304,10 @@
     {"kind": "inspect", "x": 1260, "y": 640, "r": 24, "label": "Observar", "text": "Um beco esquecido atrás da casa das lanternas. Os barris estão marcados com o selo da Guilda."},
     {"kind": "inspect", "x": 70, "y": 540, "r": 24, "label": "Observar", "text": "Debaixo da árvore grande o barulho do mercado some. Bom esconderijo para quem foge de dívidas."},
     {"kind": "inspect", "x": 440, "y": 448, "r": 24, "label": "Observar", "text": "Pedras do largo gastas em círculo. É aqui que uma Brecha costuma abrir na véspera."}
+  ],
+  "objects": [
+    {"id": "notice_board", "x": 470, "y": 468},
+    {"id": "brazier_stand", "x": 1075, "y": 440},
+    {"id": "lamp_post_common", "x": 330, "y": 470}
   ]
 }
