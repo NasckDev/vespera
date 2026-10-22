@@ -1,0 +1,490 @@
+{
+ "character": "lamina",
+ "stage": "aprendiz",
+ "cell": [
+  48,
+  48
+ ],
+ "anchor": [
+  24,
+  41
+ ],
+ "anchor_note": "pixel (x, y) do chão sob os pés dentro da célula; no Godot: centered=false, offset=(-24, -41). Esquerda = 'side' com flip_h e offset.x=-24 (espelho em torno do pé), e os retângulos de 'side' com x espelhado: x' = -(x + w).",
+ "directions": [
+  "down",
+  "up",
+  "side"
+ ],
+ "sheet_layout": "linhas = down, up, side; colunas = quadros",
+ "animations": {
+  "idle": {
+   "file": "sheets/lamina_idle.png",
+   "frames": 4,
+   "fps": 6,
+   "loop": true,
+   "durations": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "events": {}
+  },
+  "walk": {
+   "file": "sheets/lamina_walk.png",
+   "frames": 8,
+   "fps": 12,
+   "loop": true,
+   "durations": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "events": {
+    "footstep": [
+     0,
+     4
+    ]
+   }
+  },
+  "dodge": {
+   "file": "sheets/lamina_dodge.png",
+   "frames": 5,
+   "fps": 15,
+   "loop": false,
+   "durations": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.6
+   ],
+   "events": {
+    "footstep": [
+     0,
+     4
+    ],
+    "iframes": [
+     1,
+     2,
+     3
+    ]
+   }
+  },
+  "attack1": {
+   "file": "sheets/lamina_attack1.png",
+   "frames": 5,
+   "fps": 15,
+   "loop": false,
+   "durations": [
+    1.3,
+    0.7,
+    1.4,
+    1.0,
+    1.4
+   ],
+   "events": {
+    "hitbox": {
+     "frames": [
+      1,
+      2
+     ],
+     "rect_by_dir": {
+      "down": {
+       "1": {
+        "x": -16,
+        "y": -18,
+        "w": 11,
+        "h": 20
+       },
+       "2": {
+        "x": -17,
+        "y": -13,
+        "w": 29,
+        "h": 17
+       }
+      },
+      "up": {
+       "1": {
+        "x": 5,
+        "y": -32,
+        "w": 14,
+        "h": 20
+       },
+       "2": {
+        "x": -13,
+        "y": -36,
+        "w": 30,
+        "h": 22
+       }
+      },
+      "side": {
+       "1": {
+        "x": -9,
+        "y": -32,
+        "w": 20,
+        "h": 12
+       },
+       "2": {
+        "x": -7,
+        "y": -33,
+        "w": 27,
+        "h": 28
+       }
+      }
+     },
+     "rect_note": "px relativos ao pé; y para baixo; tirado da lâmina + rastro do quadro"
+    }
+   },
+   "combo_next": "attack2"
+  },
+  "attack2": {
+   "file": "sheets/lamina_attack2.png",
+   "frames": 5,
+   "fps": 15,
+   "loop": false,
+   "durations": [
+    1.3,
+    0.7,
+    1.4,
+    1.0,
+    1.4
+   ],
+   "events": {
+    "hitbox": {
+     "frames": [
+      1,
+      2
+     ],
+     "rect_by_dir": {
+      "down": {
+       "1": {
+        "x": 4,
+        "y": -18,
+        "w": 12,
+        "h": 20
+       },
+       "2": {
+        "x": -15,
+        "y": -15,
+        "w": 32,
+        "h": 19
+       }
+      },
+      "up": {
+       "1": {
+        "x": -16,
+        "y": -33,
+        "w": 12,
+        "h": 14
+       },
+       "2": {
+        "x": -17,
+        "y": -35,
+        "w": 32,
+        "h": 16
+       }
+      },
+      "side": {
+       "1": {
+        "x": -12,
+        "y": -9,
+        "w": 25,
+        "h": 10
+       },
+       "2": {
+        "x": -10,
+        "y": -27,
+        "w": 30,
+        "h": 28
+       }
+      }
+     },
+     "rect_note": "px relativos ao pé; y para baixo; tirado da lâmina + rastro do quadro"
+    }
+   },
+   "combo_next": "attack3"
+  },
+  "attack3": {
+   "file": "sheets/lamina_attack3.png",
+   "frames": 5,
+   "fps": 14,
+   "loop": false,
+   "durations": [
+    1.8,
+    0.7,
+    1.6,
+    1.2,
+    1.8
+   ],
+   "events": {
+    "hitbox": {
+     "frames": [
+      2,
+      3
+     ],
+     "rect_by_dir": {
+      "down": {
+       "2": {
+        "x": -17,
+        "y": -29,
+        "w": 20,
+        "h": 33
+       },
+       "3": {
+        "x": -17,
+        "y": -18,
+        "w": 19,
+        "h": 22
+       }
+      },
+      "up": {
+       "2": {
+        "x": -3,
+        "y": -40,
+        "w": 20,
+        "h": 39
+       },
+       "3": {
+        "x": -1,
+        "y": -40,
+        "w": 18,
+        "h": 28
+       }
+      },
+      "side": {
+       "2": {
+        "x": -13,
+        "y": -34,
+        "w": 32,
+        "h": 33
+       },
+       "3": {
+        "x": 6,
+        "y": -27,
+        "w": 13,
+        "h": 29
+       }
+      }
+     },
+     "rect_note": "px relativos ao pé; y para baixo; tirado da lâmina + rastro do quadro"
+    }
+   }
+  },
+  "heavy_charge": {
+   "file": "sheets/lamina_heavy_charge.png",
+   "frames": 2,
+   "fps": 8,
+   "loop": true,
+   "durations": [
+    1.0,
+    1.0
+   ],
+   "events": {}
+  },
+  "heavy_strike": {
+   "file": "sheets/lamina_heavy_strike.png",
+   "frames": 6,
+   "fps": 16,
+   "loop": false,
+   "durations": [
+    1.2,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    2.0
+   ],
+   "events": {
+    "hitbox": {
+     "frames": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "rect_by_dir": {
+      "down": {
+       "1": {
+        "x": -16,
+        "y": -15,
+        "w": 38,
+        "h": 19
+       },
+       "2": {
+        "x": -2,
+        "y": -37,
+        "w": 21,
+        "h": 39
+       },
+       "3": {
+        "x": -21,
+        "y": -33,
+        "w": 37,
+        "h": 23
+       },
+       "4": {
+        "x": -19,
+        "y": -30,
+        "w": 22,
+        "h": 34
+       }
+      },
+      "up": {
+       "1": {
+        "x": -21,
+        "y": -33,
+        "w": 37,
+        "h": 23
+       },
+       "2": {
+        "x": -19,
+        "y": -30,
+        "w": 22,
+        "h": 34
+       },
+       "3": {
+        "x": -16,
+        "y": -15,
+        "w": 38,
+        "h": 19
+       },
+       "4": {
+        "x": -2,
+        "y": -37,
+        "w": 21,
+        "h": 39
+       }
+      },
+      "side": {
+       "1": {
+        "x": -2,
+        "y": -37,
+        "w": 21,
+        "h": 39
+       },
+       "2": {
+        "x": -21,
+        "y": -33,
+        "w": 37,
+        "h": 23
+       },
+       "3": {
+        "x": -19,
+        "y": -30,
+        "w": 22,
+        "h": 34
+       },
+       "4": {
+        "x": -16,
+        "y": -15,
+        "w": 38,
+        "h": 19
+       }
+      }
+     },
+     "rect_note": "px relativos ao pé; y para baixo; tirado da lâmina + rastro do quadro"
+    }
+   }
+  },
+  "skill": {
+   "file": "sheets/lamina_skill.png",
+   "frames": 6,
+   "fps": 14,
+   "loop": false,
+   "durations": [
+    2.0,
+    0.8,
+    1.0,
+    1.4,
+    1.2,
+    1.4
+   ],
+   "events": {
+    "hitbox": {
+     "frames": [
+      2,
+      3
+     ],
+     "rect_by_dir": {
+      "down": {
+       "2": {
+        "x": -13,
+        "y": -40,
+        "w": 27,
+        "h": 44
+       },
+       "3": {
+        "x": -12,
+        "y": -33,
+        "w": 25,
+        "h": 37
+       }
+      },
+      "up": {
+       "2": {
+        "x": -12,
+        "y": -35,
+        "w": 25,
+        "h": 39
+       },
+       "3": {
+        "x": -11,
+        "y": -35,
+        "w": 23,
+        "h": 39
+       }
+      },
+      "side": {
+       "2": {
+        "x": -22,
+        "y": -30,
+        "w": 45,
+        "h": 31
+       },
+       "3": {
+        "x": -14,
+        "y": -30,
+        "w": 37,
+        "h": 31
+       }
+      }
+     },
+     "rect_note": "px relativos ao pé; y para baixo; tirado da lâmina + rastro do quadro"
+    }
+   }
+  },
+  "hurt": {
+   "file": "sheets/lamina_hurt.png",
+   "frames": 2,
+   "fps": 10,
+   "loop": false,
+   "durations": [
+    1.4,
+    1.0
+   ],
+   "events": {}
+  },
+  "death": {
+   "file": "sheets/lamina_death.png",
+   "frames": 7,
+   "fps": 8,
+   "loop": false,
+   "durations": [
+    1.0,
+    1.0,
+    1.4,
+    1.2,
+    1.0,
+    1.6,
+    3.0
+   ],
+   "events": {}
+  }
+ }
+}
