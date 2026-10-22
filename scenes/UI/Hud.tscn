@@ -1,7 +1,0 @@
-[gd_scene format=3]
-
-[ext_resource type="Script" path="res://src/UI/Hud.cs" id="1_hud"]
-
-[node name="Hud" type="CanvasLayer"]
-layer = 10
-script = ExtResource("1_hud")

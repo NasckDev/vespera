@@ -1,9 +1,0 @@
-{
-  "cell": 4,
-  "base": "none",
-  "note": "Fixture do smoke (integração v0.1): Rua da Forja inteira andável e vazia, praça de testes dos objetos do catálogo na escala do motor.",
-  "walk": [
-    {"rect": [16, 16, 1640, 909], "note": "tudo"}
-  ],
-  "block": []
-}
