@@ -139,6 +139,9 @@ public partial class DialogScreen : Screen
     /// Mostra uma fala. Sem opções: confirmar fecha e chama <paramref name="next"/>. Com opções: aparecem quando o
     /// texto termina. <paramref name="cancel"/> é chamado se o jogador fechar com Esc.
     /// </summary>
+    /// <summary>A fala atual mostra o busto desenhado (não o recorte do atlas).</summary>
+    public bool PortraitIsBust { get; private set; }
+
     public void Show(string speaker, string text, IReadOnlyList<DialogChoice>? choices = null, Action? next = null, Action? cancel = null)
     {
         _generation++;
@@ -148,6 +151,12 @@ public partial class DialogScreen : Screen
         _name.Text = speaker;
         var portrait = Database.Db.Npcs.Portraits.TryGetValue(speaker, out var key) ? key : null;
         _portrait.Key = portrait ?? string.Empty;
+        if (UiIcons.Bust(portrait) is { } bust)
+        {
+            _portrait.Texture = bust; // busto neutro do designer (C2-D6) no lugar do corpo inteiro do atlas
+        }
+
+        PortraitIsBust = portrait is not null && _portrait.Texture == UiIcons.Bust(portrait);
         _portraitFrame.Visible = portrait is not null;
         _box.OffsetTop = _box.OffsetBottom - (portrait is null ? BoxHeightNoPortrait : BoxHeight);
         _text.Text = text;
