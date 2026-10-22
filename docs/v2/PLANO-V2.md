@@ -44,6 +44,29 @@ A fonte da história é `docs/design/GDD.md`. A v0.1 fica congelada na tag `v0.1
 - **Arte:** gerada por **código** em `tools/art/` (Python + Pillow + numpy): peças desenhadas pixel a pixel, montadas por um esqueleto de poses, e exportadas como folhas PNG + `SpriteFrames .tres`. A arte pintada antiga só entra **convertida** para a grade e a paleta (script de pixelização) e só se ficar boa; retratos de diálogo podem usar os bustos pintados.
 - **Áudio:** sons sintetizados no começo (`tools/audio/`), um por ação; música depois.
 
+## 2.1 Contrato de escala (obrigatório em todo mapa, personagem, monstro e objeto)
+
+Pedido do dono (22/10): "tamanho dos players, monstros e NPC dentro do mapa tem que fazer sentido com o cenário, não só juntar".
+
+- **O mapa é a régua.** Cada `data/levels/<id>.json` declara `doorHeight` em px de mundo, medido numa porta pintada do
+  chão (ou, num mapa sem porta, na altura de um elemento equivalente: arco, grade de esgoto, bancada = 0,45 porta).
+- **Altura humana do mapa** = `0,75 × doorHeight`. Tudo deriva dela; não existe `actorScale` escolhido à mão por mapa.
+- **Tabela de alturas** (altura do corpo, pés à cabeça, sem arma nem efeito), em múltiplos da altura humana:
+
+  | Ator | Altura | Ator | Altura |
+  |---|---|---|---|
+  | Caçador (Lâmina, Arco, Martelo) | 1,00 | Lodo | 0,35 (na canela/joelho) |
+  | Odete, Ravi, Nilza | 1,00 | Espectro | 1,00 (flutua 0,15 acima do chão) |
+  | Benício (curvado) | 0,95 | Lodo-Mãe (Guardião) | 3,00 |
+  | Lis (criança) | 0,75 | Objetos | medidos contra o equivalente pintado no chão |
+
+- **No código:** um registro único (`ScaleRegistry`) calcula a escala do sprite = altura-alvo ÷ altura opaca medida no
+  JSON da tira (`standing_height`). Um ator novo entra só com uma linha na tabela.
+- **Teste automático** (headless, roda no CI): para cada mapa, instancia cada ator que pode aparecer nele, mede a altura
+  opaca renderizada em px de mundo e falha se fugir mais de ±8% do alvo. Objetos: idem contra a medida registrada.
+- **Prova visual por mapa:** captura "fila de escala" com caçador ao lado da porta, de cada NPC e de cada monstro daquele
+  mapa, revisada pelo coordenador antes de qualquer entrega.
+
 ## 3. Arquitetura de código
 
 ```
