@@ -2,6 +2,7 @@
 
 Uma linha por tarefa concluída, mais recente primeiro.
 
+- 2026-10-22 — Integração v0.1: as 8 frentes da Fase B no mesmo jogo (objetos, motor, 3 frentes de mapa, cidade, combate, interface); catálogo de objetos convertido para o motor e calibrado no caçador de 56,7 u, obstáculos sólidos na área andável, A\* dos moradores com marcos, monstros destravados (campo de 4 u, voadores, quinas), gamepad sem botões repetidos, prompt só no mundo e cenário de smoke "jornada v0.1" do título ao Continuar (INT-D1–INT-D7).
 - 2026-10-21 — Biblioteca de objetos (B5): 445 objetos recortados de 6 folhas em 9 temas, `objects.json` calibrado pelo jogador + `ObjectCatalog`, 20 mapas candidatos (salas extras e Brechas 6–10), galeria de depuração com smoke e triagem das 70 imagens em `catalogo-assets.md` (B5-1 a B5-5).
 - 2026-10-21 — Motor do mundo (B4a): escala inteira e câmera no pixel, andar com aceleração curta e interpolação, caçador do super kit com caminhada procedural, proporção pela porta (1,75×), oclusão translúcida, água/luzes/fumaça/vagalumes, quebráveis, baús, decoração (lampião, flor, balsa, pesca, banco, placas), objetos do catálogo, sons ambiente e minimapa (B4a-D39–D47).
 - 2026-10-21 — Rua da Forja refeita (B4b): colisão de 4 px andável em todas as escadas, pontes, cais e becos, 42 oclusores, água, 15 sons ambiente, 35 quebráveis, 6 baús, 38 decorações com lore, 6 balsas e portas reais para as 4 lojas; smoke `rua da forja` (B4b-D60–D63).
