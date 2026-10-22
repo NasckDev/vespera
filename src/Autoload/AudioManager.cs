@@ -19,7 +19,7 @@ public partial class AudioManager : Node
     public const string UiBus = "UI";
 
     public const string SettingsPath = "user://settings.cfg";
-    private const string SmokeSettingsPath = "user://settings_smoke.cfg";
+    private const string SmokeSettingsPrefix = "user://settings_smoke_";
     private const string SettingsSection = "audio";
 
     private const string SfxDir = "res://assets/audio/sfx/";
@@ -106,7 +106,7 @@ public partial class AudioManager : Node
         if (Testing.SmokeTest.IsRequested())
         {
             // como o SaveService: o smoke test nunca toca nas opções reais do jogador
-            _settingsPath = SmokeSettingsPath;
+            _settingsPath = SmokeSettingsPrefix + OS.GetProcessId() + ".cfg"; // POLI-16: um por processo
             DirAccess.RemoveAbsolute(_settingsPath);
         }
     }
@@ -144,6 +144,11 @@ public partial class AudioManager : Node
 
     public override void _ExitTree()
     {
+        if (_settingsPath != SettingsPath)
+        {
+            DirAccess.RemoveAbsolute(_settingsPath);
+        }
+
         var bus = EventBus.Instance;
         bus.RankChanged -= OnRankChanged;
         bus.PlayerDamaged -= OnPlayerDamaged;
