@@ -325,6 +325,10 @@ public sealed class WalkFollower
                 var lateral = MathF.Min(off, s);
                 var nx = X + (px * lateral * sign);
                 var ny = Y + (py * lateral * sign);
+                if (lateral < off && !area.CanStand(nx, ny, Radius))
+                {
+                    continue; // o deslize parcial (limitado ao passo) cai entre dois pontos livres, mas dentro da quina
+                }
                 var forward = MathF.Sqrt(MathF.Max(0f, (s * s) - (lateral * lateral)));
                 if (forward > 1e-4f && area.CanStand(nx + (ux * forward), ny + (uy * forward), Radius))
                 {

@@ -62,6 +62,9 @@ public partial class TownNpc : Node2D
         {
             _name = Labels.Rent(WorldLabels.Style.NpcName);
             WorldLabels.SetText(_name, Def.Name);
+            // O corpo só aparece quando a rota (calculada em thread) fica pronta: até lá o nome também não aparece,
+            // senão ficava solto no canto da tela (QA "nome de morador nunca aparece solto").
+            _name.Visible = false;
         }
 
         Modulate = Colors.White with { A = 0f };
@@ -151,6 +154,7 @@ public partial class TownNpc : Node2D
         UpdatePose();
         if (_name is not null)
         {
+            _name.Visible = Visible;
             _name.Modulate = Colors.White with { A = _alpha };
             WorldLabels.PlaceCentered(_name, WorldLabels.ToScreen(this, GlobalPosition + new Vector2(0, -40)));
         }

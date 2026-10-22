@@ -54,6 +54,14 @@ public sealed class WalkPlanner
     private readonly PriorityQueue<int, float> _open = new();
     private readonly List<int> _chain = [];
     private readonly List<MapPoint> _raw = [];
+
+    /// <summary>Distâncias na malha de cada marco a todos os nós (heurística ALT), feitas no <see cref="Prepare"/>.</summary>
+    private float[][] _landmarks = [];
+    private readonly float[] _goalLandmark = new float[LandmarkCount];
+    private bool _altActive;
+
+    /// <summary>Marcos da heurística ALT: corta muito os nós abertos em mapas com canal e pontes.</summary>
+    public const int LandmarkCount = 8;
     private int _generation;
 
     public WalkPlanner(IWalkArea area, float radius = WalkMover.NpcRadius)
@@ -164,7 +172,204 @@ public sealed class WalkPlanner
             _labelSizes.Add(size);
         }
 
+        BuildLandmarks();
         IsPrepared = true;
+        WarmUp();
+    }
+
+    /// <summary>
+    /// Um pedido de ida e volta entre dois marcos, ainda na troca de mapa: compila o laço do A* e cresce a fila e as listas
+    /// para o primeiro pedido do jogo não pagar isso no meio de um quadro.
+    /// </summary>
+    private void WarmUp()
+    {
+        if (_landmarks.Length < 2)
+        {
+            return;
+        }
+
+        var a = Array.IndexOf(_landmarks[0], 0f);
+        var b = Array.IndexOf(_landmarks[1], 0f);
+        if (a < 0 || b < 0)
+        {
+            return;
+        }
+
+        var path = new List<MapPoint>();
+        TryPlan(NodePoint(a % Columns, a / Columns), NodePoint(b % Columns, b / Columns), path);
+        TryPlan(NodePoint(b % Columns, b / Columns), NodePoint(a % Columns, a / Columns), path);
+    }
+
+    /// <summary>
+    /// Heurística ALT (A*, marcos e desigualdade triangular): escolhe marcos afastados na maior região e guarda a
+    /// distância na malha de cada um a todos os nós. h(n) = máx |d(L, alvo) − d(L, n)|, nunca maior que a distância real.
+    /// </summary>
+    private void BuildLandmarks()
+    {
+        var biggest = 0;
+        for (var id = 1; id < _labelSizes.Count; id++)
+        {
+            if (_labelSizes[id] > _labelSizes[biggest])
+            {
+                biggest = id;
+            }
+        }
+
+        if (biggest == 0)
+        {
+            _landmarks = [];
+            return;
+        }
+
+        var seed = Array.IndexOf(_label, biggest);
+        var marks = new List<float[]>(LandmarkCount);
+        var probe = Dijkstra(seed);
+        for (var m = 0; m < LandmarkCount; m++)
+        {
+            // o nó mais longe dos marcos já escolhidos (no primeiro: do nó semente)
+            var far = seed;
+            var best = -1f;
+            for (var n = 0; n < _label.Length; n++)
+            {
+                if (_label[n] != biggest)
+                {
+                    continue;
+                }
+
+                var d = float.MaxValue;
+                if (marks.Count == 0)
+                {
+                    d = probe[n];
+                }
+                else
+                {
+                    foreach (var mk in marks)
+                    {
+                        d = MathF.Min(d, mk[n]);
+                    }
+                }
+
+                if (d > best && !float.IsPositiveInfinity(d))
+                {
+                    best = d;
+                    far = n;
+                }
+            }
+
+            marks.Add(Dijkstra(far));
+        }
+
+        _landmarks = [.. marks];
+    }
+
+    private float[] Dijkstra(int source)
+    {
+        var dist = new float[_label.Length];
+        Array.Fill(dist, float.PositiveInfinity);
+        var queue = new PriorityQueue<int, float>();
+        dist[source] = 0;
+        queue.Enqueue(source, 0);
+        while (queue.TryDequeue(out var node, out var d))
+        {
+            if (d > dist[node])
+            {
+                continue;
+            }
+
+            var ni = node % Columns;
+            var nj = node / Columns;
+            var links = LinksOf(ni, nj, node);
+            for (var k = 0; k < Neighbours.Length; k++)
+            {
+                if ((links & (1 << k)) == 0)
+                {
+                    continue;
+                }
+
+                var n = node + (Neighbours[k].Dy * Columns) + Neighbours[k].Dx;
+                var nd = d + (k >= 4 ? Diagonal : Step);
+                if (nd < dist[n])
+                {
+                    dist[n] = nd;
+                    queue.Enqueue(n, nd);
+                }
+            }
+        }
+
+        return dist;
+    }
+
+    /// <summary>Prepara a heurística ALT para o alvo: distância de cada marco ao nó da malha mais perto do alvo.</summary>
+    private void SetAltGoal(MapPoint to)
+    {
+        _altActive = false;
+        if (_landmarks.Length == 0)
+        {
+            return;
+        }
+
+        var ci = (int)MathF.Round((to.X - OffsetX) / Step);
+        var cj = (int)MathF.Round((to.Y - OffsetY) / Step);
+        var bestNode = -1;
+        var bestD = float.MaxValue;
+        for (var dj = -3; dj <= 3; dj++)
+        {
+            for (var di = -3; di <= 3; di++)
+            {
+                var i = ci + di;
+                var j = cj + dj;
+                if (i < 0 || j < 0 || i >= Columns || j >= Rows)
+                {
+                    continue;
+                }
+
+                var n = (j * Columns) + i;
+                if (!Stand(n) || float.IsPositiveInfinity(_landmarks[0][n]))
+                {
+                    continue;
+                }
+
+                var d = Distance(NodePoint(i, j), to);
+                if (d < bestD)
+                {
+                    bestD = d;
+                    bestNode = n;
+                }
+            }
+        }
+
+        if (bestNode < 0)
+        {
+            return;
+        }
+
+        for (var m = 0; m < _landmarks.Length; m++)
+        {
+            _goalLandmark[m] = _landmarks[m][bestNode];
+        }
+
+        // o nó do alvo está até ~3 nós do ponto: tira essa folga para a heurística não passar da distância real
+        _altSlack = bestD + (3 * Diagonal);
+        _altActive = true;
+    }
+
+    private float _altSlack;
+
+    private float AltBound(int node)
+    {
+        var best = 0f;
+        for (var m = 0; m < _landmarks.Length; m++)
+        {
+            var dn = _landmarks[m][node];
+            if (float.IsPositiveInfinity(dn))
+            {
+                return 0f;
+            }
+
+            best = MathF.Max(best, MathF.Abs(_goalLandmark[m] - dn));
+        }
+
+        return MathF.Max(0f, best - _altSlack);
     }
 
     /// <summary>Região ligada de um ponto (a do nó mais perto que ele alcança em linha reta), ou 0 se nenhuma.</summary>
@@ -325,6 +530,7 @@ public sealed class WalkPlanner
 
         NextGeneration();
         _open.Clear();
+        SetAltGoal(to);
         var gen = _generation;
 
         // Sementes: nós livres em volta do início a que se chega em linha reta.
@@ -359,7 +565,7 @@ public sealed class WalkPlanner
                     _seen[n] = gen;
                     _g[n] = g;
                     _parent[n] = -1;
-                    _open.Enqueue(n, g + Heuristic(q, to));
+                    _open.Enqueue(n, g + Estimate(n, q.X, q.Y, to));
                 }
             }
         }
@@ -387,15 +593,24 @@ public sealed class WalkPlanner
                 return true;
             }
 
-            foreach (var (dx, dy) in Neighbours)
+            // Laço quente: bits de ligação já guardados por nó (LinksOf), vizinho por deslocamento no vetor.
+            var links = LinksOf(ni, nj, node);
+            var gNode = _g[node];
+            for (var k = 0; k < Neighbours.Length; k++)
             {
-                var n = Link(ni, nj, dx, dy);
-                if (n < 0 || _closed[n] == gen)
+                if ((links & (1 << k)) == 0)
                 {
                     continue;
                 }
 
-                var g = _g[node] + (dx != 0 && dy != 0 ? Diagonal : Step);
+                var (dx, dy) = Neighbours[k];
+                var n = node + (dy * Columns) + dx;
+                if (_closed[n] == gen)
+                {
+                    continue;
+                }
+
+                var g = gNode + (k >= 4 ? Diagonal : Step);
                 if (_seen[n] == gen && g >= _g[n])
                 {
                     continue;
@@ -404,7 +619,7 @@ public sealed class WalkPlanner
                 _seen[n] = gen;
                 _g[n] = g;
                 _parent[n] = node;
-                _open.Enqueue(n, g + Heuristic(NodePoint(ni + dx, nj + dy), to));
+                _open.Enqueue(n, g + Estimate(n, OffsetX + ((ni + dx) * Step), OffsetY + ((nj + dy) * Step), to));
             }
         }
 
@@ -522,6 +737,14 @@ public sealed class WalkPlanner
     private int Link(int i, int j, int dx, int dy)
     {
         var node = (j * Columns) + i;
+        var links = LinksOf(i, j, node);
+        var bit = NeighbourIndex(dx, dy);
+        return (links & (1 << bit)) != 0 ? ((j + dy) * Columns) + i + dx : -1;
+    }
+
+    /// <summary>As 8 ligações do nó (bit k = <see cref="Neighbours"/>[k]), calculadas uma vez.</summary>
+    private int LinksOf(int i, int j, int node)
+    {
         var links = _links[node];
         if (links == 0)
         {
@@ -537,8 +760,7 @@ public sealed class WalkPlanner
             _links[node] = links;
         }
 
-        var bit = NeighbourIndex(dx, dy);
-        return (links & (1 << bit)) != 0 ? ((j + dy) * Columns) + i + dx : -1;
+        return links;
     }
 
     private static int NeighbourIndex(int dx, int dy) => (dx, dy) switch
@@ -609,10 +831,19 @@ public sealed class WalkPlanner
     /// Distância octil × <see cref="HeuristicWeight"/>: A* "ganancioso" abre bem menos nós; o caminho pode sair um pouco
     /// mais longo que o ótimo, mas é encurtado depois e ninguém nota num passeio pela rua.
     /// </summary>
-    private static float Heuristic(MapPoint a, MapPoint b)
+    private static float Heuristic(MapPoint a, MapPoint b) => Heuristic(a.X, a.Y, b);
+
+    /// <summary>Heurística do nó: a maior entre a octil e a ALT, com o mesmo peso.</summary>
+    private float Estimate(int node, float x, float y, MapPoint to)
     {
-        var dx = MathF.Abs(b.X - a.X);
-        var dy = MathF.Abs(b.Y - a.Y);
+        var h = Heuristic(x, y, to);
+        return _altActive ? MathF.Max(h, HeuristicWeight * AltBound(node)) : h;
+    }
+
+    private static float Heuristic(float ax, float ay, MapPoint b)
+    {
+        var dx = MathF.Abs(b.X - ax);
+        var dy = MathF.Abs(b.Y - ay);
         return HeuristicWeight * (MathF.Max(dx, dy) + ((1.41421356f - 1f) * MathF.Min(dx, dy)));
     }
 }
