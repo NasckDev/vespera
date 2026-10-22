@@ -1,0 +1,46 @@
+{
+  "_doc": "Roteiro geral do Prólogo + Ato I. Objetivos em ordem de campanha (o Diário usa a ordem). Regras: quando a flag 'when' liga, aplica o objetivo. Retratos: {0} vira 1 (neutro) ou 2 (expressão). Benício NÃO tem arte aprovada: sem retrato, só a placa de nome (voz fora de cena). Flags/eventos documentados em src/Core/Story/StoryFlags.cs.",
+  "startObjective": "quadro",
+  "objectives": [
+    {
+      "id": "quadro",
+      "title": "Ir ao quadro da Ordem",
+      "text": "Alguém chamou pelo seu nome. Aproxime-se do quadro de avisos, no meio da praça."
+    },
+    {
+      "id": "ravi",
+      "title": "Falar com o rapaz da praça",
+      "text": "Um rapaz de selo E anda pela praça fazendo barulho. Ele parece saber mais do que diz."
+    },
+    {
+      "id": "odete",
+      "title": "Visitar a Forja da Odete",
+      "text": "Atravesse a ponte a oeste até o Bairro das Forjas e peça a Odete uma arma digna de um caçador."
+    },
+    {
+      "id": "brecha",
+      "title": "Fechar a Brecha dos Esgotos do Mercado",
+      "text": "A Brecha aberta na praça leva aos Esgotos do Mercado. Entre, derrote o Lodo-Mãe e feche-a antes do escuro."
+    },
+    {
+      "id": "ato2",
+      "title": "Pomar Alto",
+      "text": "O próximo caminho sobe para o Pomar Alto. Em breve.",
+      "locked": true
+    }
+  ],
+  "triggers": [
+    { "when": "GuardianDefeated:lodo_mae", "objective": "ato2", "set": ["act1_done"] }
+  ],
+  "autoplay": [
+    { "level": "praca", "dialogue": "chegada", "if": ["!arrival_done"] }
+  ],
+  "speakers": {
+    "narrador": { "name": "" },
+    "benicio": { "name": "Mestre Benício" },
+    "odete": { "name": "Odete", "portrait": "res://assets/v2/sprites/npcs/retrato_odete_{0}.png" },
+    "ravi": { "name": "Ravi", "portrait": "res://assets/v2/sprites/npcs/retrato_ravi_{0}.png" },
+    "lis": { "name": "Lis", "portrait": "res://assets/v2/sprites/npcs/retrato_lis_{0}.png" },
+    "nilza": { "name": "Tia Nilza", "portrait": "res://assets/v2/sprites/npcs/retrato_nilza_{0}.png" }
+  }
+}

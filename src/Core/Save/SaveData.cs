@@ -76,6 +76,12 @@ public sealed class SaveData
 
     public QuestProgress Quests { get; set; } = new();
 
+    /// <summary>
+    /// Flags, objetivo e fase da história (Prólogo + Atos). Campo aditivo: saves v2 sem "story" carregam com a
+    /// história zerada (por isso <see cref="CurrentVersion"/> não mudou); ver SaveSerializer.Sanitize.
+    /// </summary>
+    public Vespera.Core.Story.StoryProgress Story { get; set; } = new();
+
     public DateTimeOffset SavedAt { get; set; }
 
     /// <summary>Jogo novo (<c>newSave(name, cls)</c>, <c>core.js:208-212</c>): só a arma da classe, nível 1.</summary>

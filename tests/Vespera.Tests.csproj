@@ -39,6 +39,7 @@
   <ItemGroup>
     <None Include="..\src\Data\*.json" Link="Data/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\data\levels\*.json" Link="Levels/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\data\dialogue\*.json" Link="Dialogue/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <!-- Lógica pura da camada de jogo (sem Godot) testada fora da engine. -->
