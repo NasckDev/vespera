@@ -76,6 +76,7 @@
     "occludes": true,
     "interact": {
       "kind": "board",
+      "dialogue": "benicio_quadro",
       "prompt": "Ler o mural",
       "title": "Mural de contratos",
       "text": "CONTRATO Nº 1 — Rank E\nUma Brecha pequena abriu nos Esgotos do Mercado ao cair da véspera.\nLimpar os Lodos e trazer 5 Fragmentos.\nRecompensa: 40 Lumes.  Falar com Benício, na Guilda."

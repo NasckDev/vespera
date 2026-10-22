@@ -38,6 +38,9 @@ public sealed class LevelData
 
     public List<ZoneData> Zones { get; set; } = [];
 
+    /// <summary>NPCs da fase (posição pelo pé, rotina e fala). "if" filtra por flags da história ao carregar.</summary>
+    public List<NpcPlacement> Npcs { get; set; } = [];
+
     public List<string> Grid { get; set; } = [];
 }
 
@@ -72,6 +75,38 @@ public sealed class ZoneData
     public string Prompt { get; set; } = string.Empty;
 
     public string Text { get; set; } = string.Empty;
+
+    /// <summary>Fase de destino (saída com transição); vazio = trancada, mostra <see cref="Text"/>.</summary>
+    public string Target { get; set; } = string.Empty;
+
+    /// <summary>Onde o jogador nasce na fase de destino (pé, em px do mundo dela).</summary>
+    public float[] Spawn { get; set; } = [];
+
+    /// <summary>Id de uma fala em data/dialogue (zona do tipo "talk").</summary>
+    public string Dialogue { get; set; } = string.Empty;
+}
+
+/// <summary>NPC posicionado numa fase. <see cref="Routine"/>: "idle" fica parado; "patrol" anda entre os pontos de <see cref="Path"/>.</summary>
+public sealed class NpcPlacement
+{
+    public string Id { get; set; } = string.Empty;
+
+    public float[] At { get; set; } = [0, 0];
+
+    /// <summary>"down", "up", "left" ou "right".</summary>
+    public string Facing { get; set; } = "down";
+
+    public string Routine { get; set; } = "idle";
+
+    public List<float[]> Path { get; set; } = [];
+
+    public string Dialogue { get; set; } = string.Empty;
+
+    public string Prompt { get; set; } = string.Empty;
+
+    /// <summary>Condições de história (mesma sintaxe das falas) para o NPC existir nesta fase.</summary>
+    [JsonPropertyName("if")]
+    public List<string> Conditions { get; set; } = [];
 }
 
 /// <summary>
@@ -106,7 +141,7 @@ public sealed class PropDef
         Interact = Interact is null ? null : new InteractDef
         {
             Kind = Interact.Kind, Prompt = Interact.Prompt, PromptOff = Interact.PromptOff, Title = Interact.Title,
-            Text = Interact.Text, Radius = Interact.Radius * factor,
+            Text = Interact.Text, Dialogue = Interact.Dialogue, Radius = Interact.Radius * factor,
         },
     };
 
@@ -136,6 +171,9 @@ public sealed class InteractDef
     public string Title { get; set; } = string.Empty;
 
     public string Text { get; set; } = string.Empty;
+
+    /// <summary>Id de uma fala em data/dialogue; se preenchido, interagir abre a conversa em vez do painel de texto.</summary>
+    public string Dialogue { get; set; } = string.Empty;
 
     /// <summary>Alcance da interação em px do mundo; 0 = automático (meia pegada + folga).</summary>
     public float Radius { get; set; }

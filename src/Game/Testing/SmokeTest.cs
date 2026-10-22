@@ -33,6 +33,7 @@ public partial class SmokeTest : Node
     {
         _withIntro = Array.IndexOf(args, Boot.Boot.WithIntroFlag) >= 0;
         _args = args;
+        ConfigureStory();
         foreach (var arg in args)
         {
             if (arg.StartsWith(ShotsPrefix, StringComparison.Ordinal))
@@ -45,7 +46,7 @@ public partial class SmokeTest : Node
     public override void _Ready()
     {
         _router = SceneRouter.Instance;
-        var watchdog = GetTree().CreateTimer(Array.IndexOf(_args, BotFlag) >= 0 || Array.IndexOf(_args, QaFlag) >= 0 ? BotWatchdogSeconds : WatchdogSeconds);
+        var watchdog = GetTree().CreateTimer(Array.IndexOf(_args, BotFlag) >= 0 || Array.IndexOf(_args, QaFlag) >= 0 || Array.IndexOf(_args, StoryFlag) >= 0 ? BotWatchdogSeconds : WatchdogSeconds);
         watchdog.Timeout += () =>
         {
             Log.Error("smoke: tempo esgotado");

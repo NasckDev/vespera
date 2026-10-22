@@ -68,7 +68,9 @@
       "at": [22, 455],
       "radius": 40,
       "prompt": "Atravessar a ponte",
-      "text": "Bairro das Forjas — trancado, em breve."
+      "text": "",
+      "target": "forjas",
+      "spawn": [722, 676]
     },
     {
       "kind": "exit",
@@ -76,6 +78,37 @@
       "radius": 40,
       "prompt": "Atravessar a ponte",
       "text": "Mercado das Marés — trancado, em breve."
+    },
+    {
+      "kind": "talk",
+      "at": [1200, 396],
+      "radius": 60,
+      "prompt": "Falar com Lis",
+      "dialogue": "lis",
+      "text": ""
+    }
+  ],
+  "npcs": [
+    {
+      "id": "ravi",
+      "at": [880, 724],
+      "facing": "side",
+      "routine": "patrol",
+      "path": [[1010, 724]],
+      "dialogue": "ravi",
+      "prompt": "Falar com Ravi",
+      "if": ["!starter_blade"],
+      "_note": "Antes de ter a lâmina: patrulha perto do ponto de nascimento."
+    },
+    {
+      "id": "ravi",
+      "at": [940, 560],
+      "facing": "up",
+      "routine": "idle",
+      "dialogue": "ravi",
+      "prompt": "Falar com Ravi",
+      "if": ["starter_blade"],
+      "_note": "Depois da lâmina: espera perto da Brecha (ajustar a posição quando o portal do combate estiver fixo)."
     }
   ],
   "authoring": {

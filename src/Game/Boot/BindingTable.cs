@@ -21,7 +21,7 @@ public sealed class BindingTable
 
     // Códigos de tecla (Godot.Key como inteiro) usados nos padrões.
     private const int KeyW = 87, KeyA = 65, KeyS = 83, KeyD = 68, KeyJ = 74, KeyK = 75, KeyQ = 81, KeyE = 69;
-    private const int KeyF = 70, KeyI = 73, KeyP = 80, KeySpace = 32;
+    private const int KeyF = 70, KeyI = 73, KeyP = 80, KeySpace = 32, KeyL = 76;
     private const int KeyEscape = 4194305, KeyTab = 4194306, KeyShift = 4194325;
     private const int KeyLeft = 4194319, KeyUp = 4194320, KeyRight = 4194321, KeyDown = 4194322;
 
@@ -41,6 +41,7 @@ public sealed class BindingTable
         t.Set("interact", $"key:{KeyE}", Empty, "pad:0");
         t.Set("lantern", $"key:{KeyF}", Empty, "pad:10");
         t.Set("inventory", $"key:{KeyTab}", $"key:{KeyI}", "pad:4");
+        t.Set("journal", $"key:{KeyL}", Empty, "pad:9");
         t.Set("pause", $"key:{KeyEscape}", $"key:{KeyP}", "pad:6");
         return t;
     }

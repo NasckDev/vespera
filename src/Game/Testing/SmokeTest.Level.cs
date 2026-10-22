@@ -21,9 +21,11 @@ public partial class SmokeTest
         await CheckInteractions(level);
         if (Array.IndexOf(_args, BotFlag) >= 0)
         {
+            level.World.SetNpcsActive(false);
             var bot = new CollisionBot(level.World, this);
             var failures = await bot.Run();
             _failures.AddRange(failures);
+            level.World.SetNpcsActive(true);
         }
 
         var canShoot = _shotsDir is not null && DisplayServer.GetName() != "headless";
@@ -40,6 +42,10 @@ public partial class SmokeTest
         level.Player.Teleport(level.World.SpawnPoint);
         level.World.Camera.Snap();
         await PhysicsFrames(2);
+        if (Array.IndexOf(_args, StoryFlag) >= 0)
+        {
+            await RunStoryBot(level);
+        }
     }
 
     private async Task CheckInteractions(Level level)
@@ -50,9 +56,9 @@ public partial class SmokeTest
         Check(level.Player.Focus?.Kind == "board", $"perto do mural o foco deveria ser o mural, foi '{level.Player.Focus?.Kind}'");
         Check(level.Hud.PromptText.Length > 0, "o aviso de interação deveria aparecer perto do mural");
         await PressInWorld(Key.E);
-        Check(level.Hud.PanelOpen && level.Hud.PanelText.Contains("CONTRATO", StringComparison.Ordinal), "E no mural deveria abrir o contrato");
-        await PressInWorld(Key.E);
-        Check(!level.Hud.PanelOpen, "E de novo deveria fechar o mural");
+        Check(level.DialogueOpen && level.Dialogue.SpeakerName == "Mestre Benício", "E no mural deveria abrir a fala do Benício");
+        await SkipDialogue(level);
+        Check(!level.DialogueOpen, "a fala do mural deveria fechar");
 
         var lamp = level.World.Props.First(p => p.Interaction?.Kind == "lamp");
         await StandAt(level, lamp.GlobalPosition + new Vector2(0, 50 * k));

@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using Godot;
 using Vespera.Game.Actors;
 using Vespera.Game.Boot;
+using Vespera.Core.Story;
 using Vespera.Game.Components;
+using Vespera.Game.Story;
 
 namespace Vespera.Game.World;
 
@@ -18,6 +20,7 @@ public partial class LevelWorld : Node2D
     private readonly IReadOnlyDictionary<string, PropDef> _catalog;
     private readonly List<Prop> _props = [];
     private readonly List<Interactable> _zones = [];
+    private readonly List<Npc> _npcs = [];
 
     public LevelWorld(LevelData data, IReadOnlyDictionary<string, PropDef> catalog)
     {
@@ -39,6 +42,8 @@ public partial class LevelWorld : Node2D
     public IReadOnlyList<Prop> Props => _props;
 
     public IReadOnlyList<Interactable> Zones => _zones;
+
+    public IReadOnlyList<Npc> Npcs => _npcs;
 
     /// <summary>Limites visíveis e jogáveis: a parte da grade coberta pelo chão pintado.</summary>
     public Rect2 Bounds { get; private set; }
@@ -79,6 +84,9 @@ public partial class LevelWorld : Node2D
             {
                 Name = $"zone_{zone.Kind}_{_zones.Count}",
                 Text = zone.Text,
+                Dialogue = zone.Dialogue,
+                Target = zone.Target,
+                TargetSpawn = zone.Spawn,
                 Position = at,
                 PromptAnchor = at - new Vector2(0, DoorPromptHeight * _data.ActorScale),
             };
@@ -86,10 +94,39 @@ public partial class LevelWorld : Node2D
             _zones.Add(area);
         }
 
+        SpawnNpcs();
         Player = SpawnPlayer(MergedInput.LocalSolo(), SpawnPoint);
         Camera = new CameraRig(Player, Bounds, _data.ActorScale) { Name = "Camera", Zoom = new Vector2(_data.CameraZoom, _data.CameraZoom) };
         AddChild(Camera);
         Camera.MakeCurrent();
+    }
+
+    /// <summary>Liga/desliga os NPCs como obstáculos e patrulheiros (o bot de colisão varre a fase sem eles).</summary>
+    public void SetNpcsActive(bool active)
+    {
+        foreach (var npc in _npcs)
+        {
+            npc.SetActive(active);
+        }
+    }
+
+    private void SpawnNpcs()
+    {
+        foreach (var placement in _data.Npcs)
+        {
+            if (!NpcSprites.Exists(placement.Id) || !StoryConditions.Evaluate(placement.Conditions, StoryService.Engine))
+            {
+                continue;
+            }
+
+            var npc = new Npc(placement.Id, placement, _data.ActorScale)
+            {
+                Name = $"Npc_{placement.Id}_{_npcs.Count}",
+                Position = new Vector2(placement.At[0], placement.At[1]),
+            };
+            Entities.AddChild(npc);
+            _npcs.Add(npc);
+        }
     }
 
     public Vector2 SpawnPoint => new(_data.Spawn[0], _data.Spawn[1]);
