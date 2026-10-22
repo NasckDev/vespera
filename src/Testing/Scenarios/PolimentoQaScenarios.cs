@@ -1698,4 +1698,244 @@ public partial class SmokeTest
             await FleeRun(world, combat);
         }
     }
+
+    // --- todas as telas em 100% e 150%: nada cortado, texto legível, foco visível ---
+
+    /// <summary>Rótulos visíveis com texto cujo retângulo sai da área visível (fora de áreas roláveis).</summary>
+    private List<string> PqClippedTexts(Control screen)
+    {
+        var view = GetViewport().GetVisibleRect().Grow(1.5f);
+        var list = new List<string>();
+        foreach (var node in screen.FindChildren("*", "Control", true, false))
+        {
+            if (node is not Label { Text.Length: > 0 } label || !label.IsVisibleInTree())
+            {
+                continue;
+            }
+
+            var inScroll = false;
+            for (Node? p = label.GetParent(); p is not null && p != screen; p = p.GetParent())
+            {
+                if (p is ScrollContainer)
+                {
+                    inScroll = true;
+                    break;
+                }
+            }
+
+            if (!inScroll && !view.Encloses(label.GetGlobalRect()))
+            {
+                list.Add($"'{label.Text}' {label.GetGlobalRect()}");
+            }
+        }
+
+        return list;
+    }
+
+    [SmokeScenario("polimento (qa): todas as telas em 100% e 150% cabem na janela, com foco visível e texto legível", order: 1070)]
+    private async Task PqScreensGallery()
+    {
+        await PqFreshWorld();
+        var world = await FreshGame("sword");
+        var ui = UiOrFail();
+        PqResetPlayerSettings();
+        var problems = new List<string>();
+        var tinyScreens = new List<string>();
+        var win = DisplayServer.WindowGetSize();
+        try
+        {
+            if (OS.GetEnvironment("VESPERA_QA_WINDOW") is { Length: > 0 } wanted && wanted.Split('x') is { Length: 2 } wh && int.TryParse(wh[0], out var ww) && int.TryParse(wh[1], out var hh) && DisplayServer.GetName() != "headless")
+            {
+                DisplayServer.WindowSetFlag(DisplayServer.WindowFlags.Borderless, true);
+                DisplayServer.WindowSetPosition(Vector2I.Zero);
+                DisplayServer.WindowSetSize(new Vector2I(ww, hh));
+                await WaitSeconds(0.8);
+                win = DisplayServer.WindowGetSize();
+            }
+
+            world.GoMap("forge", 800, 520, instant: true);
+            await WaitMapSettled(world);
+            await DismissUi();
+            var screens = new (string Name, Func<Task> Open)[]
+            {
+                ("pausa", async () => { ui.OpenPause(); await Task.CompletedTask; }),
+                ("inventario", async () => { ui.OpenInventory(); await Task.CompletedTask; }),
+                ("mural", async () => { ui.OpenBoard(); await Task.CompletedTask; }),
+                ("diario", async () => { EventBus.Instance.EmitSignal(EventBus.SignalName.ScreenRequested, "journal"); await Task.CompletedTask; }),
+                ("ajuda", async () => { EventBus.Instance.EmitSignal(EventBus.SignalName.ScreenRequested, "help"); await Task.CompletedTask; }),
+                ("controles", async () => { EventBus.Instance.EmitSignal(EventBus.SignalName.ScreenRequested, "controls"); await Task.CompletedTask; }),
+                ("opcoes", async () => { EventBus.Instance.EmitSignal(EventBus.SignalName.ScreenRequested, "options"); await Task.CompletedTask; }),
+                ("teclas", async () => { EventBus.Instance.EmitSignal(EventBus.SignalName.ScreenRequested, "options"); await WaitSeconds(0.3); ui.Options.KeybindsRow.Activate(); }),
+                ("dialogo-bras", async () => { EventBus.Instance.EmitSignal(EventBus.SignalName.InteractionRequested, "talkSmith", "bras"); await Task.CompletedTask; }),
+            };
+            foreach (var scale in new[] { 1f, 1.25f, 1.5f })
+            {
+                GameSettings.UiScale = scale;
+                GameSettings.TextScale = scale > 1f ? 1.3f : 1f;
+                await WaitSeconds(0.3);
+                foreach (var (name, open) in screens)
+                {
+                    ui.CloseAll();
+                    await WaitSeconds(0.25);
+                    await open();
+                    await WaitSeconds(0.6);
+                    var top = ui.Stack.Top;
+                    if (top is null)
+                    {
+                        problems.Add($"{name} {scale * 100:0}%: a tela não abriu");
+                        continue;
+                    }
+
+                    var clipped = PqClippedTexts(top);
+                    var focus = GetViewport().GuiGetFocusOwner();
+                    var tiny = top.FindChildren("*", nameof(Label), true, false).OfType<Label>()
+                        .Where(l => l.IsVisibleInTree() && l.Text.Length > 0 && l.GetThemeFontSize("font_size") < 7).Select(l => $"'{l.Text}' {l.GetThemeFontSize("font_size")}px").Take(3).ToList();
+                    Log.Info($"qa-telas: {name} {scale * 100:0}% janela {win}: cortes {clipped.Count}, foco em {focus?.GetType().Name ?? "nenhum"}, fontes <7px: {tiny.Count}");
+                    await Shot($"qa-tela-{win.X}x{win.Y}-{name}-{scale * 100:0}");
+                    if (clipped.Count > 0)
+                    {
+                        problems.Add($"{name} {scale * 100:0}%: texto fora da tela: {string.Join("; ", clipped.Take(3))}");
+                    }
+
+                    if (focus is null && name is not ("controles" or "dialogo-bras"))
+                    {
+                        problems.Add($"{name} {scale * 100:0}%: nenhum controle com foco (foco invisível)");
+                    }
+
+                    if (tiny.Count > 0 && scale == 1f)
+                    {
+                        // Telas de moldura (inventário, mural, pausa, ajuda…) ainda têm texto de 5–6 px base: 10–12 px em 720p.
+                        tinyScreens.Add($"{name}: {string.Join("; ", tiny)}");
+                    }
+                }
+            }
+        }
+        finally
+        {
+            ui.CloseAll();
+            PqResetPlayerSettings();
+        }
+
+        Require(problems.Count == 0, "telas com problema de layout/foco:" + (char)10 + "  " + string.Join((char)10 + "  ", problems));
+    }
+
+    [SmokeScenario("polimento (qa): nenhuma tela do jogo tem texto menor que 7 px base (14 px em 720p)", order: 1071)]
+    private async Task PqScreensMinimumFont()
+    {
+        await PqFreshWorld();
+        var world = await FreshGame("sword");
+        var ui = UiOrFail();
+        PqResetPlayerSettings();
+        var tiny = new List<string>();
+        try
+        {
+            world.GoMap("forge", 800, 520, instant: true);
+            await WaitMapSettled(world);
+            await DismissUi();
+            var opens = new (string Name, Action Open)[]
+            {
+                ("pausa", () => ui.OpenPause()),
+                ("inventário", () => ui.OpenInventory()),
+                ("mural", () => ui.OpenBoard()),
+                ("diário", () => EventBus.Instance.EmitSignal(EventBus.SignalName.ScreenRequested, "journal")),
+                ("ajuda", () => EventBus.Instance.EmitSignal(EventBus.SignalName.ScreenRequested, "help")),
+                ("controles", () => EventBus.Instance.EmitSignal(EventBus.SignalName.ScreenRequested, "controls")),
+                ("opções", () => EventBus.Instance.EmitSignal(EventBus.SignalName.ScreenRequested, "options")),
+            };
+            foreach (var (name, open) in opens)
+            {
+                ui.CloseAll();
+                await WaitSeconds(0.25);
+                open();
+                await WaitSeconds(0.5);
+                if (ui.Stack.Top is { } top)
+                {
+                    foreach (var l in top.FindChildren("*", nameof(Label), true, false).OfType<Label>().Where(l => l.IsVisibleInTree() && l.Text.Length > 0 && l.GetThemeFontSize("font_size") < 7))
+                    {
+                        tiny.Add($"{name}: '{l.Text}' {l.GetThemeFontSize("font_size")}px");
+                    }
+                }
+            }
+        }
+        finally
+        {
+            ui.CloseAll();
+            PqResetPlayerSettings();
+        }
+
+        foreach (var t in tiny.Distinct())
+        {
+            Log.Info($"qa-fonte: {t}");
+        }
+
+        Require(tiny.Count == 0, $"{tiny.Distinct().Count()} texto(s) abaixo de 7 px base nas telas:" + (char)10 + "  " + string.Join((char)10 + "  ", tiny.Distinct().Take(10)));
+    }
+
+    // --- rótulos do mundo (nomes de caçadores, moradores, balões, portais) nunca por cima do HUD ---
+
+    [SmokeScenario("estresse: polimento (qa): 90 s de cidade viva com a câmera passeando: nenhum rótulo do mundo fica visível por cima do HUD", order: 1080)]
+    private async Task PqWorldLabelsNeverOverHud()
+    {
+        var world = await FreshGame("sword");
+        var city = CityLife.Instance ?? throw new SmokeFailure("World sem CityLife");
+        var labels = Find<WorldLabels>() ?? throw new SmokeFailure("sem WorldLabels");
+        var hud = Hud.Current!;
+        PqResetPlayerSettings();
+        city.Brechas.Reset();
+        city.SetSimulationEnabled(true);
+        var violations = new List<string>();
+        var samples = 0;
+        var maxLabels = 0;
+        try
+        {
+            world.GoMap("forge", 800, 520, instant: true);
+            await WaitMapSettled(world);
+            await DismissUi();
+            var player = FindPlayer()!;
+            using var speed = new SpeedUp(4);
+            var spots = new[] { new Vector2(800, 520), new Vector2(300, 400), new Vector2(1100, 300), new Vector2(700, 800), new Vector2(1300, 650), new Vector2(500, 250), new Vector2(900, 900) };
+            var scales = new[] { 1f, 1.25f, 1.5f };
+            var started = Time.GetTicksMsec();
+            var step = 0;
+            while ((Time.GetTicksMsec() - started) < 90000)
+            {
+                GameSettings.UiScale = scales[(step / spots.Length) % scales.Length];
+                player.Teleport(world.CorrectToWalkable(spots[step % spots.Length]));
+                step++;
+                for (var i = 0; i < 12; i++)
+                {
+                    await WaitSeconds(0.25);
+                    var inUse = 0;
+                    foreach (var child in labels.GetChildren())
+                    {
+                        if (child is not Label { Visible: true } label || label.Text.Length == 0)
+                        {
+                            continue;
+                        }
+
+                        inUse++;
+                        samples++;
+                        // Visível de verdade (não escondido pelo HUD) e encostando numa zona do HUD, de forma persistente (fade leva ~0,1 s).
+                        if (label.SelfModulate.A > 0.5f && label.Modulate.A > 0.5f && HudZones.Overlaps(label.GetGlobalRect()))
+                        {
+                            violations.Add($"'{label.Text}' {label.GetGlobalRect()} escala {GameSettings.UiScale:0.00}");
+                        }
+                    }
+
+                    maxLabels = Math.Max(maxLabels, inUse);
+                }
+            }
+
+            Log.Info($"qa-rotulos: {samples} amostras de rótulos visíveis (máx. {maxLabels} ao mesmo tempo), {violations.Count} por cima do HUD");
+            await Shot("qa-rotulos-fim");
+        }
+        finally
+        {
+            city.SetSimulationEnabled(false);
+            city.Brechas.Reset();
+            PqResetPlayerSettings();
+        }
+
+        Require(violations.Count == 0, $"{violations.Count} rótulo(s) do mundo visíveis por cima do HUD:" + (char)10 + "  " + string.Join((char)10 + "  ", violations.Distinct().Take(6)));
+    }
 }
