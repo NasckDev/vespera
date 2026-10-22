@@ -164,6 +164,7 @@ public sealed partial class PlayerCombat : IDisposable
         if (!locked && Input.IsActionJustPressed(InputActions.Dodge) && _state.TryStartDash())
         {
             _dashDir = move != Vector2.Zero ? move : Vector2.FromAngle(Aim);
+            Player.PlayDodge(_dashDir, (float)PlayerCombatState.DashSeconds); // quadros da esquiva no tempo do dash (C2-D3)
             _combat.Sfx("dash", Foot);
             _combat.Fx.Burst(Foot, 8, CombatPalette.Dash, new BurstOptions { V1 = 40, Gravity = 0 });
             EmitEnergy(force: true);
@@ -192,6 +193,27 @@ public sealed partial class PlayerCombat : IDisposable
         UpdateVisuals();
         EmitEnergy(force: false);
         EmitReadyCooldowns();
+        EmitStatuses(stats.Speed);
+    }
+
+    private readonly bool[] _statusOn = new bool[3];
+    private static readonly string[] StatusIds = ["shield", "slow", "speed"];
+
+    /// <summary>Estados com ícone no HUD (C2-D7): só emite quando liga/desliga.</summary>
+    private void EmitStatuses(double statSpeed)
+    {
+        SetStatus(0, _state.Invulnerable > 0 && !_state.IsDashing);
+        SetStatus(1, _state.Chill > 0);
+        SetStatus(2, statSpeed > 1.001);
+    }
+
+    private void SetStatus(int index, bool on)
+    {
+        if (_statusOn[index] != on)
+        {
+            _statusOn[index] = on;
+            EventBus.Instance.EmitSignal(EventBus.SignalName.PlayerStatusChanged, StatusIds[index], on);
+        }
     }
 
     // --- Mira ---
@@ -633,9 +655,10 @@ public sealed partial class PlayerCombat : IDisposable
     /// <summary>Rastro (<c>p.trail</c>): fantasma do sprite atual na camada aditiva.</summary>
     private void Trail(float alpha)
     {
-        if (AtlasLibrary.TryGet(Player.Sprite.Key, out var frame))
+        // o quadro visível de verdade (andar/esquiva desenhados, kit ou atlas), não só o recorte do atlas
+        if (Player.Animator.TryGetGhost(out var texture, out var anchor, out var unitsPerPixel))
         {
-            _combat.Glow.Ghost(frame.Texture, Player.Body.GlobalPosition, frame.Anchor, 1 / frame.Density, Player.Body.Scale.X < 0, alpha);
+            _combat.Glow.Ghost(texture, Player.Body.GlobalPosition, anchor, unitsPerPixel, Player.Body.Scale.X < 0, alpha);
         }
     }
 
