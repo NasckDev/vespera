@@ -1774,18 +1774,23 @@ public partial class SmokeTest
         await Frames(5);
         var hint = ArteQaFindLabel(hud, "Inventário") ?? throw new SmokeFailure("sem a dica de teclas (Inventário) no HUD");
         var quest = ArteQaFindLabel(hud, "Primeiros passos") ?? ArteQaFindLabel(hud, "PRIMEIROS PASSOS");
+        // levar um golpe (0,75 s de i-frames que já piscam o caçador) não acende o escudo: ele é dos i-frames concedidos (C2-D7)
+        var combat = CombatDirector.Instance ?? throw new SmokeFailure("sem CombatDirector");
+        Require(combat.PlayerCombat.State.TryHurt(), "o golpe de teste deveria acertar o caçador");
+        await Frames(4);
+        Require(!hud.IsStatusShown("shield"), "o piscar depois de um golpe não deveria acender o ícone de escudo");
+        await WaitSeconds(1.0);
         var hintY = hint.GlobalPosition.Y;
         var questY = quest?.GlobalPosition.Y ?? 0f;
-        // o i-frame de 0,75 s que vem depois de levar um golpe (GrantInvulnerability) acende o escudo de verdade
-        var combat = CombatDirector.Instance ?? throw new SmokeFailure("sem CombatDirector");
+        // i-frames concedidos (respawn, Investida, Supremos) acendem o escudo de verdade
         combat.PlayerCombat.State.GrantInvulnerability(0.75);
         await Frames(4);
-        Require(hud.IsStatusShown("shield"), "os i-frames depois de um golpe deveriam acender o ícone de escudo");
+        Require(hud.IsStatusShown("shield"), "os i-frames concedidos deveriam acender o ícone de escudo");
         await Shot("arteqa-hud-com-estado");
         var shiftHint = hint.GlobalPosition.Y - hintY;
         var shiftQuest = quest is null ? 0f : quest.GlobalPosition.Y - questY;
         await WaitSeconds(1.0);
         Log.Info($"arte qa: ao aparecer o ícone de escudo, a dica de teclas desce {shiftHint:0.0} px e a missão {shiftQuest:0.0} px");
-        Require(MathF.Abs(shiftHint) <= 1f && MathF.Abs(shiftQuest) <= 1f, $"o ícone de estado empurra o HUD: dica {shiftHint:0.0} px, missão {shiftQuest:0.0} px (treme a cada golpe sofrido: o escudo acende nos 0,75 s de i-frames)");
+        Require(MathF.Abs(shiftHint) <= 1f && MathF.Abs(shiftQuest) <= 1f, $"o ícone de estado empurra o HUD: dica {shiftHint:0.0} px, missão {shiftQuest:0.0} px (o escudo acende nos i-frames concedidos)");
     }
 }

@@ -72,6 +72,14 @@ public sealed class PlayerCombatState
     /// <summary>i-frames restantes (ferido, respawn, Ecos, Supremos).</summary>
     public double Invulnerable { get; private set; }
 
+    private bool _invulnerableFromHurt;
+
+    /// <summary>
+    /// Escudo: i-frames concedidos (respawn, Investida, Supremos), não o piscar de 0,75 s depois de levar um golpe.
+    /// É o que o ícone de escudo do HUD mostra (DECISIONS C2-D7).
+    /// </summary>
+    public bool Shielded => Invulnerable > 0 && !_invulnerableFromHurt;
+
     public double HurtTime { get; private set; }
 
     /// <summary>Recarga do ataque.</summary>
@@ -287,6 +295,7 @@ public sealed class PlayerCombatState
         }
 
         Invulnerable = HurtInvulnerability;
+        _invulnerableFromHurt = true;
         HurtTime = HurtFlashSeconds;
         SinceHurt = 0;
         if (chillSeconds > 0)
@@ -298,7 +307,11 @@ public sealed class PlayerCombatState
     }
 
     /// <summary>Garante i-frames por pelo menos <paramref name="seconds"/> (respawn 1.5, Investida 0.4, Supremos).</summary>
-    public void GrantInvulnerability(double seconds) => Invulnerable = Math.Max(Invulnerable, seconds);
+    public void GrantInvulnerability(double seconds)
+    {
+        Invulnerable = Math.Max(Invulnerable, seconds);
+        _invulnerableFromHurt = false;
+    }
 
     /// <summary>Multiplicador de velocidade de andar: atributo × frio 0.65 × ataque 0.55 × carga 0.45 × windup 0.2.</summary>
     public double SpeedMultiplier(double statSpeed)
@@ -350,6 +363,7 @@ public sealed class PlayerCombatState
     public void Respawn(double invulnerability)
     {
         Invulnerable = invulnerability;
+        _invulnerableFromHurt = false;
         Essence = 0;
         DashTime = 0;
         Charge = -1;

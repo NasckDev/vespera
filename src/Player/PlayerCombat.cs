@@ -202,7 +202,7 @@ public sealed partial class PlayerCombat : IDisposable
     /// <summary>Estados com ícone no HUD (C2-D7): só emite quando liga/desliga.</summary>
     private void EmitStatuses(double statSpeed)
     {
-        SetStatus(0, _state.Invulnerable > 0 && !_state.IsDashing);
+        SetStatus(0, _state.Shielded && !_state.IsDashing);
         SetStatus(1, _state.Chill > 0);
         SetStatus(2, statSpeed > 1.001);
     }

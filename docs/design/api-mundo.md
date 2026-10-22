@@ -158,5 +158,5 @@ chama), `AmbientLevel(kind)`, `ActiveAmbientVoices`. Loops em `assets/audio/ambi
 - **Objetos**: `PropArt.Breakable/Chest/Boat/FishingRod` e `PropArt.ForCatalogSprite(png)`; `Breakable.Stage`/`ShardsFlying`,
   `Chest.ArtFrame`, `CatalogObject.ArtRole`/`ArtState`/`Toggle()`/`SetFlowerStage()`, `WorldDressing.FerryBoat`/`FerryFrame`/`RodInHand`.
 - **UI**: `UiIcons.Bust(chaveDoRetrato)`, `UiIcons.Hud(id)`/`HudInner(id)`, `HotbarSlot.FramedIcon`, `Hud.DodgeSlot`,
-  `Hud.IsStatusShown(id)`; sinal novo `PlayerStatusChanged(status, ativo)` (`shield`, `slow`, `speed`).
+  `Hud.IsStatusShown(id)`; sinal novo `PlayerStatusChanged(status, ativo)` (`shield`, `slow`, `speed`); `shield` = `PlayerCombatState.Shielded` (i-frames concedidos: respawn, Investida, Supremos; **não** o piscar de 0,75 s depois de um golpe).
 - Smoke: `--smoke-filter=arte:` (fixture `src/Testing/Fixtures/fixture_art.json`).
