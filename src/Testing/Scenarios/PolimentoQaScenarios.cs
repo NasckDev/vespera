@@ -85,6 +85,15 @@ public partial class SmokeTest
         await WaitUntil(() => Hud.Current is not null && GameUi.Current is not null, 5, "HUD e UI do mundo novo");
     }
 
+    /// <summary>Solta tudo (o evento de soltar tem de chegar com o mapa de teclas ainda igual) e volta às teclas padrão.</summary>
+    private async Task PqRestoreKeys()
+    {
+        await Frames(3);
+        ReleaseAllActions();
+        await Frames(2);
+        InputBindings.RestoreDefaults();
+    }
+
     private static void PqResetPlayerSettings()
     {
         GameSettings.ResetAccessibility();
@@ -612,5 +621,589 @@ public partial class SmokeTest
         }
 
         Require(worst < 1.0, "área andável escondida atrás do HUD:" + (char)10 + "  " + string.Join((char)10 + "  ", report));
+    }
+
+    // --- remapeamento: vale no jogo, não duplica tecla e as telas de ajuda acompanham ---
+
+    /// <summary>Ações do jogo (fora das ui_*) que respondem ao mesmo evento que <paramref name="e"/>, menos <paramref name="except"/>.</summary>
+    private static List<string> PqActionsUsing(InputEvent e, StringName except)
+    {
+        var list = new List<string>();
+        foreach (var action in InputMap.GetActions())
+        {
+            if (action == except || action.ToString().StartsWith("ui_", StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            foreach (var other in InputMap.ActionGetEvents(action))
+            {
+                if (other.IsMatch(e, exactMatch: false) || e.IsMatch(other, exactMatch: false))
+                {
+                    list.Add(action.ToString());
+                    break;
+                }
+            }
+        }
+
+        return list;
+    }
+
+    [SmokeScenario("polimento (qa): remapear para uma tecla fixa do jogo (1–5, F2, RB) não pode disparar duas ações", order: 1010)]
+    private async Task PqRemapFixedKeyConflict()
+    {
+        await FreshGame("sword");
+        InputBindings.RestoreDefaults();
+        var problems = new List<string>();
+        try
+        {
+            // Teclado: teclas de arma 1–5, F2 (cheat de XP do debug) e botões do mouse da troca de arma.
+            foreach (var key in new[] { Key.Key1, Key.Key3, Key.F2 })
+            {
+                var result = InputBindings.Assign(InputActions.Attack, pad: false, new InputEventKey { PhysicalKeycode = key }, out _);
+                var sharing = PqActionsUsing(new InputEventKey { PhysicalKeycode = key }, InputActions.Attack);
+                Log.Info($"qa-remap: Atacar ← {key}: {result}, outras ações na mesma tecla: [{string.Join(", ", sharing)}]");
+                if (result is RemapResult.Ok or RemapResult.Swapped && sharing.Count > 0)
+                {
+                    problems.Add($"Atacar aceitou {key} que já é de [{string.Join(", ", sharing)}] (resultado {result})");
+                }
+
+                InputBindings.RestoreDefaults();
+            }
+
+            // Controle: RB (troca de arma) para Poção.
+            var pad = InputBindings.Assign(InputActions.Potion, pad: true, new InputEventJoypadButton { ButtonIndex = JoyButton.RightShoulder }, out _);
+            var padSharing = PqActionsUsing(new InputEventJoypadButton { ButtonIndex = JoyButton.RightShoulder }, InputActions.Potion);
+            Log.Info($"qa-remap: Poção ← RB: {pad}, outras ações no mesmo botão: [{string.Join(", ", padSharing)}]");
+            if (pad is RemapResult.Ok or RemapResult.Swapped && padSharing.Count > 0)
+            {
+                problems.Add($"Poção aceitou RB que já é de [{string.Join(", ", padSharing)}] (resultado {pad})");
+            }
+        }
+        finally
+        {
+            InputBindings.RestoreDefaults();
+        }
+
+        await Task.CompletedTask;
+        Require(problems.Count == 0, "conflito não detectado com ações que não aparecem na tela de teclas:" + (char)10 + "  " + string.Join((char)10 + "  ", problems));
+    }
+
+    [SmokeScenario("polimento (qa): teclas remapeadas valem de verdade no jogo (andar, atacar, interagir, poção) e as antigas deixam de valer", order: 1011)]
+    private async Task PqRemapWorksInGame()
+    {
+        var world = await FreshGame("sword");
+        var ui = UiOrFail();
+        var hud = Hud.Current!;
+        var combat = CombatDirector.Instance!;
+        var state = GameManager.Instance.State;
+        InputBindings.RestoreDefaults();
+        OnboardingHints.ResetProgress();
+        try
+        {
+            await PqUseKeyboard();
+            // Andar para a direita com L (e não mais com D).
+            Require(InputBindings.Assign(InputActions.MoveRight, pad: false, new InputEventKey { PhysicalKeycode = Key.L }, out _) == RemapResult.Ok, "Mover para a direita ← L");
+            var player = FindPlayer()!;
+            player.Teleport(world.CorrectToWalkable(new Vector2(250, 330)));
+            await Frames(3);
+            var x0 = player.GlobalPosition.X;
+            PqKeyDown(Key.D);
+            await WaitSeconds(0.6);
+            PqKeyUp(Key.D);
+            var viaOld = player.GlobalPosition.X - x0;
+            x0 = player.GlobalPosition.X;
+            PqKeyDown(Key.L);
+            await WaitSeconds(0.6);
+            PqKeyUp(Key.L);
+            var viaNew = player.GlobalPosition.X - x0;
+            Log.Info($"qa-remap: andou {viaOld:0.0} u com D (antiga) e {viaNew:0.0} u com L (nova); move_right ainda pressionada={Input.IsActionPressed(InputActions.MoveRight)}");
+            Require(viaNew > 6f && viaOld < 1f, $"movimento remapeado: nova={viaNew:0.0} u, antiga={viaOld:0.0} u");
+            await PqRestoreKeys();
+
+            // Atacar com K (troca com o ataque forte): K bate, J agora é o forte.
+            Require(InputBindings.Assign(InputActions.Attack, pad: false, new InputEventKey { PhysicalKeycode = Key.K }, out _) == RemapResult.Swapped, "Atacar ← K troca com o forte");
+            PqKeyDown(Key.K);
+            await Frames(2);
+            Require(Input.IsActionPressed(InputActions.Attack) && !Input.IsActionPressed(InputActions.AttackHeavy), "K deveria ser só o ataque comum");
+            PqKeyUp(Key.K);
+            PqKeyDown(Key.J);
+            await Frames(2);
+            Require(Input.IsActionPressed(InputActions.AttackHeavy) && !Input.IsActionPressed(InputActions.Attack), "J deveria ser só o ataque forte");
+            PqKeyUp(Key.J);
+            await PqRestoreKeys();
+
+            // Interagir com G: a conversa com a Odete abre e a tecla da dica/prompt é G.
+            Require(InputBindings.Assign(InputActions.Interact, pad: false, new InputEventKey { PhysicalKeycode = Key.G }, out _) == RemapResult.Ok, "Interagir ← G");
+            var odete = world.GetInteractable("odete") ?? throw new SmokeFailure("sem a Odete");
+            await WaitSeconds(0.8); // deixa o golpe forte do passo anterior terminar
+            Log.Info($"qa-remap: antes do teleporte: jogador {player.GlobalPosition}, move_right={Input.IsActionPressed(InputActions.MoveRight)}, ataque={Input.IsActionPressed(InputActions.Attack)}/{Input.IsActionPressed(InputActions.AttackHeavy)}");
+            player.Teleport(odete.Position + new Vector2(0, 20));
+            await WaitSeconds(0.6);
+            await PqKeyTap(Key.E);
+            await WaitSeconds(0.4);
+            Require(!ui.Dialog.IsOpen, "E (antiga) ainda interage depois do remapeamento");
+            PqKeyDown(Key.G);
+            await Frames(3);
+            Log.Info($"qa-remap: player {player.GlobalPosition} odete {odete.Position}/{odete.GlobalPosition}; com G apertado: Interact pressionada={Input.IsActionPressed(InputActions.Interact)}, foco={player.FocusedInteractable?.Id}, bloqueado={GameManager.Instance.IsGameplayBlocked}, diálogo={ui.Dialog.IsOpen}");
+            await WaitSeconds(0.2);
+            PqKeyUp(Key.G);
+            await Frames(2);
+            await WaitUntil(() => ui.Dialog.IsOpen, 3, "conversa com G");
+            ui.CloseAll();
+            await WaitSeconds(0.4);
+
+            // Poção com T: o rótulo da hotbar acompanha.
+            Require(InputBindings.Assign(InputActions.Potion, pad: false, new InputEventKey { PhysicalKeycode = Key.T }, out _) == RemapResult.Ok, "Poção ← T");
+            await Frames(2);
+            Log.Info($"qa-remap: rótulo da poção na hotbar: '{InputBindings.Label(InputActions.Potion, false)}'");
+            state.Damage(Math.Max(1, state.Hp / 2));
+            var hp0 = state.Hp;
+            await PqKeyTap(Key.R);
+            await WaitSeconds(0.3);
+            Require(state.Hp == hp0, "R (antiga) ainda bebe poção");
+            await PqKeyTap(Key.T);
+            await WaitSeconds(0.3);
+            Require(state.Hp > hp0, "T (nova) não bebeu a poção");
+        }
+        finally
+        {
+            ReleaseAllActions();
+            InputBindings.RestoreDefaults();
+            ui.CloseAll();
+            state.RestoreFullHealth();
+        }
+    }
+
+    [SmokeScenario("polimento (qa): a tela Controles e o tutorial seguem o remapeamento e o dispositivo", order: 1012)]
+    private async Task PqHelpFollowsRemap()
+    {
+        await PqFreshWorld();
+        await FreshGame("sword");
+        var ui = UiOrFail();
+        InputBindings.RestoreDefaults();
+        var problems = new List<string>();
+        try
+        {
+            // 1. Tela Controles depois de trocar Atacar (J→K, troca com o forte), Esquivar (Espaço→B) e Interagir (E→G).
+            InputBindings.Assign(InputActions.Attack, pad: false, new InputEventKey { PhysicalKeycode = Key.K }, out _);
+            InputBindings.Assign(InputActions.Dodge, pad: false, new InputEventKey { PhysicalKeycode = Key.B }, out _);
+            InputBindings.Assign(InputActions.Interact, pad: false, new InputEventKey { PhysicalKeycode = Key.G }, out _);
+            ui.OpenPause();
+            await WaitSeconds(0.2);
+            ui.Stack.Push(ui.Controls);
+            await WaitSeconds(0.3);
+            var text = string.Join(" | ", ui.Controls.FindChildren("*", nameof(Label), true, false).OfType<Label>().Select(l => l.Text));
+            Log.Info($"qa-ajuda: tela Controles após remapear: {text}");
+            await Shot("qa-ajuda-controles");
+            if (!text.Contains("G", StringComparison.Ordinal) || text.Contains("| E |", StringComparison.Ordinal))
+            {
+                problems.Add("tela Controles continua mostrando 'E' para Interagir depois de remapear para G");
+            }
+
+            if (text.Contains("Espaço / Shift", StringComparison.Ordinal))
+            {
+                problems.Add("tela Controles continua mostrando 'Espaço / Shift' para Esquiva depois de remapear para B");
+            }
+
+            ui.CloseAll();
+            InputBindings.RestoreDefaults();
+
+            // 2. Tutorial para quem joga no controle: sem "tecla F" nem "menu Esc".
+            await PqUseGamepad();
+            var state = GameManager.Instance.State;
+            ui.StartTutorial();
+            await WaitUntil(() => ui.Dialog.IsOpen && ui.Dialog.Speaker == "Odete", 4, "tutorial");
+            var last = string.Empty;
+            for (var i = 0; i < 4 && ui.Dialog.IsOpen; i++)
+            {
+                last = ui.Dialog.Text;
+                if (last.Contains("Supremo", StringComparison.Ordinal))
+                {
+                    break;
+                }
+
+                await SkipTyping(ui);
+                await PqPadTap(JoyButton.A);
+                await WaitSeconds(0.4);
+            }
+
+            await SkipTyping(ui);
+            last = ui.Dialog.Text;
+            Log.Info($"qa-ajuda: fala do tutorial no controle: {last}");
+            await Shot("qa-ajuda-tutorial-controle");
+            if (last.Contains("tecla F", StringComparison.Ordinal) || last.Contains("menu Esc", StringComparison.Ordinal))
+            {
+                problems.Add("o tutorial manda quem joga no controle apertar 'a tecla F' e abrir 'o menu Esc'");
+            }
+        }
+        finally
+        {
+            ui.CloseAll();
+            InputBindings.RestoreDefaults();
+            await PqUseKeyboard();
+        }
+
+        Require(problems.Count == 0, "ajuda de controles desatualizada:" + (char)10 + "  " + string.Join((char)10 + "  ", problems));
+    }
+
+    // --- opções: persistem, aplicam na hora, reduzir flashes de verdade ---
+
+    [SmokeScenario("polimento (qa): todas as opções de acessibilidade são gravadas no settings.cfg e voltam depois de reiniciar", order: 1013)]
+    private async Task PqSettingsPersist()
+    {
+        await FreshGame("sword");
+        PqResetPlayerSettings();
+        try
+        {
+            GameSettings.UiScale = 1.5f;
+            GameSettings.TextScale = 1.3f;
+            GameSettings.DialogSpeed = DialogSpeed.Instant;
+            GameSettings.ShakeIntensity = 0.4f;
+            GameSettings.ReduceFlashes = true;
+            GameSettings.HighContrast = true;
+            GameSettings.Captions = true;
+            GameSettings.BowToggle = true;
+            GameSettings.AimAssist = true;
+            InputBindings.Assign(InputActions.Dodge, pad: false, new InputEventKey { PhysicalKeycode = Key.B }, out _);
+            InputBindings.Assign(InputActions.Potion, pad: true, new InputEventJoypadButton { ButtonIndex = JoyButton.Y }, out _);
+
+            // O arquivo tem tudo (é o que o próximo boot lê).
+            var cfg = new ConfigFile();
+            Require(cfg.Load(AudioManager.Instance.SettingsFile) == Error.Ok, "settings.cfg não existe");
+            var expected = new (string Section, string Key, Variant Value)[]
+            {
+                ("access", "ui_scale", 1.5f), ("access", "text_scale", 1.3f), ("access", "dialog_speed", (int)DialogSpeed.Instant),
+                ("access", "shake_intensity", 0.4f), ("access", "reduce_flashes", true), ("access", "high_contrast", true),
+                ("access", "captions", true), ("access", "bow_toggle", true), ("access", "aim_assist", true),
+            };
+            foreach (var (section, key, value) in expected)
+            {
+                Require(cfg.HasSectionKey(section, key), $"[{section}] {key} não foi gravada");
+                var got = cfg.GetValue(section, key);
+                var same = value.VariantType == Variant.Type.Float ? Mathf.IsEqualApprox((float)got, (float)value) : got.Equals(value);
+                Require(same, $"[{section}] {key} gravada como {got}, esperado {value}");
+            }
+
+            Require(cfg.HasSectionKey("input_keys", InputActions.Dodge.ToString()) && cfg.HasSectionKey("input_pad", InputActions.Potion.ToString()), "teclas remapeadas não foram gravadas");
+
+            // "Reinicia": zera a memória e relê o arquivo como o boot faz.
+            InputMap.LoadFromProjectSettings();
+            GameSettings.Load();
+            InputBindings.Load();
+            Require(Mathf.IsEqualApprox(GameSettings.UiScale, 1.5f) && Mathf.IsEqualApprox(GameSettings.TextScale, 1.3f), "escalas não voltaram");
+            Require(GameSettings.DialogSpeed == DialogSpeed.Instant && Mathf.IsEqualApprox(GameSettings.ShakeIntensity, 0.4f), "velocidade do texto/tremor não voltaram");
+            Require(GameSettings.ReduceFlashes && GameSettings.HighContrast && GameSettings.Captions && GameSettings.BowToggle && GameSettings.AimAssist, "alternâncias não voltaram");
+            Require(InputBindings.Label(InputActions.Dodge, false) == "B" && InputBindings.Label(InputActions.Potion, true) == "Y", "teclas remapeadas não voltaram");
+
+            // Um mundo novo já nasce com a escala e o contraste gravados (HUD em 150%).
+            await PqFreshWorld();
+            var hud = Hud.Current!;
+            await WaitSeconds(0.4);
+            Require(Mathf.IsEqualApprox(hud.HpBar.GetGlobalTransform().Scale.X, 1.5f), $"HUD novo não nasceu em 150% ({hud.HpBar.GetGlobalTransform().Scale.X})");
+        }
+        finally
+        {
+            PqResetPlayerSettings();
+        }
+    }
+
+    [SmokeScenario("polimento (qa): 'reduzir flashes' também enfraquece o piscar branco do jogador ao levar dano", order: 1014)]
+    private async Task PqReduceFlashesPlayerHurt()
+    {
+        var (world, combat) = await CombatSetup();
+        GameManager.Instance.NewGame("Bot", "sword");
+        world.GoMap("guild", 250, 330, instant: true);
+        await WaitMapSettled(world);
+        GameUi.Current?.CloseAll();
+        var player = FindPlayer()!;
+        var results = new List<(bool Reduce, float Peak)>();
+        try
+        {
+            foreach (var reduce in new[] { false, true })
+            {
+                GameSettings.ReduceFlashes = reduce;
+                combat.PlayerCombat.Revive();
+                GameManager.Instance.State.RestoreFullHealth();
+                await WaitSeconds(1.6); // a invulnerabilidade do reviver (0,9 s) acaba
+                var materials = new List<ShaderMaterial>();
+                foreach (var sprite in player.FindChildren("*", "CanvasItem", true, false).OfType<CanvasItem>())
+                {
+                    if (sprite.Material is ShaderMaterial m)
+                    {
+                        materials.Add(m);
+                    }
+                }
+
+                var landed = combat.HurtPlayer(5, new Vector2(player.GlobalPosition.X + 20, player.GlobalPosition.Y));
+                Log.Info($"qa-flash: dano entrou={landed}, vida {GameManager.Instance.State.Hp}, invulnerável={combat.PlayerCombat.State.Invulnerable:0.00}, materiais: {string.Join(", ", materials.Select(m => m.Shader?.ResourcePath ?? "?"))}");
+                var peak = 0f;
+                for (var f = 0; f < 14; f++)
+                {
+                    await NextPhysicsFrame();
+                    foreach (var m in materials)
+                    {
+                        if (m.GetShaderParameter("flash").VariantType is Variant.Type.Float)
+                        {
+                            peak = Mathf.Max(peak, (float)m.GetShaderParameter("flash"));
+                        }
+                    }
+                }
+
+                results.Add((reduce, peak));
+                Log.Info($"qa-flash: reduzir flashes={reduce}: pico do piscar do jogador {peak:0.00} ({materials.Count} materiais)");
+                await WaitSeconds(0.8);
+            }
+        }
+        finally
+        {
+            GameSettings.ResetAccessibility();
+        }
+
+        Require(results[0].Peak > 0.3f, $"o piscar de dano do jogador deveria existir com a opção desligada (pico {results[0].Peak:0.00})");
+        Require(results[1].Peak <= results[0].Peak * 0.6f, $"reduzir flashes não enfraqueceu o piscar do jogador: {results[0].Peak:0.00} → {results[1].Peak:0.00}");
+    }
+
+    [SmokeScenario("polimento (qa): soltar a tecla remapeada solta a ação (nada fica preso apertado)", order: 1015)]
+    private async Task PqRemapKeyReleaseIsClean()
+    {
+        await FreshGame("sword");
+        InputBindings.RestoreDefaults();
+        var stuck = new List<string>();
+        try
+        {
+            async Task Probe(string label, StringName action, Key key)
+            {
+                PqKeyDown(key);
+                await Frames(3);
+                var down = Input.IsActionPressed(action);
+                PqKeyUp(key);
+                await Frames(3);
+                var up = Input.IsActionPressed(action);
+                Log.Info($"qa-remap: {label}: apertada={down}, depois de soltar={up}");
+                if (!down)
+                {
+                    stuck.Add($"{label}: a tecla não acionou a ação");
+                }
+
+                if (up)
+                {
+                    stuck.Add($"{label}: a ação ficou presa depois de soltar a tecla");
+                }
+            }
+
+            await Probe("padrão: Mover para a direita (D)", InputActions.MoveRight, Key.D);
+            await Probe("padrão: Atacar (J)", InputActions.Attack, Key.J);
+            InputBindings.Assign(InputActions.MoveRight, pad: false, new InputEventKey { PhysicalKeycode = Key.L }, out _);
+            await Probe("remapeado: Mover para a direita (L)", InputActions.MoveRight, Key.L);
+            InputBindings.Assign(InputActions.Attack, pad: false, new InputEventKey { PhysicalKeycode = Key.K }, out var other);
+            await Probe("remapeado: Atacar (K)", InputActions.Attack, Key.K);
+            await Probe("remapeado: Ataque forte (J, trocada)", InputActions.AttackHeavy, Key.J);
+        }
+        finally
+        {
+            ReleaseAllActions();
+            InputBindings.RestoreDefaults();
+        }
+
+        Require(stuck.Count == 0, "tecla remapeada com problema ao soltar:" + (char)10 + "  " + string.Join((char)10 + "  ", stuck));
+    }
+
+    // --- dicas que não grudam, saída da Brecha só com intenção, tutorial pulado ---
+
+    [SmokeScenario("polimento (qa): a dica de atacar some depois de 10 s e não volta no quadro seguinte", order: 1020)]
+    private async Task PqAttackHintDoesNotNag()
+    {
+        await PqFreshWorld();
+        await FreshGame("sword");
+        var ui = UiOrFail();
+        var hud = Hud.Current!;
+        var state = GameManager.Instance.State;
+        PqResetPlayerSettings();
+        var auto = GameUi.AutoCompleteQuests;
+        GameUi.AutoCompleteQuests = true;
+        try
+        {
+            await PqUseKeyboard();
+            // Missão 'Bonecos de treino' ativa (é onde o jogo novo cai depois do tutorial) e a dica de andar já cumprida.
+            state.Save.Quests.Counter(QuestCounters.Odete); // garante o contador
+            ui.StartTutorial();
+            await WaitUntil(() => ui.Dialog.IsOpen, 4, "tutorial");
+            for (var line = 0; line < 8 && ui.Dialog.IsOpen && state.Save.Quests.Counter(QuestCounters.Odete) == 0; line++)
+            {
+                await SkipTyping(ui);
+                await PqKeyTap(Key.Enter);
+                await WaitSeconds(0.2);
+            }
+
+            await WaitUntil(() => state.CurrentQuest?.Id == "bonecos", 4, "missão 'Bonecos de treino'");
+            await DismissUi();
+            await PqWalk(false, Vector2.Right, 1.2);
+            Require(OnboardingHints.IsDone(OnboardingStep.Move), "dica de andar cumprida");
+            // 28 s parado, sem atacar: quanto tempo seguido a dica de atacar fica na tela, e quanto some entre uma e outra.
+            var visibleRun = 0.0;
+            var longestRun = 0.0;
+            var totalVisible = 0.0;
+            var hiddenRun = 0.0;
+            var longestHidden = 0.0;
+            var started = Time.GetTicksMsec();
+            var last = started;
+            while ((Time.GetTicksMsec() - started) < 28000)
+            {
+                await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+                var now = Time.GetTicksMsec();
+                var dt = (now - last) / 1000.0;
+                last = now;
+                var shown = hud.Onboarding.Visible && hud.Onboarding.Current == OnboardingStep.Attack;
+                if (shown)
+                {
+                    visibleRun += dt;
+                    totalVisible += dt;
+                    hiddenRun = 0;
+                }
+                else
+                {
+                    visibleRun = 0;
+                    hiddenRun += dt;
+                }
+
+                longestRun = Math.Max(longestRun, visibleRun);
+                longestHidden = Math.Max(longestHidden, hiddenRun);
+            }
+
+            Log.Info($"qa-dica: em 28 s sem atacar, a dica de atacar ficou {totalVisible:0.0} s na tela (maior trecho seguido {longestRun:0.0} s; maior sumiço {longestHidden:0.0} s)");
+            await Shot("qa-dica-atacar-grudada");
+            Require(longestHidden >= 3.0 || totalVisible <= 12.0, $"a dica de atacar fica {totalVisible:0.0} de 28 s na tela (maior trecho {longestRun:0.0} s, maior sumiço {longestHidden:0.0} s): depois dos 10 s ela deveria sumir e voltar só numa próxima vez");
+        }
+        finally
+        {
+            GameUi.AutoCompleteQuests = auto;
+            PqResetPlayerSettings();
+            ui.CloseAll();
+        }
+    }
+
+    [SmokeScenario("polimento (qa): na borda de fuga, tocar, esquivar ou ficar parado nunca abre 'Saída da Brecha'", order: 1021)]
+    private async Task PqEscapeNeverByAccident()
+    {
+        var (world, combat) = await CombatSetup();
+        GameManager.Instance.NewGame("Bot", "sword");
+        world.GoMap("forge", 800, 520, instant: true);
+        await WaitMapSettled(world);
+        GameUi.Current?.CloseAll();
+        var player = FindPlayer()!;
+        var asked = new List<string>();
+        void OnEscape(string mapId) => asked.Add(mapId);
+        EventBus.Instance.DungeonEscapeRequested += OnEscape;
+        try
+        {
+            foreach (var (theme, def) in GameManager.Db.Themes)
+            {
+                await EnterBrecha(world, combat, spot: 0, theme: theme, rank: 0);
+                var edge = world.Map.Back ?? throw new SmokeFailure($"{world.MapId} sem borda de fuga");
+                asked.Clear();
+                var cx = edge.Center.X;
+
+                // 1. Parado dentro da borda por 2 s.
+                player.Teleport(world.CorrectToWalkable(new Vector2(cx, edge.Y + 2)));
+                await WaitSeconds(2.0);
+                Require(asked.Count == 0, $"{world.MapId}: parado na borda abriu a fuga");
+
+                // 2. Toques curtos (0,3 s) para baixo, cinco vezes.
+                for (var i = 0; i < 5; i++)
+                {
+                    player.Teleport(world.CorrectToWalkable(new Vector2(cx, edge.Y + 2)));
+                    await Frames(2);
+                    PressDirection(Vector2.Down);
+                    await WaitSeconds(0.3);
+                    PressDirection(Vector2.Zero);
+                    await WaitSeconds(0.25);
+                }
+
+                Require(asked.Count == 0, $"{world.MapId}: toques curtos para baixo abriram a fuga {asked.Count}x");
+
+                // 3. Esquiva para baixo ao lado da borda (segura baixo 0,2 s e solta).
+                player.Teleport(world.CorrectToWalkable(new Vector2(cx, edge.Y - 30)));
+                await Frames(3);
+                PressDirection(Vector2.Down);
+                Input.ActionPress(InputActions.Dodge);
+                await WaitSeconds(0.2);
+                Input.ActionRelease(InputActions.Dodge);
+                PressDirection(Vector2.Zero);
+                await WaitSeconds(1.0);
+                Require(asked.Count == 0, $"{world.MapId}: uma esquiva para baixo perto da borda abriu a fuga");
+
+                // 4. Andar de lado ao longo da borda por 1,5 s (olhando para baixo: o último movimento foi para baixo).
+                player.Teleport(world.CorrectToWalkable(new Vector2(edge.X + 6, edge.Y + 2)));
+                await Frames(2);
+                PressDirection(new Vector2(1, 0.05f).Normalized());
+                await WaitSeconds(1.5);
+                PressDirection(Vector2.Zero);
+                Log.Info($"qa-fuga: {world.MapId}: tocar/parado/esquivar/andar de lado → {asked.Count} pedido(s) de fuga (esperado 0)");
+                Require(asked.Count == 0, $"{world.MapId}: andar de lado dentro da borda abriu a fuga ({asked.Count}x)");
+                await FleeRun(world, combat);
+            }
+        }
+        finally
+        {
+            PressDirection(Vector2.Zero);
+            Input.ActionRelease(InputActions.Dodge);
+            EventBus.Instance.DungeonEscapeRequested -= OnEscape;
+            await FleeRun(world, combat);
+        }
+    }
+
+    [SmokeScenario("polimento (qa): pular o tutorial com Esc não trava 'Primeiros passos': falar com a Odete no balcão cumpre", order: 1022)]
+    private async Task PqTutorialSkipThenTalk()
+    {
+        await PqFreshWorld();
+        var world = await FreshGame("sword");
+        var ui = UiOrFail();
+        var state = GameManager.Instance.State;
+        PqResetPlayerSettings();
+        var auto = GameUi.AutoCompleteQuests;
+        GameUi.AutoCompleteQuests = true;
+        try
+        {
+            await PqUseKeyboard();
+            ui.StartTutorial();
+            await WaitUntil(() => ui.Dialog.IsOpen && ui.Dialog.Speaker == "Odete", 4, "tutorial");
+            await WaitSeconds(0.5);
+            await PqKeyTap(Key.Escape);
+            await WaitSeconds(0.5);
+            Log.Info($"qa-tutorial: depois do Esc: diálogo aberto={ui.Dialog.IsOpen}, missão={state.CurrentQuest?.Id}, contador Odete={state.Save.Quests.Counter(QuestCounters.Odete)}");
+            await Shot("qa-tutorial-pulado");
+            ui.CloseAll();
+            await WaitSeconds(0.4);
+            Require(state.CurrentQuest?.Id == "primeiros_passos" || state.CurrentQuest?.Id == "bonecos", $"missão depois de pular: {state.CurrentQuest?.Id}");
+
+            // Falar com a Odete de verdade (E) até a conversa acabar: a missão tem de andar.
+            var odete = world.GetInteractable("odete") ?? throw new SmokeFailure("sem a Odete");
+            FindPlayer()!.Teleport(odete.Position + new Vector2(0, 20));
+            await WaitSeconds(0.6);
+            for (var i = 0; i < 8 && state.CurrentQuest?.Id == "primeiros_passos"; i++)
+            {
+                if (!ui.Dialog.IsOpen)
+                {
+                    await PqKeyTap(Key.E);
+                    await WaitSeconds(0.5);
+                }
+                else
+                {
+                    await SkipTyping(ui);
+                    await PqKeyTap(Key.Enter);
+                    await WaitSeconds(0.3);
+                }
+            }
+
+            Log.Info($"qa-tutorial: depois de falar com a Odete: missão={state.CurrentQuest?.Id}, contador={state.Save.Quests.Counter(QuestCounters.Odete)}");
+            Require(state.CurrentQuest?.Id != "primeiros_passos", "falar com a Odete no balcão não cumpriu 'Primeiros passos' depois de pular o tutorial");
+        }
+        finally
+        {
+            GameUi.AutoCompleteQuests = auto;
+            PqResetPlayerSettings();
+            ui.CloseAll();
+        }
     }
 }
