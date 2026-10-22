@@ -54,7 +54,7 @@ def walk(d: str):
                 ank_s=a_ank[i], foot_s=a_ft[i], bend_s=a_bend[i],
                 ank_o=a_ank[j], foot_o=a_ft[j], bend_o=a_bend[j],
                 wr_s=(wr_near[i], 33 + b[1]), wr_o=(wr_far[i], 32 + b[1]),
-                sword=(3 if wr_near[i] >= 25 else 4, (0, 1)),
+                sword=(2, (0, 1)),
                 cape=_cape_walk(d, i), lantern_off=([0, 0, -1, -1, 0, 0, 1, 1][(i - 1) % 8], 0),
             ))
         return out

@@ -9,55 +9,82 @@ from pixcore import parse
 # bola do rolamento: 1) encolhido, cabeça à frente  2) costas/capa para cima  3) botas por cima
 BALL = {
     "tuck": parse("""
-        ....BCDDC.....
-        ..BCDEEDDCg...
-        .BCDDDDCCghg..
-        .CDDDCCCghihg.
-        BCDCCCBghiihg.
-        BCCCBBghhtsg..
-        BCCBAMMghssIH.
-        ACBAMNMMLqIJH.
-        .ABKMMMLLGIIH.
-        ..AKLLHIIHHG..
-        ...FGHIIHGG...
-        ....FGGGFF....
+        .....BCDDCB.....
+        ...BCDEEEDCB....
+        ..BCDDEDDDCCgg..
+        .BCDDDDDCCCghig.
+        .CDDDDCCCCghiihg
+        BCDDDCCCCBghjihg
+        BCDDCCCCBghhiihg
+        BCDCCCCBBghttshg
+        BCCCCCBBAMgtssqg
+        ACCCCBBAMMLGIJHg
+        ACCCBBAMNMMLIJIH
+        .ACBBAKMMMLLGIIH
+        ..AAAKLLLHHIIHG.
+        ....FGHIIHHGGF..
+        .....FFGGGFF....
     """),
     "cape": parse("""
-        ....BCDDCB....
-        ..BCDEEDDCB...
-        .BCDEDDDCCCB..
-        .CDDDDCCCCCBA.
-        BCDDCCCBCCBBA.
-        BCDCCBCCCBBBA.
-        BCCCBCCCBBBA..
-        ABCCBCCBBBAg..
-        .ABBCCBBAAghg.
-        ..AABBAAghhg..
-        ....HIIHggg...
-        .....GGGF.....
+        .....BCDDCB.....
+        ...BCDEEEDDCB...
+        ..BCDEEDDDDCCB..
+        .BCDDEDDDCCCCBA.
+        .CDDDDDCCCCCBBA.
+        BCDDDDCCCBCCBBA.
+        BCDDDCCCBCCCBBAA
+        BCDDCCCBCCCBBBA.
+        BCCCCCBCCCBBBAA.
+        ACCCCBCCCBBBAA..
+        ACCCBBCCBBBAAgg.
+        .ACBBBBBBAAghhig
+        ..AAABBAAghhiig.
+        ....FGHHGFgggg..
+        .....FGGGF......
     """),
     "feet": parse("""
-        ......HIJH....
-        .....GHIIHG...
-        ..BCLMMLHHG...
-        .BCDMNNMLKB...
-        BCDDCMMLKCBA..
-        BCDCCBLKCCBA..
-        BCCCBBCCCBBA..
-        ACCBghgCBBA...
-        .ABghiihgBA...
-        ..ghijhhhg....
-        ...ghhhgg.....
+        .......GHIJH....
+        ......GHIJJIH...
+        .....GHHIIIHG...
+        ...BCMLLHHHGG...
+        ..BCDMNNMLLKB...
+        .BCDDCMMNMLKCB..
+        BCDDDCCMMLKCCBA.
+        BCDDCCCBLKCCCBA.
+        BCDCCCBBBCCCBBA.
+        BCCCCBBgggCCBBA.
+        ACCCBghhiigCBA..
+        .ACBghijihhgA...
+        ..AAghiihhhg....
+        ....ggghhgg.....
+        .....gggg.......
     """),
+}
+
+# poeira do passo/rolamento/queda (rampa pedra)
+DUST = {
+    "small": parse("""
+        .21.
+        2112
+        .32.
+    """, {"1": "stone:5", "2": "stone:4", "3": "stone:3"}),
+    "big": parse("""
+        ..21..2.
+        .21112..
+        2111123.
+        .3223.3.
+    """, {"1": "stone:5", "2": "stone:4", "3": "stone:3"}),
 }
 
 # caído de bruços, cabeça para a direita (morte)
 FALLEN = parse("""
-    ........BCDDCB..........
-    .....BCDDEEDDCCB...gghg.
-    ...ABCDDDDDDCCCBBAghiihg
-    FG.ABCCDCCDCCBBBAgghiihg
-    GHIHKMMLLBCCBAAKLLghttsg
-    GHIHKMMMLLLKKGHHIIqrsss.
-    .FGGKKLLLKK..FGHHG.rrr..
+    ..........BCDDCB.............
+    .......BCDDEEDDCCB...gghhg...
+    .....ABCDDDDEDDCCBBAghijihg..
+    ...AABCDDDDDDDCCCBBghiiihhg..
+    FGG.ABCCDCCDCCBBBAAghhihhhg..
+    GHIHKMMLLBCCCBBAAKLghhgttsgg.
+    GHIIHMMMLLLLKKQRRQPgrtsssrIJH
+    .FGGKKLLLKKK..OPQPPOqrrrrqHIH
+    ..FF...................FGGF..
 """)

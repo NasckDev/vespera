@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from figure import fig
 from parts_gear import LANTERN, LANTERN_PIVOT, sword as sword_img
-from parts_poses import BALL, FALLEN
+from parts_poses import BALL, DUST, FALLEN
 from rig import Item
 
 FLIP = {"down": False, "up": True, "side": False}   # para onde o corpo deita/rola na tela
@@ -60,7 +60,9 @@ def _ground_sword(x, y, flip):
 def _fallen(d, lantern, lant_xy, extra_y=0):
     flip = FLIP[d] if d != "side" else False
     h, w = FALLEN.shape
-    x = 24 - w // 2
+    x = 24 - w // 2 - 2
+    if flip:
+        x = 48 - x - w
     items = [Item(FALLEN, (x, 44 - h + extra_y), layer="auto", z=4, flip=flip)]
     img = LANTERN[lantern]
     piv = LANTERN_PIVOT[lantern]
@@ -68,10 +70,9 @@ def _fallen(d, lantern, lant_xy, extra_y=0):
     if flip:
         lx = 48 - lx
     items.append(Item(img[:, ::-1] if flip else img, (lx - piv[0], ly - piv[1]), layer="lantern", z=6))
-    sx = 10 if not flip else 38
-    items.append(_ground_sword(sx, 42, flip))
-    return _p(d, (0, 0), legs=False, arms=False, cape=False, lantern=None, head=False, **{}) if False else \
-        _fallen_pose(d, items)
+    sx = 9 if not flip else 39
+    items.append(_ground_sword(sx, 37, flip))
+    return _fallen_pose(d, items)
 
 
 def _fallen_pose(d, items):
@@ -101,13 +102,26 @@ def death(d):
                 ank_s=(28, 41), ank_o=(21, 41), cape={"flare": 1})
         f2 = _kneel(d, (0, 6), hd, (31, 40), (17, 40), (2, (0, 1)))
         f3 = _kneel(d, (0, 8), hd, (30, 44), (18, 44), (0, (0, 1)), slump=True)
-    f4 = _fallen(d, "glow", (39, 43), extra_y=-1)
+    f4 = _fallen(d, "fallen", (38, 43), extra_y=-1)
+    f4.aura = [dust("big", (8, 41)), dust("big", (38, 41))]
     f5 = _fallen(d, "fallen_glow", (41, 43))
+    f5.aura = [dust("small", (44, 41))]
     f6 = _fallen(d, "fallen_out", (41, 43))
     return [hurt_f, f1, f2, f3, f4, f5, f6]
 
 
 # ------------------------------------------------------------------ esquiva: impulso, bola x3, aterrissa
+def dust(name, center):
+    from pixcore import blit, canvas
+    img = canvas(48, 48)
+    s = DUST[name]
+    blit(img, s, center[0] - s.shape[1] // 2, center[1] - s.shape[0] // 2)
+    return img
+
+
+ROLL_BACK = {"down": (0, -6), "up": (0, 6), "side": (-6, 0)}
+
+
 def _ball(d, name, hop):
     img = BALL[name]
     h, w = img.shape
@@ -116,6 +130,8 @@ def _ball(d, name, hop):
     p.torso = False
     p.head = False
     p.items = [Item(img, (24 - w // 2, 44 - h + hop), layer="auto", z=5, flip=flip)]
+    bx, by = ROLL_BACK[d]
+    p.ghosts = [(bx, by, "purple:1")]
     return p
 
 
@@ -126,14 +142,16 @@ def dodge(d):
         land = _p(d, (-1, 3), ank_s=(28, 41), ank_o=(20, 41), bend_s=(2, -1), bend_o=(1, 0),
                   wr_s=(27, 35), sword=(2, (0, 1)), cape={"flare": 3, "lift": 1})
     elif d == "down":
-        launch = _p(d, (0, 4), head="down_slump", ank_s=(21, 42), ank_o=(28, 42), wr_s=(20, 38), wr_o=(28, 38),
-                    sword=(4, (0, 1)), cape={"flare": 3})
+        launch = _p(d, (0, 4), head="down_slump", ank_s=(21, 42), ank_o=(28, 42), wr_s=(18, 38), wr_o=(30, 38),
+                    sword=(6, (0, 1)), cape={"flare": 3})
         land = _p(d, (0, 3), ank_s=(21, 41), ank_o=(28, 41), wr_s=(17, 36), sword=(6, (0, 1)), cape={"flare": 2})
     else:
         launch = _p(d, (0, 4), ank_s=(28, 40), ank_o=(21, 40), wr_s=(29, 37), wr_o=(19, 37), sword=(3, (0, 1)),
                     cape={"flare": 3, "lift": 2})
         land = _p(d, (0, 3), ank_s=(28, 41), ank_o=(21, 41), wr_s=(31, 36), sword=(2, (0, 1)), cape={"flare": 2})
-    return [launch, _ball(d, "tuck", 0), _ball(d, "cape", -1), _ball(d, "feet", 0), land]
+    launch.fx = [dust("small", (18, 43)), dust("small", (30, 43))]
+    land.fx = [dust("small", (24 - ROLL_BACK[d][0], 43))]
+    return [launch, _ball(d, "tuck", 0), _ball(d, "cape", -2), _ball(d, "feet", 0), land]
 
 
 ANIMS = {"dodge": dodge, "hurt": hurt, "death": death}
