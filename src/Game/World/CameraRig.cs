@@ -46,8 +46,17 @@ public partial class CameraRig : Camera2D
         ResetSmoothing();
     }
 
+    /// <summary>Ponto fixo para a câmera (capturas de revisão); null = segue o jogador.</summary>
+    public Vector2? FixedFocus { get; set; }
+
     public override void _PhysicsProcess(double delta)
     {
+        if (FixedFocus is { } focus)
+        {
+            GlobalPosition = focus;
+            return;
+        }
+
         var wanted = (_target.Velocity * LookAhead).LimitLength(MaxLead * _actorScale);
         _lead = _lead.Lerp(wanted, Mathf.Min(1f, LeadSmoothing * (float)delta));
         GlobalPosition = Focus() + _lead;

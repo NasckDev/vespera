@@ -17,6 +17,32 @@ public sealed class LevelQaCapture(Level level, SmokeTest host)
     private const int SequenceFrames = 8;
     private const int FrameGap = 4;
 
+    /// <summary>
+    /// Prova de proporção: três caçadores parados ao lado de uma porta pintada, de um banco pintado e da grande
+    /// lanterna, numa só imagem com a câmera fixa; repete com o chão em filtro nearest para comparar a nitidez.
+    /// </summary>
+    public async Task RunProof()
+    {
+        var world = level.World;
+        var atDoor = world.SpawnPlayer(new ScriptedInput(), new Vector2(190, 133));
+        var atBench = world.SpawnPlayer(new ScriptedInput(), new Vector2(452, 252));
+        atDoor.CollisionMask = 0;
+        atBench.CollisionMask = 0;
+        await Place(new Vector2(772, 478));
+        world.Camera.FixedFocus = new Vector2(500, 330);
+        await Settle(30);
+        await host.Capture("c1_00_prova_proporcao");
+        var ground = world.GetNode<Sprite2D>("Ground");
+        ground.TextureFilter = CanvasItem.TextureFilterEnum.Nearest;
+        await Settle(4);
+        await host.Capture("c1_00b_prova_chao_nearest");
+        ground.TextureFilter = CanvasItem.TextureFilterEnum.Linear;
+        world.Camera.FixedFocus = null;
+        atDoor.QueueFree();
+        atBench.QueueFree();
+        await Settle(4);
+    }
+
     public async Task Run()
     {
         var player = level.Player;

@@ -7,12 +7,12 @@ namespace Vespera.Game.Testing;
 /// <summary>Fonte de input dirigida por código (bots de teste e capturas): direção e ações ligadas à mão.</summary>
 public sealed class ScriptedInput : IInputSource
 {
-    public const int BotDevice = -100;
 
     private readonly HashSet<string> _held = [];
     private readonly HashSet<string> _taps = [];
 
-    public int DeviceId => BotDevice;
+    /// <summary>Finge ser o teclado, para os avisos das capturas mostrarem as teclas do jogador.</summary>
+    public int DeviceId => LocalInputSource.KeyboardMouse;
 
     public Vector2 Move { get; set; }
 

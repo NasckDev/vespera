@@ -14,6 +14,7 @@ public partial class SmokeTest
 {
     public const string BotFlag = "--bot";
     public const string QaFlag = "--qa";
+    public const string QaProofFlag = "--qa-prova";
 
     private async Task RunLevelExtras(Level level)
     {
@@ -25,7 +26,13 @@ public partial class SmokeTest
             _failures.AddRange(failures);
         }
 
-        if (Array.IndexOf(_args, QaFlag) >= 0 && _shotsDir is not null && DisplayServer.GetName() != "headless")
+        var canShoot = _shotsDir is not null && DisplayServer.GetName() != "headless";
+        if (Array.IndexOf(_args, QaProofFlag) >= 0 && canShoot)
+        {
+            await new LevelQaCapture(level, this).RunProof();
+        }
+
+        if (Array.IndexOf(_args, QaFlag) >= 0 && canShoot)
         {
             await new LevelQaCapture(level, this).Run();
         }

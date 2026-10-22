@@ -4,20 +4,20 @@
   "ground": {
     "texture": "res://assets/v2/cenarios/praca/chao_praca.png",
     "scale": 1.0,
-    "filter": "linear",
-    "_note": "Chão definitivo do GPT (1672x941, vista de cima alinhada aos eixos). Mapa 'afastado': porta pintada ~45 px; o caçador usa actorScale para ficar com ~35 px e a câmera aproxima (cameraZoom)."
+    "filter": "nearest",
+    "_note": "Chão definitivo do GPT (1672x941, vista de cima alinhada aos eixos). Régua: porta pintada ~72 px; caçador = 0,75 x porta = 54 px (actorScale) e a câmera aproxima 1,85x (ver _regua)."
   },
   "cell": 16,
   "cols": 105,
   "rows": 59,
   "spawn": [836, 640],
-  "actorScale": 0.273,
-  "propScale": 0.273,
-  "cameraZoom": 2.2,
+  "actorScale": 0.432,
+  "propScale": 1.0,
+  "cameraZoom": 1.85,
   "props": [
     {
       "type": "lanterna_bronze",
-      "at": [836, 462]
+      "at": [836, 470]
     },
     {
       "type": "mural",
@@ -28,28 +28,16 @@
       "at": [470, 420]
     },
     {
-      "type": "fonte",
-      "at": [380, 560]
-    },
-    {
       "type": "poco",
-      "at": [1300, 560]
+      "at": [1290, 565]
     },
     {
       "type": "barraca_lona",
-      "at": [1205, 345]
-    },
-    {
-      "type": "caixote",
-      "at": [1270, 345]
+      "at": [1200, 350]
     },
     {
       "type": "barril",
-      "at": [1140, 340]
-    },
-    {
-      "type": "carrinho_flores",
-      "at": [520, 335]
+      "at": [1262, 352]
     },
     {
       "type": "lanterna_chao",
@@ -58,14 +46,6 @@
     {
       "type": "lanterna_chao",
       "at": [972, 620]
-    },
-    {
-      "type": "banco",
-      "at": [1060, 600]
-    },
-    {
-      "type": "vaso",
-      "at": [1020, 250]
     }
   ],
   "zones": [
@@ -122,8 +102,8 @@
         [585, 700],
         [590, 772],
         [730, 775],
-        [730, 941],
-        [942, 941],
+        [730, 925],
+        [942, 925],
         [942, 775],
         [1082, 772],
         [1087, 700],
@@ -207,6 +187,15 @@
     "##############################################.............##############################################",
     "##############################################.............##############################################",
     "##############################################.............##############################################",
-    "##############################################.............##############################################"
-  ]
+    "#########################################################################################################"
+  ],
+  "_regua": {
+    "porta_pintada": "72 px (porta da casa de cima à esquerda: 70 px; de cima à direita: 78 px; largura 42-48 px)",
+    "cacador": "54 px = 0,75 x porta; tira com 125 px opacos (cabeça 50 -> pé 175) -> actorScale 0,432",
+    "banco_pintado": "120 x 38 px",
+    "lampiao_pintado": "lanterna ~40 px; com pilar ~115 px",
+    "escadaria": "212 px de largura (saída de cima e de baixo, x 730-942); degraus ~10 px",
+    "plataforma_central": "disco interno ~295 px; anel externo ~375 px",
+    "camera": "zoom 1,85 -> caçador com ~100 px na tela em 1080p"
+  }
 }
