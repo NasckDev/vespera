@@ -119,7 +119,7 @@ public partial class WorldCamera : Camera2D
     {
         var stretch = GetViewport().GetStretchTransform().X.X;
         PixelScale = MathF.Max(1f, MathF.Round(stretch));
-        var amplitude = CameraFraming.ShakeAmplitude(_shake, VisibleSize.Y);
+        var amplitude = CameraFraming.ShakeAmplitude(_shake, VisibleSize.Y) * GameSettings.ShakeIntensity; // C1-D9: 0–100% nas Opções
         var offset = amplitude > 0f
             ? new Vector2(((float)_shakeRandom.NextDouble() * 2f) - 1f, ((float)_shakeRandom.NextDouble() * 2f) - 1f) * amplitude
             : Vector2.Zero;

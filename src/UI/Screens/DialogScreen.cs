@@ -71,10 +71,10 @@ public partial class DialogScreen : Screen
         _portraitFrame = Ui.Panel("SlotPanel", _portrait);
         _portraitFrame.SizeFlagsVertical = SizeFlags.ShrinkCenter;
 
-        _name = Ui.Title(string.Empty, 9, UiPalette.Ambar);
+        _name = UiScaling.Reading(Ui.Title(string.Empty, 9, UiPalette.Ambar));
         _nameTab = Ui.Panel("TabFocus", _name);
         _nameTab.SizeFlagsHorizontal = SizeFlags.ShrinkBegin;
-        _text = Ui.Text(string.Empty, UiFonts.Body, UiPalette.Creme, wrap: true);
+        _text = UiScaling.Reading(Ui.Text(string.Empty, UiFonts.Body, UiPalette.Creme, wrap: true));
         _text.VisibleCharactersBehavior = TextServer.VisibleCharactersBehavior.CharsAfterShaping;
         _text.SizeFlagsVertical = SizeFlags.ExpandFill;
         _text.CustomMinimumSize = new Vector2(330, 0);
@@ -158,7 +158,14 @@ public partial class DialogScreen : Screen
         HideChoices();
         RestartAge(); // cada fala espera 0,18 s antes de aceitar confirmação (ui.js:31)
         UiSound(); // dialog() toca "ui" (world.js:204)
+        if (float.IsPositiveInfinity(GameSettings.DialogCharsPerSecond) && _total > 0)
+        {
+            CompleteText(); // C1-D5: "Velocidade do texto: instantâneo"
+        }
     }
+
+    /// <summary>Caixa de 460 u e opções acima dela: a escala da interface para antes de passar disso.</summary>
+    public override Vector2 DesignSize => new(480, 230);
 
     /// <summary>Confirma: completa o texto ou avança/fecha (o mesmo que Enter).</summary>
     public void Advance()
@@ -268,7 +275,7 @@ public partial class DialogScreen : Screen
         if (IsTyping)
         {
             _typing += delta;
-            var shown = (int)(_typing * CharsPerSecond);
+            var shown = (int)(_typing * MathF.Min(GameSettings.DialogCharsPerSecond, 100000f)); // C1-D5: velocidade nas Opções
             if (shown >= _total)
             {
                 CompleteText();
@@ -322,11 +329,11 @@ public partial class DialogScreen : Screen
         {
             var option = _options[i];
             var index = i;
-            var label = Ui.Text(option.Label, UiFonts.Body, option.Disabled ? UiPalette.Disabled : RowText);
+            var label = UiScaling.Reading(Ui.Text(option.Label, UiFonts.Body, option.Disabled ? UiPalette.Disabled : RowText));
             var column = Ui.Column(0, label);
             if (option.Sub is { } sub)
             {
-                column.AddChild(Ui.Text(sub, UiFonts.Tiny, option.Disabled ? SubDisabled : UiPalette.Sub));
+                column.AddChild(UiScaling.Reading(Ui.Text(sub, UiFonts.Small, option.Disabled ? SubDisabled : UiPalette.Sub)));
             }
 
             var content = Ui.Row(4);

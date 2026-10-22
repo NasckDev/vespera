@@ -44,6 +44,12 @@ public partial class Screen : Control
     /// <summary>WASD/stick navegam como as setas (desligue em telas que digitam texto ou tratam as teclas sozinhas).</summary>
     public virtual bool WasdNavigation => true;
 
+    /// <summary>
+    /// Tamanho (u da tela base) que o conteúdo precisa: a escala da interface para antes de ele sair da tela
+    /// (C1-D4). Zero = sem limite (a tela se ancora nas bordas).
+    /// </summary>
+    public virtual Vector2 DesignSize => Vector2.Zero;
+
     /// <summary>Controle que recebe o foco ao abrir.</summary>
     protected virtual Control? DefaultFocus => null;
 

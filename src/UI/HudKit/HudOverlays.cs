@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 using Vespera.Core.Ranks;
@@ -31,8 +32,8 @@ public partial class ToastBox : Control
         _panel = new OrnatePanel { MouseFilter = MouseFilterEnum.Ignore };
         _style = (StyleBoxFlat)_panel.GetThemeStylebox("panel", "OrnatePanel").Duplicate();
         _icon = IconRect.Create(string.Empty, 15);
-        _title = Ui.Title(string.Empty, 9);
-        _sub = Ui.Text(string.Empty, UiFonts.Small, new Color("#d8cfe0"));
+        _title = UiScaling.Reading(Ui.Title(string.Empty, 10));
+        _sub = UiScaling.Reading(Ui.Text(string.Empty, UiFonts.Body, new Color("#d8cfe0")));
         _panel.AddChild(Ui.Row(6, _icon, Ui.Column(0, _title, _sub)));
         AddChild(_panel);
         Visible = false;
@@ -47,6 +48,12 @@ public partial class ToastBox : Control
 
     /// <summary>Y do topo (sobe um pouco quando há barra de chefe, <c>render.js:300</c>).</summary>
     public float Top { get; set; } = 40;
+
+    /// <summary>
+    /// Bloco do HUD que o toast não pode cobrir (coordenadas da raiz do HUD). Com a escala da interface em 125/150% o
+    /// toast centralizado alcança o painel de vida: aí ele desce para baixo do bloco (C1-D7).
+    /// </summary>
+    public Rect2 Avoid { get; set; }
 
     /// <summary>Descarta a fila e o toast visível (smoke, troca de cena).</summary>
     public void Clear()
@@ -71,10 +78,25 @@ public partial class ToastBox : Control
         _t += Mathf.Min(0.05f, (float)delta);
         var a = Mathf.Min(1f, Mathf.Min(_t * 4f, (_max - _t) * 2.5f));
         Modulate = new Color(1, 1, 1, Mathf.Max(0f, a));
+        Place();
         if (_t >= _max)
         {
             Next();
         }
+    }
+
+    /// <summary>Centralizado em <see cref="Top"/>, ou abaixo de <see cref="Avoid"/> se encostaria nele.</summary>
+    private void Place()
+    {
+        var size = _panel.Size;
+        var y = Top;
+        var left = Position.X - (size.X / 2f);
+        if (Avoid.Size.X > 0 && left < Avoid.End.X + 4f && y < Avoid.End.Y)
+        {
+            y = Avoid.End.Y + 4f;
+        }
+
+        _panel.Position = new Vector2(MathF.Round(-size.X / 2f), y);
     }
 
     private void Next()
@@ -101,8 +123,7 @@ public partial class ToastBox : Control
         _panel.CornerColor = toast.Color;
         _panel.QueueRedraw();
         _panel.ResetSize();
-        var size = _panel.GetCombinedMinimumSize();
-        _panel.Position = new Vector2(-size.X / 2f, Top);
+        Place();
         Modulate = new Color(1, 1, 1, 0);
         Visible = true;
         SetProcess(true);
@@ -110,12 +131,13 @@ public partial class ToastBox : Control
 }
 
 /// <summary>
-/// Caixa de loot / notas da direita (guia hud-kit "caixa de loot"; notas da v2, <c>render.js:289-292</c>): até 6 linhas
-/// com ícone, texto e "×N" quando o mesmo item se repete; cada uma vive 4 s e some no último segundo. Linhas reaproveitadas.
+/// Caixa de loot / notas da direita (guia hud-kit "caixa de loot"; notas da v2, <c>render.js:289-292</c>): até 4 linhas
+/// (C1-D7: eram 6 empilhadas no meio da tela) com ícone, texto e "×N" quando o mesmo item se repete; cada uma vive 4 s e
+/// some no último segundo. Linhas reaproveitadas.
 /// </summary>
 public partial class LootFeed : VBoxContainer
 {
-    private const int MaxEntries = 6;
+    private const int MaxEntries = 4;
     private const float Life = 4f;
 
     private readonly List<Entry> _entries = [];
@@ -134,6 +156,25 @@ public partial class LootFeed : VBoxContainer
 
         SetProcess(false);
     }
+
+    /// <summary>Fundo opaco nas linhas (opção "Alto contraste").</summary>
+    public bool HighContrast
+    {
+        get => _highContrast;
+        set
+        {
+            _highContrast = value;
+            foreach (var e in _entries)
+            {
+                e.Panel.ThemeTypeVariation = value ? "InsetPanel" : "SoftPanel";
+            }
+        }
+    }
+
+    private bool _highContrast;
+
+    /// <summary>Quantas linhas cabem (smoke test).</summary>
+    public static int Capacity => MaxEntries;
 
     /// <summary>Linhas visíveis (texto), da mais antiga para a mais nova (smoke test).</summary>
     public IEnumerable<string> VisibleTexts
@@ -236,9 +277,9 @@ public partial class LootFeed : VBoxContainer
     {
         public Entry()
         {
-            Icon = IconRect.Create(string.Empty, 9);
-            Text = Ui.Text(string.Empty, UiFonts.Small);
-            CountLabel = Ui.Bold(string.Empty, UiFonts.Small, UiPalette.Ambar);
+            Icon = IconRect.Create(string.Empty, 10);
+            Text = UiScaling.Reading(Ui.Text(string.Empty, UiFonts.Body));
+            CountLabel = Ui.Bold(string.Empty, UiFonts.Body, UiPalette.Ambar);
             Panel = Ui.Panel("SoftPanel", Ui.Row(4, Icon, Text, CountLabel));
             Panel.SizeFlagsHorizontal = SizeFlags.ShrinkEnd;
             Panel.Visible = false;
@@ -286,14 +327,21 @@ public partial class Banner : Control
         MouseFilter = MouseFilterEnum.Ignore;
         AnchorRight = 1;
         OffsetTop = y;
-        _band = new ColorRect { Color = new Color(9 / 255f, 7 / 255f, 20 / 255f, 0.75f), MouseFilter = MouseFilterEnum.Ignore, Visible = band, AnchorRight = 1, OffsetTop = -10, OffsetBottom = 30 };
+        // Faixa do tamanho do texto (C1-D8: a de 40 u cobria o meio da arena no bote do chefe).
+        _band = new ColorRect { Color = new Color(9 / 255f, 7 / 255f, 20 / 255f, 0.7f), MouseFilter = MouseFilterEnum.Ignore, Visible = band };
+        _band.SetAnchor(Side.Right, 0.75f);
+        _band.SetAnchor(Side.Left, 0.25f);
+        _band.SetOffset(Side.Left, 0);
+        _band.SetOffset(Side.Right, 0);
+        _band.SetOffset(Side.Top, -3);
+        _band.SetOffset(Side.Bottom, titleSize + 14);
         AddChild(_band);
         _title = Ui.Title(string.Empty, titleSize, null, HorizontalAlignment.Center);
         _title.AnchorRight = 1;
         AddChild(_title);
-        _sub = Ui.Text(string.Empty, UiFonts.Small, UiPalette.Creme, align: HorizontalAlignment.Center);
+        _sub = UiScaling.Reading(Ui.Text(string.Empty, UiFonts.Body, UiPalette.Creme, align: HorizontalAlignment.Center));
         _sub.AnchorRight = 1;
-        _sub.OffsetTop = titleSize + 5;
+        _sub.OffsetTop = titleSize + 3;
         AddChild(_sub);
         var line = Ui.Row(0, Ui.Rule(45, 1f), Diamond.Create(5, UiPalette.Gold), Ui.Rule(45, 1f));
         line.Alignment = BoxContainer.AlignmentMode.Center;
@@ -412,7 +460,7 @@ public partial class BossBar : VBoxContainer
     {
         MouseFilter = MouseFilterEnum.Ignore;
         AddThemeConstantOverride("separation", 2);
-        _name = Ui.Title(string.Empty, UiFonts.Body, null, HorizontalAlignment.Center);
+        _name = Ui.Title(string.Empty, 9, null, HorizontalAlignment.Center);
         _bar = UiBar.Create("boss", new Vector2(280, 7), lag: true);
         _bar.SizeFlagsHorizontal = SizeFlags.ShrinkCenter;
         AddChild(_name);
@@ -446,4 +494,109 @@ public partial class BossBar : VBoxContainer
     }
 
     public void End() => Visible = false;
+}
+
+/// <summary>
+/// Legendas de sons importantes (frente C1, DECISIONS C1-D12): até 3 linhas curtas acima da hotbar, fundo escuro,
+/// 2,6 s cada; a mesma legenda de novo só renova a linha. Só aparece com "Legendas de sons" ligada. Linhas fixas
+/// reaproveitadas, sem alocar por quadro.
+/// </summary>
+public partial class CaptionBox : VBoxContainer
+{
+    private const int MaxLines = 3;
+    private const float Life = 2.6f;
+
+    private readonly PanelContainer[] _panels = new PanelContainer[MaxLines];
+    private readonly Label[] _labels = new Label[MaxLines];
+    private readonly float[] _age = new float[MaxLines];
+
+    public CaptionBox()
+    {
+        MouseFilter = MouseFilterEnum.Ignore;
+        Alignment = AlignmentMode.End;
+        AddThemeConstantOverride("separation", 1);
+        var style = new StyleBoxFlat { BgColor = new Color(0.03f, 0.02f, 0.06f, 0.82f), ContentMarginLeft = 5, ContentMarginRight = 5, ContentMarginTop = 1, ContentMarginBottom = 1 };
+        for (var i = 0; i < MaxLines; i++)
+        {
+            _labels[i] = UiScaling.Reading(Ui.Bold(string.Empty, UiFonts.Body, UiPalette.Creme, HorizontalAlignment.Center));
+            _panels[i] = new PanelContainer { MouseFilter = MouseFilterEnum.Ignore, SizeFlagsHorizontal = SizeFlags.ShrinkCenter, Visible = false };
+            _panels[i].AddThemeStyleboxOverride("panel", style);
+            _panels[i].AddChild(_labels[i]);
+            AddChild(_panels[i]);
+        }
+
+        SetProcess(false);
+    }
+
+    /// <summary>Legendas na tela agora (smoke test).</summary>
+    public IEnumerable<string> Shown
+    {
+        get
+        {
+            for (var i = 0; i < MaxLines; i++)
+            {
+                if (_panels[i].Visible)
+                {
+                    yield return _labels[i].Text;
+                }
+            }
+        }
+    }
+
+    public void Show(string text)
+    {
+        var slot = -1;
+        for (var i = 0; i < MaxLines; i++)
+        {
+            if (_panels[i].Visible && _labels[i].Text == text)
+            {
+                _age[i] = 0;
+                return;
+            }
+
+            if (slot < 0 && !_panels[i].Visible)
+            {
+                slot = i;
+            }
+        }
+
+        if (slot < 0)
+        {
+            slot = 0;
+            for (var i = 1; i < MaxLines; i++)
+            {
+                if (_age[i] > _age[slot])
+                {
+                    slot = i;
+                }
+            }
+        }
+
+        _labels[slot].Text = text;
+        _age[slot] = 0;
+        _panels[slot].Visible = true;
+        _panels[slot].Modulate = Colors.White;
+        MoveChild(_panels[slot], -1);
+        SetProcess(true);
+    }
+
+    public override void _Process(double delta)
+    {
+        var any = false;
+        for (var i = 0; i < MaxLines; i++)
+        {
+            if (!_panels[i].Visible)
+            {
+                continue;
+            }
+
+            _age[i] += (float)delta;
+            var a = Mathf.Clamp((Life - _age[i]) * 3f, 0f, 1f);
+            _panels[i].Modulate = new Color(1, 1, 1, a);
+            _panels[i].Visible = a > 0f;
+            any |= _panels[i].Visible;
+        }
+
+        SetProcess(any);
+    }
 }

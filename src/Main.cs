@@ -15,6 +15,7 @@ public partial class Main : Node
     public override void _Ready()
     {
         GameSettings.Load();
+        InputBindings.Load(); // C1-D6: teclas remapeadas pelo jogador
         if (SmokeTest.IsRequested())
         {
             // O runner vive na raiz para sobreviver às trocas de cena.

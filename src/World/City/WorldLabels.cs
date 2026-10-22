@@ -37,8 +37,37 @@ public partial class WorldLabels : CanvasLayer
     /// <summary>Quantos rótulos estão alugados agora (testes).</summary>
     public int InUse { get; private set; }
 
+    /// <summary>
+    /// C1-D7: rótulos do mundo nunca por cima do HUD. Depois que os donos posicionaram os rótulos no quadro
+    /// (prioridade alta = roda por último), quem encosta numa zona do HUD (<see cref="UI.Common.HudZones"/>) some
+    /// rápido e volta quando sai. Só percorre os filhos do pool; nada aloca.
+    /// </summary>
+    public override void _Process(double delta)
+    {
+        var step = (float)Math.Min(1.0, delta * 14.0);
+        var count = GetChildCount();
+        for (var i = 0; i < count; i++)
+        {
+            if (GetChild(i) is not Label { Visible: true } label)
+            {
+                continue;
+            }
+
+            var target = UI.Common.HudZones.Overlaps(label.GetGlobalRect()) ? 0f : 1f;
+            var a = label.SelfModulate.A;
+            if (!Mathf.IsEqualApprox(a, target))
+            {
+                label.SelfModulate = Colors.White with { A = MathF.Abs(target - a) < 0.02f ? target : Mathf.Lerp(a, target, step) };
+            }
+        }
+    }
+
+    /// <summary>O rótulo está escondido por encostar no HUD (smoke test).</summary>
+    public static bool HiddenByHud(Label label) => label.SelfModulate.A < 0.05f;
+
     public override void _Ready()
     {
+        ProcessPriority = 100; // depois de NPCs, caçadores e portais moverem os rótulos
         Layer = 6; // acima da escuridão (5), abaixo do HUD (10)
         // Em tamanho pequeno o espaço da Pixelify/Cinzel arredonda para quase nada: alarga um pouco.
         var pixel = Spaced(GD.Load<FontFile>("res://assets/fonts/PixelifySans.ttf"), 2);

@@ -87,6 +87,15 @@ public partial class InteractionPrompt : Node2D
         _panel.AddChild(row);
         AddChild(_panel);
         UpdateGlyph();
+        InputBindings.Changed += OnBindingsChanged;
+    }
+
+    public override void _ExitTree() => InputBindings.Changed -= OnBindingsChanged;
+
+    private void OnBindingsChanged()
+    {
+        UpdateGlyph();
+        _shown = null;
     }
 
     public override void _Input(InputEvent @event)
@@ -141,39 +150,9 @@ public partial class InteractionPrompt : Node2D
 
     private void UpdateGlyph() => _keyLabel.Text = _gamepad ? JoyGlyph() : KeyGlyphText();
 
-    private static string KeyGlyphText()
-    {
-        foreach (var e in InputMap.ActionGetEvents(InputActions.Interact))
-        {
-            if (e is InputEventKey k)
-            {
-                var code = k.PhysicalKeycode != Key.None ? k.PhysicalKeycode : k.Keycode;
-                return OS.GetKeycodeString(code);
-            }
-        }
+    private static string KeyGlyphText() => InputBindings.Label(InputActions.Interact, pad: false) ?? "E"; // C1-D6: segue o remapeamento
 
-        return "E";
-    }
-
-    private static string JoyGlyph()
-    {
-        foreach (var e in InputMap.ActionGetEvents(InputActions.Interact))
-        {
-            if (e is InputEventJoypadButton b)
-            {
-                return b.ButtonIndex switch
-                {
-                    JoyButton.A => "A",
-                    JoyButton.B => "B",
-                    JoyButton.X => "X",
-                    JoyButton.Y => "Y",
-                    _ => b.ButtonIndex.ToString(),
-                };
-            }
-        }
-
-        return "A";
-    }
+    private static string JoyGlyph() => InputBindings.Label(InputActions.Interact, pad: true) ?? "A";
 }
 
 /// <summary>Cartão de texto curto no mundo (placa, fonte, banco, "olhar"): some sozinho ou quando o jogador se afasta.</summary>

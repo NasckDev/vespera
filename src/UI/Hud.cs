@@ -61,6 +61,17 @@ public partial class Hud : CanvasLayer
     private Banner _locationBanner = null!;
     private Banner _bossBanner = null!;
     private Banner _ultimateBanner = null!;
+    private Control _root = null!;
+    private Control _status = null!;
+    private Control _topRight = null!;
+    private Control _hotbar = null!;
+    private Control _wallet = null!;
+    private Control _minimapSlot = null!;
+    private Control _essRow = null!;
+    private PanelContainer _statusBack = null!;
+    private PanelContainer _topBack = null!;
+    private float _questExpandT;
+    private bool _insideBrecha;
     private float _flashT;
     private float _essenceValue;
     private float _potionCooldown;
@@ -101,6 +112,12 @@ public partial class Hud : CanvasLayer
 
     public LootFeed Loot { get; private set; } = null!;
 
+    /// <summary>Dicas de controle da primeira vez (C1-D13).</summary>
+    public OnboardingHints Onboarding { get; private set; } = null!;
+
+    /// <summary>Legendas de sons (C1-D12).</summary>
+    public CaptionBox Captions { get; private set; } = null!;
+
     public RankUpOverlay RankUp { get; private set; } = null!;
 
     public BossBar Boss { get; private set; } = null!;
@@ -139,8 +156,8 @@ public partial class Hud : CanvasLayer
     public override void _Ready()
     {
         Layer = 10;
-        var root = new Control { MouseFilter = Control.MouseFilterEnum.Ignore };
-        root.SetAnchorsPreset(Control.LayoutPreset.FullRect);
+        // C1-D4: raiz sem âncoras, escalada pela opção "Escala da interface" (UiScaling.Fit).
+        var root = _root = new Control { MouseFilter = Control.MouseFilterEnum.Ignore };
         AddChild(root);
 
         root.AddChild(Vignette());
@@ -151,24 +168,47 @@ public partial class Hud : CanvasLayer
         _chrome = new Control { MouseFilter = Control.MouseFilterEnum.Ignore };
         _chrome.SetAnchorsPreset(Control.LayoutPreset.FullRect);
         root.AddChild(_chrome);
-        _chrome.AddChild(BuildStatus());
-        _chrome.AddChild(BuildTopRight());
-        _chrome.AddChild(BuildHotbar());
-        _chrome.AddChild(BuildWallet());
+        _chrome.AddChild(_status = BuildStatus());
+        _chrome.AddChild(_topRight = BuildTopRight());
+        _chrome.AddChild(_hotbar = BuildHotbar());
+        _chrome.AddChild(_wallet = BuildWallet());
         _chrome.AddChild(BuildPrompt());
 
-        Loot = new LootFeed { AnchorLeft = 1, AnchorRight = 1, OffsetLeft = -200, OffsetRight = -9, OffsetTop = 120, OffsetBottom = 240 };
+        // C1-D7: a caixa de loot fica no canto de baixo, em cima da carteira, e cresce para cima (no máximo 4 linhas).
+        Loot = new LootFeed { AnchorLeft = 1, AnchorRight = 1, AnchorTop = 1, AnchorBottom = 1, OffsetLeft = -190, OffsetRight = -8, OffsetTop = -150, OffsetBottom = -46 };
+        Loot.GrowVertical = Control.GrowDirection.Begin;
         _chrome.AddChild(Loot);
 
-        Boss = new BossBar { AnchorLeft = 0.5f, AnchorRight = 0.5f, OffsetLeft = -150, OffsetRight = 150, OffsetTop = 8 };
+        Boss = new BossBar { AnchorLeft = 0.5f, AnchorRight = 0.5f, OffsetLeft = -150, OffsetRight = 150, OffsetTop = 6 };
         _chrome.AddChild(Boss);
 
-        _locationBanner = new Banner(108, UiFonts.Title, band: false, rule: true);
-        _bossBanner = new Banner(124, UiFonts.Title, band: true, rule: false);
-        _ultimateBanner = new Banner(82, UiFonts.Title, band: true, rule: false);
+        // Onda no alto, no centro (era o 5º bloco empilhado no canto direito).
+        _chrome.AddChild(_wave);
+        _wave.AnchorLeft = 0.5f;
+        _wave.AnchorRight = 0.5f;
+        _wave.OffsetLeft = -120;
+        _wave.OffsetRight = 120;
+        _wave.OffsetTop = 6;
+        _wave.HorizontalAlignment = HorizontalAlignment.Center;
+
+        // C1-D8: letreiros menores e no alto; o do chefe fica logo abaixo da barra dele e dura 2 s.
+        _locationBanner = new Banner(92, UiFonts.Heading, band: false, rule: true);
+        _bossBanner = new Banner(30, UiFonts.Large, band: true, rule: false);
+        _ultimateBanner = new Banner(64, UiFonts.Heading, band: true, rule: false);
         _chrome.AddChild(_locationBanner);
         _chrome.AddChild(_bossBanner);
         _chrome.AddChild(_ultimateBanner);
+
+        // C1-D12: legendas acima da hotbar (fora dos painéis: continuam com tela de diálogo aberta).
+        Captions = new CaptionBox { AnchorLeft = 0.5f, AnchorRight = 0.5f, AnchorTop = 1, AnchorBottom = 1, OffsetLeft = -150, OffsetRight = 150, OffsetTop = -100, OffsetBottom = -64 };
+        Captions.GrowVertical = Control.GrowDirection.Begin;
+        root.AddChild(Captions);
+
+        // C1-D13: dicas de controle da primeira vez, no mesmo lugar das legendas (logo acima delas).
+        Onboarding = new OnboardingHints { AnchorLeft = 0.5f, AnchorRight = 0.5f, AnchorTop = 1, AnchorBottom = 1, OffsetTop = -124, OffsetBottom = -106 };
+        Onboarding.GrowHorizontal = Control.GrowDirection.Both;
+        Onboarding.GrowVertical = Control.GrowDirection.Begin;
+        _chrome.AddChild(Onboarding);
 
         Toasts = new ToastBox { AnchorLeft = 0.5f, AnchorRight = 0.5f };
         root.AddChild(Toasts);
@@ -178,10 +218,52 @@ public partial class Hud : CanvasLayer
 
         Subscribe();
         Refresh();
+        GetViewport().SizeChanged += ApplyScale;
+        ApplyScale();
+    }
+
+    /// <summary>Escala e contraste atuais (opções da frente C1). Chamado ao abrir, ao redimensionar e quando as opções mudam.</summary>
+    private void ApplyScale()
+    {
+        UiScaling.Fit(_root, GameSettings.UiScale);
+        UiScaling.ApplyOversampling(this);
+        UiScaling.ApplyText(_root);
+        var contrast = GameSettings.HighContrast;
+        _statusBack.AddThemeStyleboxOverride("panel", HudBackdrop(contrast));
+        _topBack.AddThemeStyleboxOverride("panel", HudBackdrop(contrast));
+        Loot.HighContrast = contrast;
+    }
+
+    /// <summary>Fundo atrás dos blocos de cima: leve no normal, quase opaco e com borda no alto contraste.</summary>
+    private static StyleBoxFlat HudBackdrop(bool contrast)
+    {
+        var style = new StyleBoxFlat
+        {
+            BgColor = contrast ? new Color(0.03f, 0.02f, 0.06f, 0.9f) : new Color(0.04f, 0.03f, 0.08f, 0.5f),
+            ContentMarginLeft = 4,
+            ContentMarginRight = 4,
+            ContentMarginTop = 3,
+            ContentMarginBottom = 3,
+        };
+        style.SetCornerRadiusAll(2);
+        if (contrast)
+        {
+            style.SetBorderWidthAll(1);
+            style.BorderColor = UiPalette.Creme with { A = 0.85f };
+        }
+
+        return style;
     }
 
     public override void _ExitTree()
     {
+        if (GetViewport() is { } viewport)
+        {
+            viewport.SizeChanged -= ApplyScale;
+        }
+
+        HudZones.Clear();
+        HudZones.MinimapSlot = default;
         Unsubscribe();
         if (Current == this)
         {
@@ -195,7 +277,7 @@ public partial class Hud : CanvasLayer
         if (_flashT > 0f)
         {
             _flashT = Mathf.Max(0f, _flashT - dt);
-            _flash.Color = FlashColor with { A = _flashT * 0.5f };
+            _flash.Color = FlashColor with { A = _flashT * 0.5f * GameSettings.FlashScale }; // C1-D9
             _flash.Visible = _flashT > 0f;
         }
 
@@ -206,6 +288,16 @@ public partial class Hud : CanvasLayer
         }
 
         UpdateClock();
+        if (_questExpandT > 0f)
+        {
+            _questExpandT -= dt;
+            if (_questExpandT <= 0f)
+            {
+                _questDesc.Visible = false; // C1-D7: missão compacta depois de alguns segundos
+            }
+        }
+
+        PublishZones();
 
         _questPoll += delta;
         if (_questPoll >= QuestPollSeconds)
@@ -253,68 +345,70 @@ public partial class Hud : CanvasLayer
 
     private Control BuildStatus()
     {
+        // C1-D7: retrato, nome, Nível/Selo, Vida, Energia e (só com Eco) Essência; texto nunca abaixo de 8 px base
+        // (16 px em 720p). As dicas de tecla saíram daqui: viraram as dicas da primeira vez (Onboarding).
         _portrait = new PortraitFrame();
-        _name = Ui.Title(string.Empty, 9);
-        RankSeal = new RankSeal { CustomMinimumSize = new Vector2(9, 9), LabelFont = UiFonts.TextBold, LabelFontSize = 5, SizeFlagsVertical = Control.SizeFlags.ShrinkCenter };
-        LevelLabel = Ui.Bold(string.Empty, UiFonts.Small, UiPalette.Ambar);
-        _rankTitle = Ui.Text(string.Empty, UiFonts.Small);
-        _levelBar = UiBar.Create("xp", new Vector2(78, 2));
+        _name = Ui.Title(string.Empty, 10);
+        RankSeal = new RankSeal { CustomMinimumSize = new Vector2(10, 10), LabelFont = UiFonts.TextBold, LabelFontSize = 6, SizeFlagsVertical = Control.SizeFlags.ShrinkCenter };
+        LevelLabel = Ui.Bold(string.Empty, UiFonts.Body, UiPalette.Ambar);
+        _rankTitle = Ui.Text(string.Empty, UiFonts.Body);
+        _rankTitle.Visible = false; // o título do Selo está no inventário e no Novo Selo; aqui só pesava a linha
+        _levelBar = UiBar.Create("xp", new Vector2(84, 2));
         var identity = Ui.Column(1, _name, Ui.Row(3, RankSeal, LevelLabel, _rankTitle), _levelBar);
         var header = Ui.Row(6, _portrait, identity);
 
         _hp = UiBar.Create("hp", new Vector2(104, 7), lag: true, segments: 10);
-        _hpText = Ui.Text(string.Empty, UiFonts.Small);
+        _hpText = Ui.Bold(string.Empty, UiFonts.Body, UiPalette.Creme);
         _energy = UiBar.Create("energy", new Vector2(78, 5), segments: 5);
         _essence = UiBar.Create("essence", new Vector2(63, 4));
         var hpRow = Ui.Row(3, IconRect.Create("ui_hpicon", 11), _hp, _hpText);
         var enRow = Ui.Row(3, IconRect.Create("ui_sticon", 10), _energy);
-        var essRow = Ui.Row(3, Ui.Gap(10), _essence, Ui.Text(UiText.HudEssence, UiFonts.Tiny, UiPalette.EcoText));
-        _noLantern = Ui.Text(UiText.HudNoLantern, UiFonts.Tiny, UiPalette.Brecha);
+        _essRow = Ui.Row(3, Ui.Gap(10), _essence, Ui.Text(UiText.HudEssence, UiFonts.Body, UiPalette.EcoText));
+        _noLantern = UiScaling.Reading(Ui.Text(UiText.HudNoLantern, UiFonts.Body, UiPalette.Brecha));
 
-        var hints = Ui.Row(6,
-            Ui.Hint("Tab", "Back", UiText.HudInventory, UiFonts.Tiny),
-            Ui.Hint("Esc", "Start", UiText.HudMenu, UiFonts.Tiny),
-            Ui.Hint("F", "RT", UiText.HudUltimate, UiFonts.Tiny));
-
-        _questName = Ui.Title(string.Empty, UiFonts.Small, UiPalette.Ambar);
-        _questProgress = Ui.Bold(string.Empty, UiFonts.Small, UiPalette.Creme);
-        _questDesc = Ui.Text(string.Empty, UiFonts.Tiny, UiPalette.Body, wrap: true);
-        _questDesc.CustomMinimumSize = new Vector2(120, 0);
-        var questHeader = Ui.Row(3, IconRect.Create("ic_scroll", 8), _questName, Ui.Spacer(), _questProgress);
+        _questName = UiScaling.Reading(Ui.Bold(string.Empty, UiFonts.Body, UiPalette.Ambar));
+        _questProgress = UiScaling.Reading(Ui.Bold(string.Empty, UiFonts.Body, UiPalette.Creme));
+        _questDesc = UiScaling.Reading(Ui.Text(string.Empty, UiFonts.Body, UiPalette.Body, wrap: true));
+        _questDesc.CustomMinimumSize = new Vector2(150, 0);
+        var questHeader = Ui.Row(3, IconRect.Create("ic_scroll", 9), _questName, Ui.Spacer(), _questProgress);
         _questPanel = Ui.Panel("SoftPanel", Ui.Column(1, questHeader, _questDesc));
-        _questPanel.CustomMinimumSize = new Vector2(130, 0);
+        _questPanel.CustomMinimumSize = new Vector2(150, 0);
         _questPanel.SizeFlagsHorizontal = Control.SizeFlags.ShrinkBegin;
 
-        var column = Ui.Column(2, header, hpRow, enRow, essRow, _noLantern, hints, Ui.Gap(0, 3), _questPanel);
-        column.Position = new Vector2(6, 6);
-        return column;
+        var column = Ui.Column(2, header, hpRow, enRow, _essRow, _noLantern);
+        _statusBack = Ui.Panel("SoftPanel", column);
+        _statusBack.SizeFlagsHorizontal = Control.SizeFlags.ShrinkBegin;
+        var block = Ui.Column(4, _statusBack, _questPanel);
+        block.Position = new Vector2(6, 6);
+        return block;
     }
 
     private Control BuildTopRight()
     {
         _dayNumber = Ui.Title("1", 11, null, HorizontalAlignment.Center);
-        var dayBox = Ui.Ornate(Ui.Column(0, Ui.Text(UiText.HudDay, UiFonts.Tiny - 1, UiPalette.Sub, align: HorizontalAlignment.Center), _dayNumber), "OrnatePanelAmber");
+        var dayBox = Ui.Ornate(Ui.Column(0, Ui.Text(UiText.HudDay, UiFonts.Small, UiPalette.Sub, align: HorizontalAlignment.Center), _dayNumber), "OrnatePanelAmber");
         dayBox.CornerColor = UiPalette.Ambar;
         dayBox.CornerSize = 2f;
         dayBox.InnerLine = false;
         dayBox.AddThemeStyleboxOverride("panel", Compact((StyleBoxFlat)dayBox.GetThemeStylebox("panel", "OrnatePanelAmber")));
         dayBox.CustomMinimumSize = new Vector2(30, 0);
 
-        LocationLabel = Ui.Title(string.Empty, UiFonts.Body, null, HorizontalAlignment.Right);
-        _seasonLine = Ui.Text(string.Empty, UiFonts.Small, UiPalette.SubLight, align: HorizontalAlignment.Right);
+        LocationLabel = Ui.Title(string.Empty, 9, null, HorizontalAlignment.Right);
+        _seasonLine = Ui.Text(string.Empty, UiFonts.Body, UiPalette.SubLight, align: HorizontalAlignment.Right);
         var info = Ui.Column(0, LocationLabel, _seasonLine);
         info.Alignment = BoxContainer.AlignmentMode.Center;
-        var top = Ui.Row(5, info, dayBox);
+        _topBack = Ui.Panel("SoftPanel", info);
+        var top = Ui.Row(4, _topBack, dayBox);
         top.Alignment = BoxContainer.AlignmentMode.End;
 
         _brechaList = Ui.Column(2);
-        _invasion = Ui.Text(UiText.HudInvasion, UiFonts.Tiny, UiPalette.Brecha, align: HorizontalAlignment.Right);
-        _wave = Ui.Title(string.Empty, UiFonts.Body, UiPalette.Brecha, HorizontalAlignment.Right);
+        _invasion = UiScaling.Reading(Ui.Text(UiText.HudInvasion, UiFonts.Body, UiPalette.Brecha, align: HorizontalAlignment.Right));
+        _wave = Ui.Title(string.Empty, UiFonts.Large, UiPalette.Brecha, HorizontalAlignment.Right);
         _wave.Visible = false;
-        // Integração v0.1: o minimapa do motor ocupa o canto logo abaixo do nome do local (120×70); a lista de Brechas,
-        // a invasão e a onda descem para baixo dele em vez de ficar por trás.
-        var minimapGap = new Control { CustomMinimumSize = new Vector2(0, 74), MouseFilter = Control.MouseFilterEnum.Ignore };
-        var column = Ui.Column(4, top, minimapGap, _brechaList, _invasion, _wave);
+        // Integração v0.1: o minimapa do motor fica logo abaixo do nome do local; C1-D7: o HUD reserva o lugar e diz
+        // ao minimapa onde desenhar (HudZones.MinimapSlot), para os dois crescerem juntos com a escala da interface.
+        _minimapSlot = new Control { CustomMinimumSize = new Vector2(120, 70), MouseFilter = Control.MouseFilterEnum.Ignore, SizeFlagsHorizontal = Control.SizeFlags.ShrinkEnd };
+        var column = Ui.Column(4, top, _minimapSlot, _brechaList, _invasion);
         column.AnchorLeft = 1;
         column.AnchorRight = 1;
         column.OffsetLeft = -180;
@@ -328,8 +422,8 @@ public partial class Hud : CanvasLayer
     {
         var db = Database.Db;
         _ultimate = new UltimateButton();
-        _ultimateName = Ui.Text(string.Empty, UiFonts.Tiny, UiPalette.Creme, align: HorizontalAlignment.Center);
-        var ultCap = KeyCap.Create("F", "RT"); // Supremo no gatilho direito (api-combate)
+        _ultimateName = Ui.Text(string.Empty, UiFonts.Body, UiPalette.Creme, align: HorizontalAlignment.Center);
+        var ultCap = KeyCap.ForAction(InputActions.Ultimate, UiFonts.Small); // C1-D6: segue o remapeamento
         var ultBox = new Control { CustomMinimumSize = new Vector2(29, 29), MouseFilter = Control.MouseFilterEnum.Ignore };
         ultBox.AddChild(_ultimate);
         ultBox.AddChild(ultCap);
@@ -349,13 +443,12 @@ public partial class Hud : CanvasLayer
         }
 
         _ecoSlot = new HotbarSlot { IconKey = "i_eco", IconScale = 0.7f };
-        _ecoSlot.SetKey("Q", UiPalette.EcoText);
         _potionSlot = new HotbarSlot { IconKey = "ic_potion", IconScale = 0.6f };
-        _potionSlot.SetKey("R", UiPalette.Dim);
+        RefreshSlotKeys();
 
-        _weaponName = Ui.Text(string.Empty, UiFonts.Small, new Color("#d8cfe0"), align: HorizontalAlignment.Center);
+        _weaponName = Ui.Text(string.Empty, UiFonts.Body, new Color("#d8cfe0"), align: HorizontalAlignment.Center);
         var slots = Ui.Row(8, ultColumn, weapons, Ui.Row(3, _ecoSlot, _potionSlot));
-        slots.Alignment = BoxContainer.AlignmentMode.End;
+        slots.Alignment = BoxContainer.AlignmentMode.Center;
         var column = Ui.Column(2, _weaponName, slots);
         column.AnchorLeft = 0.5f;
         column.AnchorRight = 0.5f;
@@ -373,7 +466,7 @@ public partial class Hud : CanvasLayer
 
     private Control BuildWallet()
     {
-        FragmentsLabel = Ui.Bold("0", UiFonts.Body, UiPalette.Creme, HorizontalAlignment.Right);
+        FragmentsLabel = Ui.Bold("0", UiFonts.Large, UiPalette.Creme, HorizontalAlignment.Right);
         LumesLabel = Ui.Bold("0", UiFonts.Large, UiPalette.Creme, HorizontalAlignment.Right);
         var shards = Ui.Row(3, IconRect.Create("i_shard", 9), FragmentsLabel);
         var lumes = Ui.Row(3, IconRect.Create("i_coin", 10), LumesLabel);
@@ -462,6 +555,9 @@ public partial class Hud : CanvasLayer
         bus.InvasionStateChanged += OnInvasionChanged;
         bus.InvasionRequested += OnInvasionRequested;
         GameSettings.Changed += OnSettingsChanged;
+        InputBindings.Changed += RefreshSlotKeys;
+        InputHints.DeviceChanged += RefreshSlotKeys;
+        bus.CaptionRequested += Caption;
     }
 
     private void Unsubscribe()
@@ -502,6 +598,18 @@ public partial class Hud : CanvasLayer
         bus.InvasionStateChanged -= OnInvasionChanged;
         bus.InvasionRequested -= OnInvasionRequested;
         GameSettings.Changed -= OnSettingsChanged;
+        InputBindings.Changed -= RefreshSlotKeys;
+        InputHints.DeviceChanged -= RefreshSlotKeys;
+        bus.CaptionRequested -= Caption;
+    }
+
+    /// <summary>Mostra uma legenda de som se a opção estiver ligada (C1-D12).</summary>
+    public void Caption(string text)
+    {
+        if (GameSettings.Captions)
+        {
+            Captions.Show(text);
+        }
     }
 
     /// <summary>Relê tudo do estado atual (início e depois de carregar um save).</summary>
@@ -672,7 +780,7 @@ public partial class Hud : CanvasLayer
         if (locationName != _locationName)
         {
             _locationName = locationName;
-            _locationBanner.Play(locationName, string.Empty, UiPalette.Creme, 3f);
+            _locationBanner.Play(locationName, string.Empty, UiPalette.Creme, 2.4f);
         }
     }
 
@@ -703,7 +811,10 @@ public partial class Hud : CanvasLayer
         var state = GameManager.Instance.State;
         var cost = state.Save.EquippedEco is { } eco ? state.EcoCost(eco) : DefaultEcoMarker;
         _essence.SetMarker(cost / 100f);
-        if (state.Save.EquippedEco is null)
+        var hasEco = state.Save.EquippedEco is not null;
+        _ecoSlot.Visible = hasEco; // C1-D7: slot vazio e barra de Essência só aparecem quando há Eco para usar
+        _essRow.Visible = hasEco;
+        if (!hasEco)
         {
             _ecoSlot.IconAlpha = 0f;
             _ecoSlot.VeilRatio = 0f;
@@ -731,8 +842,9 @@ public partial class Hud : CanvasLayer
             var level = save.WeaponLevel(id);
             slot.Selected = id == current;
             slot.Locked = id != save.ClassId; // extra.js:141: só a arma da classe
+            slot.Visible = !slot.Locked; // C1-D7: os 4 cadeados não diziam nada ao novato e enchiam o rodapé
             slot.IconAlpha = level > 0 ? 1f : 0.18f;
-            slot.SetKey((i + 1).ToString(), slot.Selected ? UiPalette.Ambar : UiPalette.Dim);
+            slot.SetKey(InputHints.UsingGamepad ? string.Empty : (i + 1).ToString(), slot.Selected ? UiPalette.Ambar : UiPalette.Dim);
             slot.SetCorner(level > 1 ? $"+{level}" : string.Empty, UiPalette.Ambar);
         }
 
@@ -798,9 +910,10 @@ public partial class Hud : CanvasLayer
     private void OnBossSpawned(string bossName, int maxHp)
     {
         Boss.Begin(bossName, maxHp);
+        Caption(UiText.CaptionBoss);
         Toasts.Top = 42;
         _locationBanner.Stop(); // o nome da Câmara do Núcleo ainda estava na tela e sobrepunha o do chefe
-        _bossBanner.Play(bossName.ToUpperInvariant(), UiText.BossIntroHint, UiPalette.Brecha, 3.2f);
+        _bossBanner.Play(bossName.ToUpperInvariant(), UiText.BossIntroHint, UiPalette.Brecha, 2.0f, 4f, 2.5f); // C1-D8: era 3,2 s no meio da arena
         _wave.Visible = false;
     }
 
@@ -816,11 +929,13 @@ public partial class Hud : CanvasLayer
     private void OnBrechaStarted(string themeId, int rank)
     {
         _wave.Visible = false;
+        _insideBrecha = true;
         CallDeferred(MethodName.RefreshBrechas);
     }
 
     private void OnBrechaEnded(string themeId, bool cleared)
     {
+        _insideBrecha = false;
         Boss.End();
         Toasts.Top = 40;
         _wave.Visible = false;
@@ -867,17 +982,107 @@ public partial class Hud : CanvasLayer
         var progress = state.QuestRules.ProgressText(quest, state.Save);
         _questProgress.Text = progress ?? string.Empty;
         _questPanel.Visible = GameSettings.QuestHints;
+        ExpandQuest();
     }
 
-    private void OnSettingsChanged() => _questPanel.Visible = GameSettings.QuestHints && GameManager.Instance.State.CurrentQuest is not null;
+    private void OnSettingsChanged()
+    {
+        _questPanel.Visible = GameSettings.QuestHints && GameManager.Instance.State.CurrentQuest is not null;
+        ApplyScale();
+    }
 
-    private void OnBrechasChanged(int spot, string themeId, int rank) => CallDeferred(MethodName.RefreshBrechas);
+    /// <summary>Segundos que a missão fica aberta (descrição) depois de mudar; depois fica só o nome e o progresso.</summary>
+    public const float QuestExpandSeconds = 8f;
+
+    /// <summary>A descrição da missão está à vista (smoke test).</summary>
+    public bool QuestExpanded => _questDesc.Visible;
+
+    /// <summary>Mostra a descrição da missão por <see cref="QuestExpandSeconds"/> (missão nova, progresso, Diário).</summary>
+    public void ExpandQuest()
+    {
+        _questDesc.Visible = true;
+        _questExpandT = QuestExpandSeconds;
+    }
+
+    /// <summary>Teclas dos slots pelo dispositivo e pelo remapeamento (C1-D6).</summary>
+    private void RefreshSlotKeys()
+    {
+        var pad = InputHints.UsingGamepad;
+        _ecoSlot.SetKey(InputBindings.Label(InputActions.Eco1, pad) ?? string.Empty, UiPalette.EcoText);
+        _potionSlot.SetKey(InputBindings.Label(InputActions.Potion, pad) ?? string.Empty, UiPalette.Dim);
+        if (_weaponName is not null)
+        {
+            UpdateHotbar(GameManager.Instance.State.Save.ClassId);
+        }
+    }
+
+    /// <summary>
+    /// Zonas ocupadas pelo HUD para os textos do mundo não passarem por cima (C1-D7) e o lugar do minimapa. Sem
+    /// alocação: só retângulos.
+    /// </summary>
+    private void PublishZones()
+    {
+        Toasts.Avoid = _chrome.Visible ? new Rect2(_status.Position, _status.Size) : default;
+        HudZones.Clear();
+        HudZones.MinimapSlot = _chrome.Visible && _minimapSlot.IsVisibleInTree() ? _minimapSlot.GetGlobalRect() : default;
+        if (!_chrome.Visible)
+        {
+            return;
+        }
+
+        AddZone(_statusBack);
+        AddZone(_questPanel);
+        AddZone(_topBack);
+        AddZone(_minimapSlot);
+        AddZone(_brechaList);
+        AddZone(_hotbar);
+        AddZone(_wallet);
+        AddZoneChildren(Loot);
+        AddZone(Boss);
+        AddZone(_wave);
+    }
+
+    /// <summary>Só as linhas visíveis (a caixa vazia ocupa o canto inteiro sem desenhar nada).</summary>
+    private static void AddZoneChildren(Control container)
+    {
+        if (!container.IsVisibleInTree())
+        {
+            return;
+        }
+
+        var count = container.GetChildCount();
+        for (var i = 0; i < count; i++)
+        {
+            if (container.GetChild(i) is Control { Visible: true } child)
+            {
+                HudZones.Add(child.GetGlobalRect().Grow(2f));
+            }
+        }
+    }
+
+    private static void AddZone(Control c)
+    {
+        if (c.IsVisibleInTree())
+        {
+            HudZones.Add(c.GetGlobalRect().Grow(2f));
+        }
+    }
+
+    private void OnBrechasChanged(int spot, string themeId, int rank)
+    {
+        Caption(UiText.CaptionPortal);
+        CallDeferred(MethodName.RefreshBrechas);
+    }
 
     private void OnPortalClosed(int spot) => CallDeferred(MethodName.RefreshBrechas);
 
     private void OnInvasionChanged(bool active) => CallDeferred(MethodName.RefreshBrechas);
 
-    private void OnInvasionRequested(string themeId, int rank) => CallDeferred(MethodName.RefreshBrechas);
+    private void OnInvasionRequested(string themeId, int rank)
+    {
+        Caption(UiText.CaptionInvasion);
+        CallDeferred(MethodName.RefreshBrechas);
+    }
 
     /// <summary>Lista de Brechas não fechadas (<c>render.js:257-266</c>), sem timer (a Cidade não publica).</summary>
     public void RefreshBrechas()
@@ -885,9 +1090,9 @@ public partial class Hud : CanvasLayer
         Ui.Clear(_brechaList);
         var tracker = BrechaTracker.Current;
         _invasion.Visible = tracker?.Invasion == true;
-        if (tracker is null)
+        if (tracker is null || _insideBrecha)
         {
-            return;
+            return; // C1-D7: dentro da Brecha a lista só repetia "você está dentro"
         }
 
         foreach (var b in tracker.All)
@@ -903,11 +1108,11 @@ public partial class Hud : CanvasLayer
             var sub = ruptured ? UiText.HudRuptured : inside ? UiText.HudInside : BrechaTracker.Title(b);
             var rankDef = Database.Db.Ranks[Math.Clamp(b.Rank, 0, Database.Db.Ranks.Count - 1)];
             var lines = Ui.Column(0,
-                Ui.Text(UiText.HudBrecha + BrechaTracker.Bairro(b.ThemeId), UiFonts.Small),
-                Ui.Text(sub, UiFonts.Tiny, ruptured ? UiPalette.Brecha : new Color("#a99bb5")));
+                Ui.Text(UiText.HudBrecha + BrechaTracker.Bairro(b.ThemeId), UiFonts.Body),
+                Ui.Text(sub, UiFonts.Body, ruptured ? UiPalette.Brecha : new Color("#b9aec4")));
             var row = Ui.Row(4, IconRect.Create(rankDef.Icon, 11), lines);
             var panel = Ui.Panel(highlight || ruptured ? "SoftPanelDanger" : "SoftPanel", row);
-            panel.CustomMinimumSize = new Vector2(115, 0);
+            panel.CustomMinimumSize = new Vector2(120, 0);
             panel.SizeFlagsHorizontal = Control.SizeFlags.ShrinkEnd;
             _brechaList.AddChild(panel);
         }

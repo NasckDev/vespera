@@ -61,5 +61,54 @@ public partial class CombatDirector
     {
         Hazards.DrawAir(layer);
         PlayerCombat.DrawAir(layer, _time);
+        DrawDangerIcons(layer);
+    }
+
+    private static readonly Vector2[] Triangle = new Vector2[3];
+    private static readonly Color[] TriangleColor = new Color[1];
+
+    /// <summary>O monstro está mostrando o aviso de golpe no chão (as mesmas janelas do <see cref="DrawGround"/>).</summary>
+    public static bool TelegraphActive(MonsterBody m) => !m.Dead && !m.IsDummy && m.SpawnT <= 0 && m.State switch
+    {
+        MonsterState.Wind => true,
+        MonsterState.Bite => m.T < 0.65,
+        MonsterState.Tide => m.T < 0.9,
+        MonsterState.Swipe => m.T < 0.45,
+        MonsterState.Chain => m.T < 0.7,
+        MonsterState.Slam => m.T < 0.75,
+        MonsterState.Sweep => m.T < 0.7,
+        MonsterState.Charge => m.T < 0.6,
+        _ => false,
+    };
+
+    /// <summary>
+    /// C1-D11: aviso de perigo que não depende só da cor — um triângulo com "!" sobre a cabeça de quem prepara um
+    /// golpe, junto do desenho no chão. Maior e com contorno grosso no alto contraste. Sem alocação (arrays fixos).
+    /// </summary>
+    private void DrawDangerIcons(FxLayer g)
+    {
+        var contrast = Autoload.GameSettings.HighContrast;
+        var r = contrast ? 7.5f : 5.5f;
+        var bob = MathF.Sin(_time * 14) * 0.8f;
+        for (var i = 0; i < _enemies.Count; i++)
+        {
+            var m = _enemies[i].Body;
+            if (!TelegraphActive(m))
+            {
+                continue;
+            }
+
+            var c = new Vector2((float)m.X, (float)(m.Y - (m.HitHeight * m.Def.Scale)) - 14f - r + bob);
+            Triangle[0] = c + new Vector2(0, -r);
+            Triangle[1] = c + new Vector2(r * 1.05f, r * 0.8f);
+            Triangle[2] = c + new Vector2(-r * 1.05f, r * 0.8f);
+            TriangleColor[0] = CombatPalette.TelegraphLine;
+            g.DrawPolygon(Triangle, TriangleColor);
+            var ink = new Color(0.08f, 0.04f, 0.1f);
+            g.DrawPolyline(Triangle, ink, contrast ? 1.6f : 1f);
+            g.DrawLine(Triangle[2], Triangle[0], ink, contrast ? 1.6f : 1f);
+            g.DrawRect(new Rect2(c.X - 0.75f, c.Y - (r * 0.45f), 1.5f, r * 0.7f), ink);
+            g.DrawRect(new Rect2(c.X - 0.75f, c.Y + (r * 0.4f), 1.5f, 1.5f), ink);
+        }
     }
 }

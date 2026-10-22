@@ -149,12 +149,14 @@ public partial class Enemy : Node2D
             : (m.State == MonsterState.Chase ? -Math.Abs(Math.Sin(m.Bob * 9)) : 0);
         var shakeX = m.State == MonsterState.Wind || (m.State == MonsterState.Slam && m.T < 0.75) ? (float)((Math.Sin(time * 97) * 0.7)) : 0f;
         _body.Position = new Vector2(shakeX, (float)bob);
-        _body.Scale = new Vector2(m.Face < 0 ? -1 : 1, 1);
+        // C1-D10: o acerto "amassa" o monstro por um instante (squash de 0,12 s junto com o flash) — peso sem exagero.
+        var pop = m.Dead ? 0f : (float)Math.Min(1, m.Flash * 8);
+        _body.Scale = new Vector2((m.Face < 0 ? -1 : 1) * (1f + (0.16f * pop)), 1f - (0.12f * pop));
         _sprite.Modulate = new Color(1, 1, 1, (float)a);
         _shadow.Modulate = new Color(1, 1, 1, (float)(0.45 * a));
 
         // Flash do golpe (0,12 s, alfa ×6) e brilho pulsante enquanto mira um golpe forte.
-        var flash = (float)Math.Min(1, m.Flash * 6);
+        var flash = (float)Math.Min(1, m.Flash * 6) * (Autoload.GameSettings.ReduceFlashes ? 0.45f : 1f);
         if (m.IsTelegraphing && !m.Dead)
         {
             flash = MathF.Max(flash, 0.18f + (0.15f * MathF.Sin(time * 30)));

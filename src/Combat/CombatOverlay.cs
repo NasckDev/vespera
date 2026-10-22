@@ -127,7 +127,7 @@ public partial class CombatOverlay : Node2D
 
         if (_red > 0)
         {
-            DrawRect(new Rect2(Vector2.Zero, view), new Color(180 / 255f, 20 / 255f, 50 / 255f, _red * 0.5f));
+            DrawRect(new Rect2(Vector2.Zero, view), new Color(180 / 255f, 20 / 255f, 50 / 255f, _red * 0.5f * Autoload.GameSettings.FlashScale)); // C1-D9: reduzir flashes
         }
 
         if (_charm > 0)

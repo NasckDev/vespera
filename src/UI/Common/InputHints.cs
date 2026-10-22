@@ -58,9 +58,32 @@ public static class InputHints
     /// <summary>Rótulo da tecla da ação no dispositivo atual (ex.: <c>interact</c> → "E" ou "A").</summary>
     public static string Label(string action) => LabelFor(action, UsingGamepad);
 
-    /// <summary>Rótulo da tecla da ação num dispositivo específico.</summary>
-    public static string LabelFor(string action, bool gamepad) =>
-        Labels.TryGetValue(action, out var label) ? (gamepad ? label.Gamepad : label.Keyboard) : action;
+    /// <summary>
+    /// Rótulo da tecla da ação num dispositivo específico. Ações remapeáveis vêm do Input Map
+    /// (<see cref="InputBindings.Label"/>, já com as trocas do jogador); as outras, da tabela fixa.
+    /// </summary>
+    public static string LabelFor(string action, bool gamepad)
+    {
+        if (IsRemappable(action) && InputBindings.Label(action, gamepad) is { } bound)
+        {
+            return bound;
+        }
+
+        return Labels.TryGetValue(action, out var label) ? (gamepad ? label.Gamepad : label.Keyboard) : action;
+    }
+
+    private static bool IsRemappable(string action)
+    {
+        foreach (var r in InputBindings.Remappable)
+        {
+            if (r.Action == action)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     /// <summary>Rótulo para um par explícito (teclado, gamepad).</summary>
     public static string Label(string keyboard, string gamepad) => UsingGamepad ? gamepad : keyboard;

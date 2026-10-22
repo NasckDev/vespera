@@ -166,12 +166,12 @@ public partial class HotbarSlot : Control
         var font = UiFonts.TextBold;
         if (_key.Length > 0)
         {
-            HudDraw.Text(this, font, new Vector2(2, 6), _key, UiFonts.Tiny - 1, _keyColor);
+            HudDraw.Text(this, font, new Vector2(2, 7), _key, UiFonts.Small, _keyColor); // C1-D7: era 5 px base
         }
 
         if (_corner.Length > 0)
         {
-            HudDraw.Text(this, font, new Vector2(size.X - 2, size.Y - 2), _corner, UiFonts.Tiny, _cornerColor, HorizontalAlignment.Right);
+            HudDraw.Text(this, font, new Vector2(size.X - 2, size.Y - 2), _corner, UiFonts.Small, _cornerColor, HorizontalAlignment.Right);
         }
 
         if (!_drawFrame)
@@ -336,7 +336,7 @@ public partial class PortraitFrame : OrnatePanel
         AddChild(_face);
 
         var badge = new PanelContainer { ThemeTypeVariation = "KeyCap", MouseFilter = MouseFilterEnum.Ignore };
-        _level = Ui.Bold("1", UiFonts.Tiny, UiPalette.Ambar, HorizontalAlignment.Center);
+        _level = Ui.Bold("1", UiFonts.Small, UiPalette.Ambar, HorizontalAlignment.Center);
         _level.AddThemeConstantOverride("shadow_offset_y", 0);
         badge.AddChild(_level);
         var corner = new Control { MouseFilter = MouseFilterEnum.Ignore };
