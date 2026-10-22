@@ -82,6 +82,6 @@ public partial class SlotScreen(SlotScreen.Mode mode) : UiScreen
         }
 
         GameSession.Begin(slot, data);
-        SceneRouter.Instance.GoTo(ScreenKeys.Game);
+        SceneRouter.Instance.GoTo(mode == Mode.NewGame ? ScreenKeys.Prologue : ScreenKeys.AfterPrologue);
     }
 }

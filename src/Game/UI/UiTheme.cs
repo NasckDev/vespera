@@ -46,6 +46,7 @@ public static class UiTheme
         AddButtonStyles(theme, body, BodySizes[i], i);
         AddPanelStyles(theme);
         AddScrollStyles(theme);
+        UiAssets.AddTo(theme);
         return theme;
     }
 

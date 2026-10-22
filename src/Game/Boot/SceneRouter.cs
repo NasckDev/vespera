@@ -101,6 +101,46 @@ public partial class SceneRouter : Node
         _busy = false;
     }
 
+    /// <summary>
+    /// Troca a cena principal com fundido cruzado (a nova aparece por cima da atual, sem passar pelo preto).
+    /// Usado na abertura, onde a última imagem do vídeo é o início do título.
+    /// </summary>
+    public async void CrossfadeTo(string key, float seconds)
+    {
+        if (_busy)
+        {
+            return;
+        }
+
+        if (!_factories.TryGetValue(key, out var factory))
+        {
+            Log.Error($"Cena '{key}' não registrada.");
+            return;
+        }
+
+        _busy = true;
+        var previous = _current;
+        var next = factory();
+        if (next is CanvasItem item)
+        {
+            item.Modulate = item.Modulate with { A = 0f };
+        }
+
+        _current = next;
+        CurrentKey = key;
+        _stage.AddChild(next);
+
+        var tween = CreateTween();
+        if (next is CanvasItem fading)
+        {
+            tween.TweenProperty(fading, "modulate:a", 1f, seconds);
+        }
+
+        await ToSignal(tween, Tween.SignalName.Finished);
+        previous?.QueueFree();
+        _busy = false;
+    }
+
     public void Push(string key)
     {
         if (_factories.TryGetValue(key, out var factory) && factory() is Control screen)

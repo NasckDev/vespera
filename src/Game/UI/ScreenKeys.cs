@@ -12,4 +12,9 @@ public static class ScreenKeys
     public const string SlotsNew = "slots_new";
     public const string SlotsContinue = "slots_continue";
     public const string Game = "game";
+    public const string Intro = "intro";
+    public const string Prologue = "prologue";
+
+    /// <summary>Cena que começa o jogo depois do prólogo (e ao continuar um save). Troque aqui para plugar o nível jogável.</summary>
+    public const string AfterPrologue = Game;
 }

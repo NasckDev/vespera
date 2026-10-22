@@ -3,53 +3,67 @@ using Godot;
 namespace Vespera.Game.UI;
 
 /// <summary>
-/// Fundo do título: key art com paralaxe e zoom bem lentos, sombra lateral atrás do menu, vinheta e brasas âmbar subindo.
-/// Sem entrada de mouse; só desenha.
+/// Fundo do título: o último quadro da abertura (cidade e logo pintados) com zoom e paralaxe bem lentos, sombra lateral
+/// atrás do menu, vinheta e brasas âmbar subindo. A sombra e a vinheta entram aos poucos, para o fundido vindo da
+/// abertura começar exatamente na imagem do vídeo. Sem entrada de mouse; só desenha.
 /// </summary>
 public partial class TitleBackground : Control
 {
-    private const float BaseZoom = 1.95f;
-    private const float ZoomBreath = 0.04f;
-    private const float DriftX = 46f;
-    private const float DriftY = 22f;
+    private const float ZoomGain = 0.035f;
+    private const float ZoomRate = 0.1f;
+    private const float DriftX = 18f;
+    private const float DriftY = 9f;
+    private const float RampSeconds = 1.2f;
+    private const float ShadeStartX = 1250f;
+    private const float ShadeAlpha = 0.80f;
     private const int EmberCount = 70;
     private const float EmberLifetime = 11f;
 
     private double _time;
+    private CpuParticles2D _embers = null!;
 
     public override void _Ready()
     {
         SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
         MouseFilter = MouseFilterEnum.Stop;
-        AddChild(BuildEmbers());
+        _embers = BuildEmbers();
+        _embers.Modulate = Colors.Transparent;
+        AddChild(_embers);
     }
 
     public override void _Process(double delta)
     {
         _time += delta;
+        _embers.Modulate = new Color(1f, 1f, 1f, Ramp());
         QueueRedraw();
     }
 
     public override void _Draw()
     {
         var t = (float)_time;
-        var zoom = BaseZoom + (ZoomBreath * (0.5f + (0.5f * Mathf.Sin(t * 0.12f))));
+        var zoom = 1f + (ZoomGain * (0.5f - (0.5f * Mathf.Cos(t * ZoomRate))));
         var shift = new Vector2(Mathf.Sin(t * 0.09f) * DriftX, Mathf.Cos(t * 0.07f) * DriftY);
-        ArtAssets.DrawKeyArt(this, zoom, shift);
+        ArtAssets.DrawIntroStill(this, zoom, shift);
 
+        var ramp = Ramp();
         var rect = new Rect2(Vector2.Zero, Size);
-        DrawRect(rect, new Color(0.05f, 0.06f, 0.16f, 0.30f));
-        DrawSideShade();
-        DrawTextureRect(ArtAssets.Vignette, rect, false);
+        DrawSideShade(ramp);
+        DrawTextureRect(ArtAssets.Vignette, rect, false, new Color(1f, 1f, 1f, ramp * 0.8f));
     }
 
-    /// <summary>Sombra em degradê da direita para a esquerda, para o painel do menu e o letreiro lerem bem.</summary>
-    private void DrawSideShade()
+    private float Ramp()
+    {
+        var x = Mathf.Clamp((float)_time / RampSeconds, 0f, 1f);
+        return x * x * (3f - (2f * x));
+    }
+
+    /// <summary>Sombra em degradê da direita para a esquerda, para o painel do menu ler bem sem apagar o logo.</summary>
+    private void DrawSideShade(float ramp)
     {
         var clear = new Color(0.04f, 0.05f, 0.13f, 0f);
-        var dark = new Color(0.04f, 0.05f, 0.13f, 0.82f);
+        var dark = new Color(0.04f, 0.05f, 0.13f, ShadeAlpha * ramp);
         DrawPolygon(
-            [new Vector2(980, 0), new Vector2(Size.X, 0), new Vector2(Size.X, Size.Y), new Vector2(980, Size.Y)],
+            [new Vector2(ShadeStartX, 0), new Vector2(Size.X, 0), new Vector2(Size.X, Size.Y), new Vector2(ShadeStartX, Size.Y)],
             [clear, dark, dark, clear]);
     }
 

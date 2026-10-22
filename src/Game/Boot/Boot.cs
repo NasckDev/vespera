@@ -12,6 +12,8 @@ namespace Vespera.Game.Boot;
 public partial class Boot : Node
 {
     public const string SmokeFlag = "--smoke-test";
+    public const string SkipIntroFlag = "--skip-intro";
+    public const string WithIntroFlag = "--with-intro";
 
     public override void _Ready()
     {
@@ -27,11 +29,13 @@ public partial class Boot : Node
         InputSetup.Initialize();
         GameSettings.Apply(GetTree());
         ApplyTheme();
+        UiAssets.InstallCursor();
         GameSettings.Changed += ApplyTheme;
 
         var router = GetNode<SceneRouter>("/root/SceneRouter");
         RegisterScreens(router);
-        router.GoTo(ScreenKeys.Title);
+        var skipIntro = Array.IndexOf(args, SkipIntroFlag) >= 0 || (smoke && Array.IndexOf(args, WithIntroFlag) < 0);
+        router.GoTo(skipIntro ? ScreenKeys.Title : ScreenKeys.Intro);
 
         if (smoke)
         {
@@ -54,5 +58,7 @@ public partial class Boot : Node
         router.Register(ScreenKeys.SlotsNew, () => new SlotScreen(SlotScreen.Mode.NewGame));
         router.Register(ScreenKeys.SlotsContinue, () => new SlotScreen(SlotScreen.Mode.Continue));
         router.Register(ScreenKeys.Game, () => new GameRoom());
+        router.Register(ScreenKeys.Intro, () => new IntroScreen());
+        router.Register(ScreenKeys.Prologue, () => new PrologueScreen());
     }
 }
