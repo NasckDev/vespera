@@ -1893,14 +1893,25 @@ public partial class SmokeTest
             await DismissUi();
             var player = FindPlayer()!;
             using var speed = new SpeedUp(4);
-            var spots = new[] { new Vector2(800, 520), new Vector2(300, 400), new Vector2(1100, 300), new Vector2(700, 800), new Vector2(1300, 650), new Vector2(500, 250), new Vector2(900, 900) };
+            var rng = new Random(7);
+            var spots = new List<Vector2>();
+            while (spots.Count < 8)
+            {
+                var x = 40 + (float)(rng.NextDouble() * (world.Map.ImageWidth - 80));
+                var y = 40 + (float)(rng.NextDouble() * (world.Map.ImageHeight - 80));
+                if (world.WalkArea.CanStand(x, y))
+                {
+                    spots.Add(new Vector2(x, y));
+                }
+            }
+
             var scales = new[] { 1f, 1.25f, 1.5f };
             var started = Time.GetTicksMsec();
             var step = 0;
             while ((Time.GetTicksMsec() - started) < 90000)
             {
-                GameSettings.UiScale = scales[(step / spots.Length) % scales.Length];
-                player.Teleport(world.CorrectToWalkable(spots[step % spots.Length]));
+                GameSettings.UiScale = scales[(step / spots.Count) % scales.Length];
+                player.Teleport(world.CorrectToWalkable(spots[step % spots.Count]));
                 step++;
                 for (var i = 0; i < 12; i++)
                 {
@@ -1937,5 +1948,179 @@ public partial class SmokeTest
         }
 
         Require(violations.Count == 0, $"{violations.Count} rótulo(s) do mundo visíveis por cima do HUD:" + (char)10 + "  " + string.Join((char)10 + "  ", violations.Distinct().Take(6)));
+    }
+
+    [SmokeScenario("estresse: polimento (qa): 40 s de spam de teclas reais (andar, interagir, atacar, esquivar, poção, Esc, Tab) com a acessibilidade no máximo", order: 1081)]
+    private async Task PqInputSpamWithAccessibility()
+    {
+        var (world, combat) = await CombatSetup();
+        GameManager.Instance.NewGame("Bot", "sword");
+        PqResetPlayerSettings();
+        OnboardingHints.ResetProgress();
+        world.GoMap("guild", 250, 330, instant: true);
+        await WaitMapSettled(world);
+        GameUi.Current?.CloseAll();
+        var ui = UiOrFail();
+        var rng = new Random(99);
+        var keys = new[] { Key.W, Key.A, Key.S, Key.D, Key.E, Key.J, Key.K, Key.Space, Key.R, Key.Q, Key.C, Key.F, Key.Escape, Key.Tab, Key.M, Key.Enter, Key.Up, Key.Down };
+        var down = new HashSet<Key>();
+        var nodes0 = 0.0;
+        try
+        {
+            GameSettings.UiScale = 1.5f;
+            GameSettings.TextScale = 1.3f;
+            GameSettings.HighContrast = true;
+            GameSettings.Captions = true;
+            GameSettings.ReduceFlashes = true;
+            GameSettings.DialogSpeed = DialogSpeed.Instant;
+            await WaitSeconds(0.5);
+            nodes0 = Performance.GetMonitor(Performance.Monitor.ObjectNodeCount);
+            var started = Time.GetTicksMsec();
+            var presses = 0;
+            var maxStack = 0;
+            var warm = false;
+            while (Time.GetTicksMsec() - started < 40000)
+            {
+                var key = keys[rng.Next(keys.Length)];
+                if (down.Contains(key))
+                {
+                    PqKeyUp(key);
+                    down.Remove(key);
+                }
+                else
+                {
+                    PqKeyDown(key);
+                    down.Add(key);
+                    presses++;
+                }
+
+                if (rng.Next(25) == 0)
+                {
+                    foreach (var k in down.ToList())
+                    {
+                        PqKeyUp(k);
+                    }
+
+                    down.Clear();
+                }
+
+                if (rng.Next(40) == 0)
+                {
+                    PqPadDown(JoyButton.A);
+                    PqPadUp(JoyButton.A);
+                    PqNoopKey();
+                }
+
+                maxStack = Math.Max(maxStack, ui.Stack.Count);
+                if (!warm && Time.GetTicksMsec() - started > 15000)
+                {
+                    warm = true; // as telas e os pools de som já foram criados: daqui em diante os nós não podem crescer
+                    nodes0 = Performance.GetMonitor(Performance.Monitor.ObjectNodeCount);
+                }
+
+                await Frames(rng.Next(1, 4));
+            }
+
+            foreach (var k in down.ToList())
+            {
+                PqKeyUp(k);
+            }
+
+            ReleaseAllActions();
+            ui.CloseAll();
+            await WaitSeconds(0.8);
+            var nodes1 = Performance.GetMonitor(Performance.Monitor.ObjectNodeCount);
+            Log.Info($"qa-spam: {presses} teclas em 40 s, pilha de telas máx. {maxStack}, nós {nodes0}→{nodes1}, vida {GameManager.Instance.State.Hp}, mapa {world.MapId}");
+            await Shot("qa-spam-fim");
+            Require(nodes1 - nodes0 <= 60, $"nós cresceram {nodes0}→{nodes1}");
+            Require(maxStack <= 4, $"pilha de telas chegou a {maxStack}");
+            Require(!GameManager.Instance.IsGameplayBlocked, $"jogo ficou travado por: {string.Join(", ", GameManager.Instance.GameplayBlocks)}");
+            // Depois do spam o jogador ainda anda.
+            var x0 = FindPlayer()!.GlobalPosition;
+            PqKeyDown(Key.D);
+            await WaitSeconds(0.6);
+            PqKeyUp(Key.D);
+            Require(FindPlayer()!.GlobalPosition.DistanceTo(x0) > 3f, "o jogador não anda depois do spam");
+        }
+        finally
+        {
+            foreach (var k in down.ToList())
+            {
+                PqKeyUp(k);
+            }
+
+            ReleaseAllActions();
+            ui.CloseAll();
+            PqResetPlayerSettings();
+        }
+    }
+
+    [SmokeScenario("polimento (qa): telegrafia legível (triângulo '!' + desenho no chão) em luta real, normal e em alto contraste", order: 1031)]
+    private async Task PqTelegraphShots()
+    {
+        var (world, combat) = await CombatSetup();
+        GameManager.Instance.NewGame("Bot", "sword");
+        GameSettings.ResetAccessibility();
+        world.GoMap("forge", 800, 520, instant: true);
+        await WaitMapSettled(world);
+        GameUi.Current?.CloseAll();
+        var running = true;
+        var shots = 0;
+        var telegraphSeen = 0;
+        var contrastShots = 0;
+        try
+        {
+            await EnterBrecha(world, combat, spot: 0, theme: "fish", rank: 0);
+            async Task Watcher()
+            {
+                var cooldown = 0;
+                while (running)
+                {
+                    await NextPhysicsFrame();
+                    if (cooldown-- > 0)
+                    {
+                        continue;
+                    }
+
+                    foreach (var e in combat.Enemies)
+                    {
+                        var foot = FindPlayer()!.GlobalPosition;
+                        if (CombatDirector.TelegraphActive(e.Body) && new Vector2((float)e.Body.X, (float)e.Body.Y).DistanceTo(foot) < 170f)
+                        {
+                            telegraphSeen++;
+                            var contrast = GameSettings.HighContrast;
+                            await Shot($"qa-telegrafia-{(contrast ? "contraste" : "normal")}-{(contrast ? contrastShots : shots)}-{e.Body.Def.Id}-{e.Body.State}");
+                            if (contrast)
+                            {
+                                contrastShots++;
+                            }
+                            else
+                            {
+                                shots++;
+                            }
+
+                            cooldown = 40;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            _ = Watcher();
+            var t0 = Time.GetTicksMsec();
+            await Bot(combat, () => (Time.GetTicksMsec() - t0) > 40000 || shots >= 3 || combat.Brecha.Run is null, 60, "telegrafia normal");
+            GameSettings.HighContrast = true;
+            t0 = Time.GetTicksMsec();
+            await Bot(combat, () => (Time.GetTicksMsec() - t0) > 40000 || contrastShots >= 3 || combat.Brecha.Run is null, 60, "telegrafia em alto contraste");
+            running = false;
+            Log.Info($"qa-telegrafia: {telegraphSeen} telegrafias vistas perto do jogador, prints normal {shots}, contraste {contrastShots}");
+            Require(telegraphSeen > 0, "nenhum monstro telegrafou um golpe perto do jogador em 80 s");
+        }
+        finally
+        {
+            running = false;
+            GameSettings.ResetAccessibility();
+            await FleeRun(world, combat);
+        }
     }
 }
