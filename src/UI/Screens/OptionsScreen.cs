@@ -109,7 +109,7 @@ public partial class OptionsScreen : FrameScreen
 
     protected override void OnOpened()
     {
-        _scroll.ScrollVertical = 0;
+        OpenScrollAtTop(_scroll); // POLI-3
         Refresh();
     }
 

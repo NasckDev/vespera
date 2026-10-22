@@ -55,6 +55,32 @@ public partial class Screen : Control
 
     public void Close() => Stack?.Remove(this);
 
+    /// <summary>
+    /// Abre uma lista rolável no topo (POLI-3): na 1ª abertura o foco chega antes do layout (o ScrollContainer ainda tem
+    /// page=0) e o FollowFocus rolava a lista para cima, escondendo a 1ª linha e o foco. Não segue o foco até o layout
+    /// assentar (2 quadros) e então volta ao topo e liga o seguimento.
+    /// </summary>
+    protected void OpenScrollAtTop(ScrollContainer scroll)
+    {
+        scroll.FollowFocus = false;
+        scroll.ScrollVertical = 0;
+        _ = SettleScrollAsync(scroll);
+    }
+
+    private async System.Threading.Tasks.Task SettleScrollAsync(ScrollContainer scroll)
+    {
+        var tree = GetTree();
+        await ToSignal(tree, SceneTree.SignalName.ProcessFrame);
+        await ToSignal(tree, SceneTree.SignalName.ProcessFrame);
+        if (!IsInsideTree() || !IsInstanceValid(scroll))
+        {
+            return;
+        }
+
+        scroll.ScrollVertical = 0;
+        scroll.FollowFocus = true;
+    }
+
     /// <summary>Foca o controle padrão (ou o primeiro focável).</summary>
     public void FocusDefault()
     {

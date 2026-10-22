@@ -182,8 +182,8 @@ public partial class KeybindScreen : FrameScreen
     protected override void OnOpened()
     {
         _listening = -1;
-        _scroll.ScrollVertical = 0;
-        _column = InputHints.UsingGamepad ? 1 : 0;
+        OpenScrollAtTop(_scroll);
+        _column =InputHints.UsingGamepad ? 1 : 0;
         _status.Text = UiText.KeybindsHint;
         Refresh();
     }
