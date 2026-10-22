@@ -1,0 +1,107 @@
+{
+  "character": "lodo",
+  "anchor": [
+    64,
+    120
+  ],
+  "stand_height_px": 48,
+  "facing": "olha para a direita; para a esquerda use flip_h",
+  "scale_class": 0.1979,
+  "stand_height_source_px": 242.5,
+  "hit_frame_method": "quadro de maior área opaca (índice base 0), só para ataques",
+  "frame_counts": {
+    "parado": 4,
+    "pulo": 6,
+    "aviso": 3,
+    "dano": 2,
+    "morte": 6
+  },
+  "atlas": "lodo_atlas.png",
+  "cell": [
+    128,
+    128
+  ],
+  "animations": {
+    "parado": {
+      "row": 0,
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "scale": 0.1979,
+      "source": "lodo_parado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        2066,
+        2224,
+        2014,
+        2129
+      ],
+      "note": null
+    },
+    "pulo": {
+      "row": 1,
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.1979,
+      "source": "lodo_pulo.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        1627,
+        2496,
+        1935,
+        1928,
+        2083,
+        2127
+      ],
+      "note": null
+    },
+    "aviso": {
+      "row": 2,
+      "frames": 3,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.1979,
+      "source": "lodo_aviso.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        1719,
+        1559,
+        2024
+      ],
+      "note": null
+    },
+    "dano": {
+      "row": 3,
+      "frames": 2,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.1979,
+      "source": "lodo_dano.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        2077,
+        2543
+      ],
+      "note": null
+    },
+    "morte": {
+      "row": 4,
+      "frames": 6,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.1979,
+      "source": "lodo_morte.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        2284,
+        2281,
+        2316,
+        2186,
+        1495,
+        876
+      ],
+      "note": null
+    }
+  }
+}

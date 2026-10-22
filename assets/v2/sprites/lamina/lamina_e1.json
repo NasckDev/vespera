@@ -1,0 +1,415 @@
+{
+  "character": "lamina",
+  "stage": "e1",
+  "anchor": [
+    128,
+    232
+  ],
+  "stand_height_px": 112,
+  "facing": "lado olha para a direita; para a esquerda use flip_h",
+  "scale_class": 0.2445,
+  "stand_height_source_px": 458.0,
+  "hit_frame_method": "quadro de maior área opaca (índice base 0), só para ataques",
+  "frame_counts": {
+    "parado": 4,
+    "ataque1": 5,
+    "ataque2": 5,
+    "ataque3": 5,
+    "pesado": 8,
+    "esquiva": 5,
+    "dano": 2,
+    "morte": 7
+  },
+  "atlas": "lamina_e1_atlas.png",
+  "cell": [
+    256,
+    256
+  ],
+  "animations": {
+    "andar_baixo": {
+      "row": 0,
+      "frames": 6,
+      "fps": 10,
+      "loop": true,
+      "scale": 0.8996,
+      "source": "lamina_e1_andar_baixo_6q_REFERENCIA.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        5030,
+        4989,
+        5353,
+        5107,
+        4901,
+        5310
+      ],
+      "note": null
+    },
+    "andar_cima": {
+      "row": 1,
+      "frames": 6,
+      "fps": 10,
+      "loop": true,
+      "scale": 0.8996,
+      "source": "lamina_e1_andar_cima_6q_REFERENCIA.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        5341,
+        5239,
+        5549,
+        5526,
+        5193,
+        5587
+      ],
+      "note": null
+    },
+    "andar_lado": {
+      "row": 2,
+      "frames": 4,
+      "fps": 10,
+      "loop": true,
+      "scale": 0.8996,
+      "source": "lamina_e1_andar_lado_6q_REFERENCIA.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        4752,
+        3997,
+        4176,
+        4317
+      ],
+      "note": null
+    },
+    "parado_baixo": {
+      "row": 3,
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "scale": 0.243,
+      "source": "lamina_e1_parado_baixo.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        5462,
+        5495,
+        5554,
+        5750
+      ],
+      "note": "reescalada: guarda +1% vs parado"
+    },
+    "parado_cima": {
+      "row": 4,
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "scale": 0.2894,
+      "source": "lamina_e1_parado_cima.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        5927,
+        5984,
+        5855,
+        5914
+      ],
+      "note": "reescalada: guarda -16% vs parado"
+    },
+    "parado_lado": {
+      "row": 5,
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "scale": 0.2435,
+      "source": "lamina_e1_parado_lado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        5244,
+        5336,
+        5394,
+        5291
+      ],
+      "note": "reescalada: guarda +0% vs parado"
+    },
+    "ataque1_baixo": {
+      "row": 6,
+      "frames": 5,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.3478,
+      "source": "lamina_e1_ataque1_baixo.png",
+      "hit_frame": 3,
+      "opaque_area_per_frame": [
+        6308,
+        6796,
+        9310,
+        9356,
+        6194
+      ],
+      "note": "reescalada: guarda -30% vs parado"
+    },
+    "ataque1_cima": {
+      "row": 7,
+      "frames": 5,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.3027,
+      "source": "lamina_e1_ataque1_cima.png",
+      "hit_frame": 2,
+      "opaque_area_per_frame": [
+        6303,
+        7224,
+        9715,
+        7661,
+        6214
+      ],
+      "note": "reescalada: guarda -19% vs parado"
+    },
+    "ataque1_lado": {
+      "row": 8,
+      "frames": 5,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.3394,
+      "source": "lamina_e1_ataque1_lado.png",
+      "hit_frame": 2,
+      "opaque_area_per_frame": [
+        6032,
+        6701,
+        10097,
+        7415,
+        5856
+      ],
+      "note": "reescalada: guarda -28% vs parado"
+    },
+    "ataque2_baixo": {
+      "row": 9,
+      "frames": 5,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.3333,
+      "source": "lamina_e1_ataque2_baixo.png",
+      "hit_frame": 2,
+      "opaque_area_per_frame": [
+        6850,
+        7596,
+        9617,
+        9020,
+        6761
+      ],
+      "note": "reescalada: guarda -27% vs parado"
+    },
+    "ataque2_cima": {
+      "row": 10,
+      "frames": 5,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.3533,
+      "source": "lamina_e1_ataque2_cima.png",
+      "hit_frame": 2,
+      "opaque_area_per_frame": [
+        5978,
+        6737,
+        11297,
+        7060,
+        5971
+      ],
+      "note": "reescalada: guarda -31% vs parado"
+    },
+    "ataque2_lado": {
+      "row": 11,
+      "frames": 5,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.3173,
+      "source": "lamina_e1_ataque2_lado.png",
+      "hit_frame": 2,
+      "opaque_area_per_frame": [
+        7111,
+        9060,
+        13321,
+        8138,
+        6114
+      ],
+      "note": "reescalada: guarda -23% vs parado"
+    },
+    "ataque3_baixo": {
+      "row": 12,
+      "frames": 5,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.3294,
+      "source": "lamina_e1_ataque3_baixo.png",
+      "hit_frame": 2,
+      "opaque_area_per_frame": [
+        7190,
+        9393,
+        13129,
+        9845,
+        7353
+      ],
+      "note": "reescalada: guarda -26% vs parado"
+    },
+    "ataque3_cima": {
+      "row": 13,
+      "frames": 5,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.3467,
+      "source": "lamina_e1_ataque3_cima.png",
+      "hit_frame": 2,
+      "opaque_area_per_frame": [
+        8432,
+        9449,
+        15027,
+        13387,
+        7431
+      ],
+      "note": "reescalada: guarda -29% vs parado"
+    },
+    "ataque3_lado": {
+      "row": 14,
+      "frames": 5,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.3415,
+      "source": "lamina_e1_ataque3_lado.png",
+      "hit_frame": 2,
+      "opaque_area_per_frame": [
+        7703,
+        7751,
+        14689,
+        10352,
+        7527
+      ],
+      "note": "reescalada: guarda -28% vs parado"
+    },
+    "pesado_lado": {
+      "row": 15,
+      "frames": 8,
+      "fps": 12,
+      "loop": false,
+      "scale": 0.4628,
+      "source": "lamina_e1_pesado_lado.png",
+      "hit_frame": 2,
+      "opaque_area_per_frame": [
+        6230,
+        7403,
+        10083,
+        8690,
+        7602,
+        8273,
+        7392,
+        5767
+      ],
+      "note": "reescalada: guarda -47% vs parado"
+    },
+    "esquiva_baixo": {
+      "row": 16,
+      "frames": 5,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.3043,
+      "source": "lamina_e1_esquiva_baixo.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        6508,
+        6562,
+        5674,
+        6544,
+        6394
+      ],
+      "note": "reescalada: guarda -20% vs parado"
+    },
+    "esquiva_cima": {
+      "row": 17,
+      "frames": 5,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.2786,
+      "source": "lamina_e1_esquiva_cima.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        5409,
+        5221,
+        4890,
+        5219,
+        5407
+      ],
+      "note": "reescalada: guarda -12% vs parado"
+    },
+    "esquiva_lado": {
+      "row": 18,
+      "frames": 5,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.2821,
+      "source": "lamina_e1_esquiva_lado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        5509,
+        5683,
+        4479,
+        5715,
+        5451
+      ],
+      "note": "reescalada: guarda -13% vs parado"
+    },
+    "dano_baixo": {
+      "row": 19,
+      "frames": 2,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.2358,
+      "source": "lamina_e1_dano_baixo.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        6273,
+        7716
+      ],
+      "note": "reescalada: guarda +4% vs parado"
+    },
+    "dano_cima": {
+      "row": 20,
+      "frames": 2,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.2074,
+      "source": "lamina_e1_dano_cima.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        5978,
+        6841
+      ],
+      "note": "reescalada: guarda +18% vs parado"
+    },
+    "dano_lado": {
+      "row": 21,
+      "frames": 2,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.1833,
+      "source": "lamina_e1_dano_lado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        6221,
+        6994
+      ],
+      "note": "reescalada: guarda +33% vs parado"
+    },
+    "morte_lado": {
+      "row": 22,
+      "frames": 7,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.4043,
+      "source": "lamina_e1_morte_lado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        5316,
+        10315,
+        3947,
+        4038,
+        1427,
+        3649,
+        3556
+      ],
+      "note": "reescalada: guarda -40% vs parado"
+    }
+  }
+}
