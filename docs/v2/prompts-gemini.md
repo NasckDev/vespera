@@ -16,8 +16,13 @@ O Gemini faz uma coisa por vez e precisa de bastante contexto. Então:
 **O que já temos, não peça de novo:**
 - caminhada de 6 quadros das 3 classes (GPT #11)
 - 58 objetos (GPT #10)
-- kit de interface (GPT #14)
+- kit de interface completo (GPT #14)
 - vídeo de abertura
+
+**Rejeitados, refazer aqui:**
+- Os retratos de NPC do GPT: eram estudos de 256 px ampliados, quadradões e fora do GDD (Odete jovem, Lis adulta).
+- Os chãos "PROTÓTIPO".
+- Os estudos parados de monstro: sem animação, e a Lodo-Mãe saiu como raízes e tentáculos.
 
 ---
 
@@ -131,7 +136,10 @@ right. Monster: [DESCRIPTION]. Animation: [ANIMATION]. Same design, size and lig
 - C9: `lunge attack` (4)
 - C10: `dissolve death` (6)
 
-**Lodo-Mãe (Guardião)**, com a descrição `huge mother slime, a mass of sludge holding plates, cutlery and toys, three glowing cores`:
+**Lodo-Mãe (Guardião)**, com a descrição `huge mother slime, a mass of sludge holding plates, cutlery and toys, three glowing cores`.
+Acrescente no fim do pedido: `It is a SLIME, round and gooey like a giant jelly, NOT roots, NOT tentacles, NOT a tree.`
+
+Pedidos:
 - C11: `idle` (6)
 - C12: `big jump` (8)
 - C13: `swallow attack` (8)
@@ -152,6 +160,19 @@ Request D[n] - character portrait, bust, facing slightly right, flat green #00FF
 - **D5–D6, Ravi:** `18-year-old rival hunter, patched clothes, E seal on wrist, cocky`. Expressões: neutral / laughing.
 - **D7–D8, Lis:** `11-year-old barefoot girl scout with a satchel of hand-drawn maps`. Expressões: neutral / suspicious.
 - **D9–D10, Tia Nilza:** `warm tavern keeper, apron, wooden spoon, motherly`. Expressões: neutral / smiling.
+
+Respeite a idade do GDD: a Odete é uma mulher de 50 e poucos anos que nunca sorri, e a Lis é uma criança de 11 anos.
+
+### D11 a D40: NPCs andando pela cidade
+
+Use o modelo da Parte B, mas troque a primeira frase por `sprite strip of THIS EXACT character` e anexe o retrato aprovado
+do NPC. Peça, para cada um dos 5 NPCs:
+- `parado` com 4 quadros, nas direções down, up e right side
+- `andar` com 6 quadros, nas direções down, up e right side
+
+A escala é a mesma do caçador (a Lis menor, por ser criança). Nada de chibi ou cabeçudo.
+
+Nome do arquivo: `npc_<nome>_<animacao>_<dir>.png`.
 
 ---
 
