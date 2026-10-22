@@ -2291,4 +2291,66 @@ public partial class SmokeTest
 
         Require(problems.Count == 0, "Opções pelo título:" + (char)10 + "  " + string.Join((char)10 + "  ", problems));
     }
+
+    [SmokeScenario("polimento (qa): do título ao jogo só com o controle (A, direcional), sem teclado, escolhendo o Arco com o nome padrão", order: 1053)]
+    private async Task PqTitleToGameWithPadOnly()
+    {
+        await WaitForScene("World", 10);
+        PqResetPlayerSettings();
+        DirAccess.RemoveAbsolute(SaveService.Instance.SavePath);
+        GameManager.Instance.ChangeScene(Vespera.UI.Title.TitleScreen.ScenePath);
+        await WaitForScene("Title", 10);
+        try
+        {
+            var title = (Vespera.UI.Title.TitleScreen)GetTree().CurrentScene;
+            await PqUseGamepad();
+            await WaitSeconds(0.4);
+            await Shot("qa-controle-titulo");
+            Require(title.NewGameRow.HasFocus(), "o foco inicial do título deveria estar em 'Novo jogo'");
+            await PqPadTap(JoyButton.A);
+            await WaitUntil(() => title.Stack.Top == title.Story, 3, "história abrir com A");
+            await WaitSeconds(0.4);
+            for (var i = 0; i < 10 && title.Stack.Top != title.ClassSelect; i++)
+            {
+                await PqPadTap(JoyButton.A);
+                await WaitSeconds(0.15);
+            }
+
+            Require(title.Stack.Top == title.ClassSelect, "a história não avançou até a escolha de classe só com A");
+            await WaitSeconds(0.4);
+            Log.Info($"qa-controle: nome padrão '{title.ClassSelect.PlayerName}', classe inicial {title.ClassSelect.SelectedClass}");
+            Require(title.ClassSelect.PlayerName.Length > 0, "sem nome padrão: quem joga no controle não consegue digitar");
+            await PqPadTap(JoyButton.DpadRight);
+            await WaitSeconds(0.2);
+            Require(title.ClassSelect.SelectedClass == "bow", $"direcional direito deveria escolher o Arco, está em {title.ClassSelect.SelectedClass}");
+            await Shot("qa-controle-classe");
+            await PqPadTap(JoyButton.A);
+            await WaitForScene("World", 10);
+            var state = GameManager.Instance.State;
+            Require(state.Save.ClassId == "bow" && state.Save.Name.Length > 0, $"jogo novo: {state.Save.Name} ({state.Save.ClassId})");
+
+            // O tutorial da Odete avança só com A e o controle continua sendo o dispositivo ativo (dicas com botões).
+            var ui = UiOrFail();
+            await WaitUntil(() => ui.Dialog.IsOpen, 5, "tutorial da Odete");
+            for (var line = 0; line < 8 && ui.Dialog.IsOpen; line++)
+            {
+                await SkipTyping(ui);
+                await PqPadTap(JoyButton.A);
+                await WaitSeconds(0.3);
+            }
+
+            await DismissUi();
+            await WaitSeconds(0.5);
+            Require(InputHints.UsingGamepad, "o dispositivo ativo deveria continuar sendo o controle");
+            var hint = Hud.Current!.Onboarding;
+            Log.Info($"qa-controle: depois do tutorial a dica é '{hint.Text}' com a tecla '{hint.KeyText}'");
+            await Shot("qa-controle-guilda");
+        }
+        finally
+        {
+            PqResetPlayerSettings();
+            await PqUseKeyboard();
+            UiOrFail().CloseAll();
+        }
+    }
 }
