@@ -614,6 +614,7 @@ public partial class SmokeTest
         var traceEvery = int.TryParse(OS.GetEnvironment("VESPERA_BOT_TRACE"), out var every) ? (every == 1 ? 120 : every) : 0;
         IReadOnlyList<MapPoint>? path = null;
         var pathAge = 0;
+        var waitFar = 0; // esperou demais o monstro vir: vai até ele pelo caminho (monstro preso numa ilha da sala)
         try
         {
             while (!done())
@@ -665,7 +666,8 @@ public partial class SmokeTest
                 SetAim(aim.Normalized());
                 var ranged = weapon.Kind is Core.Data.WeaponKind.Bow or Core.Data.WeaponKind.Orb;
                 var clear = ClearShot(combat, p - new Vector2(0, 12), new Vector2((float)target.X, (float)(target.Y - (target.HitHeight * 0.5))));
-                if (!clear && d > 150)
+                waitFar = !clear && d > 150 ? waitFar + 1 : 0;
+                if (!clear && d > 150 && waitFar < 240)
                 {
                     PressDirection(Vector2.Zero); // longe e atrás de obstáculo: espera o monstro vir (ele contorna, B1-D43)
                 }
