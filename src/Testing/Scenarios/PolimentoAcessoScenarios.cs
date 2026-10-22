@@ -40,6 +40,9 @@ public partial class SmokeTest
             await NextPhysicsFrame();
             Require(hud.Loot.VisibleTexts.Count() <= LootFeed.Capacity, $"caixa de loot com {hud.Loot.VisibleTexts.Count()} linhas");
             Require(hud.Loot.GetGlobalRect().Position.Y > GetViewport().GetVisibleRect().Size.Y * 0.45f, $"caixa de loot no canto de baixo: {hud.Loot.GetGlobalRect()}");
+            hud.Note("Uma nota bem comprida que antes saía pela borda direita da tela", "ic_scroll");
+            await NextPhysicsFrame();
+            Require(GetViewport().GetVisibleRect().Encloses(hud.Loot.GetGlobalRect()), $"nota comprida saiu da tela: {hud.Loot.GetGlobalRect()}");
 
             foreach (var scale in GameSettings.UiScales)
             {

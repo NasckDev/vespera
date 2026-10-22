@@ -176,6 +176,7 @@ public partial class Hud : CanvasLayer
         // C1-D7: a caixa de loot fica no canto de baixo, em cima da carteira, e cresce para cima (no máximo 4 linhas).
         Loot = new LootFeed { AnchorLeft = 1, AnchorRight = 1, AnchorTop = 1, AnchorBottom = 1, OffsetLeft = -190, OffsetRight = -8, OffsetTop = -150, OffsetBottom = -46 };
         Loot.GrowVertical = Control.GrowDirection.Begin;
+        Loot.GrowHorizontal = Control.GrowDirection.Begin; // nota comprida cresce para a esquerda, nunca para fora da tela
         _chrome.AddChild(Loot);
 
         Boss = new BossBar { AnchorLeft = 0.5f, AnchorRight = 0.5f, OffsetLeft = -150, OffsetRight = 150, OffsetTop = 6 };

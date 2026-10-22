@@ -462,9 +462,9 @@ public partial class GameUi : CanvasLayer
         {
             if (i >= lines.Count)
             {
-                Note(TownServices.Line("odete", "tutorialNote"), "ic_scroll");
                 // C1-D1: o tutorial é a conversa com a Odete no balcão; sem isso "Primeiros passos" pedia para falar
-                // com ela de novo logo depois de ouvir as três falas.
+                // com ela de novo logo depois de ouvir as três falas. A nota "Missão nova: fale com Odete" sai junto
+                // (a missão já se cumpre e o toast anuncia a próxima).
                 CountOdeteTalk(GameManager.Instance.State);
                 return;
             }
