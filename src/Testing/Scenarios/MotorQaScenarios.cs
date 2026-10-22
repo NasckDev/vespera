@@ -903,6 +903,8 @@ public partial class SmokeTest
             world.Minimap.SetExpanded(false);
         }
 
+        // o spam de Pause/Mapa abre o menu de pausa de verdade (é a tela "ui" que trava o jogador): quem joga fecha com Esc
+        UI.GameUi.Current?.CloseAll();
         // levantar do banco / desistir da pesca / esperar a balsa: o jogo tem que devolver o controle
         await Hold(InputActions.MoveDown, 30);
         await WaitUntil(() => !world.Dressing.InActivity && !GameManager.Instance.IsGameplayBlocked, 10, "jogo destravar depois do spam");
