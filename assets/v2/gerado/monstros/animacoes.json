@@ -1,0 +1,803 @@
+{
+  "source_issue": "https://github.com/NasckDev/vespera/issues/18",
+  "animations": [
+    {
+      "file": "lodo_parado.png",
+      "frames": 4,
+      "frame_width": 768,
+      "frame_height": 768,
+      "columns": 4,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 1,
+          "x": 768,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 2,
+          "x": 1536,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 3,
+          "x": 2304,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        }
+      ]
+    },
+    {
+      "file": "lodo_pulo.png",
+      "frames": 6,
+      "frame_width": 768,
+      "frame_height": 768,
+      "columns": 6,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 1,
+          "x": 768,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 2,
+          "x": 1536,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 3,
+          "x": 2304,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 4,
+          "x": 3072,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 5,
+          "x": 3840,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        }
+      ]
+    },
+    {
+      "file": "lodo_aviso.png",
+      "frames": 3,
+      "frame_width": 768,
+      "frame_height": 768,
+      "columns": 3,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 1,
+          "x": 768,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 2,
+          "x": 1536,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        }
+      ]
+    },
+    {
+      "file": "lodo_dano.png",
+      "frames": 2,
+      "frame_width": 768,
+      "frame_height": 768,
+      "columns": 2,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 1,
+          "x": 768,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        }
+      ]
+    },
+    {
+      "file": "lodo_morte.png",
+      "frames": 6,
+      "frame_width": 768,
+      "frame_height": 768,
+      "columns": 6,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 1,
+          "x": 768,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 2,
+          "x": 1536,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 3,
+          "x": 2304,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 4,
+          "x": 3072,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 5,
+          "x": 3840,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        }
+      ]
+    },
+    {
+      "file": "espectro_parado.png",
+      "frames": 4,
+      "frame_width": 768,
+      "frame_height": 768,
+      "columns": 4,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 1,
+          "x": 768,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 2,
+          "x": 1536,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 3,
+          "x": 2304,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        }
+      ]
+    },
+    {
+      "file": "espectro_mover.png",
+      "frames": 6,
+      "frame_width": 768,
+      "frame_height": 768,
+      "columns": 6,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 1,
+          "x": 768,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 2,
+          "x": 1536,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 3,
+          "x": 2304,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 4,
+          "x": 3072,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 5,
+          "x": 3840,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        }
+      ]
+    },
+    {
+      "file": "espectro_aviso.png",
+      "frames": 3,
+      "frame_width": 768,
+      "frame_height": 768,
+      "columns": 3,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 1,
+          "x": 768,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 2,
+          "x": 1536,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        }
+      ]
+    },
+    {
+      "file": "espectro_ataque.png",
+      "frames": 4,
+      "frame_width": 768,
+      "frame_height": 768,
+      "columns": 4,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 1,
+          "x": 768,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 2,
+          "x": 1536,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 3,
+          "x": 2304,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        }
+      ]
+    },
+    {
+      "file": "espectro_morte.png",
+      "frames": 6,
+      "frame_width": 768,
+      "frame_height": 768,
+      "columns": 6,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 1,
+          "x": 768,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 2,
+          "x": 1536,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 3,
+          "x": 2304,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 4,
+          "x": 3072,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 5,
+          "x": 3840,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        }
+      ]
+    },
+    {
+      "file": "lodo_mae_parado.png",
+      "frames": 6,
+      "frame_width": 768,
+      "frame_height": 768,
+      "columns": 6,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 1,
+          "x": 768,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 2,
+          "x": 1536,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 3,
+          "x": 2304,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 4,
+          "x": 3072,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 5,
+          "x": 3840,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        }
+      ]
+    },
+    {
+      "file": "lodo_mae_pulo.png",
+      "frames": 8,
+      "frame_width": 768,
+      "frame_height": 768,
+      "columns": 8,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 1,
+          "x": 768,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 2,
+          "x": 1536,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 3,
+          "x": 2304,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 4,
+          "x": 3072,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 5,
+          "x": 3840,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 6,
+          "x": 4608,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 7,
+          "x": 5376,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        }
+      ]
+    },
+    {
+      "file": "lodo_mae_engolir.png",
+      "frames": 8,
+      "frame_width": 768,
+      "frame_height": 768,
+      "columns": 8,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 1,
+          "x": 768,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 2,
+          "x": 1536,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 3,
+          "x": 2304,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 4,
+          "x": 3072,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 5,
+          "x": 3840,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 6,
+          "x": 4608,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 7,
+          "x": 5376,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        }
+      ]
+    },
+    {
+      "file": "lodo_mae_dividir.png",
+      "frames": 8,
+      "frame_width": 768,
+      "frame_height": 768,
+      "columns": 8,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 1,
+          "x": 768,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 2,
+          "x": 1536,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 3,
+          "x": 2304,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 4,
+          "x": 3072,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 5,
+          "x": 3840,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 6,
+          "x": 4608,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 7,
+          "x": 5376,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        }
+      ]
+    },
+    {
+      "file": "lodo_mae_morte.png",
+      "frames": 10,
+      "frame_width": 768,
+      "frame_height": 768,
+      "columns": 10,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 1,
+          "x": 768,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 2,
+          "x": 1536,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 3,
+          "x": 2304,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 4,
+          "x": 3072,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 5,
+          "x": 3840,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 6,
+          "x": 4608,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 7,
+          "x": 5376,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 8,
+          "x": 6144,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        },
+        {
+          "index": 9,
+          "x": 6912,
+          "y": 0,
+          "w": 768,
+          "h": 768
+        }
+      ]
+    }
+  ]
+}
