@@ -1,0 +1,1756 @@
+{
+  "version": 1,
+  "note": "anchor e footprint em pixels do sprite (origem no canto superior esquerdo). Escala 1.0 = 1920x1080.",
+  "objects": [
+    {
+      "id": "bairro_das_forjas.common_lamp_post_common",
+      "path": "res://assets/v2/objetos/bairro_das_forjas/common_lamp_post_common.png",
+      "place": "bairro_das_forjas",
+      "size": [
+        88,
+        181
+      ],
+      "opaque_bbox": [
+        3,
+        2,
+        83,
+        177
+      ],
+      "anchor": [
+        27,
+        179
+      ],
+      "footprint": [
+        11,
+        147,
+        34,
+        32
+      ],
+      "interactive": "lamp"
+    },
+    {
+      "id": "bairro_das_forjas.common_weapon_rack",
+      "path": "res://assets/v2/objetos/bairro_das_forjas/common_weapon_rack.png",
+      "place": "bairro_das_forjas",
+      "size": [
+        204,
+        138
+      ],
+      "opaque_bbox": [
+        3,
+        2,
+        199,
+        134
+      ],
+      "anchor": [
+        113,
+        136
+      ],
+      "footprint": [
+        3,
+        112,
+        199,
+        24
+      ],
+      "interactive": "workstation"
+    },
+    {
+      "id": "bairro_das_forjas.mine_anvil",
+      "path": "res://assets/v2/objetos/bairro_das_forjas/mine_anvil.png",
+      "place": "bairro_das_forjas",
+      "size": [
+        68,
+        66
+      ],
+      "opaque_bbox": [
+        2,
+        3,
+        63,
+        61
+      ],
+      "anchor": [
+        34,
+        64
+      ],
+      "footprint": [
+        8,
+        53,
+        46,
+        11
+      ],
+      "interactive": "workstation"
+    },
+    {
+      "id": "bairro_das_forjas.mine_anvil_heavy",
+      "path": "res://assets/v2/objetos/bairro_das_forjas/mine_anvil_heavy.png",
+      "place": "bairro_das_forjas",
+      "size": [
+        99,
+        107
+      ],
+      "opaque_bbox": [
+        3,
+        3,
+        93,
+        102
+      ],
+      "anchor": [
+        52,
+        105
+      ],
+      "footprint": [
+        8,
+        87,
+        77,
+        18
+      ],
+      "interactive": "workstation"
+    },
+    {
+      "id": "bairro_das_forjas.mine_barrel_mine",
+      "path": "res://assets/v2/objetos/bairro_das_forjas/mine_barrel_mine.png",
+      "place": "bairro_das_forjas",
+      "size": [
+        51,
+        65
+      ],
+      "opaque_bbox": [
+        2,
+        3,
+        47,
+        60
+      ],
+      "anchor": [
+        26,
+        63
+      ],
+      "footprint": [
+        5,
+        52,
+        42,
+        11
+      ],
+      "interactive": "container"
+    },
+    {
+      "id": "bairro_das_forjas.mine_chain_hook",
+      "path": "res://assets/v2/objetos/bairro_das_forjas/mine_chain_hook.png",
+      "place": "bairro_das_forjas",
+      "size": [
+        38,
+        162
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        34,
+        157
+      ],
+      "anchor": [
+        20,
+        159
+      ],
+      "footprint": [
+        2,
+        131,
+        34,
+        28
+      ],
+      "interactive": "decor"
+    },
+    {
+      "id": "bairro_das_forjas.mine_coal_heap",
+      "path": "res://assets/v2/objetos/bairro_das_forjas/mine_coal_heap.png",
+      "place": "bairro_das_forjas",
+      "size": [
+        95,
+        110
+      ],
+      "opaque_bbox": [
+        3,
+        2,
+        90,
+        106
+      ],
+      "anchor": [
+        26,
+        108
+      ],
+      "footprint": [
+        9,
+        89,
+        57,
+        19
+      ],
+      "interactive": "decor"
+    },
+    {
+      "id": "bairro_das_forjas.mine_coal_pile",
+      "path": "res://assets/v2/objetos/bairro_das_forjas/mine_coal_pile.png",
+      "place": "bairro_das_forjas",
+      "size": [
+        84,
+        62
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        79,
+        58
+      ],
+      "anchor": [
+        46,
+        60
+      ],
+      "footprint": [
+        6,
+        50,
+        70,
+        10
+      ],
+      "interactive": "decor"
+    },
+    {
+      "id": "bairro_das_forjas.mine_crate_ore",
+      "path": "res://assets/v2/objetos/bairro_das_forjas/mine_crate_ore.png",
+      "place": "bairro_das_forjas",
+      "size": [
+        88,
+        89
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        84,
+        85
+      ],
+      "anchor": [
+        48,
+        87
+      ],
+      "footprint": [
+        15,
+        72,
+        62,
+        15
+      ],
+      "interactive": "container"
+    },
+    {
+      "id": "bairro_das_forjas.mine_crate_tools",
+      "path": "res://assets/v2/objetos/bairro_das_forjas/mine_crate_tools.png",
+      "place": "bairro_das_forjas",
+      "size": [
+        65,
+        71
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        60,
+        67
+      ],
+      "anchor": [
+        35,
+        69
+      ],
+      "footprint": [
+        7,
+        57,
+        51,
+        12
+      ],
+      "interactive": "container"
+    },
+    {
+      "id": "bairro_das_forjas.mine_furnace_pipe",
+      "path": "res://assets/v2/objetos/bairro_das_forjas/mine_furnace_pipe.png",
+      "place": "bairro_das_forjas",
+      "size": [
+        124,
+        163
+      ],
+      "opaque_bbox": [
+        2,
+        3,
+        120,
+        158
+      ],
+      "anchor": [
+        66,
+        161
+      ],
+      "footprint": [
+        8,
+        133,
+        114,
+        28
+      ],
+      "interactive": "lamp"
+    },
+    {
+      "id": "bairro_das_forjas.mine_furnace_tall",
+      "path": "res://assets/v2/objetos/bairro_das_forjas/mine_furnace_tall.png",
+      "place": "bairro_das_forjas",
+      "size": [
+        85,
+        175
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        80,
+        171
+      ],
+      "anchor": [
+        41,
+        173
+      ],
+      "footprint": [
+        3,
+        142,
+        79,
+        31
+      ],
+      "interactive": "lamp"
+    },
+    {
+      "id": "bairro_das_forjas.mine_ore_rock",
+      "path": "res://assets/v2/objetos/bairro_das_forjas/mine_ore_rock.png",
+      "place": "bairro_das_forjas",
+      "size": [
+        59,
+        83
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        55,
+        78
+      ],
+      "anchor": [
+        28,
+        80
+      ],
+      "footprint": [
+        2,
+        66,
+        52,
+        14
+      ],
+      "interactive": "decor"
+    },
+    {
+      "id": "bairro_das_forjas.mine_wheelbarrow_mine",
+      "path": "res://assets/v2/objetos/bairro_das_forjas/mine_wheelbarrow_mine.png",
+      "place": "bairro_das_forjas",
+      "size": [
+        68,
+        59
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        63,
+        55
+      ],
+      "anchor": [
+        26,
+        57
+      ],
+      "footprint": [
+        15,
+        47,
+        44,
+        10
+      ],
+      "interactive": "decor"
+    },
+    {
+      "id": "esgotos_do_mercado.cathedral_drain_grate",
+      "path": "res://assets/v2/objetos/esgotos_do_mercado/cathedral_drain_grate.png",
+      "place": "esgotos_do_mercado",
+      "size": [
+        52,
+        89
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        48,
+        85
+      ],
+      "anchor": [
+        20,
+        87
+      ],
+      "footprint": [
+        3,
+        72,
+        46,
+        15
+      ],
+      "interactive": "door"
+    },
+    {
+      "id": "esgotos_do_mercado.cathedral_jar_clay",
+      "path": "res://assets/v2/objetos/esgotos_do_mercado/cathedral_jar_clay.png",
+      "place": "esgotos_do_mercado",
+      "size": [
+        33,
+        58
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        29,
+        54
+      ],
+      "anchor": [
+        16,
+        56
+      ],
+      "footprint": [
+        4,
+        46,
+        26,
+        10
+      ],
+      "interactive": "container"
+    },
+    {
+      "id": "esgotos_do_mercado.cathedral_junk_pile",
+      "path": "res://assets/v2/objetos/esgotos_do_mercado/cathedral_junk_pile.png",
+      "place": "esgotos_do_mercado",
+      "size": [
+        68,
+        59
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        64,
+        55
+      ],
+      "anchor": [
+        40,
+        57
+      ],
+      "footprint": [
+        13,
+        47,
+        48,
+        10
+      ],
+      "interactive": "decor"
+    },
+    {
+      "id": "esgotos_do_mercado.cathedral_pipe_copper_elbow",
+      "path": "res://assets/v2/objetos/esgotos_do_mercado/cathedral_pipe_copper_elbow.png",
+      "place": "esgotos_do_mercado",
+      "size": [
+        58,
+        73
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        54,
+        69
+      ],
+      "anchor": [
+        42,
+        71
+      ],
+      "footprint": [
+        31,
+        59,
+        24,
+        12
+      ],
+      "interactive": "decor"
+    },
+    {
+      "id": "esgotos_do_mercado.cathedral_rock_mossy_small",
+      "path": "res://assets/v2/objetos/esgotos_do_mercado/cathedral_rock_mossy_small.png",
+      "place": "esgotos_do_mercado",
+      "size": [
+        52,
+        48
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        47,
+        44
+      ],
+      "anchor": [
+        36,
+        46
+      ],
+      "footprint": [
+        14,
+        38,
+        35,
+        8
+      ],
+      "interactive": "decor"
+    },
+    {
+      "id": "esgotos_do_mercado.cathedral_rubble_mossy",
+      "path": "res://assets/v2/objetos/esgotos_do_mercado/cathedral_rubble_mossy.png",
+      "place": "esgotos_do_mercado",
+      "size": [
+        56,
+        56
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        52,
+        52
+      ],
+      "anchor": [
+        25,
+        54
+      ],
+      "footprint": [
+        2,
+        45,
+        51,
+        9
+      ],
+      "interactive": "decor"
+    },
+    {
+      "id": "esgotos_do_mercado.cathedral_sewer_grate",
+      "path": "res://assets/v2/objetos/esgotos_do_mercado/cathedral_sewer_grate.png",
+      "place": "esgotos_do_mercado",
+      "size": [
+        111,
+        117
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        107,
+        112
+      ],
+      "anchor": [
+        57,
+        114
+      ],
+      "footprint": [
+        2,
+        94,
+        106,
+        20
+      ],
+      "interactive": "door"
+    },
+    {
+      "id": "esgotos_do_mercado.cathedral_sewer_outflow",
+      "path": "res://assets/v2/objetos/esgotos_do_mercado/cathedral_sewer_outflow.png",
+      "place": "esgotos_do_mercado",
+      "size": [
+        109,
+        121
+      ],
+      "opaque_bbox": [
+        2,
+        3,
+        104,
+        116
+      ],
+      "anchor": [
+        54,
+        119
+      ],
+      "footprint": [
+        5,
+        98,
+        98,
+        21
+      ],
+      "interactive": "door"
+    },
+    {
+      "id": "esgotos_do_mercado.common_bones_pile",
+      "path": "res://assets/v2/objetos/esgotos_do_mercado/common_bones_pile.png",
+      "place": "esgotos_do_mercado",
+      "size": [
+        85,
+        87
+      ],
+      "opaque_bbox": [
+        2,
+        3,
+        81,
+        82
+      ],
+      "anchor": [
+        56,
+        85
+      ],
+      "footprint": [
+        3,
+        70,
+        78,
+        15
+      ],
+      "interactive": "decor"
+    },
+    {
+      "id": "esgotos_do_mercado.common_crate_common",
+      "path": "res://assets/v2/objetos/esgotos_do_mercado/common_crate_common.png",
+      "place": "esgotos_do_mercado",
+      "size": [
+        92,
+        97
+      ],
+      "opaque_bbox": [
+        3,
+        2,
+        87,
+        93
+      ],
+      "anchor": [
+        53,
+        95
+      ],
+      "footprint": [
+        7,
+        78,
+        83,
+        17
+      ],
+      "interactive": "container"
+    },
+    {
+      "id": "esgotos_do_mercado.common_crystal_spikes",
+      "path": "res://assets/v2/objetos/esgotos_do_mercado/common_crystal_spikes.png",
+      "place": "esgotos_do_mercado",
+      "size": [
+        83,
+        117
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        79,
+        112
+      ],
+      "anchor": [
+        36,
+        114
+      ],
+      "footprint": [
+        2,
+        94,
+        75,
+        20
+      ],
+      "interactive": "brecha"
+    },
+    {
+      "id": "esgotos_do_mercado.common_floor_crack_brecha",
+      "path": "res://assets/v2/objetos/esgotos_do_mercado/common_floor_crack_brecha.png",
+      "place": "esgotos_do_mercado",
+      "size": [
+        123,
+        95
+      ],
+      "opaque_bbox": [
+        2,
+        3,
+        119,
+        90
+      ],
+      "anchor": [
+        67,
+        93
+      ],
+      "footprint": [
+        20,
+        77,
+        100,
+        16
+      ],
+      "interactive": "brecha"
+    },
+    {
+      "id": "esgotos_do_mercado.common_urn_common",
+      "path": "res://assets/v2/objetos/esgotos_do_mercado/common_urn_common.png",
+      "place": "esgotos_do_mercado",
+      "size": [
+        44,
+        70
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        39,
+        66
+      ],
+      "anchor": [
+        21,
+        68
+      ],
+      "footprint": [
+        7,
+        56,
+        29,
+        12
+      ],
+      "interactive": "container"
+    },
+    {
+      "id": "esgotos_do_mercado.market_bucket_wood",
+      "path": "res://assets/v2/objetos/esgotos_do_mercado/market_bucket_wood.png",
+      "place": "esgotos_do_mercado",
+      "size": [
+        43,
+        53
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        39,
+        49
+      ],
+      "anchor": [
+        21,
+        51
+      ],
+      "footprint": [
+        4,
+        42,
+        36,
+        9
+      ],
+      "interactive": "container"
+    },
+    {
+      "id": "esgotos_do_mercado.market_crate_crabs",
+      "path": "res://assets/v2/objetos/esgotos_do_mercado/market_crate_crabs.png",
+      "place": "esgotos_do_mercado",
+      "size": [
+        79,
+        64
+      ],
+      "opaque_bbox": [
+        3,
+        2,
+        74,
+        60
+      ],
+      "anchor": [
+        29,
+        62
+      ],
+      "footprint": [
+        5,
+        51,
+        58,
+        11
+      ],
+      "interactive": "container"
+    },
+    {
+      "id": "esgotos_do_mercado.market_crate_fish",
+      "path": "res://assets/v2/objetos/esgotos_do_mercado/market_crate_fish.png",
+      "place": "esgotos_do_mercado",
+      "size": [
+        88,
+        80
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        84,
+        76
+      ],
+      "anchor": [
+        49,
+        78
+      ],
+      "footprint": [
+        18,
+        64,
+        66,
+        14
+      ],
+      "interactive": "container"
+    },
+    {
+      "id": "forja_da_odete.cathedral_door_arched",
+      "path": "res://assets/v2/objetos/forja_da_odete/cathedral_door_arched.png",
+      "place": "forja_da_odete",
+      "size": [
+        90,
+        116
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        86,
+        112
+      ],
+      "anchor": [
+        45,
+        114
+      ],
+      "footprint": [
+        2,
+        94,
+        86,
+        20
+      ],
+      "interactive": "door"
+    },
+    {
+      "id": "forja_da_odete.common_chopping_block",
+      "path": "res://assets/v2/objetos/forja_da_odete/common_chopping_block.png",
+      "place": "forja_da_odete",
+      "size": [
+        97,
+        119
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        93,
+        115
+      ],
+      "anchor": [
+        45,
+        117
+      ],
+      "footprint": [
+        2,
+        96,
+        91,
+        21
+      ],
+      "interactive": "workstation"
+    },
+    {
+      "id": "forja_da_odete.common_crate_common",
+      "path": "res://assets/v2/objetos/esgotos_do_mercado/common_crate_common.png",
+      "place": "forja_da_odete",
+      "size": [
+        92,
+        97
+      ],
+      "opaque_bbox": [
+        3,
+        2,
+        87,
+        93
+      ],
+      "anchor": [
+        53,
+        95
+      ],
+      "footprint": [
+        7,
+        78,
+        83,
+        17
+      ],
+      "interactive": "container",
+      "duplicate_of": "esgotos_do_mercado.common_crate_common"
+    },
+    {
+      "id": "forja_da_odete.common_weapon_rack",
+      "path": "res://assets/v2/objetos/bairro_das_forjas/common_weapon_rack.png",
+      "place": "forja_da_odete",
+      "size": [
+        204,
+        138
+      ],
+      "opaque_bbox": [
+        3,
+        2,
+        199,
+        134
+      ],
+      "anchor": [
+        113,
+        136
+      ],
+      "footprint": [
+        3,
+        112,
+        199,
+        24
+      ],
+      "interactive": "workstation",
+      "duplicate_of": "bairro_das_forjas.common_weapon_rack"
+    },
+    {
+      "id": "forja_da_odete.mine_anvil_heavy",
+      "path": "res://assets/v2/objetos/bairro_das_forjas/mine_anvil_heavy.png",
+      "place": "forja_da_odete",
+      "size": [
+        99,
+        107
+      ],
+      "opaque_bbox": [
+        3,
+        3,
+        93,
+        102
+      ],
+      "anchor": [
+        52,
+        105
+      ],
+      "footprint": [
+        8,
+        87,
+        77,
+        18
+      ],
+      "interactive": "workstation",
+      "duplicate_of": "bairro_das_forjas.mine_anvil_heavy"
+    },
+    {
+      "id": "forja_da_odete.mine_barrel_mine",
+      "path": "res://assets/v2/objetos/bairro_das_forjas/mine_barrel_mine.png",
+      "place": "forja_da_odete",
+      "size": [
+        51,
+        65
+      ],
+      "opaque_bbox": [
+        2,
+        3,
+        47,
+        60
+      ],
+      "anchor": [
+        26,
+        63
+      ],
+      "footprint": [
+        5,
+        52,
+        42,
+        11
+      ],
+      "interactive": "container",
+      "duplicate_of": "bairro_das_forjas.mine_barrel_mine"
+    },
+    {
+      "id": "forja_da_odete.mine_coal_heap",
+      "path": "res://assets/v2/objetos/bairro_das_forjas/mine_coal_heap.png",
+      "place": "forja_da_odete",
+      "size": [
+        95,
+        110
+      ],
+      "opaque_bbox": [
+        3,
+        2,
+        90,
+        106
+      ],
+      "anchor": [
+        26,
+        108
+      ],
+      "footprint": [
+        9,
+        89,
+        57,
+        19
+      ],
+      "interactive": "decor",
+      "duplicate_of": "bairro_das_forjas.mine_coal_heap"
+    },
+    {
+      "id": "forja_da_odete.mine_crate_ingots",
+      "path": "res://assets/v2/objetos/forja_da_odete/mine_crate_ingots.png",
+      "place": "forja_da_odete",
+      "size": [
+        78,
+        68
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        73,
+        64
+      ],
+      "anchor": [
+        46,
+        66
+      ],
+      "footprint": [
+        20,
+        54,
+        48,
+        12
+      ],
+      "interactive": "container"
+    },
+    {
+      "id": "forja_da_odete.mine_crate_tools",
+      "path": "res://assets/v2/objetos/bairro_das_forjas/mine_crate_tools.png",
+      "place": "forja_da_odete",
+      "size": [
+        65,
+        71
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        60,
+        67
+      ],
+      "anchor": [
+        35,
+        69
+      ],
+      "footprint": [
+        7,
+        57,
+        51,
+        12
+      ],
+      "interactive": "container",
+      "duplicate_of": "bairro_das_forjas.mine_crate_tools"
+    },
+    {
+      "id": "forja_da_odete.mine_forge_furnace",
+      "path": "res://assets/v2/objetos/forja_da_odete/mine_forge_furnace.png",
+      "place": "forja_da_odete",
+      "size": [
+        172,
+        216
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        168,
+        212
+      ],
+      "anchor": [
+        49,
+        214
+      ],
+      "footprint": [
+        3,
+        176,
+        159,
+        38
+      ],
+      "interactive": "lamp"
+    },
+    {
+      "id": "forja_da_odete.mine_ingot_mold_lava",
+      "path": "res://assets/v2/objetos/forja_da_odete/mine_ingot_mold_lava.png",
+      "place": "forja_da_odete",
+      "size": [
+        78,
+        67
+      ],
+      "opaque_bbox": [
+        2,
+        3,
+        74,
+        62
+      ],
+      "anchor": [
+        25,
+        65
+      ],
+      "footprint": [
+        3,
+        54,
+        44,
+        11
+      ],
+      "interactive": "decor"
+    },
+    {
+      "id": "forja_da_odete.mine_kiln_fire",
+      "path": "res://assets/v2/objetos/forja_da_odete/mine_kiln_fire.png",
+      "place": "forja_da_odete",
+      "size": [
+        63,
+        84
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        58,
+        80
+      ],
+      "anchor": [
+        31,
+        82
+      ],
+      "footprint": [
+        2,
+        68,
+        58,
+        14
+      ],
+      "interactive": "lamp"
+    },
+    {
+      "id": "forja_da_odete.mine_ore_rock",
+      "path": "res://assets/v2/objetos/bairro_das_forjas/mine_ore_rock.png",
+      "place": "forja_da_odete",
+      "size": [
+        59,
+        83
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        55,
+        78
+      ],
+      "anchor": [
+        28,
+        80
+      ],
+      "footprint": [
+        2,
+        66,
+        52,
+        14
+      ],
+      "interactive": "decor",
+      "duplicate_of": "bairro_das_forjas.mine_ore_rock"
+    },
+    {
+      "id": "forja_da_odete.mine_quench_bucket",
+      "path": "res://assets/v2/objetos/forja_da_odete/mine_quench_bucket.png",
+      "place": "forja_da_odete",
+      "size": [
+        45,
+        52
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        41,
+        48
+      ],
+      "anchor": [
+        21,
+        50
+      ],
+      "footprint": [
+        3,
+        41,
+        38,
+        9
+      ],
+      "interactive": "container"
+    },
+    {
+      "id": "praca_da_lanterna.astral_bench_wood",
+      "path": "res://assets/v2/objetos/praca_da_lanterna/astral_bench_wood.png",
+      "place": "praca_da_lanterna",
+      "size": [
+        86,
+        81
+      ],
+      "opaque_bbox": [
+        3,
+        2,
+        81,
+        77
+      ],
+      "anchor": [
+        63,
+        79
+      ],
+      "footprint": [
+        56,
+        65,
+        24,
+        14
+      ],
+      "interactive": "seat"
+    },
+    {
+      "id": "praca_da_lanterna.astral_fountain_tiered",
+      "path": "res://assets/v2/objetos/praca_da_lanterna/astral_fountain_tiered.png",
+      "place": "praca_da_lanterna",
+      "size": [
+        125,
+        153
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        121,
+        148
+      ],
+      "anchor": [
+        63,
+        150
+      ],
+      "footprint": [
+        3,
+        123,
+        118,
+        27
+      ],
+      "interactive": "fountain"
+    },
+    {
+      "id": "praca_da_lanterna.cathedral_statue_angel_lantern",
+      "path": "res://assets/v2/objetos/praca_da_lanterna/cathedral_statue_angel_lantern.png",
+      "place": "praca_da_lanterna",
+      "size": [
+        98,
+        178
+      ],
+      "opaque_bbox": [
+        2,
+        3,
+        94,
+        173
+      ],
+      "anchor": [
+        51,
+        176
+      ],
+      "footprint": [
+        3,
+        145,
+        92,
+        31
+      ],
+      "interactive": "lamp"
+    },
+    {
+      "id": "praca_da_lanterna.common_banner_stand",
+      "path": "res://assets/v2/objetos/praca_da_lanterna/common_banner_stand.png",
+      "place": "praca_da_lanterna",
+      "size": [
+        94,
+        175
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        90,
+        171
+      ],
+      "anchor": [
+        13,
+        173
+      ],
+      "footprint": [
+        2,
+        142,
+        62,
+        31
+      ],
+      "interactive": "notice_board"
+    },
+    {
+      "id": "praca_da_lanterna.common_lamp_post_common",
+      "path": "res://assets/v2/objetos/bairro_das_forjas/common_lamp_post_common.png",
+      "place": "praca_da_lanterna",
+      "size": [
+        88,
+        181
+      ],
+      "opaque_bbox": [
+        3,
+        2,
+        83,
+        177
+      ],
+      "anchor": [
+        27,
+        179
+      ],
+      "footprint": [
+        11,
+        147,
+        34,
+        32
+      ],
+      "interactive": "lamp",
+      "duplicate_of": "bairro_das_forjas.common_lamp_post_common"
+    },
+    {
+      "id": "praca_da_lanterna.common_notice_board",
+      "path": "res://assets/v2/objetos/praca_da_lanterna/common_notice_board.png",
+      "place": "praca_da_lanterna",
+      "size": [
+        110,
+        134
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        106,
+        130
+      ],
+      "anchor": [
+        44,
+        132
+      ],
+      "footprint": [
+        17,
+        109,
+        81,
+        23
+      ],
+      "interactive": "notice_board"
+    },
+    {
+      "id": "praca_da_lanterna.common_potted_plant",
+      "path": "res://assets/v2/objetos/praca_da_lanterna/common_potted_plant.png",
+      "place": "praca_da_lanterna",
+      "size": [
+        79,
+        93
+      ],
+      "opaque_bbox": [
+        3,
+        2,
+        74,
+        89
+      ],
+      "anchor": [
+        38,
+        91
+      ],
+      "footprint": [
+        14,
+        75,
+        50,
+        16
+      ],
+      "interactive": "decor"
+    },
+    {
+      "id": "praca_da_lanterna.common_well_common",
+      "path": "res://assets/v2/objetos/praca_da_lanterna/common_well_common.png",
+      "place": "praca_da_lanterna",
+      "size": [
+        157,
+        163
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        152,
+        159
+      ],
+      "anchor": [
+        87,
+        161
+      ],
+      "footprint": [
+        4,
+        132,
+        150,
+        29
+      ],
+      "interactive": "well"
+    },
+    {
+      "id": "praca_da_lanterna.greenhouse_bush_green",
+      "path": "res://assets/v2/objetos/praca_da_lanterna/greenhouse_bush_green.png",
+      "place": "praca_da_lanterna",
+      "size": [
+        87,
+        79
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        83,
+        75
+      ],
+      "anchor": [
+        37,
+        77
+      ],
+      "footprint": [
+        2,
+        63,
+        78,
+        14
+      ],
+      "interactive": "decor"
+    },
+    {
+      "id": "praca_da_lanterna.greenhouse_topiary_cone_tall",
+      "path": "res://assets/v2/objetos/praca_da_lanterna/greenhouse_topiary_cone_tall.png",
+      "place": "praca_da_lanterna",
+      "size": [
+        47,
+        188
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        43,
+        184
+      ],
+      "anchor": [
+        22,
+        186
+      ],
+      "footprint": [
+        3,
+        153,
+        41,
+        33
+      ],
+      "interactive": "decor"
+    },
+    {
+      "id": "praca_da_lanterna.market_flower_cart",
+      "path": "res://assets/v2/objetos/praca_da_lanterna/market_flower_cart.png",
+      "place": "praca_da_lanterna",
+      "size": [
+        160,
+        134
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        156,
+        129
+      ],
+      "anchor": [
+        93,
+        131
+      ],
+      "footprint": [
+        3,
+        108,
+        118,
+        23
+      ],
+      "interactive": "stall"
+    },
+    {
+      "id": "praca_da_lanterna.market_lantern_ornate",
+      "path": "res://assets/v2/objetos/praca_da_lanterna/market_lantern_ornate.png",
+      "place": "praca_da_lanterna",
+      "size": [
+        38,
+        84
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        34,
+        80
+      ],
+      "anchor": [
+        19,
+        82
+      ],
+      "footprint": [
+        3,
+        68,
+        33,
+        14
+      ],
+      "interactive": "lamp"
+    },
+    {
+      "id": "praca_da_lanterna.market_stall_canvas",
+      "path": "res://assets/v2/objetos/praca_da_lanterna/market_stall_canvas.png",
+      "place": "praca_da_lanterna",
+      "size": [
+        224,
+        219
+      ],
+      "opaque_bbox": [
+        3,
+        2,
+        219,
+        214
+      ],
+      "anchor": [
+        171,
+        216
+      ],
+      "footprint": [
+        145,
+        177,
+        57,
+        39
+      ],
+      "interactive": "stall"
+    },
+    {
+      "id": "praca_da_lanterna.market_stall_striped",
+      "path": "res://assets/v2/objetos/praca_da_lanterna/market_stall_striped.png",
+      "place": "praca_da_lanterna",
+      "size": [
+        195,
+        207
+      ],
+      "opaque_bbox": [
+        3,
+        2,
+        190,
+        203
+      ],
+      "anchor": [
+        64,
+        205
+      ],
+      "footprint": [
+        5,
+        168,
+        188,
+        37
+      ],
+      "interactive": "stall"
+    },
+    {
+      "id": "v01.cathedral_chest_closed",
+      "path": "res://assets/v2/objetos/v01/cathedral_chest_closed.png",
+      "place": "v01",
+      "size": [
+        54,
+        47
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        50,
+        43
+      ],
+      "anchor": [
+        23,
+        45
+      ],
+      "footprint": [
+        5,
+        37,
+        46,
+        8
+      ],
+      "interactive": "chest"
+    },
+    {
+      "id": "v01.cathedral_chest_open",
+      "path": "res://assets/v2/objetos/v01/cathedral_chest_open.png",
+      "place": "v01",
+      "size": [
+        63,
+        70
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        59,
+        66
+      ],
+      "anchor": [
+        27,
+        68
+      ],
+      "footprint": [
+        12,
+        56,
+        49,
+        12
+      ],
+      "interactive": "chest"
+    },
+    {
+      "id": "v01.common_chest_iron",
+      "path": "res://assets/v2/objetos/v01/common_chest_iron.png",
+      "place": "v01",
+      "size": [
+        105,
+        81
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        100,
+        77
+      ],
+      "anchor": [
+        45,
+        79
+      ],
+      "footprint": [
+        6,
+        65,
+        96,
+        14
+      ],
+      "interactive": "chest"
+    },
+    {
+      "id": "v01.common_chest_gold",
+      "path": "res://assets/v2/objetos/v01/common_chest_gold.png",
+      "place": "v01",
+      "size": [
+        96,
+        81
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        91,
+        76
+      ],
+      "anchor": [
+        47,
+        78
+      ],
+      "footprint": [
+        4,
+        64,
+        87,
+        14
+      ],
+      "interactive": "chest"
+    },
+    {
+      "id": "v01.cathedral_door_arched",
+      "path": "res://assets/v2/objetos/v01/cathedral_door_arched.png",
+      "place": "v01",
+      "size": [
+        90,
+        116
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        86,
+        112
+      ],
+      "anchor": [
+        45,
+        114
+      ],
+      "footprint": [
+        2,
+        94,
+        86,
+        20
+      ],
+      "interactive": "door"
+    },
+    {
+      "id": "v01.cathedral_door_barred",
+      "path": "res://assets/v2/objetos/v01/cathedral_door_barred.png",
+      "place": "v01",
+      "size": [
+        84,
+        123
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        80,
+        119
+      ],
+      "anchor": [
+        42,
+        121
+      ],
+      "footprint": [
+        2,
+        100,
+        80,
+        21
+      ],
+      "interactive": "door"
+    },
+    {
+      "id": "v01.cathedral_door_double_arched",
+      "path": "res://assets/v2/objetos/v01/cathedral_door_double_arched.png",
+      "place": "v01",
+      "size": [
+        131,
+        139
+      ],
+      "opaque_bbox": [
+        2,
+        3,
+        127,
+        134
+      ],
+      "anchor": [
+        65,
+        137
+      ],
+      "footprint": [
+        2,
+        113,
+        127,
+        24
+      ],
+      "interactive": "door"
+    },
+    {
+      "id": "v01.astral_lantern_standing",
+      "path": "res://assets/v2/objetos/v01/astral_lantern_standing.png",
+      "place": "v01",
+      "size": [
+        38,
+        82
+      ],
+      "opaque_bbox": [
+        3,
+        2,
+        33,
+        77
+      ],
+      "anchor": [
+        21,
+        79
+      ],
+      "footprint": [
+        11,
+        65,
+        21,
+        14
+      ],
+      "interactive": "lamp"
+    },
+    {
+      "id": "v01.market_gate_iron_small",
+      "path": "res://assets/v2/objetos/v01/market_gate_iron_small.png",
+      "place": "v01",
+      "size": [
+        159,
+        96
+      ],
+      "opaque_bbox": [
+        2,
+        2,
+        155,
+        92
+      ],
+      "anchor": [
+        81,
+        94
+      ],
+      "footprint": [
+        2,
+        77,
+        155,
+        17
+      ],
+      "interactive": "door"
+    }
+  ]
+}
