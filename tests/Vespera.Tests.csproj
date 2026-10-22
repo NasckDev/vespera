@@ -39,4 +39,9 @@
   <ItemGroup>
     <None Include="..\src\Data\*.json" Link="Data/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
+
+  <!-- Lógica pura da camada de jogo (sem Godot) testada fora da engine. -->
+  <ItemGroup>
+    <Compile Include="..\src\Game\Boot\BindingTable.cs" Link="Game/BindingTable.cs" />
+  </ItemGroup>
 </Project>
