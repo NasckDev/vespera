@@ -548,7 +548,7 @@ public partial class PlayerAnimator : Node
         if (Walker.Visible && !IsDodging)
         {
             var frame = Walker.Frame;
-            contact = moving && frame != _lastWalkFrame && (frame == 0 || frame == 3) && _lastWalkFrame >= 0;
+            contact = moving && frame != _lastWalkFrame && (frame == 0 || frame == 3); // o primeiro apoio ao sair do parado também conta
             _lastWalkFrame = frame;
         }
         else

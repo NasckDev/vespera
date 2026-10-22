@@ -165,23 +165,27 @@ public partial class SmokeTest
         var db = GameManager.Db;
         var rng = new SeededRandom(7);
         var placed = new List<Enemy>();
-        var x = 640f;
+        player.Teleport(world.CorrectToWalkable(new Vector2(900, 470)));
+        var origin = player.GlobalPosition;
+        var slot = 0;
         try
         {
             foreach (var id in new[] { "angler", "reaper", "colosso", "rainha", "knight", "wolfE" })
             {
+                // duas fileiras de três na frente do caçador (cabem na vista de 640×360 u)
+                var x = origin.X + (((slot % 3) - 1) * 190f);
+                var y = origin.Y + (slot < 3 ? 60f : 175f);
+                slot++;
                 var def = db.Monsters[id];
                 Require(Enemy.ArtPathFor(def) is not null, $"{id}: sem arte aprovada");
                 Enemy.Preload(def);
-                var body = new MonsterBody(new ScaledMonster(def, def.Hp, def.Damage, []), x, 470, Enemy.HitHeightFor(def), rng) { SpawnT = 0 };
+                var body = new MonsterBody(new ScaledMonster(def, def.Hp, def.Damage, []), x, y, Enemy.HitHeightFor(def), rng) { SpawnT = 0 };
                 var enemy = Enemy.Create(body);
                 world.Entities.AddChild(enemy);
                 placed.Add(enemy);
-                x += id == "wolfE" ? 60 : 95;
             }
 
-            player.Teleport(world.CorrectToWalkable(new Vector2(900, 560)));
-            var foot = player.GlobalPosition;
+            var foot = player.GlobalPosition + new Vector2(0, 400); // "jogador" abaixo de todos: olham para a câmera
             var minY = placed.ToDictionary(e => e, _ => 9f);
             var maxY = placed.ToDictionary(e => e, _ => 0f);
             for (var i = 0; i < 60; i++)

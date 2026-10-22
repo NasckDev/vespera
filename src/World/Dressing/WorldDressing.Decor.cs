@@ -512,8 +512,10 @@ public partial class WorldDressing
         }
 
         var root = new Node2D { Name = "FerryBoat", ZIndex = -1 };
-        var height = art.TopHeight(BoatRowing);
-        var drop = height * (kind == "raft" ? 0.5f : 0.42f); // o pé do caçador fica no meio do casco
+        // altura do casco opaco (o PNG tem margem transparente em cima): o pé do caçador fica no meio do casco
+        var used = art.Texture(BoatRowing, 0)?.GetImage()?.GetUsedRect() ?? new Rect2I(0, 0, 1, 1);
+        var height = (art.Anchor(BoatRowing).Y - used.Position.Y) * art.UnitsPerPixel(BoatRowing);
+        var drop = height * 0.5f;
         if (art.Has(BoatReflection))
         {
             var reflection = new Sprite2D { Name = "Reflection", Modulate = new Color(1f, 1f, 1f, 0.28f), Position = new Vector2(0, drop + 2f) };
