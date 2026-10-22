@@ -819,6 +819,9 @@ public partial class CombatDirector : Node2D, IMonsterWorld
 
     public void Sfx(string id, Vector2 at) => AudioManager.Instance?.PlaySfx(id, at);
 
+    /// <summary>Efeito com tom base e variação próprios (acerto do golpe final do combo, POLI-15).</summary>
+    public void Sfx(string id, Vector2 at, float basePitch, float jitter) => AudioManager.Instance?.PlaySfx(id, at, jitter, basePitch);
+
     // --- Eventos ---
 
     private void OnMapChanged(string mapId, string mapName)

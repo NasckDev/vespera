@@ -118,6 +118,9 @@ public static class GameSettings
     /// <summary>Fator dos clarões (1 normal, 0,3 com "reduzir flashes").</summary>
     public static float FlashScale => ReduceFlashes ? 0.3f : 1f;
 
+    /// <summary>Fator do piscar branco de dano na silhueta do monstro e do jogador (1 normal, 0,45 com "reduzir flashes").</summary>
+    public static float HitFlashScale => ReduceFlashes ? 0.45f : 1f;
+
     /// <summary>HUD em alto contraste (fundos opacos, texto claro, contorno nos avisos de perigo).</summary>
     public static bool HighContrast
     {

@@ -63,6 +63,11 @@ public sealed partial class PlayerCombat : IDisposable
 
     private bool _bowLatched;
 
+    private Vector2 _lastHitAt;
+
+    /// <summary>Tom do "hit" no golpe final do combo (POLI-15): 0,8 = quase uma terça menor, soa pesado sem virar outro som.</summary>
+    public const float HitPitchBig = 0.8f;
+
     /// <summary>Arco carregando por alternância (smoke test).</summary>
     public bool BowLatched => _bowLatched;
 
@@ -105,6 +110,7 @@ public sealed partial class PlayerCombat : IDisposable
     public void OnMapChanged()
     {
         _knock = Vector2.Zero;
+        _bowLatched = false;
         _pullT = 0;
         _uivoT = 0;
         _state.CancelActions();
@@ -123,9 +129,20 @@ public sealed partial class PlayerCombat : IDisposable
         }
     }
 
-    /// <summary>Gameplay bloqueado (UI/pausa): nada anda.</summary>
-    public void Frozen()
+    /// <summary>Gameplay bloqueado (UI/pausa): nada anda. A carga alternada do arco termina (POLI-14).</summary>
+    public void Frozen() => ReleaseBowLatch();
+
+    /// <summary>
+    /// POLI-14: a carga do arco no modo "alternar" só vale enquanto o jogador tem o controle; ao pausar, abrir diálogo, morrer,
+    /// trocar de mapa ou sofrer um Supremo/transição ela é cancelada (sem soltar flecha), em vez de voltar armada depois.
+    /// </summary>
+    private void ReleaseBowLatch()
     {
+        if (_bowLatched)
+        {
+            _bowLatched = false;
+            _state.CancelActions();
+        }
     }
 
     public void Step(float dt)
@@ -135,6 +152,7 @@ public sealed partial class PlayerCombat : IDisposable
         _potionCd = MathF.Max(0, _potionCd - dt);
         if (Dead)
         {
+            ReleaseBowLatch();
             _deadT += dt;
             Player.MovementLocked = true;
             Player.Body.Rotation = -MathF.PI / 2 * MathF.Min(1, _deadT * 3);
@@ -157,6 +175,7 @@ public sealed partial class PlayerCombat : IDisposable
 
         if (_uivoT > 0)
         {
+            ReleaseBowLatch();
             StepUivo(dt);
             Player.MovementLocked = true;
             Player.AttackPose = true;
@@ -190,6 +209,10 @@ public sealed partial class PlayerCombat : IDisposable
         {
             StepAttack(dt, stats);
             StepActions();
+        }
+        else
+        {
+            ReleaseBowLatch();
         }
 
         Player.AttackPose = _state.AttackTime > 0 || _state.IsCharging || _state.IsWindingUp;
@@ -365,7 +388,8 @@ public sealed partial class PlayerCombat : IDisposable
                 _combat.Sfx("swing", p);
                 if (n > 0)
                 {
-                    _combat.Sfx("hit", p);
+                    // POLI-15: o som do acerto sai de onde o golpe pegou (não do jogador); o golpe final do combo é mais grave e pesado.
+                    _combat.Sfx("hit", _lastHitAt, swing.Big ? HitPitchBig : 1f, swing.Big ? 0.04f : 0.07f);
                     if (swing.Big)
                     {
                         // C1-D10: o golpe final do combo pesa mais (pausa e tremor um pouco maiores que o acerto comum).
@@ -437,6 +461,11 @@ public sealed partial class PlayerCombat : IDisposable
 
             if (CombatMath.InSector(origin.X, origin.Y, m.X, m.Y - (m.HitHeight * 0.5), m.Radius, aim, arc, range))
             {
+                if (n == 0)
+                {
+                    _lastHitAt = new Vector2((float)m.X, (float)(m.Y - (m.HitHeight * 0.5)));
+                }
+
                 _combat.HitMob(m, damage, origin, new HitOptions(w.PartMult, w.Backstab ?? 0, knockback, element));
                 n++;
             }
@@ -596,6 +625,7 @@ public sealed partial class PlayerCombat : IDisposable
     private void Die()
     {
         Dead = true;
+        _bowLatched = false;
         _deadT = 0;
         _state.CancelActions();
         EndUltimate();
@@ -692,7 +722,7 @@ public sealed partial class PlayerCombat : IDisposable
     {
         var blink = _state.Invulnerable > 0 && ((int)(_combat.Time * 18) % 2) == 1;
         Player.Body.Modulate = new Color(1, 1, 1, blink ? 0.5f : 1);
-        var flash = (float)Math.Min(1, _state.HurtTime * 3);
+        var flash = (float)Math.Min(1, _state.HurtTime * 3) * GameSettings.HitFlashScale; // POLI-7: reduzir flashes
         if (!Mathf.IsEqualApprox(flash, _lastFlash))
         {
             _lastFlash = flash;

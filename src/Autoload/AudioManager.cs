@@ -11,6 +11,9 @@ namespace Vespera.Autoload;
 /// SFX tocam num pool fixo de players (nenhum nó é criado por chamada) com limite de vozes por id;
 /// música faz crossfade entre três players (D37) e escolhe a faixa pelo local (D36); volumes por barramento (0–1) ficam em user://settings.cfg.
 /// </summary>
+/// <summary>Registro do último efeito tocado (smoke test).</summary>
+public readonly record struct SfxPlayed(string Id, Vector2? Position, float Pitch);
+
 public partial class AudioManager : Node
 {
     public const string MasterBus = "Master";
@@ -165,9 +168,10 @@ public partial class AudioManager : Node
     /// Toca o efeito <paramref name="id"/>. Com <paramref name="worldPos"/> usa um player 2D (volume e pan pela
     /// câmera); sem, toca "na cabeça". <paramref name="pitchJitter"/> varia o pitch em ±fração para não cansar.
     /// <paramref name="pitchJitter"/> é limitado a 0–<see cref="MaxPitchJitter"/>.
+    /// <paramref name="basePitch"/> é o tom central (1 = original; 0,8 = mais grave), antes da variação.
     /// Id desconhecido gera um aviso (uma vez) e é ignorado. Depois do encerramento não faz nada.
     /// </summary>
-    public void PlaySfx(string id, Vector2? worldPos = null, float pitchJitter = 0.05f)
+    public void PlaySfx(string id, Vector2? worldPos = null, float pitchJitter = 0.05f, float basePitch = 1f)
     {
         if (_released)
         {
@@ -181,7 +185,8 @@ public partial class AudioManager : Node
         }
 
         var bus = id == "ui" ? _uiBusName : _sfxBusName;
-        var pitch = 1f + (((float)_random.NextDouble() * 2f) - 1f) * Mathf.Clamp(pitchJitter, 0f, MaxPitchJitter);
+        var pitch = Mathf.Clamp(basePitch, 0.25f, 4f) * (1f + ((((float)_random.NextDouble() * 2f) - 1f) * Mathf.Clamp(pitchJitter, 0f, MaxPitchJitter)));
+        LastSfx = new SfxPlayed(id, worldPos, pitch);
 
         if (worldPos is { } position)
         {
@@ -202,6 +207,9 @@ public partial class AudioManager : Node
         flat.PitchScale = pitch;
         flat.Play();
     }
+
+    /// <summary>Último efeito pedido (id, posição, tom): ajuda os cenários de smoke a conferir o som sem ouvir.</summary>
+    public SfxPlayed LastSfx { get; private set; }
 
     public bool HasSfx(string id) => _sfx.ContainsKey(id);
 

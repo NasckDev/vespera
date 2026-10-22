@@ -156,7 +156,7 @@ public partial class Enemy : Node2D
         _shadow.Modulate = new Color(1, 1, 1, (float)(0.45 * a));
 
         // Flash do golpe (0,12 s, alfa ×6) e brilho pulsante enquanto mira um golpe forte.
-        var flash = (float)Math.Min(1, m.Flash * 6) * (Autoload.GameSettings.ReduceFlashes ? 0.45f : 1f);
+        var flash = (float)Math.Min(1, m.Flash * 6) * Autoload.GameSettings.HitFlashScale;
         if (m.IsTelegraphing && !m.Dead)
         {
             flash = MathF.Max(flash, 0.18f + (0.15f * MathF.Sin(time * 30)));
