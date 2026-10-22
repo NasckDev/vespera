@@ -100,5 +100,10 @@ metadata/densities = {
 "walk_back": 4.5461,
 "walk_side": 4.6417
 }
+metadata/used_rects = {
+"walk_front": Rect2(80, 265, 197, 147),
+"walk_back": Rect2(144, 266, 172, 144),
+"walk_side": Rect2(87, 265, 207, 147)
+}
 metadata/scale_class = "character"
 metadata/source = "pacote v4 do designer (issue #3): caminhada hammer 6 quadros por vista"

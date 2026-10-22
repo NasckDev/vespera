@@ -1667,6 +1667,43 @@ public partial class SmokeTest
         Require(brazier.ArtState is "on" or "off", $"braseiro real com a arte nova, está '{brazier.ArtState}'");
     }
 
+    [SmokeScenario("arte (qa): testa que todo frames.tres traz o recorte opaco gravado e igual ao da textura", order: 170)]
+    private Task ArteQaUsedRectsAreBaked()
+    {
+        var paths = new List<string>();
+        ArteQaCollectFrames("res://assets/sprites", paths);
+        Require(paths.Count >= 29, $"poucos frames.tres encontrados: {paths.Count}");
+        var failures = new List<string>();
+        foreach (var path in paths)
+        {
+            if (!ArtFrames.TryLoad(path, out var art))
+            {
+                failures.Add($"{path}: não carregou");
+                continue;
+            }
+
+            foreach (var name in art.Frames.GetAnimationNames())
+            {
+                var key = new StringName(name);
+                if (!art.HasUsedRect(key))
+                {
+                    failures.Add($"{path}:{name}: sem used_rects (rode build_art.py frames)");
+                    continue;
+                }
+
+                var real = art.Texture(key, 0)?.GetImage()?.GetUsedRect();
+                if (real is { } r && r != art.UsedRect(key))
+                {
+                    failures.Add($"{path}:{name}: used_rects {art.UsedRect(key)} difere da textura {r}");
+                }
+            }
+        }
+
+        Log.Info($"arte qa: {paths.Count} frames.tres com used_rects conferidos");
+        Require(failures.Count == 0, string.Join("\n  ", failures.Take(20)));
+        return Task.CompletedTask;
+    }
+
     [SmokeScenario("arte (qa): testa Alfa mantém a arte com cristas parado e perseguindo e o tamanho perto do lobo do atlas", order: 167)]
     private async Task ArteQaAlphaKeepsArtInEveryState()
     {

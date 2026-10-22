@@ -100,5 +100,10 @@ metadata/densities = {
 "walk_back": 3.9759,
 "walk_side": 4.0257
 }
+metadata/used_rects = {
+"walk_front": Rect2(121, 265, 150, 144),
+"walk_back": Rect2(158, 265, 128, 142),
+"walk_side": Rect2(146, 265, 162, 145)
+}
 metadata/scale_class = "character"
 metadata/source = "pacote v4 do designer (issue #3): caminhada staff 6 quadros por vista"

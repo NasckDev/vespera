@@ -41,5 +41,9 @@ metadata/densities = {
 "off": 1.9511,
 "on": 1.9511
 }
+metadata/used_rects = {
+"off": Rect2(8, 9, 84, 177),
+"on": Rect2(8, 9, 84, 177)
+}
 metadata/scale_class = "fixed"
 metadata/source = "pacote v1 do designer (issue #5): lamp_post apagado/aceso com chama em 4 quadros"

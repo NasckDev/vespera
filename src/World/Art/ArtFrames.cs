@@ -15,7 +15,8 @@ public enum ArtScaleClass
 /// <summary>
 /// SpriteFrames da arte aprovada (gerado por <c>tools/sprites/build_art.py</c>, DECISIONS C2-D1) com os metadados que
 /// põem cada animação no tamanho e no pé certos: <c>anchors</c> (pé em px do PNG), <c>densities</c> (px por u a escala 1)
-/// e <c>scale_class</c>. Carregado uma vez por caminho e guardado em cache (nada é alocado por quadro).
+/// e <c>scale_class</c>, mais <c>used_rects</c> (recorte opaco do 1º quadro de cada animação: nada de ler pixels da GPU em
+/// tempo de jogo). Carregado uma vez por caminho e guardado em cache (nada é alocado por quadro).
 /// </summary>
 public sealed class ArtFrames
 {
@@ -23,6 +24,7 @@ public sealed class ArtFrames
 
     private readonly Dictionary<StringName, Vector2> _anchors = [];
     private readonly Dictionary<StringName, float> _densities = [];
+    private readonly Dictionary<StringName, Rect2I> _usedRects = [];
 
     private ArtFrames(string path, SpriteFrames frames)
     {
@@ -41,6 +43,15 @@ public sealed class ArtFrames
             foreach (var (k, v) in densities)
             {
                 _densities[new StringName(k.AsString())] = Mathf.Max(0.01f, (float)v.AsDouble());
+            }
+        }
+
+        if (frames.GetMeta("used_rects", new Godot.Collections.Dictionary()).AsGodotDictionary() is { } rects)
+        {
+            foreach (var (k, v) in rects)
+            {
+                var r = v.AsRect2();
+                _usedRects[new StringName(k.AsString())] = new Rect2I((int)r.Position.X, (int)r.Position.Y, (int)r.Size.X, (int)r.Size.Y);
             }
         }
 
@@ -96,6 +107,28 @@ public sealed class ArtFrames
     public int Count(StringName animation) => Frames.HasAnimation(animation) ? Frames.GetFrameCount(animation) : 0;
 
     public float Fps(StringName animation) => Frames.HasAnimation(animation) ? (float)Frames.GetAnimationSpeed(animation) : 0f;
+
+    /// <summary>O <c>.tres</c> traz o retângulo opaco da animação (<c>used_rects</c>).</summary>
+    public bool HasUsedRect(StringName animation) => _usedRects.ContainsKey(animation);
+
+    /// <summary>
+    /// Retângulo opaco (px do PNG) do 1º quadro da animação, gravado pelo <c>build_art.py</c> no <c>.tres</c>. Sem o metadado
+    /// (arte antiga) lê a textura uma vez e guarda: <c>GetImage()</c> só funciona porque os PNG são importados sem compressão
+    /// com perda de VRAM (<c>compress/mode=0</c>) e pode engasgar, por isso o caminho normal nunca passa por ele.
+    /// </summary>
+    public Rect2I UsedRect(StringName animation)
+    {
+        if (_usedRects.TryGetValue(animation, out var rect))
+        {
+            return rect;
+        }
+
+        var texture = Texture(animation, 0);
+        rect = texture?.GetImage() is { } image ? image.GetUsedRect() : new Rect2I(0, 0, 1, 1);
+        _usedRects[animation] = rect;
+        Log.Warning($"Arte '{Path}' sem used_rects para '{animation}': rode tools/sprites/build_art.py frames.");
+        return rect;
+    }
 
     public Vector2 Anchor(StringName animation) => _anchors.TryGetValue(animation, out var a) ? a : Vector2.Zero;
 

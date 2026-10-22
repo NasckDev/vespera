@@ -62,5 +62,12 @@ metadata/densities = {
 "open": 4.1667,
 "empty": 4.1667
 }
+metadata/used_rects = {
+"closed": Rect2(31, 64, 94, 79),
+"opening_1": Rect2(31, 59, 94, 84),
+"opening_2": Rect2(33, 48, 92, 93),
+"open": Rect2(33, 43, 92, 98),
+"empty": Rect2(33, 43, 92, 98)
+}
 metadata/scale_class = "prop"
 metadata/source = "pacotes v2/v3/v4 do designer (issue #5/#8): baú tier 3 fechado/abrindo/aberto/vazio"

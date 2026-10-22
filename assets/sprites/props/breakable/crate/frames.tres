@@ -106,5 +106,16 @@ metadata/densities = {
 "shard_4": 4.1667,
 "shard_5": 4.1667
 }
+metadata/used_rects = {
+"whole": Rect2(32, 26, 88, 93),
+"cracked": Rect2(32, 26, 88, 93),
+"broken": Rect2(27, 14, 109, 118),
+"shard_0": Rect2(85, 57, 51, 56),
+"shard_1": Rect2(41, 70, 58, 62),
+"shard_2": Rect2(28, 70, 42, 60),
+"shard_3": Rect2(31, 14, 40, 52),
+"shard_4": Rect2(27, 15, 41, 45),
+"shard_5": Rect2(86, 45, 47, 44)
+}
 metadata/scale_class = "prop"
 metadata/source = "pacote v1 do designer (issue #5): crate inteiro/rachado/quebrado + 6 estilhaços"

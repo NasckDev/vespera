@@ -14,6 +14,9 @@ Dois passos, os dois determinísticos:
            metadata/anchors     = {animação: Vector2(pé em px do PNG)}
            metadata/densities   = {animação: px por u na escala 1 (antes de characterScale/propScale)}
            metadata/scale_class = "character" | "prop" | "fixed"  (qual escala global do rules.json se aplica)
+           metadata/used_rects  = {animação: Rect2(x, y, w, h) do recorte opaco do 1º quadro, alfa > 0 como o
+                                   Image.get_used_rect do Godot}: o jogo não lê pixels da GPU em tempo de execução
+                                   (centro dos estilhaços, casco do barco)
          A densidade é calibrada pela arte que já está no jogo, para nada mudar de tamanho (DECISIONS C2-D1):
            - Lâmina: altura do corpo (pé até a cabeça, sem o cabo da espada) / 32 u, a mesma conta do cut_hunter.py;
            - outras classes: cada vista contra a pose do atlas (c_<classe>_<vista>) de onde o rig v4 saiu;
@@ -232,6 +235,11 @@ def write_tres(path: Path, anims: list[tuple[str, list[Path], float, bool]], anc
     lines.append("animations = [%s]" % ", ".join(blocks))
     lines.append("metadata/anchors = {\n%s\n}" % ",\n".join(f'"{a}": Vector2({x:g}, {y:g})' for a, (x, y) in anchors.items()))
     lines.append("metadata/densities = {\n%s\n}" % ",\n".join(f'"{a}": {d:.4f}' for a, d in densities.items()))
+    used = []
+    for name, frames, _, _ in anims:
+        x0, y0, x1, y1 = load(frames[0]).getchannel("A").getbbox() or (0, 0, 1, 1)  # alfa > 0, igual ao get_used_rect do Godot
+        used.append(f'"{name}": Rect2({x0}, {y0}, {x1 - x0}, {y1 - y0})')
+    lines.append("metadata/used_rects = {\n%s\n}" % ",\n".join(used))
     lines.append(f'metadata/scale_class = "{scale_class}"')
     lines.append(f'metadata/source = "{source}"')
     path.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")

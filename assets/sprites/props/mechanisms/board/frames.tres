@@ -18,5 +18,8 @@ metadata/anchors = {
 metadata/densities = {
 "board": 1.7637
 }
+metadata/used_rects = {
+"board": Rect2(0, 0, 106, 130)
+}
 metadata/scale_class = "fixed"
 metadata/source = "pacote v1 do designer (issue #5): quadro de avisos"

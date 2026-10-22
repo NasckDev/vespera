@@ -29,5 +29,9 @@ metadata/densities = {
 "off": 1.7763,
 "on": 1.7763
 }
+metadata/used_rects = {
+"off": Rect2(14, 14, 76, 141),
+"on": Rect2(14, 14, 76, 141)
+}
 metadata/scale_class = "fixed"
 metadata/source = "pacote v1 do designer (issue #5): alavanca"

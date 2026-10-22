@@ -29,5 +29,9 @@ metadata/densities = {
 "closed": 1.7637,
 "open": 1.7637
 }
+metadata/used_rects = {
+"closed": Rect2(19, 16, 86, 112),
+"open": Rect2(19, 16, 86, 112)
+}
 metadata/scale_class = "fixed"
 metadata/source = "pacote v2 do designer (issue #5): porta fechada/aberta"

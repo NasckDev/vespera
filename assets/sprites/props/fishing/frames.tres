@@ -29,5 +29,9 @@ metadata/densities = {
 "right": 6.7500,
 "left": 6.7500
 }
+metadata/used_rects = {
+"right": Rect2(14, 11, 85, 162),
+"left": Rect2(11, 11, 85, 162)
+}
 metadata/scale_class = "character"
 metadata/source = "pacote v2 do designer (issue #5): vara de pesca nas duas mãos"

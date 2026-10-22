@@ -51,5 +51,11 @@ metadata/densities = {
 "special": 3.5938,
 "death": 3.5938
 }
+metadata/used_rects = {
+"front": Rect2(247, 232, 326, 230),
+"attack": Rect2(235, 238, 349, 224),
+"special": Rect2(261, 163, 297, 299),
+"death": Rect2(275, 298, 270, 164)
+}
 metadata/scale_class = "character"
 metadata/source = "pacote v4 do designer (issue #2): poses autorais normalizadas, tela 820x490, pé (410, 462)"

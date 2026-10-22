@@ -52,5 +52,10 @@ metadata/densities = {
 "rowing": 1.4991,
 "reflection": 1.4991
 }
+metadata/used_rects = {
+"rest": Rect2(66, 66, 85, 54),
+"rowing": Rect2(9, 65, 199, 56),
+"reflection": Rect2(22, 30, 85, 96)
+}
 metadata/scale_class = "fixed"
 metadata/source = "pacote v2 do designer (issue #5): raft parado/remando (4 quadros)"

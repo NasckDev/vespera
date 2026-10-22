@@ -209,5 +209,13 @@ metadata/densities = {
 "dodge_front": 4.5000,
 "dodge_back": 4.5000
 }
+metadata/used_rects = {
+"walk_front": Rect2(162, 265, 98, 146),
+"walk_back": Rect2(156, 261, 108, 148),
+"walk_side": Rect2(157, 260, 106, 143),
+"dodge_side": Rect2(128, 269, 143, 143),
+"dodge_front": Rect2(158, 279, 101, 133),
+"dodge_back": Rect2(155, 279, 108, 133)
+}
 metadata/scale_class = "character"
 metadata/source = "pacotes v2/v3/v4 do designer (issue #3): andar frente v3, costas v3+v4, lado kit+v2, esquiva lado v4, frente/costas v3 (provisória)"

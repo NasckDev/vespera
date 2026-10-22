@@ -517,7 +517,7 @@ public partial class WorldDressing
 
         var root = new Node2D { Name = "FerryBoat", ZIndex = -1 };
         // altura do casco opaco (o PNG tem margem transparente em cima): o pé do caçador fica no meio do casco
-        var used = art.Texture(BoatRowing, 0)?.GetImage()?.GetUsedRect() ?? new Rect2I(0, 0, 1, 1);
+        var used = art.UsedRect(BoatRowing);
         var height = (art.Anchor(BoatRowing).Y - used.Position.Y) * art.UnitsPerPixel(BoatRowing);
         var drop = height * 0.5f;
         if (art.Has(BoatReflection))
@@ -589,7 +589,11 @@ public partial class WorldDressing
         return _rodRight is not null && _rodLeft is not null;
     }
 
-    /// <summary>Recorta a vara (do cabo até a ponta, sem a linha pendurada); devolve o recorte, o cabo e a ponta em px do recorte.</summary>
+    /// <summary>
+    /// Recorta a vara (do cabo até a ponta, sem a linha pendurada); devolve o recorte, o cabo e a ponta em px do recorte.
+    /// Lê os pixels uma única vez (cache estático na primeira pescaria): depende dos PNG importados sem compressão de VRAM
+    /// (<c>compress/mode=0</c>), como o resto da arte desenhada.
+    /// </summary>
     private static (AtlasTexture?, Vector2, Vector2) CutRod(Texture2D? texture, bool right)
     {
         if (texture?.GetImage() is not { } image)

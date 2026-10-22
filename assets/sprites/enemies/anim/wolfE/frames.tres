@@ -29,5 +29,9 @@ metadata/densities = {
 "front": 4.9900,
 "back": 4.9900
 }
+metadata/used_rects = {
+"front": Rect2(66, 2, 190, 184),
+"back": Rect2(96, 0, 144, 186)
+}
 metadata/scale_class = "character"
 metadata/source = "pacote v2 do designer (issue #2): Alfa com cristas, poses estáticas aprovadas"

@@ -40,5 +40,10 @@ metadata/densities = {
 "harvested": 2.1164,
 "sprouting": 2.1164
 }
+metadata/used_rects = {
+"flowering": Rect2(10, 10, 59, 66),
+"harvested": Rect2(10, 10, 59, 66),
+"sprouting": Rect2(20, 21, 39, 43)
+}
 metadata/scale_class = "fixed"
 metadata/source = "pacote v1 do designer (issue #5): flor violet florida/colhida/brotando"

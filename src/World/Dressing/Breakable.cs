@@ -291,8 +291,7 @@ public partial class Breakable : Node2D
         var key = _art!.Path + ":" + name;
         if (!ShardCenters.TryGetValue(key, out var center))
         {
-            var tex = _art.Texture(name, 0);
-            var used = tex?.GetImage() is { } img ? img.GetUsedRect() : new Rect2I(Vector2I.Zero, Vector2I.One);
+            var used = _art.UsedRect(name);
             center = ((Vector2)used.Position + ((Vector2)used.Size / 2f) - anchor) * upp;
             ShardCenters[key] = center;
         }
