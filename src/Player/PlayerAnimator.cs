@@ -71,6 +71,7 @@ public partial class PlayerAnimator : Node
     private float _dodgeDuration = 0.17f;
     private Vector2 _dodgeDir = Vector2.Down;
     private bool _wasAttackPose;
+    private bool _attackCancelled;
     private float _attackPoseT;
     private FacingDirection _lastDirection = FacingDirection.Down;
     private float _lastVelX;
@@ -110,7 +111,11 @@ public partial class PlayerAnimator : Node
     /// <summary>Trocas de quadro da caminhada desenhada (para testes de fluidez).</summary>
     public int WalkFrameChanges { get; private set; }
 
-    public bool IsAttacking => _attackT >= 0f || _player.AttackPose;
+    /// <summary>
+    /// A pose de golpe está na tela. A esquiva cancela o golpe: durante o dash (e até o combate soltar o
+    /// <see cref="Player.AttackPose"/> daquele golpe) o caçador mostra a esquiva, não desliza em pose de ataque.
+    /// </summary>
+    public bool IsAttacking => !IsDodging && !_attackCancelled && (_attackT >= 0f || _player.AttackPose);
 
     public bool IsHurt => _hurtT >= 0f;
 
@@ -169,6 +174,7 @@ public partial class PlayerAnimator : Node
 
         _attackDuration = MathF.Max(0.08f, duration);
         _attackT = 0f;
+        _attackCancelled = false;
     }
 
     /// <summary>
@@ -185,6 +191,8 @@ public partial class PlayerAnimator : Node
         _dodgeDir = direction == Vector2.Zero ? Vector2.Down : direction.Normalized();
         _dodgeDuration = MathF.Max(0.05f, duration);
         _dodgeT = 0f;
+        _attackT = -1f; // a esquiva cancela o golpe: o combate segue com AttackPose por mais um pouco, a pose não
+        _attackCancelled = _player.AttackPose;
     }
 
     public void PlayHurt()
@@ -201,6 +209,7 @@ public partial class PlayerAnimator : Node
         {
             _deathT = 0f;
             _attackT = -1f;
+            _attackCancelled = false;
             _hurtT = -1f;
             _dodgeT = -1f;
         }
@@ -211,6 +220,7 @@ public partial class PlayerAnimator : Node
         _deathT = -1f;
         _hurtT = -1f;
         _attackT = -1f;
+        _attackCancelled = false;
         _dodgeT = -1f;
     }
 
@@ -294,6 +304,10 @@ public partial class PlayerAnimator : Node
 
         _wasAttackPose = _player.AttackPose;
         _attackPoseT += dt;
+        if (!_player.AttackPose && _attackT < 0f)
+        {
+            _attackCancelled = false; // o golpe cancelado acabou; o próximo mostra a pose
+        }
 
         var velocity = _player.Velocity;
         var maxSpeed = Player.BaseSpeed * _player.SpeedMultiplier;
@@ -353,7 +367,7 @@ public partial class PlayerAnimator : Node
     {
         var direction = _player.Direction;
         var attacking = IsAttacking;
-        var dodging = IsDodging && !attacking && !IsDead;
+        var dodging = IsDodging && !IsDead;
         var view = direction switch
         {
             FacingDirection.Up => GaitView.Back,

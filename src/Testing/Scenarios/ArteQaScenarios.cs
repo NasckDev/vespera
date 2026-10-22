@@ -361,6 +361,7 @@ public partial class SmokeTest
             await Frames(2);
             Input.ActionPress(InputActions.Dodge);
             var slidingAttackFrames = 0;
+            var notDodgeFrames = 0;
             var dashFrames = 0;
             var shot = false;
             for (var i = 0; i < 30; i++)
@@ -374,9 +375,13 @@ public partial class SmokeTest
                 if (combat.PlayerCombat.State.IsDashing)
                 {
                     dashFrames++;
-                    if (anim.IsAttacking && !anim.IsDodging || anim.IsAttacking)
+                    if (anim.IsAttacking)
                     {
                         slidingAttackFrames++;
+                    }
+                    else if (dashFrames > 1 && anim.Walker.Art is { } drawn && drawn.Has("dodge_side") && !anim.CurrentAnimation.StartsWith("dodge", StringComparison.Ordinal))
+                    {
+                        notDodgeFrames++; // a classe tem esquiva desenhada e ela não está na tela (o 1º quadro do dash ainda é o desenho do quadro anterior: o animador roda em _Process, depois da física)
                     }
 
                     if (!shot && dashFrames == 4)
@@ -397,6 +402,11 @@ public partial class SmokeTest
             if (slidingAttackFrames > 0)
             {
                 failures.Add($"{cls}: {slidingAttackFrames} de {dashFrames} quadros do dash saíram deslizando em pose de ataque (a esquiva desenhada não aparece)");
+            }
+
+            if (notDodgeFrames > 0)
+            {
+                failures.Add($"{cls}: {notDodgeFrames} de {dashFrames} quadros do dash sem a esquiva desenhada na tela");
             }
 
             await WaitSeconds(0.6);
