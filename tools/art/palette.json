@@ -1,0 +1,35 @@
+{
+  "name": "vespera-v2-master",
+  "notes": "Paleta mestre da v2 (PLANO-V2 §2). Cada rampa vai do escuro ao claro e desloca o matiz: sombras puxam para índigo/roxo, luzes para âmbar. Nenhuma cor é preto puro. 'brand' marca a cor de marca/cena exigida pelo plano dentro da rampa.",
+  "ramps": {
+    "indigo":  {"brand": "#1B1F3B", "colors": ["#0E0B1A", "#1B1F3B", "#2B2F52", "#3E4470", "#5A6194"]},
+    "purple":  {"brand": "#4A2C6B", "colors": ["#24163A", "#4A2C6B", "#6E4391", "#9663B5", "#C08FD6"]},
+    "amber":   {"brand": "#F2A541", "colors": ["#4A2416", "#7A3E1C", "#B8692A", "#F2A541", "#FFD27D", "#FFF1C2"]},
+    "breach":  {"brand": "#E64A8E", "colors": ["#3A0F35", "#7A1A55", "#B32D70", "#E64A8E", "#FF86B8", "#FFD0E3"]},
+    "cream":   {"brand": "#F4E7C6", "colors": ["#4E3B4A", "#8A7268", "#C2AA8C", "#F4E7C6", "#FFFBEF"]},
+    "red":     {"colors": ["#2A0B1E", "#5A1229", "#8E1F33", "#C2343A", "#E5604A", "#F79A6E"]},
+    "skin":    {"colors": ["#3A1A26", "#6E3434", "#A85B48", "#D98E66", "#F2BC8F", "#FFE1C0"]},
+    "hair":    {"colors": ["#160E1C", "#2A1825", "#45272C", "#653B35", "#8A5541"]},
+    "leather": {"colors": ["#1E1219", "#3B2124", "#5E3628", "#8A5233", "#B5773F", "#D9A35A"]},
+    "cloth":   {"colors": ["#14111F", "#252033", "#3A3249", "#544966", "#776B85"]},
+    "steel":   {"colors": ["#1C2030", "#3A4258", "#64708C", "#9AA6BF", "#D3DCEA", "#F5F8FC"]},
+    "moss":    {"brand": "#5C8C4A", "colors": ["#1C2A1E", "#2F4A2B", "#44693A", "#5C8C4A", "#86B062", "#B8D78A"]},
+    "earth":   {"brand": "#8A5A3C", "colors": ["#2A1716", "#4A2A22", "#6B402E", "#8A5A3C", "#B07D52", "#D3A877"]},
+    "stone":   {"brand": "#6B6F8A", "colors": ["#1E1D2C", "#36384E", "#50536C", "#6B6F8A", "#8D92AA", "#B9BDD0"]},
+    "water":   {"brand": "#3C7A8A", "colors": ["#122431", "#1C3F4E", "#2A5C6B", "#3C7A8A", "#5FA3AE", "#9AD0CF"]}
+  },
+  "legend": {
+    ".": null,
+    "k": "indigo:0", "l": "indigo:1", "X": "indigo:2",
+    "m": "purple:0", "n": "purple:1", "o": "purple:2", "p": "purple:3",
+    "a": "amber:0", "b": "amber:1", "c": "amber:2", "d": "amber:3", "e": "amber:4", "#": "amber:5",
+    "v": "breach:0", "w": "breach:1", "x": "breach:2", "y": "breach:3", "z": "breach:4", "*": "breach:5",
+    "O": "cream:0", "P": "cream:1", "Q": "cream:2", "R": "cream:3", "Y": "cream:4",
+    "A": "red:0", "B": "red:1", "C": "red:2", "D": "red:3", "E": "red:4", "Z": "red:5",
+    "q": "skin:1", "r": "skin:2", "s": "skin:3", "t": "skin:4", "u": "skin:5", "@": "skin:0",
+    "f": "hair:0", "g": "hair:1", "h": "hair:2", "i": "hair:3", "j": "hair:4",
+    "F": "leather:0", "G": "leather:1", "H": "leather:2", "I": "leather:3", "J": "leather:4", "%": "leather:5",
+    "K": "cloth:0", "L": "cloth:1", "M": "cloth:2", "N": "cloth:3", "&": "cloth:4",
+    "S": "steel:0", "T": "steel:1", "U": "steel:2", "V": "steel:3", "W": "steel:4", "+": "steel:5"
+  }
+}
