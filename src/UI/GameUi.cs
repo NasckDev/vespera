@@ -104,6 +104,7 @@ public partial class GameUi : CanvasLayer
         bus.ChoiceRequested += OnChoiceRequested;
         bus.ScreenRequested += OnScreenRequested;
         bus.PlayerDied += OnPlayerDied;
+        bus.RespawnRequested += OnRespawnRequested;
         bus.BrechaStarted += OnBrechaStarted;
         bus.LanternStateChanged += OnLanternStateChanged;
         bus.GameLoaded += OnGameLoaded;
@@ -124,6 +125,7 @@ public partial class GameUi : CanvasLayer
         bus.ChoiceRequested -= OnChoiceRequested;
         bus.ScreenRequested -= OnScreenRequested;
         bus.PlayerDied -= OnPlayerDied;
+        bus.RespawnRequested -= OnRespawnRequested;
         bus.BrechaStarted -= OnBrechaStarted;
         bus.LanternStateChanged -= OnLanternStateChanged;
         bus.GameLoaded -= OnGameLoaded;
@@ -384,6 +386,16 @@ public partial class GameUi : CanvasLayer
         _deathInBrecha = Brechas.InsideTheme is not null;
         _deathTheme = Brechas.InsideTheme;
         _deathT = DeathDelay;
+    }
+
+    /// <summary>Respawn pedido por outro caminho (atalho, teste): a tela de morte que ainda vai abrir ou está aberta sai.</summary>
+    private void OnRespawnRequested()
+    {
+        _deathT = -1f;
+        if (Death.IsOpen)
+        {
+            Stack.Clear();
+        }
     }
 
     private void OpenDeath()

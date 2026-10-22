@@ -799,6 +799,7 @@ public partial class Hud : CanvasLayer
     {
         Boss.Begin(bossName, maxHp);
         Toasts.Top = 42;
+        _locationBanner.Stop(); // o nome da Câmara do Núcleo ainda estava na tela e sobrepunha o do chefe
         _bossBanner.Play(bossName.ToUpperInvariant(), UiText.BossIntroHint, UiPalette.Brecha, 3.2f);
         _wave.Visible = false;
     }

@@ -298,6 +298,13 @@ public partial class Banner : Control
 
     public string Text => _title.Text;
 
+    /// <summary>Some na hora (outro letreiro vai ocupar o mesmo lugar).</summary>
+    public void Stop()
+    {
+        Visible = false;
+        SetProcess(false);
+    }
+
     public void Play(string title, string sub, Color color, float duration, float fadeIn = 2f, float fadeOut = 1.5f, float slide = 0f)
     {
         _title.Text = title;
