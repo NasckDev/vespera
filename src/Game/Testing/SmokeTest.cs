@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Godot;
 using Vespera.Game.Boot;
 using Vespera.Game.UI;
+using Vespera.Game.World;
 
 namespace Vespera.Game.Testing;
 
@@ -16,16 +17,19 @@ public partial class SmokeTest : Node
 {
     private const string ShotsPrefix = "--shots=";
     private const double WatchdogSeconds = 90;
+    private const double BotWatchdogSeconds = 900;
     private const int HelpPages = 6;
     private const int ExitFailed = 1;
     private const int ExitTimeout = 2;
 
     private readonly List<string> _failures = [];
     private readonly string? _shotsDir;
+    private readonly string[] _args;
     private SceneRouter _router = null!;
 
     public SmokeTest(string[] args)
     {
+        _args = args;
         foreach (var arg in args)
         {
             if (arg.StartsWith(ShotsPrefix, StringComparison.Ordinal))
@@ -38,7 +42,7 @@ public partial class SmokeTest : Node
     public override void _Ready()
     {
         _router = SceneRouter.Instance;
-        var watchdog = GetTree().CreateTimer(WatchdogSeconds);
+        var watchdog = GetTree().CreateTimer(Array.IndexOf(_args, BotFlag) >= 0 || Array.IndexOf(_args, QaFlag) >= 0 ? BotWatchdogSeconds : WatchdogSeconds);
         watchdog.Timeout += () =>
         {
             Log.Error("smoke: tempo esgotado");
@@ -174,25 +178,28 @@ public partial class SmokeTest : Node
         await OpenFromTitle("Nova história");
         await Shot("07_espacos");
         await Tap(Key.Enter);
-        await WaitFor(() => _router.Current is GameRoom && !_router.IsBusy, "jogo");
+        await WaitFor(() => _router.Current is Level && !_router.IsBusy, "jogo");
         Check(GameSession.IsActive, "sessão deveria estar ativa");
         Check(Godot.FileAccess.FileExists(UserPaths.SlotFile(1)), "save do espaço 1 deveria existir");
         Check(SaveService.Load(1)?.Name == SaveService.DefaultName, "save deveria carregar de volta com o nome padrão");
 
-        var room = (GameRoom)_router.Current!;
-        var startX = room.PlayerPosition.X;
+        var level = (Level)_router.Current!;
+        var startX = level.Player.GlobalPosition.X;
         Input.ParseInputEvent(MakeKey(Key.D, pressed: true));
-        await Frames(20);
+        await PhysicsFrames(20);
         Input.ParseInputEvent(MakeKey(Key.D, pressed: false));
-        Check(room.PlayerPosition.X > startX, "o marcador deveria andar para a direita com a fonte de input");
+        Check(level.Player.GlobalPosition.X > startX, "o caçador deveria andar para a direita com a fonte de input");
+        Check(level.Player.CurrentAnimation.StartsWith("walk", StringComparison.Ordinal) || level.Player.CurrentAnimation.StartsWith("idle", StringComparison.Ordinal),
+            $"animação inesperada: {level.Player.CurrentAnimation}");
         await Shot("08_jogo");
+        await RunLevelExtras(level);
 
         await Tap(Key.Escape);
         Check(_router.OverlayDepth == 1 && GetTree().Paused, "Esc deveria abrir a pausa e pausar a árvore");
         await Shot("09_pausa");
         await FocusButton("Opções");
         await Tap(Key.Enter);
-        Check(_router.Current is GameRoom && _router.OverlayDepth == 2, "Opções deveria abrir sobre a pausa");
+        Check(_router.Current is Level && _router.OverlayDepth == 2, "Opções deveria abrir sobre a pausa");
         await Tap(Key.Escape);
         Check(FocusText() == "Opções", $"foco deveria voltar a 'Opções' na pausa, foi '{FocusText()}'");
         await Tap(Key.Escape);
@@ -211,7 +218,7 @@ public partial class SmokeTest : Node
         await OpenFromTitle("Continuar");
         await Shot("11_continuar");
         await Tap(Key.Enter);
-        await WaitFor(() => _router.Current is GameRoom && !_router.IsBusy, "jogo (continuar)");
+        await WaitFor(() => _router.Current is Level && !_router.IsBusy, "jogo (continuar)");
         await Tap(Key.Escape);
         await FocusButton("Voltar ao título");
         await Tap(Key.Enter);
