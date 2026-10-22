@@ -101,7 +101,9 @@ public partial class CatalogObject : Node2D
 
     private ArtFrames? _art;
     private StringName _artState = ArtOff;
-    private float _artTime;
+    private float _flame; // contador de quadros da chama (volta ao zero a cada ciclo: não cresce sem limite)
+    private float _flameFps;
+    private int _flameCount;
     private int _artFrame = -1;
 
     private readonly MapPoint[] _rect = new MapPoint[4];
@@ -174,6 +176,12 @@ public partial class CatalogObject : Node2D
                 _ => ArtOff,
             };
             ApplyArt(0);
+            if (role is PropArtRole.Lamp or PropArtRole.Brazier)
+            {
+                // fps e quadros da chama uma vez só: cada consulta ao SpriteFrames é uma chamada ao motor por quadro
+                _flameFps = art.Fps(ArtOn);
+                _flameCount = art.Count(ArtOn);
+            }
         }
         _bounds = new MapRect(placed.X + local.Position.X, placed.Y + local.Position.Y, local.Size.X, local.Size.Y);
         _rect[0] = new MapPoint(_bounds.X, _bounds.Y);
@@ -258,8 +266,8 @@ public partial class CatalogObject : Node2D
             // chama em 4 quadros (8 fps) enquanto o halo está aceso; apagado, o quadro "off"
             var lit = IsLit;
             var state = lit ? ArtOn : ArtOff;
-            _artTime += (float)delta;
-            var frame = lit ? FrameClock.Loop(_artTime * _art.Fps(ArtOn) % _art.Count(ArtOn), _art.Count(ArtOn)) : 0;
+            _flame = FrameClock.Advance(_flame, (float)delta, _flameFps, 1f, _flameCount);
+            var frame = lit ? FrameClock.Loop(_flame, _flameCount) : 0;
             if (state != _artState || frame != _artFrame)
             {
                 _artState = state;

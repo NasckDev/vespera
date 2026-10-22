@@ -32,6 +32,7 @@ public partial class Chest : Node2D
     private ArtFrames? _art;
     private Sprite2D? _artSprite;
     private float _emptyT = -1f;
+    private StringName? _shownFrame;
     private const float EmptyAfterSeconds = 0.9f;
 
     private static readonly StringName[] OpeningFrames = ["closed", "opening_1", "opening_2", "open"];
@@ -223,6 +224,12 @@ public partial class Chest : Node2D
             return;
         }
 
+        if (_shownFrame == frame)
+        {
+            return; // só troca (e só gera o texto de ArtFrame) quando o quadro muda: são 5 trocas por baú, não uma por quadro
+        }
+
+        _shownFrame = frame;
         ArtFrame = frame.ToString();
         _art.Apply(_artSprite, frame, 0);
     }
