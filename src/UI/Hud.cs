@@ -274,7 +274,7 @@ public partial class Hud : CanvasLayer
         var hints = Ui.Row(6,
             Ui.Hint("Tab", "Back", UiText.HudInventory, UiFonts.Tiny),
             Ui.Hint("Esc", "Start", UiText.HudMenu, UiFonts.Tiny),
-            Ui.Hint("F", "RB", UiText.HudUltimate, UiFonts.Tiny));
+            Ui.Hint("F", "RT", UiText.HudUltimate, UiFonts.Tiny));
 
         _questName = Ui.Title(string.Empty, UiFonts.Small, UiPalette.Ambar);
         _questProgress = Ui.Bold(string.Empty, UiFonts.Small, UiPalette.Creme);
@@ -311,7 +311,10 @@ public partial class Hud : CanvasLayer
         _invasion = Ui.Text(UiText.HudInvasion, UiFonts.Tiny, UiPalette.Brecha, align: HorizontalAlignment.Right);
         _wave = Ui.Title(string.Empty, UiFonts.Body, UiPalette.Brecha, HorizontalAlignment.Right);
         _wave.Visible = false;
-        var column = Ui.Column(4, top, _brechaList, _invasion, _wave);
+        // Integração v0.1: o minimapa do motor ocupa o canto logo abaixo do nome do local (120×70); a lista de Brechas,
+        // a invasão e a onda descem para baixo dele em vez de ficar por trás.
+        var minimapGap = new Control { CustomMinimumSize = new Vector2(0, 74), MouseFilter = Control.MouseFilterEnum.Ignore };
+        var column = Ui.Column(4, top, minimapGap, _brechaList, _invasion, _wave);
         column.AnchorLeft = 1;
         column.AnchorRight = 1;
         column.OffsetLeft = -180;
@@ -326,7 +329,7 @@ public partial class Hud : CanvasLayer
         var db = Database.Db;
         _ultimate = new UltimateButton();
         _ultimateName = Ui.Text(string.Empty, UiFonts.Tiny, UiPalette.Creme, align: HorizontalAlignment.Center);
-        var ultCap = KeyCap.Create("F", "RB");
+        var ultCap = KeyCap.Create("F", "RT"); // Supremo no gatilho direito (api-combate)
         var ultBox = new Control { CustomMinimumSize = new Vector2(29, 29), MouseFilter = Control.MouseFilterEnum.Ignore };
         ultBox.AddChild(_ultimate);
         ultBox.AddChild(ultCap);

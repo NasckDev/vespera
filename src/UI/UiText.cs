@@ -108,11 +108,12 @@ public static class UiText
         ("Mouse", "Direção do movimento", "Mirar"),
         ("J, K ou clique", "X / Y", "Atacar (Arco: segure)"),
         ("Espaço / Shift", "B", "Esquiva"),
-        ("F ou V", "RB", "Golpe Supremo"),
-        ("Q / botão direito", "", "Usar Eco"),
-        ("R", "", "Beber poção"),
+        ("F ou V", "RT", "Golpe Supremo"),
+        ("Q / C", "LT / R3", "Usar Eco"),
+        ("R", "LB", "Beber poção"),
         ("E", "A", "Interagir, falar, abrir baús"),
         ("Tab / I", "Back", "Inventário"),
+        ("M", "L3", "Mapa"),
         ("Esc", "Start", "Menu de pausa"),
     ];
 

@@ -22,7 +22,10 @@ public static class InputHints
         [InputActions.Dodge] = ("Espaço", "B"),
         [InputActions.Pause] = ("Esc", "Start"),
         [InputActions.Inventory] = ("Tab", "Back"),
-        [InputActions.Lantern] = ("F", "RB"),
+        [InputActions.Lantern] = ("F", "RT"), // integração: F/RT são do Supremo (INT-D3)
+        [InputActions.Ultimate] = ("F", "RT"),
+        [InputActions.Potion] = ("R", "LB"),
+        [InputActions.Map] = ("M", "L3"),
         ["ui_accept"] = ("Enter", "A"),
         ["ui_cancel"] = ("Esc", "B"),
         ["ui_up"] = ("↑↓", "↑↓"),
