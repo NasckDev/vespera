@@ -17,6 +17,19 @@ A fonte da história é `docs/design/GDD.md`. A v0.1 fica congelada na tag `v0.1
 
 ## 2. Padrões técnicos (travados)
 
+> **Revisão 22/10, 14:30 (vale mais que o resto desta seção):** o dono vetou a arte "feita por código" ("cara de Paint,
+> quadrado cru; a v1 era mais bonita"). A v2 **usa a arte pintada do dono** (estilo das imagens em
+> `Downloads\Vespera` e `docs/brand/`), e o que mudou foi a **estrutura**, não o estilo:
+> - **Resolução base 1920×1080**, `stretch canvas_items`, filtro **linear** (a arte é pintada em alta resolução).
+> - **Cenário = chão limpo pintado** (sem objetos) **+ objetos e prédios como sprites RGBA separados**, cada um com a
+>   pegada no pé. A colisão é uma **grade de 48 px desenhada por nós** sobre o chão limpo (camada invisível de TileMap)
+>   mais as pegadas dos objetos, e um bot valida tudo. A pintura achatada com máscara automática está proibida.
+> - **Personagens e monstros:** folhas de animação quadro a quadro no estilo pintado, encomendadas pelas issues
+>   `arte-v2` (GPT/Gemini), com grade e âncora fixas. Personagem com ~128 px de altura em célula 192×192, pé em (96,176).
+>   Enquanto a folha não chega, entra a melhor folha disponível, nunca retângulo.
+> - **UI:** molduras ornamentadas 9-patch (kit de UI em issue), key-art no título. Nada chapado.
+> - Os itens abaixo sobre 480×270, tile 16 px, Nearest e arte por código ficam **revogados**.
+
 - **Engine:** Godot 4.7.2 .NET, C# (`C:\Godot\Godot_v4.7.2-stable_mono_win64.exe`). Desktop Windows primeiro; Linux/macOS no CI.
 - **Resolução base:** 480×270, `stretch_mode=viewport`, escala **inteira** (2× 960×540, 4× 1080p, 5× 1440p com borda, 8× 4K). Filtro **Nearest**, snap de pixel.
 - **Grade:** tile **16×16**. Personagem humano: corpo ~20×30 px numa **célula 48×48** (sobra para arma e golpe). Monstros comuns em células 32/48/64; Guardiões 96–160.
