@@ -48,6 +48,8 @@ public static class InputActions
     public static readonly StringName AimUp = "aim_up";
 
     public static readonly StringName AimDown = "aim_down";
+    /// <summary>Abre o inventário (Tab/I, Back no gamepad; <c>main.js:96</c>).</summary>
+    public static readonly StringName Inventory = "inventory";
 
     /// <summary>Só em build de debug: concede XP para testar HUD e ranks.</summary>
     public static readonly StringName DebugGrantXp = "debug_grant_xp";

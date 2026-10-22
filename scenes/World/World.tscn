@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://src/World/Minimap.cs" id="6_minimap"]
 [ext_resource type="Script" path="res://src/World/City/CityLife.cs" id="7_city"]
 [ext_resource type="Script" path="res://src/Combat/CombatDirector.cs" id="8_combat"]
+[ext_resource type="PackedScene" path="res://scenes/UI/GameUi.tscn" id="9_gameui"]
 
 [node name="World" type="Node2D" node_paths=PackedStringArray("MapSprite", "CollisionRoot", "Entities", "InteractablesRoot", "Player", "Camera", "FadeRect", "Dressing", "Minimap")]
 script = ExtResource("1_world")
@@ -54,6 +55,9 @@ script = ExtResource("6_minimap")
 
 [node name="City" type="Node" parent="." node_paths=PackedStringArray("World")]
 script = ExtResource("7_city")
+World = NodePath("..")
+
+[node name="GameUi" parent="." node_paths=PackedStringArray("World") instance=ExtResource("9_gameui")]
 World = NodePath("..")
 
 [node name="Fade" type="CanvasLayer" parent="."]

@@ -80,6 +80,7 @@ public sealed class BrechaController
         bus.InvasionRequested += Invasion.OnInvasionRequested;
         bus.RespawnRequested += Lantern.OnRespawnRequested;
         bus.GameLoaded += Lantern.OnGameLoaded;
+        bus.LanternRescueRequested += Lantern.ScheduleRescue; // resgate pago da Odete (Interface, api-combate)
         Lantern.OnGameLoaded();
     }
 
@@ -94,6 +95,7 @@ public sealed class BrechaController
         bus.InvasionRequested -= Invasion.OnInvasionRequested;
         bus.RespawnRequested -= Lantern.OnRespawnRequested;
         bus.GameLoaded -= Lantern.OnGameLoaded;
+        bus.LanternRescueRequested -= Lantern.ScheduleRescue;
     }
 
     public void Step(float dt, float realDt)

@@ -331,6 +331,8 @@ public partial class SmokeTest
             EventBus.Instance.InteractionRequested -= OnRequest;
         }
 
+        await DismissUi(); // a Interface abre o diálogo do interagível; fecha para o jogador voltar a andar
+
         Require(got is not null, $"interagir com {interactableId} não emitiu InteractionRequested");
         return got!.Value;
     }

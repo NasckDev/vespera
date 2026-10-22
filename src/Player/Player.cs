@@ -122,6 +122,8 @@ public partial class Player : CharacterBody2D, ICameraTarget
             _decelSeconds = (float)rules.Movement.DecelSeconds;
         }
 
+        EventBus.Instance.GameLoaded += SyncClassFromSave;
+        SyncClassFromSave();
         UpdatePoseKeys();
         Animator.Setup(this, Body, Sprite);
         _previousPhysicsPosition = _currentPhysicsPosition = GlobalPosition;
@@ -131,7 +133,17 @@ public partial class Player : CharacterBody2D, ICameraTarget
     {
         InteractionArea.AreaEntered -= OnAreaEntered;
         InteractionArea.AreaExited -= OnAreaExited;
+        EventBus.Instance.GameLoaded -= SyncClassFromSave;
         SetFocused(null);
+    }
+
+    /// <summary>Visual da classe do save (classe permanente, <c>extra.js:161</c>): jogo novo e Continuar.</summary>
+    private void SyncClassFromSave()
+    {
+        if (GameManager.Instance?.State.Save.ClassId is { Length: > 0 } classId)
+        {
+            ClassId = classId;
+        }
     }
 
     /// <summary>Coloca o jogador num ponto (troca de mapa), parado, sem rastro de interpolação e sem foco de interação.</summary>
