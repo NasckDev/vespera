@@ -45,7 +45,7 @@ public partial class SmokeTest : Node
     public override void _Ready()
     {
         _router = SceneRouter.Instance;
-        var watchdog = GetTree().CreateTimer(Array.IndexOf(_args, BotFlag) >= 0 || Array.IndexOf(_args, QaFlag) >= 0 ? BotWatchdogSeconds : WatchdogSeconds);
+        var watchdog = GetTree().CreateTimer(Array.IndexOf(_args, BotFlag) >= 0 || Array.IndexOf(_args, QaFlag) >= 0 || Array.IndexOf(_args, CombatBotFlag) >= 0 || Array.IndexOf(_args, CombatQaFlag) >= 0 ? BotWatchdogSeconds : WatchdogSeconds);
         watchdog.Timeout += () =>
         {
             Log.Error("smoke: tempo esgotado");
@@ -214,7 +214,7 @@ public partial class SmokeTest : Node
         await PhysicsFrames(20);
         Input.ParseInputEvent(MakeKey(Key.D, pressed: false));
         Check(level.Player.GlobalPosition.X > startX, "o caçador deveria andar para a direita com a fonte de input");
-        Check(level.Player.CurrentAnimation.StartsWith("walk", StringComparison.Ordinal) || level.Player.CurrentAnimation.StartsWith("idle", StringComparison.Ordinal),
+        Check(level.Player.CurrentAnimation.StartsWith("andar", StringComparison.Ordinal) || level.Player.CurrentAnimation.StartsWith("parado", StringComparison.Ordinal),
             $"animação inesperada: {level.Player.CurrentAnimation}");
         await Shot("08_jogo");
         await RunLevelExtras(level);

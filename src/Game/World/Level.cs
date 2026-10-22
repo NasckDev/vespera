@@ -1,15 +1,19 @@
 using System.Collections.Generic;
 using Godot;
 using Vespera.Game.Actors;
+using Vespera.Game.Actors.Enemies;
 using Vespera.Game.Boot;
+using Vespera.Game.Combat;
 using Vespera.Game.Components;
 using Vespera.Game.UI;
+using Vespera.Game.World.Rift;
 
 namespace Vespera.Game.World;
 
 /// <summary>
-/// Cena de jogo de uma fase: o <see cref="LevelWorld"/> renderizado num SubViewport (câmera própria, luzes 2D) e,
-/// por cima, a <see cref="InteractionHud"/>. Trata pausa (Esc/Start) e o que cada interação faz.
+/// Cena de jogo: o <see cref="LevelWorld"/> da sala atual renderizado num SubViewport (câmera própria, luzes 2D) e,
+/// por cima, a HUD de caçada, os números de dano e a <see cref="InteractionHud"/>. Troca de sala com fade (Praça ⇄
+/// salas da Brecha, em <c>Level.Rift.cs</c>), trata pausa (Esc/Start) e o que cada interação faz.
 /// </summary>
 public partial class Level : Control
 {
@@ -17,7 +21,7 @@ public partial class Level : Control
     private const float FlavorSeconds = 5f;
     private const float LeaveDistance = 1.8f;
 
-    private readonly LevelData _data;
+    private LevelData _data;
     private readonly IReadOnlyDictionary<string, PropDef> _catalog;
     private SubViewport _viewport = null!;
     private InteractionHud _hud = null!;
@@ -34,20 +38,29 @@ public partial class Level : Control
 
     public InteractionHud Hud => _hud;
 
+    public CombatHud CombatHud { get; private set; } = null!;
+
     public Player Player => World.Player;
 
     /// <summary>Lê data/levels/&lt;id&gt;.json e o catálogo de objetos e cria a cena.</summary>
     public static Level Load(string id)
     {
+        RiftSession.Reset();
+        return new Level(LoadData(id), LoadCatalog()) { Name = $"Level_{id}" };
+    }
+
+    public static LevelData LoadData(string id)
+    {
         var level = LevelJson.ParseLevel(ReadText($"{LevelsFolder}/{id}.json"));
-        var catalog = LevelJson.ParseProps(ReadText($"{LevelsFolder}/props.json"));
-        foreach (var problem in LevelJson.Validate(level, catalog))
+        foreach (var problem in LevelJson.Validate(level, LoadCatalog()))
         {
             Log.Error($"fase '{id}': {problem}");
         }
 
-        return new Level(level, catalog) { Name = $"Level_{id}" };
+        return level;
     }
+
+    public static IReadOnlyDictionary<string, PropDef> LoadCatalog() => LevelJson.ParseProps(ReadText($"{LevelsFolder}/props.json"));
 
     public override void _Ready()
     {
@@ -66,37 +79,54 @@ public partial class Level : Control
             PhysicsObjectPicking = false,
         };
         container.AddChild(_viewport);
-        World = new LevelWorld(_data, _catalog) { Name = "World" };
-        _viewport.AddChild(World);
-        World.Player.InteractRequested += OnInteract;
 
+        Numbers = new FloatingNumbers(WorldToScreen) { Name = "Numbers" };
+        AddChild(Numbers);
+        CombatHud = new CombatHud { Name = "CombatHud" };
+        AddChild(CombatHud);
         _hud = new InteractionHud { Name = "Hud" };
         AddChild(_hud);
+        BuildFade();
+        MountWorld(new LevelWorld(_data, _catalog) { Name = "World" });
         GameSession.Autosave();
     }
 
     public override void _ExitTree()
     {
+        Engine.TimeScale = 1.0;
         HunterSprites.ClearCache();
+        MonsterSprites.ClearCache();
         ContactShadow.ClearCache();
         LightTexture.ClearCache();
         WorldSfx.ClearCache();
+        CombatSfx.ClearCache();
+        CombatFeel.ClearCache();
+        HitFlash.ClearCache();
+        BreachPortal.ClearCache();
     }
 
     public override void _Process(double delta)
     {
         var dt = (float)delta;
         UpdateReading(dt);
+        UpdatePicker();
         var focus = Player.Focus;
         var deviceId = (Player.Input as MergedInput)?.DeviceId ?? Player.Input.DeviceId;
         var anchor = focus is null ? Vector2.Zero : WorldToScreen(focus.PromptAnchor);
-        _hud.ShowPrompt(focus?.Prompt, anchor, InteractionHud.InteractKeyName(deviceId), dt);
+        var prompt = _picker is null && !Player.Combat.IsDead ? focus?.Prompt : null;
+        _hud.ShowPrompt(prompt, anchor, InteractionHud.InteractKeyName(deviceId), dt);
     }
 
     public Vector2 WorldToScreen(Vector2 world) => _viewport.CanvasTransform * world;
 
     public override void _UnhandledInput(InputEvent @event)
     {
+        if (@event is InputEventKey { Pressed: true, Echo: false } key && HandleDebugKey(key.PhysicalKeycode))
+        {
+            GetViewport().SetInputAsHandled();
+            return;
+        }
+
         if (!@event.IsActionPressed(InputActions.Pause) || !SceneRouter.Instance.IsActive(this))
         {
             return;
@@ -113,8 +143,33 @@ public partial class Level : Control
         SceneRouter.Instance.Push(ScreenKeys.Pause);
     }
 
+    private FloatingNumbers Numbers { get; set; } = null!;
+
+    /// <summary>Põe um mundo novo no SubViewport e liga jogador, HUD e efeitos a ele.</summary>
+    private void MountWorld(LevelWorld world)
+    {
+        World = world;
+        _viewport.AddChild(world);
+        world.Player.InteractRequested += OnInteract;
+        world.Player.Combat.Died += OnPlayerDied;
+        world.Feel.NumberRequested += (at, text, color, size) => Numbers.Spawn(at, text, color, size);
+        world.Feel.ToastRequested += CombatHud.Toast;
+        CombatHud.Bind(world);
+        if (world.Director is { } director)
+        {
+            director.ExitRequested += OnRoomExit;
+        }
+
+        OnWorldMounted();
+    }
+
     private void OnInteract(Player player, Interactable? item)
     {
+        if (_picker is not null)
+        {
+            return;
+        }
+
         if (_reading is not null || item is null)
         {
             CloseReading();
@@ -124,6 +179,15 @@ public partial class Level : Control
         var at = item.GlobalPosition;
         switch (item.Kind)
         {
+            case "brecha":
+                OpenPicker();
+                return;
+            case "chest":
+                World.Director?.Chest?.Open();
+                return;
+            case "descer" or "saida":
+                World.Director?.RequestExit();
+                return;
             case "lamp" when item.OwnerProp is { } lamp:
                 lamp.SetLight(!lamp.LightOn);
                 WorldSfx.Play(World, lamp.LightOn ? WorldSound.LampOn : WorldSound.LampOff, at);
@@ -167,6 +231,12 @@ public partial class Level : Control
     {
         if (_reading is null)
         {
+            return;
+        }
+
+        if (!IsInstanceValid(_reading))
+        {
+            CloseReading();
             return;
         }
 
