@@ -231,6 +231,9 @@ public partial class GameUi : CanvasLayer
         Stack.Push(Pause);
     }
 
+    /// <summary>Agenda o tutorial da Odete (0,9 s), como o título faz no jogo novo (smoke test).</summary>
+    public void StartTutorial() => _tutorialT = TutorialDelay;
+
     /// <summary>Fecha todas as telas (smoke test, troca de cena).</summary>
     public void CloseAll() => Stack.Clear();
 
@@ -460,6 +463,9 @@ public partial class GameUi : CanvasLayer
             if (i >= lines.Count)
             {
                 Note(TownServices.Line("odete", "tutorialNote"), "ic_scroll");
+                // C1-D1: o tutorial é a conversa com a Odete no balcão; sem isso "Primeiros passos" pedia para falar
+                // com ela de novo logo depois de ouvir as três falas.
+                CountOdeteTalk(GameManager.Instance.State);
                 return;
             }
 
@@ -467,6 +473,15 @@ public partial class GameUi : CanvasLayer
         }
 
         ShowLine(0);
+    }
+
+    /// <summary>Conta a conversa com a Odete uma vez só (<c>qc.odete = true</c>, <c>extra.js:128</c>).</summary>
+    internal static void CountOdeteTalk(GameState state)
+    {
+        if (state.Save.Quests.Counter(QuestCounters.Odete) == 0)
+        {
+            state.CountQuest(QuestCounters.Odete);
+        }
     }
 
     private void FadeThen(Action callback)

@@ -72,10 +72,7 @@ public sealed class TownServices(GameUi ui)
     public void TalkClerk()
     {
         var state = State;
-        if (state.Save.Quests.Counter(QuestCounters.Odete) == 0)
-        {
-            state.CountQuest(QuestCounters.Odete); // qc.odete = true (extra.js:128)
-        }
+        GameUi.CountOdeteTalk(state); // qc.odete = true (extra.js:128)
 
         var options = new List<DialogChoice>();
         if (state.Save.CarriedLanterns.Count > 0)
