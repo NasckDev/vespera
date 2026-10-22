@@ -17,15 +17,18 @@ public partial class SmokeTest : Node
     private const string ShotsPrefix = "--shots=";
     private const double WatchdogSeconds = 90;
     private const int HelpPages = 6;
+    private const double ShotSettleSeconds = 1.4;
     private const int ExitFailed = 1;
     private const int ExitTimeout = 2;
 
     private readonly List<string> _failures = [];
     private readonly string? _shotsDir;
+    private readonly bool _withIntro;
     private SceneRouter _router = null!;
 
     public SmokeTest(string[] args)
     {
+        _withIntro = Array.IndexOf(args, Boot.Boot.WithIntroFlag) >= 0;
         foreach (var arg in args)
         {
             if (arg.StartsWith(ShotsPrefix, StringComparison.Ordinal))
@@ -75,6 +78,11 @@ public partial class SmokeTest : Node
     private async Task Run()
     {
         ResetUserFiles();
+        if (_withIntro)
+        {
+            await VisitIntro();
+        }
+
         await WaitFor(() => _router.Current is TitleScreen && !_router.IsBusy && FocusText() is not null, "título");
         Check(FocusText() == "Nova história", $"foco inicial no título deveria ser 'Nova história', foi '{FocusText()}'");
         Check(FindButton("Continuar")?.Disabled == true, "Continuar deveria estar desabilitado sem save");
@@ -169,11 +177,28 @@ public partial class SmokeTest : Node
         await CloseWithEscape("Créditos");
     }
 
+    private async Task VisitIntro()
+    {
+        await WaitFor(() => _router.Current is IntroScreen, "abertura");
+        await Seconds(0.3);
+        await Shot("00a_abertura", 0);
+        await Seconds(0.6);
+        await Shot("00b_abertura", 0);
+        await WaitFor(() => _router.Current is TitleScreen, "título (fundido)");
+        await Seconds(0.45);
+        await Shot("00c_fundido", 0);
+    }
+
     private async Task StartNewGameAndPause()
     {
         await OpenFromTitle("Nova história");
         await Shot("07_espacos");
         await Tap(Key.Enter);
+        await WaitFor(() => _router.Current is PrologueScreen && !_router.IsBusy, "prólogo");
+        Check(GameSession.IsActive, "sessão deveria estar ativa durante o prólogo");
+        await Seconds(1.2);
+        await Shot("07b_prologo");
+        await Tap(Key.Space);
         await WaitFor(() => _router.Current is GameRoom && !_router.IsBusy, "jogo");
         Check(GameSession.IsActive, "sessão deveria estar ativa");
         Check(Godot.FileAccess.FileExists(UserPaths.SlotFile(1)), "save do espaço 1 deveria existir");
@@ -309,6 +334,11 @@ public partial class SmokeTest : Node
 
     private async Task SendKey(Key key) => await Tap(key);
 
+    private async Task Seconds(double seconds)
+    {
+        await ToSignal(GetTree().CreateTimer(seconds), SceneTreeTimer.SignalName.Timeout);
+    }
+
     private async Task Frames(int count)
     {
         for (var i = 0; i < count; i++)
@@ -336,15 +366,15 @@ public partial class SmokeTest : Node
         }
     }
 
-    private async Task Shot(string name)
+    private async Task Shot(string name, double settle = ShotSettleSeconds)
     {
         if (_shotsDir is null || DisplayServer.GetName() == "headless")
         {
             return;
         }
 
-        await Frames(3);
-        var image = GetTree().Root.GetTexture().GetImage();
+        await Seconds(settle);
+        var image =GetTree().Root.GetTexture().GetImage();
         var folder = ProjectSettings.GlobalizePath(_shotsDir);
         DirAccess.MakeDirRecursiveAbsolute(folder);
         var error = image.SavePng($"{folder}/{name}.png");

@@ -8,8 +8,9 @@ namespace Vespera.Game.UI;
 public partial class TitleScreen : UiScreen
 {
     private const string Version = "v0.2.0-dev";
-    private static readonly Rect2 LogoRect = new(0, 40, 1920, 230);
-    private static readonly Rect2 MenuRect = new(1150, 300, 730, 700);
+    private const float MenuFadeSeconds = 0.7f;
+    private const float MenuFadeDelay = 0.25f;
+    private static readonly Rect2 MenuRect = new(1150, 340, 730, 680);
 
     private Button _newGame = null!;
     private Button _continue = null!;
@@ -22,11 +23,9 @@ public partial class TitleScreen : UiScreen
     {
         AddChild(new TitleBackground());
 
-        var logo = new LogoBanner { Position = LogoRect.Position, Size = LogoRect.Size };
-        AddChild(logo);
-
-        var panel = new PanelContainer { Position = MenuRect.Position, Size = MenuRect.Size };
+        var panel = new PanelContainer { Position = MenuRect.Position, Size = MenuRect.Size, Modulate = Colors.Transparent };
         AddChild(panel);
+        CreateTween().TweenProperty(panel, "modulate:a", 1f, MenuFadeSeconds).SetDelay(MenuFadeDelay);
         var scroll = UiKit.MakeScroll();
         panel.AddChild(scroll);
         var menu = UiKit.MakeColumn(10);

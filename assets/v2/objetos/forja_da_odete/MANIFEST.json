@@ -1,0 +1,15 @@
+{
+  "issue": 10,
+  "place": "forja_da_odete",
+  "floor_status": "structural_prototype_not_final_painted_art",
+  "floor_size": [
+    1536,
+    1024
+  ],
+  "objects_existing_original": 14,
+  "object_placement": "not authored yet",
+  "warnings": [
+    "No original layered map was provided. This is an exploratory clean floor only; must be repainted to matching original style and approved.",
+    "Footprints and collision shapes need map design."
+  ]
+}

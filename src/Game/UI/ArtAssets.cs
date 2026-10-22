@@ -8,13 +8,20 @@ public static class ArtAssets
 {
     public const float ScreenWidth = 1920f;
     public const float ScreenHeight = 1080f;
+    public const string IntroVideoPath = "res://assets/v2/video/abertura.ogv";
+    public const string PrologueVideoPath = "res://assets/v2/video/prologo.ogv";
     private const string KeyArtPath = "res://assets/v2/ui/key-art.png";
+    private const string IntroStillPath = "res://assets/v2/video/abertura_ultimo_quadro.png";
 
     private static Texture2D? _keyArt;
+    private static Texture2D? _introStill;
     private static ImageTexture? _vignette;
     private static ImageTexture? _softCircle;
 
     public static Texture2D KeyArt => _keyArt ??= GD.Load<Texture2D>(KeyArtPath);
+
+    /// <summary>Último quadro da abertura (cidade + logo pintado), em 1920x1080: fundo do título e ponte do fundido.</summary>
+    public static Texture2D IntroStill => _introStill ??= GD.Load<Texture2D>(IntroStillPath);
 
     /// <summary>Escurece as bordas e os cantos (centro transparente).</summary>
     public static ImageTexture Vignette => _vignette ??= Radial(256, 144, 0.45f, 1.15f, new Color("070816"), 0.92f, invert: false);
@@ -34,6 +41,14 @@ public static class ArtAssets
         var maxY = size.Y - ScreenHeight;
         var origin = new Vector2(-(maxX * 0.18f) - shift.X, -(maxY * 0.9f) - shift.Y);
         canvas.DrawTextureRect(texture, new Rect2(origin, size), false);
+    }
+
+    /// <summary>Desenha o quadro da abertura ampliado por <paramref name="zoom"/> em torno do centro, mais o deslocamento de paralaxe.</summary>
+    public static void DrawIntroStill(CanvasItem canvas, float zoom, Vector2 shift)
+    {
+        var full = new Vector2(ScreenWidth, ScreenHeight);
+        var size = full * zoom;
+        canvas.DrawTextureRect(IntroStill, new Rect2(((full - size) / 2f) + shift, size), false);
     }
 
     private static ImageTexture Radial(int w, int h, float inner, float outer, Color color, float maxAlpha, bool invert)
