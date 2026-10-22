@@ -194,11 +194,18 @@ public partial class ScreenStack : Control
             return;
         }
 
-        Navigate(InputActions.MoveUp, "ui_up", Side.Top);
-        Navigate(InputActions.MoveDown, "ui_down", Side.Bottom);
-        Navigate(InputActions.MoveLeft, "ui_left", Side.Left);
-        Navigate(InputActions.MoveRight, "ui_right", Side.Right);
+        Navigate(InputActions.MoveUp, UiUp, Side.Top);
+        Navigate(InputActions.MoveDown, UiDown, Side.Bottom);
+        Navigate(InputActions.MoveLeft, UiLeft, Side.Left);
+        Navigate(InputActions.MoveRight, UiRight, Side.Right);
     }
+
+    // StringName fixo: a conversão implícita de "ui_up" criava um StringName novo por chamada (4 por quadro com tela
+    // aberta, ~380 B/quadro no teste de QA de alocação).
+    private static readonly StringName UiUp = "ui_up";
+    private static readonly StringName UiDown = "ui_down";
+    private static readonly StringName UiLeft = "ui_left";
+    private static readonly StringName UiRight = "ui_right";
 
     private void Navigate(StringName move, StringName ui, Side side)
     {

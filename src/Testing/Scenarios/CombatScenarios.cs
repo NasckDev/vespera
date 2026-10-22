@@ -614,6 +614,7 @@ public partial class SmokeTest
         var traceEvery = int.TryParse(OS.GetEnvironment("VESPERA_BOT_TRACE"), out var every) ? (every == 1 ? 120 : every) : 0;
         IReadOnlyList<MapPoint>? path = null;
         var pathAge = 0;
+        object? lastTarget = null;
         var waitFar = 0; // esperou demais o monstro vir: vai até ele pelo caminho (monstro preso numa ilha da sala)
         try
         {
@@ -666,7 +667,14 @@ public partial class SmokeTest
                 SetAim(aim.Normalized());
                 var ranged = weapon.Kind is Core.Data.WeaponKind.Bow or Core.Data.WeaponKind.Orb;
                 var clear = ClearShot(combat, p - new Vector2(0, 12), new Vector2((float)target.X, (float)(target.Y - (target.HitHeight * 0.5))));
-                waitFar = !clear && d > 150 ? waitFar + 1 : 0;
+                // Esperou 4 s e o monstro não veio: vai buscá-lo e não volta a esperar enquanto for o mesmo alvo.
+                if (!ReferenceEquals(target, lastTarget))
+                {
+                    lastTarget = target;
+                    waitFar = 0;
+                }
+
+                waitFar = waitFar >= 240 ? waitFar + 1 : (!clear && d > 150 ? waitFar + 1 : 0);
                 if (!clear && d > 150 && waitFar < 240)
                 {
                     PressDirection(Vector2.Zero); // longe e atrás de obstáculo: espera o monstro vir (ele contorna, B1-D43)
@@ -709,10 +717,13 @@ public partial class SmokeTest
                     Input.ActionRelease(InputActions.Attack);
                 }
 
-                if (shotAt is not null && traceEvery > 0 && frame % traceEvery == 0)
+                if (traceEvery > 0 && frame % traceEvery == 0)
                 {
-                    Log.Info($"bot {frame}: p={p} alvo {target.Def.Id} ({target.X:0},{target.Y:0}) {target.State} hp {target.Hp:0} d={d:0} {combat.DescribeChase(target)}");
-                    await Shot($"{shotAt}-{frame}");
+                    Log.Info($"bot {frame}: p={p} alvo {target.Def.Id} ({target.X:0},{target.Y:0}) {target.State} hp {target.Hp:0} d={d:0} clear={clear} esperando={waitFar} {combat.DescribeChase(target)}");
+                    if (shotAt is not null)
+                    {
+                        await Shot($"{shotAt}-{frame}");
+                    }
                 }
 
                 if (!shotTaken && d < range + 10)

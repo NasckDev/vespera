@@ -182,16 +182,18 @@ public partial class SmokeTest
             Require(kind == "portalDialog" && id == "portal0", $"portal emitiu ({kind}, {id})");
 
             // Dentro da Brecha o timer para; fugir volta a contar; chefe derrotado fecha o portal.
+            // Integração v0.1: BrechaStartRequested agora leva o jogador para a sala (combate); aqui só o lado da
+            // cidade importa, então o cenário anuncia a entrada com BrechaStarted (o outro sinal que para o timer).
             var b = city.Brechas.OpenAt(0)!;
-            bus.EmitSignal(EventBus.SignalName.BrechaStartRequested, 0);
+            bus.EmitSignal(EventBus.SignalName.BrechaStarted, b.ThemeId, b.Rank);
             var t0 = b.TimeLeft;
             await WaitSeconds(0.5);
             Require(Math.Abs(b.TimeLeft - t0) < 1e-9, "com o jogador dentro, o timer da Brecha não corre");
-            bus.EmitSignal(EventBus.SignalName.BrechaEnded, "fish", false);
+            bus.EmitSignal(EventBus.SignalName.BrechaEnded, b.ThemeId, false);
             await WaitSeconds(0.3);
             Require(b.TimeLeft < t0 && b.IsOpen, "depois da fuga a Brecha continua aberta e o timer volta");
-            bus.EmitSignal(EventBus.SignalName.BrechaStartRequested, 0);
-            bus.EmitSignal(EventBus.SignalName.BrechaEnded, "fish", true);
+            bus.EmitSignal(EventBus.SignalName.BrechaStarted, b.ThemeId, b.Rank);
+            bus.EmitSignal(EventBus.SignalName.BrechaEnded, b.ThemeId, true);
             Require(closed.Contains(0) && b.Status == BrechaStatus.Closed, "Brecha limpa deveria fechar e emitir PortalClosed(0)");
             Require(!portal.Enabled, "portal0 deveria desligar ao fechar");
             await WaitSeconds(0.6);
@@ -305,6 +307,12 @@ public partial class SmokeTest
                 while (dialogues.Count <= talk)
                 {
                     Require(Time.GetTicksMsec() < deadline, $"interagir com a Marta deveria emitir DialogueRequested (foco: {player.FocusedInteractable?.Prompt ?? "nenhum"})");
+                    if (UI.GameUi.Current is { } ui && ui.Stack.Count > 0)
+                    {
+                        ui.CloseAll(); // integração: a fala anterior abriu na Interface e trava o foco até fechar
+                        await Frames(3);
+                    }
+
                     player.Teleport(world.CorrectToWalkable(marta.Position + new Vector2(0, 12)));
                     await WaitUntil(() => player.FocusedInteractable is NpcInteractable { Npc: var npc } && npc == marta, 3, "foco na Marta");
                     Require(player.FocusedInteractable!.Prompt == "Falar com Marta", $"prompt: {player.FocusedInteractable.Prompt}");
@@ -346,7 +354,10 @@ public partial class SmokeTest
             await Frames(10);
             await Shot("chat-balao");
 
-            // Fim do horário: às 21:00 a Marta sai do mapa.
+            // Fim do horário: às 21:00 a Marta sai do mapa. (Integração: fecha a fala da Marta na Interface, que
+            // congela o relógio enquanto aberta.)
+            UI.GameUi.Current?.CloseAll();
+            await Frames(3);
             GameManager.Instance.State.Save.ClockMinutes = (21 * 60) - 0.5;
             await WaitUntil(() => marta.IsLeaving, 5, "Marta saindo às 21:00");
             await WaitUntil(() => !GodotObject.IsInstanceValid(marta) || marta.IsQueuedForDeletion(), 5, "Marta sumindo");

@@ -597,7 +597,8 @@ public partial class SmokeTest
         var closest = double.MaxValue;
         var casts = 0;
         var was = false;
-        for (var i = 0; i < 60 * 15 && casts == 0; i++)
+        // Integração v0.1: na cripta redesenhada (B4c) o caminho daqui até o jogador tem ~960 u (era ~650 na v2): 30 s.
+        for (var i = 0; i < 60 * 30 && casts == 0; i++)
         {
             KillOthers(combat, ghost);
             combat.PlayerCombat.State.GrantInvulnerability(1);
@@ -608,10 +609,10 @@ public partial class SmokeTest
         }
 
         await Shot("qa-espectro-parede");
-        Log.Info($"Espectro: de ({spot.X:0},{spot.Y:0}) chegou a {closest:0} u do jogador, lançou {casts}× em 15 s; parou em ({ghost.X:0},{ghost.Y:0}) {combat.DescribeChase(ghost)}");
+        Log.Info($"Espectro: de ({spot.X:0},{spot.Y:0}) chegou a {closest:0} u do jogador, lançou {casts}× em 30 s; parou em ({ghost.X:0},{ghost.Y:0}) {combat.DescribeChase(ghost)}");
         ghost.Kill();
         await FleeRun(world, combat);
-        Require(casts > 0, $"Espectro da Névoa (voador) ficou preso: em 15 s chegou no máximo a {closest:0} u e nunca atacou — a onda não termina sem o jogador caçá-lo");
+        Require(casts > 0, $"Espectro da Névoa (voador) ficou preso: em 30 s chegou no máximo a {closest:0} u e nunca atacou — a onda não termina sem o jogador caçá-lo");
     }
 
     private static void KillOthers(CombatDirector combat, MonsterBody keep)

@@ -380,6 +380,17 @@ public partial class CombatDirector : Node2D, IMonsterWorld
     public void Move(MonsterBody m, double dx, double dy)
     {
         var r = Math.Min(MonsterMoveRadius, m.Radius * 0.5);
+
+        // Encaixado onde o corpo não cabe (nascer na quina, empurrão de prop): nenhum passo passaria no CanStand e o
+        // monstro ficaria parado para sempre (lobo da invasão na cabeceira da ponte velha). Desencaixa no ponto livre
+        // mais perto, até 16 u.
+        if (!CanStand(m.X, m.Y, r, fly: true)
+            && World.WalkArea is { } area
+            && area.NearestWalkable((float)m.X, (float)m.Y, (float)r, maxDistance: 16f) is { } free)
+        {
+            m.X = free.X;
+            m.Y = free.Y;
+        }
         var steps = Math.Max(1, (int)Math.Ceiling(Math.Max(Math.Abs(dx), Math.Abs(dy)) / 3));
         var sx = dx / steps;
         var sy = dy / steps;
@@ -442,13 +453,15 @@ public partial class CombatDirector : Node2D, IMonsterWorld
     /// <summary>Linha reta bloqueada → segue o campo de perseguição (B1-D43). Voadores vão reto.</summary>
     public void ChaseDirection(MonsterBody m, ref double ux, ref double uy)
     {
-        if (m.Fly || _chase is null)
+        if (_chase is null)
         {
             return;
         }
 
+        // Voadores passam por cima dos props, mas não das paredes (o Move deles ainda testa a máscara): também seguem o
+        // campo quando a reta bate em parede. Antes saíam aqui e o Espectro da cripta empacava na quina (QA do combate).
         var p = PlayerFoot;
-        if (_chase.LineClear((float)m.X, (float)m.Y, p.X, p.Y) && !PropOnLine((float)m.X, (float)m.Y, p.X, p.Y))
+        if (_chase.LineClear((float)m.X, (float)m.Y, p.X, p.Y) && (m.Fly || !PropOnLine((float)m.X, (float)m.Y, p.X, p.Y)))
         {
             return;
         }
@@ -491,9 +504,18 @@ public partial class CombatDirector : Node2D, IMonsterWorld
 
     private bool AxisMoves(MonsterBody m, double ux, double uy, double r)
     {
+        // Integração v0.1: conta como "anda" só se o passo inteiro ou o eixo principal andam. Antes bastava o eixo
+        // menor (0,2 de x numa direção quase vertical): na cabeceira da ponte velha o lobo da invasão ficava
+        // tremendo de lado contra a quina, sem nunca descer.
         const double probe = 2;
-        return (Math.Abs(ux) > 0.2 && CanStand(m.X + (ux * probe), m.Y, r, fly: true))
-            || (Math.Abs(uy) > 0.2 && CanStand(m.X, m.Y + (uy * probe), r, fly: true));
+        if (CanStand(m.X + (ux * probe), m.Y + (uy * probe), r, fly: true))
+        {
+            return true;
+        }
+
+        return Math.Abs(ux) >= Math.Abs(uy)
+            ? CanStand(m.X + (ux * probe), m.Y, r, fly: true)
+            : CanStand(m.X, m.Y + (uy * probe), r, fly: true);
     }
 
     /// <summary>Algum prop sólido corta a reta (o monstro empacaria nele).</summary>
@@ -523,7 +545,23 @@ public partial class CombatDirector : Node2D, IMonsterWorld
 
         var p = PlayerFoot;
         var ok = _chase.TryDirection((float)m.X, (float)m.Y, out var ux, out var uy);
-        return $"dist={_chase.Distance((float)m.X, (float)m.Y)} line={_chase.LineClear((float)m.X, (float)m.Y, p.X, p.Y)} dir={ok}({ux:0.00},{uy:0.00}) stand={CanStand(m.X, m.Y, Math.Min(MonsterMoveRadius, m.Radius * 0.5), m.Fly)} reach={_chase.Reachable((float)m.X, (float)m.Y, p.X, p.Y)}";
+        var moves = string.Empty;
+        for (var k = 0; k < 8; k++)
+        {
+            var a = k * Math.PI / 4;
+            moves += AxisMoves(m, Math.Cos(a), Math.Sin(a), Math.Min(MonsterMoveRadius, m.Radius * 0.5)) ? "1" : "0";
+        }
+
+        var nearProp = string.Empty;
+        foreach (var pp in _props)
+        {
+            if (pp.BlocksMovement && pp.Position.DistanceTo(new Vector2((float)m.X, (float)m.Y)) < 40)
+            {
+                nearProp += $"[{pp.Name} {pp.Position} r{pp.SolidRadius:0}]";
+            }
+        }
+
+        return $"spd={m.Speed:0.0} st={m.State} T={m.T:0.0} cd={m.Cd:0.0} props={_props.Count}{nearProp} anda8={moves} r={m.Radius:0.0} spawnT={m.SpawnT:0.00} dist={_chase.Distance((float)m.X, (float)m.Y)} line={_chase.LineClear((float)m.X, (float)m.Y, p.X, p.Y)} dir={ok}({ux:0.00},{uy:0.00}) stand={CanStand(m.X, m.Y, Math.Min(MonsterMoveRadius, m.Radius * 0.5), m.Fly)} reach={_chase.Reachable((float)m.X, (float)m.Y, p.X, p.Y)}";
     }
 
     public bool CanStand(double x, double y, double radius, bool fly)
