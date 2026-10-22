@@ -59,6 +59,7 @@ atlas. `sprites/player/` tem o kit da Lâmina (`hunter_*`) e o andar desenhado d
 
 ## O que falta desenhar ou decidir
 
+- **Bustos neutros de Gaspar, Abel e Iara** (128×128, no estilo dos 8 de `sprites/npcs/portraits/`): o designer entregou só 8 e o protótipo v2 também só tinha retrato para esses 8. Até chegarem, os três falam em caixa de diálogo só de texto (sem moldura de retrato). Ao entregar: copiar para `sprites/npcs/portraits/<id>.png` e acrescentar a chave em `portraits` de `src/Data/npcs.json`; o cenário `arte (qa): testa retratos de todos os NPCs que falam` passa a exigir os 11 quando a lista de exceções ficar vazia.
 - **Costas (`_b`) dos 20 monstros de `sprites/enemies/`**: só existem frente, ataque, morte e (alguns) especial. A v2 cai para `_f`.
 - **Âncora desses 20 monstros e dos ícones `d_*`**: o `meta.json` não traz pivô. Usamos o centro da base do recorte não transparente (DECISIONS D10); conferir na arte.
 - **Quadros de caminhada**: o caçador tem andar desenhado (C2); NPCs e monstros comuns ainda têm uma pose por direção com *bob* procedural (spec §4.3). Faltam esquivas das outras 4 classes, golpes pesados desenhados e costas/locomoção dos chefes.
