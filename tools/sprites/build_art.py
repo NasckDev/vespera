@@ -142,8 +142,10 @@ def cmd_copy(packages: Path) -> None:
             sys.exit(f"faltou {dest} ({sources})")
         target = SPRITES / dest
         target.parent.mkdir(parents=True, exist_ok=True)
-        # só PNG RGBA válidos entram (o arquivo é aberto e verificado antes de copiar)
+        # só PNG RGBA válidos entram: verify() só detecta arquivo corrompido, então formato e modo são conferidos à parte
         with Image.open(src) as im:
+            if im.format != "PNG" or im.mode != "RGBA":
+                sys.exit(f"{src}: esperado PNG RGBA, veio {im.format} {im.mode}")
             im.verify()
         shutil.copyfile(src, target)
         copied += 1
