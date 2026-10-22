@@ -4,7 +4,7 @@ using Vespera.Core.World;
 namespace Vespera.Autoload;
 
 /// <summary>
-/// Escala inteira inteligente da janela (POLI-11, DECISIONS C1-D18). Com <c>scale_mode=integer</c> o Godot escolhe
+/// Escala inteira inteligente da janela (POLI-11, DECISIONS C1-D22). Com <c>scale_mode=integer</c> o Godot escolhe
 /// <c>floor(min(janela ÷ base))</c>: numa janela de 1080p com barra de título (1920×1061) isso é 2× e o jogo ocupa
 /// 1302×720, com metade da tela preta, a primeira impressão de quem não usa tela cheia. Aqui o tamanho base pedido ao
 /// engine acompanha a janela para a escala ser a maior N que ainda deixa ≥ 600×330 u visíveis
