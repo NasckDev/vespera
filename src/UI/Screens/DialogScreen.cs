@@ -135,13 +135,13 @@ public partial class DialogScreen : Screen
 
     protected override Control? DefaultFocus => _choicesShown && _rows.Count > 0 ? _rows[0] : null;
 
+    /// <summary>A fala atual mostra o busto desenhado (não o recorte do atlas).</summary>
+    public bool PortraitIsBust { get; private set; }
+
     /// <summary>
     /// Mostra uma fala. Sem opções: confirmar fecha e chama <paramref name="next"/>. Com opções: aparecem quando o
     /// texto termina. <paramref name="cancel"/> é chamado se o jogador fechar com Esc.
     /// </summary>
-    /// <summary>A fala atual mostra o busto desenhado (não o recorte do atlas).</summary>
-    public bool PortraitIsBust { get; private set; }
-
     public void Show(string speaker, string text, IReadOnlyList<DialogChoice>? choices = null, Action? next = null, Action? cancel = null)
     {
         _generation++;
