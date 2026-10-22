@@ -1,0 +1,31 @@
+{
+  "_nota": "Paleta provisoria dos tiles. Deve ser mesclada em tools/art/palette.json (rampas em 'ramps', cores de marca/cena em 'brand'/'scene'). Rampas vao do escuro (0) ao claro (4), sombras para azul/roxo e luzes para amarelo/quente.",
+  "brand": {
+    "indigo": "#1B1F3B",
+    "roxo_vespera": "#4A2C6B",
+    "ambar": "#F2A541",
+    "luz_de_brecha": "#E64A8E",
+    "creme": "#F4E7C6"
+  },
+  "scene": {
+    "musgo": "#5C8C4A",
+    "terra": "#8A5A3C",
+    "pedra": "#6B6F8A",
+    "agua": "#3C7A8A"
+  },
+  "ramps": {
+    "grass":   ["#233F3A", "#3A6A45", "#5C8C4A", "#86A850", "#B3C56A"],
+    "stone":   ["#2B2D4A", "#4A4C6E", "#6B6F8A", "#8F92A3", "#BDB8B8"],
+    "dirt":    ["#3A2A3C", "#5E3F3E", "#8A5A3C", "#A9764A", "#C99A5E"],
+    "water":   ["#1F3C5A", "#2C5C78", "#3C7A8A", "#5FA0A0", "#A8D4C6"],
+    "wall":    ["#4A3F5E", "#7A6A78", "#A8927E", "#CDB896", "#F4E7C6"],
+    "roof":    ["#241A40", "#38275C", "#4A2C6B", "#6B4A8E", "#8E6FAA"],
+    "wood":    ["#4A2C3B", "#7A4A3A", "#A8683A", "#F2A541", "#F8CF7A"],
+    "rift":    ["#5A1F4A", "#9A2E6A", "#E64A8E", "#F58AB4", "#FBC4D8"],
+    "sew_floor": ["#1F2638", "#2E3A4E", "#44556A", "#62747F", "#8C9A9A"],
+    "sew_wall":  ["#12142A", "#241E42", "#382E5A", "#524272", "#76658F"],
+    "sewage":  ["#18262E", "#2A4440", "#46684C", "#7A9A5C", "#B7C97F"],
+    "clay":    ["#4E2A38", "#7E4238", "#B2653C", "#D88C50", "#F0B87A"],
+    "flower":  ["#F4E7C6", "#E8A0BF", "#F2A541", "#B9A7E8", "#FFFFFF"]
+  }
+}

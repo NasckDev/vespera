@@ -1,0 +1,2149 @@
+{
+ "name": "praca",
+ "tile_size": 16,
+ "terrain_mode": "MATCH_CORNERS",
+ "terrains": [
+  {
+   "name": "grass",
+   "color": "#5C8C4A"
+  },
+  {
+   "name": "cobble",
+   "color": "#6B6F8A"
+  },
+  {
+   "name": "dirt",
+   "color": "#8A5A3C"
+  },
+  {
+   "name": "water",
+   "color": "#3C7A8A"
+  }
+ ],
+ "sources": [
+  {
+   "id": 0,
+   "png": "res://assets/v2/tiles/praca.png",
+   "animated": false,
+   "tiles": [
+    {
+     "name": "cobble_0",
+     "x": 0,
+     "y": 0,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 1,
+     "corners": [
+      1,
+      1,
+      1,
+      1
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "cobble_1",
+     "x": 1,
+     "y": 0,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 1,
+     "corners": [
+      1,
+      1,
+      1,
+      1
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "cobble_2",
+     "x": 2,
+     "y": 0,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 1,
+     "corners": [
+      1,
+      1,
+      1,
+      1
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "cobble_3",
+     "x": 3,
+     "y": 0,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 1,
+     "corners": [
+      1,
+      1,
+      1,
+      1
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_0",
+     "x": 4,
+     "y": 0,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 0,
+     "corners": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_1",
+     "x": 5,
+     "y": 0,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 0,
+     "corners": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_2",
+     "x": 6,
+     "y": 0,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 0,
+     "corners": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_flowers_0",
+     "x": 7,
+     "y": 0,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 0,
+     "corners": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "probability": 0.12
+    },
+    {
+     "name": "grass_flowers_1",
+     "x": 8,
+     "y": 0,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 0,
+     "corners": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "probability": 0.12
+    },
+    {
+     "name": "grass_flowers_2",
+     "x": 9,
+     "y": 0,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 0,
+     "corners": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "probability": 0.12
+    },
+    {
+     "name": "dirt_0",
+     "x": 10,
+     "y": 0,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      2,
+      2,
+      2,
+      2
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "dirt_1",
+     "x": 11,
+     "y": 0,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      2,
+      2,
+      2,
+      2
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "dirt_2",
+     "x": 12,
+     "y": 0,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      2,
+      2,
+      2,
+      2
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_cobble_01",
+     "x": 1,
+     "y": 1,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 1,
+     "corners": [
+      1,
+      0,
+      0,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_cobble_02",
+     "x": 2,
+     "y": 1,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 1,
+     "corners": [
+      0,
+      1,
+      0,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_cobble_03",
+     "x": 3,
+     "y": 1,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 1,
+     "corners": [
+      1,
+      1,
+      0,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_cobble_04",
+     "x": 0,
+     "y": 2,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 1,
+     "corners": [
+      0,
+      0,
+      1,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_cobble_05",
+     "x": 1,
+     "y": 2,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 1,
+     "corners": [
+      1,
+      0,
+      1,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_cobble_06",
+     "x": 2,
+     "y": 2,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 1,
+     "corners": [
+      0,
+      1,
+      1,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_cobble_07",
+     "x": 3,
+     "y": 2,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 1,
+     "corners": [
+      1,
+      1,
+      1,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_cobble_08",
+     "x": 0,
+     "y": 3,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 1,
+     "corners": [
+      0,
+      0,
+      0,
+      1
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_cobble_09",
+     "x": 1,
+     "y": 3,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 1,
+     "corners": [
+      1,
+      0,
+      0,
+      1
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_cobble_10",
+     "x": 2,
+     "y": 3,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 1,
+     "corners": [
+      0,
+      1,
+      0,
+      1
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_cobble_11",
+     "x": 3,
+     "y": 3,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 1,
+     "corners": [
+      1,
+      1,
+      0,
+      1
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_cobble_12",
+     "x": 0,
+     "y": 4,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 1,
+     "corners": [
+      0,
+      0,
+      1,
+      1
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_cobble_13",
+     "x": 1,
+     "y": 4,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 1,
+     "corners": [
+      1,
+      0,
+      1,
+      1
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_cobble_14",
+     "x": 2,
+     "y": 4,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 1,
+     "corners": [
+      0,
+      1,
+      1,
+      1
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_dirt_01",
+     "x": 5,
+     "y": 1,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      2,
+      0,
+      0,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_dirt_02",
+     "x": 6,
+     "y": 1,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      0,
+      2,
+      0,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_dirt_03",
+     "x": 7,
+     "y": 1,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      2,
+      2,
+      0,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_dirt_04",
+     "x": 4,
+     "y": 2,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      0,
+      0,
+      2,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_dirt_05",
+     "x": 5,
+     "y": 2,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      2,
+      0,
+      2,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_dirt_06",
+     "x": 6,
+     "y": 2,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      0,
+      2,
+      2,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_dirt_07",
+     "x": 7,
+     "y": 2,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      2,
+      2,
+      2,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_dirt_08",
+     "x": 4,
+     "y": 3,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      0,
+      0,
+      0,
+      2
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_dirt_09",
+     "x": 5,
+     "y": 3,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      2,
+      0,
+      0,
+      2
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_dirt_10",
+     "x": 6,
+     "y": 3,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      0,
+      2,
+      0,
+      2
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_dirt_11",
+     "x": 7,
+     "y": 3,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      2,
+      2,
+      0,
+      2
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_dirt_12",
+     "x": 4,
+     "y": 4,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      0,
+      0,
+      2,
+      2
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_dirt_13",
+     "x": 5,
+     "y": 4,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      2,
+      0,
+      2,
+      2
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "grass_dirt_14",
+     "x": 6,
+     "y": 4,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      0,
+      2,
+      2,
+      2
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "cobble_dirt_01",
+     "x": 9,
+     "y": 5,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      2,
+      1,
+      1,
+      1
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "cobble_dirt_02",
+     "x": 10,
+     "y": 5,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      1,
+      2,
+      1,
+      1
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "cobble_dirt_03",
+     "x": 11,
+     "y": 5,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      2,
+      2,
+      1,
+      1
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "cobble_dirt_04",
+     "x": 8,
+     "y": 6,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      1,
+      1,
+      2,
+      1
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "cobble_dirt_05",
+     "x": 9,
+     "y": 6,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      2,
+      1,
+      2,
+      1
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "cobble_dirt_06",
+     "x": 10,
+     "y": 6,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      1,
+      2,
+      2,
+      1
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "cobble_dirt_07",
+     "x": 11,
+     "y": 6,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      2,
+      2,
+      2,
+      1
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "cobble_dirt_08",
+     "x": 8,
+     "y": 7,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      1,
+      1,
+      1,
+      2
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "cobble_dirt_09",
+     "x": 9,
+     "y": 7,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      2,
+      1,
+      1,
+      2
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "cobble_dirt_10",
+     "x": 10,
+     "y": 7,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      1,
+      2,
+      1,
+      2
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "cobble_dirt_11",
+     "x": 11,
+     "y": 7,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      2,
+      2,
+      1,
+      2
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "cobble_dirt_12",
+     "x": 8,
+     "y": 8,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      1,
+      1,
+      2,
+      2
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "cobble_dirt_13",
+     "x": 9,
+     "y": 8,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      2,
+      1,
+      2,
+      2
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "cobble_dirt_14",
+     "x": 10,
+     "y": 8,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 2,
+     "corners": [
+      1,
+      2,
+      2,
+      2
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "wall_shadow",
+     "x": 12,
+     "y": 5,
+     "kind": "deco",
+     "collision": [],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "roof_cap_l",
+     "x": 8,
+     "y": 1,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "roof_cap_m",
+     "x": 9,
+     "y": 1,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "roof_cap_r",
+     "x": 10,
+     "y": 1,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "roof_fill_l",
+     "x": 8,
+     "y": 2,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "roof_fill_m",
+     "x": 9,
+     "y": 2,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "roof_fill_r",
+     "x": 10,
+     "y": 2,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "face_upper_l",
+     "x": 8,
+     "y": 3,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "face_upper_m",
+     "x": 9,
+     "y": 3,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "face_upper_r",
+     "x": 10,
+     "y": 3,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "face_lower_l",
+     "x": 8,
+     "y": 4,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "face_lower_m",
+     "x": 9,
+     "y": 4,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "face_lower_r",
+     "x": 10,
+     "y": 4,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "roof_cap_m_alt",
+     "x": 11,
+     "y": 1,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "roof_fill_m_alt",
+     "x": 11,
+     "y": 2,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "face_upper_window",
+     "x": 11,
+     "y": 3,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "face_lower_door",
+     "x": 11,
+     "y": 4,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "face_upper_m_alt",
+     "x": 12,
+     "y": 3,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "face_lower_m_alt",
+     "x": 12,
+     "y": 4,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "face_upper_window_b",
+     "x": 12,
+     "y": 2,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "stairs_l",
+     "x": 13,
+     "y": 1,
+     "kind": "floor",
+     "collision": [],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "stairs_m",
+     "x": 14,
+     "y": 1,
+     "kind": "floor",
+     "collision": [],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "stairs_r",
+     "x": 15,
+     "y": 1,
+     "kind": "floor",
+     "collision": [],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "curb_n",
+     "x": 0,
+     "y": 5,
+     "kind": "deco",
+     "collision": [],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "curb_s",
+     "x": 1,
+     "y": 5,
+     "kind": "deco",
+     "collision": [],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "curb_w",
+     "x": 2,
+     "y": 5,
+     "kind": "deco",
+     "collision": [],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "curb_e",
+     "x": 3,
+     "y": 5,
+     "kind": "deco",
+     "collision": [],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "curb_nw",
+     "x": 4,
+     "y": 5,
+     "kind": "deco",
+     "collision": [],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "curb_ne",
+     "x": 5,
+     "y": 5,
+     "kind": "deco",
+     "collision": [],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "curb_sw",
+     "x": 6,
+     "y": 5,
+     "kind": "deco",
+     "collision": [],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "curb_se",
+     "x": 7,
+     "y": 5,
+     "kind": "deco",
+     "collision": [],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    }
+   ]
+  },
+  {
+   "id": 1,
+   "png": "res://assets/v2/tiles/praca_water.png",
+   "animated": true,
+   "tiles": [
+    {
+     "name": "water_full_b",
+     "x": 0,
+     "y": 0,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": 3,
+     "corners": [
+      3,
+      3,
+      3,
+      3
+     ],
+     "probability": 0.7
+    },
+    {
+     "name": "water_01",
+     "x": 4,
+     "y": 0,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        0,
+        -8
+       ],
+       [
+        0,
+        0
+       ],
+       [
+        -8,
+        0
+       ]
+      ]
+     ],
+     "terrain": 3,
+     "corners": [
+      3,
+      0,
+      0,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "water_02",
+     "x": 8,
+     "y": 0,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        0,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        0
+       ],
+       [
+        0,
+        0
+       ]
+      ]
+     ],
+     "terrain": 3,
+     "corners": [
+      0,
+      3,
+      0,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "water_03",
+     "x": 12,
+     "y": 0,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        0
+       ],
+       [
+        -8,
+        0
+       ]
+      ]
+     ],
+     "terrain": 3,
+     "corners": [
+      3,
+      3,
+      0,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "water_04",
+     "x": 0,
+     "y": 1,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        0,
+        0
+       ],
+       [
+        8,
+        0
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        0,
+        8
+       ]
+      ]
+     ],
+     "terrain": 3,
+     "corners": [
+      0,
+      0,
+      3,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "water_05",
+     "x": 4,
+     "y": 1,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        0,
+        -8
+       ],
+       [
+        0,
+        0
+       ],
+       [
+        -8,
+        0
+       ]
+      ],
+      [
+       [
+        0,
+        0
+       ],
+       [
+        8,
+        0
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        0,
+        8
+       ]
+      ]
+     ],
+     "terrain": 3,
+     "corners": [
+      3,
+      0,
+      3,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "water_06",
+     "x": 8,
+     "y": 1,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        0,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        0,
+        8
+       ]
+      ]
+     ],
+     "terrain": 3,
+     "corners": [
+      0,
+      3,
+      3,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "water_07",
+     "x": 12,
+     "y": 1,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        0,
+        8
+       ],
+       [
+        0,
+        0
+       ],
+       [
+        -8,
+        0
+       ]
+      ]
+     ],
+     "terrain": 3,
+     "corners": [
+      3,
+      3,
+      3,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "water_08",
+     "x": 0,
+     "y": 2,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        -8,
+        0
+       ],
+       [
+        0,
+        0
+       ],
+       [
+        0,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": 3,
+     "corners": [
+      0,
+      0,
+      0,
+      3
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "water_09",
+     "x": 4,
+     "y": 2,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        0,
+        -8
+       ],
+       [
+        0,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": 3,
+     "corners": [
+      3,
+      0,
+      0,
+      3
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "water_10",
+     "x": 8,
+     "y": 2,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        0,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        0
+       ],
+       [
+        0,
+        0
+       ]
+      ],
+      [
+       [
+        -8,
+        0
+       ],
+       [
+        0,
+        0
+       ],
+       [
+        0,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": 3,
+     "corners": [
+      0,
+      3,
+      0,
+      3
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "water_11",
+     "x": 12,
+     "y": 2,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        0
+       ],
+       [
+        0,
+        0
+       ],
+       [
+        0,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": 3,
+     "corners": [
+      3,
+      3,
+      0,
+      3
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "water_12",
+     "x": 0,
+     "y": 3,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        -8,
+        0
+       ],
+       [
+        8,
+        0
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": 3,
+     "corners": [
+      0,
+      0,
+      3,
+      3
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "water_13",
+     "x": 4,
+     "y": 3,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        0,
+        -8
+       ],
+       [
+        0,
+        0
+       ],
+       [
+        8,
+        0
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": 3,
+     "corners": [
+      3,
+      0,
+      3,
+      3
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "water_14",
+     "x": 8,
+     "y": 3,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        0,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ],
+       [
+        -8,
+        0
+       ],
+       [
+        0,
+        0
+       ]
+      ]
+     ],
+     "terrain": 3,
+     "corners": [
+      0,
+      3,
+      3,
+      3
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "water_15",
+     "x": 12,
+     "y": 3,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": 3,
+     "corners": [
+      3,
+      3,
+      3,
+      3
+     ],
+     "probability": 1.0
+    }
+   ],
+   "frames": 4,
+   "frame_seconds": 0.25
+  }
+ ]
+}

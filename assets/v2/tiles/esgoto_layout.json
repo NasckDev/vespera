@@ -1,0 +1,1361 @@
+{
+ "name": "esgoto",
+ "tile_size": 16,
+ "terrain_mode": "MATCH_CORNERS",
+ "terrains": [
+  {
+   "name": "stone",
+   "color": "#44556A"
+  },
+  {
+   "name": "sewage",
+   "color": "#46684C"
+  }
+ ],
+ "sources": [
+  {
+   "id": 0,
+   "png": "res://assets/v2/tiles/esgoto.png",
+   "animated": false,
+   "tiles": [
+    {
+     "name": "floor_0",
+     "x": 0,
+     "y": 0,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 0,
+     "corners": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "floor_1",
+     "x": 1,
+     "y": 0,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 0,
+     "corners": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "floor_2",
+     "x": 2,
+     "y": 0,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 0,
+     "corners": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "floor_3",
+     "x": 3,
+     "y": 0,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 0,
+     "corners": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "floor_rift_crack",
+     "x": 4,
+     "y": 0,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 0,
+     "corners": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "probability": 0.06
+    },
+    {
+     "name": "floor_moss_0",
+     "x": 5,
+     "y": 0,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 0,
+     "corners": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "probability": 0.35
+    },
+    {
+     "name": "floor_moss_1",
+     "x": 6,
+     "y": 0,
+     "kind": "floor",
+     "collision": [],
+     "terrain": 0,
+     "corners": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "probability": 0.35
+    },
+    {
+     "name": "grate_bars",
+     "x": 7,
+     "y": 0,
+     "kind": "floor",
+     "collision": [],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "grate_drain",
+     "x": 8,
+     "y": 0,
+     "kind": "floor",
+     "collision": [],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "debris_pottery_0",
+     "x": 9,
+     "y": 0,
+     "kind": "deco",
+     "collision": [],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "debris_pottery_1",
+     "x": 10,
+     "y": 0,
+     "kind": "deco",
+     "collision": [],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "debris_pottery_2",
+     "x": 11,
+     "y": 0,
+     "kind": "deco",
+     "collision": [],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "debris_pottery_3",
+     "x": 12,
+     "y": 0,
+     "kind": "deco",
+     "collision": [],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "top_cap_l",
+     "x": 0,
+     "y": 1,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "top_cap_m",
+     "x": 1,
+     "y": 1,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "top_cap_r",
+     "x": 2,
+     "y": 1,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "top_fill_l",
+     "x": 0,
+     "y": 2,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "top_fill_m",
+     "x": 1,
+     "y": 2,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "top_fill_r",
+     "x": 2,
+     "y": 2,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "face_upper_l",
+     "x": 0,
+     "y": 3,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "face_upper_m",
+     "x": 1,
+     "y": 3,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "face_upper_r",
+     "x": 2,
+     "y": 3,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "face_lower_l",
+     "x": 0,
+     "y": 4,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "face_lower_m",
+     "x": 1,
+     "y": 4,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "face_lower_r",
+     "x": 2,
+     "y": 4,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "top_fill_m_alt",
+     "x": 3,
+     "y": 2,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "top_cap_m_alt",
+     "x": 3,
+     "y": 1,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "face_upper_slime",
+     "x": 3,
+     "y": 3,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "face_upper_rift",
+     "x": 4,
+     "y": 3,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "face_lower_grate",
+     "x": 3,
+     "y": 4,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "face_lower_m_alt",
+     "x": 4,
+     "y": 4,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    },
+    {
+     "name": "void",
+     "x": 5,
+     "y": 1,
+     "kind": "wall",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": -1,
+     "corners": null,
+     "probability": 1.0
+    }
+   ]
+  },
+  {
+   "id": 1,
+   "png": "res://assets/v2/tiles/esgoto_water.png",
+   "animated": true,
+   "tiles": [
+    {
+     "name": "sewage_full_b",
+     "x": 0,
+     "y": 0,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": 1,
+     "corners": [
+      1,
+      1,
+      1,
+      1
+     ],
+     "probability": 0.7
+    },
+    {
+     "name": "sewage_01",
+     "x": 4,
+     "y": 0,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        0,
+        -8
+       ],
+       [
+        0,
+        0
+       ],
+       [
+        -8,
+        0
+       ]
+      ]
+     ],
+     "terrain": 1,
+     "corners": [
+      1,
+      0,
+      0,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "sewage_02",
+     "x": 8,
+     "y": 0,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        0,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        0
+       ],
+       [
+        0,
+        0
+       ]
+      ]
+     ],
+     "terrain": 1,
+     "corners": [
+      0,
+      1,
+      0,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "sewage_03",
+     "x": 12,
+     "y": 0,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        0
+       ],
+       [
+        -8,
+        0
+       ]
+      ]
+     ],
+     "terrain": 1,
+     "corners": [
+      1,
+      1,
+      0,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "sewage_04",
+     "x": 0,
+     "y": 1,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        0,
+        0
+       ],
+       [
+        8,
+        0
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        0,
+        8
+       ]
+      ]
+     ],
+     "terrain": 1,
+     "corners": [
+      0,
+      0,
+      1,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "sewage_05",
+     "x": 4,
+     "y": 1,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        0,
+        -8
+       ],
+       [
+        0,
+        0
+       ],
+       [
+        -8,
+        0
+       ]
+      ],
+      [
+       [
+        0,
+        0
+       ],
+       [
+        8,
+        0
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        0,
+        8
+       ]
+      ]
+     ],
+     "terrain": 1,
+     "corners": [
+      1,
+      0,
+      1,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "sewage_06",
+     "x": 8,
+     "y": 1,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        0,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        0,
+        8
+       ]
+      ]
+     ],
+     "terrain": 1,
+     "corners": [
+      0,
+      1,
+      1,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "sewage_07",
+     "x": 12,
+     "y": 1,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        0,
+        8
+       ],
+       [
+        0,
+        0
+       ],
+       [
+        -8,
+        0
+       ]
+      ]
+     ],
+     "terrain": 1,
+     "corners": [
+      1,
+      1,
+      1,
+      0
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "sewage_08",
+     "x": 0,
+     "y": 2,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        -8,
+        0
+       ],
+       [
+        0,
+        0
+       ],
+       [
+        0,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": 1,
+     "corners": [
+      0,
+      0,
+      0,
+      1
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "sewage_09",
+     "x": 4,
+     "y": 2,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        0,
+        -8
+       ],
+       [
+        0,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": 1,
+     "corners": [
+      1,
+      0,
+      0,
+      1
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "sewage_10",
+     "x": 8,
+     "y": 2,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        0,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        0
+       ],
+       [
+        0,
+        0
+       ]
+      ],
+      [
+       [
+        -8,
+        0
+       ],
+       [
+        0,
+        0
+       ],
+       [
+        0,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": 1,
+     "corners": [
+      0,
+      1,
+      0,
+      1
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "sewage_11",
+     "x": 12,
+     "y": 2,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        0
+       ],
+       [
+        0,
+        0
+       ],
+       [
+        0,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": 1,
+     "corners": [
+      1,
+      1,
+      0,
+      1
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "sewage_12",
+     "x": 0,
+     "y": 3,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        -8,
+        0
+       ],
+       [
+        8,
+        0
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": 1,
+     "corners": [
+      0,
+      0,
+      1,
+      1
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "sewage_13",
+     "x": 4,
+     "y": 3,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        0,
+        -8
+       ],
+       [
+        0,
+        0
+       ],
+       [
+        8,
+        0
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": 1,
+     "corners": [
+      1,
+      0,
+      1,
+      1
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "sewage_14",
+     "x": 8,
+     "y": 3,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        0,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ],
+       [
+        -8,
+        0
+       ],
+       [
+        0,
+        0
+       ]
+      ]
+     ],
+     "terrain": 1,
+     "corners": [
+      0,
+      1,
+      1,
+      1
+     ],
+     "probability": 1.0
+    },
+    {
+     "name": "sewage_15",
+     "x": 12,
+     "y": 3,
+     "kind": "water",
+     "collision": [
+      [
+       [
+        -8,
+        -8
+       ],
+       [
+        8,
+        -8
+       ],
+       [
+        8,
+        8
+       ],
+       [
+        -8,
+        8
+       ]
+      ]
+     ],
+     "terrain": 1,
+     "corners": [
+      1,
+      1,
+      1,
+      1
+     ],
+     "probability": 1.0
+    }
+   ],
+   "frames": 4,
+   "frame_seconds": 0.25
+  }
+ ]
+}
