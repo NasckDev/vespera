@@ -74,6 +74,7 @@ public partial class Hud : CanvasLayer
     private PanelContainer _topBack = null!;
     private VBoxContainer _topRight = null!;
     private int _layoutFrames;
+    private bool _bossShown;
     private float _questExpandT;
     private string _questDescRaw = string.Empty;
     private bool _insideBrecha;
@@ -928,6 +929,7 @@ public partial class Hud : CanvasLayer
     private void OnBossSpawned(string bossName, int maxHp)
     {
         Boss.Begin(bossName, maxHp);
+        _bossShown = Boss.Visible;
         _layoutFrames = 3;
         Caption(UiText.CaptionBoss);
         Toasts.Top = 42;
@@ -939,6 +941,12 @@ public partial class Hud : CanvasLayer
     private void OnBossHealth(int hp, int maxHp)
     {
         Boss.SetHealth(hp, maxHp);
+        if (Boss.Visible != _bossShown)
+        {
+            _bossShown = Boss.Visible;
+            _layoutFrames = 3; // a barra do chefe apareceu ou sumiu: o espaço do loot se reajusta (não a cada golpe)
+        }
+
         if (!Boss.Visible)
         {
             Toasts.Top = 40;
@@ -956,6 +964,8 @@ public partial class Hud : CanvasLayer
     {
         _insideBrecha = false;
         Boss.End();
+        _bossShown = false;
+        _layoutFrames = 3;
         Toasts.Top = 40;
         _wave.Visible = false;
         CallDeferred(MethodName.RefreshBrechas);
@@ -996,6 +1006,7 @@ public partial class Hud : CanvasLayer
             return;
         }
 
+        _layoutFrames = 3; // o painel da missão muda de largura: o vão dos letreiros se reajusta
         _questName.Text = quest.Name;
         _questDescRaw = quest.Desc;
         _questDesc.Text = KeyText.Expand(_questDescRaw);

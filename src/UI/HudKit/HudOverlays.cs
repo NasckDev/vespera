@@ -422,6 +422,11 @@ public partial class Banner : Control
     /// </summary>
     public void SetSpan(float left, float right)
     {
+        if (Mathf.IsEqualApprox(OffsetLeft, left) && Mathf.IsEqualApprox(OffsetRight, Math.Max(left + 40f, right)))
+        {
+            return;
+        }
+
         OffsetLeft = left;
         OffsetRight = Math.Max(left + 40f, right);
         _spanWidth = OffsetRight - OffsetLeft;

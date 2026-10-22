@@ -2132,6 +2132,15 @@ public partial class SmokeTest
         var (world, combat) = await CombatSetup();
         GameManager.Instance.NewGame("Bot", "sword");
         GameSettings.ResetAccessibility();
+        // Sem janela de verdade (headless) o viewport é quadrado (640×640) e nenhum ponto a ~220 u fica fora da vista: usa uma janela 16:9.
+        var root = GetTree().Root;
+        var oldSize = root.Size;
+        if (DisplayServer.GetName() == "headless")
+        {
+            root.Size = new Vector2I(1280, 720);
+            await Frames(3);
+        }
+
         world.GoMap("forge", 800, 520, instant: true);
         await WaitMapSettled(world);
         GameUi.Current?.CloseAll();
@@ -2175,7 +2184,7 @@ public partial class SmokeTest
                 }
             }
 
-            Require(spot is not null, "sem ponto andável fora da tela a 212–226 u do jogador");
+            Require(spot is not null, $"sem ponto andável fora da tela a 212–226 u do jogador (vista {view.Size})");
             var direction = (spot!.Value - player.GlobalPosition).Normalized();
             Log.Info($"qa-perigo: jogador {player.GlobalPosition}, monstro em {spot} (direção {direction}), câmera {view}");
 
@@ -2216,6 +2225,10 @@ public partial class SmokeTest
         {
             GameSettings.ResetAccessibility();
             await FleeRun(world, combat);
+            if (root.Size != oldSize)
+            {
+                root.Size = oldSize;
+            }
         }
     }
 
