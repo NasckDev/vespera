@@ -1587,4 +1587,159 @@ public partial class SmokeTest
         var missing = plain.Where(n => n is not ("Gaspar" or "Abel" or "Iara")).ToList();
         Require(missing.Count == 0, $"{missing.Count} personagem(ns) com busto entregue falam sem ele: {string.Join(", ", missing)}");
     }
+
+    [SmokeScenario("arte (qa): testa que cada família de objeto com estados aparece em algum mapa real do jogo", order: 166)]
+    private async Task ArteQaRealMapsHaveStatefulObjects()
+    {
+        await WaitForScene("World", timeoutSeconds: 10);
+        var world = FindWorld();
+        var perRole = new Dictionary<PropArtRole, List<string>>();
+        foreach (var role in new[] { PropArtRole.Lamp, PropArtRole.Brazier, PropArtRole.Flower, PropArtRole.Lever, PropArtRole.Door, PropArtRole.Board })
+        {
+            perRole[role] = [];
+        }
+
+        var maps = new[] { "forge", "guild", "inn", "shop_arm", "shop_mag", "shop_alq", "shop_rel", "fish2", "crypt2", "mine", "garden", "cath", "core" };
+        foreach (var id in maps)
+        {
+            var map = World.World.Catalog[id];
+            world.GoMap(id, map.Spawn.X, map.Spawn.Y, instant: true);
+            await WaitMapSettled(world);
+            foreach (var o in world.Dressing.Objects)
+            {
+                if (perRole.TryGetValue(o.ArtRole, out var list))
+                {
+                    list.Add(id);
+                }
+            }
+        }
+
+        world.GoMap("forge", 800, 520, instant: true);
+        await WaitMapSettled(world);
+        foreach (var (role, list) in perRole)
+        {
+            Log.Info($"arte qa: objetos com arte de estados {role} nos mapas reais: {(list.Count == 0 ? "NENHUM" : string.Join(", ", list.Distinct()))}");
+        }
+
+        var missing = perRole.Where(p => p.Value.Count == 0).Select(p => p.Key.ToString()).ToList();
+        Require(missing.Count == 0, $"famílias aprovadas do designer que nenhum mapa real usa (só existem no fixture do smoke): {string.Join(", ", missing)}");
+    }
+
+    [SmokeScenario("arte (qa): testa Alfa mantém a arte com cristas parado e perseguindo e o tamanho perto do lobo do atlas", order: 167)]
+    private async Task ArteQaAlphaKeepsArtInEveryState()
+    {
+        var (world, _) = await CombatSetup();
+        GameManager.Instance.NewGame("Bot", "sword");
+        world.GoMap("forge", 800, 520, instant: true);
+        await WaitMapSettled(world);
+        var player = FindPlayer()!;
+        player.Teleport(world.CorrectToWalkable(new Vector2(900, 470)));
+        var def = GameManager.Db.Monsters["wolfE"];
+        Enemy.Preload(def);
+        var rng = new SeededRandom(3);
+        var origin = player.GlobalPosition;
+        var body = new MonsterBody(new ScaledMonster(def, def.Hp, def.Damage, []), origin.X + 60f, origin.Y + 40f, Enemy.HitHeightFor(def), rng) { SpawnT = 0 };
+        var alpha = Enemy.Create(body);
+        world.Entities.AddChild(alpha);
+        var failures = new List<string>();
+        try
+        {
+            ArtFrames.TryLoad(Enemy.ArtPathFor(def)!, out var art);
+            ArteQaPoseMetric(art, "front", def.Scale, out var artHeight, out _, out _);
+            var shown = new List<string>();
+            foreach (var state in new[] { MonsterState.Idle, MonsterState.Chase, MonsterState.Wind, MonsterState.Lunge, MonsterState.Rec })
+            {
+                body.ForceState(state);
+                body.T = 0.2;
+                for (var i = 0; i < 4; i++)
+                {
+                    alpha.Sync(1f + i * 0.05f, origin + new Vector2(0, 300));
+                    await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+                }
+
+                shown.Add($"{state}={(alpha.UsesArt ? alpha.ArtPose : "atlas")}");
+                if (state is MonsterState.Chase or MonsterState.Lunge)
+                {
+                    await Shot($"arteqa-alfa-{state}");
+                }
+
+                // Wind/Lunge/morte caem no atlas do lobo: o designer não entregou golpe nem morte do Alfa (conhecido, só registrado)
+                if (!alpha.UsesArt && state is MonsterState.Idle or MonsterState.Chase or MonsterState.Rec)
+                {
+                    failures.Add($"Alfa em {state}: a arte com cristas some e o lobo comum do atlas aparece no lugar");
+                }
+            }
+
+            body.ForceState(MonsterState.Lunge);
+            body.Kill();
+            body.DeadT = 0.4;
+            alpha.Sync(2f, origin);
+            shown.Add($"morto={(alpha.UsesArt ? alpha.ArtPose : "atlas")}");
+            var sizes = new List<string>();
+            foreach (var key in new[] { "wolf_f", "wolf_a", "wolf_d" })
+            {
+                if (AtlasLibrary.TryGet(key, out var atlasFrame))
+                {
+                    var used = ArteQaUsedRect(atlasFrame.Texture);
+                    var h = used.Size.Y / atlasFrame.Density * (float)def.Scale * WorldScale.For(key, SpriteScaleClass.Auto);
+                    var w = used.Size.X / atlasFrame.Density * (float)def.Scale * WorldScale.For(key, SpriteScaleClass.Auto);
+                    sizes.Add($"{key} {h:0.0}x{w:0.0} u");
+                    if (key == "wolf_f" && MathF.Abs(h - artHeight) > artHeight * 0.25f)
+                    {
+                        failures.Add($"o lobo do atlas parado ({h:0.0} u) e a arte do Alfa ({artHeight:0.0} u) diferem de tamanho");
+                    }
+                }
+            }
+
+            Log.Info($"arte qa: Alfa ({artHeight:0.0} u de altura na arte): {string.Join(", ", shown)}; atlas do lobo (Alfa ×{def.Scale}): {string.Join(", ", sizes)}");
+        }
+        finally
+        {
+            alpha.QueueFree();
+        }
+
+        Require(failures.Count == 0, string.Join("\n  ", failures));
+    }
+
+    private static Label? ArteQaFindLabel(Node node, string contains)
+    {
+        if (node is Label label && label.Text.Contains(contains, StringComparison.Ordinal))
+        {
+            return label;
+        }
+
+        foreach (var child in node.GetChildren())
+        {
+            if (ArteQaFindLabel(child, contains) is { } found)
+            {
+                return found;
+            }
+        }
+
+        return null;
+    }
+
+    [SmokeScenario("arte (qa): testa que os ícones de estado não empurram o resto do HUD ao ligar e desligar", order: 168)]
+    private async Task ArteQaStatusRowDoesNotShiftHud()
+    {
+        await WaitForScene("World", timeoutSeconds: 10);
+        var hud = Hud.Current ?? throw new SmokeFailure("sem HUD");
+        GameManager.Instance.NewGame("Bot", "sword");
+        await Frames(5);
+        var hint = ArteQaFindLabel(hud, "Inventário") ?? throw new SmokeFailure("sem a dica de teclas (Inventário) no HUD");
+        var quest = ArteQaFindLabel(hud, "Primeiros passos") ?? ArteQaFindLabel(hud, "PRIMEIROS PASSOS");
+        var hintY = hint.GlobalPosition.Y;
+        var questY = quest?.GlobalPosition.Y ?? 0f;
+        // o i-frame de 0,75 s que vem depois de levar um golpe (GrantInvulnerability) acende o escudo de verdade
+        var combat = CombatDirector.Instance ?? throw new SmokeFailure("sem CombatDirector");
+        combat.PlayerCombat.State.GrantInvulnerability(0.75);
+        await Frames(4);
+        Require(hud.IsStatusShown("shield"), "os i-frames depois de um golpe deveriam acender o ícone de escudo");
+        await Shot("arteqa-hud-com-estado");
+        var shiftHint = hint.GlobalPosition.Y - hintY;
+        var shiftQuest = quest is null ? 0f : quest.GlobalPosition.Y - questY;
+        await WaitSeconds(1.0);
+        Log.Info($"arte qa: ao aparecer o ícone de escudo, a dica de teclas desce {shiftHint:0.0} px e a missão {shiftQuest:0.0} px");
+        Require(MathF.Abs(shiftHint) <= 1f && MathF.Abs(shiftQuest) <= 1f, $"o ícone de estado empurra o HUD: dica {shiftHint:0.0} px, missão {shiftQuest:0.0} px (treme a cada golpe sofrido: o escudo acende nos 0,75 s de i-frames)");
+    }
 }
