@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Godot;
 using Vespera.Autoload;
 using Vespera.Core.Rules;
 using Vespera.UI;
+using Vespera.World.City;
 
 namespace Vespera.Testing;
 
@@ -48,5 +50,46 @@ public partial class SmokeTest
         }
 
         Require(world.MapId == "guild", "continua na Guilda");
+    }
+
+    [SmokeScenario("polimento: as primeiras Brechas respeitam o Selo do novato", order: 961)]
+    private async Task PolishNoviceBrechas()
+    {
+        await FreshGame("sword");
+        var state = GameManager.Instance.State;
+        var city = CityLife.Instance ?? throw new SmokeFailure("World sem CityLife");
+        state.Save.FirstBrechaDone = true; // a primeira (Mercado, rank do Selo) já passou: daqui em diante a v2 sorteia
+        var ranks = new List<string>();
+        try
+        {
+            for (var round = 0; round < 10; round++)
+            {
+                city.Brechas.Reset();
+                for (var i = 0; i < 2; i++)
+                {
+                    city.Brechas.OpenSoon(0);
+                    city.Brechas.Step(0.01);
+                }
+
+                Require(city.Brechas.Schedule.Novice, "jogo novo (0 Brechas fechadas) deveria ser novato");
+                foreach (var b in city.Brechas.Brechas)
+                {
+                    ranks.Add($"{b.ThemeId}/r{b.Rank}");
+                    Require(state.Brechas.CanEnter(b.Rank, state.RankIndex), $"Brecha {b.ThemeId} rank {b.Rank} abriu acima do que o Selo {state.RankDef.Id} entra");
+                }
+            }
+
+            Log.Info($"polimento: Brechas do novato (Selo {state.RankDef.Id}): {string.Join(", ", ranks)}");
+            state.Save.BrechasClosed = state.Brechas.Def.NoviceBrechas;
+            city.Brechas.Step(0.01);
+            Require(!city.Brechas.Schedule.Novice, "com 3 Brechas fechadas o sorteio volta ao da v2");
+        }
+        finally
+        {
+            state.Save.BrechasClosed = 0;
+            city.Brechas.Reset();
+            Hud.Current?.Toasts.Clear();
+            await WaitSeconds(0.1);
+        }
     }
 }

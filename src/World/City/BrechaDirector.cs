@@ -102,6 +102,7 @@ public sealed class BrechaDirector(CityLife city)
 
         var state = GameManager.Instance.State;
         _events.Clear();
+        Schedule.Novice = state.Brechas.IsNovice(state.Save.BrechasClosed); // C1-D2: as primeiras respeitam o Selo
         Schedule.Tick(dt, state.RankIndex, state.Save.Day, _events);
         for (var i = 0; i < _events.Count; i++)
         {

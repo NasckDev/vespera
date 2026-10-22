@@ -253,6 +253,12 @@ public sealed record BrechaRulesDef
     /// <summary>Só entra em Brecha até este número de Selos acima do seu.</summary>
     public required int EntryMargin { get; init; }
 
+    /// <summary>
+    /// Brechas fechadas até deixar de ser novato (DECISIONS C1-D2): antes disso, toda Brecha que abre tem rank que o
+    /// Selo do jogador pode entrar. Ausente nos dados = 3.
+    /// </summary>
+    public int NoviceBrechas { get; init; } = 3;
+
     public required int BossBonusBase { get; init; }
 
     public required int BossBonusPerRank { get; init; }

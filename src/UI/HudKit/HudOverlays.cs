@@ -48,6 +48,15 @@ public partial class ToastBox : Control
     /// <summary>Y do topo (sobe um pouco quando há barra de chefe, <c>render.js:300</c>).</summary>
     public float Top { get; set; } = 40;
 
+    /// <summary>Descarta a fila e o toast visível (smoke, troca de cena).</summary>
+    public void Clear()
+    {
+        _queue.Clear();
+        _showing = false;
+        Visible = false;
+        SetProcess(false);
+    }
+
     public void Show(string title, string sub, Color color, string? icon = null, float seconds = DefaultSeconds)
     {
         _queue.Enqueue((title, sub, color, icon, seconds));
