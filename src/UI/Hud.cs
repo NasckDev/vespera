@@ -269,9 +269,11 @@ public partial class Hud : CanvasLayer
         _energy = UiBar.Create("energy", new Vector2(78, 5), segments: 5);
         _essence = UiBar.Create("essence", new Vector2(63, 4));
         var hpRow = Ui.Row(3, IconRect.Create("ui_hpicon", 11), _hp, _hpText);
-        var enRow = Ui.Row(3, IconRect.Create("ui_sticon", 10), _energy);
         var essRow = Ui.Row(3, Ui.Gap(10), _essence, Ui.Text(UiText.HudEssence, UiFonts.Tiny, UiPalette.EcoText));
         var statusRow = BuildArtStatusRow(); // C2-D7: estados com ícone (Hud.Art.cs)
+        // os ícones de estado ficam na linha da energia (espaço reservado: a altura da linha não muda ao acender/apagar)
+        var enRow = Ui.Row(3, IconRect.Create("ui_sticon", 10), _energy, Ui.Gap(2), statusRow);
+        enRow.CustomMinimumSize = new Vector2(0, 11);
         _noLantern = Ui.Text(UiText.HudNoLantern, UiFonts.Tiny, UiPalette.Brecha);
 
         var hints = Ui.Row(6,
@@ -288,7 +290,7 @@ public partial class Hud : CanvasLayer
         _questPanel.CustomMinimumSize = new Vector2(130, 0);
         _questPanel.SizeFlagsHorizontal = Control.SizeFlags.ShrinkBegin;
 
-        var column = Ui.Column(2, header, hpRow, enRow, essRow, statusRow, _noLantern, hints, Ui.Gap(0, 3), _questPanel);
+        var column = Ui.Column(2, header, hpRow, enRow, essRow, _noLantern, hints, Ui.Gap(0, 3), _questPanel);
         column.Position = new Vector2(6, 6);
         return column;
     }
