@@ -2,6 +2,7 @@ using System;
 using Godot;
 using Vespera.Autoload;
 using Vespera.Core.World;
+using Vespera.UI.Common;
 
 namespace Vespera.World;
 
@@ -111,7 +112,7 @@ public partial class WorldCamera : Camera2D
         MapPoint? boss = LookAtTarget is { } b && IsInstanceValid(b) ? new MapPoint(b.GlobalPosition.X, b.GlobalPosition.Y) : null;
         var focus = CameraFraming.Focus(new MapPoint(p.X, p.Y), boss, FocusOffsetY);
         var view = VisibleSize;
-        var t = CameraFraming.Target(_mapSize.X, _mapSize.Y, view.X, view.Y, focus);
+        var t = CameraFraming.Target(_mapSize.X, _mapSize.Y, view.X, view.Y, focus, HudZones.BottomInset); // POLI-9: folga para a hotbar
         return new Vector2(t.X, t.Y);
     }
 

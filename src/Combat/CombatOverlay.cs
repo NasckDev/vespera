@@ -95,11 +95,7 @@ public partial class CombatOverlay : Node2D
     /// Fator da janela sobre a base 640×360 (stretch <c>canvas_items</c>, aspecto <c>keep</c>): o texto é rasterizado
     /// nesse tamanho e fica nítido em 1080p/4K (DECISIONS B1-D45; sem ele o <c>DrawString</c> sai na base e é ampliado em blocos).
     /// </summary>
-    private float Oversampling()
-    {
-        var window = GetTree().Root.Size;
-        return MathF.Max(1, MathF.Min(window.X / 640f, window.Y / 360f));
-    }
+    private float Oversampling() => UI.Common.UiScaling.WindowFactor(this); // POLI-11: a escala inteira real da janela
 
     public override void _Draw()
     {

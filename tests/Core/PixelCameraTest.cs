@@ -22,6 +22,39 @@ public class PixelCameraTest
     }
 
     [TestCase]
+    public void FitScaleKeepsTheImageBigInWindowsWithATitleBar()
+    {
+        AssertThat(CameraFraming.FitScale(1280, 720)).IsEqual(2);
+        AssertThat(CameraFraming.FitScale(1920, 1080)).IsEqual(3);
+        AssertThat(CameraFraming.FitScale(1920, 1061)).IsEqual(3); // 1080p maximizado com barra de título: era 2× com metade da tela preta
+        AssertThat(CameraFraming.FitScale(1920, 1009)).IsEqual(3);
+        AssertThat(CameraFraming.FitScale(1920, 960)).IsEqual(2);
+        AssertThat(CameraFraming.FitScale(2560, 1440)).IsEqual(4);
+        AssertThat(CameraFraming.FitScale(2560, 1380)).IsEqual(4);
+        AssertThat(CameraFraming.FitScale(3840, 2160)).IsEqual(6);
+        AssertThat(CameraFraming.FitScale(3840, 2100)).IsEqual(6);
+        AssertThat(CameraFraming.FitScale(1366, 768)).IsEqual(2);
+        AssertThat(CameraFraming.FitScale(1600, 900)).IsEqual(2);
+        AssertThat(CameraFraming.FitScale(2560, 1080)).IsEqual(3);
+        AssertThat(CameraFraming.FitScale(800, 600)).IsEqual(1);
+        AssertThat(CameraFraming.FitScale(320, 200)).IsEqual(1);
+    }
+
+    [TestCase]
+    public void ContentSizeFeedsTheEngineTheChosenScale()
+    {
+        // A conta do Godot (min(janela/base) arredondado para baixo) tem de dar exatamente a escala escolhida.
+        foreach (var (w, h) in new[] { (1280, 720), (1920, 1080), (1920, 1061), (1920, 1009), (2560, 1440), (3840, 2160), (1366, 768), (1600, 900), (800, 600) })
+        {
+            var scale = CameraFraming.FitScale(w, h);
+            var (cw, ch) = CameraFraming.ContentSizeFor(w, h, scale);
+            var engine = Math.Max(1, (int)MathF.Floor(MathF.Min(w / (float)cw, h / (float)ch)));
+            AssertThat(engine).IsEqual(scale);
+            AssertThat(cw >= 560 && ch >= 300 || scale == 1).IsTrue();
+        }
+    }
+
+    [TestCase]
     public void SnapsToScreenPixels()
     {
         AssertThat(CameraFraming.SnapToPixel(10.2f, 3)).IsEqualApprox(10f + (1f / 3f), 0.0001f);

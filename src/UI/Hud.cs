@@ -23,6 +23,9 @@ public partial class Hud : CanvasLayer
     private const float QuestPollSeconds = 0.5f;
     private const float DefaultEcoMarker = 60f; // render.js:247
 
+    /// <summary>Largura da coluna do canto superior direito (local, minimapa, barra do chefe, lista de Brechas).</summary>
+    private const float ColumnWidth = 140f;
+
     private static readonly Color FlashColor = new(180 / 255f, 20 / 255f, 50 / 255f);
 
     private readonly List<HotbarSlot> _weaponSlots = [];
@@ -69,6 +72,8 @@ public partial class Hud : CanvasLayer
     private Control _essRow = null!;
     private PanelContainer _statusBack = null!;
     private PanelContainer _topBack = null!;
+    private VBoxContainer _topRight = null!;
+    private int _layoutFrames;
     private float _questExpandT;
     private string _questDescRaw = string.Empty;
     private bool _insideBrecha;
@@ -180,21 +185,20 @@ public partial class Hud : CanvasLayer
         Loot.GrowHorizontal = Control.GrowDirection.Begin; // nota comprida cresce para a esquerda, nunca para fora da tela
         _chrome.AddChild(Loot);
 
-        Boss = new BossBar { AnchorLeft = 0.5f, AnchorRight = 0.5f, OffsetLeft = -150, OffsetRight = 150, OffsetTop = 6 };
-        _chrome.AddChild(Boss);
-
-        // Onda no alto, no centro (era o 5º bloco empilhado no canto direito).
+        // Onda no alto, no centro (era o 5º bloco empilhado no canto direito). POLI-1: só no vão entre o painel de vida e a
+        // coluna da direita (FitLayout), para o rótulo nunca passar por cima deles em 125/150%.
         _chrome.AddChild(_wave);
-        _wave.AnchorLeft = 0.5f;
-        _wave.AnchorRight = 0.5f;
-        _wave.OffsetLeft = -120;
-        _wave.OffsetRight = 120;
+        _wave.AnchorLeft = 0;
+        _wave.AnchorRight = 0;
+        _wave.OffsetLeft = 170;
+        _wave.OffsetRight = 470;
         _wave.OffsetTop = 6;
         _wave.HorizontalAlignment = HorizontalAlignment.Center;
 
-        // C1-D8: letreiros menores e no alto; o do chefe fica logo abaixo da barra dele e dura 2 s.
+        // C1-D8: letreiros menores e no alto, de 2 s. POLI-1: o do chefe fica no topo do vão central (a barra do chefe saiu
+        // do centro e foi para a coluna da direita) e todos se limitam a esse vão (FitLayout).
         _locationBanner = new Banner(92, UiFonts.Heading, band: false, rule: true);
-        _bossBanner = new Banner(30, UiFonts.Large, band: true, rule: false);
+        _bossBanner = new Banner(8, UiFonts.Large, band: true, rule: false);
         _ultimateBanner = new Banner(64, UiFonts.Heading, band: true, rule: false);
         _chrome.AddChild(_locationBanner);
         _chrome.AddChild(_bossBanner);
@@ -221,6 +225,7 @@ public partial class Hud : CanvasLayer
         Refresh();
         GetViewport().SizeChanged += ApplyScale;
         ApplyScale();
+        _layoutFrames = 3;
     }
 
     /// <summary>Escala e contraste atuais (opções da frente C1). Chamado ao abrir, ao redimensionar e quando as opções mudam.</summary>
@@ -229,6 +234,7 @@ public partial class Hud : CanvasLayer
         UiScaling.Fit(_root, GameSettings.UiScale);
         UiScaling.ApplyOversampling(this);
         UiScaling.ApplyText(_root);
+        _layoutFrames = 3; // o layout só assenta depois de alguns quadros: FitLayout roda então
         var contrast = GameSettings.HighContrast;
         _statusBack.AddThemeStyleboxOverride("panel", HudBackdrop(contrast));
         _topBack.AddThemeStyleboxOverride("panel", HudBackdrop(contrast));
@@ -265,6 +271,7 @@ public partial class Hud : CanvasLayer
 
         HudZones.Clear();
         HudZones.MinimapSlot = default;
+        HudZones.BottomInset = 0f;
         Unsubscribe();
         if (Current == this)
         {
@@ -296,6 +303,11 @@ public partial class Hud : CanvasLayer
             {
                 _questDesc.Visible = false; // C1-D7: missão compacta depois de alguns segundos
             }
+        }
+
+        if (_layoutFrames > 0 && --_layoutFrames == 0)
+        {
+            FitLayout();
         }
 
         PublishZones();
@@ -402,6 +414,7 @@ public partial class Hud : CanvasLayer
         var top = Ui.Row(4, _topBack, dayBox);
         top.Alignment = BoxContainer.AlignmentMode.End;
 
+        Boss = new BossBar { SizeFlagsHorizontal = Control.SizeFlags.ShrinkEnd }; // POLI-1: abaixo do minimapa, na coluna da direita
         _brechaList = Ui.Column(2);
         _invasion = UiScaling.Reading(Ui.Text(UiText.HudInvasion, UiFonts.Body, UiPalette.Brecha, align: HorizontalAlignment.Right));
         _wave = Ui.Title(string.Empty, UiFonts.Large, UiPalette.Brecha, HorizontalAlignment.Right);
@@ -409,13 +422,14 @@ public partial class Hud : CanvasLayer
         // Integração v0.1: o minimapa do motor fica logo abaixo do nome do local; C1-D7: o HUD reserva o lugar e diz
         // ao minimapa onde desenhar (HudZones.MinimapSlot), para os dois crescerem juntos com a escala da interface.
         _minimapSlot = new Control { CustomMinimumSize = new Vector2(120, 70), MouseFilter = Control.MouseFilterEnum.Ignore, SizeFlagsHorizontal = Control.SizeFlags.ShrinkEnd };
-        var column = Ui.Column(4, top, _minimapSlot, _brechaList, _invasion);
+        var column = Ui.Column(4, top, _minimapSlot, Boss, _brechaList, _invasion);
         column.AnchorLeft = 1;
         column.AnchorRight = 1;
-        column.OffsetLeft = -180;
+        column.OffsetLeft = -ColumnWidth - 6;
         column.OffsetRight = -6;
         column.OffsetTop = 6;
         column.GrowHorizontal = Control.GrowDirection.Begin;
+        _topRight = column;
         return column;
     }
 
@@ -451,14 +465,17 @@ public partial class Hud : CanvasLayer
         var slots = Ui.Row(8, ultColumn, weapons, Ui.Row(3, _ecoSlot, _potionSlot));
         slots.Alignment = BoxContainer.AlignmentMode.Center;
         var column = Ui.Column(2, _weaponName, slots);
+        // POLI-1/8: a coluna abraça o conteúdo (cresce dos dois lados do centro), em vez de reservar 250 u de largura: o
+        // retângulo que o HUD publica passa a ser o que a hotbar de fato ocupa, e o loot da direita não o cruza em 150%.
         column.AnchorLeft = 0.5f;
         column.AnchorRight = 0.5f;
         column.AnchorTop = 1;
         column.AnchorBottom = 1;
-        column.OffsetLeft = -125;
-        column.OffsetRight = 125;
+        column.OffsetLeft = 0;
+        column.OffsetRight = 0;
         column.OffsetTop = -60;
         column.OffsetBottom = -6;
+        column.GrowHorizontal = Control.GrowDirection.Both;
         column.GrowVertical = Control.GrowDirection.Begin;
         column.Alignment = BoxContainer.AlignmentMode.End;
         _weaponName.SizeFlagsHorizontal = Control.SizeFlags.Fill;
@@ -911,6 +928,7 @@ public partial class Hud : CanvasLayer
     private void OnBossSpawned(string bossName, int maxHp)
     {
         Boss.Begin(bossName, maxHp);
+        _layoutFrames = 3;
         Caption(UiText.CaptionBoss);
         Toasts.Top = 42;
         _locationBanner.Stop(); // o nome da Câmara do Núcleo ainda estava na tela e sobrepunha o do chefe
@@ -1028,11 +1046,17 @@ public partial class Hud : CanvasLayer
         Toasts.Avoid = _chrome.Visible ? new Rect2(_status.Position, _status.Size) : default;
         HudZones.Clear();
         HudZones.MinimapSlot = _chrome.Visible && _minimapSlot.IsVisibleInTree() ? _minimapSlot.GetGlobalRect() : default;
+        HudZones.BottomInset = _chrome.Visible && _hotbar.IsVisibleInTree()
+            ? Math.Max(0f, GetViewport().GetVisibleRect().End.Y - _hotbar.GetGlobalRect().Position.Y + 2f)
+            : 0f;
         if (!_chrome.Visible)
         {
             return;
         }
 
+        // POLI-12: o chefe e a onda primeiro (os mais importantes para os nomes do mundo não passarem por cima).
+        AddZone(Boss);
+        AddZone(_wave);
         AddZone(_statusBack);
         AddZone(_questPanel);
         AddZone(_topBack);
@@ -1041,8 +1065,34 @@ public partial class Hud : CanvasLayer
         AddZone(_hotbar);
         AddZone(_wallet);
         AddZoneChildren(Loot);
-        AddZone(Boss);
-        AddZone(_wave);
+    }
+
+    /// <summary>
+    /// Vão central do alto (POLI-1) e espaço do loot (POLI-8) com o layout assentado: os letreiros e o rótulo da onda ficam
+    /// entre o painel de vida e a coluna da direita; a caixa de loot só mostra as linhas que cabem abaixo da lista de Brechas.
+    /// Roda quando a escala, a lista de Brechas ou os letreiros mudam, nunca por quadro.
+    /// </summary>
+    private void FitLayout()
+    {
+        if (_topRight is null || !IsInsideTree())
+        {
+            return;
+        }
+
+        var rootSize = _root.Size;
+        var left = _status.Position.X + Math.Max(_statusBack.Size.X, _questPanel.Visible ? _questPanel.Size.X : 0f) + 6f;
+        var right = Math.Min(_topRight.Position.X, rootSize.X - ColumnWidth - 6f) - 6f;
+        _locationBanner.SetSpan(left, right);
+        _bossBanner.SetSpan(left, right);
+        _ultimateBanner.SetSpan(left, right);
+        _wave.OffsetLeft = left;
+        _wave.OffsetRight = Math.Max(left + 40f, right);
+
+        // Loot: cresce de baixo para cima; não pode chegar na lista de Brechas (que cresce de cima para baixo).
+        var rightBottom = _topRight.Position.Y + _topRight.Size.Y + 4f;
+        var lootBottom = rootSize.Y - 46f;
+        var lineHeight = Loot.GetThemeConstant("separation") + 14f; // 8 px de texto + margens do painel
+        Loot.Limit = (int)Math.Floor((lootBottom - rightBottom) / lineHeight);
     }
 
     /// <summary>Só as linhas visíveis (a caixa vazia ocupa o canto inteiro sem desenhar nada).</summary>
@@ -1108,16 +1158,18 @@ public partial class Hud : CanvasLayer
             var inside = tracker.Inside == b;
             var ruptured = b.Status == BrechaStatus.Ruptured;
             var highlight = inside || tracker.TrackedId == b.Id;
-            var sub = ruptured ? UiText.HudRuptured : inside ? UiText.HudInside : BrechaTracker.Title(b);
             var rankDef = Database.Db.Ranks[Math.Clamp(b.Rank, 0, Database.Db.Ranks.Count - 1)];
-            var lines = Ui.Column(0,
-                Ui.Text(UiText.HudBrecha + BrechaTracker.Bairro(b.ThemeId), UiFonts.Body),
-                Ui.Text(sub, UiFonts.Body, ruptured ? UiPalette.Brecha : new Color("#b9aec4")));
-            var row = Ui.Row(4, IconRect.Create(rankDef.Icon, 11), lines);
+            // POLI-8: uma linha por Brecha (o título de flavor está no Mural); era um bloco de duas linhas que, com 2–3 Brechas
+            // e a interface em 125/150%, descia até a caixa de loot. A Brecha rompida ganha o aviso na própria linha.
+            var title = UiText.HudBrecha + BrechaTracker.Bairro(b.ThemeId) + (ruptured ? " · " + UiText.HudRupturedShort : string.Empty);
+            var line = Ui.Text(title, UiFonts.Body, ruptured ? UiPalette.Brecha : UiPalette.Creme);
+            var row = Ui.Row(4, IconRect.Create(rankDef.Icon, 11), line);
             var panel = Ui.Panel(highlight || ruptured ? "SoftPanelDanger" : "SoftPanel", row);
-            panel.CustomMinimumSize = new Vector2(120, 0);
+            panel.CustomMinimumSize = new Vector2(ColumnWidth - 20f, 0);
             panel.SizeFlagsHorizontal = Control.SizeFlags.ShrinkEnd;
             _brechaList.AddChild(panel);
         }
+
+        _layoutFrames = 3; // a lista mudou de altura: o loot e os letreiros se reajustam
     }
 }

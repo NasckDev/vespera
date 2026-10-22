@@ -9,6 +9,7 @@ using Vespera.UI;
 using Vespera.UI.Common;
 using Vespera.UI.HudKit;
 using Vespera.Core.Rules;
+using Vespera.Core.World;
 using Vespera.UI.Screens;
 using Vespera.UI.Widgets;
 
@@ -263,6 +264,141 @@ public partial class SmokeTest
             ui.CloseAll();
             InputBindings.RestoreDefaults();
             await PqUseKeyboard();
+        }
+    }
+
+    [SmokeScenario("polimento (r1): chefe, onda e 4 linhas de loot cabem nas zonas do HUD e o letreiro com a faixa fica no vão entre os blocos (100/125/150%)", order: 1106)]
+    private async Task PrBossZonesAndBannerBand()
+    {
+        await PqFreshWorld();
+        var world = await FreshGame("sword");
+        var hud = Hud.Current!;
+        PqResetPlayerSettings();
+        var problems = new List<string>();
+        try
+        {
+            world.GoMap("forge", 800, 520, instant: true);
+            await WaitMapSettled(world);
+            await DismissUi();
+            foreach (var scale in GameSettings.UiScales)
+            {
+                GameSettings.UiScale = scale;
+                await WaitSeconds(0.3);
+                for (var i = 0; i < 4; i++)
+                {
+                    hud.Note($"Estilhaço {i} em {scale * 100:0}%", "i_coin");
+                }
+
+                EventBus.Instance.EmitSignal(EventBus.SignalName.WaveStarted, 2, 3);
+                await WaitSeconds(0.3);
+                var waveZone = hud.WaveLabel.GetGlobalRect();
+                EventBus.Instance.EmitSignal(EventBus.SignalName.BossSpawned, "O Abissal do Mercado", 500);
+                await WaitSeconds(0.45);
+                var bossRect = hud.Boss.GetGlobalRect().Grow(2f);
+                var found = false;
+                for (var i = 0; i < HudZones.Count; i++)
+                {
+                    found |= HudZones.Get(i).Position.IsEqualApprox(bossRect.Position) && HudZones.Get(i).Size.IsEqualApprox(bossRect.Size);
+                }
+
+                Log.Info($"poli-12: {scale * 100:0}%: {HudZones.Count} zonas (capacidade {HudZones.Capacity}), barra do chefe publicada={found}, loot com {hud.Loot.VisibleTexts.Count()} linha(s)");
+                if (!found)
+                {
+                    problems.Add($"{scale * 100:0}%: a zona da barra do chefe {bossRect} não foi publicada ({HudZones.Count} zonas)");
+                }
+
+                if (HudZones.Count >= HudZones.Capacity)
+                {
+                    problems.Add($"{scale * 100:0}%: {HudZones.Count} zonas lotam a capacidade {HudZones.Capacity}: zonas novas seriam descartadas");
+                }
+
+                // O letreiro com a faixa de fundo (Panel) ocupa só o vão entre o painel de vida e a coluna da direita, sem cobrir nenhum bloco.
+                var view = hud.GetViewport().GetVisibleRect();
+                var banner = hud.BossAlert;
+                var cover = new List<(string Name, Rect2 Rect)>();
+                foreach (var c in banner.GetChildren().OfType<Control>().Where(c => c.IsVisibleInTree()))
+                {
+                    cover.Add((c is Label ? "texto" : "faixa", c is Label label ? PqTextRect(label) : c.GetGlobalRect()));
+                }
+
+                if (cover.Count == 0)
+                {
+                    problems.Add($"{scale * 100:0}%: o letreiro do chefe não estava na tela");
+                }
+
+                for (var z = 0; z < HudZones.Count; z++)
+                {
+                    foreach (var (name, rect) in cover)
+                    {
+                        var cut = HudZones.Get(z).GrowIndividual(-2, -2, -2, -2).Intersection(rect);
+                        if (cut.Size.X > 1f && cut.Size.Y > 1f)
+                        {
+                            problems.Add($"{scale * 100:0}%: {name} do letreiro {rect} cobre a zona{z} {HudZones.Get(z)}");
+                        }
+                    }
+
+                    foreach (var (name, rect) in cover)
+                    {
+                        if (!view.Grow(1f).Encloses(rect))
+                        {
+                            problems.Add($"{scale * 100:0}%: {name} do letreiro {rect} fora da tela {view}");
+                        }
+                    }
+                }
+
+                _ = waveZone;
+                await Shot($"r1-chefe-zonas-{scale * 100:0}");
+                EventBus.Instance.EmitSignal(EventBus.SignalName.BossHealthChanged, 0, 500);
+                await WaitSeconds(2.3);
+            }
+        }
+        finally
+        {
+            hud.Toasts.Clear();
+            PqResetPlayerSettings();
+        }
+
+        Require(problems.Count == 0, "zonas do HUD no chefe:\n  " + string.Join("\n  ", problems.Distinct()));
+    }
+
+    [SmokeScenario("polimento (r1): janela de 1080p com barra de título usa escala inteira 3× e cobre a tela (sem metade preta)", order: 1107)]
+    private async Task PrWindowCoversTheScreen()
+    {
+        if (DisplayServer.GetName() == "headless")
+        {
+            Log.Info("poli-11: sem janela de verdade no headless; a conta da escala está nos testes do Core (FitScale)");
+            await Task.CompletedTask;
+            return;
+        }
+
+        await PqFreshWorld();
+        await FreshGame("sword");
+        var window = GetTree().Root;
+        var hud = Hud.Current!;
+        var oldSize = DisplayServer.WindowGetSize();
+        var oldBorderless = DisplayServer.WindowGetFlag(DisplayServer.WindowFlags.Borderless);
+        try
+        {
+            foreach (var size in new[] { new Vector2I(1920, 1061), new Vector2I(1280, 720), new Vector2I(1920, 1009) })
+            {
+                DisplayServer.WindowSetFlag(DisplayServer.WindowFlags.Borderless, true);
+                DisplayServer.WindowSetPosition(Vector2I.Zero);
+                DisplayServer.WindowSetSize(size);
+                await WaitSeconds(0.8);
+                var win = window.Size;
+                var visible = GetViewport().GetVisibleRect().Size;
+                var factor = UiScaling.WindowFactor(hud);
+                var covered = (visible.X * factor * visible.Y * factor) / (win.X * (double)win.Y);
+                Log.Info($"poli-11: janela {win}: fator {factor}, área visível {visible} u, cobre {covered * 100:0.0}% da janela");
+                Require(covered >= 0.95, $"janela {win}: o jogo ocupa só {covered * 100:0.0}% da janela (fator {factor}, visível {visible})");
+                Require(visible.X >= 600f && visible.Y >= 330f, $"janela {win}: área visível pequena demais ({visible})");
+                Require(Mathf.IsEqualApprox(factor, CameraFraming.FitScale(win.X, win.Y)), $"janela {win}: fator {factor} diferente do FitScale {CameraFraming.FitScale(win.X, win.Y)}");
+            }
+        }
+        finally
+        {
+            DisplayServer.WindowSetFlag(DisplayServer.WindowFlags.Borderless, oldBorderless);
+            DisplayServer.WindowSetSize(oldSize);
         }
     }
 }

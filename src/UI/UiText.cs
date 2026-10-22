@@ -213,6 +213,7 @@ public static class UiText
     public const string HudUltimate = "Supremo";
     public const string HudBrecha = "Brecha · ";
     public const string HudRuptured = "ROMPEU — Rua da Forja";
+    public const string HudRupturedShort = "ROMPEU";
     public const string HudInside = "você está dentro";
     public const string HudWave = "Onda {n} de {total}";
     public const string BossIntroHint = "Quebre suas partes. Cada uma muda a luta.";

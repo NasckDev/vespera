@@ -141,6 +141,7 @@ public partial class LootFeed : VBoxContainer
     private const float Life = 4f;
 
     private readonly List<Entry> _entries = [];
+    private int _limit = MaxEntries;
 
     public LootFeed()
     {
@@ -175,6 +176,20 @@ public partial class LootFeed : VBoxContainer
 
     /// <summary>Quantas linhas cabem (smoke test).</summary>
     public static int Capacity => MaxEntries;
+
+    /// <summary>
+    /// Quantas linhas a caixa pode mostrar agora (1 a <see cref="Capacity"/>): o HUD reduz quando a lista de Brechas ocupa o
+    /// espaço que o loot cresceria (POLI-8); as mais antigas saem primeiro, as novas continuam entrando.
+    /// </summary>
+    public int Limit
+    {
+        get => _limit;
+        set
+        {
+            _limit = Math.Clamp(value, 1, MaxEntries);
+            TrimToLimit(null);
+        }
+    }
 
     /// <summary>Linhas visíveis (texto), da mais antiga para a mais nova (smoke test).</summary>
     public IEnumerable<string> VisibleTexts
@@ -220,6 +235,7 @@ public partial class LootFeed : VBoxContainer
         }
 
         slot ??= Oldest();
+        TrimToLimit(slot);
         slot.Key = key;
         slot.Count = amount;
         slot.Age = 0;
@@ -257,6 +273,34 @@ public partial class LootFeed : VBoxContainer
         }
 
         SetProcess(any);
+    }
+
+    /// <summary>Esconde as linhas mais antigas até sobrarem <see cref="Limit"/> (a linha <paramref name="incoming"/> vai contar como visível).</summary>
+    private void TrimToLimit(Entry? incoming)
+    {
+        while (true)
+        {
+            var visible = 0;
+            Entry? oldest = null;
+            foreach (var e in _entries)
+            {
+                if (e != incoming && e.Panel.Visible)
+                {
+                    visible++;
+                    if (oldest is null || e.Age > oldest.Age)
+                    {
+                        oldest = e;
+                    }
+                }
+            }
+
+            if (visible + (incoming is null ? 0 : 1) <= _limit || oldest is null)
+            {
+                return;
+            }
+
+            oldest.Panel.Visible = false;
+        }
     }
 
     private Entry Oldest()
@@ -313,35 +357,48 @@ public partial class LootFeed : VBoxContainer
 /// </summary>
 public partial class Banner : Control
 {
+    private const int MinFontSize = 7; // mínimo legível (14 px em 720p)
+
     private readonly Label _title;
     private readonly Label _sub;
-    private readonly ColorRect _band;
+    private readonly Panel _band;
+    private readonly int _titleBase;
     private float _t;
     private float _duration;
     private float _fadeIn = 2f;
     private float _fadeOut = 1.5f;
     private float _slide;
+    private float _spanWidth = 640f;
 
     public Banner(float y, int titleSize, bool band, bool rule)
     {
         MouseFilter = MouseFilterEnum.Ignore;
-        AnchorRight = 1;
+        _titleBase = titleSize;
+        // POLI-1: o letreiro ocupa só o vão entre o painel de vida (esquerda) e a coluna do canto direito (SetSpan), em vez
+        // de meia tela centrada: com a interface em 125/150% a faixa de 50% da tela entrava no painel de vida.
+        AnchorLeft = 0;
+        AnchorRight = 0;
+        OffsetLeft = 0;
+        OffsetRight = _spanWidth;
         OffsetTop = y;
         // Faixa do tamanho do texto (C1-D8: a de 40 u cobria o meio da arena no bote do chefe).
-        _band = new ColorRect { Color = new Color(9 / 255f, 7 / 255f, 20 / 255f, 0.7f), MouseFilter = MouseFilterEnum.Ignore, Visible = band };
-        _band.SetAnchor(Side.Right, 0.75f);
-        _band.SetAnchor(Side.Left, 0.25f);
+        _band = new Panel { MouseFilter = MouseFilterEnum.Ignore, Visible = band };
+        _band.AddThemeStyleboxOverride("panel", new StyleBoxFlat { BgColor = new Color(9 / 255f, 7 / 255f, 20 / 255f, 0.7f) });
+        _band.SetAnchor(Side.Left, 0f);
+        _band.SetAnchor(Side.Right, 1f);
         _band.SetOffset(Side.Left, 0);
         _band.SetOffset(Side.Right, 0);
         _band.SetOffset(Side.Top, -3);
-        _band.SetOffset(Side.Bottom, titleSize + 14);
+        _band.SetOffset(Side.Bottom, Mathf.CeilToInt(titleSize * 1.45f) + 15);
         AddChild(_band);
         _title = Ui.Title(string.Empty, titleSize, null, HorizontalAlignment.Center);
         _title.AnchorRight = 1;
+        _title.ClipText = true;
+        _title.TextOverrunBehavior = TextServer.OverrunBehavior.TrimEllipsis;
         AddChild(_title);
         _sub = UiScaling.Reading(Ui.Text(string.Empty, UiFonts.Body, UiPalette.Creme, align: HorizontalAlignment.Center));
         _sub.AnchorRight = 1;
-        _sub.OffsetTop = titleSize + 3;
+        _sub.OffsetTop = Mathf.CeilToInt(titleSize * 1.45f) + 1; // logo abaixo da linha do título (a fonte Cinzel tem ~1,4× de altura de linha)
         AddChild(_sub);
         var line = Ui.Row(0, Ui.Rule(45, 1f), Diamond.Create(5, UiPalette.Gold), Ui.Rule(45, 1f));
         line.Alignment = BoxContainer.AlignmentMode.Center;
@@ -354,6 +411,22 @@ public partial class Banner : Control
     }
 
     public string Text => _title.Text;
+
+    /// <summary>Largura disponível agora (u da raiz do HUD).</summary>
+    public float SpanWidth => _spanWidth;
+
+    /// <summary>
+    /// Limita o letreiro ao vão horizontal <paramref name="left"/>–<paramref name="right"/> (coordenadas da raiz do HUD) e
+    /// encolhe o texto até caber (mínimo 7 px base); o subtítulo que não cabe numa linha some. Chamado quando o
+    /// vão muda (escala, lista de Brechas) e ao tocar o letreiro, nunca por quadro.
+    /// </summary>
+    public void SetSpan(float left, float right)
+    {
+        OffsetLeft = left;
+        OffsetRight = Math.Max(left + 40f, right);
+        _spanWidth = OffsetRight - OffsetLeft;
+        FitText();
+    }
 
     /// <summary>Some na hora (outro letreiro vai ocupar o mesmo lugar).</summary>
     public void Stop()
@@ -368,6 +441,7 @@ public partial class Banner : Control
         _title.AddThemeColorOverride("font_color", color);
         _sub.Text = sub;
         _sub.Visible = sub.Length > 0;
+        FitText();
         _t = 0;
         _duration = duration;
         _fadeIn = fadeIn;
@@ -376,6 +450,39 @@ public partial class Banner : Control
         Visible = true;
         Modulate = new Color(1, 1, 1, 0);
         SetProcess(true);
+    }
+
+    /// <summary>Título e subtítulo numa linha só dentro do vão: encolhe a fonte até o mínimo legível; o que ainda não cabe é cortado (título) ou some (subtítulo).</summary>
+    private void FitText()
+    {
+        var room = _spanWidth - 8f;
+        if (_title.Text.Length > 0)
+        {
+            var font = _title.GetThemeFont("font");
+            var size = _titleBase;
+            while (size > MinFontSize && font.GetStringSize(_title.Text, HorizontalAlignment.Left, -1, size).X > room)
+            {
+                size--;
+            }
+
+            _title.AddThemeFontSizeOverride("font_size", size);
+        }
+
+        if (_sub.Text.Length > 0)
+        {
+            var font = _sub.GetThemeFont("font");
+            var size = UiScaling.ReadingSize(UiFonts.Body); // tamanho de leitura atual (opção "Tamanho do texto")
+            while (size > MinFontSize && font.GetStringSize(_sub.Text, HorizontalAlignment.Left, -1, size).X > room)
+            {
+                size--;
+            }
+
+            _sub.AddThemeFontSizeOverride("font_size", size);
+            _sub.Visible = font.GetStringSize(_sub.Text, HorizontalAlignment.Left, -1, size).X <= room;
+        }
+
+        // A faixa acompanha as linhas que de fato aparecem.
+        _band.SetOffset(Side.Bottom, _sub.Visible && _sub.Text.Length > 0 ? _sub.OffsetTop + 14f : _sub.OffsetTop + 3f);
     }
 
     public override void _Process(double delta)
@@ -450,9 +557,16 @@ public partial class RankUpOverlay : Control
     }
 }
 
-/// <summary>Barra do chefe no topo (<c>render.js:293-297</c>): nome em Cinzel, barra magenta com lag.</summary>
+/// <summary>
+/// Barra do chefe (<c>render.js:293-297</c>): nome em Cinzel, barra magenta com lag. POLI-1: mora na coluna do canto
+/// superior direito, logo abaixo do minimapa (a lista de Brechas some dentro da Brecha), e não mais no centro do alto,
+/// onde com a interface em 125/150% ela cobria o painel de vida e o relógio.
+/// </summary>
 public partial class BossBar : VBoxContainer
 {
+    /// <summary>Largura da barra: cabe na coluna da direita em qualquer escala.</summary>
+    public const float BarWidth = 136f;
+
     private readonly Label _name;
     private readonly UiBar _bar;
 
@@ -461,7 +575,10 @@ public partial class BossBar : VBoxContainer
         MouseFilter = MouseFilterEnum.Ignore;
         AddThemeConstantOverride("separation", 2);
         _name = Ui.Title(string.Empty, 9, null, HorizontalAlignment.Center);
-        _bar = UiBar.Create("boss", new Vector2(280, 7), lag: true);
+        _name.ClipText = true;
+        _name.TextOverrunBehavior = TextServer.OverrunBehavior.TrimEllipsis;
+        _name.CustomMinimumSize = new Vector2(BarWidth, 0);
+        _bar = UiBar.Create("boss", new Vector2(BarWidth, 7), lag: true);
         _bar.SizeFlagsHorizontal = SizeFlags.ShrinkCenter;
         AddChild(_name);
         AddChild(_bar);

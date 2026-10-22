@@ -17,11 +17,20 @@ public static class UiScaling
     private static readonly StringName BaseMeta = "c1_text_base";
     private static readonly StringName FontSize = "font_size";
 
-    /// <summary>Fator inteiro da janela sobre 640×360 (stretch <c>canvas_items</c> com escala inteira).</summary>
+    /// <summary>
+    /// Fator inteiro da janela (px de tela por u; stretch <c>canvas_items</c> com escala inteira): janela ÷ área visível,
+    /// que acompanha a base que o <see cref="WindowFit"/> pede ao engine (POLI-11).
+    /// </summary>
     public static float WindowFactor(Node node)
     {
         var window = node.GetTree().Root.Size;
-        return MathF.Max(1f, MathF.Floor(MathF.Min(window.X / 640f, window.Y / 360f)));
+        var visible = node.GetViewport().GetVisibleRect().Size;
+        if (visible.X <= 0f || visible.Y <= 0f)
+        {
+            return 1f;
+        }
+
+        return MathF.Max(1f, MathF.Round(MathF.Min(window.X / visible.X, window.Y / visible.Y)));
     }
 
     /// <summary>Ajusta <paramref name="root"/> à área visível na escala <paramref name="scale"/>.</summary>
@@ -122,7 +131,7 @@ public static class UiScaling
 /// </summary>
 public static class HudZones
 {
-    public const int Capacity = 12;
+    public const int Capacity = 16; // POLI-12: 7 blocos fixos + chefe + onda + até 4 linhas de loot = 13
 
     private static readonly Rect2[] Rects = new Rect2[Capacity];
 
@@ -130,6 +139,12 @@ public static class HudZones
 
     /// <summary>Onde o minimapa do canto deve ficar (vazio = posição padrão do motor).</summary>
     public static Rect2 MinimapSlot { get; set; }
+
+    /// <summary>
+    /// Altura (u da tela) que a hotbar ocupa no pé da tela, 0 sem HUD. A câmera deixa esta folga além da borda de baixo do
+    /// mapa para o jogador que anda até a borda não ficar escondido atrás dela (POLI-9).
+    /// </summary>
+    public static float BottomInset { get; set; }
 
     public static Rect2 Get(int i) => Rects[i];
 
