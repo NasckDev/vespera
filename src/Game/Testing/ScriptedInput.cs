@@ -7,7 +7,6 @@ namespace Vespera.Game.Testing;
 /// <summary>Fonte de input dirigida por código (bots de teste e capturas): direção e ações ligadas à mão.</summary>
 public sealed class ScriptedInput : IInputSource
 {
-
     private readonly HashSet<string> _held = [];
     private readonly HashSet<string> _taps = [];
 
