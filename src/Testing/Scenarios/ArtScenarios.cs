@@ -268,6 +268,7 @@ public partial class SmokeTest
     private async Task ArtProps()
     {
         await WaitForScene("World", timeoutSeconds: 10);
+        World.World.Objects.Reset(); // baú aberto/barril quebrado por cenários anteriores da sessão (o registro é estático)
         World.World.LayoutOverrides["forge"] = ArtFixture;
         WorldDressing.ExtraCatalogPath = FixtureObjects;
         WorldDressing.ReloadCatalog();

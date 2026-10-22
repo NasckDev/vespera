@@ -111,6 +111,7 @@ public partial class GameManager : Node
     private void Attach(SaveData save)
     {
         Detach();
+        Vespera.World.World.Objects.Reset(); // barril quebrado e baú aberto de outro jogo não passam para este (o registro é estático)
         var seed = Testing.SmokeTest.IsRequested() ? SmokeSeed : (int)(Time.GetTicksUsec() & int.MaxValue);
         _state = new GameState(Db, save, new SeededRandom(seed));
         _lastHp = _state.Hp;

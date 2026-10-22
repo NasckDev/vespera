@@ -45,4 +45,19 @@ public class WorldObjectRegistryTest
         reg.NewDay();
         AssertThat(reg.GetFlag(key, true)).IsFalse();
     }
+
+    /// <summary>Jogo novo ou save carregado começa com o mundo intacto: nada gasto, lampiões no padrão.</summary>
+    [TestCase]
+    public void ResetForgetsSpentObjectsAndFlags()
+    {
+        var reg = new WorldObjectRegistry();
+        var chest = WorldObjectRegistry.Key("forge", "chest", 2);
+        var lamp = WorldObjectRegistry.Key("forge", "lamp", 0);
+        reg.MarkSpent(chest, 1, 5);
+        reg.SetFlag(lamp, false);
+        reg.Reset();
+        AssertThat(reg.IsSpent(chest, 1, 6)).IsFalse();
+        AssertThat(reg.SpentCount).IsEqual(0);
+        AssertThat(reg.GetFlag(lamp, true)).IsTrue();
+    }
 }

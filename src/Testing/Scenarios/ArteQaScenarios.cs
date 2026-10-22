@@ -623,6 +623,7 @@ public partial class SmokeTest
     {
         await WaitForScene("World", timeoutSeconds: 10);
         GameManager.Instance.NewGame("Bot", "sword");
+        World.World.Objects.Reset(); // baús abertos e barris quebrados por cenários anteriores da mesma sessão não valem aqui
         var world = FindWorld();
         world.GoMap("forge", 800, 520, instant: true);
         await WaitMapSettled(world);
@@ -1460,8 +1461,11 @@ public partial class SmokeTest
         world.GoMap("forge", 800, 520, instant: true);
         await WaitMapSettled(world);
         var growthNodes = nodes[49] - nodes[19];
-        var growthMem = mem[49] - mem[19];
-        Log.Info($"arte qa: 50 trocas com classes — nós (20ª > 50ª) {nodes[19]} > {nodes[49]}, memória {mem[19]:0.0} > {mem[49]:0.0} MB; {stats.Summary(out _)}");
+        // a memória estática serra com o coletor de lixo (cai 20–30 MB de repente): um ponto só mede o dente da serra, a média de
+        // uma janela mede a tendência
+        var growthMem = mem.Skip(35).Average() - mem.Skip(20).Take(15).Average();
+        Log.Info($"arte qa: memória a cada troca (MB): {string.Join(" ", mem.Select(m => m.ToString("0")))}");
+        Log.Info($"arte qa: 50 trocas com classes — nós (20ª > 50ª) {nodes[19]} > {nodes[49]}, memória (média da 21ª–35ª > 36ª–50ª) {mem.Skip(20).Take(15).Average():0.0} > {mem.Skip(35).Average():0.0} MB; {stats.Summary(out _)}");
         Require(growthNodes <= 6, $"nós crescem com as trocas: +{growthNodes}");
         Require(growthMem <= 10, $"memória cresce com as trocas: +{growthMem:0.0} MB");
         Require(Performance.GetMonitor(Performance.Monitor.ObjectOrphanNodeCount) == 0, "nós órfãos depois das trocas");

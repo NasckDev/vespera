@@ -42,6 +42,13 @@ public sealed class WorldObjectRegistry
     /// <summary>Novo dia: tudo volta (quebráveis inteiros, baús fechados, flores crescidas). Lampiões ficam como estão.</summary>
     public void NewDay() => _spent.Clear();
 
+    /// <summary>Jogo novo ou save carregado: esquece tudo (gastos e lampiões). O registro vive na sessão, não no save.</summary>
+    public void Reset()
+    {
+        _spent.Clear();
+        _flags.Clear();
+    }
+
     public bool GetFlag(string key, bool fallback) => _flags.TryGetValue(key, out var v) ? v : fallback;
 
     public void SetFlag(string key, bool value) => _flags[key] = value;

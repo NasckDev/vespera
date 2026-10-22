@@ -307,6 +307,8 @@ public partial class SmokeTest
         var failures = new List<string>();
         var firstVisit = new Dictionary<string, (double Nodes, double Memory)>();
         var lastVisit = new Dictionary<string, (double Nodes, double Memory)>();
+        var visits = new Dictionary<string, int>();
+        var samples = new Dictionary<string, List<(double Nodes, double Memory)>>();
         var orphansStart = Performance.GetMonitor(Performance.Monitor.ObjectOrphanNodeCount);
         var worstMs = 0.0;
         var next = 0;
@@ -346,8 +348,20 @@ public partial class SmokeTest
             }
 
             var sample = (Performance.GetMonitor(Performance.Monitor.ObjectNodeCount), Performance.GetMonitor(Performance.Monitor.MemoryStatic) / (1024 * 1024));
-            firstVisit.TryAdd(to, sample);
-            lastVisit[to] = sample;
+            // a 1ª visita carrega texturas e caches preguiçosos (a arte aprovada trouxe vários): é aquecimento. O vazamento se mede da
+            // 2ª visita em diante, quando só sobra o que cresce a cada troca
+            visits[to] = visits.GetValueOrDefault(to) + 1;
+            if (visits[to] >= 2)
+            {
+                if (!samples.TryGetValue(to, out var list))
+                {
+                    samples[to] = list = [];
+                }
+
+                list.Add(sample);
+                firstVisit.TryAdd(to, sample);
+                lastVisit[to] = sample;
+            }
             if ((i + 1) % 10 == 0)
             {
                 Log.Info($"QA trocas: {i + 1} trocas, nós={sample.Item1} órfãos={Performance.GetMonitor(Performance.Monitor.ObjectOrphanNodeCount)} memória={sample.Item2:0.0}MB, pior troca {worstMs} ms");
@@ -363,9 +377,15 @@ public partial class SmokeTest
                 failures.Add($"{map}: nós cresceram de {first.Nodes} para {last.Nodes}");
             }
 
-            if (last.Memory > first.Memory + 8)
+            // a memória estática serra com o coletor de lixo: com amostras o bastante, a tendência é a média das 3 últimas contra a das
+            // 3 primeiras depois do aquecimento, não dois pontos soltos (que medem o dente da serra)
+            var list = samples[map];
+            var (head, tail) = list.Count >= 6
+                ? (list.Take(3).Average(x => x.Memory), list.Skip(list.Count - 3).Average(x => x.Memory))
+                : (first.Memory, last.Memory);
+            if (tail > head + 8)
             {
-                failures.Add($"{map}: memória cresceu de {first.Memory:0.0} para {last.Memory:0.0} MB");
+                failures.Add($"{map}: memória cresceu de {head:0.0} para {tail:0.0} MB");
             }
         }
 
