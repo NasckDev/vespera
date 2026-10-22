@@ -138,7 +138,8 @@ def sprite_body(subject, anim_desc, frames, facing, extra):
             "(256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. "
             "Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. "
             "The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, "
-            "so the frames play as smooth animation.", NEVER]
+            "so the frames play as smooth animation. SCALE: the character must have exactly the same size as in the attached "
+            "reference strips (do not zoom in, even for close actions like getting hit).", NEVER]
 
 
 def maps():

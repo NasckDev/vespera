@@ -14,7 +14,7 @@ Animation: idle wobble. Exactly 4 frames. side view facing RIGHT.
 If an earlier strip of this same monster is attached, keep its design identical.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
 
-FORMAT: the 4 frames side by side in ONE single horizontal row, every frame the same square size (256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, so the frames play as smooth animation.
+FORMAT: the 4 frames side by side in ONE single horizontal row, every frame the same square size (256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, so the frames play as smooth animation. SCALE: the character must have exactly the same size as in the attached reference strips (do not zoom in, even for close actions like getting hit).
 Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid lines, extra characters.
 ```
 
@@ -30,7 +30,7 @@ Animation: crouches and jumps forward. Exactly 6 frames. side view facing RIGHT.
 If an earlier strip of this same monster is attached, keep its design identical.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
 
-FORMAT: the 6 frames side by side in ONE single horizontal row, every frame the same square size (256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, so the frames play as smooth animation.
+FORMAT: the 6 frames side by side in ONE single horizontal row, every frame the same square size (256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, so the frames play as smooth animation. SCALE: the character must have exactly the same size as in the attached reference strips (do not zoom in, even for close actions like getting hit).
 Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid lines, extra characters.
 ```
 
@@ -46,7 +46,7 @@ Animation: warning pose before attacking: squashes down and the core glows brigh
 If an earlier strip of this same monster is attached, keep its design identical.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
 
-FORMAT: the 3 frames side by side in ONE single horizontal row, every frame the same square size (256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, so the frames play as smooth animation.
+FORMAT: the 3 frames side by side in ONE single horizontal row, every frame the same square size (256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, so the frames play as smooth animation. SCALE: the character must have exactly the same size as in the attached reference strips (do not zoom in, even for close actions like getting hit).
 Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid lines, extra characters.
 ```
 
@@ -62,7 +62,7 @@ Animation: hit: splashes and flashes. Exactly 2 frames. side view facing RIGHT.
 If an earlier strip of this same monster is attached, keep its design identical.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
 
-FORMAT: the 2 frames side by side in ONE single horizontal row, every frame the same square size (256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, so the frames play as smooth animation.
+FORMAT: the 2 frames side by side in ONE single horizontal row, every frame the same square size (256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, so the frames play as smooth animation. SCALE: the character must have exactly the same size as in the attached reference strips (do not zoom in, even for close actions like getting hit).
 Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid lines, extra characters.
 ```
 
@@ -78,7 +78,7 @@ Animation: death: bursts into a puddle, the plates fall out. Exactly 6 frames. s
 If an earlier strip of this same monster is attached, keep its design identical.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
 
-FORMAT: the 6 frames side by side in ONE single horizontal row, every frame the same square size (256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, so the frames play as smooth animation.
+FORMAT: the 6 frames side by side in ONE single horizontal row, every frame the same square size (256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, so the frames play as smooth animation. SCALE: the character must have exactly the same size as in the attached reference strips (do not zoom in, even for close actions like getting hit).
 Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid lines, extra characters.
 ```
 
@@ -94,7 +94,7 @@ Animation: floating idle, the veil drifting. Exactly 4 frames. side view facing 
 If an earlier strip of this same monster is attached, keep its design identical.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
 
-FORMAT: the 4 frames side by side in ONE single horizontal row, every frame the same square size (256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, so the frames play as smooth animation.
+FORMAT: the 4 frames side by side in ONE single horizontal row, every frame the same square size (256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, so the frames play as smooth animation. SCALE: the character must have exactly the same size as in the attached reference strips (do not zoom in, even for close actions like getting hit).
 Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid lines, extra characters.
 ```
 
@@ -110,7 +110,7 @@ Animation: chasing forward through the air. Exactly 6 frames. side view facing R
 If an earlier strip of this same monster is attached, keep its design identical.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
 
-FORMAT: the 6 frames side by side in ONE single horizontal row, every frame the same square size (256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, so the frames play as smooth animation.
+FORMAT: the 6 frames side by side in ONE single horizontal row, every frame the same square size (256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, so the frames play as smooth animation. SCALE: the character must have exactly the same size as in the attached reference strips (do not zoom in, even for close actions like getting hit).
 Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid lines, extra characters.
 ```
 
@@ -126,7 +126,7 @@ Animation: warning: the veil flares and glows amber. Exactly 3 frames. side view
 If an earlier strip of this same monster is attached, keep its design identical.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
 
-FORMAT: the 3 frames side by side in ONE single horizontal row, every frame the same square size (256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, so the frames play as smooth animation.
+FORMAT: the 3 frames side by side in ONE single horizontal row, every frame the same square size (256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, so the frames play as smooth animation. SCALE: the character must have exactly the same size as in the attached reference strips (do not zoom in, even for close actions like getting hit).
 Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid lines, extra characters.
 ```
 
@@ -142,7 +142,7 @@ Animation: lunges forward with the coat sleeves. Exactly 4 frames. side view fac
 If an earlier strip of this same monster is attached, keep its design identical.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
 
-FORMAT: the 4 frames side by side in ONE single horizontal row, every frame the same square size (256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, so the frames play as smooth animation.
+FORMAT: the 4 frames side by side in ONE single horizontal row, every frame the same square size (256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, so the frames play as smooth animation. SCALE: the character must have exactly the same size as in the attached reference strips (do not zoom in, even for close actions like getting hit).
 Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid lines, extra characters.
 ```
 
@@ -158,7 +158,7 @@ Animation: dissolves into violet mist. Exactly 6 frames. side view facing RIGHT.
 If an earlier strip of this same monster is attached, keep its design identical.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
 
-FORMAT: the 6 frames side by side in ONE single horizontal row, every frame the same square size (256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, so the frames play as smooth animation.
+FORMAT: the 6 frames side by side in ONE single horizontal row, every frame the same square size (256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, so the frames play as smooth animation. SCALE: the character must have exactly the same size as in the attached reference strips (do not zoom in, even for close actions like getting hit).
 Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid lines, extra characters.
 ```
 
@@ -174,7 +174,7 @@ Animation: idle, slowly pulsing. Exactly 6 frames. side view facing RIGHT.
 If an earlier strip of this same monster is attached, keep its design identical.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
 
-FORMAT: the 6 frames side by side in ONE single horizontal row, every frame the same square size (256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, so the frames play as smooth animation.
+FORMAT: the 6 frames side by side in ONE single horizontal row, every frame the same square size (256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, so the frames play as smooth animation. SCALE: the character must have exactly the same size as in the attached reference strips (do not zoom in, even for close actions like getting hit).
 Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid lines, extra characters.
 ```
 
@@ -190,7 +190,7 @@ Animation: big jump: squashes, launches up, lands with a splash. Exactly 8 frame
 If an earlier strip of this same monster is attached, keep its design identical.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
 
-FORMAT: the 8 frames side by side in ONE single horizontal row, every frame the same square size (256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, so the frames play as smooth animation.
+FORMAT: the 8 frames side by side in ONE single horizontal row, every frame the same square size (256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, so the frames play as smooth animation. SCALE: the character must have exactly the same size as in the attached reference strips (do not zoom in, even for close actions like getting hit).
 Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid lines, extra characters.
 ```
 
@@ -206,7 +206,7 @@ Animation: swallow attack: opens a huge gooey mouth and lunges. Exactly 8 frames
 If an earlier strip of this same monster is attached, keep its design identical.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
 
-FORMAT: the 8 frames side by side in ONE single horizontal row, every frame the same square size (256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, so the frames play as smooth animation.
+FORMAT: the 8 frames side by side in ONE single horizontal row, every frame the same square size (256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, so the frames play as smooth animation. SCALE: the character must have exactly the same size as in the attached reference strips (do not zoom in, even for close actions like getting hit).
 Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid lines, extra characters.
 ```
 
@@ -222,7 +222,7 @@ Animation: splits into three smaller slimes. Exactly 8 frames. side view facing 
 If an earlier strip of this same monster is attached, keep its design identical.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
 
-FORMAT: the 8 frames side by side in ONE single horizontal row, every frame the same square size (256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, so the frames play as smooth animation.
+FORMAT: the 8 frames side by side in ONE single horizontal row, every frame the same square size (256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, so the frames play as smooth animation. SCALE: the character must have exactly the same size as in the attached reference strips (do not zoom in, even for close actions like getting hit).
 Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid lines, extra characters.
 ```
 
@@ -238,6 +238,6 @@ Animation: death: collapses and melts, the toys and plates spill out. Exactly 10
 If an earlier strip of this same monster is attached, keep its design identical.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
 
-FORMAT: the 10 frames side by side in ONE single horizontal row, every frame the same square size (256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, so the frames play as smooth animation.
+FORMAT: the 10 frames side by side in ONE single horizontal row, every frame the same square size (256x256 or larger), evenly spaced, the subject centered in each frame with the feet on the same baseline. Background: flat solid pure green #00FF00 everywhere (it will be removed), no ground shadow. The SAME character in every frame: same face, clothes, colors, proportions and size; only the pose changes, so the frames play as smooth animation. SCALE: the character must have exactly the same size as in the attached reference strips (do not zoom in, even for close actions like getting hit).
 Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid lines, extra characters.
 ```
