@@ -360,13 +360,15 @@ public partial class WorldDressing : Node2D
 
             if (def.Light is { } light)
             {
-                Lights.AddLight(at + new Vector2(placed.Flip ? -light.X : light.X, light.Y), light.Radius, light.Kind);
+                o.LightIndex = Lights.AddLight(at + new Vector2(placed.Flip ? -light.X : light.X, light.Y), light.Radius, light.Kind);
+                o.Lights = Lights;
             }
 
             if (def.Interact is { } interact)
             {
                 var decor = new LayoutDecor(interact.Kind, placed.X, placed.Y, interact.Radius, interact.Label, interact.Text, null);
-                AddDecor(map, decor, layout.Decor.Count + i, key, MathF.Max(24f, o.Bounds.Height + 6f));
+                var spot = AddDecor(map, decor, layout.Decor.Count + i, key, MathF.Max(24f, o.Bounds.Height + 6f));
+                spot.Object = o;
             }
         }
     }

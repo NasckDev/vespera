@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Godot;
+using Vespera.Core.Art;
 using Vespera.Core.World;
 
 namespace Vespera.World;
@@ -82,10 +83,26 @@ public static class ObjectVisuals
 /// <c>footprint</c>, translúcido com fade quando cobre o jogador (<c>occluder</c>, as mesmas regras dos recortes D44) e
 /// balanço barato (<c>sway</c>, shader de vértice). Luz, interação, quebrável e baú são montados pelo
 /// <see cref="WorldDressing"/> a partir do mesmo <see cref="DressingDef"/>.
+/// Objetos de onde saiu a arte de estados do designer (DECISIONS C2-D5) trocam o quadro pelo estado: lampião e braseiro
+/// apagado/aceso com a chama em 4 quadros (seguem o halo da luz), flor florida/colhida/brotando, alavanca e porta
+/// alternam ao usar, quadro de avisos com a arte nova.
 /// </summary>
 public partial class CatalogObject : Node2D
 {
     private static Shader? _swayShader;
+    private static readonly StringName ArtOn = "on";
+    private static readonly StringName ArtOff = "off";
+    private static readonly StringName ArtOpen = "open";
+    private static readonly StringName ArtClosed = "closed";
+    private static readonly StringName ArtFlowering = "flowering";
+    private static readonly StringName ArtHarvested = "harvested";
+    private static readonly StringName ArtSprouting = "sprouting";
+    private static readonly StringName ArtBoard = "board";
+
+    private ArtFrames? _art;
+    private StringName _artState = ArtOff;
+    private float _artTime;
+    private int _artFrame = -1;
 
     private readonly MapPoint[] _rect = new MapPoint[4];
     private MapRect _bounds;
@@ -108,6 +125,23 @@ public partial class CatalogObject : Node2D
     /// <summary>Retângulo do sprite no mundo (u).</summary>
     public MapRect Bounds => _bounds;
 
+    /// <summary>Papel da arte de estados (<see cref="PropArtRole.None"/> sem arte nova).</summary>
+    public PropArtRole ArtRole { get; private set; }
+
+    /// <summary>Estado desenhado agora (<c>on</c>, <c>off</c>, <c>open</c>, <c>flowering</c>…; "" sem arte).</summary>
+    public string ArtState => _art is null ? string.Empty : _artState.ToString();
+
+    /// <summary>Halo que o lampião/braseiro segue (o motor liga e a cidade acende ao escurecer).</summary>
+    public LightGlows? Lights { get; set; }
+
+    public int LightIndex { get; set; } = -1;
+
+    /// <summary>Lampião/braseiro aceso agora (pelo halo; sem halo, sempre aceso).</summary>
+    public bool IsLit => Lights is null || LightIndex < 0 || Lights.IsLit(LightIndex);
+
+    /// <summary>Alavanca puxada / porta aberta.</summary>
+    public bool Toggled { get; private set; }
+
     public void Setup(DressingDef def, LayoutObject placed, float coveredAlpha, float fadeRate, bool sway)
     {
         Def = def;
@@ -126,6 +160,21 @@ public partial class CatalogObject : Node2D
 
         Sprite = ObjectVisuals.Create(def, placed.Flip, out var local);
         AddChild(Sprite);
+        var (artPath, role) = PropArt.ForCatalogSprite(def.Sprite);
+        if (artPath is not null && role != PropArtRole.Breakable && ArtFrames.TryLoad(artPath, out var art))
+        {
+            _art = art;
+            ArtRole = role;
+            _artState = role switch
+            {
+                PropArtRole.Lamp or PropArtRole.Brazier => ArtOn,
+                PropArtRole.Flower => ArtFlowering,
+                PropArtRole.Door => ArtClosed,
+                PropArtRole.Board => ArtBoard,
+                _ => ArtOff,
+            };
+            ApplyArt(0);
+        }
         _bounds = new MapRect(placed.X + local.Position.X, placed.Y + local.Position.Y, local.Size.X, local.Size.Y);
         _rect[0] = new MapPoint(_bounds.X, _bounds.Y);
         _rect[1] = new MapPoint(_bounds.Right, _bounds.Y);
@@ -158,11 +207,71 @@ public partial class CatalogObject : Node2D
             AddChild(body);
         }
 
-        SetProcess(_occluder);
+        SetProcess(_occluder || ArtRole is PropArtRole.Lamp or PropArtRole.Brazier);
+    }
+
+    /// <summary>Estado da flor (o motor chama no tique de 0,25 s).</summary>
+    public void SetFlowerStage(FlowerStage stage)
+    {
+        if (ArtRole != PropArtRole.Flower)
+        {
+            return;
+        }
+
+        var next = stage switch { FlowerStage.Harvested => ArtHarvested, FlowerStage.Sprouting => ArtSprouting, _ => ArtFlowering };
+        if (next != _artState)
+        {
+            _artState = next;
+            ApplyArt(0);
+        }
+    }
+
+    /// <summary>Alavanca: puxa/solta. Porta: abre/fecha. Devolve o estado novo.</summary>
+    public bool Toggle()
+    {
+        if (ArtRole is not (PropArtRole.Lever or PropArtRole.Door))
+        {
+            return false;
+        }
+
+        Toggled = !Toggled;
+        _artState = ArtRole == PropArtRole.Door ? (Toggled ? ArtOpen : ArtClosed) : (Toggled ? ArtOn : ArtOff);
+        ApplyArt(0);
+        return Toggled;
+    }
+
+    private void ApplyArt(int frame)
+    {
+        if (_art is null)
+        {
+            return;
+        }
+
+        _artFrame = frame;
+        _art.Apply(Sprite, _artState, frame);
     }
 
     public override void _Process(double delta)
     {
+        if (ArtRole is PropArtRole.Lamp or PropArtRole.Brazier && _art is not null)
+        {
+            // chama em 4 quadros (8 fps) enquanto o halo está aceso; apagado, o quadro "off"
+            var lit = IsLit;
+            var state = lit ? ArtOn : ArtOff;
+            _artTime += (float)delta;
+            var frame = lit ? FrameClock.Loop(_artTime * _art.Fps(ArtOn) % _art.Count(ArtOn), _art.Count(ArtOn)) : 0;
+            if (state != _artState || frame != _artFrame)
+            {
+                _artState = state;
+                ApplyArt(frame);
+            }
+
+            if (!_occluder)
+            {
+                return;
+            }
+        }
+
         var covering = false;
         if (Target is { } t && IsInstanceValid(t))
         {

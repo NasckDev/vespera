@@ -1,6 +1,7 @@
 using System;
 using Godot;
 using Vespera.Autoload;
+using Vespera.Core.Art;
 using Vespera.Core.Rules;
 using Vespera.Core.World;
 
@@ -27,7 +28,30 @@ public partial class WorldDressing
     private float _ferryDuration;
     private uint _savedMask;
     private Node2D? _ferryHull;
+    private Sprite2D? _ferryBoat;
+    private ArtFrames? _ferryArt;
     private Line2D? _fishingLine;
+    private Sprite2D? _fishingRod;
+    private Vector2 _rodTip;
+
+    private static readonly StringName BoatRowing = "rowing";
+    private static readonly StringName BoatReflection = "reflection";
+    private static AtlasTexture? _rodRight;
+    private static AtlasTexture? _rodLeft;
+    private static Vector2 _rodGripRight;
+    private static Vector2 _rodGripLeft;
+    private static Vector2 _rodTipRight;
+    private static Vector2 _rodTipLeft;
+    private static float _rodUnitsPerPixel = 0.07f;
+
+    /// <summary>Barco desenhado da travessia em curso (<c>raft</c> ou <c>rowboat</c>; "" sem arte ou parado).</summary>
+    public string FerryBoat { get; private set; } = string.Empty;
+
+    /// <summary>Quadro da remada mostrado agora (−1 fora da travessia).</summary>
+    public int FerryFrame { get; private set; } = -1;
+
+    /// <summary>A vara desenhada está na mão (pescando).</summary>
+    public bool RodInHand => _fishingRod is { Visible: true };
     private Vector2 _bobber;
 
     private enum Activity
@@ -57,7 +81,7 @@ public partial class WorldDressing
         }
     }
 
-    private void AddDecor(MapDef map, LayoutDecor def, int index, string key, float promptHeight = 0f)
+    private DecorSpot AddDecor(MapDef map, LayoutDecor def, int index, string key, float promptHeight = 0f)
     {
         var spot = new DecorSpot(def, index, key);
         var interact = new WorldInteractable
@@ -98,6 +122,7 @@ public partial class WorldDressing
         }
 
         _decor.Add(spot);
+        return spot;
     }
 
     /// <summary>Flores colhidas voltam com o tempo (<c>regrowSeconds</c>) ou no dia seguinte.</summary>
@@ -113,6 +138,13 @@ public partial class WorldDressing
 
             var spent = World.Objects.IsSpent(spot.Key, CurrentDay, Now, regrow);
             spot.Interactable.Enabled = !spent;
+            if (spot.Object is { } flower)
+            {
+                // arte de estados (C2-D5): colhida logo depois, broto no caminho, florida de novo quando volta
+                var since = spent ? regrow - World.Objects.RemainingSeconds(spot.Key, CurrentDay, Now, regrow) : 0.0;
+                flower.SetFlowerStage(Core.Art.PropArtStates.Flower(spent, since, regrow));
+            }
+
             if (spot.Sparkle is { } s)
             {
                 s.Emitting = !spent;
@@ -156,6 +188,13 @@ public partial class WorldDressing
                 StartSitting(spot);
                 break;
             default: // sign, fountain, stall, inspect
+                if (spot.Object is { ArtRole: PropArtRole.Lever or PropArtRole.Door } mechanism)
+                {
+                    // alavanca e porta com arte de estados alternam ao usar (o texto continua)
+                    var on = mechanism.Toggle();
+                    AudioManager.Instance?.PlaySfx(mechanism.ArtRole == PropArtRole.Door ? "open" : "hit", at, pitchJitter: on ? 0.05f : 0.15f);
+                }
+
                 Lore.ShowText(def.Text ?? DefaultText(def.Kind), at, spot.Interactable.PromptHeight + 4f, def.Radius);
                 AudioManager.Instance?.PlaySfx("ui", at, pitchJitter: 0f);
                 break;
@@ -179,6 +218,7 @@ public partial class WorldDressing
         _bobber = NearestWater(player.GlobalPosition) ?? player.GlobalPosition + (facing * 26f) + new Vector2(0, 4f);
         _fishingLine = new Line2D { Name = "FishingLine", Width = 0.8f, DefaultColor = new Color(0.95f, 0.92f, 0.8f, 0.8f), ZIndex = 3, Points = new Vector2[3] };
         _decorRoot.AddChild(_fishingLine);
+        CreateRod(facing.X < 0f || (facing.X == 0f && _bobber.X < player.GlobalPosition.X));
         UpdateFishingLine(false);
         FishingBar.Show(_world.Player.GlobalPosition - new Vector2(0, WorldScale.CharacterHeight + 12f), _fishing.ZoneStart, _fishing.ZoneWidth);
         AudioManager.Instance?.PlaySfx("swing", _world.Player.GlobalPosition, pitchJitter: 0.1f);
@@ -192,7 +232,7 @@ public partial class WorldDressing
         _ferryDuration = Math.Clamp(_ferryFrom.DistanceTo(to) / FerrySpeed, 1.2f, 6f);
         _savedMask = player.CollisionMask;
         player.CollisionMask = 0; // atravessa a água bloqueada
-        _ferryHull = CreateHull();
+        _ferryHull = CreateBoat(spot, to.X < from.X) ?? CreateHull();
         _world.Entities.AddChild(_ferryHull);
         Begin(Activity.Ferry, spot);
         AudioManager.Instance?.PlaySfx("dash", from, pitchJitter: 0.1f);
@@ -232,6 +272,10 @@ public partial class WorldDressing
             player.GlobalPosition = _world.CorrectToWalkable(player.GlobalPosition);
             _ferryHull?.QueueFree();
             _ferryHull = null;
+            _ferryBoat = null;
+            _ferryArt = null;
+            FerryBoat = string.Empty;
+            FerryFrame = -1;
         }
 
         if (IsInstanceValid(player))
@@ -242,6 +286,8 @@ public partial class WorldDressing
 
         _fishingLine?.QueueFree();
         _fishingLine = null;
+        _fishingRod?.QueueFree();
+        _fishingRod = null;
         _activity = Activity.None;
         _activeSpot = null;
         _fishing = null;
@@ -311,6 +357,17 @@ public partial class WorldDressing
         {
             hull.GlobalPosition = p + new Vector2(0, 1f);
             hull.Rotation = MathF.Sin(_activityT * 2.3f) * 0.03f;
+            if (_ferryBoat is { } boat && _ferryArt is { } art)
+            {
+                // remos em 4 quadros enquanto atravessa (6 fps), mais devagar no começo e no fim do trajeto
+                var pace = 0.35f + (0.65f * MathF.Sin(t * MathF.PI));
+                var frame = FrameClock.Loop(_activityT * art.Fps(BoatRowing) * pace % art.Count(BoatRowing), art.Count(BoatRowing));
+                if (frame != FerryFrame)
+                {
+                    FerryFrame = frame;
+                    art.Apply(boat, BoatRowing, frame);
+                }
+            }
         }
 
         if (t >= 1f && _activityEnd < 0f)
@@ -397,6 +454,13 @@ public partial class WorldDressing
 
         var player = _world.Player;
         var hand = player.GlobalPosition + new Vector2(player.Facing.X >= 0 ? 7f : -7f, -WorldScale.CharacterHeight * 0.55f);
+        if (_fishingRod is { } rod)
+        {
+            // a linha sai da ponta da vara desenhada; a vara treme quando o peixe morde
+            rod.Rotation = biting ? MathF.Sin(_activityT * 34f) * 0.05f : MathF.Sin(_activityT * 1.7f) * 0.015f;
+            hand = rod.GlobalTransform * _rodTip;
+        }
+
         var bob = biting ? new Vector2(MathF.Sin(_activityT * 40f) * 0.8f, 1.5f) : new Vector2(0, MathF.Sin(_activityT * 3f) * 0.6f);
         var end = _bobber + bob;
         var mid = hand.Lerp(end, 0.5f) + new Vector2(0, biting ? 2f : 6f); // a linha faz barriga
@@ -433,6 +497,130 @@ public partial class WorldDressing
             ZIndex = 4,
             Material = new CanvasItemMaterial { BlendMode = CanvasItemMaterial.BlendModeEnum.Add },
         };
+    }
+
+    /// <summary>
+    /// Barco desenhado da travessia (DECISIONS C2-D5): balsa para os rótulos "balsa", barco a remo para os outros, por trás
+    /// do caçador (z −1 dentro do y-sort) com o pé dele no meio do casco, reflexo na água e os remos em 4 quadros.
+    /// </summary>
+    private Node2D? CreateBoat(DecorSpot spot, bool flip)
+    {
+        var kind = (spot.Def.Label ?? string.Empty).Contains("balsa", StringComparison.OrdinalIgnoreCase) ? "raft" : "rowboat";
+        if (PropArt.Boat(kind) is not { } path || !ArtFrames.TryLoad(path, out var art))
+        {
+            return null;
+        }
+
+        var root = new Node2D { Name = "FerryBoat", ZIndex = -1 };
+        var height = art.TopHeight(BoatRowing);
+        var drop = height * (kind == "raft" ? 0.5f : 0.42f); // o pé do caçador fica no meio do casco
+        if (art.Has(BoatReflection))
+        {
+            var reflection = new Sprite2D { Name = "Reflection", Modulate = new Color(1f, 1f, 1f, 0.28f), Position = new Vector2(0, drop + 2f) };
+            art.Apply(reflection, BoatReflection, 0, 0.9f);
+            reflection.Scale = new Vector2(flip ? -reflection.Scale.X : reflection.Scale.X, reflection.Scale.Y * 0.5f);
+            root.AddChild(reflection);
+        }
+
+        var boat = new Sprite2D { Name = "Boat", Position = new Vector2(0, drop) };
+        if (flip)
+        {
+            boat.Scale = new Vector2(-1f, 1f);
+        }
+
+        art.Apply(boat, BoatRowing, 0);
+        root.AddChild(boat);
+        _ferryBoat = boat;
+        _ferryArt = art;
+        FerryBoat = kind;
+        FerryFrame = 0;
+        return root;
+    }
+
+    /// <summary>
+    /// Vara de pesca desenhada na mão (DECISIONS C2-D5). O PNG traz a linha e a boia penduradas; mostramos só a vara (recorte
+    /// até a ponta) porque a linha de verdade vai até a boia na água e afunda quando o peixe morde.
+    /// </summary>
+    private void CreateRod(bool left)
+    {
+        if (!EnsureRodTextures())
+        {
+            return;
+        }
+
+        var player = _world.Player;
+        var texture = left ? _rodLeft! : _rodRight!;
+        var grip = left ? _rodGripLeft : _rodGripRight;
+        _rodTip = (left ? _rodTipLeft : _rodTipRight) - grip;
+        _fishingRod = new Sprite2D
+        {
+            Name = "FishingRod",
+            Texture = texture,
+            Centered = false,
+            Offset = -grip,
+            Scale = Vector2.One * _rodUnitsPerPixel,
+            ZIndex = 1,
+            Position = new Vector2(left ? -6f : 6f, -WorldScale.CharacterHeight * 0.42f),
+        };
+        player.AddChild(_fishingRod);
+    }
+
+    private static bool EnsureRodTextures()
+    {
+        if (_rodRight is not null)
+        {
+            return true;
+        }
+
+        if (PropArt.FishingRod() is not { } path || !ArtFrames.TryLoad(path, out var art))
+        {
+            return false;
+        }
+
+        _rodUnitsPerPixel = art.UnitsPerPixel("right");
+        (_rodRight, _rodGripRight, _rodTipRight) = CutRod(art.Texture("right", 0), right: true);
+        (_rodLeft, _rodGripLeft, _rodTipLeft) = CutRod(art.Texture("left", 0), right: false);
+        return _rodRight is not null && _rodLeft is not null;
+    }
+
+    /// <summary>Recorta a vara (do cabo até a ponta, sem a linha pendurada); devolve o recorte, o cabo e a ponta em px do recorte.</summary>
+    private static (AtlasTexture?, Vector2, Vector2) CutRod(Texture2D? texture, bool right)
+    {
+        if (texture?.GetImage() is not { } image)
+        {
+            return (null, Vector2.Zero, Vector2.Zero);
+        }
+
+        var used = image.GetUsedRect();
+        // ponta = pixel opaco mais alto; cabo = pixel opaco mais baixo (lado do cabo)
+        var tip = new Vector2I(used.Position.X, used.Position.Y);
+        for (var x = used.Position.X; x < used.End.X; x++)
+        {
+            if (image.GetPixel(x, used.Position.Y).A > 0.5f)
+            {
+                tip = new Vector2I(x, used.Position.Y);
+                break;
+            }
+        }
+
+        var bottom = used.End.Y - 1;
+        var gripX = used.Position.X;
+        for (var x = used.Position.X; x < used.End.X; x++)
+        {
+            if (image.GetPixel(x, bottom).A > 0.5f)
+            {
+                gripX = x;
+                break;
+            }
+        }
+
+        // a linha fica do lado de dentro da ponta: o recorte vai do cabo até 2 px depois da ponta
+        var x0 = right ? used.Position.X : Math.Max(used.Position.X, tip.X - 2);
+        var x1 = right ? Math.Min(used.End.X, tip.X + 3) : used.End.X;
+        var region = new Rect2(x0, used.Position.Y, x1 - x0, used.Size.Y);
+        var cut = new AtlasTexture { Atlas = texture, Region = region };
+        var origin = region.Position;
+        return (cut, new Vector2(gripX + 2, bottom) - origin, new Vector2(tip.X, tip.Y) - origin);
     }
 
     /// <summary>Barco de madeira sob o jogador na travessia (a balsa pintada no mapa fica no cais): casco com proa e popa, borda clara e esteira.</summary>
@@ -494,4 +682,7 @@ public sealed class DecorSpot(LayoutDecor def, int index, string key)
     public int Light { get; set; } = -1;
 
     public CpuParticles2D? Sparkle { get; set; }
+
+    /// <summary>Objeto do catálogo com esta interação (lampião, flor, alavanca, porta), se houver.</summary>
+    public CatalogObject? Object { get; set; }
 }
