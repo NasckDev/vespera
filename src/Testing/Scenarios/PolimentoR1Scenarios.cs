@@ -8,6 +8,7 @@ using Vespera.Combat;
 using Vespera.UI;
 using Vespera.UI.Common;
 using Vespera.UI.HudKit;
+using Vespera.Core.Rules;
 using Vespera.UI.Screens;
 
 namespace Vespera.Testing;
@@ -171,5 +172,48 @@ public partial class SmokeTest
         var lowest = hits.Min(h => h.Pitch);
         var highest = hits.Max(h => h.Pitch);
         Require(lowest <= 0.9f && highest >= 0.93f, $"o golpe final do combo deveria soar mais grave que os outros (tons de {lowest:0.00} a {highest:0.00})");
+    }
+
+    [SmokeScenario("polimento (r1): com a dica de atacar na tela, o primeiro prompt de interagir passa na frente e a de atacar não volta em seguida", order: 1104)]
+    private async Task PrInteractHintBeatsAttackHint()
+    {
+        await PqFreshWorld();
+        await FreshGame("sword");
+        var ui = UiOrFail();
+        var hud = Hud.Current!;
+        var state = GameManager.Instance.State;
+        PqResetPlayerSettings();
+        var auto = GameUi.AutoCompleteQuests;
+        GameUi.AutoCompleteQuests = true;
+        try
+        {
+            await PqUseKeyboard();
+            ui.StartTutorial();
+            await WaitUntil(() => ui.Dialog.IsOpen, 4, "tutorial");
+            for (var line = 0; line < 8 && ui.Dialog.IsOpen && state.Save.Quests.Counter(QuestCounters.Odete) == 0; line++)
+            {
+                await SkipTyping(ui);
+                await PqKeyTap(Key.Enter);
+                await WaitSeconds(0.2);
+            }
+
+            await WaitUntil(() => state.CurrentQuest?.Id == "bonecos", 4, "missão 'Bonecos de treino'");
+            await DismissUi();
+            await PqWalk(false, Vector2.Right, 1.2);
+            await WaitUntil(() => hud.Onboarding.Current == OnboardingStep.Attack, 4, "dica de atacar (missão dos bonecos)");
+
+            // Chega no balcão sem ter atacado: o prompt aparece e a dica de interagir toma o lugar.
+            var odete = FindWorld().GetInteractable("odete") ?? throw new SmokeFailure("sem a Odete");
+            FindPlayer()!.Teleport(odete.Position + new Vector2(0, 20));
+            await WaitUntil(() => hud.Onboarding.Current == OnboardingStep.Interact, 3, "dica de interagir no primeiro prompt");
+            Require(!OnboardingHints.IsDone(OnboardingStep.Attack), "a dica de atacar não deveria ter sido dada como aprendida");
+            Log.Info($"poli-5: dica de interagir apareceu no 1º prompt (atacar ainda pendente); tecla '{hud.Onboarding.KeyText}'");
+        }
+        finally
+        {
+            GameUi.AutoCompleteQuests = auto;
+            PqResetPlayerSettings();
+            ui.CloseAll();
+        }
     }
 }

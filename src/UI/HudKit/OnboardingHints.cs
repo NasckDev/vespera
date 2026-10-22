@@ -33,10 +33,11 @@ public partial class OnboardingHints : PanelContainer
     private static readonly bool[] Done = new bool[5];
     private static bool _loaded;
 
+    private readonly float[] _spent = new float[5]; // segundos já mostrados de cada dica (POLI-5)
+    private readonly bool[] _snoozed = new bool[5]; // passou dos 10 s sem fazer: só volta numa próxima vez
     private readonly KeyCap _cap;
     private readonly Label _text;
     private OnboardingStep? _current;
-    private float _t;
     private float _moved;
     private bool _promptShown;
     private bool WantInteract => _promptShown && !_inFight;
@@ -121,12 +122,20 @@ public partial class OnboardingHints : PanelContainer
             {
                 Dismiss(); // o prompt sumiu (ou a luta começou): a dica volta no próximo
             }
+            else if (step != OnboardingStep.Interact && WantInteract && !IsDone(OnboardingStep.Interact) && !_snoozed[(int)OnboardingStep.Interact])
+            {
+                Dismiss(); // POLI-5: há um prompt à vista: a dica de interagir passa na frente da de atacar/esquivar/poção
+            }
             else if (!blocked)
             {
-                _t += dt;
-                if (_t >= MaxSeconds)
+                _spent[(int)step] += dt;
+                if (_spent[(int)step] >= MaxSeconds)
                 {
-                    Dismiss(); // não marca: volta numa próxima vez
+                    // POLI-5: depois de 10 s a dica sai e NÃO volta no quadro seguinte; só numa próxima vez
+                    // (nova onda, novo golpe levado, novo prompt). Não é marcada como aprendida.
+                    _snoozed[(int)step] = true;
+                    _spent[(int)step] = 0;
+                    Dismiss();
                 }
             }
 
@@ -141,26 +150,35 @@ public partial class OnboardingHints : PanelContainer
         }
 
         // Próxima dica que tem motivo para aparecer agora.
-        if (!IsDone(OnboardingStep.Move))
+        if (Wants(OnboardingStep.Move, true))
         {
             Show(OnboardingStep.Move);
         }
-        else if (WantInteract && !IsDone(OnboardingStep.Interact))
+        else if (Wants(OnboardingStep.Interact, WantInteract))
         {
             Show(OnboardingStep.Interact);
         }
-        else if ((_wantAttack || game!.State.CurrentQuest?.Id == "bonecos") && !IsDone(OnboardingStep.Attack))
+        else if (Wants(OnboardingStep.Attack, _wantAttack || game!.State.CurrentQuest?.Id == "bonecos"))
         {
             Show(OnboardingStep.Attack);
         }
-        else if (_wantDodge && !IsDone(OnboardingStep.Dodge))
+        else if (Wants(OnboardingStep.Dodge, _wantDodge))
         {
             Show(OnboardingStep.Dodge);
         }
-        else if (!IsDone(OnboardingStep.Potion) && game!.State is { } s && s.Save.Potions > 0 && s.MaxHp > 0 && s.Hp < s.MaxHp * 0.5)
+        else if (Wants(OnboardingStep.Potion, game!.State is { } s && s.Save.Potions > 0 && s.MaxHp > 0 && s.Hp < s.MaxHp * 0.5))
         {
             Show(OnboardingStep.Potion);
         }
+    }
+
+    /// <summary>A dica tem motivo para aparecer, não foi aprendida e não está dormindo (passou dos 10 s sem o jogador fazer a ação).</summary>
+    private bool Wants(OnboardingStep step, bool reason) => reason && !IsDone(step) && !_snoozed[(int)step];
+
+    private void Wake(OnboardingStep step)
+    {
+        _snoozed[(int)step] = false;
+        _spent[(int)step] = 0;
     }
 
     private bool Learned(OnboardingStep step, float dt)
@@ -188,7 +206,6 @@ public partial class OnboardingHints : PanelContainer
     private void Show(OnboardingStep step)
     {
         _current = step;
-        _t = 0;
         _moved = 0;
         _text.Text = step switch
         {
@@ -251,17 +268,33 @@ public partial class OnboardingHints : PanelContainer
         });
     }
 
-    private void OnPrompt(string prompt) => _promptShown = prompt.Length > 0;
+    private void OnPrompt(string prompt)
+    {
+        var shown = prompt.Length > 0;
+        if (shown && !_promptShown)
+        {
+            Wake(OnboardingStep.Interact); // novo prompt = próxima vez
+        }
+
+        _promptShown = shown;
+    }
 
     private void OnWave(int wave, int total)
     {
         _wantAttack = true;
         _inFight = true;
+        Wake(OnboardingStep.Attack);
+        Wake(OnboardingStep.Dodge);
     }
 
     private void OnBrechaEnded(string themeId, bool cleared) => _inFight = false;
 
-    private void OnDamaged(int amount, int hp, int max) => _wantDodge |= _wantAttack || IsDone(OnboardingStep.Attack);
+    private void OnDamaged(int amount, int hp, int max)
+    {
+        _wantDodge |= _wantAttack || IsDone(OnboardingStep.Attack);
+        Wake(OnboardingStep.Dodge); // levou um golpe de novo: a dica de esquivar pode voltar
+        Wake(OnboardingStep.Potion);
+    }
 
     private static string FilePath => AudioManager.Instance?.SettingsFile ?? AudioManager.SettingsPath;
 
