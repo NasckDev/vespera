@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Godot;
 using Vespera.Combat;
+using Vespera.Core.Art;
 using Vespera.Core.Combat.Ai;
 using Vespera.World;
 
@@ -13,6 +14,9 @@ namespace Vespera.Enemies;
 /// Sprite <c>{spr}_{f|a|b|d|s}</c> como <c>mobSpr</c> (<c>render.js:11-18</c>), espelho pela face, bob, fade de nascimento e
 /// de morte, flash branco ao ser atingido e pulso branco enquanto mira um golpe forte (<c>render.js:145-156</c>).
 /// Fica em <see cref="World.World.Entities"/> (y-sort pelo pé) e é liberado na troca de mapa.
+/// Chefes e o Alfa com arte aprovada (<c>assets/sprites/enemies/anim/&lt;sprite&gt;/frames.tres</c>, DECISIONS C2-D4) trocam
+/// de pose pelo estado de IA (<see cref="CreaturePose"/>: frente/costas, ataque, especial, morte) com o corpo vivo
+/// (respiração, passada, antecipação na telegrafia, estalo no golpe); a pose que faltar cai no atlas.
 /// </summary>
 public partial class Enemy : Node2D
 {
@@ -24,11 +28,37 @@ public partial class Enemy : Node2D
     private ShaderMaterial _flash = null!;
     private SpriteKeys _keys;
     private float _lastFlash = -1;
+    private ArtSprite? _art;
+    private float _poseT;
+    private bool _wasStriking;
+    private double _lastTime = -1;
+
+    private static readonly StringName PoseFront = "front";
+    private static readonly StringName PoseBack = "back";
+    private static readonly StringName PoseAttack = "attack";
+    private static readonly StringName PoseSpecial = "special";
+    private static readonly StringName PoseDeath = "death";
 
     public MonsterBody Body { get; private set; } = null!;
 
     /// <summary>Monstro de invasão (conta para resolver a ruptura).</summary>
     public bool Invasion => Body.Invasion;
+
+    /// <summary>Usa a arte aprovada (chefe/Alfa) e qual pose mostra agora ("" no atlas).</summary>
+    public bool UsesArt => _art is { Visible: true };
+
+    public string ArtPose => _art is { Visible: true } a ? a.Shown.ToString() : string.Empty;
+
+    /// <summary>Escala viva aplicada agora (respiração/antecipação/estalo), para testes.</summary>
+    public Vector2 LiveScale { get; private set; } = Vector2.One;
+
+    /// <summary>SpriteFrames da arte aprovada do monstro, ou null (Alfa: <c>wolfE</c> com cristas; chefes pelo sprite).</summary>
+    public static string? ArtPathFor(Vespera.Core.Data.MonsterDef def)
+    {
+        var id = def.Elite && def.Sprite == "wolf" ? "wolfE" : def.Sprite;
+        var path = $"res://assets/sprites/enemies/anim/{id}/frames.tres";
+        return ArtFrames.Exists(path) ? path : null;
+    }
 
     /// <summary>Cria o nó para o corpo (chame antes de adicionar à árvore).</summary>
     public static Enemy Create(MonsterBody body)
@@ -40,6 +70,14 @@ public partial class Enemy : Node2D
         enemy._flash = FlashMaterial.Create();
         enemy._sprite = new AtlasSprite { Key = enemy._keys.Front ?? string.Empty, SpriteScale = (float)body.Def.Scale, Material = enemy._flash };
         enemy._body.AddChild(enemy._sprite);
+        if (!body.IsDummy && ArtPathFor(body.Def) is { } path && ArtFrames.TryLoad(path, out var art))
+        {
+            enemy._art = new ArtSprite { Name = "Art", Material = enemy._flash };
+            enemy._art.Setup(art);
+            enemy._art.ExtraScale = (float)body.Def.Scale;
+            enemy._body.AddChild(enemy._art);
+        }
+
         enemy.AddChild(enemy._shadow);
         enemy.AddChild(enemy._body);
         enemy.Position = new Vector2((float)body.X, (float)body.Y);
@@ -69,6 +107,11 @@ public partial class Enemy : Node2D
         if (keys.Special is { } special)
         {
             AtlasLibrary.TryGet(special, out _);
+        }
+
+        if (ArtPathFor(def) is { } path)
+        {
+            ArtFrames.TryLoad(path, out _); // as poses grandes dos chefes: carregar atrás do fade, não no meio da luta
         }
     }
 
@@ -125,6 +168,57 @@ public partial class Enemy : Node2D
         }
 
         _sprite.Key = key;
+        var dt = _lastTime < 0 ? 0f : (float)Math.Clamp(time - _lastTime, 0, 0.1);
+        _lastTime = time;
+        var live = Vector2.One;
+        var liveY = 0f;
+        if (_art is { Art: { } art })
+        {
+            // arte aprovada: pose pelo estado de IA + corpo vivo; a pose que não foi desenhada fica no atlas
+            var facingAway = player.Y < m.Y - 14 && m.State != MonsterState.Idle;
+            // o estalo do golpe conta da soltura: quando a telegrafia acaba ou um golpe sem telegrafia começa
+            var tele = m.IsTelegraphing;
+            var striking = (m.IsAttacking || m.IsSpecial) && !tele;
+            if (striking && !_wasStriking)
+            {
+                _poseT = 0f;
+            }
+
+            _wasStriking = striking;
+            var input = CreaturePose.Input(m.Dead, m.IsSpecial && m.T > 0.1, m.IsAttacking, tele, facingAway,
+                m.State == MonsterState.Chase, m.Fly, time, tele ? (float)m.T : m.Dead ? (float)m.DeadT : _poseT);
+            var sample = CreaturePose.Evaluate(input);
+            _poseT += dt;
+            var anim = sample.Pose switch
+            {
+                CreaturePoseKind.Death => PoseDeath,
+                CreaturePoseKind.Special => PoseSpecial,
+                CreaturePoseKind.Attack => PoseAttack,
+                CreaturePoseKind.Back => PoseBack,
+                _ => PoseFront,
+            };
+            // pose não desenhada: especial → ataque, costas → frente (como o atlas sem _b); a morte de um chefe sem pose de
+            // morte fica na frente afundando (o atlas teria outra pintura); ataque/morte do Alfa caem no atlas do lobo
+            if (!art.Has(anim))
+            {
+                anim = anim == PoseSpecial && art.Has(PoseAttack) ? PoseAttack
+                    : anim == PoseBack || (anim == PoseDeath && m.IsBoss) ? PoseFront
+                    : anim;
+            }
+
+            var drawn = art.Has(anim);
+            _art.Visible = drawn;
+            _sprite.Visible = !drawn;
+            if (drawn)
+            {
+                _art.Show(anim, 0);
+            }
+
+            live = new Vector2(sample.ScaleX, sample.ScaleY);
+            liveY = sample.OffsetY * (float)m.Def.Scale;
+        }
+
+        LiveScale = live;
 
         var a = 1.0;
         if (m.Dead)
@@ -148,9 +242,13 @@ public partial class Enemy : Node2D
             ? (Math.Sin(m.Bob * 3) * 2) - 3
             : (m.State == MonsterState.Chase ? -Math.Abs(Math.Sin(m.Bob * 9)) : 0);
         var shakeX = m.State == MonsterState.Wind || (m.State == MonsterState.Slam && m.T < 0.75) ? (float)((Math.Sin(time * 97) * 0.7)) : 0f;
-        _body.Position = new Vector2(shakeX, (float)bob);
-        _body.Scale = new Vector2(m.Face < 0 ? -1 : 1, 1);
+        _body.Position = new Vector2(shakeX, (float)bob + liveY);
+        _body.Scale = new Vector2((m.Face < 0 ? -1 : 1) * live.X, live.Y);
         _sprite.Modulate = new Color(1, 1, 1, (float)a);
+        if (_art is not null)
+        {
+            _art.Modulate = _sprite.Modulate;
+        }
         _shadow.Modulate = new Color(1, 1, 1, (float)(0.45 * a));
 
         // Flash do golpe (0,12 s, alfa ×6) e brilho pulsante enquanto mira um golpe forte.
