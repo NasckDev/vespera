@@ -419,10 +419,16 @@ public partial class SmokeTest
             Require(d.InActivity && d.ActivityName == "Ferry", "travessia começou");
             Require(d.FerryBoat is "raft" or "rowboat", $"barco desenhado na travessia, está '{d.FerryBoat}'");
             var oars = new HashSet<int>();
-            for (var i = 0; i < 90 && d.InActivity; i++)
+            var sequence = new List<int> { d.FerryFrame };
+            for (var i = 0; i < 900 && d.InActivity; i++)
             {
                 await NextPhysicsFrame();
                 oars.Add(d.FerryFrame);
+                if (d.InActivity && d.FerryFrame != sequence[^1])
+                {
+                    sequence.Add(d.FerryFrame);
+                }
+
                 if (i == 30)
                 {
                     await Shot("arte-barco-remando");
@@ -430,6 +436,17 @@ public partial class SmokeTest
             }
 
             Require(oars.Count >= 3, $"remos passaram por {oars.Count} quadros");
+            // os remos avançam sempre no mesmo sentido (ARTE-8): cada troca de quadro é +1 no ciclo, do começo ao fim da travessia
+            var backwards = 0;
+            for (var i = 1; i < sequence.Count; i++)
+            {
+                if (sequence[i] != (sequence[i - 1] + 1) % 4)
+                {
+                    backwards++;
+                }
+            }
+
+            Require(backwards == 0, $"remos tocaram fora de ordem {backwards} vez(es) na travessia: {string.Join(",", sequence)}");
             await WaitUntil(() => !d.InActivity, 8, "fim da travessia");
 
             var fishing = d.Decor.First(s => s.Def.Kind == "fishing");

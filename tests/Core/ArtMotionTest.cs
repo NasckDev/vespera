@@ -7,6 +7,33 @@ using static GdUnit4.Assertions;
 [TestSuite]
 public class ArtMotionTest
 {
+    /// <summary>ARTE-8: o ritmo varia na travessia (devagar no começo e no fim) e os remos nunca voltam um quadro.</summary>
+    [TestCase]
+    public void OarsAlwaysAdvanceInOneDirectionWhileThePaceVaries()
+    {
+        const float duration = 4f;
+        var phase = 0f;
+        var last = 0;
+        var changes = 0;
+        for (var i = 1; i <= (int)(duration * 120f); i++)
+        {
+            var t = i / (duration * 120f);
+            phase = FrameClock.Advance(phase, 1f / 120f, 6f, FrameClock.RowPace(t), 4);
+            var frame = FrameClock.Loop(phase, 4);
+            if (frame != last)
+            {
+                AssertThat(frame).IsEqual((last + 1) % 4);
+                last = frame;
+                changes++;
+            }
+        }
+
+        AssertThat(changes >= 10).IsTrue();
+        AssertThat(FrameClock.RowPace(0f)).IsEqualApprox(0.35f, 1e-4f);
+        AssertThat(FrameClock.RowPace(0.5f)).IsEqualApprox(1f, 1e-4f);
+        AssertThat(FrameClock.RowPace(1f)).IsEqualApprox(0.35f, 1e-4f);
+    }
+
     [TestCase]
     public void WalkLoopRunsAtNineFpsAtFullSpeed()
     {

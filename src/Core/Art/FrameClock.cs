@@ -22,6 +22,12 @@ public static class FrameClock
         return next >= count ? next % count : next;
     }
 
+    /// <summary>
+    /// Ritmo dos remos numa travessia (0,35–1): devagar ao sair e ao chegar, cheio no meio, em função do progresso
+    /// <paramref name="t"/> (0–1). Entra como <c>speedRatio</c> de <see cref="Advance"/>, que integra o ritmo.
+    /// </summary>
+    public static float RowPace(float t) => 0.35f + (0.65f * MathF.Sin(Math.Clamp(t, 0f, 1f) * MathF.PI));
+
     /// <summary>Quadro atual de um laço (contador de <see cref="Advance"/>).</summary>
     public static int Loop(float counter, int count) =>
         count <= 0 ? 0 : Math.Clamp((int)MathF.Floor(counter), 0, count - 1);

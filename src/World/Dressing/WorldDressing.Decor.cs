@@ -26,6 +26,7 @@ public partial class WorldDressing
     private Vector2 _ferryFrom;
     private Vector2 _ferryTo;
     private float _ferryDuration;
+    private float _ferryPhase;
     private uint _savedMask;
     private Node2D? _ferryHull;
     private Sprite2D? _ferryBoat;
@@ -230,6 +231,7 @@ public partial class WorldDressing
         _ferryFrom = player.GlobalPosition;
         _ferryTo = to;
         _ferryDuration = Math.Clamp(_ferryFrom.DistanceTo(to) / FerrySpeed, 1.2f, 6f);
+        _ferryPhase = 0f;
         _savedMask = player.CollisionMask;
         player.CollisionMask = 0; // atravessa a água bloqueada
         _ferryHull = CreateBoat(spot, to.X < from.X) ?? CreateHull();
@@ -359,9 +361,11 @@ public partial class WorldDressing
             hull.Rotation = MathF.Sin(_activityT * 2.3f) * 0.03f;
             if (_ferryBoat is { } boat && _ferryArt is { } art)
             {
-                // remos em 4 quadros enquanto atravessa (6 fps), mais devagar no começo e no fim do trajeto
-                var pace = 0.35f + (0.65f * MathF.Sin(t * MathF.PI));
-                var frame = FrameClock.Loop(_activityT * art.Fps(BoatRowing) * pace % art.Count(BoatRowing), art.Count(BoatRowing));
+                // remos em 4 quadros enquanto atravessa (6 fps), mais devagar no começo e no fim do trajeto. A fase é a integral
+                // do ritmo (contador que só soma): tempo × ritmo variável faria os quadros voltarem depois de t ≈ 0,7
+                var count = art.Count(BoatRowing);
+                _ferryPhase = FrameClock.Advance(_ferryPhase, (float)delta, art.Fps(BoatRowing), FrameClock.RowPace(t), count);
+                var frame = FrameClock.Loop(_ferryPhase, count);
                 if (frame != FerryFrame)
                 {
                     FerryFrame = frame;
