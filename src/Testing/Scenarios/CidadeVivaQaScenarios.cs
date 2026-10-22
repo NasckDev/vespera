@@ -539,6 +539,9 @@ public partial class SmokeTest
             var problems = new List<string>();
             foreach (var mapId in new[] { "forge", "guild" })
             {
+                // Integração v0.1: a última fala do mapa anterior está aberta na Interface e congela a cidade.
+                UI.GameUi.Current?.CloseAll();
+                await ProcessFrames(3);
                 if (world.MapId != mapId)
                 {
                     world.GoMap(mapId, new Vector2(250, 560), instant: true);
@@ -603,6 +606,12 @@ public partial class SmokeTest
     private async Task<string?> TalkByWalking(World.World world, TownNpc npc, List<(string Speaker, string[] Lines)> dialogues, double timeoutSeconds)
     {
         var player = FindPlayer()!;
+        if (UI.GameUi.Current is { } ui && ui.Stack.Count > 0)
+        {
+            ui.CloseAll(); // integração: a fala com o morador anterior está aberta na Interface e trava o jogador
+            await ProcessFrames(3);
+        }
+
         var area = world.WalkArea;
         var count0 = dialogues.Count;
         var deadline = Time.GetTicksMsec() + (ulong)(timeoutSeconds * 1000);
