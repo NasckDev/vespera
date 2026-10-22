@@ -1,0 +1,48 @@
+{
+  "exams": [
+    {
+      "id": "exame_c",
+      "rank": "C",
+      "name": "Exame da Ordem: Selo C",
+      "description": "Sobreviva à maré da Brecha da Ordem. Ninguém conta o que você carrega: só o que você faz.",
+      "objectives": [ { "type": "survive", "seconds": 90 } ],
+      "timeLimitSeconds": 150,
+      "maxHits": null,
+      "rewardXp": 60,
+      "arenaHint": "mercado_das_mares"
+    },
+    {
+      "id": "exame_a",
+      "rank": "A",
+      "name": "Exame da Ordem: Selo A",
+      "description": "Quebre os três sinos marcados antes que o silêncio caia sobre a arena.",
+      "objectives": [ { "type": "destroy_marked", "count": 3 } ],
+      "timeLimitSeconds": 180,
+      "maxHits": null,
+      "rewardXp": 140,
+      "arenaHint": "torre_do_sino"
+    },
+    {
+      "id": "exame_s",
+      "rank": "S",
+      "name": "Exame da Ordem: Selo S",
+      "description": "Atravesse as Ruas Invertidas até a saída levando no máximo três golpes.",
+      "objectives": [ { "type": "reach_exit" } ],
+      "timeLimitSeconds": 150,
+      "maxHits": 3,
+      "rewardXp": 260,
+      "arenaHint": "ruas_baixas"
+    },
+    {
+      "id": "exame_sss",
+      "rank": "SSS",
+      "name": "Exame da Ordem: Selo SSS",
+      "description": "Derrote quarenta ecos do Avesso levando no máximo seis golpes.",
+      "objectives": [ { "type": "kill_count", "count": 40 } ],
+      "timeLimitSeconds": 240,
+      "maxHits": 6,
+      "rewardXp": 500,
+      "arenaHint": "avesso_profundo"
+    }
+  ]
+}

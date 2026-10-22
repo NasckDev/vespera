@@ -1,0 +1,70 @@
+{
+  "forge": {
+    "levelsPerTier": 2,
+    "fragmentosBase": 24,
+    "fragmentosGrowth": 1.3,
+    "primaryBase": 3,
+    "primaryPerLevel": 1,
+    "secondaryBase": 1,
+    "secondaryEveryLevels": 2,
+    "guardianPerCrossing": 1,
+    "lastLevelDamageBonus": 0.08,
+    "critPerLevel": 0.5
+  },
+  "weapons": [
+    {
+      "id": "sword",
+      "name": "Lâmina",
+      "attacksPerSecond": 1.0,
+      "critPct": 2.0,
+      "partBreakPct": 5.0,
+      "tiers": [
+        { "rank": "E", "name": "Lâmina de Ferro Frio", "damage": 12 },
+        { "rank": "D", "name": "Espada das Marés", "damage": 23 },
+        { "rank": "C", "name": "Espada do Velório", "damage": 40 },
+        { "rank": "B", "name": "Espada de Ferro Negro", "damage": 55 },
+        { "rank": "A", "name": "Espada da Vinha Ancião", "damage": 86 },
+        { "rank": "S", "name": "Espada do Vitral", "damage": 132 },
+        { "rank": "SS", "name": "Lâmina das Cinco Brechas", "damage": 168 },
+        { "rank": "SSS", "name": "Espada Maré-Morta", "damage": 239 },
+        { "rank": "Alvor", "name": "Espada do Primeiro Sol", "damage": 415 }
+      ]
+    },
+    {
+      "id": "bow",
+      "name": "Arco",
+      "attacksPerSecond": 1.15,
+      "critPct": 3.0,
+      "partBreakPct": 5.0,
+      "tiers": [
+        { "rank": "E", "name": "Arco do Cais", "damage": 11 },
+        { "rank": "D", "name": "Arco do Peixe-Lanterna", "damage": 22 },
+        { "rank": "C", "name": "Arco dos Ossos", "damage": 32 },
+        { "rank": "B", "name": "Arco da Fornalha", "damage": 52 },
+        { "rank": "A", "name": "Arco de Seiva Régia", "damage": 81 },
+        { "rank": "S", "name": "Arco do Halo", "damage": 108 },
+        { "rank": "SS", "name": "Arco do Eclipse de Lumeira", "damage": 159 },
+        { "rank": "SSS", "name": "Arco do Caçador de Ecos", "damage": 226 },
+        { "rank": "Alvor", "name": "Arco de Mil Amanheceres", "damage": 392 }
+      ]
+    },
+    {
+      "id": "hammer",
+      "name": "Martelo",
+      "attacksPerSecond": 0.6,
+      "critPct": 2.0,
+      "partBreakPct": 11.0,
+      "tiers": [
+        { "rank": "E", "name": "Martelo da Doca", "damage": 17 },
+        { "rank": "D", "name": "Martelo de Âncora", "damage": 32 },
+        { "rank": "C", "name": "Martelo da Lápide", "damage": 55 },
+        { "rank": "B", "name": "Martelo da Bigorna", "damage": 76 },
+        { "rank": "A", "name": "Martelo do Golem Verde", "damage": 119 },
+        { "rank": "S", "name": "Martelo do Nórtex", "damage": 182 },
+        { "rank": "SS", "name": "Martelo do Colosso Ressurgido", "damage": 232 },
+        { "rank": "SSS", "name": "Martelo do Sol Submerso", "damage": 330 },
+        { "rank": "Alvor", "name": "Martelo do Novo Dia", "damage": 573 }
+      ]
+    }
+  ]
+}

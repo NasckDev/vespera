@@ -1,0 +1,42 @@
+{
+  "materials": [
+    { "id": "gel_de_lodo", "name": "Gel de Lodo", "rank": "E", "kind": "common", "source": "Lodo", "origin": "gdd", "value": 2, "weight": 1.0, "desc": "Gelatina de esgoto que ainda guarda o calor das cozinhas de Lumeira." },
+    { "id": "veu_de_espectro", "name": "Véu de Espectro", "rank": "E", "kind": "common", "source": "Espectro", "origin": "gdd", "value": 2, "weight": 1.0, "desc": "Um pano de névoa com a silhueta de um casaco. Some se você demora." },
+    { "id": "nucleo_lodo_mae", "name": "Núcleo da Lodo-Mãe", "rank": "E", "kind": "guardian", "source": "Lodo-Mãe", "origin": "gdd", "value": 12, "weight": 0.0, "desc": "O coração pulsante de tudo o que a cidade jogou fora." },
+
+    { "id": "fragmento_mordido", "name": "Fragmento Mordido", "rank": "D", "kind": "common", "source": "Rato-Lanterna", "origin": "gdd", "value": 3, "weight": 1.0, "desc": "Fragmento de qualidade menor, com marcas de dentes." },
+    { "id": "espinho", "name": "Espinho", "rank": "D", "kind": "common", "source": "Carrapicho", "origin": "gdd", "value": 3, "weight": 1.0, "desc": "Duro como prego, arrancado de uma horta que ninguém colhe." },
+    { "id": "semente_podre", "name": "Semente Podre", "rank": "D", "kind": "common", "source": "Carrapicho", "origin": "gdd", "value": 3, "weight": 0.8, "desc": "Ainda tenta brotar. Cheira a pomar abandonado." },
+    { "id": "galho_oco", "name": "Galho Oco", "rank": "D", "kind": "guardian", "source": "A Macieira Oca", "origin": "gdd", "value": 18, "weight": 0.0, "desc": "Madeira leve e vazia que zumbe quando o vento passa." },
+
+    { "id": "bronze_salgado", "name": "Bronze Salgado", "rank": "C", "kind": "common", "source": "Afogado", "origin": "gdd", "value": 5, "weight": 1.0, "desc": "Bronze de capacete, corroído por uma maré que nunca voltou." },
+    { "id": "corda_encharcada", "name": "Corda Encharcada", "rank": "C", "kind": "common", "source": "Afogado", "origin": "gdd", "value": 5, "weight": 1.0, "desc": "Nunca seca. Aguenta peso de navio." },
+    { "id": "bronze_mudo", "name": "Bronze Mudo", "rank": "C", "kind": "common", "source": "Sineiro", "origin": "gdd", "value": 5, "weight": 1.0, "desc": "Fragmento de sino que perdeu a voz." },
+    { "id": "pedra_de_gargula", "name": "Pedra de Gárgula", "rank": "C", "kind": "common", "source": "Sineiro", "origin": "gdd", "value": 5, "weight": 0.8, "desc": "Pedra fria com um rosto quase apagado." },
+    { "id": "lente_do_farol", "name": "Lente do Farol", "rank": "C", "kind": "guardian", "source": "O Farol Afogado", "origin": "gdd", "value": 28, "weight": 0.0, "desc": "Vidro grosso que ainda lembra a direção da luz." },
+
+    { "id": "pavio_eterno", "name": "Pavio Eterno", "rank": "B", "kind": "common", "source": "Velinha", "origin": "gdd", "value": 8, "weight": 1.0, "desc": "Queima sem se consumir, esperando alguém voltar." },
+    { "id": "palha_negra", "name": "Palha Negra", "rank": "B", "kind": "common", "source": "Ceifador de Pomar", "origin": "gdd", "value": 8, "weight": 1.0, "desc": "Palha de espantalho, escura como noite sem lua." },
+    { "id": "lamina_enferrujada", "name": "Lâmina Enferrujada", "rank": "B", "kind": "common", "source": "Ceifador de Pomar", "origin": "gdd", "value": 8, "weight": 0.8, "desc": "A foice de quem só se move quando ninguém olha." },
+    { "id": "candelabro_derretido", "name": "Candelabro Derretido", "rank": "B", "kind": "guardian", "source": "A Velória", "origin": "gdd", "value": 40, "weight": 0.0, "desc": "Cera endurecida em volta de um metal que ainda está quente." },
+
+    { "id": "placa_de_casca", "name": "Placa de Casca", "rank": "A", "kind": "common", "source": "Casca", "origin": "gdd", "value": 14, "weight": 1.0, "desc": "Placa de casco, boa para armadura." },
+    { "id": "pedra_de_torre", "name": "Pedra de Torre", "rank": "A", "kind": "common", "source": "Torre do Sino Mudo", "origin": "proposta", "value": 14, "weight": 1.0, "desc": "Lasca da Torre do Sino, cinza e muito antiga." },
+    { "id": "sino_mudo", "name": "Sino Mudo", "rank": "A", "kind": "guardian", "source": "O Sineiro Mudo", "origin": "gdd", "value": 60, "weight": 0.0, "desc": "A última badalada, guardada em bronze." },
+
+    { "id": "fio_do_avesso", "name": "Fio do Avesso", "rank": "S", "kind": "common", "source": "Rasgo", "origin": "gdd", "value": 24, "weight": 1.0, "desc": "Material lendário tecido pela própria Brecha." },
+    { "id": "tijolo_invertido", "name": "Tijolo Invertido", "rank": "S", "kind": "common", "source": "Ruas Invertidas", "origin": "proposta", "value": 24, "weight": 1.0, "desc": "Tijolo de casa demolida: a parte de dentro fica para fora." },
+    { "id": "perna_de_madeira", "name": "Perna de Madeira", "rank": "S", "kind": "guardian", "source": "O Inquilino", "origin": "gdd", "value": 90, "weight": 0.0, "desc": "Madeira de soalho, ainda quente de uma casa que andou." },
+
+    { "id": "cinza_do_avesso", "name": "Cinza do Avesso", "rank": "SS", "kind": "common", "source": "Avesso profundo", "origin": "proposta", "value": 36, "weight": 1.0, "desc": "O que sobra quando uma Brecha se apaga." },
+    { "id": "casca_de_brecha", "name": "Casca de Brecha", "rank": "SS", "kind": "common", "source": "Avesso profundo", "origin": "proposta", "value": 36, "weight": 1.0, "desc": "A borda endurecida de um rasgo entre mundos." },
+    { "id": "essencia_do_avesso", "name": "Essência do Avesso", "rank": "SS", "kind": "guardian", "source": "Guardião Revertido", "origin": "proposta", "value": 140, "weight": 0.0, "desc": "Um Guardião virado do avesso, destilado em uma gota." },
+
+    { "id": "luz_quebrada", "name": "Luz Quebrada", "rank": "SSS", "kind": "common", "source": "Avesso profundo", "origin": "proposta", "value": 55, "weight": 1.0, "desc": "Um caco de luz que não reflete nada." },
+    { "id": "eco_cristalizado", "name": "Eco Cristalizado", "rank": "SSS", "kind": "common", "source": "Avesso profundo", "origin": "proposta", "value": 55, "weight": 1.0, "desc": "Uma voz presa em cristal." },
+    { "id": "estilhaco_do_reflexo", "name": "Estilhaço do Reflexo", "rank": "SSS", "kind": "guardian", "source": "O Reflexo", "origin": "proposta", "value": 220, "weight": 0.0, "desc": "Um pedaço de você que ficou para trás." },
+
+    { "id": "luz_de_alvor", "name": "Luz de Alvor", "rank": "Alvor", "kind": "common", "source": "Praça da Lanterna", "origin": "proposta", "value": 90, "weight": 1.0, "desc": "A primeira luz da manhã depois do Ano Sem Alvor." },
+    { "id": "ouro_de_amanhecer", "name": "Ouro de Amanhecer", "rank": "Alvor", "kind": "common", "source": "Praça da Lanterna", "origin": "proposta", "value": 90, "weight": 1.0, "desc": "Metal aquecido por um sol que ainda vai nascer." }
+  ]
+}
