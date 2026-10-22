@@ -2,14 +2,17 @@ using System;
 using System.Collections.Generic;
 using Godot;
 using Vespera.Game.Boot;
+using Vespera.Game.Combat;
 using Vespera.Game.Components;
+using Vespera.Game.World;
 
 namespace Vespera.Game.Actors;
 
 /// <summary>
 /// Caçador controlado por uma <see cref="IInputSource"/> (nunca por <c>Input</c> direto). Anda em 8 direções com
 /// aceleração e frenagem, colide só pelo pé (cápsula deitada) e anima quadro a quadro em 4 direções.
-/// A cadência da animação acompanha a velocidade real para o pé não deslizar no chão.
+/// A cadência da animação acompanha a velocidade real para o pé não deslizar no chão. O combate
+/// (<see cref="HunterCombat"/>) roda antes do movimento e pode tomar a animação e a velocidade (golpe, esquiva, dano).
 /// </summary>
 public partial class Player : CharacterBody2D
 {
@@ -17,7 +20,7 @@ public partial class Player : CharacterBody2D
     public const uint WorldLayer = 1;
     public const uint PlayerLayer = 2;
 
-    /// <summary>Velocidade máxima na escala 1 (px/s). Casada com a passada: 6 quadros a 12 fps cobrem 2 passos de ~52 px.</summary>
+    /// <summary>Velocidade máxima na escala 1 (px/s). Casada com a passada da folha de andar.</summary>
     public const float BaseSpeed = 210f;
     public const float FeetHalfWidth = 22f;
     public const float FeetHalfHeight = 11f;
@@ -25,15 +28,12 @@ public partial class Player : CharacterBody2D
     private const float Acceleration = 1500f;
     private const float Deceleration = 2100f;
     private const float FacingHysteresis = 1.15f;
-    private const float BreathPeriod = 2.6f;
-    private const float BreathAmount = 0.012f;
 
     private readonly List<Interactable> _nearby = [];
-    private AnimatedSprite2D _sprite = null!;
     private Facing _facing = Facing.Down;
     private bool _faceLeft;
-    private float _breath;
-    private float _scale = 1f;
+    private Vector2 _aim = Vector2.Down;
+    private readonly float _scale;
 
     public Player(IInputSource input, HunterClass hunter, float actorScale)
     {
@@ -44,7 +44,9 @@ public partial class Player : CharacterBody2D
 
     public IInputSource Input { get; set; }
 
-    public HunterClass Hunter { get; }
+    public HunterClass Hunter { get; private set; }
+
+    public float ActorScale => _scale;
 
     public float MaxSpeed => BaseSpeed * _scale;
 
@@ -55,6 +57,20 @@ public partial class Player : CharacterBody2D
 
     public bool FacingLeft => _faceLeft;
 
+    /// <summary>Direção da mira (último movimento ou golpe), unitária.</summary>
+    public Vector2 AimDirection => _aim;
+
+    public AnimatedSprite2D Sprite { get; private set; } = null!;
+
+    public HitFlash Flash { get; private set; } = null!;
+
+    public HunterCombat Combat { get; private set; } = null!;
+
+    /// <summary>Mundo da sala (posto por <see cref="LevelWorld.SpawnPlayer"/>).</summary>
+    public LevelWorld? World { get; set; }
+
+    public CombatFeel? Feel => World?.Feel;
+
     /// <summary>Retângulo do colisor do pé em coordenadas do mundo.</summary>
     public Rect2 FeetRect => new(GlobalPosition.X - (FeetHalfWidth * _scale), GlobalPosition.Y - (2 * FeetHalfHeight * _scale),
         2 * FeetHalfWidth * _scale, 2 * FeetHalfHeight * _scale);
@@ -62,9 +78,9 @@ public partial class Player : CharacterBody2D
     /// <summary>Retângulo aproximado do corpo desenhado (para a oclusão).</summary>
     public Rect2 BodyRect => new(GlobalPosition.X - (40 * _scale), GlobalPosition.Y - (124 * _scale), 80 * _scale, 124 * _scale);
 
-    public string CurrentAnimation => _sprite.Animation;
+    public string CurrentAnimation => Sprite.Animation;
 
-    public int CurrentFrame => _sprite.Frame;
+    public int CurrentFrame => Sprite.Frame;
 
     /// <summary>Interativo mais próximo no alcance, ou null.</summary>
     public Interactable? Focus { get; private set; }
@@ -88,32 +104,53 @@ public partial class Player : CharacterBody2D
         };
         AddChild(feet);
 
-        _sprite = new AnimatedSprite2D
+        var spriteScale = _scale * HunterSprites.SheetToWorld;
+        Sprite = new AnimatedSprite2D
         {
             Name = "Sprite",
             SpriteFrames = HunterSprites.Build(Hunter),
             Offset = HunterSprites.FootOffset,
-            Scale = new Vector2(_scale, _scale),
+            Scale = new Vector2(spriteScale, spriteScale),
         };
-        AddChild(_sprite);
+        AddChild(Sprite);
+        Flash = new HitFlash(Sprite);
         AddChild(ContactShadow.Make(2 * FeetHalfWidth * _scale * 1.25f, 0.42f));
+        Combat = new HunterCombat(this);
+        AddChild(Combat);
         PlayIdle();
+        World?.Combat.Register(Combat);
     }
+
+    public override void _ExitTree() => World?.Combat.Unregister(Combat);
 
     public override void _PhysicsProcess(double delta)
     {
         var dt = (float)delta;
         var move = Frozen ? Vector2.Zero : Input.Move;
-        var target = move * MaxSpeed;
-        var rate = move.LengthSquared() > 0.0001f ? Acceleration : Deceleration;
-        Velocity = Velocity.MoveToward(target, rate * _scale * dt);
+        var order = Combat.Step(dt, move);
+        if (order.Velocity is { } forced)
+        {
+            Velocity = forced;
+        }
+        else
+        {
+            var target = move * MaxSpeed * order.SpeedScale;
+            var rate = target.LengthSquared() > 0.0001f ? Acceleration : Deceleration;
+            Velocity = Velocity.MoveToward(target, rate * _scale * dt);
+        }
+
         MoveAndSlide();
-        UpdateAnimation(move, dt);
+        if (!order.OwnsAnimation)
+        {
+            UpdateAnimation(order.SpeedScale > 0f ? move : Vector2.Zero);
+        }
+
+        Flash.Update(dt);
         UpdateFocus();
 
         // A borda de "interagir" é consultada todo quadro; travado (lendo), o aperto serve para fechar.
         var pressed = Input.IsJustPressed(InputActions.Interact);
-        if (pressed && (Focus is not null || Frozen))
+        if (pressed && (Focus is not null || Frozen) && Combat.State == HunterState.Free && !Combat.Moves.Busy)
         {
             InteractRequested?.Invoke(this, Focus);
         }
@@ -126,6 +163,59 @@ public partial class Player : CharacterBody2D
         ResetPhysicsInterpolation();
     }
 
+    /// <summary>Troca de classe (seletor de arma): outra folha e outro conjunto de golpes.</summary>
+    public void SetHunter(HunterClass hunter)
+    {
+        Hunter = hunter;
+        Sprite.SpriteFrames = HunterSprites.Build(hunter);
+        Combat.ChangeWeapon();
+        PlayIdle(force: true);
+    }
+
+    /// <summary>Vira para a direção (8 direções → baixo/cima/lado + espelho) e guarda a mira.</summary>
+    public void Face(Vector2 dir)
+    {
+        if (dir.LengthSquared() < 0.0001f)
+        {
+            return;
+        }
+
+        _aim = dir.Normalized();
+        var ax = Mathf.Abs(dir.X);
+        var ay = Mathf.Abs(dir.Y);
+        _facing = ax >= ay * 0.85f ? Facing.Side : dir.Y < 0 ? Facing.Up : Facing.Down;
+        if (ax > 0.05f)
+        {
+            _faceLeft = dir.X < 0;
+        }
+    }
+
+    /// <summary>
+    /// Toca a animação do verbo na direção atual (cai para o lado quando a folha não tem a direção) e devolve o nome.
+    /// <paramref name="fitSeconds"/> &gt; 0 ajusta a velocidade para a animação durar esse tempo.
+    /// </summary>
+    public string PlayAnimation(string verb, bool restart, float fitSeconds = 0f)
+    {
+        var frames = Sprite.SpriteFrames;
+        var name = HunterSprites.Resolve(frames, verb, _facing);
+        var side = name.EndsWith("_lado", StringComparison.Ordinal);
+        Sprite.FlipH = side && _faceLeft;
+        Sprite.SpeedScale = 1f;
+        if (fitSeconds > 0f)
+        {
+            var natural = frames.GetFrameCount(name) / (float)frames.GetAnimationSpeed(name);
+            Sprite.SpeedScale = natural / fitSeconds;
+        }
+
+        if (restart || Sprite.Animation != name)
+        {
+            Sprite.Play(name);
+            Sprite.Frame = 0;
+        }
+
+        return name;
+    }
+
     public void EnterRange(Interactable item)
     {
         if (!_nearby.Contains(item))
@@ -136,43 +226,41 @@ public partial class Player : CharacterBody2D
 
     public void ExitRange(Interactable item) => _nearby.Remove(item);
 
-    private void UpdateAnimation(Vector2 move, float dt)
+    private void UpdateAnimation(Vector2 move)
     {
         var speed = GetRealVelocity().Length();
         var walking = move.LengthSquared() > 0.0001f && speed > 8f * _scale;
         if (move.LengthSquared() > 0.0001f)
         {
             ChooseFacing(move);
+            _aim = move.Normalized();
         }
 
-        _sprite.FlipH = _facing == Facing.Side && _faceLeft;
+        Sprite.FlipH = _facing == Facing.Side && _faceLeft;
         if (walking)
         {
             var walk = HunterSprites.WalkAnimation(_facing);
-            if (_sprite.Animation != walk)
+            if (Sprite.Animation != walk)
             {
-                _sprite.Play(walk);
+                Sprite.Play(walk);
             }
 
-            _sprite.SpeedScale = Mathf.Clamp(speed / MaxSpeed, 0.35f, 1.2f);
-            _sprite.Scale = new Vector2(_scale, _scale);
-            _breath = 0f;
+            Sprite.SpeedScale = Mathf.Clamp(speed / MaxSpeed, 0.35f, 1.2f);
             return;
         }
 
         PlayIdle();
-        _breath += dt;
-        var rise = 1f + (BreathAmount * (0.5f - (0.5f * Mathf.Cos(_breath * Mathf.Tau / BreathPeriod))));
-        _sprite.Scale = new Vector2(_scale, _scale * rise);
     }
 
-    private void PlayIdle()
+    private void PlayIdle(bool force = false)
     {
         var idle = HunterSprites.IdleAnimation(_facing);
-        if (_sprite.Animation != idle)
+        if (force || Sprite.Animation != idle)
         {
-            _sprite.Play(idle);
+            Sprite.Play(idle);
         }
+
+        Sprite.SpeedScale = 1f;
     }
 
     /// <summary>Lado quando o eixo X domina com folga; senão cima/baixo. A folga evita trocar de pose nas diagonais.</summary>
@@ -180,8 +268,7 @@ public partial class Player : CharacterBody2D
     {
         var ax = Mathf.Abs(move.X);
         var ay = Mathf.Abs(move.Y);
-        var current = _facing;
-        if (current == Facing.Side ? ax * FacingHysteresis >= ay : ax > ay * FacingHysteresis)
+        if (_facing == Facing.Side ? ax * FacingHysteresis >= ay : ax > ay * FacingHysteresis)
         {
             _facing = Facing.Side;
             if (ax > 0.05f)
