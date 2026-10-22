@@ -445,18 +445,20 @@ public partial class SmokeTest
 
                 PressDirection(Vector2.Zero);
                 await Frames(30);
+                // O spam deixa telas abertas (a pausa, o diário e/ou uma fala do dono, empilhadas): um jogador aperta Esc
+                // (ui_cancel fecha a tela do topo; a ação "pause" só abre a pausa) até sair delas, uma por vez.
+                for (var esc = 0; esc < 6 && GameManager.Instance.IsGameplayBlocked; esc++)
+                {
+                    GetViewport().PushInput(new InputEventAction { Action = "ui_cancel", Pressed = true });
+                    await Frames(2);
+                    GetViewport().PushInput(new InputEventAction { Action = "ui_cancel", Pressed = false });
+                    await Frames(30);
+                }
+
                 if (GameManager.Instance.IsGameplayBlocked)
                 {
-                    // Número ímpar de "pausar": um jogador apertaria de novo para despausar.
-                    GetViewport().PushInput(new InputEventAction { Action = InputActions.Pause, Pressed = true });
-                    await Frames(2);
-                    GetViewport().PushInput(new InputEventAction { Action = InputActions.Pause, Pressed = false });
-                    await Frames(30);
-                    if (GameManager.Instance.IsGameplayBlocked)
-                    {
-                        failures.Add($"{id}: o jogo ficou bloqueado depois do spam");
-                        continue;
-                    }
+                    failures.Add($"{id}: o jogo ficou bloqueado depois do spam ({string.Join(",", GameManager.Instance.GameplayBlocks)}, tela {UI.GameUi.Current?.Stack.Top?.GetType().Name})");
+                    continue;
                 }
 
                 if (world.MapId != id)
@@ -636,6 +638,12 @@ public partial class SmokeTest
                 if (frame > maxFrames)
                 {
                     return $"tempo esgotado; parou em ({p.X:0.0}, {p.Y:0.0}), próximo ponto {(next < path.Count ? path[next] : last)}";
+                }
+
+                if (GameManager.Instance.GameplayBlocks.Contains("ui"))
+                {
+                    // o Interact aleatório do passeio abriu uma fala/olhar: a tela trava o jogador de propósito; quem joga fecha e segue
+                    UI.GameUi.Current?.CloseAll();
                 }
 
                 if (world.MapId == mapId && !world.IsTransitioning && !GameManager.Instance.IsGameplayBlocked)
