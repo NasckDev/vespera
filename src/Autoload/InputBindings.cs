@@ -56,6 +56,27 @@ public static class InputBindings
         new(InputActions.Pause, "Menu", true),
     ];
 
+    /// <summary>
+    /// Ações fixas do jogo que não aparecem na tela de teclas (POLI-6/POLI-13): trocar de arma (1–5, roda do mouse, RB),
+    /// mira (analógico direito) e o atalho de depuração (F2). Nenhuma ação remapeável pode tomar o evento delas: o
+    /// remapeamento recusa com conflito em vez de deixar duas ações na mesma tecla.
+    /// </summary>
+    public static readonly RemappableAction[] Reserved =
+    [
+        new(InputActions.WeaponSlots[0], "Arma 1", true),
+        new(InputActions.WeaponSlots[1], "Arma 2", true),
+        new(InputActions.WeaponSlots[2], "Arma 3", true),
+        new(InputActions.WeaponSlots[3], "Arma 4", true),
+        new(InputActions.WeaponSlots[4], "Arma 5", true),
+        new(InputActions.WeaponNext, "Próxima arma", true),
+        new(InputActions.WeaponPrev, "Arma anterior", true),
+        new(InputActions.AimLeft, "Mira (analógico direito)", true),
+        new(InputActions.AimRight, "Mira (analógico direito)", true),
+        new(InputActions.AimUp, "Mira (analógico direito)", true),
+        new(InputActions.AimDown, "Mira (analógico direito)", true),
+        new(InputActions.DebugGrantXp, "Atalho de depuração", false),
+    ];
+
     private static readonly Dictionary<StringName, (string? Keyboard, string? Pad)> LabelCache = [];
 
     /// <summary>Alguma tecla mudou (as dicas de tecla da UI se atualizam).</summary>
@@ -72,12 +93,12 @@ public static class InputBindings
 
         foreach (var r in Remappable)
         {
-            if (config.HasSectionKey(KeysSection, r.Action) && Decode((string)config.GetValue(KeysSection, r.Action)) is { } key && !IsPad(key))
+            if (config.HasSectionKey(KeysSection, r.Action) && Decode((string)config.GetValue(KeysSection, r.Action)) is { } key && !IsPad(key) && ReservedOwner(key) is null)
             {
                 Replace(r.Action, pad: false, key);
             }
 
-            if (r.Pad && config.HasSectionKey(PadSection, r.Action) && Decode((string)config.GetValue(PadSection, r.Action)) is { } button && IsPad(button))
+            if (r.Pad && config.HasSectionKey(PadSection, r.Action) && Decode((string)config.GetValue(PadSection, r.Action)) is { } button && IsPad(button) && ReservedOwner(button) is null)
             {
                 Replace(r.Action, pad: true, button);
             }
@@ -166,10 +187,40 @@ public static class InputBindings
         return null;
     }
 
-    /// <summary>Nome da ação remapeável para a UI ("Atacar").</summary>
+    /// <summary>Ação fixa do jogo (<see cref="Reserved"/>) que já usa este evento, ou null.</summary>
+    public static StringName? ReservedOwner(InputEvent e)
+    {
+        foreach (var r in Reserved)
+        {
+            if (!InputMap.HasAction(r.Action))
+            {
+                continue;
+            }
+
+            foreach (var other in InputMap.ActionGetEvents(r.Action))
+            {
+                if (Same(other, e))
+                {
+                    return r.Action;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>Nome da ação (remapeável ou fixa) para a UI ("Atacar").</summary>
     public static string ActionLabel(StringName action)
     {
         foreach (var r in Remappable)
+        {
+            if (r.Action == action)
+            {
+                return r.Label;
+            }
+        }
+
+        foreach (var r in Reserved)
         {
             if (r.Action == action)
             {
@@ -197,6 +248,12 @@ public static class InputBindings
         if (current is not null && Same(current, normalized))
         {
             return RemapResult.Ok;
+        }
+
+        if (ReservedOwner(normalized) is { } reserved)
+        {
+            other = reserved; // POLI-6/13: tecla fixa do jogo (1–5, roda, RB, mira, depuração): recusa, nunca troca
+            return RemapResult.Conflict;
         }
 
         var result = RemapResult.Ok;
