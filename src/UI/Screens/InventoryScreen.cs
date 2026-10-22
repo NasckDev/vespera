@@ -286,7 +286,7 @@ public partial class InventoryScreen : Screen
             Ui.Hint("Esc", "B", "Fechar"),
             Ui.Hint("Tab", "LB/RB", "Aba"),
             Ui.Hint("Setas", "D-pad", "Navegar"),
-            Ui.Hint("E", "A", "Equipar"),
+            Ui.ActionHint(InputActions.Interact, "Equipar"),
             Ui.Hint("X", "Y", "Desmontar"),
             _status,
             IconRect.Create("i_shard", 9), _shards,
@@ -560,7 +560,7 @@ public partial class InventoryScreen : Screen
             case ItemKind.Gear:
                 if (info.Locked is null)
                 {
-                    AddAction("E", "A", "Equipar", () => Equip(item));
+                    AddInteractAction("Equipar", () => Equip(item));
                 }
 
                 AddAction("X", "Y", "Desmontar (+2 Estilhaços)", DismantleSelected);
@@ -590,13 +590,21 @@ public partial class InventoryScreen : Screen
         }
 
         _detail.ShowInfo(UiItems.Gear(state, gearId, compareEquipped: false));
-        AddAction("E", "A", "Desequipar", () => Unequip(slotId));
+        AddInteractAction("Desequipar", () => Unequip(slotId));
     }
 
     private void AddAction(string key, string pad, string label, Action run)
     {
         var row = new SelectableRow { Marker = false, OnActivate = run, CustomMinimumSize = new Vector2(0, 13) };
         row.AddChild(Ui.Hint(key, pad, label, UiFonts.Small, UiPalette.Creme));
+        _actions.AddChild(row);
+    }
+
+    /// <summary>Ação que a linha executa com o botão de interagir: a dica segue o remapeamento (POLI-4).</summary>
+    private void AddInteractAction(string label, Action run)
+    {
+        var row = new SelectableRow { Marker = false, OnActivate = run, CustomMinimumSize = new Vector2(0, 13) };
+        row.AddChild(Ui.ActionHint(InputActions.Interact, label, UiFonts.Small, UiPalette.Creme));
         _actions.AddChild(row);
     }
 

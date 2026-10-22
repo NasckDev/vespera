@@ -51,7 +51,7 @@
     {
       "id": "golpe_supremo",
       "name": "Golpe Supremo",
-      "desc": "Use seu Golpe Supremo [F] dentro de uma Brecha.",
+      "desc": "Use seu Golpe Supremo [{key:ultimate}] dentro de uma Brecha.",
       "condition": {
         "kind": "counter",
         "key": "ults",

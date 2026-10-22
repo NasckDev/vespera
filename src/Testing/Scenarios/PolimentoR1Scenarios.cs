@@ -10,6 +10,7 @@ using Vespera.UI.Common;
 using Vespera.UI.HudKit;
 using Vespera.Core.Rules;
 using Vespera.UI.Screens;
+using Vespera.UI.Widgets;
 
 namespace Vespera.Testing;
 
@@ -214,6 +215,54 @@ public partial class SmokeTest
             GameUi.AutoCompleteQuests = auto;
             PqResetPlayerSettings();
             ui.CloseAll();
+        }
+    }
+
+    [SmokeScenario("polimento (r1): marcadores de tecla nos textos seguem o dispositivo e o remapeamento (falas, missão, Como jogar, classe)", order: 1105)]
+    private async Task PrKeyTokensFollowDeviceAndRemap()
+    {
+        await PqFreshWorld();
+        await FreshGame("sword");
+        var ui = UiOrFail();
+        InputBindings.RestoreDefaults();
+        try
+        {
+            const string sample = "{key:ultimate} | {keys:attack} | {keyPhrase:pause} | {key:interact} | {desconhecido} | {key:";
+            var kb = KeyText.Expand(sample, gamepad: false);
+            var pad = KeyText.Expand(sample, gamepad: true);
+            Log.Info($"poli-4: teclado '{kb}'; controle '{pad}'");
+            Require(kb == "F | J ou Clique | a tecla Esc | E | {desconhecido} | {key:", $"teclado: '{kb}'");
+            Require(pad == "RT | X | o botão Start | A | {desconhecido} | {key:", $"controle: '{pad}'");
+
+            // Remapeia o Supremo para G e Atacar para H: a ajuda e a escolha de classe acompanham.
+            InputBindings.Assign(InputActions.Ultimate, pad: false, new InputEventKey { PhysicalKeycode = Key.G }, out _);
+            InputBindings.Assign(InputActions.Attack, pad: false, new InputEventKey { PhysicalKeycode = Key.H }, out _);
+            await PqUseKeyboard();
+            Require(KeyText.Expand("{key:ultimate}") == "G", "o Supremo remapeado para G");
+
+            ui.OpenPause();
+            await WaitSeconds(0.2);
+            ui.Stack.Push(ui.Help);
+            await WaitSeconds(0.3);
+            var combatTab = ui.Help.FindChildren("*", nameof(SelectableRow), true, false).OfType<SelectableRow>().ElementAt(2);
+            combatTab.GrabFocus();
+            await WaitSeconds(0.3);
+            var helpText = string.Join(" | ", ui.Help.FindChildren("*", nameof(Label), true, false).OfType<Label>().Select(l => l.Text));
+            Log.Info($"poli-4: Como jogar (Combate): {helpText}");
+            Require(helpText.Contains("Ataque com H", StringComparison.Ordinal), "a ajuda de combate deveria dizer 'Ataque com H…' depois de remapear");
+            Require(!helpText.Contains("{key", StringComparison.Ordinal), "marcador de tecla sobrou na ajuda");
+            ui.CloseAll();
+
+            // A missão do Supremo cita a tecla do dispositivo em uso.
+            var quest = GameManager.Db.Quests.First(q => q.Desc.Contains("{key:ultimate}", StringComparison.Ordinal));
+            Require(KeyText.Expand(quest.Desc, gamepad: true).Contains("[RT]", StringComparison.Ordinal), $"missão no controle: {KeyText.Expand(quest.Desc, gamepad: true)}");
+            Require(KeyText.Expand(quest.Desc, gamepad: false).Contains("[G]", StringComparison.Ordinal), $"missão no teclado remapeado: {KeyText.Expand(quest.Desc, gamepad: false)}");
+        }
+        finally
+        {
+            ui.CloseAll();
+            InputBindings.RestoreDefaults();
+            await PqUseKeyboard();
         }
     }
 }

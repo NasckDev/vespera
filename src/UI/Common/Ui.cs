@@ -157,6 +157,10 @@ public static class Ui
     public static HBoxContainer Hint(string keyboard, string gamepad, string label, int size = UiFonts.Small, Color? color = null) =>
         Row(3, KeyCap.Create(keyboard, gamepad), Text(label, size, color ?? UiPalette.SubLight));
 
+    /// <summary>Tecla da ação do Input Map + legenda: segue o dispositivo em uso e o remapeamento.</summary>
+    public static HBoxContainer ActionHint(string action, string label, int size = UiFonts.Small, Color? color = null) =>
+        Row(3, KeyCap.ForAction(action), Text(label, size, color ?? UiPalette.SubLight));
+
     /// <summary>Remove e libera todos os filhos.</summary>
     public static void Clear(Node node)
     {

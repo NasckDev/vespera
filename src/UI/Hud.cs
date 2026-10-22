@@ -70,6 +70,7 @@ public partial class Hud : CanvasLayer
     private PanelContainer _statusBack = null!;
     private PanelContainer _topBack = null!;
     private float _questExpandT;
+    private string _questDescRaw = string.Empty;
     private bool _insideBrecha;
     private float _flashT;
     private float _essenceValue;
@@ -978,7 +979,8 @@ public partial class Hud : CanvasLayer
         }
 
         _questName.Text = quest.Name;
-        _questDesc.Text = quest.Desc;
+        _questDescRaw = quest.Desc;
+        _questDesc.Text = KeyText.Expand(_questDescRaw);
         var progress = state.QuestRules.ProgressText(quest, state.Save);
         _questProgress.Text = progress ?? string.Empty;
         _questPanel.Visible = GameSettings.QuestHints;
@@ -1010,6 +1012,7 @@ public partial class Hud : CanvasLayer
         var pad = InputHints.UsingGamepad;
         _ecoSlot.SetKey(InputBindings.Label(InputActions.Eco1, pad) ?? string.Empty, UiPalette.EcoText);
         _potionSlot.SetKey(InputBindings.Label(InputActions.Potion, pad) ?? string.Empty, UiPalette.Dim);
+        _questDesc.Text = KeyText.Expand(_questDescRaw); // POLI-4: a missão cita a tecla do dispositivo em uso
         if (_weaponName is not null)
         {
             UpdateHotbar(GameManager.Instance.State.Save.ClassId);

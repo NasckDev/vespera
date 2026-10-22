@@ -45,7 +45,7 @@ public static class UiText
     public const string ClassSubtitle = "A classe é permanente. Só a arma e os equipamentos da sua classe poderão ser usados.";
     public const string ClassName = "Nome:";
     public const string ClassDifficulty = "Dificuldade: ";
-    public const string ClassUltimate = "Supremo [F]";
+    public const string ClassUltimate = "Supremo [{key:ultimate}]";
     public const string ClassChoose = "Escolher";
     public const string ClassStart = "Começar";
     public const string Back = "Voltar";
@@ -72,11 +72,11 @@ public static class UiText
         ]),
         ("Combate", "Partes, lados e fraquezas",
         [
-            "Ataque com J ou com o clique. Espaço esquiva e deixa você invulnerável por um instante, mas gasta energia.",
+            "Ataque com {keys:attack}. {key:dodge} esquiva e deixa você invulnerável por um instante, mas gasta energia.",
             "Todo monstro tem partes. Algumas ficam na frente (mandíbula, isca, capuz), outras atrás (dorso, barbatanas, corrente). Quebrar uma parte solta um material específico e muda o comportamento do monstro.",
             "Golpes marcados em rosa no chão avisam o ataque: saia da área.",
             "Infusões elementais (Gaspar, na Armaria) fazem sua arma acertar fraquezas: \"Fraqueza!\" causa 50% a mais, \"Resiste\" causa 40% a menos.",
-            "Cada acerto enche a Essência. Com Essência suficiente, Q (ou o botão direito) usa o Eco equipado.",
+            "Cada acerto enche a Essência. Com Essência suficiente, {keys:eco_1} usa o Eco equipado.",
         ]),
         ("Brechas", "Bairros e estações",
         [
@@ -90,7 +90,7 @@ public static class UiText
         [
             "O Selo sobe com a experiência de monstros, chefes e missões: E, D, C, B, A, S, SS, SSS, SSSS e Alvor.",
             "Cada Selo aumenta a vida, libera Brechas mais difíceis e equipamentos melhores. Outros caçadores veem o seu Selo ao lado do nome.",
-            "O Diário (Esc) guia a história principal. Cada missão cumprida dá recompensas e uma conversa nova.",
+            "O Diário (menu {key:pause}) guia a história principal. Cada missão cumprida dá recompensas e uma conversa nova.",
         ]),
         ("Cidade", "Lumeira e seus ofícios",
         [
@@ -102,20 +102,22 @@ public static class UiText
     ];
 
     // --- Controles (CONTROLS, extra.js:178; coluna de gamepad = project.godot, DECISIONS D9) ---
-    public static readonly (string Keys, string Gamepad, string Action)[] Controls =
-    [
-        ("WASD / Setas", "Stick esq. / D-pad", "Mover"),
-        ("Mouse", "Direção do movimento", "Mirar"),
-        ("J, K ou clique", "X / Y", "Atacar (Arco: segure)"),
-        ("Espaço / Shift", "B", "Esquiva"),
-        ("F ou V", "RT", "Golpe Supremo"),
-        ("Q / C", "LT / R3", "Usar Eco"),
-        ("R", "LB", "Beber poção"),
-        ("E", "A", "Interagir, falar, abrir baús"),
-        ("Tab / I", "Back", "Inventário"),
-        ("M", "L3", "Mapa"),
-        ("Esc", "Start", "Menu de pausa"),
-    ];
+    // As teclas de cada linha vêm do Input Map (ControlsScreen), então seguem o remapeamento (POLI-4).
+    public const string ControlMove = "Mover";
+    public const string ControlMovePad = "Stick esq. / D-pad";
+    public const string ControlAim = "Mirar";
+    public const string ControlAimMouse = "Mouse";
+    public const string ControlAimPad = "Analógico dir.";
+    public const string ControlAttack = "Atacar (Arco: segure)";
+    public const string ControlHeavy = "Ataque forte";
+    public const string ControlDodge = "Esquiva";
+    public const string ControlUltimate = "Golpe Supremo";
+    public const string ControlEco = "Usar Eco 1 / 2";
+    public const string ControlPotion = "Beber poção";
+    public const string ControlInteract = "Interagir, falar, abrir baús";
+    public const string ControlInventory = "Inventário";
+    public const string ControlMap = "Mapa";
+    public const string ControlPause = "Menu de pausa";
 
     public const string ControlsTip = "Dica: o Golpe Supremo e o Eco são independentes. Use os dois juntos nas lutas contra chefes.";
 

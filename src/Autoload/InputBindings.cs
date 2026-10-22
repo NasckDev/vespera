@@ -138,6 +138,26 @@ public static class InputBindings
         return pad ? labels.Pad : labels.Keyboard;
     }
 
+    /// <summary>Rótulos de todas as teclas (ou botões) da ação na coluna, a principal primeiro ("J", "Clique").</summary>
+    public static IReadOnlyList<string> Labels(StringName action, bool pad)
+    {
+        var list = new List<string>();
+        if (!InputMap.HasAction(action))
+        {
+            return list;
+        }
+
+        foreach (var e in InputMap.ActionGetEvents(action))
+        {
+            if (IsPad(e) == pad && IsBindable(e) && Describe(e) is { } text && !list.Contains(text))
+            {
+                list.Add(text);
+            }
+        }
+
+        return list;
+    }
+
     /// <summary>Nome curto de um evento de entrada para a UI.</summary>
     public static string? Describe(InputEvent? e) => e switch
     {

@@ -46,7 +46,7 @@ public partial class HelpScreen : FrameScreen
         IReadOnlyList<string> texts = paragraphs.Length > 0 ? paragraphs : ClassParagraphs();
         foreach (var text in texts)
         {
-            _paragraphs.AddChild(Ui.Text(text, UiFonts.Small, UiPalette.Body, wrap: true));
+            _paragraphs.AddChild(Ui.Text(KeyText.Expand(text), UiFonts.Small, UiPalette.Body, wrap: true)); // POLI-4
         }
 
         for (var i = 0; i < _tabs.Count; i++)

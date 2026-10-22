@@ -569,9 +569,10 @@ public sealed class TownServices(GameUi ui)
     {
         var state = State;
         var cls = state.Save.ClassId;
-        return text
+        var filled = text
             .Replace("{name}", state.Save.Name, StringComparison.Ordinal)
             .Replace("{class}", state.EquipmentRules.ClassName(cls), StringComparison.Ordinal)
             .Replace("{ultimate}", Db.Ultimates.TryGetValue(cls, out var ult) ? ult.Name : string.Empty, StringComparison.Ordinal);
+        return KeyText.Expand(filled); // POLI-4: teclas do dispositivo e do remapeamento
     }
 }

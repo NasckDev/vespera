@@ -116,7 +116,7 @@ public partial class BoardScreen : Screen
 
         var quest = state.CurrentQuest;
         _questName.Text = quest?.Name ?? string.Empty;
-        _questDesc.Text = quest?.Desc ?? string.Empty;
+        _questDesc.Text = KeyText.Expand(quest?.Desc ?? string.Empty);
         _questProgress.Text = quest is null ? string.Empty : state.QuestRules.ProgressText(quest, state.Save) ?? string.Empty;
         _questReward.Text = quest is null ? string.Empty : state.QuestRules.RewardText(quest);
     }
