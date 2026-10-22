@@ -10,6 +10,7 @@ using Vespera.UI.Common;
 using Vespera.UI.HudKit;
 using Vespera.UI.Screens;
 using Vespera.UI.Widgets;
+using Vespera.Core.Combat.Ai;
 using Vespera.Core.Rules;
 using Vespera.Core.World;
 using Vespera.World.City;
@@ -2120,6 +2121,99 @@ public partial class SmokeTest
         finally
         {
             running = false;
+            GameSettings.ResetAccessibility();
+            await FleeRun(world, combat);
+        }
+    }
+
+    [SmokeScenario("polimento (qa): legenda '[Perigo …]' com a seta certa aparece para monstro preparando golpe fora da tela e não aparece com a opção desligada", order: 1032)]
+    private async Task PqOffscreenDangerCaption()
+    {
+        var (world, combat) = await CombatSetup();
+        GameManager.Instance.NewGame("Bot", "sword");
+        GameSettings.ResetAccessibility();
+        world.GoMap("forge", 800, 520, instant: true);
+        await WaitMapSettled(world);
+        GameUi.Current?.CloseAll();
+        var hud = Hud.Current!;
+        try
+        {
+            await EnterBrecha(world, combat, spot: 0, theme: "fish", rank: 0);
+            await WaitSeconds(0.5);
+            foreach (var m in combat.Enemies.ToList())
+            {
+                m.Body.ForceState(MonsterState.Dead);
+            }
+
+            var player = FindPlayer()!;
+            Vector2? spot = null;
+            Rect2 view = default;
+            // Procura (por grade) um lugar para o jogador onde exista chão a 215–255 u dele fora da área visível da câmera.
+            for (var gy = 60; gy < world.Map.ImageHeight - 60 && spot is null; gy += 40)
+            {
+                for (var gx = 60; gx < world.Map.ImageWidth - 60 && spot is null; gx += 40)
+                {
+                    if (!world.WalkArea.CanStand(gx, gy))
+                    {
+                        continue;
+                    }
+
+                    player.Teleport(new Vector2(gx, gy));
+                    world.Camera.Snap();
+                    view = new Rect2(world.Camera.GetScreenCenterPosition() - (world.Camera.VisibleSize / 2f), world.Camera.VisibleSize);
+                    for (var r = 212f; r <= 226f && spot is null; r += 2f)
+                    {
+                        for (var a = 0; a < 48 && spot is null; a++)
+                        {
+                            var q = player.GlobalPosition + (Vector2.Right.Rotated(a * Mathf.Tau / 48f) * r);
+                            if (!view.Grow(6f).HasPoint(q) && world.WalkArea.CanStand(q.X, q.Y))
+                            {
+                                spot = q;
+                            }
+                        }
+                    }
+                }
+            }
+
+            Require(spot is not null, "sem ponto andável fora da tela a 212–226 u do jogador");
+            var direction = (spot!.Value - player.GlobalPosition).Normalized();
+            Log.Info($"qa-perigo: jogador {player.GlobalPosition}, monstro em {spot} (direção {direction}), câmera {view}");
+
+            // Um monstro fora da tela, a ~220 u, com o aviso de golpe aceso.
+            var foe = combat.SpawnMonsterNow("fishm", spot.Value, chase: false, invasion: false);
+            await WaitSeconds(1.4); // fim da animação de nascimento
+            var telegraphWhileOff = 0.0;
+            var offDuration = 0.0;
+            // Opção desligada: nenhuma legenda de perigo, mesmo com o monstro telegrafando.
+            for (var i = 0; i < 100 && telegraphWhileOff < 0.5; i++)
+            {
+                foe.Body.ForceState(MonsterState.Wind); // mantém o aviso de golpe aceso (o monstro de verdade só fica ~0,2 s nele)
+                await NextPhysicsFrame();
+                offDuration += 0.016;
+                telegraphWhileOff += CombatDirector.TelegraphActive(foe.Body) ? 0.016 : 0;
+                Require(!hud.Captions.Shown.Any(), $"legenda com a opção desligada: {string.Join(" | ", hud.Captions.Shown)}");
+            }
+
+            Log.Info($"qa-perigo: com a opção desligada o monstro telegrafou {telegraphWhileOff:0.00} s em {offDuration:0.0} s e nenhuma legenda saiu (estado {foe.Body.State})");
+
+            // Ligada: aparece, com a seta do lado certo.
+            GameSettings.Captions = true;
+            var found = string.Empty;
+            for (var i = 0; i < 400 && found.Length == 0; i++)
+            {
+                foe.Body.ForceState(MonsterState.Wind);
+                await NextPhysicsFrame();
+                found = hud.Captions.Shown.FirstOrDefault(t => t.StartsWith("[Perigo", StringComparison.Ordinal)) ?? string.Empty;
+            }
+
+            await Shot("qa-perigo-fora-da-tela");
+            Log.Info($"qa-perigo: legenda mostrada: '{found}'");
+            Require(found.Length > 0, "nenhuma legenda '[Perigo …]' para o monstro preparando golpe fora da tela");
+            var arrow = Math.Abs(direction.X) > Math.Abs(direction.Y) ? (direction.X > 0 ? "→" : "←") : (direction.Y > 0 ? "↓" : "↑");
+            Require(Math.Max(Math.Abs(direction.X), Math.Abs(direction.Y)) < 0.92f || found.Contains(arrow, StringComparison.Ordinal), $"seta '{arrow}' esperada na legenda '{found}'");
+        }
+        finally
+        {
             GameSettings.ResetAccessibility();
             await FleeRun(world, combat);
         }
