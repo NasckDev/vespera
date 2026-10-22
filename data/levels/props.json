@@ -1,0 +1,214 @@
+{
+  "_doc": "Catálogo de objetos. scale = fator próprio do objeto para o mundo dos chãos do GPT (porta pintada ~72 px, caçador 54 px): medida-alvo / altura opaca nativa do PNG (ver _medida). anchor = pé (origem do y-sort) e footprint = [x, y, largura, altura] relativo ao pé, ambos em pixels da textura. light.offset relativo ao pé em px da textura; light.radius e interact.radius em px do mundo.",
+  "banco": {
+    "texture": "res://assets/v2/cenarios/praca/objetos/banco.png",
+    "scale": 1.463,
+    "anchor": [43, 76],
+    "footprint": [-36, -24, 72, 24],
+    "occludes": false,
+    "_medida": "120 px de mundo / 82 px nativos de LARGURA (= banco pintado, 120 x 38 px; não é posto: já pintado)"
+  },
+  "fonte": {
+    "texture": "res://assets/v2/cenarios/praca/objetos/fonte.png",
+    "scale": 0.47,
+    "anchor": [60, 142],
+    "footprint": [-56, -44, 112, 44],
+    "occludes": true,
+    "interact": {
+      "kind": "water",
+      "prompt": "Olhar a fonte",
+      "text": "A água corre azulada, fria como a véspera. Alguém deixou uma moeda de cobre no fundo."
+    },
+    "_medida": "70 px de mundo / 149 px nativos (1,3x o caçador)"
+  },
+  "estatua_anjo": {
+    "texture": "res://assets/v2/cenarios/praca/objetos/estatua_anjo.png",
+    "scale": 0.494,
+    "anchor": [49, 170],
+    "footprint": [-36, -26, 72, 26],
+    "occludes": true,
+    "light": {
+      "offset": [14, -92],
+      "color": "#ffb057",
+      "energy": 0.9,
+      "radius": 70
+    },
+    "interact": {
+      "kind": "flavor",
+      "prompt": "Ler a placa",
+      "text": "\"Aos Guardiões que acenderam a primeira lanterna.\" O musgo cobre o resto dos nomes."
+    },
+    "_medida": "86 px de mundo / 174 px nativos (1,6x o caçador (estátua em pedestal))"
+  },
+  "estandarte": {
+    "texture": "res://assets/v2/cenarios/praca/objetos/estandarte.png",
+    "scale": 0.585,
+    "anchor": [47, 171],
+    "footprint": [-42, -14, 84, 14],
+    "occludes": true,
+    "_medida": "100 px de mundo / 171 px nativos (estandarte pintado ~100 px (não é posto: já pintado))"
+  },
+  "poste_lampiao": {
+    "texture": "res://assets/v2/cenarios/praca/objetos/poste_lampiao.png",
+    "scale": 0.65,
+    "anchor": [28, 177],
+    "footprint": [-14, -14, 28, 14],
+    "occludes": true,
+    "light": {
+      "offset": [27, -103],
+      "color": "#ffb45a",
+      "energy": 1.1,
+      "radius": 140
+    },
+    "interact": {
+      "kind": "lamp",
+      "prompt": "Apagar o lampião",
+      "promptOff": "Acender o lampião",
+      "text": ""
+    },
+    "_medida": "115 px de mundo / 177 px nativos (lampião pintado com pilar ~115 px (não é posto: já pintado))"
+  },
+  "mural": {
+    "texture": "res://assets/v2/cenarios/praca/objetos/mural.png",
+    "scale": 0.477,
+    "anchor": [55, 131],
+    "footprint": [-46, -16, 92, 16],
+    "occludes": true,
+    "interact": {
+      "kind": "board",
+      "prompt": "Ler o mural",
+      "title": "Mural de contratos",
+      "text": "CONTRATO Nº 1 — Rank E\nUma Brecha pequena abriu nos Esgotos do Mercado ao cair da véspera.\nLimpar os Lodos e trazer 5 Fragmentos.\nRecompensa: 40 Lumes.  Falar com Benício, na Guilda."
+    },
+    "_medida": "62 px de mundo / 130 px nativos (1,15x o caçador (quadro de ~2 m))"
+  },
+  "vaso": {
+    "texture": "res://assets/v2/cenarios/praca/objetos/vaso.png",
+    "scale": 0.36,
+    "anchor": [40, 88],
+    "footprint": [-22, -16, 44, 16],
+    "occludes": false,
+    "_medida": "32 px de mundo / 89 px nativos (0,6x o caçador)"
+  },
+  "poco": {
+    "texture": "res://assets/v2/cenarios/praca/objetos/poco.png",
+    "scale": 0.453,
+    "anchor": [80, 159],
+    "footprint": [-62, -42, 124, 42],
+    "occludes": true,
+    "interact": {
+      "kind": "water",
+      "prompt": "Olhar o poço",
+      "text": "Lá embaixo, um eco devolve a sua voz um instante tarde demais."
+    },
+    "_medida": "72 px de mundo / 159 px nativos (1,33x o caçador)"
+  },
+  "arbusto": {
+    "texture": "res://assets/v2/cenarios/praca/objetos/arbusto.png",
+    "scale": 0.4,
+    "anchor": [43, 75],
+    "footprint": [-30, -18, 60, 18],
+    "occludes": false,
+    "_medida": "30 px de mundo / 75 px nativos (0,55x o caçador)"
+  },
+  "cipreste": {
+    "texture": "res://assets/v2/cenarios/praca/objetos/cipreste.png",
+    "scale": 0.598,
+    "anchor": [23, 184],
+    "footprint": [-14, -12, 28, 12],
+    "occludes": true,
+    "_medida": "110 px de mundo / 184 px nativos (2x o caçador)"
+  },
+  "carrinho_flores": {
+    "texture": "res://assets/v2/cenarios/praca/objetos/carrinho_flores.png",
+    "scale": 0.377,
+    "anchor": [88, 128],
+    "footprint": [-70, -34, 140, 34],
+    "occludes": true,
+    "_medida": "49 px de mundo / 130 px nativos (0,9x o caçador)"
+  },
+  "lanterna_chao": {
+    "texture": "res://assets/v2/cenarios/praca/objetos/lanterna_chao.png",
+    "scale": 0.338,
+    "anchor": [19, 80],
+    "footprint": [-11, -10, 22, 10],
+    "occludes": false,
+    "light": {
+      "offset": [0, -32],
+      "color": "#ffa24a",
+      "energy": 0.8,
+      "radius": 70
+    },
+    "interact": {
+      "kind": "lamp",
+      "prompt": "Apagar a lanterna",
+      "promptOff": "Acender a lanterna",
+      "text": ""
+    },
+    "_medida": "27 px de mundo / 80 px nativos (0,5x o caçador)"
+  },
+  "barraca_lona": {
+    "texture": "res://assets/v2/cenarios/praca/objetos/barraca_lona.png",
+    "scale": 0.4,
+    "anchor": [112, 205],
+    "footprint": [-100, -64, 200, 64],
+    "occludes": true,
+    "light": {
+      "offset": [-60, -112],
+      "color": "#ffb45a",
+      "energy": 0.7,
+      "radius": 80
+    },
+    "_medida": "86 px de mundo / 215 px nativos (1,6x o caçador)"
+  },
+  "barraca_listrada": {
+    "texture": "res://assets/v2/cenarios/praca/objetos/barraca_listrada.png",
+    "scale": 0.424,
+    "anchor": [97, 200],
+    "footprint": [-90, -60, 180, 60],
+    "occludes": true,
+    "light": {
+      "offset": [-84, -92],
+      "color": "#ffb45a",
+      "energy": 0.7,
+      "radius": 80
+    },
+    "_medida": "86 px de mundo / 203 px nativos (1,6x o caçador)"
+  },
+  "caixote": {
+    "texture": "res://assets/v2/cenarios/praca/objetos/caixote.png",
+    "scale": 0.258,
+    "anchor": [46, 92],
+    "footprint": [-40, -34, 80, 34],
+    "occludes": false,
+    "_medida": "24 px de mundo / 93 px nativos (0,45x o caçador)"
+  },
+  "barril": {
+    "texture": "res://assets/v2/cenarios/praca/objetos/barril.png",
+    "scale": 0.492,
+    "anchor": [25, 62],
+    "footprint": [-20, -18, 40, 18],
+    "occludes": false,
+    "_medida": "30 px de mundo / 61 px nativos (0,55x o caçador)"
+  },
+  "lanterna_bronze": {
+    "texture": "res://assets/v2/cenarios/praca/recortes/lanterna_bronze.png",
+    "scale": 0.279,
+    "anchor": [142, 483],
+    "footprint": [-110, -30, 220, 36],
+    "occludes": true,
+    "light": {
+      "offset": [0, -150],
+      "color": "#ffb04a",
+      "energy": 1.1,
+      "radius": 230
+    },
+    "interact": {
+      "kind": "flavor",
+      "prompt": "Olhar a Lanterna",
+      "radius": 60,
+      "text": "A Lanterna da Praça. Dizem que ela nunca apagou, nem no Ano Sem Alvor."
+    },
+    "_medida": "135 px de mundo / 484 px nativos (2,5x o caçador; base de ~80 px cabe no disco de ~295 px)"
+  }
+}
