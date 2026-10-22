@@ -93,8 +93,10 @@ public class WalkPathfinderTest
     [TestCase]
     public void CoreBossAndExitPortalAreReachable()
     {
+        // O jogo usa a máscara redesenhada (walk_core.png, conferida por tools/maps/layout.py check e pelo smoke);
+        // as formas da v2 continuam no maps.json como referência da arena e precisam continuar coerentes.
         var core = Real.Value["core"];
-        var area = core.CreateShapeWalkArea();
+        var area = new ShapeWalkArea(core.ImageWidth, core.ImageHeight, core.Walk, core.Block);
         AssertThat(WalkPathfinder.FindPathNear(area, core.Spawn, core.BossDefault!.Value, 26)).IsNotNull();
         AssertThat(WalkPathfinder.FindPathNear(area, core.Spawn, core.ExitDefault!.Value, 26)).IsNotNull(); // r do portal de saída
     }

@@ -193,5 +193,53 @@
       ],
       "eliteChance": 0.5
     }
+  },
+  "world": {
+    "characterScale": 1.75,
+    "propScale": 1.25,
+    "calibration": {
+      "doorHeight": 64,
+      "playerToDoor": 0.875,
+      "spriteHeight": 32.0,
+      "paintedBarrelWidth": 25.5,
+      "barrelSpriteWidth": 20.2
+    },
+    "movement": {
+      "accelSeconds": 0.06,
+      "decelSeconds": 0.05
+    },
+    "occlusion": {
+      "coveredAlpha": 0.4,
+      "fadeRate": 10
+    },
+    "props": {
+      "hp": {
+        "barrel": 30,
+        "crate": 20,
+        "crate2": 18,
+        "sack": 10,
+        "urn": 10
+      },
+      "fallbackHp": 12
+    },
+    "flower": {
+      "material": "erva",
+      "amount": 1,
+      "regrowSeconds": 90
+    },
+    "fishing": {
+      "material": "peixe",
+      "biteDelay": [
+        1.2,
+        2.8
+      ],
+      "zoneWidth": 0.24,
+      "sweepSeconds": 1.1,
+      "maxSweeps": 3
+    },
+    "fallbackAttack": {
+      "range": 30,
+      "arc": 2.1
+    }
   }
 }

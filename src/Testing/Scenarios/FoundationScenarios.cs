@@ -16,7 +16,8 @@ public partial class SmokeTest
         Require(FindPlayer() is not null, "Player não encontrado no mundo");
         Require(world.MapId == "guild", $"novo jogo deve começar na Guilda, está em {world.MapId}");
         Require(FindPlayer()!.GlobalPosition.DistanceTo(new Vector2(250, 560)) < 1f, $"início da v2 é (250, 560), está em {FindPlayer()!.GlobalPosition}");
-        Require(Find<ShapeCollision>() is not null, "ShapeCollision não encontrado na Guilda");
+        // A Guilda usa a máscara redesenhada sobre a arte (walk_guild.png, células de 4 u), não mais as formas da v2.
+        Require(Find<MaskCollision>() is { CellSize: 4 }, "MaskCollision (walk_guild.png, célula 4) não encontrado na Guilda");
         await Shot("mundo-inicio");
     }
 

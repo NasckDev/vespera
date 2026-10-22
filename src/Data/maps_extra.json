@@ -1,0 +1,286 @@
+{
+ "_doc": "Mapas candidatos (sem colisão). Gerado por tools/maps/extra_maps.py. role=extraRoom: sala extra de um mapa de Brecha existente (map); role=brecha: sala de uma Brecha nova 6–10 (nomes da prancha 52). Para jogar, crie layout + colisão com tools/maps/layout.py e mova para maps.json.",
+ "brechas": {
+  "6": "Biblioteca Submersa",
+  "7": "Torre Relógio Mecânica",
+  "8": "Labirinto Alagado das Catacumbas",
+  "9": "Templo em Ruínas",
+  "10": "Observatório Astral"
+ },
+ "maps": [
+  {
+   "id": "extra_fish2_b",
+   "image": "res://assets/maps/extra/extra_fish2_b/map_extra_fish2_b.png",
+   "imageSize": [
+    1672,
+    941
+   ],
+   "source": "41",
+   "role": "extraRoom",
+   "map": "fish2",
+   "collision": false,
+   "note": "Variação do Mercado de Peixes: canais, barcos e barracas"
+  },
+  {
+   "id": "extra_crypt2_b",
+   "image": "res://assets/maps/extra/extra_crypt2_b/map_extra_crypt2_b.png",
+   "imageSize": [
+    1672,
+    941
+   ],
+   "source": "42",
+   "role": "extraRoom",
+   "map": "crypt2",
+   "collision": false,
+   "note": "Variação do Cemitério das Velas: túmulos e brecha violeta"
+  },
+  {
+   "id": "extra_mine_b",
+   "image": "res://assets/maps/extra/extra_mine_b/map_extra_mine_b.png",
+   "imageSize": [
+    1672,
+    941
+   ],
+   "source": "43",
+   "role": "extraRoom",
+   "map": "mine",
+   "collision": false,
+   "note": "Variação das Minas da Forja: rios de lava e pontes"
+  },
+  {
+   "id": "extra_garden_b",
+   "image": "res://assets/maps/extra/extra_garden_b/map_extra_garden_b.png",
+   "imageSize": [
+    1672,
+    941
+   ],
+   "source": "44",
+   "role": "extraRoom",
+   "map": "garden",
+   "collision": false,
+   "note": "Variação da Estufa Silvestre: estufas e jardins"
+  },
+  {
+   "id": "extra_cath_b",
+   "image": "res://assets/maps/extra/extra_cath_b/map_extra_cath_b.png",
+   "imageSize": [
+    1672,
+    941
+   ],
+   "source": "45",
+   "role": "extraRoom",
+   "map": "cath",
+   "collision": false,
+   "note": "Variação da Catedral do Arauto: nave, cristais magenta"
+  },
+  {
+   "id": "extra_garden_c",
+   "image": "res://assets/maps/extra/extra_garden_c/map_extra_garden_c.png",
+   "imageSize": [
+    886,
+    887
+   ],
+   "source": "66R",
+   "role": "extraRoom",
+   "map": "garden",
+   "collision": false,
+   "note": "Estufas de vidro em volta de tanques e cascatas"
+  },
+  {
+   "id": "brecha6_library",
+   "image": "res://assets/maps/extra/brecha6_library/map_brecha6_library.png",
+   "imageSize": [
+    1672,
+    941
+   ],
+   "source": "46",
+   "role": "brecha",
+   "brecha": 6,
+   "brechaName": "Biblioteca Submersa",
+   "collision": false,
+   "note": "Salas alagadas sobre o vazio, água azul"
+  },
+  {
+   "id": "brecha6_library_b",
+   "image": "res://assets/maps/extra/brecha6_library_b/map_brecha6_library_b.png",
+   "imageSize": [
+    1023,
+    887
+   ],
+   "source": "60L",
+   "role": "brecha",
+   "brecha": 6,
+   "brechaName": "Biblioteca Submersa",
+   "collision": false,
+   "note": "Galerias alagadas com tanques e escadarias"
+  },
+  {
+   "id": "brecha7_clock",
+   "image": "res://assets/maps/extra/brecha7_clock/map_brecha7_clock.png",
+   "imageSize": [
+    1672,
+    941
+   ],
+   "source": "47",
+   "role": "brecha",
+   "brecha": 7,
+   "brechaName": "Torre Relógio Mecânica",
+   "collision": false,
+   "note": "Mostrador gigante no centro, engrenagens e vitrais azuis"
+  },
+  {
+   "id": "brecha7_clock_b",
+   "image": "res://assets/maps/extra/brecha7_clock_b/map_brecha7_clock_b.png",
+   "imageSize": [
+    751,
+    887
+   ],
+   "source": "60R",
+   "role": "brecha",
+   "brecha": 7,
+   "brechaName": "Torre Relógio Mecânica",
+   "collision": false,
+   "note": "Câmara do mecanismo com engrenagens expostas"
+  },
+  {
+   "id": "brecha7_clock_c",
+   "image": "res://assets/maps/extra/brecha7_clock_c/map_brecha7_clock_c.png",
+   "imageSize": [
+    894,
+    887
+   ],
+   "source": "64L",
+   "role": "brecha",
+   "brecha": 7,
+   "brechaName": "Torre Relógio Mecânica",
+   "collision": false,
+   "note": "Torre com relógio central, sino e cascatas azuis"
+  },
+  {
+   "id": "brecha8_catacombs",
+   "image": "res://assets/maps/extra/brecha8_catacombs/map_brecha8_catacombs.png",
+   "imageSize": [
+    1672,
+    941
+   ],
+   "source": "48",
+   "role": "brecha",
+   "brecha": 8,
+   "brechaName": "Labirinto Alagado das Catacumbas",
+   "collision": false,
+   "note": "Catacumbas alagadas em verde-água, câmara circular"
+  },
+  {
+   "id": "brecha8_catacombs_b",
+   "image": "res://assets/maps/extra/brecha8_catacombs_b/map_brecha8_catacombs_b.png",
+   "imageSize": [
+    989,
+    887
+   ],
+   "source": "62L",
+   "role": "brecha",
+   "brecha": 8,
+   "brechaName": "Labirinto Alagado das Catacumbas",
+   "collision": false,
+   "note": "Corredores alagados com fontes"
+  },
+  {
+   "id": "brecha8_catacombs_c",
+   "image": "res://assets/maps/extra/brecha8_catacombs_c/map_brecha8_catacombs_c.png",
+   "imageSize": [
+    785,
+    887
+   ],
+   "source": "62R",
+   "role": "brecha",
+   "brecha": 8,
+   "brechaName": "Labirinto Alagado das Catacumbas",
+   "collision": false,
+   "note": "Salão central alagado com cascatas"
+  },
+  {
+   "id": "brecha8_catacombs_d",
+   "image": "res://assets/maps/extra/brecha8_catacombs_d/map_brecha8_catacombs_d.png",
+   "imageSize": [
+    888,
+    887
+   ],
+   "source": "66L",
+   "role": "brecha",
+   "brecha": 8,
+   "brechaName": "Labirinto Alagado das Catacumbas",
+   "collision": false,
+   "note": "Canais com vitórias-régias e cascatas"
+  },
+  {
+   "id": "brecha9_temple",
+   "image": "res://assets/maps/extra/brecha9_temple/map_brecha9_temple.png",
+   "imageSize": [
+    1672,
+    941
+   ],
+   "source": "49",
+   "role": "brecha",
+   "brecha": 9,
+   "brechaName": "Templo em Ruínas",
+   "collision": false,
+   "note": "Templo claro com estátuas, fontes e jardins"
+  },
+  {
+   "id": "brecha9_temple_b",
+   "image": "res://assets/maps/extra/brecha9_temple_b/map_brecha9_temple_b.png",
+   "imageSize": [
+    880,
+    887
+   ],
+   "source": "64R",
+   "role": "brecha",
+   "brecha": 9,
+   "brechaName": "Templo em Ruínas",
+   "collision": false,
+   "note": "Nave em ruínas com tapete vermelho e fogo ritual"
+  },
+  {
+   "id": "brecha10_astral",
+   "image": "res://assets/maps/extra/brecha10_astral/map_brecha10_astral.png",
+   "imageSize": [
+    1672,
+    941
+   ],
+   "source": "50",
+   "role": "brecha",
+   "brecha": 10,
+   "brechaName": "Observatório Astral",
+   "collision": false,
+   "note": "Plataformas violeta sobre o vazio, observatório no alto"
+  },
+  {
+   "id": "brecha10_astral_b",
+   "image": "res://assets/maps/extra/brecha10_astral_b/map_brecha10_astral_b.png",
+   "imageSize": [
+    979,
+    887
+   ],
+   "source": "58L",
+   "role": "brecha",
+   "brecha": 10,
+   "brechaName": "Observatório Astral",
+   "collision": false,
+   "note": "Plataformas flutuantes ligadas por pontes"
+  },
+  {
+   "id": "brecha10_astral_c",
+   "image": "res://assets/maps/extra/brecha10_astral_c/map_brecha10_astral_c.png",
+   "imageSize": [
+    795,
+    887
+   ],
+   "source": "58R",
+   "role": "brecha",
+   "brecha": 10,
+   "brechaName": "Observatório Astral",
+   "collision": false,
+   "note": "Anel de salas em volta de um poço de estrelas"
+  }
+ ]
+}

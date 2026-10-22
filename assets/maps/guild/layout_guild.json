@@ -1,10 +1,77 @@
 {
   "cell": 4,
   "base": "shapes",
-  "walk": [],
-  "block": [],
-  "occluders": [],
-  "props": [],
-  "chests": [],
-  "decor": []
+  "walk": [
+    {"rect": [52, 196, 396, 70], "note": "mezanino da recepção"},
+    {"rect": [137, 260, 216, 92], "note": "escadaria central"},
+    {"rect": [48, 290, 394, 352], "note": "salão de treino"},
+    {"rect": [216, 636, 60, 116], "note": "porta de entrada"},
+    {"rect": [186, 744, 116, 100], "note": "degraus da entrada"},
+    {"rect": [206, 840, 88, 56], "note": "saída para a Rua da Forja"}
+  ],
+  "block": [
+    {"rect": [52, 228, 17, 17], "note": "baú escondido (sólido no motor)"},
+    {"rect": [0, 0, 52, 896], "note": "parede oeste"},
+    {"rect": [442, 0, 58, 896], "note": "parede leste"},
+    {"rect": [48, 150, 90, 48], "note": "estante de frascos"},
+    {"rect": [130, 150, 34, 42], "note": "vaso ao lado do balcão"},
+    {"rect": [163, 170, 169, 71], "note": "balcão da Odete"},
+    {"rect": [330, 150, 30, 48], "note": "castiçal e vaso"},
+    {"rect": [358, 150, 90, 52], "note": "mural de contratos"},
+    {"poly": [[48, 247], [124, 272], [140, 272], [140, 296], [48, 296]], "note": "borda do mezanino (oeste)"},
+    {"poly": [[452, 247], [372, 272], [352, 272], [352, 296], [452, 296]], "note": "borda do mezanino (leste)"},
+    {"rect": [118, 268, 22, 100], "note": "pilar da escada (oeste)"},
+    {"rect": [352, 268, 21, 100], "note": "pilar da escada (leste)"},
+    {"rect": [48, 280, 38, 192], "note": "prateleiras e correntes (oeste)"},
+    {"rect": [84, 296, 34, 82], "note": "lampião de mesa"},
+    {"rect": [84, 380, 30, 50], "note": "banqueta com ferramentas"},
+    {"rect": [48, 472, 54, 106], "note": "armário de lanças"},
+    {"rect": [48, 576, 54, 66], "note": "caixote (sudoeste)"},
+    {"rect": [372, 290, 30, 68], "note": "tocha de parede"},
+    {"rect": [398, 280, 50, 178], "note": "caixotes e estandarte (leste)"},
+    {"rect": [414, 462, 34, 42], "note": "barril"},
+    {"rect": [393, 498, 55, 76], "note": "caixote alto"},
+    {"rect": [379, 592, 69, 50], "note": "baú da Guilda"},
+    {"rect": [128, 624, 56, 18], "note": "pilar sul (oeste)"},
+    {"rect": [308, 624, 56, 18], "note": "pilar sul (leste)"},
+    {"rect": [48, 642, 168, 110], "note": "parede sul (oeste)"},
+    {"rect": [276, 642, 170, 110], "note": "parede sul (leste)"},
+    {"rect": [182, 752, 26, 18], "note": "base da tocha (oeste)"},
+    {"rect": [284, 752, 26, 18], "note": "base da tocha (leste)"},
+    {"rect": [0, 752, 186, 144], "note": "mureta da escada (oeste)"},
+    {"rect": [302, 752, 198, 144], "note": "mureta da escada (leste)"},
+    {"rect": [144, 466, 22, 16], "note": "base do boneco de treino 1"},
+    {"rect": [329, 466, 22, 16], "note": "base do boneco de treino 2"},
+    {"rect": [162, 556, 22, 16], "note": "base do boneco de treino 3"},
+    {"rect": [314, 556, 22, 16], "note": "base do boneco de treino 4"}
+  ],
+  "occluders": [
+    {"poly": [[146, 417], [162, 417], [163, 432], [177, 432], [177, 444], [163, 444], [163, 458], [161, 458], [161, 465], [165, 465], [165, 482], [144, 482], [144, 465], [149, 465], [149, 458], [145, 458], [145, 444], [132, 444], [132, 432], [145, 432]], "baseY": 481, "sway": false, "note": "boneco de treino 1"},
+    {"poly": [[331, 417], [347, 417], [348, 432], [362, 432], [362, 444], [348, 444], [348, 458], [346, 458], [346, 465], [350, 465], [350, 482], [329, 482], [329, 465], [334, 465], [334, 458], [330, 458], [330, 444], [317, 444], [317, 432], [330, 432]], "baseY": 481, "sway": false, "note": "boneco de treino 2"},
+    {"poly": [[164, 507], [180, 507], [181, 522], [195, 522], [195, 534], [181, 534], [181, 548], [179, 548], [179, 555], [183, 555], [183, 572], [162, 572], [162, 555], [167, 555], [167, 548], [163, 548], [163, 534], [150, 534], [150, 522], [163, 522]], "baseY": 571, "sway": false, "note": "boneco de treino 3"},
+    {"poly": [[316, 507], [332, 507], [333, 522], [347, 522], [347, 534], [333, 534], [333, 548], [331, 548], [331, 555], [335, 555], [335, 572], [314, 572], [314, 555], [319, 555], [319, 548], [315, 548], [315, 534], [302, 534], [302, 522], [315, 522]], "baseY": 571, "sway": false, "note": "boneco de treino 4"},
+    {"poly": [[118, 266], [140, 266], [140, 368], [118, 368]], "baseY": 367, "sway": false, "note": "pilar da escada (oeste)"},
+    {"poly": [[352, 266], [373, 266], [373, 368], [352, 368]], "baseY": 367, "sway": false, "note": "pilar da escada (leste)"},
+    {"poly": [[186, 664], [206, 664], [206, 706], [201, 706], [201, 738], [208, 738], [208, 768], [182, 768], [182, 738], [191, 738], [191, 706], [186, 706]], "baseY": 767, "sway": false, "note": "tocha da entrada (oeste)"},
+    {"poly": [[288, 664], [308, 664], [308, 706], [303, 706], [303, 738], [310, 738], [310, 768], [284, 768], [284, 738], [293, 738], [293, 706], [288, 706]], "baseY": 767, "sway": false, "note": "tocha da entrada (leste)"},
+    {"poly": [[54, 474], [102, 474], [102, 578], [54, 578]], "baseY": 577, "sway": false, "note": "armário de lanças"}
+  ],
+  "water": [],
+  "ambient": [
+    {"kind": "crowd", "x": 250, "y": 430, "r": 210, "note": "salão de treino"},
+    {"kind": "fire", "x": 246, "y": 712, "r": 70, "note": "tochas da entrada"}
+  ],
+  "props": [
+    {"kind": "crate", "x": 116, "y": 636, "note": "depósito do canto sudoeste"},
+    {"kind": "crate2", "x": 112, "y": 612, "note": "depósito do canto sudoeste"}
+  ],
+  "chests": [
+    {"x": 60, "y": 236, "tier": 0, "note": "canto sudoeste do mezanino, encostado na parede e longe da estante (pé bloqueado na colisão)"}
+  ],
+  "decor": [
+    {"kind": "inspect", "x": 92, "y": 214, "r": 22, "label": "Examinar a estante", "text": "Óleo de lanterna, pavios de reserva e um caderno de turnos. Na margem, alguém escreveu: \"quem volta sem a Lanterna paga o óleo dos outros\"."},
+    {"kind": "inspect", "x": 155, "y": 494, "r": 20, "label": "Examinar o boneco de treino", "text": "Palha e couro remendados mil vezes. Ninguém conta quantos golpes ele já levou; conta-se quantos caçadores voltaram depois de treinar aqui."},
+    {"kind": "inspect", "x": 372, "y": 620, "r": 22, "label": "Examinar o baú da Guilda", "text": "Trancado com o selo dos Lanterneiros. Guarda as lanternas resgatadas até os donos virem buscá-las."},
+    {"kind": "inspect", "x": 110, "y": 520, "r": 20, "label": "Examinar o armário de lanças", "text": "Lanças antigas, do tempo em que a Guilda ainda saía em patrulha. As pontas estão cegas; as hastes, gastas de tanta mão."}
+  ]
 }

@@ -173,6 +173,23 @@ public partial class EventBus : Node
     [Signal]
     public delegate void AbilityCooldownChangedEventHandler(string abilityId, float remaining, float total);
 
+    // --- Combate (frente B1; docs/design/api-combate.md) ---
+    /// <summary>Combate → HUD: item coletado (<c>kind</c> = lume, mat, gear, potion, eco, lantern, mylantern; id do item ou "").</summary>
+    [Signal]
+    public delegate void LootCollectedEventHandler(string kind, string itemId, int amount);
+
+    /// <summary>Combate → HUD: parte de monstro quebrou (barra do chefe mostra "— quebrada").</summary>
+    [Signal]
+    public delegate void MonsterPartBrokenEventHandler(string monsterId, string partId, string partName, bool boss);
+
+    /// <summary>Combate e Cidade → HUD: nota curta lateral da v2 (<c>note</c>: "Sem poções…", "+1 Presa Rubra", "A Casa X fechou a Brecha"). <paramref name="icon"/> = chave do atlas.</summary>
+    [Signal]
+    public delegate void NoteRequestedEventHandler(string message, string icon);
+
+    /// <summary>Combate → todos: o chefe da Brecha caiu (antes do portal de saída).</summary>
+    [Signal]
+    public delegate void BossDefeatedEventHandler(string bossId);
+
     /// <summary>Qualquer sistema → UI: pergunta com opções (ex.: "Fugir para Lumeira?"). A UI responde com <see cref="ChoiceMade"/>.</summary>
     [Signal]
     public delegate void ChoiceRequestedEventHandler(string requestId, string speaker, string text, string[] options);
@@ -184,6 +201,36 @@ public partial class EventBus : Node
     /// <summary>UI → todos: jogo pausado/despausado (o relógio do dia para; combate congela).</summary>
     [Signal]
     public delegate void PauseChangedEventHandler(bool paused);
+
+    // --- Motor do mundo (frente B4a; docs/design/api-mundo.md) ---
+    /// <summary>Mundo → todos: um quebrável do layout quebrou (<paramref name="kind"/> = barrel, crate, crate2, sack, urn).</summary>
+    [Signal]
+    public delegate void PropBrokenEventHandler(string mapId, string kind, Vector2 position);
+
+    /// <summary>Mundo → todos: um baú do layout abriu (o saque já foi dado).</summary>
+    [Signal]
+    public delegate void ChestOpenedEventHandler(string mapId, int tier, Vector2 position);
+
+    /// <summary>
+    /// Mundo → todos: o jogador usou uma decoração do layout (<paramref name="kind"/> = lamp, flower, boat, fishing, sign,
+    /// bench, fountain, stall, inspect; <paramref name="index"/> = posição na lista <c>decor</c>). Missões e conquistas escutam aqui.
+    /// </summary>
+    [Signal]
+    public delegate void WorldObjectUsedEventHandler(string kind, string mapId, int index);
+    // --- Cidade viva (frente B2, docs/design/api-cidade.md) ---
+    /// <summary>
+    /// Cidade → Interface (log de chat, opcional): mensagem do chat simulado de Lumeira (spec 01 §6.3). A cidade já mostra
+    /// o balão sobre o caçador quando ele está no mapa. <paramref name="rank"/> = id do Selo ("C") ou "—".
+    /// </summary>
+    [Signal]
+    public delegate void ChatMessageEventHandler(string who, string rank, string text);
+
+    // NoteRequested(text, icon) também é emitido pela Cidade ("A Casa da Maré fechou a Brecha do Mercado de Peixes"):
+    // as duas frentes criaram o mesmo sinal com a mesma assinatura; fica um só, no bloco do Combate.
+
+    /// <summary>Cidade → todos: uma Brecha mudou de estado (int de <c>Vespera.Core.World.BrechaStatus</c>). Para o Mural e a lista do HUD.</summary>
+    [Signal]
+    public delegate void BrechaStatusChangedEventHandler(int brechaId, int status);
 
     // --- UI ---
     /// <summary>Texto do prompt de interação ("" esconde).</summary>
@@ -200,9 +247,14 @@ public partial class EventBus : Node
     [Signal]
     public delegate void ScreenRequestedEventHandler(string screenId);
 
-    /// <summary>Mensagem curta e passageira no centro da tela (rank up, item, aviso).</summary>
+    /// <summary>Mensagem curta e passageira no centro da tela (rank up, item, aviso). Com quebra de linha: "título" + linha nova + "subtítulo".</summary>
     [Signal]
     public delegate void ToastRequestedEventHandler(string message);
+
+    // --- Interface (frente B3; docs/design/api-interface.md) ---
+    /// <summary>UI → Combate: o jogador pagou a Odete pelo resgate da Lanterna; a volta acontece em <paramref name="delaySeconds"/> (LanternRules.OdeteRescueDelay).</summary>
+    [Signal]
+    public delegate void LanternRescueRequestedEventHandler(double delaySeconds);
 
     public static EventBus Instance { get; private set; } = null!;
 

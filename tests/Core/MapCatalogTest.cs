@@ -35,7 +35,9 @@ public class MapCatalogTest
         AssertThat(guild.Name).IsEqual("Guilda dos Lanterneiros");
         AssertThat(guild.Indoor).IsTrue();
         AssertThat(guild.Hd).IsFalse();
-        AssertThat(guild.HasMask).IsFalse();
+        // Colisão redesenhada sobre a arte (tools/maps/layout.py): máscara de células de 4 u; walk/block da v2 ficam como base.
+        AssertThat(guild.Mask).IsEqual("res://assets/maps/guild/walk_guild.png");
+        AssertThat(guild.MaskCell).IsEqual(4);
         AssertThat(guild.ImageWidth).IsEqual(500);
         AssertThat(guild.ImageHeight).IsEqual(896);
         AssertThat(guild.Spawn).IsEqual(new MapPoint(250, 560));
@@ -56,12 +58,13 @@ public class MapCatalogTest
         var forge = Catalog["forge"];
         AssertThat(forge.Hd).IsTrue();
         AssertThat(forge.Outdoor).IsTrue();
-        AssertThat(forge.Mask).IsEqual("res://assets/maps/city/mask_city.png");
-        AssertThat(forge.MaskCell).IsEqual(8);
+        AssertThat(forge.Mask).IsEqual("res://assets/maps/city/walk_forge.png"); // layout_forge.json (B4b)
+        AssertThat(forge.MaskCell).IsEqual(4);
         AssertThat(forge.LightsKey).IsEqual("city");
         AssertThat(forge.Spawn).IsEqual(new MapPoint(1500, 250));
         AssertThat(forge.Exits[0]).IsEqual(new MapExit(new MapRect(250, 268, 40, 25), "inn", new MapPoint(250, 760)));
         AssertThat(forge.Exits[1]).IsEqual(new MapExit(new MapRect(1460, 128, 80, 22), "guild", new MapPoint(250, 840)));
+        AssertThat(forge.Exits.Select(e => e.To).ToArray()).IsEqual(new[] { "inn", "guild", "shop_arm", "shop_rel", "shop_alq", "shop_mag" });
         AssertThat(forge.PortalSpots.Count).IsEqual(2);
         AssertThat(forge.PortalSpots[1]).IsEqual(new MapPoint(1174, 534));
         AssertThat(forge.Interactables.Count).IsEqual(4);
@@ -89,6 +92,9 @@ public class MapCatalogTest
         {
             AssertThat(Catalog[id].Dungeon).IsTrue();
             AssertThat(Catalog[id].Exits.Count).IsEqual(0);
+            // Colisão redesenhada sobre a arte (tools/maps/layout.py, frente B4c): máscara de células de 4 u.
+            AssertThat(Catalog[id].Mask).IsEqual($"res://assets/maps/{id}/walk_{id}.png");
+            AssertThat(Catalog[id].MaskCell).IsEqual(4);
         }
     }
 
@@ -102,16 +108,36 @@ public class MapCatalogTest
     }
 
     [TestCase]
-    public void ShopsAreIndoorShopsThatExitToTheOficios()
+    public void ShopsAreIndoorShopsThatExitToTheirStreetDoor()
     {
+        var forge = Catalog["forge"];
         foreach (var id in new[] { "shop_arm", "shop_mag", "shop_alq", "shop_rel" })
         {
             var shop = Catalog[id];
             AssertThat(shop.Shop).IsTrue();
             AssertThat(shop.Indoor).IsTrue();
             AssertThat(shop.Exits.Single().To).IsEqual("forge");
-            AssertThat(shop.Exits.Single().At).IsEqual(new MapPoint(305, 790));
             AssertThat(shop.Interactables.Count).IsEqual(1);
+
+            // Sair da loja põe o jogador na frente da porta da rua que leva a ela (B4b), não na placa dos Ofícios.
+            var door = forge.Exits.Single(e => e.To == id).Area;
+            var at = shop.Exits.Single().At;
+            var dx = at.X - (door.X + (door.Width / 2));
+            var dy = at.Y - (door.Y + (door.Height / 2));
+            AssertThat(MathF.Sqrt((dx * dx) + (dy * dy)) < 40f).IsTrue();
+        }
+    }
+
+    [TestCase]
+    public void InteriorsUseTheWalkMasksRedrawnOverTheArt()
+    {
+        // B4d: Guilda, Estalagem e lojas têm a colisão redesenhada (tools/maps/layout.py) em células de 4 u.
+        foreach (var id in new[] { "guild", "inn", "shop_arm", "shop_mag", "shop_alq", "shop_rel" })
+        {
+            var map = Catalog[id];
+            var dir = map.Image[..map.Image.LastIndexOf('/')];
+            AssertThat(map.Mask).OverrideFailureMessage($"{id}: máscara").IsEqual($"{dir}/walk_{id}.png");
+            AssertThat(map.MaskCell).OverrideFailureMessage($"{id}: célula").IsEqual(4);
         }
     }
 

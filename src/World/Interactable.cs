@@ -37,6 +37,10 @@ public partial class Interactable : Area2D
     [Export]
     public float Radius { get; set; }
 
+    /// <summary>Altura (u) acima do ponto em que o prompt com ícone aparece (v2: <c>y − 44</c>, <c>render.js:228</c>).</summary>
+    [Export]
+    public float PromptHeight { get; set; } = 44f;
+
     public override void _Ready()
     {
         CollisionLayer = InteractablesLayer;

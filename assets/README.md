@@ -21,7 +21,7 @@ continua Nearest para a UI pixel; o mundo liga Linear nos próprios nós.
 
 | Arquivo | Conteúdo |
 |---|---|
-| `maps/city/` | Rua da Forja (`map_city.png` 1672×941 + `mask_city.png` 209×117) |
+| `maps/city/` | Rua da Forja (`map_city.png` 1672×941; colisão em `walk_forge.png` gerada de `layout_forge.json`; `mask_city.png` 209×117 da v2 só como referência) |
 | `maps/fish2/`, `maps/crypt2/`, `maps/mine/`, `maps/garden/`, `maps/cath/` | 5 Brechas hd (mapa 1672×941 + máscara 209×117) |
 | `maps/guild/`, `maps/inn/`, `maps/core/` | Guilda, Estalagem, Câmara do Núcleo (colisão por formas em `src/Data/maps.json`) |
 | `maps/shops/` | 4 lojas da Rua dos Ofícios (Armaria, Feitiços, Alquimia, Relíquias) |
@@ -30,6 +30,15 @@ continua Nearest para a UI pixel; o mundo liga Linear nos próprios nós.
 | `sprites/enemies/*.png` + `meta.json` | 20 monstros dos temas Cemitério, Minas, Estufa e Catedral (`_f`, `_a`, `_d`, alguns `_s`), `meta.json` = `[w, h, k]` |
 | `sprites/items/d_*.png` | 36 ícones de materiais |
 | `sprites/ui/` | `keyart.png` (título), `lumeira_map.png` (história), `logo.png` |
+
+## Leva do dono de 2026-10-20 (frente B5)
+
+| Arquivo | Conteúdo |
+|---|---|
+| `sprites/objects/<tema>/*.png` | 445 objetos do mundo em 9 temas, recortados das folhas de `docs/brand/source/objects/`; tamanho, pé, footprint e luz em `src/Data/objects.json` (gerado por `tools/assets/build_objects.py`). Importados com mipmaps, como os outros sprites |
+| `maps/extra/<id>/map_<id>.png` | 20 mapas candidatos **sem colisão** (salas extras das Brechas e Brechas 6–10), registrados em `src/Data/maps_extra.json` |
+
+Triagem completa das 70 imagens: [`docs/design/catalogo-assets.md`](../docs/design/catalogo-assets.md).
 
 ## Placeholders
 
