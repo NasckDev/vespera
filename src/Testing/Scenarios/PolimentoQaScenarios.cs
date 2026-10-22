@@ -2218,4 +2218,77 @@ public partial class SmokeTest
             await FleeRun(world, combat);
         }
     }
+
+    [SmokeScenario("polimento (qa): Opções aberta pelo título (teclado) mostra a primeira linha com foco visível e mexe na escala na hora", order: 1052)]
+    private async Task PqTitleOptions()
+    {
+        await WaitForScene("World", 10);
+        PqResetPlayerSettings();
+        var problems = new List<string>();
+        GameManager.Instance.ChangeScene(Vespera.UI.Title.TitleScreen.ScenePath);
+        await WaitForScene("Title", 10);
+        try
+        {
+            var title = (Vespera.UI.Title.TitleScreen)GetTree().CurrentScene;
+            await WaitSeconds(0.5);
+            // Novo jogo → ↓ ↓ ↓ → Opções (Continuar fica desabilitado sem save).
+            for (var i = 0; i < 6 && title.Stack.Top != title.Options; i++)
+            {
+                var focus = GetViewport().GuiGetFocusOwner();
+                var isOptions = focus is SelectableRow row && row.FindChildren("*", nameof(Label), true, false).OfType<Label>().Any(l => l.Text == UiText.MenuOptions);
+                await UiPress(isOptions ? "ui_accept" : "ui_down");
+                await WaitSeconds(0.2);
+            }
+
+            Require(title.Stack.Top == title.Options, "não consegui abrir as Opções pelo título só com o teclado");
+            await WaitSeconds(0.5);
+            var rows = PqRows(title.Options);
+            var scroll = title.Options.FindChildren("*", nameof(ScrollContainer), true, false).OfType<ScrollContainer>().First();
+            var view = scroll.GetGlobalRect();
+            var first = rows[0];
+            var firstLabel = ((Label)((HBoxContainer)first.GetChild(0)).GetChild(0)).Text;
+            var focusOwner = GetViewport().GuiGetFocusOwner();
+            Log.Info($"qa-opcoes-titulo: primeira '{firstLabel}' em {first.GetGlobalRect()}, área {view}, rolagem {scroll.ScrollVertical}, foco em {focusOwner?.GetType().Name}");
+            await Shot("qa-opcoes-titulo");
+            if (!view.Grow(1).Encloses(first.GetGlobalRect()))
+            {
+                problems.Add($"a primeira linha '{firstLabel}' das Opções (pelo título) está cortada: {first.GetGlobalRect()} em {view} (rolagem {scroll.ScrollVertical})");
+            }
+
+            if (focusOwner is not SelectableRow || !view.Grow(1).Encloses(focusOwner.GetGlobalRect()))
+            {
+                problems.Add("o foco das Opções não está visível ao abrir");
+            }
+
+            // Escala 150% aplica na hora no título (a tela não pode estourar).
+            while (GameSettings.UiScale < 1.4f)
+            {
+                var label = ((Label)((HBoxContainer)((SelectableRow)GetViewport().GuiGetFocusOwner()!).GetChild(0)).GetChild(0)).Text;
+                if (label == UiText.OptionUiScale)
+                {
+                    await UiPress("ui_right");
+                    await UiPress("ui_right");
+                    break;
+                }
+
+                await UiPress("ui_down");
+            }
+
+            await WaitSeconds(0.4);
+            Log.Info($"qa-opcoes-titulo: escala agora {GameSettings.UiScale}");
+            await Shot("qa-opcoes-titulo-150");
+            if (!Mathf.IsEqualApprox(GameSettings.UiScale, 1.5f))
+            {
+                problems.Add($"a escala não mudou na hora (UiScale {GameSettings.UiScale})");
+            }
+        }
+        finally
+        {
+            PqResetPlayerSettings();
+            GameManager.Instance.ChangeScene(Vespera.UI.Title.TitleScreen.WorldScenePath);
+            await WaitForScene("World", 10);
+        }
+
+        Require(problems.Count == 0, "Opções pelo título:" + (char)10 + "  " + string.Join((char)10 + "  ", problems));
+    }
 }
