@@ -236,6 +236,9 @@ public partial class GameManager : Node
 
     public void BlockGameplay(string reason) => _gameplayBlocks.Add(reason);
 
+    /// <summary>Motivos do bloqueio agora (diagnóstico do smoke).</summary>
+    public IReadOnlyCollection<string> GameplayBlocks => _gameplayBlocks;
+
     public void UnblockGameplay(string reason) => _gameplayBlocks.Remove(reason);
 
     /// <summary>Troca a cena atual com fade para o índigo da marca.</summary>

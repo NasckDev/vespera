@@ -79,6 +79,7 @@ public partial class SmokeTest : Node
             finally
             {
                 ReleaseAllActions();
+                IsolateScenario(name);
             }
         }
 
@@ -101,6 +102,25 @@ public partial class SmokeTest : Node
             .OrderBy(x => x.Attr!.Order)
             .ThenBy(x => x.Attr!.Name, StringComparer.Ordinal)
             .Select(x => (x.Attr!.Name, x.Method));
+
+    /// <summary>
+    /// Integração v0.1: com a Interface no World, um cenário que deixa uma tela aberta (fala de missão concluída, Novo
+    /// Selo, loja) trava o jogador nos cenários das outras frentes, que não conhecem a UI. Fecha as telas que sobraram e
+    /// registra no log o que ficou travando, sem esconder bloqueios de outros sistemas.
+    /// </summary>
+    private static void IsolateScenario(string name)
+    {
+        if (UI.GameUi.Current is { } ui && ui.Stack.Count > 0)
+        {
+            Log.Info($"smoke: '{name}' deixou {ui.Stack.Count} tela(s) aberta(s) ({ui.Stack.Top?.GetType().Name}); fechando para o próximo cenário");
+            ui.CloseAll();
+        }
+
+        if (GameManager.Instance is { IsGameplayBlocked: true } gm)
+        {
+            Log.Warning($"smoke: depois de '{name}' o jogo segue travado por: {string.Join(", ", gm.GameplayBlocks)}");
+        }
+    }
 
     private static void ReleaseAllActions()
     {

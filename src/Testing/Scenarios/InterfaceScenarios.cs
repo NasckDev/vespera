@@ -687,7 +687,8 @@ public partial class SmokeTest
         await WaitUntil(() => ui.Dialog.ChoicesVisible, 2, $"opções para '{label}'");
         await NextPhysicsFrame();
         var rect = ui.Dialog.ChoicesRect;
-        Require(new Rect2(0, 0, 640, 360).Encloses(rect), $"painel de opções fora da tela: {rect}");
+        // Integração v0.1: com aspect=expand (B4a-D39) a área visível pode passar de 640×360 (janela fora de múltiplo inteiro, headless).
+        Require(GetViewport().GetVisibleRect().Encloses(rect), $"painel de opções fora da tela {GetViewport().GetVisibleRect()}: {rect}");
         var target = -1;
         for (var i = 0; i < ui.Dialog.Options.Count; i++)
         {

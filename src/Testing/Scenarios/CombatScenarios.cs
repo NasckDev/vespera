@@ -173,7 +173,10 @@ public partial class SmokeTest
         }
 
         Require(waves.Count == 2 && waves[0] == 1 && waves[1] == 2, $"WaveStarted: [{string.Join(",", waves)}]");
-        Require(combat.Props.Count >= 9, $"sala do tema deveria ter 9–13 props + baús, tem {combat.Props.Count}");
+        // INT-D4: sala com layout desenhado (frente de mapas) usa os quebráveis e baús do layout, montados pelo motor.
+        var designedProps = world.Dressing.Breakables.Count + world.Dressing.Chests.Count;
+        Require(world.Layout.Props.Count > 0 ? designedProps >= world.Layout.Props.Count && combat.Props.Count == 0 : combat.Props.Count >= 9,
+            $"sala do tema: {combat.Props.Count} props sorteados, {designedProps} do layout ({world.Layout.Props.Count} quebráveis no layout)");
         await Shot("combate-porta-aberta");
 
         // Porta → Câmara do Núcleo

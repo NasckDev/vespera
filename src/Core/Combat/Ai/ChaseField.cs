@@ -17,8 +17,13 @@ public sealed class ChaseField
     /// <summary>Células processadas por frame (o mapa hd inteiro tem ~25 mil: o campo atualiza em ~4 frames).</summary>
     public const int DefaultBudget = 6000;
 
-    /// <summary>Raio de passagem das células: o maior raio de movimento de monstro (<c>min(6, r/2)</c>, <c>core.js:250</c>).</summary>
-    public const float PassRadius = 6f;
+    /// <summary>
+    /// Raio de passagem das células: o do jogador (4 u). Era o maior raio de movimento de monstro (<c>min(6, r/2)</c>,
+    /// <c>core.js:250</c>), mas com as máscaras de 4 u das Brechas redesenhadas (folga de 12 u nas passagens) o centro
+    /// de muitas células de 8 u não cabe 6 u, e monstros nascidos ali ficavam fora do campo (Espectro preso na cripta).
+    /// Integração v0.1, DECISIONS INT-D6: o campo liga tudo o que o jogador alcança; o monstro maior desliza na quina.
+    /// </summary>
+    public const float PassRadius = 4f;
 
     private const ushort Unreached = ushort.MaxValue;
 
