@@ -261,7 +261,7 @@ public partial class CombatDirector
                 PlayerCombat.FillEssence();
                 Sfx("eco", at);
                 var eco = _db.Ecos[k.Id];
-                Toast($"Eco absorvido: {eco.Name}", $"{eco.Skill} — {eco.Desc} [Q]");
+                Toast($"Eco absorvido: {eco.Name}", UI.Common.KeyText.Expand($"{eco.Skill} — {eco.Desc} [{{key:eco_1}}]")); // POLI-4: tecla do remapeamento
                 Glow.Burst(at, 40, CombatPalette.Eco, new BurstOptions { V1 = 140 });
                 GameManager.Instance.SaveGame();
                 break;

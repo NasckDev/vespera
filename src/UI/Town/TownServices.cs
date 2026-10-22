@@ -246,7 +246,7 @@ public sealed class TownServices(GameUi ui)
                 {
                     UiSound.Play("boom");
                     var rarity = UiItems.Rarity(gear.Rarity);
-                    ui.Toast($"Forjado: {gear.Name}", $"{rarity.Name} · equipe no inventário [Tab]", UiItems.RarityColor(gear.Rarity), gear.Icon);
+                    ui.Toast($"Forjado: {gear.Name}", $"{rarity.Name} · equipe no inventário [{KeyText.Expand("{key:inventory}")}]", UiItems.RarityColor(gear.Rarity), gear.Icon);
                     GameManager.Instance.SaveGame();
                 }
 
@@ -526,7 +526,7 @@ public sealed class TownServices(GameUi ui)
                 {
                     UiSound.Open();
                     var rarity = UiItems.Rarity(gear.Rarity);
-                    ui.Toast(gear.Name, $"{rarity.Name} · equipe no inventário [Tab]", UiItems.RarityColor(gear.Rarity), gear.Icon);
+                    ui.Toast(gear.Name, $"{rarity.Name} · equipe no inventário [{KeyText.Expand("{key:inventory}")}]", UiItems.RarityColor(gear.Rarity), gear.Icon);
                     GameManager.Instance.SaveGame();
                 }
 

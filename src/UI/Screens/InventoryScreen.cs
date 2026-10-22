@@ -728,7 +728,7 @@ public partial class InventoryScreen : Screen
             if (owned)
             {
                 column.AddChild(Ui.Text($"Custo: {state.EcoCost(eco.Id)} de Essência{(tuned ? " (afinado)" : string.Empty)}", UiFonts.Tiny, UiPalette.Sub));
-                column.AddChild(Ui.Text(equipped ? "Equipado em [Q]" : "[E] Equipar", UiFonts.Tiny, equipped ? UiPalette.Ambar : UiPalette.Creme));
+                column.AddChild(Ui.Text(KeyText.Expand(equipped ? "Equipado em [{key:eco_1}]" : "[{key:interact}] Equipar"), UiFonts.Tiny, equipped ? UiPalette.Ambar : UiPalette.Creme));
             }
 
             var card = new SelectableRow
