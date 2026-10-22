@@ -53,6 +53,6 @@ public partial class Boot : Node
         router.Register(ScreenKeys.Pause, () => new PauseScreen());
         router.Register(ScreenKeys.SlotsNew, () => new SlotScreen(SlotScreen.Mode.NewGame));
         router.Register(ScreenKeys.SlotsContinue, () => new SlotScreen(SlotScreen.Mode.Continue));
-        router.Register(ScreenKeys.Game, () => new GameRoom());
+        router.Register(ScreenKeys.Game, World.GameEntry.CreateStartScene);
     }
 }
