@@ -35,14 +35,8 @@
     <ProjectReference Include="..\src\Core\Vespera.Core.csproj" />
   </ItemGroup>
 
-  <!-- Os testes carregam os JSON reais do jogo (src/Data, incluindo maps.json) e o atlas para validar dados e regras juntos. -->
+  <!-- Os testes carregam os JSON reais do jogo (src/Data) para validar dados e regras juntos. -->
   <ItemGroup>
     <None Include="..\src\Data\*.json" Link="Data/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
-    <None Include="..\assets\sprites\atlas\atlas.json" Link="Data/atlas.json" CopyToOutputDirectory="PreserveNewest" />
-    <!-- Motor do mundo (B4a): layouts de todos os mapas, fixtures de layout do smoke e o catálogo de objetos de teste. -->
-    <None Include="..\assets\maps\**\layout_*.json" Link="Layouts/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
-    <None Include="..\src\Testing\Fixtures\fixture_*.json" Link="Layouts/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
-    <None Include="..\src\Testing\Fixtures\objects_*.json" Link="Fixtures/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
-    <None Include="..\assets\maps\lights.json" Link="Data/lights.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>
