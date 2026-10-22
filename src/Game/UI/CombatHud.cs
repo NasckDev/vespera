@@ -129,28 +129,26 @@ public partial class CombatHud : Control
 
     private void BuildPlayerPanel()
     {
-        var seal = new RankSealIcon { Position = new Vector2(34, 30), Size = new Vector2(96, 96) };
-        AddChild(seal);
+        AddChild(new RankSealIcon { Position = new Vector2(28, 24), Size = new Vector2(116, 116) });
         _hp = UiAssets.MakeBar(UiAssets.BarKind.Vida);
-        _hp.Position = new Vector2(138, 34);
-        _hp.Scale = new Vector2(0.86f, 0.86f);
+        _hp.Position = new Vector2(150, 30);
         AddChild(_hp);
-        _hpText = HudLabel(26, Palette.Cream);
-        _hpText.Position = new Vector2(150, 34);
-        _hpText.Size = new Vector2(420, 40);
+        _hpText = HudLabel(32, Palette.Cream);
+        _hpText.Position = new Vector2(150, 30);
+        _hpText.Size = new Vector2(512, 48);
         _hpText.HorizontalAlignment = HorizontalAlignment.Center;
         _hpText.VerticalAlignment = VerticalAlignment.Center;
         AddChild(_hpText);
         _stamina = UiAssets.MakeBar(UiAssets.BarKind.Folego);
-        _stamina.Position = new Vector2(138, 78);
-        _stamina.Scale = new Vector2(0.62f, 0.62f);
+        _stamina.Position = new Vector2(150, 82);
+        _stamina.Scale = new Vector2(0.72f, 0.72f);
         AddChild(_stamina);
-        AddChild(new FragmentIcon { Position = new Vector2(150, 118), Size = new Vector2(34, 40) });
-        _fragments = HudLabel(40, Palette.Cream);
-        _fragments.Position = new Vector2(192, 112);
+        AddChild(new FragmentIcon { Position = new Vector2(160, 124), Size = new Vector2(40, 50) });
+        _fragments = HudLabel(52, Palette.Cream);
+        _fragments.Position = new Vector2(208, 116);
         AddChild(_fragments);
-        _className = HudLabel(26, Palette.CreamDim);
-        _className.Position = new Vector2(262, 122);
+        _className = HudLabel(32, Palette.CreamDim);
+        _className.Position = new Vector2(300, 130);
         AddChild(_className);
     }
 

@@ -79,6 +79,12 @@ public abstract class WeaponMoves
             }
         }
 
+        // A recuperação começa logo depois do impacto: daí já dá para encadear o próximo golpe do combo.
+        if (LastImpact >= 0 && frame == LastImpact + 1)
+        {
+            Combo.Finish(C.Clock);
+        }
+
         OnAnimFrame(frame);
     }
 
@@ -115,8 +121,9 @@ public abstract class WeaponMoves
     /// <summary>Começa a animação do golpe mirando pelo input (ou para onde olha), com ajuda de mira.</summary>
     protected void StartAttack(string verb, Vector2 move, float speedScale, float range)
     {
-        var aim = move.LengthSquared() > 0.04f ? move.Normalized() : P.AimDirection;
-        Aim = Assist(aim, range);
+        var steering = move.LengthSquared() > 0.04f;
+        var aim = steering ? move.Normalized() : P.AimDirection;
+        Aim = Assist(aim, range, steering ? AssistAngle : Mathf.Pi);
         P.Face(Aim);
         CurrentVerb = verb;
         _framesDone.Clear();
@@ -180,8 +187,11 @@ public abstract class WeaponMoves
         return landed;
     }
 
-    /// <summary>Puxa a mira para o alvo vivo mais próximo dentro de um cone à frente.</summary>
-    private Vector2 Assist(Vector2 aim, float range)
+    /// <summary>
+    /// Puxa a mira para o alvo vivo mais próximo dentro de um cone à frente (parado, sem direção no controle, vale
+    /// qualquer lado: o golpe vira para o monstro mais perto).
+    /// </summary>
+    private Vector2 Assist(Vector2 aim, float range, float cone)
     {
         var world = P.World;
         if (world is null || range <= 0f)
@@ -201,7 +211,7 @@ public abstract class WeaponMoves
             var v = target.HitCenter - Chest;
             var d = v.Length();
             var angle = Mathf.Abs(v.AngleTo(aim));
-            if (d > range * AssistReach || angle > AssistAngle)
+            if (d > range * AssistReach || angle > cone)
             {
                 continue;
             }

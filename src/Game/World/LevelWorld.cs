@@ -18,7 +18,7 @@ namespace Vespera.Game.World;
 public partial class LevelWorld : Node2D
 {
     private const float DoorPromptHeight = 190f;
-    private const float PracaPortalHeight = 150f;
+    private const float PracaPortalHeight = 250f;
 
     private readonly LevelData _data;
     private readonly IReadOnlyDictionary<string, PropDef> _catalog;

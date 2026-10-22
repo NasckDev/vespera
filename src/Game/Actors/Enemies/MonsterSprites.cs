@@ -19,8 +19,8 @@ public static class MonsterSprites
     /// <summary>Altura desejada em "caçadores" (1 = altura do caçador em pé).</summary>
     public static float HeightInHunters(string id) => id switch
     {
-        "lodo" => 0.36f,
-        "espectro" => 0.95f,
+        "lodo" => 0.45f,
+        "espectro" => 1.1f,
         "lodo_mae" => 3.0f,
         _ => 1f,
     };

@@ -62,14 +62,14 @@ public partial class LodoMae(LevelWorld world) : Enemy("lodo_mae", world)
     /// <summary>Núcleos acertáveis (no chão e com o corpo visível).</summary>
     public bool CoresExposed => !Dead && BodyVisible && _phase is not (Phase.HopAir or Phase.Intro);
 
-    public bool BodyVisible => _phase is not Phase.Split;
+    public bool BodyVisible => _phase is not (Phase.Split or Phase.Splitting);
 
     public int CoresBroken => _cores.Count(c => c.Broken);
 
     public int Stage => RiftSession.Rules.BossPhase(TotalHp, MaxHp);
 
     /// <summary>Vida somada da mãe e das divisões (para a barra do chefe).</summary>
-    public double TotalHp => (BodyVisible && !Dead ? Hp : 0) + _children.Where(c => !c.Dead).Sum(c => c.Hp);
+    public double TotalHp => (_phase != Phase.Split && !Dead ? Hp : 0) + _children.Where(c => !c.Dead).Sum(c => c.Hp);
 
     public bool Engaged => _phase != Phase.Intro;
 
@@ -87,7 +87,7 @@ public partial class LodoMae(LevelWorld world) : Enemy("lodo_mae", world)
         Vector2[] anchors = [new(0.04f, 0.66f), new(-0.2f, 0.4f), new(0.24f, 0.34f)];
         foreach (var anchor in anchors.Take(tuning.Cores))
         {
-            var core = new BossCore(this, anchor, 15f * A, tuning.CoreHp);
+            var core = new BossCore(this, anchor, 19f * A, tuning.CoreHp);
             core.Shattered += OnCoreShattered;
             AddChild(core);
             World.Combat.Register(core);
@@ -220,7 +220,7 @@ public partial class LodoMae(LevelWorld world) : Enemy("lodo_mae", world)
         _moveCount++;
         var swallow = Stage >= 2 && _moveCount % 2 == 0;
         FaceTowards(target.GlobalPosition);
-        Flash.Tint = 0.45f;
+        Flash.Tint = 0.3f;
         CombatSfx.Play(this, CombatSound.Telegraph, Vector2.Zero);
         if (swallow)
         {
@@ -384,6 +384,7 @@ public partial class LodoMae(LevelWorld world) : Enemy("lodo_mae", world)
         }
 
         Sprite.Visible = false;
+        Bar.Conceal();
         CollisionLayer = 0;
         CollisionMask = 0;
         _phase = Phase.Split;

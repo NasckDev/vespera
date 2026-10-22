@@ -186,6 +186,17 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
         return new HitOutcome(result.Damage, false, result.Crit, true);
     }
 
+    /// <summary>Tira vida sem golpe (capturas de QA forçando fases do Guardião).</summary>
+    public void TakeDirect(double amount)
+    {
+        Hp = Math.Max(0, Hp - amount);
+        Bar.Set((float)(Hp / MaxHp));
+        if (Hp <= 0)
+        {
+            Die();
+        }
+    }
+
     /// <summary>Vida cheia nova (divisões da Lodo-Mãe herdam a vida dela).</summary>
     public void SetHealth(double hp)
     {

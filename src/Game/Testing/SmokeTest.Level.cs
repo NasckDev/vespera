@@ -128,4 +128,7 @@ public partial class SmokeTest
     }
 
     internal async Task Capture(string name) => await Shot(name);
+
+    /// <summary>Captura sem esperar a cena assentar (sequências quadro a quadro).</summary>
+    internal async Task CaptureNow(string name) => await Shot(name, 0);
 }

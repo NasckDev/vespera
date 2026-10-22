@@ -80,12 +80,28 @@ public partial class Barrier : Node2D
         var hot = new Color("ffc2e0");
 
         // Base no chão: o retângulo da passagem aceso.
-        DrawRect(new Rect2(-w / 2f, -d, w, d), magenta with { A = 0.35f * fade });
+        DrawRect(new Rect2(-w / 2f, -d, w, d), magenta with { A = 0.55f * fade });
         DrawRect(new Rect2(-w / 2f, -d, w, d), hot with { A = 0.8f * fade }, false, 2f);
 
         // Cortina: faixas verticais que sobem e tremulam, mais fortes embaixo.
         var horizontal = w >= d;
         var span = horizontal ? w : d;
+        var sheet = _height * rise;
+        Vector2[] quad = horizontal
+            ? [new(-w / 2f, -d / 2f), new(w / 2f, -d / 2f), new(w / 2f, (-d / 2f) - sheet), new(-w / 2f, (-d / 2f) - sheet)]
+            : [new(0, -d), new(0, 0), new(0, -sheet), new(0, -d - sheet)];
+        if (horizontal)
+        {
+            var bottom = magenta with { A = 0.42f * fade };
+            var top = magenta with { A = 0f };
+            DrawPolygon(quad, [bottom, bottom, top, top]);
+        }
+        else
+        {
+            DrawPolygon([new(-4f, -d), new(4f, 0), new(4f, -sheet), new(-4f, -d - sheet)],
+                [magenta with { A = 0.42f * fade }, magenta with { A = 0.42f * fade }, magenta with { A = 0f }, magenta with { A = 0f }]);
+        }
+
         var strands = Mathf.Max(6, (int)(span / 7f));
         for (var i = 0; i <= strands; i++)
         {
@@ -94,8 +110,8 @@ public partial class Barrier : Node2D
             var flicker = 0.55f + (0.45f * Mathf.Sin((_t * 7f) + (i * 1.7f)));
             var h = _height * rise * (0.75f + (0.25f * Mathf.Sin((_t * 3f) + (i * 0.9f))));
             var top = basePoint + new Vector2(Mathf.Sin((_t * 4f) + i) * 2f, -h);
-            DrawLine(basePoint, top, magenta with { A = 0.28f * flicker * fade }, 5f, true);
-            DrawLine(basePoint, basePoint.Lerp(top, 0.6f), hot with { A = 0.35f * flicker * fade }, 1.6f, true);
+            DrawLine(basePoint, top, magenta with { A = 0.5f * flicker * fade }, 7f, true);
+            DrawLine(basePoint, basePoint.Lerp(top, 0.6f), hot with { A = 0.65f * flicker * fade }, 2.2f, true);
         }
 
         var sweep = (_t * 0.8f) % 1f;

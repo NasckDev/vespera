@@ -11,7 +11,7 @@ namespace Vespera.Game.UI;
 public partial class FloatingNumbers : Control
 {
     private const float Life = 0.85f;
-    private const int BaseSize = 46;
+    private const int BaseSize = 58;
 
     private readonly Func<Vector2, Vector2> _toScreen;
     private readonly List<Entry> _entries = [];
@@ -26,7 +26,7 @@ public partial class FloatingNumbers : Control
     public override void _Ready()
     {
         SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
-        _font = GD.Load<Font>("res://assets/v2/fonts/PixelifySans.ttf");
+        _font = GD.Load<Font>("res://assets/v2/fonts/VT323-Regular.ttf");
     }
 
     public void Spawn(Vector2 world, string text, Color color, float size)

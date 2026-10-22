@@ -13,7 +13,7 @@ public partial class Chest : Node2D
 {
     private const string ClosedPath = "res://assets/v2/objetos/v01/cathedral_chest_closed.png";
     private const string OpenPath = "res://assets/v2/objetos/v01/cathedral_chest_open.png";
-    private const float TargetHeight = 70f;
+    private const float TargetHeight = 86f;
 
     private readonly LevelWorld _world;
     private Sprite2D _sprite = null!;

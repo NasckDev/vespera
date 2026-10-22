@@ -17,8 +17,8 @@ public partial class RoomDirector : Node
     private const float FirstWaveDelay = 0.9f;
     private const float WaveGap = 0.8f;
     private const float SpawnWarning = 0.55f;
-    private const float BarrierHeight = 120f;
-    private const float PortalHeight = 150f;
+    private const float BarrierHeight = 170f;
+    private const float PortalHeight = 210f;
 
     private readonly LevelWorld _world;
     private readonly RiftRoomData _data;
