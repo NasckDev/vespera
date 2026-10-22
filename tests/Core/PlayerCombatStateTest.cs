@@ -196,6 +196,26 @@ public class PlayerCombatStateTest
         AssertThat(s.Essence).IsEqual(5.0);
     }
 
+    /// <summary>ARTE-9: o ícone de escudo vale para i-frames concedidos, não para o piscar depois de um golpe.</summary>
+    [TestCase]
+    public void ShieldIsGrantedIFramesNotTheHitBlink()
+    {
+        var s = NewState();
+        AssertThat(s.Shielded).IsFalse();
+        AssertThat(s.TryHurt()).IsTrue();
+        AssertThat(s.Invulnerable > 0).IsTrue();
+        AssertThat(s.Shielded).IsFalse();
+
+        s.GrantInvulnerability(0.4); // Supremo/Investida
+        AssertThat(s.Shielded).IsTrue();
+
+        var r = NewState();
+        r.Respawn(1.5);
+        AssertThat(r.Shielded).IsTrue();
+        r.TickTimers(2.0);
+        AssertThat(r.Shielded).IsFalse();
+    }
+
     [TestCase]
     public void RespawnGrantsInvulnerabilityAndClearsEssence()
     {

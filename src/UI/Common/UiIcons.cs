@@ -9,6 +9,53 @@ namespace Vespera.UI.Common;
 /// </summary>
 public static class UiIcons
 {
+    public const string BustDir = "res://assets/sprites/npcs/portraits/";
+    public const string HudDir = "res://assets/sprites/ui/hud/";
+
+    private static readonly System.Collections.Generic.Dictionary<string, Texture2D?> Loose = [];
+
+    /// <summary>
+    /// Busto neutro do designer (pacote v2, issue #6; DECISIONS C2-D6) para a chave de retrato do atlas
+    /// (<c>npc_odete_f</c> → <c>npcs/portraits/odete.png</c>), ou null se o NPC não tem busto.
+    /// </summary>
+    public static Texture2D? Bust(string? portraitKey)
+    {
+        if (portraitKey is not { Length: > 6 } key || !key.StartsWith("npc_", System.StringComparison.Ordinal))
+        {
+            return null;
+        }
+
+        var cut = key.LastIndexOf('_');
+        return cut > 4 ? LoadLoose($"{BustDir}{key[4..cut]}.png") : null;
+    }
+
+    /// <summary>Ícone do HUD do designer (<c>ui/hud/&lt;id&gt;.png</c>, 29 do v1 + 2 do v4, com a moldura do slot), ou null.</summary>
+    public static Texture2D? Hud(string id) => LoadLoose($"{HudDir}{id}.png");
+
+    /// <summary>Miolo do ícone do HUD (sem os 8 px da moldura de slot), para botões redondos.</summary>
+    public static Texture2D? HudInner(string id)
+    {
+        if (Hud(id) is not { } texture)
+        {
+            return null;
+        }
+
+        var size = texture.GetSize();
+        var inset = Mathf.Round(size.X * 0.125f);
+        return new AtlasTexture { Atlas = texture, Region = new Rect2(inset, inset, size.X - (2 * inset), size.Y - (2 * inset)) };
+    }
+
+    private static Texture2D? LoadLoose(string path)
+    {
+        if (!Loose.TryGetValue(path, out var texture))
+        {
+            texture = ResourceLoader.Exists(path) ? GD.Load<Texture2D>(path) : null;
+            Loose[path] = texture;
+        }
+
+        return texture;
+    }
+
     /// <summary>Textura do recorte, ou null se a chave não existe.</summary>
     public static Texture2D? Get(string? key) =>
         key is { Length: > 0 } && AtlasLibrary.TryGet(key, out var frame) ? frame.Texture : null;

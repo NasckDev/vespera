@@ -1,0 +1,221 @@
+[gd_resource type="SpriteFrames" load_steps=41 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/walk_front_00.png" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/walk_front_01.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/walk_front_02.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/walk_front_03.png" id="4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/walk_front_04.png" id="5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/walk_front_05.png" id="6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/walk_back_00.png" id="7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/walk_back_01.png" id="8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/walk_back_02.png" id="9"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/walk_back_03.png" id="10"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/walk_back_04.png" id="11"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/walk_back_05.png" id="12"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/walk_side_00.png" id="13"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/walk_side_01.png" id="14"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/walk_side_02.png" id="15"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/walk_side_03.png" id="16"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/walk_side_04.png" id="17"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/walk_side_05.png" id="18"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/dodge_side_00.png" id="19"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/dodge_side_01.png" id="20"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/dodge_side_02.png" id="21"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/dodge_side_03.png" id="22"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/dodge_side_04.png" id="23"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/dodge_side_05.png" id="24"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/dodge_front_00.png" id="25"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/dodge_front_01.png" id="26"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/dodge_front_02.png" id="27"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/dodge_front_03.png" id="28"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/dodge_front_04.png" id="29"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/dodge_front_05.png" id="30"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/dodge_front_06.png" id="31"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/dodge_front_07.png" id="32"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/dodge_back_00.png" id="33"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/dodge_back_01.png" id="34"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/dodge_back_02.png" id="35"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/dodge_back_03.png" id="36"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/dodge_back_04.png" id="37"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/dodge_back_05.png" id="38"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/dodge_back_06.png" id="39"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/sword/dodge_back_07.png" id="40"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6")
+}],
+"loop": true,
+"name": &"walk_front",
+"speed": 9.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12")
+}],
+"loop": true,
+"name": &"walk_back",
+"speed": 9.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18")
+}],
+"loop": true,
+"name": &"walk_side",
+"speed": 9.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("19")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24")
+}],
+"loop": false,
+"name": &"dodge_side",
+"speed": 35.29
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("25")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32")
+}],
+"loop": false,
+"name": &"dodge_front",
+"speed": 47.06
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("33")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40")
+}],
+"loop": false,
+"name": &"dodge_back",
+"speed": 47.06
+}]
+metadata/anchors = {
+"walk_front": Vector2(210, 412),
+"walk_back": Vector2(210, 412),
+"walk_side": Vector2(210, 412),
+"dodge_side": Vector2(210, 412),
+"dodge_front": Vector2(210, 412),
+"dodge_back": Vector2(210, 412)
+}
+metadata/densities = {
+"walk_front": 4.5000,
+"walk_back": 4.5000,
+"walk_side": 4.5000,
+"dodge_side": 4.5000,
+"dodge_front": 4.5000,
+"dodge_back": 4.5000
+}
+metadata/used_rects = {
+"walk_front": Rect2(162, 265, 98, 146),
+"walk_back": Rect2(156, 261, 108, 148),
+"walk_side": Rect2(157, 260, 106, 143),
+"dodge_side": Rect2(128, 269, 143, 143),
+"dodge_front": Rect2(158, 279, 101, 133),
+"dodge_back": Rect2(155, 279, 108, 133)
+}
+metadata/scale_class = "character"
+metadata/source = "pacotes v2/v3/v4 do designer (issue #3): andar frente v3, costas v3+v4, lado kit+v2, esquiva lado v4, frente/costas v3 (provisória)"

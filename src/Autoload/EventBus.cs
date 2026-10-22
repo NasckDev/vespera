@@ -264,6 +264,14 @@ public partial class EventBus : Node
     [Signal]
     public delegate void CaptionRequestedEventHandler(string text);
 
+    // --- Arte aprovada (frente C2) ---
+    /// <summary>
+    /// Combate → HUD: um estado do jogador com ícone ligou/desligou (<c>shield</c> = i-frames de respawn, <c>slow</c> = gelo,
+    /// <c>speed</c> = equipamento acima de 100%). Só emitido na troca (DECISIONS C2-D7).
+    /// </summary>
+    [Signal]
+    public delegate void PlayerStatusChangedEventHandler(string status, bool active);
+
     public static EventBus Instance { get; private set; } = null!;
 
     public override void _EnterTree() => Instance = this;

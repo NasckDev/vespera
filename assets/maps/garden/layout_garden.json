@@ -159,5 +159,10 @@
   "decor": [
     {"kind": "inspect", "x": 965, "y": 650, "r": 28, "label": "Examinar a fonte da jardineira", "text": "A água que a estátua derrama nunca toca o fundo do lago. As flores em volta viram a cabeça, devagar, para quem se aproxima."},
     {"kind": "inspect", "x": 672, "y": 186, "r": 26, "label": "Ler a placa do santuário", "text": "\"Para Silvana, que plantou a primeira semente da estufa.\" Alguém riscou o nome e escreveu por cima, com seiva: RAINHA."}
+  ],
+  "objects": [
+    {"id": "flowers_blue", "x": 760, "y": 650},
+    {"id": "flowers_yellow", "x": 1130, "y": 620},
+    {"id": "flower_violet_glow", "x": 770, "y": 560}
   ]
 }

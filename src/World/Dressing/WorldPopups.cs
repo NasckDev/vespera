@@ -163,6 +163,7 @@ public partial class LoreCard : Node2D
     private Label _text = null!;
     private float _life;
     private Vector2 _anchor;
+    private Vector2 _foot;
     private float _leaveRadius;
 
     public Player.Player? Player { get; set; }
@@ -194,6 +195,7 @@ public partial class LoreCard : Node2D
         }
 
         _leaveRadius = leaveRadius;
+        _foot = at; // o jogador se afasta do pé do objeto, não do cartão: num objeto alto (quadro de avisos) o cartão fica 80 u acima
         _life = 3.2f + (text.Length * 0.045f);
         Position = _anchor;
         Visible = true;
@@ -231,7 +233,7 @@ public partial class LoreCard : Node2D
         }
 
         _life -= (float)delta;
-        var far = Player is { } p && IsInstanceValid(p) && p.GlobalPosition.DistanceTo(_anchor) > _leaveRadius + 60f;
+        var far = Player is { } p && IsInstanceValid(p) && p.GlobalPosition.DistanceTo(_foot) > _leaveRadius + 60f;
         if (_life <= 0f || far)
         {
             Visible = false;

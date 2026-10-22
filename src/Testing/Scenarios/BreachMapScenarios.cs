@@ -264,6 +264,8 @@ public partial class SmokeTest
     }
 
     /// <summary>Anda com input do ponto atual até ficar a <paramref name="reach"/> u do alvo. Erro null se chegou.</summary>
+    private static readonly MapPoint[] ShiftedGrids = [new(2, 0), new(-2, 0), new(0, 2), new(0, -2), new(2, 2), new(-2, -2), new(2, -2), new(-2, 2)];
+
     private async Task<(string? Error, float Length)> BreachWalkNear(World.World world, MapPoint target, float reach, float clearance = WalkAreaExtensions.PlayerRadius)
     {
         var player = FindPlayer()!;
@@ -278,6 +280,17 @@ public partial class SmokeTest
             ? WalkPathfinder.FindPath(world.WalkArea, start, p => MathF.Sqrt(((p.X - target.X) * (p.X - target.X)) + ((p.Y - target.Y) * (p.Y - target.Y))) <= reach, 4f, clearance)
                 ?? WalkPathfinder.FindPathNear(world.WalkArea, start, target, reach)
             : WalkPathfinder.FindPathNear(world.WalkArea, start, target, reach);
+        // a malha da busca (4 u) nasce no ponto de partida: um gargalo de 8–9 u de largura passa ou não conforme o
+        // alinhamento. O jogador anda em qualquer ponto, então tenta de novo com a malha deslocada meia célula.
+        for (var k = 0; path is null && k < ShiftedGrids.Length; k++)
+        {
+            var shifted = new MapPoint(start.X + ShiftedGrids[k].X, start.Y + ShiftedGrids[k].Y);
+            if (world.WalkArea.CanStand(shifted.X, shifted.Y))
+            {
+                path = WalkPathfinder.FindPathNear(world.WalkArea, shifted, target, reach);
+            }
+        }
+
         if (path is null)
         {
             return ($"inalcançável a {reach:0} u saindo de ({start.X:0}, {start.Y:0})", 0f);

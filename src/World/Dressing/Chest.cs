@@ -1,6 +1,7 @@
 using System;
 using Godot;
 using Vespera.Autoload;
+using Vespera.Core.Art;
 
 namespace Vespera.World;
 
@@ -9,6 +10,8 @@ namespace Vespera.World;
 /// tampa (metade de cima do recorte) vira para trás em volta da dobradiça, sobe um brilho de dentro com faíscas e o saque
 /// de <c>LootTables.ChestDrops</c> sai em textos escalonados. O roxo (tier ≥ 3) usa as chances de baú roxo e termina no
 /// sprite aberto <c>pr_chest4</c>. Fica aberto até o dia seguinte. Sólido como na v2 (r 8).
+/// Com a arte aprovada dos 5 tiers (DECISIONS C2-D5) a tampa não é mais um recorte girando: a abertura toca os quadros
+/// desenhados (fechado → abrindo 1 → abrindo 2 → aberto), o saque sai com o baú aberto e, entregue, ele fica vazio.
 /// </summary>
 public partial class Chest : Node2D
 {
@@ -26,6 +29,14 @@ public partial class Chest : Node2D
     private float _scale = 1f;
     private float _lidHeight;
     private string _key = string.Empty;
+    private ArtFrames? _art;
+    private Sprite2D? _artSprite;
+    private float _emptyT = -1f;
+    private StringName? _shownFrame;
+    private const float EmptyAfterSeconds = 0.9f;
+
+    private static readonly StringName[] OpeningFrames = ["closed", "opening_1", "opening_2", "open"];
+    private static readonly StringName EmptyFrame = "empty";
 
     public int Tier { get; private set; }
 
@@ -35,6 +46,12 @@ public partial class Chest : Node2D
     public bool IsOpening => _openT >= 0f;
 
     public bool Purple => Tier >= 3;
+
+    /// <summary>Usa os quadros desenhados do tier.</summary>
+    public bool HasStateArt => _art is not null;
+
+    /// <summary>Quadro desenhado mostrado agora (<c>closed</c>, <c>opening_1</c>, <c>opening_2</c>, <c>open</c>, <c>empty</c>; "" sem arte).</summary>
+    public string ArtFrame { get; private set; } = string.Empty;
 
     public WorldInteractable Interactable => _interact;
 
@@ -85,6 +102,16 @@ public partial class Chest : Node2D
 
         AddChild(_lid);
 
+        if (PropArt.Chest(Tier) is { } artPath && ArtFrames.TryLoad(artPath, out var art))
+        {
+            _art = art;
+            _artSprite = new Sprite2D { Name = "Art" };
+            AddChild(_artSprite);
+            _base.Visible = false;
+            _lid.Visible = false;
+            ShowArt(OpeningFrames[0]);
+        }
+
         _glow = new Sprite2D
         {
             Name = "Glow",
@@ -108,6 +135,7 @@ public partial class Chest : Node2D
         if (alreadyOpen)
         {
             SetOpenVisual(1f);
+            ShowArt(EmptyFrame); // já foi saqueado hoje
         }
     }
 
@@ -129,6 +157,15 @@ public partial class Chest : Node2D
     {
         IsOpen = false;
         _openT = -1f;
+        _emptyT = -1f;
+        if (_art is not null)
+        {
+            ShowArt(OpeningFrames[0]);
+            _glow.Modulate = _glow.Modulate with { A = 0f };
+            _interact.Enabled = true;
+            return;
+        }
+
         _interact.Enabled = true;
         _lid.Visible = true;
         _lid.Scale = new Vector2(MathF.Abs(_lid.Scale.X), MathF.Abs(_lid.Scale.X));
@@ -140,6 +177,16 @@ public partial class Chest : Node2D
 
     public override void _Process(double delta)
     {
+        if (_emptyT >= 0f)
+        {
+            _emptyT += (float)delta;
+            if (_emptyT >= EmptyAfterSeconds)
+            {
+                _emptyT = -1f;
+                ShowArt(EmptyFrame);
+            }
+        }
+
         if (_openT < 0f)
         {
             if (IsOpen)
@@ -161,12 +208,52 @@ public partial class Chest : Node2D
             IsOpen = true;
             _sparkles.Restart();
             DropLoot?.Invoke(this);
+            if (_art is not null)
+            {
+                _emptyT = 0f; // o saque saiu: depois de um instante o baú fica vazio
+            }
+
             EventBus.Instance.EmitSignal(EventBus.SignalName.ChestOpened, MapId, Tier, GlobalPosition);
         }
     }
 
+    private void ShowArt(StringName frame)
+    {
+        if (_art is null || _artSprite is null)
+        {
+            return;
+        }
+
+        if (_shownFrame == frame)
+        {
+            return; // só troca (e só gera o texto de ArtFrame) quando o quadro muda: são 5 trocas por baú, não uma por quadro
+        }
+
+        _shownFrame = frame;
+        ArtFrame = frame.ToString();
+        _art.Apply(_artSprite, frame, 0);
+    }
+
     private void SetOpenVisual(float k)
     {
+        if (_art is not null)
+        {
+            // quadros desenhados; pulinho do corpo e brilho de dentro como antes
+            var hopK = MathF.Sin(MathF.Min(1f, k * 1.6f) * MathF.PI) * 2.5f * _scale;
+            _artSprite!.Position = new Vector2(0, -hopK * 0.35f);
+            ShowArt(OpeningFrames[PropArtStates.ChestFrame(k)]);
+            var easeA = 1f - MathF.Pow(1f - k, 3f);
+            _glow.Modulate = _glow.Modulate with { A = MathF.Sin(MathF.Min(1f, k * 1.3f) * MathF.PI * 0.5f) * (k >= 1f ? 0.24f : 0.65f) };
+            _glow.Scale = new Vector2(0.55f + (0.25f * easeA), 0.4f + (0.5f * easeA)) * _scale;
+            if (k >= 1f)
+            {
+                IsOpen = true;
+                _interact.Enabled = false;
+            }
+
+            return;
+        }
+
         // tampa: pulinho e vira para trás (escala y de 1 até −0,42 mostrando o lado de dentro), com leve giro
         var ease = 1f - MathF.Pow(1f - k, 3f);
         var baseK = MathF.Abs(_lid.Scale.X);

@@ -1,0 +1,61 @@
+[gd_resource type="SpriteFrames" load_steps=7 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/props/boats/rowboat/rest.png" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/props/boats/rowboat/rowing_0.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/props/boats/rowboat/rowing_1.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/props/boats/rowboat/rowing_2.png" id="4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/props/boats/rowboat/rowing_3.png" id="5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/props/boats/rowboat/water_reflection.png" id="6"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1")
+}],
+"loop": false,
+"name": &"rest",
+"speed": 1.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}],
+"loop": true,
+"name": &"rowing",
+"speed": 6.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6")
+}],
+"loop": false,
+"name": &"reflection",
+"speed": 1.00
+}]
+metadata/anchors = {
+"rest": Vector2(124.5, 214),
+"rowing": Vector2(124.5, 214),
+"reflection": Vector2(80.5, 252)
+}
+metadata/densities = {
+"rest": 1.7402,
+"rowing": 1.7402,
+"reflection": 1.7402
+}
+metadata/used_rects = {
+"rest": Rect2(66, 66, 117, 148),
+"rowing": Rect2(17, 66, 215, 148),
+"reflection": Rect2(22, 30, 117, 223)
+}
+metadata/scale_class = "fixed"
+metadata/source = "pacote v2 do designer (issue #5): rowboat parado/remando (4 quadros)"

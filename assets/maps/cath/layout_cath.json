@@ -180,5 +180,8 @@
   "decor": [
     {"kind": "inspect", "x": 836, "y": 312, "r": 30, "label": "Examinar a estátua do Arauto", "text": "O Arauto ergue as mãos para um vitral que mostra Lumeira inteira. No vidro, a cidade está escura; só uma lanterna, no centro, continua acesa."},
     {"kind": "inspect", "x": 180, "y": 760, "r": 26, "label": "Ler o livro de vigílias", "text": "Um livro de presença dos sineiros. A última página tem uma única linha, repetida até o fim: \"O sino toca na véspera. O sino toca na véspera.\""}
+  ],
+  "objects": [
+    {"id": "door_arched", "x": 1550, "y": 472, "label": "Abrir a porta", "text": "A porta cede sem esforço, como se alguém a tivesse usado hoje. Do outro lado, só poeira e o eco do sino."}
   ]
 }

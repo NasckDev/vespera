@@ -652,6 +652,7 @@ public partial class SmokeTest
         var measuring = true;
         var meter = QaMeasureFrames(frames, () => measuring);
         var rng = new Random(9);
+        var entityCounts = new Dictionary<string, int>();
         for (var i = 0; i < 50; i++)
         {
             var id = QaAllMaps[rng.Next(QaAllMaps.Length)];
@@ -664,7 +665,15 @@ public partial class SmokeTest
             world.GoMap(id, map.Spawn.X, map.Spawn.Y);
             await WaitUntil(() => world.MapId == id, 5, $"troca {i + 1} para {id}");
             await WaitMapSettled(world);
-            Require(world.Entities.GetChildCount() == 1, $"troca {i + 1}: {world.Entities.GetChildCount()} entidades (só o jogador esperado)");
+            // O y-sort carrega o jogador e toda a vestimenta do mapa (NPCs, quebráveis, baús, objetos, luzes): o que a troca
+            // não pode deixar é sobra do mapa anterior, então a contagem de um mapa é a mesma em toda visita.
+            var count = world.Entities.GetChildCount();
+            Require(count >= 1, $"troca {i + 1}: {count} entidades (o jogador sumiu)");
+            if (!entityCounts.TryAdd(id, count))
+            {
+                Require(entityCounts[id] == count, $"troca {i + 1} para {id}: {count} entidades, na primeira visita eram {entityCounts[id]} (sobra do mapa anterior?)");
+            }
+
             Require(world.CollisionRoot.GetChildCount() == 1, $"troca {i + 1}: {world.CollisionRoot.GetChildCount()} corpos de colisão");
         }
 
@@ -755,6 +764,16 @@ public partial class SmokeTest
         }
 
         await Frames(10);
+        // o spam de Pause e Interact abre a pausa e falas de verdade (telas que travam o jogador de propósito): quem joga
+        // aperta Esc (ui_cancel fecha a tela do topo) até sair delas
+        for (var esc = 0; esc < 6 && GameManager.Instance.IsGameplayBlocked; esc++)
+        {
+            Input.ParseInputEvent(new InputEventAction { Action = "ui_cancel", Pressed = true });
+            await Frames(2);
+            Input.ParseInputEvent(new InputEventAction { Action = "ui_cancel", Pressed = false });
+            await Frames(20);
+        }
+
         Log.Info($"estresse spam: {requests} pedidos de interação, pausado={GetTree().Paused}, bloqueado={GameManager.Instance.IsGameplayBlocked}");
         Require(!GetTree().Paused, "a árvore ficou pausada depois do spam");
         Require(!GameManager.Instance.IsGameplayBlocked, "o gameplay ficou bloqueado depois do spam");

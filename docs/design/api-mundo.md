@@ -146,3 +146,17 @@ Sinais novos (bloco B4a do `EventBus`): `PropBroken(mapId, kind, pos)`, `ChestOp
 
 `PlaySfx("step")`; `SetAmbientEmitters(layout.Ambient, fade)` e `UpdateAmbientListener(pé, dt)` (o `WorldDressing` já
 chama), `AmbientLevel(kind)`, `ActiveAmbientVoices`. Loops em `assets/audio/ambient/` (`tools/audio/gen_world.py`).
+
+## Arte aprovada (frente C2) — DECISIONS C2-D1 a C2-D8
+
+- **`ArtFrames.TryLoad(path, out art)`** (`src/World/Art/ArtFrames.cs`): SpriteFrames gerado por `tools/sprites/build_art.py`
+  com pé (`Anchor(anim)`), densidade (`Density(anim)`) e classe de escala; `art.Apply(sprite2D, anim, quadro)` mostra um
+  quadro num `Sprite2D` comum. **`ArtSprite`** (`AnimatedSprite2D`): `Setup(art)` e `Show(anim, quadro)` a cada quadro (sem `Play()`).
+- **Caçador**: `Player.PlayDodge(direção, segundos)` (o combate chama ao começar o dash); `Animator.Walker` (arte nova),
+  `UsesDrawnFrames`, `CurrentAnimation`/`CurrentFrame`, `WalkFrameChanges`, `TryGetGhost(...)` para rastros.
+- **Monstros**: `Enemy.ArtPathFor(def)` (chefes e Alfa), `UsesArt`, `ArtPose`, `LiveScale`.
+- **Objetos**: `PropArt.Breakable/Chest/Boat/FishingRod` e `PropArt.ForCatalogSprite(png)`; `Breakable.Stage`/`ShardsFlying`,
+  `Chest.ArtFrame`, `CatalogObject.ArtRole`/`ArtState`/`Toggle()`/`SetFlowerStage()`, `WorldDressing.FerryBoat`/`FerryFrame`/`RodInHand`.
+- **UI**: `UiIcons.Bust(chaveDoRetrato)`, `UiIcons.Hud(id)`/`HudInner(id)`, `HotbarSlot.FramedIcon`, `Hud.DodgeSlot`,
+  `Hud.IsStatusShown(id)`; sinal novo `PlayerStatusChanged(status, ativo)` (`shield`, `slow`, `speed`); `shield` = `PlayerCombatState.Shielded` (i-frames concedidos: respawn, Investida, Supremos; **não** o piscar de 0,75 s depois de um golpe).
+- Smoke: `--smoke-filter=arte:` (fixture `src/Testing/Fixtures/fixture_art.json`).

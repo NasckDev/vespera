@@ -145,7 +145,7 @@ public partial class SmokeTest
             await NextPhysicsFrame();
             if (anim.CurrentAnimation == "walk_side")
             {
-                frames.Add(anim.Hunter.Frame);
+                frames.Add(anim.CurrentFrame); // quadros desenhados da arte aprovada (C2-D2)
             }
 
             if (i == 35)
@@ -160,18 +160,20 @@ public partial class SmokeTest
         Require(anim.DustBursts > dust, "poeira nos pés ao andar");
         Require(AudioManager.Instance.HasSfx("step"), "sfx step carregado");
 
-        // costas: procedural (o corpo quica e balança)
-        var ys = new List<float>();
+        // costas: quadros desenhados (C2-D2), sem o quique procedural por cima
+        var backFrames = new HashSet<int>();
         Input.ActionPress(InputActions.MoveUp);
         for (var i = 0; i < 40; i++)
         {
             await NextPhysicsFrame();
-            ys.Add(anim.Body.Position.Y);
+            if (anim.CurrentAnimation == "walk_back")
+            {
+                backFrames.Add(anim.CurrentFrame);
+            }
         }
 
         Input.ActionRelease(InputActions.MoveUp);
-        Require(anim.CurrentAnimation == "idle_back", $"andando para cima usa idle_back com passo procedural, está {anim.CurrentAnimation}");
-        Require(ys.Max() - ys.Min() > 1f, $"passo procedural das costas sem quique ({ys.Max() - ys.Min():0.00} u)");
+        Require(backFrames.Count >= 3, $"andando para cima deveria tocar walk_back desenhado, passou por {backFrames.Count} quadros ({anim.CurrentAnimation})");
         await Shot("motor-cacador-costas");
 
         player.PlayAttack();
@@ -219,8 +221,10 @@ public partial class SmokeTest
         player.ClassId = "bow";
         Input.ActionPress(InputActions.MoveLeft);
         await Frames(20);
+        Require(anim.UsesDrawnFrames && anim.CurrentAnimation == "walk_side", $"arco andando usa a caminhada desenhada v4, está '{anim.CurrentAnimation}'");
         Input.ActionRelease(InputActions.MoveLeft);
-        Require(!anim.UsesKitFrames && player.Sprite.Visible && player.Sprite.Key == "c_bow_side", $"arco usa o atlas c_bow_side, está {player.Sprite.Key}");
+        await WaitSeconds(0.3);
+        Require(!anim.UsesKitFrames && player.Sprite.Visible && player.Sprite.Key == "c_bow_side", $"arco parado usa o atlas c_bow_side, está {player.Sprite.Key}");
         await Shot("motor-arco-andando");
         player.ClassId = "sword";
         EndMotor();

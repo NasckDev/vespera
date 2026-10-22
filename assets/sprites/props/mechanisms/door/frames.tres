@@ -1,0 +1,37 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/props/mechanisms/door/closed.png" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/props/mechanisms/door/open.png" id="2"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1")
+}],
+"loop": false,
+"name": &"closed",
+"speed": 1.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2")
+}],
+"loop": false,
+"name": &"open",
+"speed": 1.00
+}]
+metadata/anchors = {
+"closed": Vector2(62, 128),
+"open": Vector2(62, 128)
+}
+metadata/densities = {
+"closed": 1.7637,
+"open": 1.7637
+}
+metadata/used_rects = {
+"closed": Rect2(19, 16, 86, 112),
+"open": Rect2(19, 16, 86, 112)
+}
+metadata/scale_class = "fixed"
+metadata/source = "pacote v2 do designer (issue #5): porta fechada/aberta"

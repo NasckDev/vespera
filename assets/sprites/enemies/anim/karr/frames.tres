@@ -1,0 +1,61 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/anim/karr/front.png" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/anim/karr/attack.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/anim/karr/special.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/anim/karr/death.png" id="4"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1")
+}],
+"loop": false,
+"name": &"front",
+"speed": 1.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 1.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3")
+}],
+"loop": false,
+"name": &"special",
+"speed": 1.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4")
+}],
+"loop": false,
+"name": &"death",
+"speed": 1.00
+}]
+metadata/anchors = {
+"front": Vector2(410, 462),
+"attack": Vector2(410, 462),
+"special": Vector2(410, 462),
+"death": Vector2(410, 462)
+}
+metadata/densities = {
+"front": 2.9487,
+"attack": 2.9487,
+"special": 2.9487,
+"death": 2.9487
+}
+metadata/used_rects = {
+"front": Rect2(309, 232, 202, 230),
+"attack": Rect2(248, 261, 323, 201),
+"special": Rect2(229, 220, 362, 242),
+"death": Rect2(298, 315, 223, 147)
+}
+metadata/scale_class = "character"
+metadata/source = "pacote v4 do designer (issue #2): poses autorais normalizadas, tela 820x490, pé (410, 462)"

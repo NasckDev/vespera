@@ -34,8 +34,10 @@ public sealed record LayoutDecor(string Kind, float X, float Y, float Radius, st
 /// <summary>
 /// Objeto do catálogo (<c>src/Data/objects.json</c>, frente B5) posto no mapa: <see cref="Id"/> é a chave do catálogo,
 /// (<see cref="X"/>, <see cref="Y"/>) é o pé do objeto em u e <see cref="Flip"/> espelha na horizontal.
+/// <see cref="Text"/> e <see cref="Label"/> (opcionais) trocam a fala e o rótulo da interação do catálogo: um quadro de
+/// avisos, uma alavanca ou uma porta sem texto não dizem nada ao usar.
 /// </summary>
-public sealed record LayoutObject(string Id, float X, float Y, bool Flip);
+public sealed record LayoutObject(string Id, float X, float Y, bool Flip, string? Text = null, string? Label = null);
 
 /// <summary>Efeito de ambiente sem interação (<c>smoke</c> de chaminé, <c>fireflies</c>, <c>embers</c>), com raio de espalhamento.</summary>
 public sealed record LayoutFx(string Kind, float X, float Y, float Radius);
@@ -109,7 +111,7 @@ public sealed class MapLayout
                     Str(x, "text"),
                     x.TryGetProperty("to", out var to) && to.ValueKind == JsonValueKind.Array ? new MapPoint(to[0].GetSingle(), to[1].GetSingle()) : null)),
                 Fx = List(e, "fx", x => new LayoutFx(ReqStr(x, "kind"), Num(x, "x"), Num(x, "y"), OptNum(x, "r") ?? DefaultFxRadius)),
-                Objects = List(e, "objects", x => new LayoutObject(ReqStr(x, "id"), Num(x, "x"), Num(x, "y"), x.TryGetProperty("flip", out var f) && f.ValueKind == JsonValueKind.True)),
+                Objects = List(e, "objects", x => new LayoutObject(ReqStr(x, "id"), Num(x, "x"), Num(x, "y"), x.TryGetProperty("flip", out var f) && f.ValueKind == JsonValueKind.True, Str(x, "text"), Str(x, "label"))),
             };
         }
         catch (Exception ex) when (ex is JsonException or InvalidOperationException or FormatException or KeyNotFoundException or IndexOutOfRangeException)

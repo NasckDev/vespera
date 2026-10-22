@@ -30,6 +30,7 @@ public partial class HotbarSlot : Control
     private bool _drawFrame = true;
     private bool _marker;
     private Color? _stripe;
+    private Texture2D? _framed;
 
     public HotbarSlot()
     {
@@ -50,6 +51,16 @@ public partial class HotbarSlot : Control
                 QueueRedraw();
             }
         }
+    }
+
+    /// <summary>
+    /// Ícone do designer que já traz a moldura do slot (HUD v1, DECISIONS C2-D7): desenhado no slot inteiro no lugar da
+    /// moldura do tema e do <see cref="IconKey"/>. Null volta ao desenho normal.
+    /// </summary>
+    public Texture2D? FramedIcon
+    {
+        get => _framed;
+        set => Set(ref _framed, value);
     }
 
     public float IconScale
@@ -128,12 +139,21 @@ public partial class HotbarSlot : Control
     public override void _Draw()
     {
         var size = Size;
-        if (_drawFrame)
+        var framed = _framed is not null;
+        if (framed)
+        {
+            DrawTextureRect(_framed!, new Rect2(Vector2.Zero, size), false, new Color(1, 1, 1, _iconAlpha));
+            if (_selected)
+            {
+                DrawRect(new Rect2(Vector2.Zero, size), UiPalette.Ambar, false, 1f);
+            }
+        }
+        else if (_drawFrame)
         {
             DrawStyleBox(GetThemeStylebox(ThemePanel, _selected ? Focused : Normal), new Rect2(Vector2.Zero, size));
         }
 
-        if (_icon is not null)
+        if (_icon is not null && !framed)
         {
             var side = size.X * _iconScale;
             var tex = _icon.GetSize();
@@ -174,7 +194,7 @@ public partial class HotbarSlot : Control
             HudDraw.Text(this, font, new Vector2(size.X - 2, size.Y - 2), _corner, UiFonts.Small, _cornerColor, HorizontalAlignment.Right);
         }
 
-        if (!_drawFrame)
+        if (!_drawFrame || framed)
         {
             return;
         }
@@ -226,11 +246,16 @@ public partial class UltimateButton : Control
 
     public bool IsReady => _remaining <= 0f;
 
+    /// <summary>O ícone é o do designer (não o da arma no atlas).</summary>
+    public bool UsesArt { get; private set; }
+
     public float Remaining => _remaining;
 
-    public void Setup(string iconKey, Color readyColor)
+    /// <summary>Ícone e cor de pronto; <paramref name="art"/> (ícone do Supremo do designer) vence o recorte do atlas.</summary>
+    public void Setup(string iconKey, Color readyColor, Texture2D? art = null)
     {
-        _icon = UiIcons.Get(iconKey);
+        _icon = art ?? UiIcons.Get(iconKey);
+        UsesArt = art is not null;
         _ready = readyColor;
         QueueRedraw();
     }
@@ -270,7 +295,7 @@ public partial class UltimateButton : Control
         DrawCircle(c, r, Fill);
         if (_icon is not null)
         {
-            var side = r * 2f * 0.62f;
+            var side = r * 2f * (UsesArt ? 0.74f : 0.62f);
             var tex = _icon.GetSize();
             var drawn = tex * (side / Mathf.Max(tex.X, tex.Y));
             DrawTextureRect(_icon, new Rect2(c - (drawn / 2f), drawn), false, new Color(1, 1, 1, ready ? 1f : 0.45f));

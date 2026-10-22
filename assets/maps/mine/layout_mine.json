@@ -150,5 +150,8 @@
   "decor": [
     {"kind": "inspect", "x": 1180, "y": 296, "r": 26, "label": "Examinar a bigorna", "text": "A bigorna ainda está morna. Alguém forja deste lado da Brecha, e as marteladas ecoam até hoje nas paredes de Lumeira."},
     {"kind": "inspect", "x": 604, "y": 96, "r": 26, "label": "Espiar o túnel desabado", "text": "Os trilhos somem na escuridão. Num prego, um capacete de mineiro amassado e um bilhete: \"Turno da véspera. Volto antes do sino.\""}
+  ],
+  "objects": [
+    {"id": "lever_red", "x": 640, "y": 535, "label": "Puxar a alavanca", "text": "A alavanca range e o trilho do carrinho muda de lado. Lá embaixo, algo responde ao ferro."}
   ]
 }

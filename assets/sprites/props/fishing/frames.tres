@@ -1,0 +1,37 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/props/fishing/rod_hand_right.png" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/props/fishing/rod_hand_left.png" id="2"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1")
+}],
+"loop": false,
+"name": &"right",
+"speed": 1.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2")
+}],
+"loop": false,
+"name": &"left",
+"speed": 1.00
+}]
+metadata/anchors = {
+"right": Vector2(56.5, 173),
+"left": Vector2(56.5, 173)
+}
+metadata/densities = {
+"right": 6.7500,
+"left": 6.7500
+}
+metadata/used_rects = {
+"right": Rect2(14, 11, 85, 162),
+"left": Rect2(11, 11, 85, 162)
+}
+metadata/scale_class = "character"
+metadata/source = "pacote v2 do designer (issue #5): vara de pesca nas duas mãos"

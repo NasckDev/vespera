@@ -832,6 +832,11 @@ public partial class SmokeTest
                         continue;
                     }
 
+                    if (error.StartsWith("sem caminho", StringComparison.Ordinal) && QaOnlyByBoat(world, target))
+                    {
+                        continue; // B4b-D62: os cais da Rua da Forja são só de balsa (a fixture tem o par de balsas leste/oeste)
+                    }
+
                     (error.StartsWith("sem caminho", StringComparison.Ordinal) ? unreachable : stuck).Add($"{entry} {label}: {error}");
                 }
 
@@ -903,6 +908,8 @@ public partial class SmokeTest
             world.Minimap.SetExpanded(false);
         }
 
+        // o spam de Pause/Mapa abre o menu de pausa de verdade (é a tela "ui" que trava o jogador): quem joga fecha com Esc
+        UI.GameUi.Current?.CloseAll();
         // levantar do banco / desistir da pesca / esperar a balsa: o jogo tem que devolver o controle
         await Hold(InputActions.MoveDown, 30);
         await WaitUntil(() => !world.Dressing.InActivity && !GameManager.Instance.IsGameplayBlocked, 10, "jogo destravar depois do spam");
@@ -1003,6 +1010,20 @@ public partial class SmokeTest
         var end = new Vector2(path[^1].X, path[^1].Y);
         var error = await TesterWalkPath(world, path, () => player.FocusedInteractable == target || player.GlobalPosition.DistanceTo(end) < 2f, timeoutGameSeconds);
         await Frames(3);
+        if (error is null && player.FocusedInteractable != target && player.FocusedInteractable is not null)
+        {
+            // dois interagíveis colados (baú ao lado de uma flor): o foco é do mais perto, então quem joga dá mais um passo
+            // em direção ao alvo até ele virar o foco
+            for (var step = 0; step < 90 && player.FocusedInteractable != target && player.GlobalPosition.DistanceTo(c) > 3f; step++)
+            {
+                PressDirection((c - player.GlobalPosition).Normalized());
+                await NextPhysicsFrame();
+            }
+
+            PressDirection(Vector2.Zero);
+            await Frames(3);
+        }
+
         if (player.FocusedInteractable == target)
         {
             return null;

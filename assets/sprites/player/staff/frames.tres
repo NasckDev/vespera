@@ -1,0 +1,109 @@
+[gd_resource type="SpriteFrames" load_steps=19 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/player/staff/walk_front_00.png" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/staff/walk_front_01.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/staff/walk_front_02.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/staff/walk_front_03.png" id="4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/staff/walk_front_04.png" id="5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/staff/walk_front_05.png" id="6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/staff/walk_back_00.png" id="7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/staff/walk_back_01.png" id="8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/staff/walk_back_02.png" id="9"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/staff/walk_back_03.png" id="10"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/staff/walk_back_04.png" id="11"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/staff/walk_back_05.png" id="12"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/staff/walk_side_00.png" id="13"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/staff/walk_side_01.png" id="14"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/staff/walk_side_02.png" id="15"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/staff/walk_side_03.png" id="16"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/staff/walk_side_04.png" id="17"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/staff/walk_side_05.png" id="18"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6")
+}],
+"loop": true,
+"name": &"walk_front",
+"speed": 9.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12")
+}],
+"loop": true,
+"name": &"walk_back",
+"speed": 9.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18")
+}],
+"loop": true,
+"name": &"walk_side",
+"speed": 9.00
+}]
+metadata/anchors = {
+"walk_front": Vector2(210, 412),
+"walk_back": Vector2(210, 412),
+"walk_side": Vector2(210, 412)
+}
+metadata/densities = {
+"walk_front": 3.9571,
+"walk_back": 3.9759,
+"walk_side": 4.0257
+}
+metadata/used_rects = {
+"walk_front": Rect2(121, 265, 150, 144),
+"walk_back": Rect2(158, 265, 128, 142),
+"walk_side": Rect2(146, 265, 162, 145)
+}
+metadata/scale_class = "character"
+metadata/source = "pacote v4 do designer (issue #3): caminhada staff 6 quadros por vista"

@@ -296,6 +296,8 @@ public partial class Hud : CanvasLayer
             _potionSlot.VeilRatio = _potionCooldown / _potionTotal;
         }
 
+        StepArt(dt);
+
         UpdateClock();
         if (_questExpandT > 0f)
         {
@@ -376,7 +378,10 @@ public partial class Hud : CanvasLayer
         _energy = UiBar.Create("energy", new Vector2(78, 5), segments: 5);
         _essence = UiBar.Create("essence", new Vector2(63, 4));
         var hpRow = Ui.Row(3, IconRect.Create("ui_hpicon", 11), _hp, _hpText);
-        var enRow = Ui.Row(3, IconRect.Create("ui_sticon", 10), _energy);
+        var statusRow = BuildArtStatusRow(); // C2-D7: estados com ícone (Hud.Art.cs)
+        // os ícones de estado ficam na linha da energia (espaço reservado: a altura da linha não muda ao acender/apagar)
+        var enRow = Ui.Row(3, IconRect.Create("ui_sticon", 10), _energy, Ui.Gap(2), statusRow);
+        enRow.CustomMinimumSize = new Vector2(0, 11);
         _essRow = Ui.Row(3, Ui.Gap(10), _essence, Ui.Text(UiText.HudEssence, UiFonts.Body, UiPalette.EcoText));
         _noLantern = UiScaling.Reading(Ui.Text(UiText.HudNoLantern, UiFonts.Body, UiPalette.Brecha));
 
@@ -459,11 +464,11 @@ public partial class Hud : CanvasLayer
         }
 
         _ecoSlot = new HotbarSlot { IconKey = "i_eco", IconScale = 0.7f };
-        _potionSlot = new HotbarSlot { IconKey = "ic_potion", IconScale = 0.6f };
+        _potionSlot = new HotbarSlot { IconKey = "ic_potion", IconScale = 0.6f, FramedIcon = UiIcons.Hud("potion") };
         RefreshSlotKeys();
 
         _weaponName = Ui.Text(string.Empty, UiFonts.Body, new Color("#d8cfe0"), align: HorizontalAlignment.Center);
-        var slots = Ui.Row(8, ultColumn, weapons, Ui.Row(3, _ecoSlot, _potionSlot));
+        var slots = Ui.Row(8, ultColumn, weapons, Ui.Row(3, _ecoSlot, _potionSlot, BuildDodgeSlot()));
         slots.Alignment = BoxContainer.AlignmentMode.Center;
         var column = Ui.Column(2, _weaponName, slots);
         // POLI-1/8: a coluna abraça o conteúdo (cresce dos dois lados do centro), em vez de reservar 250 u de largura: o
@@ -573,6 +578,7 @@ public partial class Hud : CanvasLayer
         bus.PortalClosed += OnPortalClosed;
         bus.InvasionStateChanged += OnInvasionChanged;
         bus.InvasionRequested += OnInvasionRequested;
+        ConnectArt(bus);
         GameSettings.Changed += OnSettingsChanged;
         InputBindings.Changed += RefreshSlotKeys;
         InputHints.DeviceChanged += RefreshSlotKeys;
@@ -616,6 +622,7 @@ public partial class Hud : CanvasLayer
         bus.PortalClosed -= OnPortalClosed;
         bus.InvasionStateChanged -= OnInvasionChanged;
         bus.InvasionRequested -= OnInvasionRequested;
+        DisconnectArt(bus);
         GameSettings.Changed -= OnSettingsChanged;
         InputBindings.Changed -= RefreshSlotKeys;
         InputHints.DeviceChanged -= RefreshSlotKeys;
@@ -664,7 +671,7 @@ public partial class Hud : CanvasLayer
         UpdateHotbar(state.Save.ClassId);
         UpdatePotions(state.Save.Potions);
         var ult = Database.Db.Ultimates.TryGetValue(state.Save.ClassId, out var u) ? u : null;
-        _ultimate.Setup(Database.Db.Weapons[state.Save.ClassId].Icon, UiPalette.FromHex(ult?.Color, UiPalette.Ambar));
+        _ultimate.Setup(Database.Db.Weapons[state.Save.ClassId].Icon, UiPalette.FromHex(ult?.Color, UiPalette.Ambar), UltimateArt(state.Save.ClassId));
         _ultimateName.Text = ult?.Name ?? string.Empty;
         _ultimate.SetCooldown(0, 1);
         _questIndex = -1;
@@ -816,7 +823,11 @@ public partial class Hud : CanvasLayer
         _promptText.Text = prompt;
     }
 
-    private void OnStaminaChanged(float current, float max) => _energy.SetRatio(max > 0 ? current / max : 0f);
+    private void OnStaminaChanged(float current, float max)
+    {
+        _energy.SetRatio(max > 0 ? current / max : 0f);
+        UpdateDodgeEnergy(current);
+    }
 
     private void OnEssenceChanged(float current, float max)
     {
@@ -830,6 +841,7 @@ public partial class Hud : CanvasLayer
         var state = GameManager.Instance.State;
         var cost = state.Save.EquippedEco is { } eco ? state.EcoCost(eco) : DefaultEcoMarker;
         _essence.SetMarker(cost / 100f);
+        _ecoSlot.FramedIcon = EcoArt(state.Save.EquippedEco); // ícone do Eco do designer (C2-D7)
         var hasEco = state.Save.EquippedEco is not null;
         _ecoSlot.Visible = hasEco; // C1-D7: slot vazio e barra de Essência só aparecem quando há Eco para usar
         _essRow.Visible = hasEco;
@@ -889,6 +901,10 @@ public partial class Hud : CanvasLayer
             _potionCooldown = remaining;
             _potionTotal = Mathf.Max(0.01f, total);
             _potionSlot.VeilRatio = remaining / _potionTotal;
+        }
+        else if (abilityId == "dash")
+        {
+            OnDashCooldown(remaining, total);
         }
         else if (abilityId.StartsWith("eco", StringComparison.Ordinal))
         {

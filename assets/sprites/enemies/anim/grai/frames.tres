@@ -1,0 +1,61 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/anim/grai/front.png" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/anim/grai/attack.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/anim/grai/special.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/anim/grai/death.png" id="4"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1")
+}],
+"loop": false,
+"name": &"front",
+"speed": 1.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 1.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3")
+}],
+"loop": false,
+"name": &"special",
+"speed": 1.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4")
+}],
+"loop": false,
+"name": &"death",
+"speed": 1.00
+}]
+metadata/anchors = {
+"front": Vector2(410, 462),
+"attack": Vector2(410, 462),
+"special": Vector2(410, 462),
+"death": Vector2(410, 462)
+}
+metadata/densities = {
+"front": 3.5938,
+"attack": 3.5938,
+"special": 3.5938,
+"death": 3.5938
+}
+metadata/used_rects = {
+"front": Rect2(247, 232, 326, 230),
+"attack": Rect2(235, 238, 349, 224),
+"special": Rect2(261, 163, 297, 299),
+"death": Rect2(275, 298, 270, 164)
+}
+metadata/scale_class = "character"
+metadata/source = "pacote v4 do designer (issue #2): poses autorais normalizadas, tela 820x490, pé (410, 462)"

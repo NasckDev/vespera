@@ -307,6 +307,8 @@ public partial class SmokeTest
         var failures = new List<string>();
         var firstVisit = new Dictionary<string, (double Nodes, double Memory)>();
         var lastVisit = new Dictionary<string, (double Nodes, double Memory)>();
+        var visits = new Dictionary<string, int>();
+        var samples = new Dictionary<string, List<(double Nodes, double Memory)>>();
         var orphansStart = Performance.GetMonitor(Performance.Monitor.ObjectOrphanNodeCount);
         var worstMs = 0.0;
         var next = 0;
@@ -346,8 +348,20 @@ public partial class SmokeTest
             }
 
             var sample = (Performance.GetMonitor(Performance.Monitor.ObjectNodeCount), Performance.GetMonitor(Performance.Monitor.MemoryStatic) / (1024 * 1024));
-            firstVisit.TryAdd(to, sample);
-            lastVisit[to] = sample;
+            // a 1ª visita carrega texturas e caches preguiçosos (a arte aprovada trouxe vários): é aquecimento. O vazamento se mede da
+            // 2ª visita em diante, quando só sobra o que cresce a cada troca
+            visits[to] = visits.GetValueOrDefault(to) + 1;
+            if (visits[to] >= 2)
+            {
+                if (!samples.TryGetValue(to, out var list))
+                {
+                    samples[to] = list = [];
+                }
+
+                list.Add(sample);
+                firstVisit.TryAdd(to, sample);
+                lastVisit[to] = sample;
+            }
             if ((i + 1) % 10 == 0)
             {
                 Log.Info($"QA trocas: {i + 1} trocas, nós={sample.Item1} órfãos={Performance.GetMonitor(Performance.Monitor.ObjectOrphanNodeCount)} memória={sample.Item2:0.0}MB, pior troca {worstMs} ms");
@@ -363,9 +377,15 @@ public partial class SmokeTest
                 failures.Add($"{map}: nós cresceram de {first.Nodes} para {last.Nodes}");
             }
 
-            if (last.Memory > first.Memory + 8)
+            // a memória estática serra com o coletor de lixo: com amostras o bastante, a tendência é a média das 3 últimas contra a das
+            // 3 primeiras depois do aquecimento, não dois pontos soltos (que medem o dente da serra)
+            var list = samples[map];
+            var (head, tail) = list.Count >= 6
+                ? (list.Take(3).Average(x => x.Memory), list.Skip(list.Count - 3).Average(x => x.Memory))
+                : (first.Memory, last.Memory);
+            if (tail > head + 8)
             {
-                failures.Add($"{map}: memória cresceu de {first.Memory:0.0} para {last.Memory:0.0} MB");
+                failures.Add($"{map}: memória cresceu de {head:0.0} para {tail:0.0} MB");
             }
         }
 
@@ -445,18 +465,20 @@ public partial class SmokeTest
 
                 PressDirection(Vector2.Zero);
                 await Frames(30);
+                // O spam deixa telas abertas (a pausa, o diário e/ou uma fala do dono, empilhadas): um jogador aperta Esc
+                // (ui_cancel fecha a tela do topo; a ação "pause" só abre a pausa) até sair delas, uma por vez.
+                for (var esc = 0; esc < 6 && GameManager.Instance.IsGameplayBlocked; esc++)
+                {
+                    GetViewport().PushInput(new InputEventAction { Action = "ui_cancel", Pressed = true });
+                    await Frames(2);
+                    GetViewport().PushInput(new InputEventAction { Action = "ui_cancel", Pressed = false });
+                    await Frames(30);
+                }
+
                 if (GameManager.Instance.IsGameplayBlocked)
                 {
-                    // Número ímpar de "pausar": um jogador apertaria de novo para despausar.
-                    GetViewport().PushInput(new InputEventAction { Action = InputActions.Pause, Pressed = true });
-                    await Frames(2);
-                    GetViewport().PushInput(new InputEventAction { Action = InputActions.Pause, Pressed = false });
-                    await Frames(30);
-                    if (GameManager.Instance.IsGameplayBlocked)
-                    {
-                        failures.Add($"{id}: o jogo ficou bloqueado depois do spam");
-                        continue;
-                    }
+                    failures.Add($"{id}: o jogo ficou bloqueado depois do spam ({string.Join(",", GameManager.Instance.GameplayBlocks)}, tela {UI.GameUi.Current?.Stack.Top?.GetType().Name})");
+                    continue;
                 }
 
                 if (world.MapId != id)
@@ -636,6 +658,12 @@ public partial class SmokeTest
                 if (frame > maxFrames)
                 {
                     return $"tempo esgotado; parou em ({p.X:0.0}, {p.Y:0.0}), próximo ponto {(next < path.Count ? path[next] : last)}";
+                }
+
+                if (GameManager.Instance.GameplayBlocks.Contains("ui"))
+                {
+                    // o Interact aleatório do passeio abriu uma fala/olhar: a tela trava o jogador de propósito; quem joga fecha e segue
+                    UI.GameUi.Current?.CloseAll();
                 }
 
                 if (world.MapId == mapId && !world.IsTransitioning && !GameManager.Instance.IsGameplayBlocked)

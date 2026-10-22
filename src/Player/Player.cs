@@ -161,6 +161,9 @@ public partial class Player : CharacterBody2D, ICameraTarget
     /// <summary>Golpe (combate chama em cada ataque). A Lâmina toca os quadros do kit; as outras classes, <c>c_*_atk</c>.</summary>
     public void PlayAttack(float duration = 0.3f) => Animator.PlayAttack(duration);
 
+    /// <summary>Esquiva (combate chama ao começar o dash): quadros desenhados por <paramref name="duration"/> s, sem mover o sprite.</summary>
+    public void PlayDodge(Vector2 direction, float duration) => Animator.PlayDodge(direction, duration);
+
     /// <summary>Levou dano: clarão branco e tremor curto.</summary>
     public void PlayHurt() => Animator.PlayHurt();
 

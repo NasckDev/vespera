@@ -1,6 +1,7 @@
 using System;
 using Godot;
 using Vespera.Autoload;
+using Vespera.Core.Art;
 using Vespera.Core.World;
 
 namespace Vespera.World;
@@ -11,6 +12,9 @@ namespace Vespera.World;
 /// toca <c>hit</c>; ao quebrar solta estilhaços, toca <c>brk</c> e dá o saque de <c>LootTables.PropDrop</c> com texto subindo.
 /// Fica quebrado até o dia seguinte (<see cref="World.Objects"/>). O combate acerta pelo grupo <see cref="HittableGroup"/>
 /// chamando <see cref="Hit"/>.
+/// Barril e caixote têm a arte de estados do designer (DECISIONS C2-D5): inteiro → rachado (metade da vida) → quebrado,
+/// que fica no chão como destroço (sem colisão) até o dia seguinte, e os 6 estilhaços desenhados voam do lugar de cada
+/// pedaço. Os outros tipos continuam no atlas.
 /// </summary>
 public partial class Breakable : Node2D
 {
@@ -29,6 +33,17 @@ public partial class Breakable : Node2D
     private float _shakeAmp;
     private float _hitDirection = 1f;
     private float _scaleK = 1f;
+    private ArtFrames? _art;
+    private Sprite2D[] _shards = [];
+    private Vector2[] _shardVel = [];
+    private float[] _shardSpin = [];
+    private float _shardT = -1f;
+    private const float ShardSeconds = 0.75f;
+
+    private static readonly StringName StageWhole = "whole";
+    private static readonly StringName StageCracked = "cracked";
+    private static readonly StringName StageBroken = "broken";
+    private static readonly StringName[] ShardNames = ["shard_0", "shard_1", "shard_2", "shard_3", "shard_4", "shard_5"];
 
     public string Kind { get; private set; } = "barrel";
 
@@ -37,6 +52,15 @@ public partial class Breakable : Node2D
     public string MapId { get; private set; } = string.Empty;
 
     public bool IsBroken => _health.IsBroken;
+
+    /// <summary>Estado desenhado agora (só com arte de estados; sem ela, <see cref="BreakableStage.Whole"/> até sumir).</summary>
+    public BreakableStage Stage { get; private set; } = BreakableStage.Whole;
+
+    /// <summary>Usa a arte de estados do designer.</summary>
+    public bool HasStateArt => _art is not null;
+
+    /// <summary>Estilhaços voando agora.</summary>
+    public bool ShardsFlying => _shardT >= 0f;
 
     public int Hp => _health.Hp;
 
@@ -67,9 +91,22 @@ public partial class Breakable : Node2D
 
         // v2 (render.js:133): sombra escala 0,8 alpha 0,4 + sprite
         _shadow = new AtlasSprite { Key = "shadow", ScaleClass = SpriteScaleClass.Prop, SpriteScale = 0.8f, Modulate = new Color(1, 1, 1, 0.4f), Position = new Vector2(0, 1) };
-        _sprite = visual ?? new AtlasSprite { Key = $"pr_{kind}", ScaleClass = SpriteScaleClass.Prop };
+        var artPath = visual is null || IsCatalogArtSource(visual) ? PropArt.Breakable(kind) : null;
+        if (artPath is not null && ArtFrames.TryLoad(artPath, out var art))
+        {
+            _art = art;
+            visual?.QueueFree();
+            _sprite = new Sprite2D { Name = "Art" };
+            art.Apply(_sprite, StageWhole, 0);
+        }
+        else
+        {
+            _sprite = visual ?? new AtlasSprite { Key = $"pr_{kind}", ScaleClass = SpriteScaleClass.Prop };
+        }
+
         AddChild(_shadow);
         AddChild(_sprite);
+        CreateShards();
 
         _body = new StaticBody2D { Name = "Solid", CollisionLayer = 1, CollisionMask = 0 };
         var r = SolidRadius * _scaleK;
@@ -101,6 +138,13 @@ public partial class Breakable : Node2D
         _sprite.Visible = true;
         _shadow.Visible = true;
         _sprite.Modulate = Colors.White;
+        SetStage(BreakableStage.Whole);
+        _shardT = -1f;
+        foreach (var shard in _shards)
+        {
+            shard.Visible = false;
+        }
+
         _body.ProcessMode = ProcessModeEnum.Inherit;
         _body.GetChild<CollisionShape2D>(0).SetDeferred(CollisionShape2D.PropertyName.Disabled, false);
         if (!IsInGroup(HittableGroup))
@@ -131,9 +175,12 @@ public partial class Breakable : Node2D
         _shakeAmp = 1.2f + (2.2f * (1f - _health.Fraction));
         if (result == PropHitResult.Damaged)
         {
+            SetStage(PropArtStates.Breakable(_health.Hp, _health.MaxHp));
             AudioManager.Instance?.PlaySfx("hit", GlobalPosition);
             return result;
         }
+
+        LaunchShards();
 
         AudioManager.Instance?.PlaySfx("brk", GlobalPosition);
         _debris.GlobalPosition = GlobalPosition + new Vector2(0, -8f * _scaleK);
@@ -147,6 +194,11 @@ public partial class Breakable : Node2D
 
     public override void _Process(double delta)
     {
+        if (_shardT >= 0f)
+        {
+            StepShards(MathF.Min(0.05f, (float)delta));
+        }
+
         if (_shakeT < 0f)
         {
             return;
@@ -168,10 +220,139 @@ public partial class Breakable : Node2D
 
     private void SetBrokenVisual()
     {
-        _sprite.Visible = false;
+        if (_art is not null)
+        {
+            // o quebrado fica no chão como destroço até o dia seguinte (sem colisão, sem sombra)
+            SetStage(BreakableStage.Broken);
+            _sprite.Position = Vector2.Zero;
+            _sprite.Rotation = 0f;
+        }
+        else
+        {
+            _sprite.Visible = false;
+        }
+
         _shadow.Visible = false;
         _body.GetChild<CollisionShape2D>(0).SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
         RemoveFromGroup(HittableGroup);
+    }
+
+    private void SetStage(BreakableStage stage)
+    {
+        Stage = stage;
+        if (_art is null)
+        {
+            return;
+        }
+
+        _art.Apply(_sprite, stage switch { BreakableStage.Broken => StageBroken, BreakableStage.Cracked => StageCracked, _ => StageWhole }, 0);
+    }
+
+    /// <summary>O visual passado é o PNG do catálogo de onde a arte de estados saiu (barril/caixote comuns).</summary>
+    private static bool IsCatalogArtSource(Sprite2D visual) =>
+        visual.Texture is { ResourcePath: { Length: > 0 } path } && PropArt.ForCatalogSprite(path).Role == PropArtRole.Breakable;
+
+    /// <summary>6 estilhaços pré-criados (nada é criado ao quebrar): cada PNG tem o pedaço no lugar dele na tela do barril.</summary>
+    private void CreateShards()
+    {
+        if (_art is null)
+        {
+            return;
+        }
+
+        var count = 0;
+        foreach (var name in ShardNames)
+        {
+            count += _art.Has(name) ? 1 : 0;
+        }
+
+        _shards = new Sprite2D[count];
+        _shardVel = new Vector2[count];
+        _shardSpin = new float[count];
+        _shardCenter = new Vector2[count];
+        var upp = _art.UnitsPerPixel(StageWhole);
+        var anchor = _art.Anchor(StageWhole);
+        for (var i = 0; i < count; i++)
+        {
+            var shard = new Sprite2D { Name = $"Shard{i}", Visible = false, ZIndex = 1 };
+            _art.Apply(shard, ShardNames[i], 0);
+            AddChild(shard);
+            _shards[i] = shard;
+            _shardCenter[i] = ShardCenter(ShardNames[i], anchor, upp);
+        }
+    }
+
+    private static readonly System.Collections.Generic.Dictionary<string, Vector2> ShardCenters = [];
+    private Vector2[] _shardCenter = [];
+
+    /// <summary>Centro do pedaço relativo ao pé (u), lido uma vez por PNG: define para onde ele voa.</summary>
+    private Vector2 ShardCenter(StringName name, Vector2 anchor, float upp)
+    {
+        var key = _art!.Path + ":" + name;
+        if (!ShardCenters.TryGetValue(key, out var center))
+        {
+            var used = _art.UsedRect(name);
+            center = ((Vector2)used.Position + ((Vector2)used.Size / 2f) - anchor) * upp;
+            ShardCenters[key] = center;
+        }
+
+        return center;
+    }
+
+    private void LaunchShards()
+    {
+        if (_shards.Length == 0 || _art is null)
+        {
+            return;
+        }
+
+        for (var i = 0; i < _shards.Length; i++)
+        {
+            var shard = _shards[i];
+            var center = _shardCenter[i];
+            var side = center.X == 0f ? (i % 2 == 0 ? 1f : -1f) : MathF.Sign(center.X);
+            var lift = 0.55f + (0.45f * Math.Clamp(-center.Y / 20f, 0f, 1f)); // pedaços de cima sobem mais
+            _shardVel[i] = new Vector2((side * (26f + (i * 4f))) + (_hitDirection * 10f), -(38f + (i * 5f)) * lift);
+            _shardSpin[i] = ((i % 2 == 0) ? 1f : -1f) * (5f + i);
+            shard.Position = Vector2.Zero;
+            shard.Rotation = 0f;
+            shard.Modulate = Colors.White;
+            shard.Visible = true;
+        }
+
+        _shardT = 0f;
+    }
+
+    private void StepShards(float dt)
+    {
+        _shardT += dt;
+        var fade = Math.Clamp((_shardT - (ShardSeconds * 0.55f)) / (ShardSeconds * 0.45f), 0f, 1f);
+        for (var i = 0; i < _shards.Length; i++)
+        {
+            var shard = _shards[i];
+            _shardVel[i] += new Vector2(0f, 210f * dt);
+            var p = shard.Position + (_shardVel[i] * dt);
+            if (p.Y > 2f)
+            {
+                // quica no chão e escorrega
+                p.Y = 2f;
+                _shardVel[i] = new Vector2(_shardVel[i].X * 0.55f, -_shardVel[i].Y * 0.3f);
+                _shardSpin[i] *= 0.5f;
+            }
+
+            shard.Position = p;
+            shard.Rotation += _shardSpin[i] * dt;
+            shard.Modulate = new Color(1f, 1f, 1f, 1f - fade);
+        }
+
+        if (_shardT >= ShardSeconds)
+        {
+            _shardT = -1f;
+            foreach (var shard in _shards)
+            {
+                shard.Visible = false;
+            }
+        }
     }
 
     private CpuParticles2D CreateDebris(string kind)

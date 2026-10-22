@@ -792,6 +792,7 @@ public partial class SmokeTest
             ReleaseAllActions();
             PressDirection(Vector2.Zero);
             SetAim(Vector2.Zero);
+            UI.GameUi.Current?.CloseAll(); // o Interact do spam pode abrir uma fala/olhar: a tela trava o jogador de propósito, quem joga fecha
             await WaitSeconds(1.2);
             var st = combat.PlayerCombat.State;
             Require(!combat.PlayerDead, $"{cls}: morreu no spam (HP era restaurado)");
@@ -1040,7 +1041,12 @@ public partial class SmokeTest
             var p = player.GlobalPosition;
             if (world.Map.Back is { } bk && new Rect2(bk.X - 30, bk.Y - 30, bk.Width + 60, bk.Height + 60).HasPoint(p + (dir * 10)))
             {
-                dir = -dir; // evita a borda de fuga (pediria escolha)
+                // evita a borda de fuga (pediria escolha). O spawn pode ficar dentro da faixa de 30 u em volta dela: virar
+                // para trás a cada quadro faria o bot tremer no lugar e ser dado como travado; sai pelo lado oposto ao centro
+                var away = p - new Vector2(bk.Center.X, bk.Center.Y);
+                dir = away.LengthSquared() > 1f ? away.Normalized() : Vector2.Up;
+                hold = 30;
+                history.Clear();
             }
 
             PressDirection(dir);

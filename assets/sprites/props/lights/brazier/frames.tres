@@ -1,0 +1,49 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/props/lights/brazier/off.png" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/props/lights/brazier/on_0.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/props/lights/brazier/on_1.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/props/lights/brazier/on_2.png" id="4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/props/lights/brazier/on_3.png" id="5"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1")
+}],
+"loop": false,
+"name": &"off",
+"speed": 1.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}],
+"loop": true,
+"name": &"on",
+"speed": 8.00
+}]
+metadata/anchors = {
+"off": Vector2(36, 144),
+"on": Vector2(36, 144)
+}
+metadata/densities = {
+"off": 2.2767,
+"on": 2.2767
+}
+metadata/used_rects = {
+"off": Rect2(6, 7, 60, 137),
+"on": Rect2(6, 7, 60, 137)
+}
+metadata/scale_class = "fixed"
+metadata/source = "pacote v1 do designer (issue #5): brazier apagado/aceso com chama em 4 quadros"
