@@ -65,6 +65,8 @@ public partial class SmokeTest : Node
 
             ran++;
             var scenarioStart = Time.GetTicksMsec();
+            // INT-D7: missões cumprem sozinhas (com a fala de fim de missão) só na jornada, que joga o fluxo real.
+            UI.GameUi.AutoCompleteQuests = name.StartsWith("jornada", StringComparison.OrdinalIgnoreCase);
             try
             {
                 await (Task)method.Invoke(this, null)!;

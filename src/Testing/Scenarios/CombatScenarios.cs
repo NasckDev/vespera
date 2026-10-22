@@ -624,6 +624,25 @@ public partial class SmokeTest
                     throw new SmokeFailure($"timeout de {timeoutSeconds}s: {what} (jogador {player.GlobalPosition}, alvo {(t is null ? "nenhum" : $"{t.Def.Id} em ({t.X:0},{t.Y:0}) {t.State} hp {t.Hp:0}")}, vivos {combat.AliveMonsters})");
                 }
                 frame++;
+
+                // Integração v0.1: a Interface mostra de verdade o "Saída da Brecha" (pé na borda de fuga) e outras falas,
+                // que travam o jogo. O bot responde como o jogador que quer lutar: "Continuar lutando" (Esc/B).
+                if (UI.GameUi.Current is { } gui && gui.Stack.Count > 0)
+                {
+                    PressDirection(Vector2.Zero);
+                    Input.ActionRelease(InputActions.Attack);
+                    Input.ParseInputEvent(new InputEventAction { Action = "ui_cancel", Pressed = true });
+                    await NextPhysicsFrame();
+                    Input.ParseInputEvent(new InputEventAction { Action = "ui_cancel", Pressed = false });
+                    await Frames(3);
+                    if (gui.Stack.Count > 0)
+                    {
+                        gui.CloseAll();
+                    }
+
+                    continue;
+                }
+
                 if (state.Hp < state.MaxHp * 0.35)
                 {
                     state.RestoreFullHealth();
@@ -653,7 +672,10 @@ public partial class SmokeTest
                 else if (d > range || (ranged && !clear))
                 {
                     var near = d > range ? range : 16; // sem linha de tiro: chega perto pelo caminho
-                    PressDirection(BotStep(combat, p, new Vector2((float)target.X, (float)target.Y), near, ref path, ref pathAge));
+                    var step = BotStep(combat, p, new Vector2((float)target.X, (float)target.Y), near, ref path, ref pathAge);
+                    // Não pisa na borda de fuga (abre "Saída da Brecha"): espera o monstro sair dali.
+                    var ahead = p + (step * 8f);
+                    PressDirection(combat.World.Map.Back is { } back && back.Contains(ahead.X, ahead.Y) ? Vector2.Zero : step);
                 }
                 else if (d < range * 0.5f && ranged)
                 {

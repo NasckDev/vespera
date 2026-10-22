@@ -227,7 +227,10 @@ public partial class SmokeTest
         var (siteMap, siteOrigin) = site!.Value;
         Log.Info($"objetos (tester): praça de testes em {siteMap} ({siteOrigin.X:0}, {siteOrigin.Y:0})");
 
-        // O jogador do mundo mede o mesmo que a régua do catálogo.
+        // O jogador do mundo mede o mesmo que a régua do catálogo (c_sword_front: o caçador da Lâmina; o cenário anterior
+        // pode ter deixado outra classe no save).
+        player.ClassId = "sword";
+        await Frames(2);
         var playerSprite = player.Sprite;
         var playerHeight = ObjectGallery.WorldHeightOf(playerSprite);
         Require(Math.Abs(playerHeight - catalog.PlayerHeight) < 1.5f, $"jogador no mundo mede {playerHeight:0.0} u, catálogo calibrado em {catalog.PlayerHeight} u");

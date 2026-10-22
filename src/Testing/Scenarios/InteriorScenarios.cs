@@ -310,6 +310,15 @@ public partial class SmokeTest
             await Frames(2);
             GetViewport().PushInput(new InputEventAction { Action = InputActions.Interact, Pressed = false });
             await NextPhysicsFrame();
+
+            // Integração v0.1: com a Interface, falar com o dono abre a fala/loja (tela modal). O bot fecha como o
+            // jogador faria (Esc) antes de seguir para o próximo ponto.
+            await Frames(2);
+            if (UI.GameUi.Current is { } ui && ui.Stack.Count > 0)
+            {
+                ui.CloseAll();
+                await Frames(3);
+            }
         }
         finally
         {

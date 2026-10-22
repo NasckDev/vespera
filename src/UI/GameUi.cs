@@ -410,11 +410,17 @@ public partial class GameUi : CanvasLayer
         _deathT = -1f;
     }
 
+    /// <summary>
+    /// Só o smoke desliga (DECISIONS INT-D7): nos cenários das outras frentes, a fala de missão cumprida abria sozinha
+    /// no meio do cenário e travava o bot. No jogo é sempre true.
+    /// </summary>
+    public static bool AutoCompleteQuests { get; set; } = true;
+
     /// <summary><c>updQuests</c> (<c>extra.js:117-121</c>): cumpre a missão atual quando não há tela aberta.</summary>
     private void CheckQuest()
     {
         var state = GameManager.Instance.State;
-        if (Stack.Count > 0 || (World?.IsTransitioning ?? false) || state.IsDead || _deathT >= 0f || _fadeCallback is not null)
+        if (!AutoCompleteQuests || Stack.Count > 0 || (World?.IsTransitioning ?? false) || state.IsDead || _deathT >= 0f || _fadeCallback is not null)
         {
             return;
         }

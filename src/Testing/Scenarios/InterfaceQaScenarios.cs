@@ -69,6 +69,7 @@ public partial class SmokeTest
             }
 
             await Frames(2);
+            await ProcessFrames(2); // o prompt do mundo atualiza no _Process (com a física acelerada, há vários ticks por quadro)
             // Integração v0.1 (INT-D5): o prompt visível é o do motor, em cima do interagível; o HUD só guarda o texto.
             if (world.Dressing.Prompt.ShownText != it.Prompt || hud.PromptLabel.Text != it.Prompt || hud.PromptVisible)
             {
@@ -1186,7 +1187,9 @@ public partial class SmokeTest
     private static List<string> QaOffscreenLabels(string screen)
     {
         var problems = new List<string>();
-        var bounds = new Rect2(-0.5f, -0.5f, 641f, 361f);
+        // Integração v0.1: com aspect=expand (B4a-D39) a área da UI é a visível da janela (640×360 ou mais), não fixa.
+        var visible = (GameUi.Current?.GetViewport() ?? Hud.Current?.GetViewport())?.GetVisibleRect() ?? new Rect2(0, 0, 640, 360);
+        var bounds = visible.Grow(0.5f);
         void Visit(Node node)
         {
             if (node is CanvasItem { Visible: false })

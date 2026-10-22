@@ -180,9 +180,26 @@ public partial class SmokeTest
         Require(anim.CurrentAnimation == "attack", $"PlayAttack toca attack, está {anim.CurrentAnimation}");
         await Shot("motor-cacador-golpe");
         await WaitSeconds(0.4);
-        player.AttackPose = true; // a API antiga do combate continua valendo
-        await WaitSeconds(0.08);
-        Require(anim.CurrentAnimation == "attack", "AttackPose mostra o golpe");
+        if (Combat.CombatDirector.Instance is null)
+        {
+            player.AttackPose = true; // a API antiga do combate continua valendo
+            await WaitSeconds(0.08);
+            Require(anim.CurrentAnimation == "attack", "AttackPose mostra o golpe");
+        }
+        else
+        {
+            // Integração v0.1: o combate é dono do AttackPose (reescreve a cada quadro); o golpe de verdade mostra o quadro.
+            Input.ActionPress(InputActions.Attack);
+            var sawAttack = false;
+            for (var i = 0; i < 20 && !sawAttack; i++)
+            {
+                await NextPhysicsFrame();
+                sawAttack = anim.CurrentAnimation == "attack";
+            }
+
+            Input.ActionRelease(InputActions.Attack);
+            Require(sawAttack, $"o golpe do combate mostra o quadro de ataque, está {anim.CurrentAnimation}");
+        }
         player.AttackPose = false;
         player.PlayHurt();
         await WaitSeconds(0.08);

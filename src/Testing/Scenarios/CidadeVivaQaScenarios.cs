@@ -722,6 +722,13 @@ public partial class SmokeTest
     {
         var it = world.GetInteractable(interactableId)!;
         var player = FindPlayer()!;
+        // Integração v0.1: a fala/diálogo aberto pela interação anterior (Interface) trava o jogador; fecha como o jogador.
+        if (UI.GameUi.Current is { } ui && ui.Stack.Count > 0)
+        {
+            ui.CloseAll();
+            await ProcessFrames(3);
+        }
+
         var area = world.WalkArea;
         var p = player.GlobalPosition;
         var path = WalkPathfinder.FindPathNear(area, new MapPoint(p.X, p.Y), new MapPoint(it.Position.X, it.Position.Y), it.Radius - 4);

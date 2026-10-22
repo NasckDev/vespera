@@ -370,9 +370,16 @@ public partial class CombatDirector : Node2D, IMonsterWorld
     /// deslizar em volta em vez de empacar encostado (na v2, colado num caixote, o passo de 0,6 u caía na faixa mais
     /// larga da elipse e o monstro ficava parado para sempre).
     /// </summary>
+    /// <summary>
+    /// Raio de colisão de monstro contra o mapa: <c>min(raio, r/2)</c>. A v2 usava 6 u (<c>core.js:250</c>); com as
+    /// máscaras de 4 u das Brechas redesenhadas (passagens de 12 u, B4c) monstros grandes empacavam onde o jogador passa.
+    /// Integração v0.1 (DECISIONS INT-D6): o mesmo raio do jogador e do campo de perseguição.
+    /// </summary>
+    public const double MonsterMoveRadius = ChaseField.PassRadius;
+
     public void Move(MonsterBody m, double dx, double dy)
     {
-        var r = Math.Min(6, m.Radius * 0.5);
+        var r = Math.Min(MonsterMoveRadius, m.Radius * 0.5);
         var steps = Math.Max(1, (int)Math.Ceiling(Math.Max(Math.Abs(dx), Math.Abs(dy)) / 3));
         var sx = dx / steps;
         var sy = dy / steps;
@@ -462,7 +469,7 @@ public partial class CombatDirector : Node2D, IMonsterWorld
     /// </summary>
     private void Unstick(MonsterBody m, ref double ux, ref double uy)
     {
-        var r = Math.Min(6, m.Radius * 0.5);
+        var r = Math.Min(MonsterMoveRadius, m.Radius * 0.5);
         if (AxisMoves(m, ux, uy, r))
         {
             return;
@@ -516,7 +523,7 @@ public partial class CombatDirector : Node2D, IMonsterWorld
 
         var p = PlayerFoot;
         var ok = _chase.TryDirection((float)m.X, (float)m.Y, out var ux, out var uy);
-        return $"dist={_chase.Distance((float)m.X, (float)m.Y)} line={_chase.LineClear((float)m.X, (float)m.Y, p.X, p.Y)} dir={ok}({ux:0.00},{uy:0.00}) stand={CanStand(m.X, m.Y, Math.Min(6, m.Radius * 0.5), m.Fly)} reach={_chase.Reachable((float)m.X, (float)m.Y, p.X, p.Y)}";
+        return $"dist={_chase.Distance((float)m.X, (float)m.Y)} line={_chase.LineClear((float)m.X, (float)m.Y, p.X, p.Y)} dir={ok}({ux:0.00},{uy:0.00}) stand={CanStand(m.X, m.Y, Math.Min(MonsterMoveRadius, m.Radius * 0.5), m.Fly)} reach={_chase.Reachable((float)m.X, (float)m.Y, p.X, p.Y)}";
     }
 
     public bool CanStand(double x, double y, double radius, bool fly)
