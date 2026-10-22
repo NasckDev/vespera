@@ -1,0 +1,44 @@
+[gd_resource type="SpriteFrames" load_steps=4 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/anim/anglerB/front.png" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/anim/anglerB/back.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/anim/anglerB/attack.png" id="3"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1")
+}],
+"loop": false,
+"name": &"front",
+"speed": 1.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2")
+}],
+"loop": false,
+"name": &"back",
+"speed": 1.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 1.00
+}]
+metadata/anchors = {
+"front": Vector2(310, 445),
+"back": Vector2(310, 445),
+"attack": Vector2(310, 445)
+}
+metadata/densities = {
+"front": 4.8668,
+"back": 4.8668,
+"attack": 4.8668
+}
+metadata/scale_class = "character"
+metadata/source = "pacotes v3 (frente/costas) e v4 (ataque +9%) do designer (issue #2/#8), pé (310, 445)"

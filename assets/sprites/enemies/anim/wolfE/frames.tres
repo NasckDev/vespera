@@ -1,0 +1,33 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/anim/wolfE/front.png" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/anim/wolfE/back.png" id="2"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1")
+}],
+"loop": false,
+"name": &"front",
+"speed": 1.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2")
+}],
+"loop": false,
+"name": &"back",
+"speed": 1.00
+}]
+metadata/anchors = {
+"front": Vector2(168, 186),
+"back": Vector2(168, 186)
+}
+metadata/densities = {
+"front": 4.9900,
+"back": 4.9900
+}
+metadata/scale_class = "character"
+metadata/source = "pacote v2 do designer (issue #2): Alfa com cristas, poses estáticas aprovadas"

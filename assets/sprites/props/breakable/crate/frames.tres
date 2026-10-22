@@ -1,0 +1,110 @@
+[gd_resource type="SpriteFrames" load_steps=10 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/props/breakable/crate/whole.png" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/props/breakable/crate/cracked.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/props/breakable/crate/broken.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/props/breakable/crate/shard_0.png" id="4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/props/breakable/crate/shard_1.png" id="5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/props/breakable/crate/shard_2.png" id="6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/props/breakable/crate/shard_3.png" id="7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/props/breakable/crate/shard_4.png" id="8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/props/breakable/crate/shard_5.png" id="9"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1")
+}],
+"loop": false,
+"name": &"whole",
+"speed": 1.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2")
+}],
+"loop": false,
+"name": &"cracked",
+"speed": 1.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3")
+}],
+"loop": false,
+"name": &"broken",
+"speed": 1.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4")
+}],
+"loop": false,
+"name": &"shard_0",
+"speed": 1.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5")
+}],
+"loop": false,
+"name": &"shard_1",
+"speed": 1.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6")
+}],
+"loop": false,
+"name": &"shard_2",
+"speed": 1.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7")
+}],
+"loop": false,
+"name": &"shard_3",
+"speed": 1.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8")
+}],
+"loop": false,
+"name": &"shard_4",
+"speed": 1.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9")
+}],
+"loop": false,
+"name": &"shard_5",
+"speed": 1.00
+}]
+metadata/anchors = {
+"whole": Vector2(76.5, 119),
+"cracked": Vector2(76.5, 119),
+"broken": Vector2(76.5, 119),
+"shard_0": Vector2(76.5, 119),
+"shard_1": Vector2(76.5, 119),
+"shard_2": Vector2(76.5, 119),
+"shard_3": Vector2(76.5, 119),
+"shard_4": Vector2(76.5, 119),
+"shard_5": Vector2(76.5, 119)
+}
+metadata/densities = {
+"whole": 4.1667,
+"cracked": 4.1667,
+"broken": 4.1667,
+"shard_0": 4.1667,
+"shard_1": 4.1667,
+"shard_2": 4.1667,
+"shard_3": 4.1667,
+"shard_4": 4.1667,
+"shard_5": 4.1667
+}
+metadata/scale_class = "prop"
+metadata/source = "pacote v1 do designer (issue #5): crate inteiro/rachado/quebrado + 6 estilhaços"

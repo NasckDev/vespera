@@ -1,0 +1,44 @@
+[gd_resource type="SpriteFrames" load_steps=4 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/props/flowers/yellow/flowering.png" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/props/flowers/yellow/harvested.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/props/flowers/yellow/sprouting.png" id="3"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1")
+}],
+"loop": false,
+"name": &"flowering",
+"speed": 1.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2")
+}],
+"loop": false,
+"name": &"harvested",
+"speed": 1.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3")
+}],
+"loop": false,
+"name": &"sprouting",
+"speed": 1.00
+}]
+metadata/anchors = {
+"flowering": Vector2(43, 75),
+"harvested": Vector2(43, 75),
+"sprouting": Vector2(43, 75)
+}
+metadata/densities = {
+"flowering": 2.7295,
+"harvested": 2.7295,
+"sprouting": 2.7295
+}
+metadata/scale_class = "fixed"
+metadata/source = "pacote v1 do designer (issue #5): flor yellow florida/colhida/brotando"

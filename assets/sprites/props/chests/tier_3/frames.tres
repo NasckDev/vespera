@@ -1,0 +1,66 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/props/chests/tier_3/closed.png" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/props/chests/tier_3/opening_1.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/props/chests/tier_3/opening_2.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/props/chests/tier_3/open.png" id="4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/props/chests/tier_3/empty.png" id="5"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1")
+}],
+"loop": false,
+"name": &"closed",
+"speed": 1.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2")
+}],
+"loop": false,
+"name": &"opening_1",
+"speed": 1.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3")
+}],
+"loop": false,
+"name": &"opening_2",
+"speed": 1.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4")
+}],
+"loop": false,
+"name": &"open",
+"speed": 1.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5")
+}],
+"loop": false,
+"name": &"empty",
+"speed": 1.00
+}]
+metadata/anchors = {
+"closed": Vector2(78, 143),
+"opening_1": Vector2(78, 143),
+"opening_2": Vector2(78, 143),
+"open": Vector2(78, 143),
+"empty": Vector2(78, 143)
+}
+metadata/densities = {
+"closed": 4.1667,
+"opening_1": 4.1667,
+"opening_2": 4.1667,
+"open": 4.1667,
+"empty": 4.1667
+}
+metadata/scale_class = "prop"
+metadata/source = "pacotes v2/v3/v4 do designer (issue #5/#8): baú tier 3 fechado/abrindo/aberto/vazio"

@@ -1,0 +1,33 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/props/mechanisms/lever/off.png" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/props/mechanisms/lever/on.png" id="2"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1")
+}],
+"loop": false,
+"name": &"off",
+"speed": 1.00
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2")
+}],
+"loop": false,
+"name": &"on",
+"speed": 1.00
+}]
+metadata/anchors = {
+"off": Vector2(52.5, 155),
+"on": Vector2(52.5, 155)
+}
+metadata/densities = {
+"off": 1.7763,
+"on": 1.7763
+}
+metadata/scale_class = "fixed"
+metadata/source = "pacote v1 do designer (issue #5): alavanca"
