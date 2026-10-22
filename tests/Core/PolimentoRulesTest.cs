@@ -67,4 +67,48 @@ public class PolimentoRulesTest
 
         AssertThat(later.Any(e => e.Kind == BrechaEventKind.Opened && !Brecha.CanEnter(e.Brecha.Rank, 0))).IsTrue();
     }
+
+    [TestCase]
+    public void EscapeNeedsHalfASecondOfInsisting()
+    {
+        var intent = new EscapeIntent();
+        // Um passo (0,25 s) na borda e soltar: nada.
+        for (var i = 0; i < 15; i++)
+        {
+            AssertThat(intent.Update(inside: true, pushing: true, 1 / 60.0)).IsFalse();
+        }
+
+        AssertThat(intent.Update(inside: true, pushing: false, 1 / 60.0)).IsFalse();
+        AssertThat(intent.Progress).IsEqual(0.0);
+
+        // Insistir 0,5 s pergunta uma vez só, até o pé sair da borda.
+        var fired = 0;
+        for (var i = 0; i < 90; i++)
+        {
+            fired += intent.Update(inside: true, pushing: true, 1 / 60.0) ? 1 : 0;
+        }
+
+        AssertThat(fired).IsEqual(1);
+        intent.Update(inside: false, pushing: false, 1 / 60.0);
+        for (var i = 0; i < 31; i++)
+        {
+            fired += intent.Update(inside: true, pushing: true, 1 / 60.0) ? 1 : 0;
+        }
+
+        AssertThat(fired).IsEqual(2);
+    }
+
+    [TestCase]
+    public void ArrivalsKeepAwayFromTheFleeEdge()
+    {
+        var back = new MapRect(790, 890, 90, 30); // Mercado de Peixes (maps.json)
+        AssertThat(EscapeIntent.KeepAway(new MapPoint(830, 870), back)).IsEqual(new MapPoint(830, 890 - EscapeIntent.SpawnGap));
+        AssertThat(EscapeIntent.KeepAway(new MapPoint(830, 700), back)).IsEqual(new MapPoint(830, 700));
+        AssertThat(EscapeIntent.KeepAway(new MapPoint(300, 880), back)).IsEqual(new MapPoint(300, 880));
+        AssertThat(EscapeIntent.InZone(back, 835, 905)).IsTrue();
+        AssertThat(EscapeIntent.InZone(back, 835, 930)).IsTrue(); // passou do retângulo andando para baixo
+        AssertThat(EscapeIntent.InZone(back, 835, 880)).IsFalse();
+        AssertThat(EscapeIntent.IsPushingOut(1f)).IsTrue();
+        AssertThat(EscapeIntent.IsPushingOut(0.1f)).IsFalse();
+    }
 }
