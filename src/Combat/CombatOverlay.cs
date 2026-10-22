@@ -12,8 +12,8 @@ namespace Vespera.Combat;
 public partial class CombatOverlay : Node2D
 {
     public const int MaxFloats = 96;
-    private const int SmallFont = 7;
-    private const int BigFont = 9;
+    private const int SmallFont = 8; // C1-D10: era 7 (B1-D45); números legíveis no sofá
+    private const int BigFont = 11; // C1-D10: era 9; crítico e fraqueza saltam mais
     private const float RedFlashSeconds = 0.35f;
 
     private readonly Floater[] _floats = new Floater[MaxFloats];
@@ -118,7 +118,7 @@ public partial class CombatOverlay : Node2D
             var max = f.Big ? 1.1f : 0.8f;
             var k = f.T / max;
             var a = (1 - (MathF.Max(0, k - 0.6f) / 0.4f)) * f.Alpha;
-            var size = (int)((f.Big ? BigFont : SmallFont) * (f.T < 0.08f ? 1.3f : 1f));
+            var size = (int)((f.Big ? BigFont : SmallFont) * (f.T < 0.1f ? 1.35f : 1f)); // "pulo" do número no acerto
             var at = xf * f.World;
             var pos = at + new Vector2(-60, 0);
             DrawStringOutline(_font, pos, f.Text, HorizontalAlignment.Center, 120, size, 2, new Color(0.03f, 0.02f, 0.06f, a * 0.85f), oversampling: os);

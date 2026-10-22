@@ -305,4 +305,43 @@ public partial class SmokeTest
 
     private static int TextSize(GameUi ui) =>
         ui.Dialog.FindChildren("*", nameof(Label), true, false).OfType<Label>().First(l => l.Text == ui.Dialog.Text).GetThemeFontSize("font_size");
+
+    [SmokeScenario("polimento: Lâmina nos bonecos tem peso (hitstop, faíscas, amasso)", order: 968)]
+    private async Task PolishBladeFeel()
+    {
+        var (world, combat) = await CombatSetup();
+        GameManager.Instance.NewGame("Bot", "sword");
+        world.GoMap("guild", 250, 330, instant: true);
+        await WaitMapSettled(world);
+        var dummy = combat.Enemies.First(e => e.Body.IsDummy);
+        var player = FindPlayer()!;
+        player.Teleport(world.CorrectToWalkable(new Vector2((float)dummy.Body.X - 18, (float)dummy.Body.Y)));
+        await Frames(4);
+        try
+        {
+            SetAim(Vector2.Right);
+            var hitstops = 0;
+            var popped = false;
+            Input.ActionPress(InputActions.Attack);
+            for (var frame = 0; frame < 90; frame++)
+            {
+                await NextPhysicsFrame();
+                hitstops += combat.Clock.Hitstop > 0 ? 1 : 0;
+                popped |= dummy.Body.Flash > 0;
+                if (frame is 3 or 5)
+                {
+                    await Shot($"polimento-golpe-{frame:00}");
+                }
+            }
+
+            Input.ActionRelease(InputActions.Attack);
+            Log.Info($"polimento: 1,5 s de Lâmina no boneco: {hitstops} quadros em hitstop, flash={popped}");
+            Require(popped && hitstops >= 3, $"acerto sem peso: {hitstops} quadros de hitstop, flash {popped}");
+        }
+        finally
+        {
+            Input.ActionRelease(InputActions.Attack);
+            SetAim(Vector2.Zero);
+        }
+    }
 }

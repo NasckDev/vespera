@@ -63,7 +63,6 @@ public partial class Hud : CanvasLayer
     private Banner _ultimateBanner = null!;
     private Control _root = null!;
     private Control _status = null!;
-    private Control _topRight = null!;
     private Control _hotbar = null!;
     private Control _wallet = null!;
     private Control _minimapSlot = null!;
@@ -169,7 +168,7 @@ public partial class Hud : CanvasLayer
         _chrome.SetAnchorsPreset(Control.LayoutPreset.FullRect);
         root.AddChild(_chrome);
         _chrome.AddChild(_status = BuildStatus());
-        _chrome.AddChild(_topRight = BuildTopRight());
+        _chrome.AddChild(BuildTopRight());
         _chrome.AddChild(_hotbar = BuildHotbar());
         _chrome.AddChild(_wallet = BuildWallet());
         _chrome.AddChild(BuildPrompt());
