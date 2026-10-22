@@ -4,7 +4,7 @@ Um prompt por imagem. Anexe as tiras de caminhada (mostram o personagem exato) e
 
 ### B-arco-01 · `arco_e1_tiro_baixo.png` · tiro (baixo)
 
-**Anexe estas referências antes de mandar:** [caminhada baixo](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/cacador_folha_original.png)
+**Anexe estas referências antes de mandar:** [caminhada baixo](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/cacador_folha_original.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -20,7 +20,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### B-arco-02 · `arco_e1_tiro_cima.png` · tiro (cima)
 
-**Anexe estas referências antes de mandar:** [caminhada baixo](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/cacador_folha_original.png)
+**Anexe estas referências antes de mandar:** [caminhada baixo](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/cacador_folha_original.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -36,7 +36,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### B-arco-03 · `arco_e1_tiro_lado.png` · tiro (lado)
 
-**Anexe estas referências antes de mandar:** [caminhada baixo](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/cacador_folha_original.png)
+**Anexe estas referências antes de mandar:** [caminhada baixo](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/cacador_folha_original.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -52,7 +52,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### B-arco-04 · `arco_e1_tiro_carregado_baixo.png` · tiro_carregado (baixo)
 
-**Anexe estas referências antes de mandar:** [caminhada baixo](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/cacador_folha_original.png)
+**Anexe estas referências antes de mandar:** [caminhada baixo](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/cacador_folha_original.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -68,7 +68,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### B-arco-05 · `arco_e1_tiro_carregado_cima.png` · tiro_carregado (cima)
 
-**Anexe estas referências antes de mandar:** [caminhada baixo](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/cacador_folha_original.png)
+**Anexe estas referências antes de mandar:** [caminhada baixo](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/cacador_folha_original.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -84,7 +84,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### B-arco-06 · `arco_e1_tiro_carregado_lado.png` · tiro_carregado (lado)
 
-**Anexe estas referências antes de mandar:** [caminhada baixo](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/cacador_folha_original.png)
+**Anexe estas referências antes de mandar:** [caminhada baixo](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/cacador_folha_original.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -100,7 +100,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### B-arco-07 · `arco_e1_parado_baixo.png` · parado (baixo)
 
-**Anexe estas referências antes de mandar:** [caminhada baixo](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/cacador_folha_original.png)
+**Anexe estas referências antes de mandar:** [caminhada baixo](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/cacador_folha_original.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -116,7 +116,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### B-arco-08 · `arco_e1_parado_cima.png` · parado (cima)
 
-**Anexe estas referências antes de mandar:** [caminhada baixo](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/cacador_folha_original.png)
+**Anexe estas referências antes de mandar:** [caminhada baixo](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/cacador_folha_original.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -132,7 +132,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### B-arco-09 · `arco_e1_parado_lado.png` · parado (lado)
 
-**Anexe estas referências antes de mandar:** [caminhada baixo](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/cacador_folha_original.png)
+**Anexe estas referências antes de mandar:** [caminhada baixo](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/cacador_folha_original.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -148,7 +148,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### B-arco-10 · `arco_e1_esquiva_baixo.png` · esquiva (baixo)
 
-**Anexe estas referências antes de mandar:** [caminhada baixo](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/cacador_folha_original.png)
+**Anexe estas referências antes de mandar:** [caminhada baixo](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/cacador_folha_original.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -164,7 +164,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### B-arco-11 · `arco_e1_esquiva_cima.png` · esquiva (cima)
 
-**Anexe estas referências antes de mandar:** [caminhada baixo](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/cacador_folha_original.png)
+**Anexe estas referências antes de mandar:** [caminhada baixo](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/cacador_folha_original.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -180,7 +180,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### B-arco-12 · `arco_e1_esquiva_lado.png` · esquiva (lado)
 
-**Anexe estas referências antes de mandar:** [caminhada baixo](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/cacador_folha_original.png)
+**Anexe estas referências antes de mandar:** [caminhada baixo](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/cacador_folha_original.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -196,7 +196,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### B-arco-13 · `arco_e1_dano_baixo.png` · dano (baixo)
 
-**Anexe estas referências antes de mandar:** [caminhada baixo](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/cacador_folha_original.png)
+**Anexe estas referências antes de mandar:** [caminhada baixo](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/cacador_folha_original.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -212,7 +212,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### B-arco-14 · `arco_e1_dano_cima.png` · dano (cima)
 
-**Anexe estas referências antes de mandar:** [caminhada baixo](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/cacador_folha_original.png)
+**Anexe estas referências antes de mandar:** [caminhada baixo](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/cacador_folha_original.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -228,7 +228,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### B-arco-15 · `arco_e1_dano_lado.png` · dano (lado)
 
-**Anexe estas referências antes de mandar:** [caminhada baixo](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/cacador_folha_original.png)
+**Anexe estas referências antes de mandar:** [caminhada baixo](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/cacador_folha_original.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -244,7 +244,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### B-arco-16 · `arco_e1_morte_lado.png` · morte (lado)
 
-**Anexe estas referências antes de mandar:** [caminhada baixo](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/cacador_folha_original.png)
+**Anexe estas referências antes de mandar:** [caminhada baixo](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_baixo.png) · [caminhada cima](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_cima.png) · [caminhada lado](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/arco_andar_lado.png) · [folha original do caçador](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/cacador_folha_original.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.

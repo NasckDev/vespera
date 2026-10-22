@@ -4,7 +4,7 @@ Um prompt por imagem. Gere primeiro o `parado` de cada monstro e anexe-o nos ped
 
 ### C-01 · `lodo_parado.png` · Lodo (slime comum, rank E): parado
 
-**Anexe estas referências antes de mandar:** [estilo de monstros](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_monstros.png) · [estilo de chefes](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_chefes.png)
+**Anexe estas referências antes de mandar:** [estilo de monstros](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_monstros.png) · [estilo de chefes](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_chefes.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -20,7 +20,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### C-02 · `lodo_pulo.png` · Lodo (slime comum, rank E): pulo
 
-**Anexe estas referências antes de mandar:** [estilo de monstros](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_monstros.png) · [estilo de chefes](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_chefes.png)
+**Anexe estas referências antes de mandar:** [estilo de monstros](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_monstros.png) · [estilo de chefes](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_chefes.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -36,7 +36,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### C-03 · `lodo_aviso.png` · Lodo (slime comum, rank E): aviso
 
-**Anexe estas referências antes de mandar:** [estilo de monstros](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_monstros.png) · [estilo de chefes](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_chefes.png)
+**Anexe estas referências antes de mandar:** [estilo de monstros](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_monstros.png) · [estilo de chefes](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_chefes.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -52,7 +52,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### C-04 · `lodo_dano.png` · Lodo (slime comum, rank E): dano
 
-**Anexe estas referências antes de mandar:** [estilo de monstros](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_monstros.png) · [estilo de chefes](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_chefes.png)
+**Anexe estas referências antes de mandar:** [estilo de monstros](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_monstros.png) · [estilo de chefes](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_chefes.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -68,7 +68,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### C-05 · `lodo_morte.png` · Lodo (slime comum, rank E): morte
 
-**Anexe estas referências antes de mandar:** [estilo de monstros](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_monstros.png) · [estilo de chefes](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_chefes.png)
+**Anexe estas referências antes de mandar:** [estilo de monstros](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_monstros.png) · [estilo de chefes](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_chefes.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -84,7 +84,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### C-06 · `espectro_parado.png` · Espectro (fantasma comum, rank E): parado
 
-**Anexe estas referências antes de mandar:** [estilo de monstros](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_monstros.png) · [estilo de chefes](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_chefes.png)
+**Anexe estas referências antes de mandar:** [estilo de monstros](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_monstros.png) · [estilo de chefes](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_chefes.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -100,7 +100,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### C-07 · `espectro_mover.png` · Espectro (fantasma comum, rank E): mover
 
-**Anexe estas referências antes de mandar:** [estilo de monstros](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_monstros.png) · [estilo de chefes](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_chefes.png)
+**Anexe estas referências antes de mandar:** [estilo de monstros](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_monstros.png) · [estilo de chefes](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_chefes.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -116,7 +116,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### C-08 · `espectro_aviso.png` · Espectro (fantasma comum, rank E): aviso
 
-**Anexe estas referências antes de mandar:** [estilo de monstros](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_monstros.png) · [estilo de chefes](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_chefes.png)
+**Anexe estas referências antes de mandar:** [estilo de monstros](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_monstros.png) · [estilo de chefes](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_chefes.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -132,7 +132,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### C-09 · `espectro_ataque.png` · Espectro (fantasma comum, rank E): ataque
 
-**Anexe estas referências antes de mandar:** [estilo de monstros](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_monstros.png) · [estilo de chefes](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_chefes.png)
+**Anexe estas referências antes de mandar:** [estilo de monstros](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_monstros.png) · [estilo de chefes](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_chefes.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -148,7 +148,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### C-10 · `espectro_morte.png` · Espectro (fantasma comum, rank E): morte
 
-**Anexe estas referências antes de mandar:** [estilo de monstros](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_monstros.png) · [estilo de chefes](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_chefes.png)
+**Anexe estas referências antes de mandar:** [estilo de monstros](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_monstros.png) · [estilo de chefes](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_chefes.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -164,7 +164,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### C-11 · `lodo_mae_parado.png` · Lodo-Mãe (Guardião, chefe rank E): parado
 
-**Anexe estas referências antes de mandar:** [estilo de monstros](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_monstros.png) · [estilo de chefes](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_chefes.png)
+**Anexe estas referências antes de mandar:** [estilo de monstros](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_monstros.png) · [estilo de chefes](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_chefes.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -180,7 +180,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### C-12 · `lodo_mae_pulo.png` · Lodo-Mãe (Guardião, chefe rank E): pulo
 
-**Anexe estas referências antes de mandar:** [estilo de monstros](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_monstros.png) · [estilo de chefes](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_chefes.png)
+**Anexe estas referências antes de mandar:** [estilo de monstros](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_monstros.png) · [estilo de chefes](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_chefes.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -196,7 +196,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### C-13 · `lodo_mae_engolir.png` · Lodo-Mãe (Guardião, chefe rank E): engolir
 
-**Anexe estas referências antes de mandar:** [estilo de monstros](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_monstros.png) · [estilo de chefes](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_chefes.png)
+**Anexe estas referências antes de mandar:** [estilo de monstros](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_monstros.png) · [estilo de chefes](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_chefes.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -212,7 +212,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### C-14 · `lodo_mae_dividir.png` · Lodo-Mãe (Guardião, chefe rank E): dividir
 
-**Anexe estas referências antes de mandar:** [estilo de monstros](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_monstros.png) · [estilo de chefes](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_chefes.png)
+**Anexe estas referências antes de mandar:** [estilo de monstros](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_monstros.png) · [estilo de chefes](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_chefes.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -228,7 +228,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### C-15 · `lodo_mae_morte.png` · Lodo-Mãe (Guardião, chefe rank E): morte
 
-**Anexe estas referências antes de mandar:** [estilo de monstros](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_monstros.png) · [estilo de chefes](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_chefes.png)
+**Anexe estas referências antes de mandar:** [estilo de monstros](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_monstros.png) · [estilo de chefes](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_chefes.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.

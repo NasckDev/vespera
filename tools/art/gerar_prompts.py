@@ -6,7 +6,7 @@ Uso: python -I tools/art/gerar_prompts.py
 """
 from pathlib import Path
 
-REPO = "https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/"
+REPO = "https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/"
 OUT = Path(__file__).resolve().parents[2] / "docs" / "v2" / "prompts"
 
 WORLD = ("I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. "
@@ -112,7 +112,7 @@ MONSTERS = [
 
 NPCS = [
     ("odete", "Odete", "a blacksmith woman in her mid-fifties, grey-streaked hair tied back, strong scarred arms, leather apron, soot on her face, she never smiles", ("neutral, stern", "angry")),
-    ("benicio", "Mestre Benício", "an old formal man, master of the Order of the Lantern, blind in one eye (milky white eye and a scar), neat grey beard, dark robe with a golden lantern emblem", ("neutral, composed", "stern and severe")),
+    ("benicio", "Mestre Benício", "a very OLD man around 70, master of the Order of the Lantern: bald head with thin white hair at the sides, long white beard, deep wrinkles, his LEFT eye is blind (milky white with a vertical scar), dark grey monk-like hooded robe with a small golden lantern emblem on the chest, formal and severe, NOT a young or middle-aged man, NOT dark hair, NOT fur", ("neutral, composed, looking wise", "stern and severe, frowning, mouth tight")),
     ("ravi", "Ravi", "an 18-year-old rival hunter, messy dark hair, patched clothes, a burned E-shaped seal on his wrist, cocky grin", ("neutral, confident", "laughing")),
     ("lis", "Lis", "an 11-year-old barefoot street girl, a CHILD, short tangled hair, oversized coat, a satchel full of rolled hand-drawn maps", ("neutral, curious", "suspicious, squinting")),
     ("nilza", "Tia Nilza", "a warm middle-aged tavern keeper, round face, headscarf, apron, a wooden spoon in hand, motherly", ("neutral, kind", "big warm smile")),
@@ -205,8 +205,9 @@ def npc_walks():
     n = 1
     for nid, name, desc, _ in NPCS:
         child = "; she is a child, so about 75% of the hunter height" if nid == "lis" else ""
-        extra = (f"Same body proportions and size as the attached hunter (not chibi, not big-headed){child}. "
-                 "If the NPC portrait is attached, copy that face and outfit.")
+        extra = (f"Same body proportions, size and chunky stylization as the attached hunter (head about one quarter of the "
+                 f"total height){child}. If the NPC portrait is attached, copy that face and outfit. In walking frames the "
+                 "legs, arms and clothes must visibly move (step, swing, sway); never repeat the same pose.")
         for anim, frames, adesc in [("parado", 4, "idle: standing and breathing"), ("andar", 6, "walking cycle")]:
             for d, facing in DIRS:
                 out.append(block(f"D2-{n:02d}", f"npc_{nid}_{anim}_{d}.png", f"{name}: {anim} ({d})", refs,

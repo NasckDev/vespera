@@ -4,7 +4,7 @@ Um prompt por imagem. Cole o bloco inteiro e anexe as referências indicadas. A 
 
 ### A2 · `chao_forjas.png` · Bairro das Forjas (rua)
 
-**Anexe estas referências antes de mandar:** [mapa aprovado (estilo e câmera)](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_mapa_praca.png) · [prancha de mapas (estilo)](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_prancha_mapas.png)
+**Anexe estas referências antes de mandar:** [mapa aprovado (estilo e câmera)](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_mapa_praca.png) · [prancha de mapas (estilo)](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_prancha_mapas.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -21,7 +21,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### A3 · `chao_forja_interior.png` · Forja da Odete (interior)
 
-**Anexe estas referências antes de mandar:** [mapa aprovado (estilo e câmera)](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_mapa_praca.png) · [prancha de mapas (estilo)](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_prancha_mapas.png)
+**Anexe estas referências antes de mandar:** [mapa aprovado (estilo e câmera)](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_mapa_praca.png) · [prancha de mapas (estilo)](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_prancha_mapas.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -38,7 +38,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### A4 · `chao_esgoto_corredor.png` · Esgotos do Mercado: corredor
 
-**Anexe estas referências antes de mandar:** [mapa aprovado (estilo e câmera)](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_mapa_praca.png) · [prancha de mapas (estilo)](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_prancha_mapas.png)
+**Anexe estas referências antes de mandar:** [mapa aprovado (estilo e câmera)](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_mapa_praca.png) · [prancha de mapas (estilo)](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_prancha_mapas.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -55,7 +55,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### A5 · `chao_esgoto_cruzamento.png` · Esgotos do Mercado: cruzamento
 
-**Anexe estas referências antes de mandar:** [mapa aprovado (estilo e câmera)](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_mapa_praca.png) · [prancha de mapas (estilo)](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_prancha_mapas.png)
+**Anexe estas referências antes de mandar:** [mapa aprovado (estilo e câmera)](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_mapa_praca.png) · [prancha de mapas (estilo)](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_prancha_mapas.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -72,7 +72,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### A6 · `chao_esgoto_tesouro.png` · Esgotos do Mercado: sala do tesouro
 
-**Anexe estas referências antes de mandar:** [mapa aprovado (estilo e câmera)](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_mapa_praca.png) · [prancha de mapas (estilo)](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_prancha_mapas.png)
+**Anexe estas referências antes de mandar:** [mapa aprovado (estilo e câmera)](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_mapa_praca.png) · [prancha de mapas (estilo)](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_prancha_mapas.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
@@ -89,7 +89,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 
 ### A7 · `chao_esgoto_arena.png` · Esgotos do Mercado: arena do Guardião
 
-**Anexe estas referências antes de mandar:** [mapa aprovado (estilo e câmera)](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_mapa_praca.png) · [prancha de mapas (estilo)](https://github.com/NasckDev/vespera/blob/v2/docs/v2/referencias/estilo_prancha_mapas.png)
+**Anexe estas referências antes de mandar:** [mapa aprovado (estilo e câmera)](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_mapa_praca.png) · [prancha de mapas (estilo)](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_prancha_mapas.png)
 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
