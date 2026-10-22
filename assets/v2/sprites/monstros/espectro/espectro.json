@@ -1,0 +1,109 @@
+{
+  "character": "espectro",
+  "anchor": [
+    96,
+    180
+  ],
+  "stand_height_px": 96,
+  "facing": "olha para a direita; para a esquerda use flip_h",
+  "scale_class": 0.267,
+  "stand_height_source_px": 359.5,
+  "hit_frame_method": "quadro de maior área opaca (índice base 0), só para ataques",
+  "frame_counts": {
+    "parado": 4,
+    "mover": 6,
+    "aviso": 3,
+    "ataque": 4,
+    "morte": 6
+  },
+  "atlas": "espectro_atlas.png",
+  "cell": [
+    192,
+    192
+  ],
+  "animations": {
+    "parado": {
+      "row": 0,
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "scale": 0.267,
+      "source": "espectro_parado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        4371,
+        4622,
+        4614,
+        4622
+      ],
+      "note": null
+    },
+    "mover": {
+      "row": 1,
+      "frames": 6,
+      "fps": 10,
+      "loop": true,
+      "scale": 0.267,
+      "source": "espectro_mover.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        4863,
+        5223,
+        5668,
+        5518,
+        5900,
+        5842
+      ],
+      "note": null
+    },
+    "aviso": {
+      "row": 2,
+      "frames": 3,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.267,
+      "source": "espectro_aviso.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        3337,
+        3842,
+        3462
+      ],
+      "note": null
+    },
+    "ataque": {
+      "row": 3,
+      "frames": 4,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.267,
+      "source": "espectro_ataque.png",
+      "hit_frame": 2,
+      "opaque_area_per_frame": [
+        4636,
+        5808,
+        7814,
+        5097
+      ],
+      "note": null
+    },
+    "morte": {
+      "row": 4,
+      "frames": 6,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.267,
+      "source": "espectro_morte.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        4736,
+        4926,
+        4540,
+        4180,
+        3503,
+        2248
+      ],
+      "note": null
+    }
+  }
+}

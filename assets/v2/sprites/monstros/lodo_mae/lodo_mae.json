@@ -1,0 +1,126 @@
+{
+  "character": "lodo_mae",
+  "anchor": [
+    240,
+    464
+  ],
+  "stand_height_px": 260,
+  "facing": "olha para a direita; para a esquerda use flip_h",
+  "scale_class": 0.6727,
+  "stand_height_source_px": 386.5,
+  "hit_frame_method": "quadro de maior área opaca (índice base 0), só para ataques",
+  "frame_counts": {
+    "parado": 6,
+    "pulo": 8,
+    "engolir": 8,
+    "dividir": 8,
+    "morte": 10
+  },
+  "atlas": "lodo_mae_atlas.png",
+  "cell": [
+    480,
+    480
+  ],
+  "animations": {
+    "parado": {
+      "row": 0,
+      "frames": 6,
+      "fps": 6,
+      "loop": true,
+      "scale": 0.6727,
+      "source": "lodo_mae_parado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        53241,
+        57562,
+        63874,
+        57696,
+        54913,
+        53527
+      ],
+      "note": null
+    },
+    "pulo": {
+      "row": 1,
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.6727,
+      "source": "lodo_mae_pulo.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        45248,
+        50538,
+        64361,
+        47517,
+        46744,
+        47181,
+        61232,
+        44747
+      ],
+      "note": null
+    },
+    "engolir": {
+      "row": 2,
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.6727,
+      "source": "lodo_mae_engolir.png",
+      "hit_frame": 3,
+      "opaque_area_per_frame": [
+        52295,
+        60667,
+        78839,
+        84861,
+        59483,
+        54517,
+        52479,
+        50084
+      ],
+      "note": null
+    },
+    "dividir": {
+      "row": 3,
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.6727,
+      "source": "lodo_mae_dividir.png",
+      "hit_frame": 0,
+      "opaque_area_per_frame": [
+        54568,
+        32074,
+        41758,
+        39310,
+        32480,
+        29658,
+        26256,
+        24129
+      ],
+      "note": null
+    },
+    "morte": {
+      "row": 4,
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.6727,
+      "source": "lodo_mae_morte.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        56934,
+        54500,
+        47062,
+        43528,
+        37553,
+        34602,
+        29233,
+        26724,
+        23189,
+        20239
+      ],
+      "note": null
+    }
+  }
+}

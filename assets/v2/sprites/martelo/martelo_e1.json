@@ -1,0 +1,372 @@
+{
+  "character": "martelo",
+  "stage": "e1",
+  "anchor": [
+    128,
+    232
+  ],
+  "stand_height_px": 112,
+  "facing": "lado olha para a direita; para a esquerda use flip_h",
+  "scale_class": 0.896,
+  "stand_height_source_px": 125.0,
+  "hit_frame_method": "quadro de maior área opaca (índice base 0), só para ataques",
+  "frame_counts": {
+    "parado": 4,
+    "ataque1": 6,
+    "ataque2": 6,
+    "pesado": 9,
+    "esquiva": 5,
+    "dano": 2,
+    "morte": 7
+  },
+  "atlas": "martelo_e1_atlas.png",
+  "cell": [
+    256,
+    256
+  ],
+  "animations": {
+    "andar_baixo": {
+      "row": 0,
+      "frames": 6,
+      "fps": 10,
+      "loop": true,
+      "scale": 0.8854,
+      "source": "martelo_e1_andar_baixo_6q_REFERENCIA.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        9417,
+        9490,
+        9567,
+        9575,
+        9532,
+        9633
+      ],
+      "note": null
+    },
+    "andar_cima": {
+      "row": 1,
+      "frames": 6,
+      "fps": 10,
+      "loop": true,
+      "scale": 0.8854,
+      "source": "martelo_e1_andar_cima_6q_REFERENCIA.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        9627,
+        9763,
+        9813,
+        9416,
+        9419,
+        9690
+      ],
+      "note": null
+    },
+    "andar_lado": {
+      "row": 2,
+      "frames": 6,
+      "fps": 10,
+      "loop": true,
+      "scale": 0.8854,
+      "source": "martelo_e1_andar_lado_6q_REFERENCIA.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        8974,
+        8969,
+        8908,
+        8855,
+        8809,
+        8886
+      ],
+      "note": null
+    },
+    "parado_baixo": {
+      "row": 3,
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "scale": 0.896,
+      "source": "martelo_e1_parado_baixo.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        9555,
+        9722,
+        9555,
+        9788
+      ],
+      "note": null
+    },
+    "parado_cima": {
+      "row": 4,
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "scale": 0.896,
+      "source": "martelo_e1_parado_cima.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        9743,
+        9939,
+        9743,
+        9848
+      ],
+      "note": null
+    },
+    "parado_lado": {
+      "row": 5,
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "scale": 0.896,
+      "source": "martelo_e1_parado_lado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        9082,
+        9012,
+        9082,
+        8983
+      ],
+      "note": null
+    },
+    "ataque1_baixo": {
+      "row": 6,
+      "frames": 6,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.896,
+      "source": "martelo_e1_ataque1_baixo.png",
+      "hit_frame": 2,
+      "opaque_area_per_frame": [
+        9003,
+        9046,
+        9107,
+        8620,
+        9082,
+        8260
+      ],
+      "note": null
+    },
+    "ataque1_cima": {
+      "row": 7,
+      "frames": 6,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.896,
+      "source": "martelo_e1_ataque1_cima.png",
+      "hit_frame": 2,
+      "opaque_area_per_frame": [
+        9584,
+        10026,
+        10112,
+        8376,
+        7614,
+        8275
+      ],
+      "note": null
+    },
+    "ataque1_lado": {
+      "row": 8,
+      "frames": 6,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.896,
+      "source": "martelo_e1_ataque1_lado.png",
+      "hit_frame": 0,
+      "opaque_area_per_frame": [
+        9087,
+        9052,
+        8678,
+        8646,
+        8049,
+        8907
+      ],
+      "note": null
+    },
+    "ataque2_baixo": {
+      "row": 9,
+      "frames": 6,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.896,
+      "source": "martelo_e1_ataque2_baixo.png",
+      "hit_frame": 5,
+      "opaque_area_per_frame": [
+        8542,
+        8285,
+        8796,
+        9055,
+        8949,
+        9140
+      ],
+      "note": null
+    },
+    "ataque2_cima": {
+      "row": 10,
+      "frames": 6,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.896,
+      "source": "martelo_e1_ataque2_cima.png",
+      "hit_frame": 5,
+      "opaque_area_per_frame": [
+        8438,
+        8173,
+        8905,
+        9023,
+        9065,
+        9799
+      ],
+      "note": null
+    },
+    "ataque2_lado": {
+      "row": 11,
+      "frames": 6,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.896,
+      "source": "martelo_e1_ataque2_lado.png",
+      "hit_frame": 1,
+      "opaque_area_per_frame": [
+        8896,
+        8938,
+        8829,
+        8502,
+        8480,
+        8879
+      ],
+      "note": null
+    },
+    "pesado_lado": {
+      "row": 12,
+      "frames": 9,
+      "fps": 12,
+      "loop": false,
+      "scale": 0.896,
+      "source": "martelo_e1_pesado_lado.png",
+      "hit_frame": 7,
+      "opaque_area_per_frame": [
+        9156,
+        9263,
+        8739,
+        8483,
+        8685,
+        8046,
+        9248,
+        9546,
+        9519
+      ],
+      "note": null
+    },
+    "esquiva_baixo": {
+      "row": 13,
+      "frames": 5,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.896,
+      "source": "martelo_e1_esquiva_baixo.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        9555,
+        7842,
+        7077,
+        7752,
+        9561
+      ],
+      "note": null
+    },
+    "esquiva_cima": {
+      "row": 14,
+      "frames": 5,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.896,
+      "source": "martelo_e1_esquiva_cima.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        9743,
+        8072,
+        7231,
+        7703,
+        9756
+      ],
+      "note": null
+    },
+    "esquiva_lado": {
+      "row": 15,
+      "frames": 5,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.896,
+      "source": "martelo_e1_esquiva_lado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        9082,
+        7422,
+        6531,
+        7215,
+        9077
+      ],
+      "note": null
+    },
+    "dano_baixo": {
+      "row": 16,
+      "frames": 2,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.896,
+      "source": "martelo_e1_dano_baixo.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        9555,
+        9178
+      ],
+      "note": null
+    },
+    "dano_cima": {
+      "row": 17,
+      "frames": 2,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.896,
+      "source": "martelo_e1_dano_cima.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        9743,
+        9057
+      ],
+      "note": null
+    },
+    "dano_lado": {
+      "row": 18,
+      "frames": 2,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.896,
+      "source": "martelo_e1_dano_lado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        9082,
+        8506
+      ],
+      "note": null
+    },
+    "morte_lado": {
+      "row": 19,
+      "frames": 7,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.896,
+      "source": "martelo_e1_morte_lado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        9082,
+        8740,
+        8083,
+        6807,
+        5597,
+        4952,
+        4636
+      ],
+      "note": null
+    }
+  }
+}

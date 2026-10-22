@@ -1,0 +1,353 @@
+{
+  "character": "arco",
+  "stage": "e1",
+  "anchor": [
+    128,
+    232
+  ],
+  "stand_height_px": 112,
+  "facing": "lado olha para a direita; para a esquerda use flip_h",
+  "scale_class": 0.3085,
+  "stand_height_source_px": 363.0,
+  "hit_frame_method": "quadro de maior área opaca (índice base 0), só para ataques",
+  "frame_counts": {
+    "parado": 4,
+    "tiro": 6,
+    "tiro_carregado": 7,
+    "esquiva": 5,
+    "dano": 2,
+    "morte": 7
+  },
+  "atlas": "arco_e1_atlas.png",
+  "cell": [
+    256,
+    256
+  ],
+  "animations": {
+    "andar_baixo": {
+      "row": 0,
+      "frames": 6,
+      "fps": 10,
+      "loop": true,
+      "scale": 0.875,
+      "source": "arco_e1_andar_baixo_6q_REFERENCIA.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        7592,
+        7456,
+        7376,
+        7278,
+        7176,
+        7398
+      ],
+      "note": null
+    },
+    "andar_cima": {
+      "row": 1,
+      "frames": 6,
+      "fps": 10,
+      "loop": true,
+      "scale": 0.875,
+      "source": "arco_e1_andar_cima_6q_REFERENCIA.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        7273,
+        7432,
+        7465,
+        7055,
+        7159,
+        7373
+      ],
+      "note": null
+    },
+    "andar_lado": {
+      "row": 2,
+      "frames": 6,
+      "fps": 10,
+      "loop": true,
+      "scale": 0.875,
+      "source": "arco_e1_andar_lado_6q_REFERENCIA.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        7545,
+        7505,
+        7473,
+        7253,
+        7406,
+        7509
+      ],
+      "note": null
+    },
+    "parado_baixo": {
+      "row": 3,
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "scale": 0.2807,
+      "source": "arco_e1_parado_baixo.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        7417,
+        7640,
+        7602,
+        7600
+      ],
+      "note": "reescalada: guarda +10% vs parado"
+    },
+    "parado_cima": {
+      "row": 4,
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "scale": 0.3085,
+      "source": "arco_e1_parado_cima.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        7525,
+        7434,
+        7549,
+        7407
+      ],
+      "note": null
+    },
+    "parado_lado": {
+      "row": 5,
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "scale": 0.3218,
+      "source": "arco_e1_parado_lado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        7963,
+        8161,
+        8078,
+        8064
+      ],
+      "note": "reescalada: guarda -4% vs parado"
+    },
+    "tiro_baixo": {
+      "row": 6,
+      "frames": 6,
+      "fps": 12,
+      "loop": false,
+      "scale": 0.3353,
+      "source": "arco_e1_tiro_baixo.png",
+      "hit_frame": 2,
+      "opaque_area_per_frame": [
+        6802,
+        6966,
+        7018,
+        6811,
+        7009,
+        6931
+      ],
+      "note": "reescalada: guarda -8% vs parado"
+    },
+    "tiro_cima": {
+      "row": 7,
+      "frames": 6,
+      "fps": 12,
+      "loop": false,
+      "scale": 0.3533,
+      "source": "arco_e1_tiro_cima.png",
+      "hit_frame": 3,
+      "opaque_area_per_frame": [
+        6365,
+        7392,
+        7829,
+        7876,
+        7801,
+        6373
+      ],
+      "note": "reescalada: guarda -13% vs parado"
+    },
+    "tiro_lado": {
+      "row": 8,
+      "frames": 6,
+      "fps": 12,
+      "loop": false,
+      "scale": 0.3875,
+      "source": "arco_e1_tiro_lado.png",
+      "hit_frame": 3,
+      "opaque_area_per_frame": [
+        6984,
+        8110,
+        8726,
+        8853,
+        8200,
+        6994
+      ],
+      "note": "reescalada: guarda -20% vs parado"
+    },
+    "tiro_carregado_baixo": {
+      "row": 9,
+      "frames": 7,
+      "fps": 12,
+      "loop": false,
+      "scale": 0.3578,
+      "source": "arco_e1_tiro_carregado_baixo.png",
+      "hit_frame": 5,
+      "opaque_area_per_frame": [
+        6602,
+        6836,
+        7073,
+        6913,
+        7166,
+        7290,
+        6738
+      ],
+      "note": "reescalada: guarda -14% vs parado"
+    },
+    "tiro_carregado_cima": {
+      "row": 10,
+      "frames": 7,
+      "fps": 12,
+      "loop": false,
+      "scale": 0.4103,
+      "source": "arco_e1_tiro_carregado_cima.png",
+      "hit_frame": 3,
+      "opaque_area_per_frame": [
+        6661,
+        7702,
+        8034,
+        9182,
+        8113,
+        7288,
+        6780
+      ],
+      "note": "reescalada: guarda -25% vs parado"
+    },
+    "tiro_carregado_lado": {
+      "row": 11,
+      "frames": 7,
+      "fps": 12,
+      "loop": false,
+      "scale": 0.4444,
+      "source": "arco_e1_tiro_carregado_lado.png",
+      "hit_frame": 2,
+      "opaque_area_per_frame": [
+        6790,
+        7774,
+        8428,
+        8255,
+        8328,
+        7460,
+        7241
+      ],
+      "note": "reescalada: guarda -31% vs parado"
+    },
+    "esquiva_baixo": {
+      "row": 12,
+      "frames": 5,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.3758,
+      "source": "arco_e1_esquiva_baixo.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        9780,
+        9607,
+        11114,
+        9338,
+        11783
+      ],
+      "note": "reescalada: guarda -18% vs parado"
+    },
+    "esquiva_cima": {
+      "row": 13,
+      "frames": 5,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.3556,
+      "source": "arco_e1_esquiva_cima.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        8626,
+        7743,
+        9186,
+        8340,
+        9593
+      ],
+      "note": "reescalada: guarda -13% vs parado"
+    },
+    "esquiva_lado": {
+      "row": 14,
+      "frames": 5,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.3986,
+      "source": "arco_e1_esquiva_lado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        10349,
+        9278,
+        10398,
+        10304,
+        11333
+      ],
+      "note": "reescalada: guarda -23% vs parado"
+    },
+    "dano_baixo": {
+      "row": 15,
+      "frames": 2,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.2033,
+      "source": "arco_e1_dano_baixo.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        7004,
+        6815
+      ],
+      "note": "reescalada: guarda +52% vs parado"
+    },
+    "dano_cima": {
+      "row": 16,
+      "frames": 2,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.2105,
+      "source": "arco_e1_dano_cima.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        8175,
+        6688
+      ],
+      "note": "reescalada: guarda +47% vs parado"
+    },
+    "dano_lado": {
+      "row": 17,
+      "frames": 2,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.2022,
+      "source": "arco_e1_dano_lado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        7897,
+        6793
+      ],
+      "note": "reescalada: guarda +53% vs parado"
+    },
+    "morte_lado": {
+      "row": 18,
+      "frames": 7,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.448,
+      "source": "arco_e1_morte_lado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        6635,
+        6455,
+        6003,
+        6244,
+        3192,
+        5593,
+        5143
+      ],
+      "note": "reescalada: guarda -31% vs parado"
+    }
+  }
+}
