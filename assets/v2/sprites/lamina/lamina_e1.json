@@ -7,11 +7,12 @@
   ],
   "stand_height_px": 112,
   "facing": "lado olha para a direita; para a esquerda use flip_h",
-  "scale_class": 0.2445,
-  "stand_height_source_px": 458.0,
+  "scale_class": 0.2821,
+  "stand_height_source_px": 397.0,
   "hit_frame_method": "quadro de maior área opaca (índice base 0), só para ataques",
   "frame_counts": {
     "parado": 4,
+    "andar": 6,
     "ataque1": 5,
     "ataque2": 5,
     "ataque3": 5,
@@ -26,391 +27,393 @@
     256
   ],
   "animations": {
-    "andar_baixo": {
-      "row": 0,
-      "frames": 6,
-      "fps": 10,
-      "loop": true,
-      "scale": 0.8996,
-      "source": "lamina_e1_andar_baixo_6q_REFERENCIA.png",
-      "hit_frame": null,
-      "opaque_area_per_frame": [
-        5030,
-        4989,
-        5353,
-        5107,
-        4901,
-        5310
-      ],
-      "note": null
-    },
-    "andar_cima": {
-      "row": 1,
-      "frames": 6,
-      "fps": 10,
-      "loop": true,
-      "scale": 0.8996,
-      "source": "lamina_e1_andar_cima_6q_REFERENCIA.png",
-      "hit_frame": null,
-      "opaque_area_per_frame": [
-        5341,
-        5239,
-        5549,
-        5526,
-        5193,
-        5587
-      ],
-      "note": null
-    },
-    "andar_lado": {
-      "row": 2,
-      "frames": 4,
-      "fps": 10,
-      "loop": true,
-      "scale": 0.8996,
-      "source": "lamina_e1_andar_lado_6q_REFERENCIA.png",
-      "hit_frame": null,
-      "opaque_area_per_frame": [
-        4752,
-        3997,
-        4176,
-        4317
-      ],
-      "note": null
-    },
     "parado_baixo": {
-      "row": 3,
+      "row": 0,
       "frames": 4,
       "fps": 6,
       "loop": true,
-      "scale": 0.243,
+      "scale": 0.2835,
       "source": "lamina_e1_parado_baixo.png",
       "hit_frame": null,
       "opaque_area_per_frame": [
-        5462,
-        5495,
-        5554,
-        5750
+        6459,
+        6583,
+        6411,
+        6707
       ],
-      "note": "reescalada: guarda +1% vs parado"
+      "note": "reescalada: guarda -1% vs parado"
     },
     "parado_cima": {
-      "row": 4,
+      "row": 1,
       "frames": 4,
       "fps": 6,
       "loop": true,
-      "scale": 0.2894,
+      "scale": 0.2971,
       "source": "lamina_e1_parado_cima.png",
       "hit_frame": null,
       "opaque_area_per_frame": [
-        5927,
-        5984,
-        5855,
-        5914
+        6166,
+        6063,
+        6190,
+        6002
       ],
-      "note": "reescalada: guarda -16% vs parado"
+      "note": "reescalada: guarda -5% vs parado"
     },
     "parado_lado": {
-      "row": 5,
+      "row": 2,
       "frames": 4,
       "fps": 6,
       "loop": true,
-      "scale": 0.2435,
+      "scale": 0.2534,
       "source": "lamina_e1_parado_lado.png",
       "hit_frame": null,
       "opaque_area_per_frame": [
-        5244,
-        5336,
-        5394,
-        5291
+        5495,
+        5534,
+        5495,
+        5489
       ],
-      "note": "reescalada: guarda +0% vs parado"
+      "note": "reescalada: guarda +11% vs parado"
+    },
+    "andar_baixo": {
+      "row": 3,
+      "frames": 6,
+      "fps": 10,
+      "loop": true,
+      "scale": 0.3601,
+      "source": "lamina_e1_andar_baixo.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        6028,
+        6182,
+        6234,
+        6110,
+        6119,
+        6049
+      ],
+      "note": "reescalada: guarda -22% vs parado"
+    },
+    "andar_cima": {
+      "row": 4,
+      "frames": 6,
+      "fps": 10,
+      "loop": true,
+      "scale": 0.3415,
+      "source": "lamina_e1_andar_cima.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        5070,
+        5043,
+        5030,
+        5226,
+        5074,
+        5209
+      ],
+      "note": "reescalada: guarda -17% vs parado"
+    },
+    "andar_lado": {
+      "row": 5,
+      "frames": 6,
+      "fps": 10,
+      "loop": true,
+      "scale": 0.3404,
+      "source": "lamina_e1_andar_lado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        5649,
+        5253,
+        5557,
+        5458,
+        5416,
+        5566
+      ],
+      "note": "reescalada: guarda -17% vs parado"
     },
     "ataque1_baixo": {
       "row": 6,
       "frames": 5,
       "fps": 14,
       "loop": false,
-      "scale": 0.3478,
+      "scale": 0.3823,
       "source": "lamina_e1_ataque1_baixo.png",
-      "hit_frame": 3,
+      "hit_frame": 2,
       "opaque_area_per_frame": [
-        6308,
-        6796,
-        9310,
-        9356,
-        6194
+        6645,
+        7839,
+        11135,
+        10723,
+        6633
       ],
-      "note": "reescalada: guarda -30% vs parado"
+      "note": "reescalada: guarda -26% vs parado"
     },
     "ataque1_cima": {
       "row": 7,
       "frames": 5,
       "fps": 14,
       "loop": false,
-      "scale": 0.3027,
+      "scale": 0.312,
       "source": "lamina_e1_ataque1_cima.png",
       "hit_frame": 2,
       "opaque_area_per_frame": [
-        6303,
-        7224,
-        9715,
-        7661,
-        6214
+        5924,
+        6750,
+        9495,
+        7323,
+        5931
       ],
-      "note": "reescalada: guarda -19% vs parado"
+      "note": "reescalada: guarda -10% vs parado"
     },
     "ataque1_lado": {
       "row": 8,
       "frames": 5,
       "fps": 14,
       "loop": false,
-      "scale": 0.3394,
+      "scale": 0.3457,
       "source": "lamina_e1_ataque1_lado.png",
       "hit_frame": 2,
       "opaque_area_per_frame": [
-        6032,
-        6701,
-        10097,
-        7415,
-        5856
+        5742,
+        6527,
+        10004,
+        7081,
+        5694
       ],
-      "note": "reescalada: guarda -28% vs parado"
+      "note": "reescalada: guarda -18% vs parado"
     },
     "ataque2_baixo": {
       "row": 9,
       "frames": 5,
       "fps": 14,
       "loop": false,
-      "scale": 0.3333,
+      "scale": 0.3294,
       "source": "lamina_e1_ataque2_baixo.png",
       "hit_frame": 2,
       "opaque_area_per_frame": [
-        6850,
-        7596,
-        9617,
-        9020,
-        6761
+        6574,
+        7451,
+        9548,
+        8488,
+        6412
       ],
-      "note": "reescalada: guarda -27% vs parado"
+      "note": "reescalada: guarda -14% vs parado"
     },
     "ataque2_cima": {
       "row": 10,
       "frames": 5,
       "fps": 14,
       "loop": false,
-      "scale": 0.3533,
+      "scale": 0.35,
       "source": "lamina_e1_ataque2_cima.png",
       "hit_frame": 2,
       "opaque_area_per_frame": [
-        5978,
-        6737,
-        11297,
-        7060,
-        5971
+        5975,
+        6845,
+        10618,
+        7176,
+        5912
       ],
-      "note": "reescalada: guarda -31% vs parado"
+      "note": "reescalada: guarda -19% vs parado"
     },
     "ataque2_lado": {
       "row": 11,
       "frames": 5,
       "fps": 14,
       "loop": false,
-      "scale": 0.3173,
+      "scale": 0.3275,
       "source": "lamina_e1_ataque2_lado.png",
       "hit_frame": 2,
       "opaque_area_per_frame": [
-        7111,
-        9060,
-        13321,
-        8138,
-        6114
+        6393,
+        8783,
+        12866,
+        7752,
+        6015
       ],
-      "note": "reescalada: guarda -23% vs parado"
+      "note": "reescalada: guarda -14% vs parado"
     },
     "ataque3_baixo": {
       "row": 12,
       "frames": 5,
       "fps": 14,
       "loop": false,
-      "scale": 0.3294,
+      "scale": 0.3304,
       "source": "lamina_e1_ataque3_baixo.png",
       "hit_frame": 2,
       "opaque_area_per_frame": [
-        7190,
-        9393,
-        13129,
-        9845,
-        7353
+        6522,
+        8990,
+        13232,
+        9242,
+        7238
       ],
-      "note": "reescalada: guarda -26% vs parado"
+      "note": "reescalada: guarda -15% vs parado"
     },
     "ataque3_cima": {
       "row": 13,
       "frames": 5,
       "fps": 14,
       "loop": false,
-      "scale": 0.3467,
+      "scale": 0.3544,
       "source": "lamina_e1_ataque3_cima.png",
       "hit_frame": 2,
       "opaque_area_per_frame": [
-        8432,
-        9449,
-        15027,
-        13387,
-        7431
+        8096,
+        8688,
+        14145,
+        12258,
+        6889
       ],
-      "note": "reescalada: guarda -29% vs parado"
+      "note": "reescalada: guarda -20% vs parado"
     },
     "ataque3_lado": {
       "row": 14,
       "frames": 5,
       "fps": 14,
       "loop": false,
-      "scale": 0.3415,
+      "scale": 0.3457,
       "source": "lamina_e1_ataque3_lado.png",
       "hit_frame": 2,
       "opaque_area_per_frame": [
-        7703,
-        7751,
-        14689,
-        10352,
-        7527
+        7514,
+        8045,
+        13903,
+        10686,
+        7598
       ],
-      "note": "reescalada: guarda -28% vs parado"
+      "note": "reescalada: guarda -18% vs parado"
     },
     "pesado_lado": {
       "row": 15,
       "frames": 8,
       "fps": 12,
       "loop": false,
-      "scale": 0.4628,
+      "scale": 0.5022,
       "source": "lamina_e1_pesado_lado.png",
       "hit_frame": 2,
       "opaque_area_per_frame": [
-        6230,
-        7403,
-        10083,
-        8690,
-        7602,
-        8273,
-        7392,
-        5767
+        6607,
+        7915,
+        10591,
+        9229,
+        8479,
+        8885,
+        8108,
+        6633
       ],
-      "note": "reescalada: guarda -47% vs parado"
+      "note": "reescalada: guarda -44% vs parado"
     },
     "esquiva_baixo": {
       "row": 16,
       "frames": 5,
       "fps": 14,
       "loop": false,
-      "scale": 0.3043,
+      "scale": 0.3404,
       "source": "lamina_e1_esquiva_baixo.png",
       "hit_frame": null,
       "opaque_area_per_frame": [
-        6508,
-        6562,
-        5674,
-        6544,
-        6394
+        6237,
+        5945,
+        5657,
+        6312,
+        6142
       ],
-      "note": "reescalada: guarda -20% vs parado"
+      "note": "reescalada: guarda -17% vs parado"
     },
     "esquiva_cima": {
       "row": 17,
       "frames": 5,
       "fps": 14,
       "loop": false,
-      "scale": 0.2786,
+      "scale": 0.3043,
       "source": "lamina_e1_esquiva_cima.png",
       "hit_frame": null,
       "opaque_area_per_frame": [
-        5409,
-        5221,
-        4890,
-        5219,
-        5407
+        5384,
+        5013,
+        5045,
+        5003,
+        5173
       ],
-      "note": "reescalada: guarda -12% vs parado"
+      "note": "reescalada: guarda -7% vs parado"
     },
     "esquiva_lado": {
       "row": 18,
       "frames": 5,
       "fps": 14,
       "loop": false,
-      "scale": 0.2821,
+      "scale": 0.3304,
       "source": "lamina_e1_esquiva_lado.png",
       "hit_frame": null,
       "opaque_area_per_frame": [
-        5509,
-        5683,
-        4479,
-        5715,
-        5451
+        5964,
+        6393,
+        5799,
+        6816,
+        5957
       ],
-      "note": "reescalada: guarda -13% vs parado"
+      "note": "reescalada: guarda -15% vs parado"
     },
     "dano_baixo": {
       "row": 19,
       "frames": 2,
       "fps": 10,
       "loop": false,
-      "scale": 0.2358,
+      "scale": 0.2483,
       "source": "lamina_e1_dano_baixo.png",
       "hit_frame": null,
       "opaque_area_per_frame": [
-        6273,
-        7716
+        6709,
+        7384
       ],
-      "note": "reescalada: guarda +4% vs parado"
+      "note": "reescalada: guarda +14% vs parado"
     },
     "dano_cima": {
       "row": 20,
       "frames": 2,
       "fps": 10,
       "loop": false,
-      "scale": 0.2074,
+      "scale": 0.2409,
       "source": "lamina_e1_dano_cima.png",
       "hit_frame": null,
       "opaque_area_per_frame": [
-        5978,
-        6841
+        6234,
+        6656
       ],
-      "note": "reescalada: guarda +18% vs parado"
+      "note": "reescalada: guarda +17% vs parado"
     },
     "dano_lado": {
       "row": 21,
       "frames": 2,
       "fps": 10,
       "loop": false,
-      "scale": 0.1833,
+      "scale": 0.204,
       "source": "lamina_e1_dano_lado.png",
       "hit_frame": null,
       "opaque_area_per_frame": [
-        6221,
-        6994
+        6121,
+        7102
       ],
-      "note": "reescalada: guarda +33% vs parado"
+      "note": "reescalada: guarda +38% vs parado"
     },
     "morte_lado": {
       "row": 22,
       "frames": 7,
       "fps": 8,
       "loop": false,
-      "scale": 0.4043,
+      "scale": 0.4133,
       "source": "lamina_e1_morte_lado.png",
       "hit_frame": null,
       "opaque_area_per_frame": [
-        5316,
-        10315,
-        3947,
-        4038,
-        1427,
-        3649,
-        3556
+        5502,
+        5324,
+        9274,
+        2264,
+        1713,
+        3661,
+        3845
       ],
-      "note": "reescalada: guarda -40% vs parado"
+      "note": "reescalada: guarda -32% vs parado"
     }
   },
-  "standing_height": 111
+  "standing_height": 112
 }

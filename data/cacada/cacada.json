@@ -4,7 +4,10 @@
   "roomsMax": 7,
   "guardianAfterRuns": 2,
   "treasureChance": 0.65,
-  "restHealPct": 0.3,
+  "restHealPct": 0.5,
+  "runGrowth": 0.3,
+  "runGrowthCap": 2,
+  "guardianRunRooms": 5,
   "firstWaveSize": 3,
   "waveSizePerRoom": 0.6,
   "maxWaveSize": 6,
@@ -20,7 +23,7 @@
     "damage": 1.25,
     "speed": 1.2,
     "period": 0.7,
-    "xp": 3,
+    "xp": 2,
     "tint": "#ff9d6e"
   },
   "grounds": {

@@ -63,6 +63,7 @@ public partial class Level
     {
         _storyHud = new StoryHud { Name = "StoryHud" };
         AddChild(_storyHud);
+        AddChild(new HintHud(this));
         _box = new DialogueBox { Name = "Dialogue" };
         AddChild(_box);
         _box.Closed += OnDialogueClosed;
@@ -144,6 +145,18 @@ public partial class Level
             {
                 OpenWeaponChange();
             }
+            else if (name == StoryFlags.EventOpenContracts)
+            {
+                Hunt.ContractsScreen.Show();
+            }
+            else if (name == StoryFlags.EventGivePotion)
+            {
+                GiftPotion();
+            }
+            else if (name == StoryFlags.EventBuyPotion)
+            {
+                BuyPotion();
+            }
         }
     }
 
@@ -198,4 +211,23 @@ public partial class Level
     }
 
     private void OnStoryEvent(string name) => _pendingEvents.Add(name);
+
+    /// <summary>Poção de presente da Tia Nilza (até o limite da bolsa).</summary>
+    private void GiftPotion()
+    {
+        var state = Hunter.HuntService.State;
+        state.Potions = System.Math.Min(Hunter.HuntService.Config.Potions.Max, state.Potions + 1);
+        CombatHud.Toast($"Você ganhou uma poção! ({state.Potions} na bolsa)");
+        GameSession.Autosave();
+    }
+
+    private void BuyPotion()
+    {
+        var (ok, message) = Hunter.HuntService.BuyPotion(withFlower: false);
+        ShowNotice(message);
+        if (ok)
+        {
+            StoryService.SetFlag(StoryFlags.PotionBought);
+        }
+    }
 }

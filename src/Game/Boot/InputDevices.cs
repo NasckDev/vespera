@@ -20,6 +20,12 @@ public partial class InputDevices : Node
 
     public static LastDevice Current { get; private set; } = LastDevice.Keyboard;
 
+    private const ulong MouseAimMilliseconds = 4000;
+    private static ulong _lastMouse;
+
+    /// <summary>O mouse foi usado há pouco (os golpes miram no cursor).</summary>
+    public static bool MouseRecently => _lastMouse > 0 && Time.GetTicksMsec() - _lastMouse < MouseAimMilliseconds;
+
     /// <summary>Coluna das associações a mostrar nas dicas: controle se o último input foi do controle; senão teclado e mouse.</summary>
     public static BindingSlot GlyphSlot => Current == LastDevice.Pad ? BindingSlot.Gamepad : BindingSlot.Primary;
 
@@ -38,6 +44,15 @@ public partial class InputDevices : Node
             InputEventJoypadMotion m when Mathf.Abs(m.AxisValue) >= PadAxisThreshold => LastDevice.Pad,
             _ => Current,
         };
+        if (@event is InputEventMouseMotion or InputEventMouseButton { Pressed: true })
+        {
+            _lastMouse = Time.GetTicksMsec();
+        }
+        else if (device == LastDevice.Pad)
+        {
+            _lastMouse = 0;
+        }
+
         Set(device);
     }
 

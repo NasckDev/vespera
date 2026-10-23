@@ -122,6 +122,17 @@ Cada camada: implementação (Sonnet) → testes automáticos → **tester jogad
 | VII | SS–SSS | Avesso profundo (Brechas que misturam bairros) | variações dos Guardiões | **Exame SSS**; o Avesso cresce |
 | Final | Alvor | Praça da Lanterna (a primeira Brecha da praça) | **O Reflexo** | o sino toca de novo → rank **Alvor** → fim da Parte 1 e gancho da Parte 2 |
 
+### 5.1 Ato I jogável (revisão do playtest de 23/10: meta de 25–35 min)
+
+Roteiro em `data/dialogue/story.json` (objetivo atual sempre visível em 1 linha; caçada mostra sala, onda e contratos):
+chegada (lanterna herdada, selo E, a Brecha se abre) → Benício explica por que se caça (Fragmentos mantêm as lanternas
+acesas) → Ravi (aposta) → Odete dá a arma da classe escolhida no jogo novo → **caçada 1** (5 salas, termina num covil de
+elite) → Tia Nilza vem dar a primeira poção → Odete melhora a arma → Lis explica as salas, contratos no mural →
+**caçada 2** → Ravi (rival) → **exame do Benício** (2 caçadas completas, arma forjada, XP do rank D; diz o que falta) →
+a Brecha fica vermelha → **caçada da Lodo-Mãe** (5 salas) → rank D, Eco Viscoso (Q), Odete reconhece a lanterna da
+Marisa, carta da Dona Celeste e a lanterna apontando para o Pomar Alto (gancho do Ato II). Cair na Brecha volta à Praça
+(Fragmentos ficam na Lanterna); o bot sem invulnerabilidade cai 0–1 vez com Lâmina/Martelo.
+
 O Alvor é "impossível para muitos": a Brecha da praça exige SSS, conjunto de armadura de Guardião e 2 Ecos, e o Reflexo copia o estilo de luta do próprio jogador (estatísticas registradas desde o prólogo).
 
 ## 6. Regras de progressão e dificuldade
@@ -132,6 +143,11 @@ O Alvor é "impossível para muitos": a Brecha da praça exige SSS, conjunto de 
 - **Poder recomendado** visível em cada Brecha; monstros escalam por rank (HP, dano, velocidade e **padrões novos**, não só números).
 - **Equipamento:** arma (sobe de nível na forja com Fragmentos + material), armadura por conjunto de Guardião (bônus de 2 e 4 peças), 2 Ecos.
 - **Morte (Lanterna):** os Fragmentos da caçada ficam na Brecha; o equipamento nunca é perdido. No co-op, um aliado pode recuperar a Lanterna.
+- **Caçadas (Ato I, `data/cacada/cacada.json`):** salas sorteadas por semente (combate, elite, tesouro, descanso com
+  lanterna que cura 50%, covil); a 1ª sala é só de Lodos; as ondas crescem um pouco a cada caçada completa; barris e
+  caixotes quebram e dão Lumes; 3 contratos no mural por volta (caçada, coleta, proteção, sem dano) pagam XP,
+  Fragmentos e Lumes; poções da Tia Nilza (14 Lumes, até 3, tecla R, curam 40%); tela de resultado ao voltar.
+- **Portão do Guardião:** a Lodo-Mãe só aparece depois do exame do Benício (flag `exame_e`).
 - **Economia:** Fragmentos (Avesso → forja, Ecos) e Lumes (cidade → comida, poções, mapas).
 
 ## 7. Classes (3 primeiro)
@@ -141,6 +157,9 @@ O Alvor é "impossível para muitos": a Brecha da praça exige SSS, conjunto de 
 | Lâmina | médio, equilibrada | combo de 3 + corte giratório | investida → aparar → lâmina de luz → corte duplo da véspera → Lâmina de Duas Vésperas |
 | Arco | longo, kiting | flecha carregada perfura | rolar e atirar → flecha de luz → chuva de flechas → marca do caçador → feixe do Alvor |
 | Martelo | lento, curto, pesado | quebra partes em dobro, hit-stop forte | tremor → escudo de bronze → martelada de âmbar → onda sísmica → queda do sino |
+
+Ajuste do rank E (playtest 23/10, bot sem invulnerabilidade): dano base Lâmina 12, Arco 16 (flecha empurra mais),
+Martelo 22; mouse mira o golpe no cursor (o Arco gira a mira na carga).
 
 ## 8. Fora do escopo da beta
 
