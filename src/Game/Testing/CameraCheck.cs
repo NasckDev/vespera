@@ -14,7 +14,7 @@ namespace Vespera.Game.Testing;
 /// mede também durante a apresentação da Lodo-Mãe (a câmera pode se afastar até 0,8×) e depois dela. Confere ainda que a
 /// câmera não mostra nada fora do chão pintado quando o mapa é maior que a tela.
 /// </summary>
-public sealed class CameraCheck(Level level, SmokeTest host)
+public sealed class CameraCheck(Level level, SmokeTest host, bool shots = false)
 {
     public const float MinOnScreen = 130f;
     public const float MaxOnScreen = 150f;
@@ -36,11 +36,27 @@ public sealed class CameraCheck(Level level, SmokeTest host)
             await host.PhysicsFrames(2);
             Expect(room, MinOnScreen, MaxOnScreen);
             CheckFraming(room);
+            if (shots && System.Array.IndexOf(CityLevels, room) >= 0)
+            {
+                await Shoot(room);
+            }
+        }
+
+        if (shots)
+        {
+            // Sala com monstros de verdade (ondas fixas do JSON), para ver caçador × Lodo × Espectro × arcos da parede.
+            var cheat = RiftSession.Cheat;
+            RiftSession.Cheat = true;
+            await level.GoToRoom("esgoto_corredor");
+            await host.PhysicsFrames(150);
+            await Shoot("esgoto_corredor");
+            RiftSession.Cheat = cheat;
         }
 
         await CheckBossIntro();
         await level.GoToRoom(Level.HubLevelId);
         await host.PhysicsFrames(4);
+        await MeasurePracaCrossing();
         return _failures;
     }
 
@@ -87,6 +103,48 @@ public sealed class CameraCheck(Level level, SmokeTest host)
         }
     }
 
+    private async Task Shoot(string name)
+    {
+        World.Camera.Snap();
+        await host.PhysicsFrames(20);
+        Log.Info($"qa-tela {name}: caçador {OnScreenHeight(level):0.0} px");
+        await host.CaptureNow($"escala_{name}");
+    }
+
+    /// <summary>Segundos máximos para atravessar a Praça de uma ponte à outra (playtest 23/10).</summary>
+    public const float MaxPracaCrossing = 6f;
+
+    /// <summary>
+    /// Atravessa a Praça andando (input de verdade, sem correr de ponte a ponte em linha reta pela lanterna): da cabeceira
+    /// oeste (x 240) à leste (x 1432) pela faixa livre y 505. Mede o tempo e falha acima de <see cref="MaxPracaCrossing"/>.
+    /// </summary>
+    private async Task MeasurePracaCrossing()
+    {
+        const float startX = 240f, endX = 1432f, laneY = 505f;
+        var player = level.Player;
+        var input = new ScriptedInput();
+        var original = player.Input;
+        player.Input = input;
+        player.Teleport(new Vector2(startX, laneY));
+        await host.PhysicsFrames(10);
+        input.Move = Vector2.Right;
+        var seconds = 0f;
+        while (player.GlobalPosition.X < endX && seconds < 15f)
+        {
+            await host.PhysicsFrames(1);
+            seconds += (float)player.GetPhysicsProcessDeltaTime();
+        }
+
+        input.Move = Vector2.Zero;
+        player.Input = original;
+        var ok = player.GlobalPosition.X >= endX && seconds <= MaxPracaCrossing;
+        Log.Info($"travessia da Praça: {endX - startX:0} px de mundo em {seconds:0.00} s ({player.MaxSpeed:0} px/s, {player.MaxSpeed / World.Data.HumanHeight:0.00} alturas/s) {(ok ? "ok" : "FORA")}");
+        if (!ok)
+        {
+            _failures.Add($"travessia da Praça em {seconds:0.00} s (máx. {MaxPracaCrossing} s; parou em x {player.GlobalPosition.X:0})");
+        }
+    }
+
     private async Task CheckBossIntro()
     {
         var cheat = RiftSession.Cheat;
@@ -103,6 +161,12 @@ public sealed class CameraCheck(Level level, SmokeTest host)
         }
 
         Expect($"{arena} (apresentação da Lodo-Mãe)", MinOnScreen * CameraRig.MinPullBack, MaxOnScreen);
+        if (shots)
+        {
+            Log.Info($"qa-tela {arena}_lodo_mae: caçador {OnScreenHeight(level):0.0} px (câmera afastada na apresentação)");
+            await host.CaptureNow($"escala_{arena}_lodo_mae");
+        }
+
         for (var i = 0; i < 60 * 5 && !boss.Engaged; i++)
         {
             await host.PhysicsFrames(1);

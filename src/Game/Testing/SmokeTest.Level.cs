@@ -44,7 +44,8 @@ public partial class SmokeTest
 
         if (Array.IndexOf(_args, CameraFlag) >= 0)
         {
-            _failures.AddRange(await new CameraCheck(level, this).Run());
+            var shots = _shotsDir is not null && DisplayServer.GetName() != "headless";
+            _failures.AddRange(await new CameraCheck(level, this, shots).Run());
         }
 
         if (Array.IndexOf(_args, CombatBotFlag) >= 0)
