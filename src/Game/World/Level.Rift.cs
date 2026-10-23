@@ -23,7 +23,6 @@ public partial class Level
     private const float PortalStepBack = 70f;
 
     private ColorRect _fade = null!;
-    private ClassPicker? _picker;
     private bool _switching;
     private int? _carriedHp;
     private Vector2? _hubSpawn;
@@ -31,15 +30,12 @@ public partial class Level
     /// <summary>Uma troca de sala está em andamento (bots esperam por ela).</summary>
     public bool Switching => _switching;
 
-    public bool PickerOpen => _picker is not null;
+    /// <summary>Atalhos de teste (1/2/3 trocam a arma na Praça) só existem com <c>--dev</c> na linha de comando.</summary>
+    public static bool DevMode { get; } = System.Array.IndexOf(OS.GetCmdlineUserArgs(), "--dev") >= 0;
 
-    /// <summary>Seletor de arma aberto no portal (bots conferem a arma padrão).</summary>
-    public ClassPicker? Picker => _picker;
-
-    /// <summary>Entra na Brecha com a classe escolhida (usado pelo seletor e pelo bot de combate).</summary>
+    /// <summary>Entra na Brecha com a classe da arma (usado pelo portal e pelo bot de combate).</summary>
     public void EnterRift(HunterClass hunter)
     {
-        ClosePicker();
         RiftSession.Hunter = hunter;
         var recovered = RiftSession.BeginRun();
         _carriedHp = null;
@@ -89,6 +85,7 @@ public partial class Level
     {
         CombatHud.ClearToasts();
         RecordStoryLevel();
+        RestoreLanternGlow();
         if (_carriedHp is { } hp)
         {
             World.Player.Combat.SetHp(hp);
@@ -110,11 +107,19 @@ public partial class Level
             return;
         }
 
-        RiftRules.MarkClosed(RiftSession.Save);
-        var end = RiftSession.EndRun(survived: true);
+        var guardian = Hunter.HuntService.Plan?.HasGuardian == true;
+        if (guardian)
+        {
+            RiftRules.MarkClosed(RiftSession.Save);
+        }
+
+        var (end, summary) = RiftSession.EndRunWithSummary(survived: true, completed: true);
         _carriedHp = null;
         GameSession.Autosave();
-        _ = ReturnToHub($"Brecha fechada! +{end?.FragmentosBanked ?? 0} Fragmentos levados para casa.", "Esgotos do Mercado — fechada");
+        var toast = guardian
+            ? $"Brecha fechada! +{end?.FragmentosBanked ?? 0} Fragmentos levados para casa."
+            : $"Caçada completa! +{end?.FragmentosBanked ?? 0} Fragmentos levados para casa.";
+        _ = ReturnToHub(toast, guardian ? "Esgotos do Mercado — fechada" : "De volta, inteiro", summary, guardian);
     }
 
     private void OnPlayerDied(HunterCombat combat)
@@ -125,18 +130,31 @@ public partial class Level
             return;
         }
 
-        var lost = RiftSession.EndRun(survived: false)?.FragmentosLeft ?? 0;
+        var (end, summary) = RiftSession.EndRunWithSummary(survived: false, completed: false);
+        var lost = end?.FragmentosLeft ?? 0;
         _carriedHp = null;
         GameSession.Autosave();
         var message = lost > 0
             ? $"Você caiu. Seus {lost} Fragmentos ficaram na Lanterna, dentro da Brecha."
             : "Você caiu. A Brecha te cuspiu de volta na Praça.";
-        _ = ReturnToHub(message, "A Lanterna ficou para trás");
+        _ = ReturnToHub(message, "A Lanterna ficou para trás", summary, false);
     }
 
-    private async Task ReturnToHub(string toast, string subtitle)
+    /// <summary>Tela de resultado da última caçada (abre na Praça, antes das falas automáticas).</summary>
+    public static bool ShowResults { get; set; } = true;
+
+    private async Task ReturnToHub(string toast, string subtitle, Hunter.RunSummary? summary = null, bool closed = false)
     {
         await GoToRoom(HubLevelId, _hubSpawn);
+        if (summary is not null && ShowResults)
+        {
+            Hunt.RunResultScreen.Show(summary, closed);
+            while (Hunt.RunResultScreen.Active is not null && IsInstanceValid(this))
+            {
+                await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+            }
+        }
+
         World.Player.Combat.Revive();
         CombatHud.ShowTitle("Praça da Lanterna", subtitle);
         CombatHud.Toast(toast);
@@ -148,55 +166,39 @@ public partial class Level
         ScheduleAutoplay();
     }
 
-    private void OpenPicker()
+    /// <summary>
+    /// Entrar na Brecha pelo portal da Praça: sem pergunta de classe (ela foi escolhida em "Nova história" e só muda pela
+    /// Odete). Sem a arma da Odete o portal recusa com um aviso.
+    /// </summary>
+    private void EnterFromPortal()
     {
-        if (_picker is not null)
+        if (_switching)
         {
             return;
         }
 
         if (!StoryService.Engine.HasFlag(StoryFlags.StarterBlade))
         {
-            ShowNotice("A fenda pulsa, mas você está de mãos vazias. Fale com a Odete, na forja do Bairro das Forjas.");
+            ShowNotice("A fenda pulsa, mas você está de mãos vazias. Fale com a Odete, na Forja: atravesse a ponte a oeste.");
             return;
         }
 
         _hubSpawn = World.Player.GlobalPosition + new Vector2(0, PortalStepBack * World.Data.ActorScale);
-        Player.Frozen = true;
-        _picker = new ClassPicker(EquippedHunter) { Name = "ClassPicker" };
-        _picker.Chosen += EnterRift;
-        _picker.Cancelled += ClosePicker;
-        AddChild(_picker);
-        MoveChild(_picker, _fade.GetIndex());
+        EnterRift(EquippedHunter);
     }
 
-    /// <summary>Classe da arma equipada na progressão (a que a Odete entregou); o seletor do portal começa nela.</summary>
+    /// <summary>Classe da arma equipada na progressão (a escolhida em "Nova história" ou trocada pela Odete).</summary>
     private static HunterClass EquippedHunter =>
         Hunter.Progression.IsActive ? RiftSession.HunterFor(Hunter.Progression.Engine.ClassId) : RiftSession.Hunter;
 
-    private void ClosePicker()
-    {
-        if (_picker is null)
-        {
-            return;
-        }
-
-        _picker.QueueFree();
-        _picker = null;
-        Player.Frozen = false;
-    }
-
-    private void UpdatePicker()
-    {
-        if (_picker is not null)
-        {
-            Player.Frozen = true;
-        }
-    }
-
-    /// <summary>Teclas de teste na Praça: 1 Lâmina, 2 Arco, 3 Martelo.</summary>
+    /// <summary>Teclas de teste na Praça (só com --dev): 1 Lâmina, 2 Arco, 3 Martelo.</summary>
     private bool HandleDebugKey(Key key)
     {
+        if (!DevMode)
+        {
+            return false;
+        }
+
         HunterClass? hunter = key switch
         {
             Key.Key1 => HunterClass.Lamina,
@@ -204,7 +206,7 @@ public partial class Level
             Key.Key3 => HunterClass.Martelo,
             _ => null,
         };
-        if (hunter is not { } chosen || RiftSession.InRift || _picker is not null || _switching)
+        if (hunter is not { } chosen || RiftSession.InRift || _switching)
         {
             return false;
         }

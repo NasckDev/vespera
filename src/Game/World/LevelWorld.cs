@@ -5,6 +5,7 @@ using Vespera.Game.Actors.Enemies;
 using Vespera.Game.Boot;
 using Vespera.Game.Combat;
 using Vespera.Game.Components;
+using Vespera.Game.Hunter;
 using Vespera.Game.World.Rift;
 
 namespace Vespera.Game.World;
@@ -29,6 +30,7 @@ public partial class LevelWorld : Node2D
     private readonly List<Rect2> _solids = [];
     private readonly List<Enemy> _enemies = [];
     private readonly List<Npc> _npcs = [];
+    private readonly List<Breakable> _breakables = [];
     private Node2D _groundFx = null!;
     private Node2D _fx = null!;
 
@@ -64,6 +66,12 @@ public partial class LevelWorld : Node2D
 
     public IReadOnlyList<Npc> Npcs => _npcs;
 
+    /// <summary>Barris e caixas que quebram (cidade e salas da Brecha).</summary>
+    public IReadOnlyList<Breakable> Breakables => _breakables;
+
+    /// <summary>Catálogo de objetos (data/levels/props.json).</summary>
+    public IReadOnlyDictionary<string, PropDef> Catalog => _catalog;
+
     /// <summary>Limites visíveis e jogáveis: a parte da grade coberta pelo chão pintado.</summary>
     public Rect2 Bounds { get; private set; }
 
@@ -96,15 +104,22 @@ public partial class LevelWorld : Node2D
         Feel = new CombatFeel { Name = "Feel", FxLayer = _fx, ActorScale = _data.ActorScale };
         AddChild(Feel);
 
-        foreach (var placement in _data.Props)
+        for (var i = 0; i < _data.Props.Count; i++)
         {
-            var prop = new Prop(placement.Type, _catalog[placement.Type].Scaled(_data.PropScale), placement.Flip, _data.ActorScale)
+            var placement = _data.Props[i];
+            var at = new Vector2(placement.At[0], placement.At[1]);
+            if (placement.Breakable)
             {
-                Name = $"{placement.Type}_{_props.Count}",
-                Position = new Vector2(placement.At[0], placement.At[1]),
-            };
-            Entities.AddChild(prop);
-            _props.Add(prop);
+                var key = $"{_data.Id}:{i}";
+                if (!Hunter.HuntService.IsBroken(key))
+                {
+                    AddBreakable(placement.Type, at, key);
+                }
+
+                continue;
+            }
+
+            AddProp(placement.Type, at, placement.Flip);
         }
 
         foreach (var zone in _data.Zones)
@@ -120,7 +135,7 @@ public partial class LevelWorld : Node2D
         Camera.MakeCurrent();
         Feel.Camera = Camera;
 
-        if (_data.Rift is { } rift && _withDirector)
+        if (RoomRift() is { } rift && _withDirector)
         {
             Director = new RoomDirector(this, rift);
             AddChild(Director);
@@ -128,6 +143,13 @@ public partial class LevelWorld : Node2D
     }
 
     public Vector2 SpawnPoint => new(_data.Spawn[0], _data.Spawn[1]);
+
+    /// <summary>Conteúdo da sala: o da caçada sorteada (dentro da Brecha) ou o fixo do JSON da fase.</summary>
+    private RiftRoomData? RoomRift() =>
+        _data.Rift is not null && RiftSession.InRift && HuntService.Plan is { } plan && RiftSession.RoomIndex < plan.Rooms.Count
+            && plan.Rooms[RiftSession.RoomIndex].Ground == _data.Id
+            ? HuntService.RoomRift(RiftSession.RoomIndex, _data)
+            : _data.Rift;
 
     /// <summary>Cria um caçador no ponto (pé) dado; usado pelo jogador e pelos bots de teste.</summary>
     public Player SpawnPlayer(IInputSource input, Vector2 feet, HunterClass hunter = HunterClass.Lamina)
@@ -145,6 +167,9 @@ public partial class LevelWorld : Node2D
     }
 
     public void AddGroundFx(Node2D node) => _groundFx.AddChild(node);
+
+    /// <summary>Efeito por cima das entidades (rastro do corte, partículas de ambiente).</summary>
+    public void AddFx(Node2D node) => _fx.AddChild(node);
 
     public void AddProjectile(Arrow arrow)
     {
@@ -205,6 +230,29 @@ public partial class LevelWorld : Node2D
         return SpawnPoint;
     }
 
+    /// <summary>Põe um objeto do catálogo com o pé em <paramref name="at"/> (salas da Brecha montadas em código).</summary>
+    public Prop AddProp(string type, Vector2 at, bool flip = false)
+    {
+        var prop = new Prop(type, _catalog[type].Scaled(_data.PropScale), flip, _data.ActorScale)
+        {
+            Name = $"{type}_{_props.Count}",
+            Position = at,
+        };
+        Entities.AddChild(prop);
+        _props.Add(prop);
+        return prop;
+    }
+
+    /// <summary>Põe um quebrável do catálogo (barril, caixote, jarro) com o pé em <paramref name="at"/>.</summary>
+    public Breakable AddBreakable(string type, Vector2 at, string key, float extraScale = 1f)
+    {
+        var breakable = new Breakable(type, _catalog[type].Scaled(_data.PropScale * extraScale), this, key) { Position = at };
+        Entities.AddChild(breakable);
+        _breakables.Add(breakable);
+        breakable.TreeExited += () => _breakables.Remove(breakable);
+        return breakable;
+    }
+
     /// <summary>Sólidos fora da grade e dos objetos (barreiras, baú, base de portal), vistos pelo bot de colisão.</summary>
     public void AddSolid(Rect2 rect) => _solids.Add(rect);
 
@@ -239,6 +287,14 @@ public partial class LevelWorld : Node2D
             }
         }
 
+        foreach (var breakable in _breakables)
+        {
+            if (IsInstanceValid(breakable) && HitsRect(capsule, breakable.FootprintRect, tolerance))
+            {
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -251,10 +307,13 @@ public partial class LevelWorld : Node2D
         var at = new Vector2(zone.At[0], zone.At[1]);
         if (zone.Kind == "brecha")
         {
-            var portal = new BreachPortal(PracaPortalHeight * _data.ActorScale, zone.Kind, zone.Prompt, zone.Radius)
+            // Depois de N caçadas completas a Brecha "fica mais forte": fenda maior e vermelha (a Lodo-Mãe espera no fim).
+            var empowered = Progression.IsActive && Hunter.HuntService.GuardianUnlocked;
+            var portal = new BreachPortal(PracaPortalHeight * _data.ActorScale * (empowered ? 1.2f : 1f), zone.Kind, zone.Prompt, zone.Radius)
             {
                 Name = "BrechaPortal",
                 Position = at,
+                Empowered = empowered,
             };
             portal.Zone.Text = zone.Text;
             Entities.AddChild(portal);

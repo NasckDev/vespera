@@ -90,6 +90,9 @@ public sealed class SaveData
     /// </summary>
     public Vespera.Core.Story.StoryProgress Story { get; set; } = new();
 
+    /// <summary>Caçadas da Brecha (contratos, poções, flores, poço, caçadas completas). Saves sem o bloco carregam zerados.</summary>
+    public Vespera.Core.Hunt.HuntState Hunt { get; set; } = new();
+
     public DateTimeOffset SavedAt { get; set; }
 
     /// <summary>Jogo novo (<c>newSave(name, cls)</c>, <c>core.js:208-212</c>): só a arma da classe, nível 1.</summary>

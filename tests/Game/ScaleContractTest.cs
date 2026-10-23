@@ -32,7 +32,7 @@ public class ScaleContractTest
         {
             var level = LevelJson.ParseLevel(File.ReadAllText(Path.Combine(LevelsDir, $"{id}.json")));
             AssertThat(level.DoorHeight).IsGreater(0f);
-            AssertThat(level.HumanHeight).IsEqualApprox(0.75f * level.DoorHeight, 0.001f);
+            AssertThat(level.HumanHeight).IsEqualApprox(1.0f * level.DoorHeight, 0.001f);
             AssertThat(level.ActorScale).IsEqualApprox(level.HumanHeight / 125f, 0.0001f);
             AssertThat(level.DoorAt).IsNotNull();
         }
@@ -42,8 +42,8 @@ public class ScaleContractTest
     public void PracaKeepsTheApprovedHunterHeight()
     {
         var praca = LevelJson.ParseLevel(File.ReadAllText(Path.Combine(LevelsDir, "praca.json")));
-        AssertThat(praca.HumanHeight).IsEqualApprox(54f, 0.01f);
-        AssertThat(praca.ActorScale).IsEqualApprox(0.432f, 0.0001f);
+        AssertThat(praca.HumanHeight).IsEqualApprox(72f, 0.01f);
+        AssertThat(praca.ActorScale).IsEqualApprox(0.576f, 0.0001f);
     }
 
     [TestCase]

@@ -28,7 +28,7 @@ public partial class Level
 
     public DialogueBox Dialogue => _box;
 
-    private bool DialogueBlocksInteraction => _box.IsOpen || _box.SecondsSinceClosed < DialogueCooldown;
+    private bool DialogueBlocksInteraction => _box.IsOpen || _sceneBusy || _box.SecondsSinceClosed < DialogueCooldown;
 
     /// <summary>Abre a fala <paramref name="id"/>; <paramref name="npc"/> (se houver) para e vira o rosto para o jogador.</summary>
     public bool StartDialogue(string id, Npc? npc = null)
@@ -56,7 +56,7 @@ public partial class Level
             return false;
         }
 
-        return StartDialogue(auto.Dialogue);
+        return BeginAutoplayScene(auto);
     }
 
     private void BuildStory()
@@ -66,6 +66,7 @@ public partial class Level
         _box = new DialogueBox { Name = "Dialogue" };
         AddChild(_box);
         _box.Closed += OnDialogueClosed;
+        _box.NodeShown += OnDialogueNode;
         StoryService.Engine.EventRaised += OnStoryEvent;
     }
 
@@ -82,15 +83,23 @@ public partial class Level
 
     private void ScheduleAutoplay()
     {
-        if (!StoryService.SuppressAutoplay)
+        if (StoryService.SuppressAutoplay)
         {
-            GetTree().CreateTimer(AutoplayDelay).Timeout += () => PlayAutoplay();
+            return;
         }
+
+        // A chegada começa na tela preta (a cena faz o fade): sem isto o jogador apareceria um instante no meio da praça.
+        if (StoryService.Engine.AutoplayFor(World.Data.Id)?.Dialogue == "chegada")
+        {
+            _fade.Color = _fade.Color with { A = 1f };
+        }
+
+        GetTree().CreateTimer(AutoplayDelay).Timeout += () => PlayAutoplay();
     }
 
     private void UpdateStory()
     {
-        _storyHud.Visible = !_box.IsOpen && !RiftSession.InRift;
+        _storyHud.Visible = !_box.IsOpen && !_sceneBusy && !RiftSession.InRift;
         if (_box.IsOpen)
         {
             Player.Frozen = true;
@@ -113,18 +122,79 @@ public partial class Level
     private void OnDialogueClosed()
     {
         Player.Frozen = false;
-        _speaking?.Hold(false);
+        ReleaseCamera();
+        if (_speaking is { } speaker && IsInstanceValid(speaker))
+        {
+            speaker.Hold(false);
+            _ = speaker.WalkTo(speaker.Home);
+        }
+
         _speaking = null;
         var events = _pendingEvents.ToArray();
         _pendingEvents.Clear();
         GameSession.Autosave();
+        ScheduleAutoplay();
         foreach (var name in events)
         {
             if (name == StoryFlags.EventOpenForge)
             {
                 ForgeScreen.Open();
             }
+            else if (name == StoryFlags.EventChangeWeapon)
+            {
+                OpenWeaponChange();
+            }
         }
+    }
+
+    /// <summary>"Trocar de arma" da Odete: escolha da arma nova, confirmação, e o caçador troca de folha e de golpes na hora.</summary>
+    private void OpenWeaponChange()
+    {
+        GetTree().Paused = true;
+        var current = RiftSession.Hunter;
+        SceneRouter.Instance.Push(new ClassSelectScreen(
+            chosen => ConfirmWeaponChange(chosen, current),
+            current,
+            "Trocar de arma",
+            "Trocar para esta arma",
+            () => GetTree().Paused = false));
+    }
+
+    private void ConfirmWeaponChange(HunterClass chosen, HunterClass current)
+    {
+        if (chosen == current)
+        {
+            ClosePauseOverlay();
+            return;
+        }
+
+        SceneRouter.Instance.Push(new ConfirmScreen(
+            $"Trocar {HunterSprites.DisplayName(current)} por {HunterSprites.DisplayName(chosen)}? A arma nova começa no nível 1; a atual fica guardada.",
+            () => ApplyWeaponChange(chosen)));
+    }
+
+    private void ApplyWeaponChange(HunterClass chosen)
+    {
+        if (GameSession.Data is { } data)
+        {
+            SaveService.ChangeClass(data, HunterSprites.WeaponId(chosen));
+            Hunter.Progression.Reset();
+            GameSession.Autosave();
+        }
+
+        Player.SetHunter(chosen);
+        ClosePauseOverlay();
+        CombatHud.Toast($"Nova arma: {HunterSprites.DisplayName(chosen)}");
+    }
+
+    private void ClosePauseOverlay()
+    {
+        while (SceneRouter.Instance.OverlayDepth > 0)
+        {
+            SceneRouter.Instance.Pop();
+        }
+
+        GetTree().Paused = false;
     }
 
     private void OnStoryEvent(string name) => _pendingEvents.Add(name);

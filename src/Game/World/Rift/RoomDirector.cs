@@ -4,6 +4,8 @@ using System.Linq;
 using Godot;
 using Vespera.Game.Actors.Enemies;
 using Vespera.Game.Combat;
+using Vespera.Game.Components;
+using Vespera.Game.Hunter;
 
 namespace Vespera.Game.World.Rift;
 
@@ -20,6 +22,10 @@ public partial class RoomDirector : Node
     private const float BarrierHeight = 170f;
     private const float PortalHeight = 210f;
 
+    /// <summary>Altura humana da Praça, onde o catálogo de objetos foi medido.</summary>
+    private const float PracaHuman = 72f;
+    private const string RestProp = "lanterna_chao";
+
     private readonly LevelWorld _world;
     private readonly RiftRoomData _data;
     private readonly List<Enemy> _wave = [];
@@ -28,6 +34,8 @@ public partial class RoomDirector : Node
     private float _timer = FirstWaveDelay;
     private bool _exitSent;
     private int _pending;
+    private bool _waveOut;
+    private Interactable? _rest;
 
     public RoomDirector(LevelWorld world, RiftRoomData data)
     {
@@ -45,6 +53,17 @@ public partial class RoomDirector : Node
     public BreachPortal? ExitPortal { get; private set; }
 
     public string Title => _data.Title;
+
+    /// <summary>Tipo da sala na caçada (combat, elite, treasure, rest, guardian; vazio = sala fixa).</summary>
+    public string Kind => _data.Kind;
+
+    /// <summary>Ondas desta sala e quantas já saíram (HUD e bots).</summary>
+    public int WaveCount => _data.Waves.Count;
+
+    public int WavesReleased => _nextWave;
+
+    /// <summary>A lanterna de descanso ainda não foi usada.</summary>
+    public bool RestAvailable => _rest is not null;
 
     /// <summary>O caçador saiu da sala (passagem ou fenda).</summary>
     public event Action? ExitRequested;
@@ -81,10 +100,68 @@ public partial class RoomDirector : Node
             _world.AddEnemy(Boss);
         }
 
+        PlaceBreakables();
+        PlaceRest();
+        HuntService.RoomStarted();
         if (_data.Waves.Count == 0 && Boss is null)
         {
             Clear(quiet: true);
         }
+    }
+
+    /// <summary>Barris e caixotes da sala (quebram com um golpe e soltam Lumes, às vezes um Fragmento).</summary>
+    private void PlaceBreakables()
+    {
+        // Os objetos do catálogo foram medidos na Praça (humano de 72 px); aqui crescem na mesma razão do caçador.
+        var grow = _world.Data.HumanHeight / PracaHuman;
+        for (var i = 0; i < _data.Breakables.Count; i++)
+        {
+            var p = _data.Breakables[i];
+            var type = i % 2 == 0 ? "barril" : "caixote";
+            if (_world.Catalog.ContainsKey(type))
+            {
+                _world.AddBreakable(type, _world.ClampToFloor(new Vector2(p[0], p[1])), string.Empty, grow);
+            }
+        }
+    }
+
+    /// <summary>Sala de descanso: uma lanterna acesa no chão que cura uma vez.</summary>
+    private void PlaceRest()
+    {
+        if (_data.Rest is not { Length: 2 } at || !_world.Catalog.ContainsKey(RestProp))
+        {
+            return;
+        }
+
+        var feet = _world.ClampToFloor(new Vector2(at[0], at[1]));
+        var lamp = _world.AddProp(RestProp, feet);
+        lamp.Scale = Vector2.One * (_world.Data.HumanHeight / PracaHuman);
+        var human = _world.Data.HumanHeight;
+        _rest = new Interactable("rest", "Descansar na lanterna", 0.9f * human)
+        {
+            Name = "Rest",
+            Text = "A chama é quente e calma. Você respira fundo.",
+            Position = feet,
+            PromptAnchor = feet - new Vector2(0, 1.1f * human),
+        };
+        _world.Entities.AddChild(_rest);
+        _world.Feel.Toast("Sala de descanso: chegue perto da lanterna e interaja para recuperar vida.");
+    }
+
+    /// <summary>Usa a lanterna de descanso: cura parte da vida máxima (uma vez por sala).</summary>
+    public bool UseRest()
+    {
+        if (_rest is null || _world.Player is not { } player)
+        {
+            return false;
+        }
+
+        var combat = player.Combat;
+        combat.Heal((int)System.Math.Round(combat.MaxHp * HuntService.Config.RestHealPct));
+        _rest.QueueFree();
+        _rest = null;
+        _world.Feel.Toast("A lanterna aqueceu você. Siga em frente.");
+        return true;
     }
 
     public override void _Process(double delta)
@@ -127,6 +204,12 @@ public partial class RoomDirector : Node
             return;
         }
 
+        if (_waveOut)
+        {
+            _waveOut = false;
+            HuntService.WaveCleared();
+        }
+
         if (_nextWave >= _data.Waves.Count)
         {
             Clear(quiet: false);
@@ -140,13 +223,18 @@ public partial class RoomDirector : Node
         }
 
         var wave = _data.Waves[_nextWave++];
+        _waveOut = true;
         for (var i = 0; i < wave.Count; i++)
         {
             SpawnWithWarning(wave[i], i * 0.18f);
         }
 
         _timer = WaveGap;
-        if (_nextWave > 1)
+        if (wave.Any(w => w.Elite))
+        {
+            _world.Feel.Toast("Cuidado: um monstro de ELITE (maior e laranja). Bate mais forte e deixa mais saque.");
+        }
+        else if (_nextWave > 1)
         {
             _world.Feel.Toast($"Mais deles saem das fendas! (onda {_nextWave}/{_data.Waves.Count})");
         }
@@ -182,6 +270,11 @@ public partial class RoomDirector : Node
                 _pending--;
 
                 Enemy enemy = spawn.Type == "espectro" ? new Espectro(_world) : new Lodo(_world) { StartDelay = (float)GD.RandRange(0.0, 0.6) };
+                if (spawn.Elite)
+                {
+                    enemy.MakeElite(HuntService.Config.Elite);
+                }
+
                 enemy.Position = at;
                 _world.AddEnemy(enemy);
                 _wave.Add(enemy);
@@ -198,6 +291,7 @@ public partial class RoomDirector : Node
         }
 
         Cleared = true;
+        HuntService.RoomCleared(combat: _data.Waves.Count > 0);
         _barrier?.Open();
         if (_barrier is not null)
         {

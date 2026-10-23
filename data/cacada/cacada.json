@@ -1,0 +1,64 @@
+{
+  "_doc": "Caçadas da Brecha E (playtest 23/10: 'o Ato I acaba em 2 minutos'). Cada entrada no portal monta uma caçada de 5-7 salas a partir dos 4 chãos do esgoto, com sorteio pela semente: mistura de ondas, posições de nascimento, variantes de elite, sala do tesouro opcional e sala de descanso com lanterna. A Lodo-Mãe só aparece depois de 'guardianAfterRuns' caçadas completas. Posições em px do mundo do chão (pé), conferidas contra a grade por tests/Core/HuntPlannerTest.",
+  "roomsMin": 5,
+  "roomsMax": 7,
+  "guardianAfterRuns": 2,
+  "treasureChance": 0.65,
+  "restHealPct": 0.3,
+  "firstWaveSize": 3,
+  "waveSizePerRoom": 0.6,
+  "maxWaveSize": 6,
+  "extraWaveFromRoom": 2,
+  "espectroShareStart": 0.15,
+  "espectroSharePerRoom": 0.07,
+  "espectroShareMax": 0.45,
+  "eliteChanceFromRoom": 2,
+  "eliteChance": 0.3,
+  "elite": {
+    "scale": 1.15,
+    "hp": 2.4,
+    "damage": 1.25,
+    "speed": 1.2,
+    "period": 0.7,
+    "xp": 3,
+    "tint": "#ff9d6e"
+  },
+  "grounds": {
+    "esgoto_corredor": {
+      "kinds": ["combat", "elite"],
+      "spawns": [[1048, 440], [504, 488], [1336, 408], [776, 408], [1192, 488], [904, 488], [632, 408], [1480, 408], [696, 488], [1400, 488], [952, 408]],
+      "breakables": [[420, 400], [1500, 500]]
+    },
+    "esgoto_cruzamento": {
+      "kinds": ["combat", "elite"],
+      "spawns": [[840, 360], [456, 440], [1224, 440], [664, 440], [1016, 440], [264, 440], [1416, 440], [856, 200], [776, 456]],
+      "breakables": [[370, 476], [1320, 480]]
+    },
+    "esgoto_tesouro": {
+      "kinds": ["combat", "treasure", "rest"],
+      "spawns": [[840, 408], [456, 696], [1208, 680], [504, 360], [1160, 360], [744, 168], [648, 504], [936, 232], [1016, 488], [1272, 504], [408, 520], [696, 360]],
+      "rest": [640, 600],
+      "breakables": [[420, 640], [1250, 620], [600, 400]]
+    },
+    "esgoto_arena": {
+      "kinds": ["combat", "elite", "rest", "guardian"],
+      "spawns": [[840, 376], [520, 424], [1160, 408], [664, 280], [1016, 280], [1000, 488], [696, 472], [808, 232], [952, 376], [904, 280], [616, 376], [728, 360]],
+      "rest": [620, 560],
+      "breakables": [[540, 520], [1120, 520]]
+    }
+  },
+  "contracts": {
+    "offered": 3,
+    "kinds": {
+      "cacada": { "title": "Caçada", "text": "Feche uma caçada inteira (sem cair).", "xp": 10, "fragmentos": 6, "lumes": 18 },
+      "coleta": { "title": "Coleta", "text": "Traga {n} {item} de uma caçada.", "min": 3, "max": 5, "xp": 8, "fragmentos": 4, "lumes": 14 },
+      "protecao": { "title": "Proteção", "text": "Sobreviva a {n} ondas numa caçada.", "min": 5, "max": 8, "xp": 8, "fragmentos": 5, "lumes": 12 },
+      "sem_dano": { "title": "Sem dano", "text": "Termine uma sala de combate sem levar golpe.", "xp": 6, "fragmentos": 3, "lumes": 16 }
+    },
+    "materials": ["gel_de_lodo", "veu_de_espectro"]
+  },
+  "potions": { "price": 14, "flowerPrice": 5, "max": 3, "healPct": 0.4, "drinkSeconds": 0.6 },
+  "flowers": { "perReturn": 3 },
+  "well": { "price": 1, "fragmentBonusPct": 25 },
+  "breakables": { "lumes": [1, 3], "fragmentChance": 0.15 }
+}

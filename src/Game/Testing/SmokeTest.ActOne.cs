@@ -63,7 +63,7 @@ public partial class SmokeTest
         await SizeShot(level, "praca");
         Check(Progression.Rank == Rank.E, "jogo novo deveria começar no rank E");
         level.PlayAutoplay();
-        await WaitFor(() => level.DialogueOpen, "fala de chegada");
+        await WaitForDialogue(level, "fala de chegada");
         level.Dialogue.Complete();
         Check(level.Dialogue.IsNarration && !level.Dialogue.PortraitFrameVisible,
             "a narração (sem retrato) deveria esconder a moldura vazia e usar a largura toda");
@@ -73,6 +73,12 @@ public partial class SmokeTest
 
         await TalkToProp(level, "mural");
         Check(StoryService.Engine.HasFlag(StoryFlags.Registered), "o quadro do Benício deveria registrar o caçador");
+        Check(level.PlayAutoplay(), "depois do quadro o Ravi deveria vir desafiar");
+        await WaitForDialogue(level, "desafio do Ravi");
+        Check(level.Dialogue.CurrentNodeId == "r1", $"o desafio deveria abrir em 'r1', abriu em '{level.Dialogue.CurrentNodeId}'");
+        await Shot("ato1_ravi_desafio", 0.5);
+        await SkipDialogue(level);
+        Check(StoryService.Engine.HasFlag(StoryFlags.MetRavi), "o desafio do Ravi deveria ligar met_ravi");
         await TalkToNpc(level, "ravi");
         Check(StoryService.Engine.ObjectiveId == "odete", $"depois do Ravi o objetivo deveria ser a Odete, é '{StoryService.Engine.ObjectiveId}'");
 
@@ -80,7 +86,7 @@ public partial class SmokeTest
         var portal = level.World.Zones.First(z => z.Kind == "brecha");
         await StandAt(level, portal.GlobalPosition + new Vector2(0, 40f * level.World.Data.ActorScale));
         await PressInWorld(Key.E);
-        Check(!level.PickerOpen && level.Hud.PanelOpen, "sem arma o portal deveria recusar com um aviso");
+        Check(!RiftSession.InRift && level.Hud.PanelOpen, "sem arma o portal deveria recusar com um aviso");
         await PressInWorld(Key.E);
         Log.Info("ato I: prólogo, quadro e Ravi OK; portal recusa sem arma");
         return level;
@@ -137,7 +143,19 @@ public partial class SmokeTest
         Check(StoryService.Engine.ObjectiveId == "ato2" && StoryService.Engine.CurrentObjective?.Locked == true,
             $"depois do Guardião o objetivo deveria ser o Ato II (em breve), é '{StoryService.Engine.ObjectiveId}'");
         await WaitFor(() => _router.Current is Level { Switching: false } && !GetTree().Paused, "Praça depois da Brecha");
-        return (Level)_router.Current!;
+        var hub = (Level)_router.Current!;
+
+        // Cena do fim do Ato I: Benício vem até o jogador, a lanterna brilha mais, selo D e o gancho do Pomar Alto.
+        Check(hub.PlayAutoplay(), "depois do Guardião a cena do fim do Ato I deveria tocar");
+        await WaitForDialogue(hub, "cena do fim do Ato I");
+        Check(hub.Dialogue.CurrentNodeId == "n1", $"o fim do Ato I deveria abrir em 'n1', abriu em '{hub.Dialogue.CurrentNodeId}'");
+        hub.Dialogue.Complete();
+        await Seconds(0.4);
+        await Shot("ato1_fim_lanterna", 0.5);
+        await SkipDialogue(hub);
+        Check(StoryService.Engine.HasFlag(StoryFlags.Ato1FimDone), "o fim do Ato I deveria ligar ato1_fim_done");
+        Check(!hub.PlayAutoplay(), "a cena do fim do Ato I não deveria repetir");
+        return hub;
     }
 
     /// <summary>

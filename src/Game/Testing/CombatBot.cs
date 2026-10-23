@@ -137,7 +137,7 @@ public sealed class CombatBot(Level level, SmokeTest host)
             // Sem a Lâmina da Odete a fenda não deixa entrar (o bot de combate testa a Brecha isolada: arma o caçador).
             _input.Tap(InputActions.Interact);
             await host.PhysicsFrames(4);
-            Check(!level.PickerOpen && level.Hud.PanelOpen, "sem a Lâmina da Odete o portal deveria recusar com um aviso");
+            Check(!RiftSession.InRift && level.Hud.PanelOpen, "sem a Lâmina da Odete o portal deveria recusar com um aviso");
             _input.Tap(InputActions.Interact);
             await host.PhysicsFrames(4);
             StoryService.SetFlag(StoryFlags.StarterBlade);
@@ -145,10 +145,13 @@ public sealed class CombatBot(Level level, SmokeTest host)
 
         _input.Tap(InputActions.Interact);
         await host.PhysicsFrames(4);
-        Check(level.PickerOpen, "interagir com a Brecha deveria abrir a escolha de arma");
         var equipped = RiftSession.HunterFor(Progression.Engine.ClassId);
-        Check(level.Picker?.Selected == equipped, $"o seletor deveria começar na arma equipada ({equipped}), está em {level.Picker?.Selected}");
-        level.EnterRift(hunter ?? level.Picker?.Selected ?? equipped);
+        Check(RiftSession.InRift, "interagir com a Brecha deveria entrar direto, sem perguntar a classe");
+        Check(RiftSession.Hunter == equipped, $"a Brecha deveria usar a arma equipada ({equipped}), usou {RiftSession.Hunter}");
+        if (hunter is { } other && other != equipped)
+        {
+            level.EnterRift(other);
+        }
         await WaitUntil(() => !level.Switching && World.Director is not null, 600, "primeira sala");
         Check(World.Data.Id == RiftSession.Brecha.Rooms[0], $"primeira sala deveria ser {RiftSession.Brecha.Rooms[0]}, foi {World.Data.Id}");
     }

@@ -66,7 +66,8 @@ public partial class StepRow : PanelContainer
         {
             direction = -1;
         }
-        else if (@event.IsActionPressed("ui_right") || @event.IsActionPressed("ui_accept"))
+        else if (@event.IsActionPressed("ui_right") || @event.IsActionPressed("ui_accept")
+            || @event is InputEventMouseButton { Pressed: true, ButtonIndex: MouseButton.Left })
         {
             direction = 1;
         }

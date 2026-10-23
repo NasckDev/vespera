@@ -4,18 +4,28 @@
   "nodes": {
     "a": {
       "speaker": "narrador",
-      "text": "Lumeira. Há vinte anos o sol sumiu por um ano inteiro, e a cidade ainda acende as lanternas antes do fim da tarde. Por via das dúvidas.",
+      "look": "lanterna",
+      "text": "Esta é Lumeira. No meio da praça fica a grande lanterna de bronze, que nunca apaga. Faz vinte anos que o sol sumiu por um ano inteiro, e desde então a cidade acende as luzes antes de escurecer.",
+      "set": ["arrival_done"],
       "next": "b"
     },
     "b": {
       "speaker": "narrador",
-      "text": "No seu pulso, o selo queimado ainda arde: uma letra, E. Na mão, uma lanterna velha que foi de alguém que você nunca conheceu.",
-      "set": ["arrival_done"],
+      "look": "player",
+      "text": "Você chegou hoje. No pulso tem um selo com a letra E: é o seu rank, o mais baixo de todos. Na mão, uma lanterna velha que era de alguém que você nunca conheceu.",
       "next": "c"
     },
     "c": {
+      "speaker": "narrador",
+      "look": "brecha",
+      "fx": "shake",
+      "text": "Então o ar da praça se rasga. É uma Brecha: uma porta para o Avesso, um mundo de monstros. Elas se abrem no fim da tarde, todo dia.",
+      "next": "d"
+    },
+    "d": {
       "speaker": "benicio",
-      "text": "Mais um que chega pela véspera. Venha até o quadro, caçador. Já tenho o seu nome na ponta da pena."
+      "look": "benicio",
+      "text": "Você aí, de lanterna na mão! Venha até o quadro de avisos. Eu sou da Ordem da Lanterna e preciso falar com você."
     }
   }
 }

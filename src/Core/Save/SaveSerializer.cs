@@ -170,6 +170,8 @@ public static class SaveSerializer
         data.Potions = Math.Max(0, data.Potions);
         data.Lumes = Math.Max(0, data.Lumes);
         data.Day = Math.Max(1, data.Day);
+        data.Hunt ??= new();
+        data.Hunt.Sanitize(int.MaxValue);
     }
 
     private static void Clean(RunBag bag, GameDatabase db, List<string> warnings)

@@ -11,68 +11,64 @@
     "rp1": {
       "speaker": "ravi",
       "expression": 2,
-      "text": "Ei, ei! Você aí, com lanterna emprestada! Antes de tudo: vá ao quadro. O velho Benício não gosta de esperar, e eu não gosto de ouvir ele reclamar."
+      "text": "Ei! Antes de falar comigo, vá ao quadro e fale com o Mestre Benício. Ele não gosta de esperar."
     },
     "r1": {
       "speaker": "ravi",
-      "text": "Selo E também, né? Dá pra ver de longe, a pele ainda está vermelha. Eu sou o Ravi. Guarda esse nome, você vai ouvir muito.",
+      "text": "Selo E também, né? Dá pra ver de longe, a pele ainda está vermelha. Eu sou o Ravi!",
       "next": "r2"
     },
     "r2": {
       "speaker": "ravi",
       "expression": 2,
-      "text": "Vou ser o primeiro da nossa turma a chegar no Alvor. Não é ameaça. É... um aviso simpático.",
+      "text": "Vou te desafiar: quem fechar mais salas de Brecha ganha. Quem perder paga a sopa. Topa?",
       "choices": [
-        { "text": "Só quero fechar a Brecha.", "next": "r3a" },
-        { "text": "Alvor? Boa sorte.", "next": "r3b" }
+        { "text": "Topo! Vai ser corrida.", "next": "r3a" },
+        { "text": "Só quero fechar a Brecha.", "next": "r3b" },
+        { "text": "Perguntar mais", "next": "m1" }
       ]
+    },
+    "m1": {
+      "speaker": "ravi",
+      "text": "Eu moro nas Ruas Baixas. Quero ser caçador pra tirar minha família de lá. E vou chegar ao Alvor antes de todo mundo.",
+      "next": "r2"
     },
     "r3a": {
       "speaker": "ravi",
-      "text": "Só isso? Que chato. Mas tá bom: fecha a sua, que eu fecho a próxima. Vai ser corrida.",
-      "next": "r4"
+      "expression": 2,
+      "text": "Isso! Então anda logo. Você precisa de uma arma, e a melhor ferreira é a Odete, na Forja, depois da ponte a oeste.",
+      "set": ["met_ravi"],
+      "objective": "odete"
     },
     "r3b": {
       "speaker": "ravi",
-      "expression": 2,
-      "text": "Sorte é pra quem não treina. Eu treino. De vez em quando.",
-      "next": "r4"
-    },
-    "r4": {
-      "speaker": "ravi",
-      "text": "Se quer arma de verdade, vai na Odete, passando a ponte a oeste. Ela quase não vende, mas dizem que gosta de quem volta inteiro.",
+      "text": "Que sem graça. Mas vale: fecha a sua que eu fecho a minha. Pegue uma arma com a Odete, na Forja, depois da ponte a oeste.",
       "set": ["met_ravi"],
-      "objective": "odete",
-      "next": "r5"
-    },
-    "r5": {
-      "speaker": "nilza",
-      "label": "Tia Nilza, na voz do Ravi",
-      "text": "\"Coma antes, menino. Selo E não luta de barriga vazia.\" É o que minha tia diz. A taverna dela é nas Ruas Baixas. Passa lá quando tiver Lumes."
+      "objective": "odete"
     },
     "rr1": {
       "speaker": "ravi",
-      "text": "A Odete fica depois da ponte, a oeste. Se ela gritar com você, é bom sinal. Quando ela não grita é que o ferro esfriou de vez."
+      "text": "A Odete fica na Forja, depois da ponte a oeste. Se ela gritar com você, é bom sinal."
     },
     "rb1": {
       "speaker": "ravi",
       "expression": 2,
-      "text": "Vai entrar mesmo? Eu só estava conferindo se o portal respira. Respira. Eu escutei.",
+      "text": "Já tem arma? Então vai! A Brecha está logo ali. Lembra: quem fechar mais salas ganha.",
       "next": "rb2"
     },
     "rb2": {
       "speaker": "ravi",
-      "text": "Volta inteiro, tá? É sério. Preciso de alguém pra eu ganhar a corrida."
+      "text": "E volta inteiro, tá? Preciso de alguém pra eu ganhar a corrida."
     },
     "rg1": {
       "speaker": "ravi",
       "expression": 2,
-      "text": "Você fechou? Sozinho? A Lodo-Mãe? Eu ouvi o chão tremer daqui.",
+      "text": "Você fechou a Brecha? Sozinho? Eu senti o chão tremer daqui!",
       "next": "rg2"
     },
     "rg2": {
       "speaker": "ravi",
-      "text": "Tá. Corrida empatada. Só por hoje."
+      "text": "Tá, corrida empatada. Só por hoje."
     }
   }
 }

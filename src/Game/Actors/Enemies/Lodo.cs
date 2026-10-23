@@ -88,13 +88,13 @@ public partial class Lodo(LevelWorld world, float sizeFactor = 1f) : Enemy("lodo
         Flash.Tint = 0f;
         Enter(EnemyState.Hurt);
         Play("dano");
-        _cooldown = (float)Def.Period * 0.6f;
+        _cooldown = (float)Period * 0.6f;
     }
 
     private void StartJump(Player? target)
     {
         var to = target?.GlobalPosition ?? GlobalPosition;
-        var maxHop = (float)Def.Speed * JumpSeconds * A * SizeFactor;
+        var maxHop = (float)Speed * JumpSeconds * A * SizeFactor;
         var delta = (to - GlobalPosition).LimitLength(maxHop);
         _jumpVelocity = delta / JumpSeconds;
         FaceTowards(to);
@@ -128,7 +128,7 @@ public partial class Lodo(LevelWorld world, float sizeFactor = 1f) : Enemy("lodo
             World.Feel.Shake(0.15f);
         }
 
-        _cooldown = Mathf.Max(0.1f, (float)(Def.Period - Def.Telegraph) - JumpSeconds - RecoverSeconds);
+        _cooldown = Mathf.Max(0.1f, (float)(Period - Def.Telegraph) - JumpSeconds - RecoverSeconds);
         Enter(EnemyState.Recover);
     }
 }
