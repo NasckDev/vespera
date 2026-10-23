@@ -28,6 +28,8 @@ public partial class Player : CharacterBody2D
     private const float Acceleration = 1500f;
     private const float Deceleration = 2100f;
     private const float FacingHysteresis = 1.15f;
+    private const float TeammateNudge = 240f;
+    private const float OutlineAlpha = 0.9f;
 
     private readonly List<Interactable> _nearby = [];
     private Facing _facing = Facing.Down;
@@ -35,11 +37,24 @@ public partial class Player : CharacterBody2D
     private Vector2 _aim = Vector2.Down;
     private readonly float _scale;
 
-    public Player(IInputSource input, HunterClass hunter, float actorScale)
+    public Player(IInputSource input, HunterClass hunter, float actorScale, int slot = 0)
     {
         Input = input;
         Hunter = hunter;
         _scale = actorScale;
+        Slot = slot;
+    }
+
+    /// <summary>Número do jogador (0 = J1, dono do save; 1 = J2 convidado no co-op local).</summary>
+    public int Slot { get; }
+
+    /// <summary>Contorno e capa do co-op: cor do jogador e, se a classe repete, a capa em outro tom.</summary>
+    public void ApplyIdentity(Color color, bool capeTint)
+    {
+        Flash.Outline = OutlineAlpha;
+        Flash.OutlineColor = color;
+        Flash.Cape = capeTint ? 1f : 0f;
+        Flash.Update(0f);
     }
 
     public IInputSource Input { get; set; }
@@ -139,7 +154,18 @@ public partial class Player : CharacterBody2D
             Velocity = Velocity.MoveToward(target, rate * _scale * dt);
         }
 
+        var party = World is { Players.Count: > 1 } w ? w : null;
+        if (party is not null)
+        {
+            Velocity = party.ConstrainToParty(this, Velocity, dt);
+        }
+
         MoveAndSlide();
+        if (party is not null && TeammateSeparation(party) is { } nudge && nudge != Vector2.Zero)
+        {
+            MoveAndCollide(nudge * dt);
+        }
+
         if (!order.OwnsAnimation)
         {
             UpdateAnimation(order.SpeedScale > 0f ? move : Vector2.Zero);
@@ -285,6 +311,37 @@ public partial class Player : CharacterBody2D
         }
 
         _facing = move.Y < 0 ? Facing.Up : Facing.Down;
+    }
+
+    /// <summary>Empurrão leve para os caçadores não ficarem um dentro do outro (eles não colidem entre si).</summary>
+    private Vector2 TeammateSeparation(LevelWorld world)
+    {
+        if (Combat.IsDead)
+        {
+            return Vector2.Zero;
+        }
+
+        var push = Vector2.Zero;
+        var min = 2f * FeetHalfWidth * _scale * 0.95f;
+        foreach (var other in world.Players)
+        {
+            if (other == this || !IsInstanceValid(other) || other.Combat.IsDead)
+            {
+                continue;
+            }
+
+            var v = GlobalPosition - other.GlobalPosition;
+            var d = v.Length();
+            if (d >= min)
+            {
+                continue;
+            }
+
+            var away = d > 0.01f ? v / d : new Vector2(Slot > other.Slot ? 1f : -1f, 0f);
+            push += away * (1f - (d / min)) * TeammateNudge * _scale;
+        }
+
+        return push;
     }
 
     private void UpdateFocus()

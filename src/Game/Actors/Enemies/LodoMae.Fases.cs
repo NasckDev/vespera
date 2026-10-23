@@ -13,8 +13,10 @@ public partial class LodoMae
 {
     private Vector2 TickLunge(Player? target)
     {
-        if (target is not null && target.Combat.HitCenter.DistanceTo(MouthPoint) < HitRadius * 0.75f && target.Combat.TrySwallow())
+        var caught = SwallowCandidate();
+        if (caught is not null && caught.Combat.TrySwallow())
         {
+            _swallowed = caught;
             Go(Phase.Swallowing);
             _digestTick = 0f;
             Sprite.Play("parado");
@@ -36,10 +38,24 @@ public partial class LodoMae
 
     private Vector2 MouthPoint => HitCenter + (_laneDir * HitRadius * 0.6f);
 
+    /// <summary>Caçador ao alcance da boca durante a investida (no co-op, o primeiro que ela alcança).</summary>
+    private Player? SwallowCandidate()
+    {
+        foreach (var p in World.Players)
+        {
+            if (IsInstanceValid(p) && p.Combat.CanBeHit && p.Combat.HitCenter.DistanceTo(MouthPoint) < HitRadius * 0.75f)
+            {
+                return p;
+            }
+        }
+
+        return null;
+    }
+
     private Vector2 TickSwallow(float dt, Player? target)
     {
         var tuning = RiftSession.Brecha.Boss;
-        var hunter = World.Player;
+        var hunter = _swallowed ?? World.Player;
         hunter.Teleport(GlobalPosition + new Vector2(0, 2f));
         _digestTick += dt;
         Sprite.Scale = Vector2.One * Sheet.SpriteScale * (1f + (0.04f * Mathf.Sin(StateTime * 18f)));
@@ -56,6 +72,7 @@ public partial class LodoMae
             var away = (_laneDir == Vector2.Zero ? Vector2.Down : _laneDir) * HitRadius * 1.4f;
             hunter.Teleport(World.ClampToFloor(GlobalPosition + away));
             hunter.Combat.Release(_laneDir * 520f * A);
+            _swallowed = null;
             CombatSfx.Play(this, CombatSound.Split, Vector2.Zero, -4f);
             Go(Phase.Spit);
         }
@@ -81,10 +98,15 @@ public partial class LodoMae
     {
         _splitHandled = true;
         _marker?.Release();
-        if (World.Player.Combat.State == HunterState.Swallowed)
+        foreach (var p in World.Players)
         {
-            World.Player.Combat.Release(Vector2.Down * 400f * A);
+            if (IsInstanceValid(p) && p.Combat.State == HunterState.Swallowed)
+            {
+                p.Combat.Release(Vector2.Down * 400f * A);
+            }
         }
+
+        _swallowed = null;
 
         Sprite.Position = Vector2.Zero;
         Sprite.Scale = Vector2.One * Sheet.SpriteScale;

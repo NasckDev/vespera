@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 using Vespera.Game.Actors;
 using Vespera.Game.Boot;
@@ -10,6 +11,8 @@ namespace Vespera.Game.World;
 /// mundo). Segue o jogador com suavização e olha à frente do movimento; fica presa ao chão pintado e, se o mapa for menor
 /// que a tela nesse zoom, centraliza o eixo (o resto vira moldura escura, ver <see cref="LevelVignette"/>).
 /// O alvo fica no peito do caçador (não no pé), para o enquadramento não cortar a cabeça perto das bordas.
+/// No co-op local a câmera é compartilhada: centra no grupo e abre o zoom só o necessário para todos caberem, até o piso
+/// em que o caçador ainda tem 85 px na tela (<see cref="Vespera.Core.Coop.CoopFraming"/>); passado isso, vale a coleira.
 /// </summary>
 public partial class CameraRig : Camera2D
 {
@@ -28,9 +31,13 @@ public partial class CameraRig : Camera2D
     private const float FollowSpeed = 6f;
     private const float PullSeconds = 0.5f;
 
-    private readonly Player _target;
+    private const float PartyZoomSmoothing = 2.2f;
+
+    private readonly IReadOnlyList<Player> _targets;
     private readonly float _actorScale;
+    private readonly float _humanHeight;
     private readonly Rect2 _bounds;
+    private float _partyFactor = 1f;
     private Vector2 _lead;
     private Vector2 _center;
     private float _trauma;
@@ -40,9 +47,16 @@ public partial class CameraRig : Camera2D
 
     /// <param name="humanHeight">Altura humana do mapa em px de mundo (0,75 × porta pintada).</param>
     public CameraRig(Player target, Rect2 bounds, float actorScale, float humanHeight)
+        : this([target], bounds, actorScale, humanHeight)
     {
-        _target = target;
+    }
+
+    /// <param name="targets">Caçadores enquadrados (lista viva: o co-op pode pôr e tirar jogadores).</param>
+    public CameraRig(IReadOnlyList<Player> targets, Rect2 bounds, float actorScale, float humanHeight)
+    {
+        _targets = targets;
         _actorScale = actorScale;
+        _humanHeight = humanHeight;
         _bounds = bounds;
         BaseZoom = ZoomFor(humanHeight);
         ProcessCallback = Camera2DProcessCallback.Physics;
@@ -59,7 +73,29 @@ public partial class CameraRig : Camera2D
         set
         {
             _zoomFactor = Mathf.Clamp(value, MinPullBack, 1f);
-            Zoom = Vector2.One * BaseZoom * _zoomFactor;
+            ApplyZoom();
+        }
+    }
+
+    /// <summary>Co-op: há mais de um caçador para enquadrar.</summary>
+    public bool Shared => _targets.Count > 1;
+
+    /// <summary>Fator do zoom aberto pelo grupo (1 = regra; até <see cref="PartyFloor"/>).</summary>
+    public float PartyFactor => _partyFactor;
+
+    /// <summary>Piso do zoom no co-op: o caçador nunca fica com menos de <c>minHunterPx</c> (85) na tela.</summary>
+    public static float PartyFloor => (float)Coop.CoopSession.Rules.MinZoomFactor(HunterScreenHeight);
+
+    /// <summary>Folga até a borda da tela no co-op, em px de mundo.</summary>
+    public float PartyMargin => (float)Coop.CoopSession.Rules.Camera.EdgeMargin * _humanHeight;
+
+    /// <summary>Distância máxima entre caçadores (por eixo, px de mundo) que cabe na tela no piso do zoom: o limite da coleira.</summary>
+    public Vector2 PartySpan
+    {
+        get
+        {
+            var span = Vespera.Core.Coop.CoopFraming.MaxSpan(ToNumerics(GetViewportRect().Size), BaseZoom, PartyFloor, PartyMargin);
+            return new Vector2(span.X, span.Y);
         }
     }
 
@@ -85,6 +121,12 @@ public partial class CameraRig : Camera2D
     public void Snap()
     {
         _lead = Vector2.Zero;
+        if (Shared)
+        {
+            _partyFactor = Frame().ZoomFactor;
+            ApplyZoom();
+        }
+
         _center = Clamp(Focus());
         GlobalPosition = _center;
         ResetSmoothing();
@@ -126,7 +168,13 @@ public partial class CameraRig : Camera2D
         }
 
         var dt = (float)delta;
-        var wanted = (_target.Velocity * LookAhead).LimitLength(MaxLead * _actorScale);
+        if (Shared)
+        {
+            _partyFactor = Mathf.Lerp(_partyFactor, Frame().ZoomFactor, Mathf.Min(1f, PartyZoomSmoothing * dt));
+            ApplyZoom();
+        }
+
+        var wanted = (LeadVelocity() * LookAhead).LimitLength(MaxLead * _actorScale);
         _lead = _lead.Lerp(wanted, Mathf.Min(1f, LeadSmoothing * dt));
         var goal = Clamp(Focus() + _lead);
         _center = _center.Lerp(goal, Mathf.Min(1f, FollowSpeed * dt));
@@ -146,5 +194,62 @@ public partial class CameraRig : Camera2D
     private static float Axis(float value, float min, float max, float half) =>
         max - min <= half * 2f ? (min + max) / 2f : Mathf.Clamp(value, min + half, max - half);
 
-    private Vector2 Focus() => _target.GlobalPosition + new Vector2(0, -ChestHeight * _actorScale);
+    private Vector2 Focus()
+    {
+        if (!Shared)
+        {
+            return Chest(_targets[0]);
+        }
+
+        var c = Frame().Center;
+        return new Vector2(c.X, c.Y);
+    }
+
+    private Vector2 Chest(Player p) => p.GlobalPosition + new Vector2(0, -ChestHeight * _actorScale);
+
+    /// <summary>Velocidade média dos caçadores de pé (o olhar à frente do grupo).</summary>
+    private Vector2 LeadVelocity()
+    {
+        if (!Shared)
+        {
+            return _targets[0].Velocity;
+        }
+
+        var sum = Vector2.Zero;
+        var n = 0;
+        foreach (var p in _targets)
+        {
+            if (IsInstanceValid(p) && !p.Combat.IsDead)
+            {
+                sum += p.Velocity;
+                n++;
+            }
+        }
+
+        return n == 0 ? Vector2.Zero : sum / n;
+    }
+
+    /// <summary>Enquadramento do grupo (peito de cada caçador, caídos inclusos: o aliado precisa vê-los para reanimar).</summary>
+    private Vespera.Core.Coop.Framing Frame()
+    {
+        var points = new List<System.Numerics.Vector2>(_targets.Count);
+        foreach (var p in _targets)
+        {
+            if (IsInstanceValid(p))
+            {
+                points.Add(ToNumerics(Chest(p)));
+            }
+        }
+
+        return Vespera.Core.Coop.CoopFraming.Frame(points, ToNumerics(GetViewportRect().Size), BaseZoom, PartyFloor, PartyMargin);
+    }
+
+    /// <summary>Zoom final: regra × afastamento do Guardião; no co-op também × grupo, nunca abaixo do piso de 85 px.</summary>
+    private void ApplyZoom()
+    {
+        var factor = Shared ? Mathf.Max(PartyFloor, _partyFactor * _zoomFactor) : _zoomFactor;
+        Zoom = Vector2.One * BaseZoom * factor;
+    }
+
+    private static System.Numerics.Vector2 ToNumerics(Vector2 v) => new(v.X, v.Y);
 }

@@ -1,6 +1,8 @@
 using System.Linq;
 using Godot;
 using Vespera.Core.Advancement;
+using Vespera.Core.Coop;
+using Vespera.Game.Coop;
 using Vespera.Game.Hunter;
 using Vespera.Game.Story;
 using Vespera.Core.Story;
@@ -10,7 +12,8 @@ namespace Vespera.Game.World.Rift;
 /// <summary>
 /// Ponte combate → progressão: cada morte, baú, núcleo e o Guardião viram XP e saque pela <see cref="Progression"/>
 /// (a fonte única de Fragmentos, materiais, peças e da Lanterna). O mundo só mostra o que a progressão entregou:
-/// cristais de Fragmento que voam para o caçador e o nome do que caiu por cima do monstro.
+/// cristais de Fragmento que voam para o caçador e o nome do que caiu por cima do monstro. No co-op o XP é de todos (valor
+/// cheio para cada um) e o saque é individual: um sorteio por jogador, cristais que só voam para o dono e brilham na cor dele.
 /// </summary>
 public static class RiftLoot
 {
@@ -29,7 +32,7 @@ public static class RiftLoot
         var xp = RiftSession.Rules.Xp(monsterId);
         if (xp > 0)
         {
-            Progression.AddXp(xp);
+            PartyProgression.AddXp(xp);
 
             // Acima do número de dano (que nasce no corpo) e um pouco ao lado, para os dois não se misturarem.
             var lift = (boss ? 2.2f : 1.25f) * world.Data.HumanHeight;
@@ -38,7 +41,7 @@ public static class RiftLoot
 
         if (!boss)
         {
-            Show(world, at, Progression.GrantLoot(RiftSession.BreachRank, LootSource.Monster), spread: 60f);
+            ShowAll(world, at, PartyProgression.GrantLoot(RiftSession.BreachRank, LootSource.Monster), spread: 60f);
         }
     }
 
@@ -50,9 +53,9 @@ public static class RiftLoot
             return;
         }
 
-        var grant = Progression.GrantLoot(RiftSession.BreachRank, LootSource.Chest);
-        Show(world, at, grant, spread: 90f);
-        world.Feel.Toast(Summary("Baú aberto", grant.Loot));
+        var grants = PartyProgression.GrantLoot(RiftSession.BreachRank, LootSource.Chest);
+        ShowAll(world, at, grants, spread: 90f);
+        world.Feel.Toast(Summary("Baú aberto", grants[0].Grant.Loot) + GuestSummary(grants));
     }
 
     /// <summary>Parte quebrada (núcleo da Lodo-Mãe).</summary>
@@ -60,7 +63,7 @@ public static class RiftLoot
     {
         if (Progression.IsActive)
         {
-            Show(world, at, Progression.GrantLoot(RiftSession.BreachRank, LootSource.Part), spread: 50f);
+            ShowAll(world, at, PartyProgression.GrantLoot(RiftSession.BreachRank, LootSource.Part), spread: 50f);
         }
     }
 
@@ -74,22 +77,55 @@ public static class RiftLoot
         }
 
         var result = Progression.RecordGuardianKill(RiftSession.Brecha.GuardianId);
-        Show(world, at, result.Loot, spread: 120f);
+        var grants = new System.Collections.Generic.List<OwnedLoot> { new(0, result.Loot) };
+        if (PartyProgression.RecordGuestGuardian(RiftSession.Brecha.GuardianId) is { } guest)
+        {
+            grants.Add(new OwnedLoot(1, guest.Loot));
+        }
+
+        ShowAll(world, at, grants, spread: 120f);
         var echo = result.EchoGained is { } e ? $" Eco absorvido: {e.Name}." : string.Empty;
-        world.Feel.Toast(Summary("A Lodo-Mãe se desfaz", result.Loot.Loot) + echo);
+        world.Feel.Toast(Summary("A Lodo-Mãe se desfaz", result.Loot.Loot) + echo + GuestSummary(grants));
     }
 
-    private static void Show(LevelWorld world, Vector2 at, LootGrant grant, float spread)
+    private static void ShowAll(LevelWorld world, Vector2 at, System.Collections.Generic.IReadOnlyList<OwnedLoot> grants, float spread)
     {
-        world.DropFragments(at, grant.FragmentosGained, spread);
+        var coop = grants.Count > 1;
+        foreach (var owned in grants)
+        {
+            // No co-op, o saque de cada um sai do lado dele do monstro e o texto leva a etiqueta (J1, J2) na cor do dono.
+            var side = coop ? (owned.OwnerSlot == 0 ? -1f : 1f) * 0.35f * world.Data.HumanHeight : 0f;
+            Show(world, at + new Vector2(side, 0f), owned.Grant, spread, coop ? owned.OwnerSlot : -1);
+        }
+    }
+
+    private static void Show(LevelWorld world, Vector2 at, LootGrant grant, float spread, int owner)
+    {
+        world.DropFragments(at, grant.FragmentosGained, spread, System.Math.Max(0, owner));
         var human = world.Data.HumanHeight;
         var i = 0;
+        var tag = owner >= 0 ? $"{CoopSession.TagOf(owner)} " : string.Empty;
+        var x = owner <= 0 ? -0.35f : 0.35f;
         foreach (var entry in grant.Loot.Entries)
         {
-            var text = entry.Kind == LootEntryKind.Material ? $"+{entry.Amount} {entry.Name}" : entry.Name;
-            var at2 = at + new Vector2(-0.35f * human, -(0.9f * human) - (i++ * 0.32f * human));
-            world.Feel.Number(at2, text, entry.Rare || entry.SetPiece ? RareColor : LootColor, 0.7f);
+            var text = entry.Kind == LootEntryKind.Material ? $"{tag}+{entry.Amount} {entry.Name}" : $"{tag}{entry.Name}";
+            var at2 = at + new Vector2(x * human, -(0.9f * human) - (i++ * 0.32f * human));
+            var color = entry.Rare || entry.SetPiece ? RareColor : owner >= 0 ? CoopSession.ColorOf(owner).Lightened(0.35f) : LootColor;
+            world.Feel.Number(at2, text, color, 0.7f);
         }
+    }
+
+    /// <summary>Resumo do saque do J2 no aviso (o do J1 já vem no começo).</summary>
+    private static string GuestSummary(System.Collections.Generic.IReadOnlyList<OwnedLoot> grants)
+    {
+        if (grants.Count < 2)
+        {
+            return string.Empty;
+        }
+
+        var g = grants[1].Grant.Loot;
+        var n = g.Entries.Count + (g.Fragmentos > 0 ? 1 : 0);
+        return n == 0 ? string.Empty : $" {CoopSession.TagOf(1)}: +{g.Fragmentos} Fragmentos e {g.Entries.Count} item(ns).";
     }
 
     private static string Summary(string title, LootResult loot)

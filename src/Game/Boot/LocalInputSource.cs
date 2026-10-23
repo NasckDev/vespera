@@ -19,15 +19,45 @@ public interface IInputSource
     bool IsJustPressed(string action);
 }
 
-/// <summary>Lê as associações atuais (<see cref="InputSetup.Table"/>) filtradas pelo dispositivo deste jogador.</summary>
-public sealed class LocalInputSource(int deviceId) : IInputSource
+/// <summary>
+/// Lê as associações atuais filtradas pelo dispositivo deste jogador. Por padrão usa a tabela do J1
+/// (<see cref="InputSetup.Table"/>) e as duas colunas de teclado; no co-op local cada jogador tem a tabela dele e o teclado
+/// pode ser dividido ao meio (o J1 lê só a coluna Principal, o J2 a tabela dele: setas + teclado numérico).
+/// </summary>
+public sealed class LocalInputSource : IInputSource
 {
     public const int KeyboardMouse = -1;
     private const float AxisPressThreshold = 0.5f;
+    private static readonly BindingSlot[] BothKeyboardSlots = [BindingSlot.Primary, BindingSlot.Alternate];
 
     private readonly System.Collections.Generic.Dictionary<string, bool> _previous = [];
+    private readonly Func<BindingTable> _table;
+    private readonly BindingSlot[] _keyboardSlots;
 
-    public int DeviceId { get; } = deviceId;
+    public LocalInputSource(int deviceId)
+        : this(deviceId, () => InputSetup.Table, BothKeyboardSlots)
+    {
+    }
+
+    /// <param name="table">Tabela lida a cada consulta (o remapeamento vale na hora).</param>
+    /// <param name="keyboardSlots">Colunas de teclado/mouse lidas (só para o teclado).</param>
+    public LocalInputSource(int deviceId, Func<BindingTable> table, BindingSlot[] keyboardSlots)
+    {
+        DeviceId = deviceId;
+        _table = table;
+        _keyboardSlots = keyboardSlots.Length == 0 ? BothKeyboardSlots : keyboardSlots;
+    }
+
+    public int DeviceId { get; }
+
+    /// <summary>Tabela usada por esta fonte agora.</summary>
+    public BindingTable Table => _table();
+
+    /// <summary>Coluna que nomeia o botão nos avisos ("E: conversar"): a Principal do teclado ou a do controle.</summary>
+    public BindingSlot PromptSlot => DeviceId == KeyboardMouse ? _keyboardSlots[0] : BindingSlot.Gamepad;
+
+    /// <summary>Nome legível do botão desta fonte para a ação (tecla do teclado ou botão do controle).</summary>
+    public string Describe(string action) => GlyphNames.Describe(Table.Get(action, PromptSlot), GlyphNames.DetectFamily());
 
     public Vector2 Move => new Vector2(Strength(InputActions.MoveRight) - Strength(InputActions.MoveLeft),
         Strength(InputActions.MoveDown) - Strength(InputActions.MoveUp)).LimitLength(1f);
@@ -46,17 +76,18 @@ public sealed class LocalInputSource(int deviceId) : IInputSource
     private float Strength(string action)
     {
         var strength = 0f;
+        var table = _table();
         if (DeviceId == KeyboardMouse)
         {
-            foreach (var slot in new[] { BindingSlot.Primary, BindingSlot.Alternate })
+            foreach (var slot in _keyboardSlots)
             {
-                strength = Math.Max(strength, KeyboardStrength(InputSetup.Table.Get(action, slot)));
+                strength = Math.Max(strength, KeyboardStrength(table.Get(action, slot)));
             }
 
             return strength;
         }
 
-        strength = Math.Max(strength, PadStrength(InputSetup.Table.Get(action, BindingSlot.Gamepad)));
+        strength = Math.Max(strength, PadStrength(table.Get(action, BindingSlot.Gamepad)));
         return Math.Max(strength, DpadStrength(action));
     }
 

@@ -46,6 +46,12 @@ public partial class RoomDirector : Node
 
     public string Title => _data.Title;
 
+    /// <summary>Monstros da última onda solta (com os extras do co-op), para os bots conferirem a escala.</summary>
+    public int LastWaveSize { get; private set; }
+
+    /// <summary>Tamanho da onda no dado da sala (sem co-op).</summary>
+    public int BaseWaveSize(int index) => index >= 0 && index < _data.Waves.Count ? _data.Waves[index].Count : 0;
+
     /// <summary>O caçador saiu da sala (passagem ou fenda).</summary>
     public event Action? ExitRequested;
 
@@ -95,10 +101,12 @@ public partial class RoomDirector : Node
             TickWaves(dt);
         }
 
-        if (Cleared && !_exitSent && _data.Exit is { } exit && _world.Player is { } player)
+        if (Cleared && !_exitSent && _data.Exit is { } exit)
         {
+            // Qualquer caçador de pé na passagem leva o grupo inteiro para a próxima sala.
             var t = exit.Trigger;
-            if (new Rect2(t[0], t[1], t[2], t[3]).HasPoint(player.GlobalPosition))
+            var area = new Rect2(t[0], t[1], t[2], t[3]);
+            if (_world.Players.Any(p => IsInstanceValid(p) && !p.Combat.IsDead && area.HasPoint(p.GlobalPosition)))
             {
                 RequestExit();
             }
@@ -140,10 +148,22 @@ public partial class RoomDirector : Node
         }
 
         var wave = _data.Waves[_nextWave++];
-        for (var i = 0; i < wave.Count; i++)
+
+        // Co-op: +1 monstro por jogador além do primeiro (data/coop.json); os extras repetem os da onda, um pouco ao lado.
+        var size = Coop.CoopSession.Rules.WaveSize(wave.Count, Coop.CoopSession.PlayerCount);
+        for (var i = 0; i < size; i++)
         {
-            SpawnWithWarning(wave[i], i * 0.18f);
+            var spawn = wave[i % wave.Count];
+            if (i >= wave.Count)
+            {
+                var offset = Vector2.FromAngle(i * 2.4f) * 0.8f * _world.Data.HumanHeight;
+                spawn = new SpawnData { Type = spawn.Type, At = [spawn.At[0] + offset.X, spawn.At[1] + offset.Y] };
+            }
+
+            SpawnWithWarning(spawn, i * 0.18f);
         }
+
+        LastWaveSize = size;
 
         _timer = WaveGap;
         if (_nextWave > 1)

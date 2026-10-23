@@ -42,7 +42,9 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
         World = world;
         SizeFactor = sizeFactor;
         Stats = RiftSession.Rules.Stats(monsterId);
-        MaxHp = Stats.Hp;
+
+        // Co-op: vida ×1,5 com 2 jogadores (×2 com 3, ×2,5 com 4), regra de data/coop.json.
+        MaxHp = Stats.Hp * Coop.CoopSession.Rules.EnemyHp(Coop.CoopSession.PlayerCount);
         Hp = MaxHp;
         Name = monsterId;
     }
@@ -126,7 +128,8 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
 
     protected Vector2 Knock { get; set; }
 
-    protected Player? Target => World.Player is { Combat.IsDead: false } p ? p : null;
+    /// <summary>Caçador de pé mais próximo (no co-op, cada monstro escolhe o seu); null se todos caíram.</summary>
+    protected Player? Target => World.NearestHunter(GlobalPosition);
 
     public override void _Ready()
     {
@@ -293,24 +296,33 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
         }
     }
 
-    /// <summary>Acerta o caçador se ele estiver a <paramref name="radius"/> do centro do corpo.</summary>
+    /// <summary>
+    /// Acerta todo caçador a <paramref name="radius"/> do centro do corpo (no co-op um golpe em área pega os dois). O dano
+    /// do Guardião sobe ×1,15 no co-op (não linear).
+    /// </summary>
     protected bool TouchPlayer(Vector2 center, float radius, double damageMult, float push)
     {
-        var target = Target;
-        if (target is null || !target.Combat.CanBeHit)
+        var landed = false;
+        var bossMult = Def.Boss ? Coop.CoopSession.Rules.BossDamage(Coop.CoopSession.PlayerCount) : 1.0;
+        foreach (var target in World.Players)
         {
-            return false;
+            if (!IsInstanceValid(target) || !target.Combat.CanBeHit)
+            {
+                continue;
+            }
+
+            var c = target.Combat;
+            if (c.HitCenter.DistanceTo(center) > radius + c.HitRadius)
+            {
+                continue;
+            }
+
+            var dir = (c.HitCenter - center).Normalized();
+            var info = new HitInfo(Stats.Damage * damageMult * bossMult, center, dir * push * A, 0.06, 1, false, 0);
+            landed |= c.ReceiveHit(info).Landed;
         }
 
-        var c = target.Combat;
-        if (c.HitCenter.DistanceTo(center) > radius + c.HitRadius)
-        {
-            return false;
-        }
-
-        var dir = (c.HitCenter - center).Normalized();
-        var info = new HitInfo(Stats.Damage * damageMult, center, dir * push * A, 0.06, 1, false, 0);
-        return c.ReceiveHit(info).Landed;
+        return landed;
     }
 
     private void TickDeath(float dt)

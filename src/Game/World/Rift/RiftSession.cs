@@ -80,11 +80,18 @@ public static class RiftSession
         _ => HunterClass.Lamina,
     };
 
-    /// <summary>Entra na Brecha: começa a caçada na progressão e devolve os Fragmentos recuperados da Lanterna do bairro.</summary>
+    /// <summary>Fragmentos que o convidado do co-op (J2) recuperou da Lanterna dele na última entrada.</summary>
+    public static int GuestRecovered { get; private set; }
+
+    /// <summary>
+    /// Entra na Brecha: começa a caçada na progressão e devolve os Fragmentos recuperados da Lanterna do bairro. No co-op é
+    /// uma caçada só para o grupo: o convidado começa a dele junto (e recupera a Lanterna dele, <see cref="GuestRecovered"/>).
+    /// </summary>
     public static int BeginRun()
     {
         RoomIndex = 0;
         InRift = true;
+        GuestRecovered = Coop.PartyProgression.BeginGuestRun(Brecha.NeighborhoodId);
         return Progression.IsActive ? Progression.BeginRun(Brecha.NeighborhoodId) : 0;
     }
 
@@ -101,8 +108,12 @@ public static class RiftSession
     {
         InRift = false;
         RoomIndex = 0;
+        GuestEnd = Coop.PartyProgression.EndGuestRun(survived);
         return Progression.IsActive ? Progression.EndRun(survived) : null;
     }
+
+    /// <summary>Fim da caçada do convidado na última saída (null sem co-op).</summary>
+    public static Core.Advancement.RunEnd? GuestEnd { get; private set; }
 
     /// <summary>Esquece o save temporário e a caçada (troca de sessão ou de cena).</summary>
     public static void Reset()

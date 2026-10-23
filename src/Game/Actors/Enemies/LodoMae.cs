@@ -37,6 +37,7 @@ public partial class LodoMae(LevelWorld world) : Enemy("lodo_mae", world)
     private int _moveCount;
     private float _digestTick;
     private bool _splitHandled;
+    private Player? _swallowed;
 
     private enum Phase
     {

@@ -7,6 +7,7 @@ namespace Vespera.Game.World.Rift;
 /// Fragmento caído (moeda do Avesso): salta do monstro num arco, quica, brilha pulsando e é puxado como ímã até o
 /// caçador. É só a imagem do saque: o valor já entrou na caçada pela <see cref="Hunter.Progression"/> quando o monstro
 /// caiu (se o caçador cair antes de pegar, os Fragmentos ficam na Lanterna do mesmo jeito). Cristal magenta-âmbar.
+/// No co-op o saque é individual: o cristal só voa para o dono (<see cref="OwnerSlot"/>) e brilha com o halo da cor dele.
 /// </summary>
 public partial class FragmentPickup : Node2D
 {
@@ -23,20 +24,26 @@ public partial class FragmentPickup : Node2D
     private float _t;
     private bool _magnet;
 
-    public FragmentPickup(LevelWorld world, Vector2 from, Vector2 landAt)
+    public FragmentPickup(LevelWorld world, Vector2 from, Vector2 landAt, int owner = 0)
     {
         _world = world;
+        OwnerSlot = owner;
         _start = from;
         _landAt = landAt;
         _a = world.Data.ActorScale;
         Position = from;
     }
 
+    /// <summary>Jogador dono (0 = J1). Só ele recolhe (regra de <see cref="Vespera.Core.Coop.CoopLoot.CanCollect"/>).</summary>
+    public int OwnerSlot { get; }
+
+    private bool Shared => _world.Players.Count > 1;
+
     public override void _Process(double delta)
     {
         var dt = (float)delta;
         _t += dt;
-        var player = _world.Player;
+        var player = _world.PlayerAt(OwnerSlot) ?? _world.Player;
         if (_t < PopSeconds)
         {
             var k = _t / PopSeconds;
@@ -72,6 +79,13 @@ public partial class FragmentPickup : Node2D
         DrawCircle(Vector2.Zero, 7f * a, new Color(0, 0, 0, 0.3f));
         DrawSetTransform(new Vector2(0, -hop - (9f * a)), 0f, Vector2.One);
         DrawCircle(Vector2.Zero, 13f * a * beat, new Color(0.9f, 0.29f, 0.56f, 0.18f));
+        if (Shared)
+        {
+            var halo = Coop.CoopSession.ColorOf(OwnerSlot);
+            DrawArc(Vector2.Zero, 11f * a, 0f, Mathf.Tau, 20, halo with { A = 0.85f }, 2.2f * a, true);
+            DrawCircle(Vector2.Zero, 9f * a * beat, halo with { A = 0.22f });
+        }
+
         var s = 7f * a;
         Vector2[] gem = [new(0, -s * 1.4f), new(s * 0.8f, -s * 0.2f), new(0, s * 1.1f), new(-s * 0.8f, -s * 0.2f)];
         DrawColoredPolygon(gem, new Color("c2367a"));
@@ -84,7 +98,8 @@ public partial class FragmentPickup : Node2D
     private void Collect()
     {
         CombatSfx.Play(_world, CombatSound.Pickup, GlobalPosition, -6f);
-        _world.Feel.Spark(GlobalPosition - new Vector2(0, 10f * _a), new Color("ff8cc4"), 5, 120f);
+        var sparkle = Shared ? Coop.CoopSession.ColorOf(OwnerSlot) : new Color("ff8cc4");
+        _world.Feel.Spark(GlobalPosition - new Vector2(0, 10f * _a), sparkle, 5, 120f);
         QueueFree();
     }
 }
