@@ -91,33 +91,33 @@ public static class RiftLoot
     private static void ShowAll(LevelWorld world, Vector2 at, System.Collections.Generic.IReadOnlyList<OwnedLoot> grants, float spread)
     {
         var coop = grants.Count > 1;
-        var line = 0;
         foreach (var owned in grants)
         {
-            // No co-op os cristais de cada um saem do lado dele do monstro; os nomes do saque ficam numa coluna só
-            // (J1 primeiro, J2 embaixo), cada linha com a etiqueta e a cor do dono, sem um texto pisar no outro.
+            // No co-op os cristais de cada um saem do lado dele do monstro; os nomes do J1 sobem acima do monstro e os do
+            // J2 ficam abaixo dele, cada linha com a etiqueta e a cor do dono (sem um texto pisar no outro nem sair da tela
+            // quando o baú está no alto da sala).
             var side = coop ? (owned.OwnerSlot == 0 ? -1f : 1f) * 0.35f * world.Data.HumanHeight : 0f;
             world.DropFragments(at + new Vector2(side, 0f), owned.Grant.FragmentosGained, spread, owned.OwnerSlot);
-            line = ShowNames(world, at, owned.Grant, coop ? owned.OwnerSlot : -1, line);
+            ShowNames(world, at, owned.Grant, coop ? owned.OwnerSlot : -1);
         }
     }
 
-    /// <summary>Nomes do saque empilhados acima do monstro a partir da linha <paramref name="line"/>; devolve a próxima linha livre.</summary>
-    private static int ShowNames(LevelWorld world, Vector2 at, LootGrant grant, int owner, int line)
+    /// <summary>Nomes do saque empilhados acima do monstro (J1 e jogo solo) ou abaixo dele (J2 no co-op).</summary>
+    private static void ShowNames(LevelWorld world, Vector2 at, LootGrant grant, int owner)
     {
         var human = world.Data.HumanHeight;
-        var i = line;
+        var i = 0;
         var tag = owner >= 0 ? $"{CoopSession.TagOf(owner)} " : string.Empty;
         const float x = -0.35f;
+        var below = owner > 0;
         foreach (var entry in grant.Loot.Entries)
         {
             var text = entry.Kind == LootEntryKind.Material ? $"{tag}+{entry.Amount} {entry.Name}" : $"{tag}{entry.Name}";
-            var at2 = at + new Vector2(x * human, -(0.9f * human) - (i++ * 0.32f * human));
+            var y = below ? (0.45f * human) + (i++ * 0.32f * human) : -(0.9f * human) - (i++ * 0.32f * human);
+            var at2 = at + new Vector2(x * human, y);
             var color = entry.Rare || entry.SetPiece ? RareColor : owner >= 0 ? CoopSession.ColorOf(owner).Lightened(0.35f) : LootColor;
             world.Feel.Number(at2, text, color, 0.7f);
         }
-
-        return i;
     }
 
     /// <summary>Resumo do saque do J2 no aviso (o do J1 já vem no começo).</summary>

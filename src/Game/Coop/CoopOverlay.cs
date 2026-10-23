@@ -76,9 +76,10 @@ public partial class CoopOverlay(Level level) : Control
 
     private void DrawDowned(LevelWorld world, Player downed, Color color)
     {
-        // O anel fica ACIMA do caçador caído (o corpo deitado continua à vista) e a dica acima do anel.
+        // O anel abraça o caçador caído sem tampá-lo (só o contorno), a etiqueta fica em cima e a dica embaixo dos pés.
         var feet = level.WorldToScreen(downed.GlobalPosition);
-        var center = level.WorldToScreen(downed.GlobalPosition - new Vector2(0, 0.95f * world.Data.HumanHeight));
+        var center = level.WorldToScreen(downed.GlobalPosition - new Vector2(0, 0.38f * world.Data.HumanHeight));
+        var ring = (level.WorldToScreen(downed.GlobalPosition) - level.WorldToScreen(downed.GlobalPosition - new Vector2(0, world.Data.HumanHeight))).Length() * 0.55f;
         var beat = 0.5f + (0.5f * Mathf.Sin(_time * 5f));
 
         // Mancha pulsando no chão: dá para achar o caído no meio da luta.
@@ -87,16 +88,15 @@ public partial class CoopOverlay(Level level) : Control
         DrawSetTransform(Vector2.Zero, 0f, Vector2.One);
 
         var fraction = world.Party.ReviveFraction(downed);
-        DrawCircle(center, RingRadius + 6f, new Color(Palette.Indigo, 0.8f));
-        DrawArc(center, RingRadius, 0f, Mathf.Tau, 48, new Color(color, 0.25f), 7f, true);
+        DrawArc(center, ring + 5f, 0f, Mathf.Tau, 56, new Color(Palette.Indigo, 0.75f), 4f, true);
+        DrawArc(center, ring, 0f, Mathf.Tau, 56, new Color(color, 0.3f), 7f, true);
         if (fraction > 0f)
         {
-            DrawArc(center, RingRadius, -Mathf.Pi / 2f, (-Mathf.Pi / 2f) + (Mathf.Tau * fraction), 48, color, 7f, true);
+            DrawArc(center, ring, -Mathf.Pi / 2f, (-Mathf.Pi / 2f) + (Mathf.Tau * fraction), 56, color, 7f, true);
         }
 
         var tag = CoopSession.TagOf(downed.Slot);
-        var tagSize = _font.GetStringSize(tag, HorizontalAlignment.Center, -1, TagFontSize);
-        DrawString(_font, center + new Vector2(-tagSize.X / 2f, tagSize.Y * 0.32f), tag, HorizontalAlignment.Left, -1, TagFontSize, color);
+        DrawTag(center - new Vector2(0, ring + 10f), $"{tag} caído", color);
 
         var helper = world.Party.HelperFor(downed);
         var text = helper is null
@@ -104,7 +104,7 @@ public partial class CoopOverlay(Level level) : Control
             : $"{CoopSession.TagOf(helper.Slot)}: segure {InputGlyphs.Describe(helper.Input, InputActions.Interact)} para reanimar";
         var hintColor = helper is null ? Palette.Cream : CoopSession.ColorOf(helper.Slot);
         var size = _font.GetStringSize(text, HorizontalAlignment.Center, -1, HintFontSize);
-        var at = center + new Vector2(-size.X / 2f, -RingRadius - 22f);
+        var at = feet + new Vector2(-size.X / 2f, size.Y + 18f);
         DrawRect(new Rect2(at - new Vector2(10f, size.Y - 2f), new Vector2(size.X + 20f, size.Y + 8f)), new Color(Palette.Indigo, 0.78f));
         DrawString(_font, at, text, HorizontalAlignment.Left, -1, HintFontSize, hintColor);
     }
