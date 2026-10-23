@@ -5,13 +5,16 @@ using Vespera.Game.Boot;
 namespace Vespera.Game.Testing;
 
 /// <summary>Fonte de input dirigida por código (bots de teste e capturas): direção e ações ligadas à mão.</summary>
-public sealed class ScriptedInput : IInputSource
+public sealed class ScriptedInput(int deviceId = LocalInputSource.KeyboardMouse) : IInputSource
 {
     private readonly HashSet<string> _held = [];
     private readonly HashSet<string> _taps = [];
 
-    /// <summary>Finge ser o teclado, para os avisos das capturas mostrarem as teclas do jogador.</summary>
-    public int DeviceId => LocalInputSource.KeyboardMouse;
+    /// <summary>
+    /// Finge ser o teclado (padrão), para os avisos das capturas mostrarem as teclas do jogador; o J2 do bot do co-op finge
+    /// ser o controle 2, como na entrada pela pausa.
+    /// </summary>
+    public int DeviceId => deviceId;
 
     public Vector2 Move { get; set; }
 

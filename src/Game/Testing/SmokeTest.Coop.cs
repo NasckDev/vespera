@@ -74,6 +74,7 @@ public partial class SmokeTest
         await Tap(Key.Escape);
         Check(_router.OverlayDepth == 1 && GetTree().Paused, "Esc deveria abrir a pausa");
         await FocusButton("Chamar J2 (co-op)");
+        await Shot("coop_pausa_chamar", 0.4);
         await Tap(Key.Enter);
         await WaitFor(() => FindOverlay<CoopJoinScreen>() is not null, "tela de entrada do co-op");
         var screen = FindOverlay<CoopJoinScreen>()!;
