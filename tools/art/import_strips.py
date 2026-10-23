@@ -55,7 +55,7 @@ SPRITES = ROOT / "assets" / "v2" / "sprites"
 RES_PREFIX = "res://assets/v2/sprites"
 
 HUNTER_FRAMES = {
-    "lamina": {"parado": 4, "ataque1": 5, "ataque2": 5, "ataque3": 5, "pesado": 8, "esquiva": 5, "dano": 2, "morte": 7},
+    "lamina": {"parado": 4, "andar": 6, "ataque1": 5, "ataque2": 5, "ataque3": 5, "pesado": 8, "esquiva": 5, "dano": 2, "morte": 7},
     "arco": {"parado": 4, "tiro": 6, "tiro_carregado": 7, "esquiva": 5, "dano": 2, "morte": 7},
     "martelo": {"parado": 4, "ataque1": 6, "ataque2": 6, "pesado": 9, "esquiva": 5, "dano": 2, "morte": 7},
 }

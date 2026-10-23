@@ -16,10 +16,16 @@ public sealed class ObjectiveDef
     public bool Locked { get; set; }
 }
 
-/// <summary>Regra: quando a flag <see cref="When"/> liga, aplica o objetivo e liga outras flags.</summary>
+/// <summary>
+/// Regra: quando a flag <see cref="When"/> liga e as condições <see cref="Conditions"/> valem (todas), aplica o objetivo
+/// e liga outras flags. Sem condição = sempre.
+/// </summary>
 public sealed class TriggerDef
 {
     public string When { get; set; } = string.Empty;
+
+    [JsonPropertyName("if")]
+    public List<string> Conditions { get; set; } = [];
 
     public string Objective { get; set; } = string.Empty;
 

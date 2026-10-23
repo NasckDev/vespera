@@ -126,13 +126,34 @@ public abstract class WeaponMoves
     {
         var steering = move.LengthSquared() > 0.04f;
         var aim = steering ? move.Normalized() : P.AimDirection;
-        Aim = Assist(aim, range, steering ? AssistAngle : Mathf.Pi);
+        if (MouseAim() is { } mouse)
+        {
+            // Mouse em uso: o golpe vai para o cursor (ajuda de mira só num cone estreito em volta dele).
+            Aim = Assist(mouse, range, AssistAngle * 0.6f);
+        }
+        else
+        {
+            Aim = Assist(aim, range, steering ? AssistAngle : Mathf.Pi);
+        }
+
         P.Face(Aim);
         CurrentVerb = verb;
         _framesDone.Clear();
         LastImpact = -1;
         CurrentAnim = P.PlayAnimation(verb, restart: true);
         P.Sprite.SpeedScale = speedScale;
+    }
+
+    /// <summary>Direção do peito do caçador até o cursor, se o jogador humano está usando o mouse; senão null.</summary>
+    protected Vector2? MouseAim()
+    {
+        if (P.Input is not MergedInput || !InputDevices.MouseRecently || Player.MouseWorld?.Invoke() is not { } cursor)
+        {
+            return null;
+        }
+
+        var to = cursor - (P.GlobalPosition - new Vector2(0, ChestHeight * S));
+        return to.LengthSquared() < 1f ? null : to.Normalized();
     }
 
     /// <summary>A animação do golpe mudou de direção no meio (mira girando na carga do Arco).</summary>

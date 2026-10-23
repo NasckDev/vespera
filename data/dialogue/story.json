@@ -1,41 +1,68 @@
 {
-  "_doc": "Roteiro geral do Prólogo + Ato I. Objetivos em ordem de campanha (o Diário usa a ordem). Regras: quando a flag 'when' liga, aplica o objetivo. Retratos: {0} vira 1 (neutro) ou 2 (expressão). Benício: retrato 1 = composto (de lado), 2 = severo (de frente). Flags/eventos documentados em src/Core/Story/StoryFlags.cs.",
+  "_doc": "Roteiro do Prólogo + Ato I (playtest 23/10: Ato I de 25-35 min). Objetivos em ordem de campanha (o Diário usa a ordem); título curto = 1 linha na tela. Regras: quando a flag 'when' liga e as condições 'if' valem, aplica o objetivo. Flags que o jogo liga sozinho: hunt_back (voltou da Brecha), hunt_1/hunt_2 (caçadas completas), fell_once (caiu), forged (forjou), potion_bought, contract_done, xp_ready (XP do próximo rank), exame_e (exame aprovado), eco_viscoso (ganhou o Eco). Retratos: {0} vira 1 (neutro) ou 2 (expressão). Flags/eventos em src/Core/Story/StoryFlags.cs.",
   "startObjective": "quadro",
   "objectives": [
     {
       "id": "quadro",
-      "title": "Falar com o Mestre Benício",
-      "text": "O Mestre Benício chamou você. Ele está ao lado do quadro de avisos, no meio da praça. Chegue perto dele e aperte o botão de interagir."
+      "title": "Fale com o Mestre Benício, no mural",
+      "text": "O Mestre Benício chamou você. Ele está ao lado do mural, no alto da praça. Chegue perto e aperte o botão de interagir."
     },
     {
       "id": "ravi",
-      "title": "Falar com o Ravi",
-      "text": "Ravi é um rapaz de selo E, como você. Ele anda pela praça e quer lhe propor uma corrida."
+      "title": "Fale com o Ravi",
+      "text": "O Ravi também é selo E. Ele está andando pela praça e quer falar com você."
     },
     {
       "id": "odete",
-      "title": "Pegar uma arma com a Odete",
-      "text": "A Odete é a ferreira. A Forja dela fica depois da ponte, a oeste da praça. Ela vai lhe dar a sua primeira arma."
+      "title": "Pegue sua arma com a Odete (oeste)",
+      "text": "A Odete é a ferreira. Atravesse a ponte a oeste da praça e entre na Forja. Ela vai lhe dar sua primeira arma."
     },
     {
-      "id": "brecha",
-      "title": "Fechar a Brecha da praça",
-      "text": "A Brecha da praça leva aos Esgotos do Mercado. Entre, vença os monstros e o chefe no fim, a Lodo-Mãe. Quando ela cair, a Brecha se fecha."
+      "id": "cacada1",
+      "title": "Entre na Brecha e chegue ao fim",
+      "text": "A Brecha fica no meio da praça. Lá dentro, vença os monstros de cada sala para abrir a passagem. No fim, uma fenda leva você de volta."
+    },
+    {
+      "id": "forja",
+      "title": "Melhore sua arma com a Odete",
+      "text": "Você trouxe Fragmentos e materiais. Leve tudo para a Odete, na Forja. Uma arma melhor bate mais forte."
+    },
+    {
+      "id": "cacada2",
+      "title": "Faça outra caçada (veja o mural)",
+      "text": "O Benício só aplica o exame em quem já voltou inteiro de duas caçadas. O mural tem contratos: cumpra um para ganhar XP e Lumes a mais."
+    },
+    {
+      "id": "exame",
+      "title": "Faça o exame com o Mestre Benício",
+      "text": "Você está quase pronto. Fale com o Benício, no mural. Ele vai ver se você pode enfrentar a Lodo-Mãe."
+    },
+    {
+      "id": "lodo_mae",
+      "title": "Vença a Lodo-Mãe e feche a Brecha",
+      "text": "A Brecha ficou vermelha. No fim dela espera a Lodo-Mãe, a chefe dos esgotos. Quebre os três núcleos dela e não fique parado quando ela pular."
     },
     {
       "id": "ato2",
-      "title": "Pomar Alto",
-      "text": "As macieiras do Pomar Alto estão apodrecendo. O caminho ainda está fechado. Em breve.",
+      "title": "Pomar Alto: ache a Dona Celeste",
+      "text": "A Dona Celeste mandou uma carta do Pomar Alto: as macieiras estão apodrecendo por dentro. O caminho para lá abre no Ato II. Em breve.",
       "locked": true
     }
   ],
   "triggers": [
+    { "when": "hunt_1", "if": ["objective:cacada1"], "objective": "forja" },
+    { "when": "forged", "if": ["objective:forja", "hunt_2", "xp_ready"], "objective": "exame" },
+    { "when": "forged", "if": ["objective:forja"], "objective": "cacada2" },
+    { "when": "hunt_2", "if": ["objective:cacada2", "xp_ready"], "objective": "exame" },
+    { "when": "xp_ready", "if": ["objective:cacada2", "hunt_2"], "objective": "exame" },
     { "when": "GuardianDefeated:lodo_mae", "objective": "ato2", "set": ["act1_done"] }
   ],
   "autoplay": [
     { "level": "praca", "dialogue": "chegada", "if": ["!arrival_done"] },
     { "level": "praca", "dialogue": "ravi", "npc": "ravi", "if": ["registered", "!met_ravi"] },
-    { "level": "praca", "dialogue": "ato1_fim", "npc": "benicio", "if": ["act1_done", "!ato1_fim_done"] }
+    { "level": "praca", "dialogue": "ato1_fim", "npc": "benicio", "if": ["act1_done", "!ato1_fim_done"] },
+    { "level": "praca", "dialogue": "nilza", "npc": "nilza", "if": ["hunt_back", "!met_nilza"] },
+    { "level": "praca", "dialogue": "ravi", "npc": "ravi", "if": ["hunt_2", "!ravi_rival"] }
   ],
   "speakers": {
     "narrador": { "name": "" },

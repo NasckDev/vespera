@@ -44,6 +44,11 @@ public sealed class StoryEngine : IStoryContext
 
         foreach (var trigger in Script.Triggers.Where(t => t.When == flag).ToList())
         {
+            if (!StoryConditions.Evaluate(trigger.Conditions, this))
+            {
+                continue;
+            }
+
             foreach (var extra in trigger.Set)
             {
                 Progress.Add(extra);
