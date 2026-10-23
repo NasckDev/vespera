@@ -59,6 +59,9 @@ public partial class Npc : CharacterBody2D
 
     public string NpcId => _id;
 
+    /// <summary>Sprite animado (medição de escala na tela e capturas).</summary>
+    public AnimatedSprite2D SpriteNode => _sprite;
+
     public Interactable Interaction { get; private set; } = null!;
 
     public Facing Facing => _facing;

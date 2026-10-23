@@ -21,6 +21,7 @@ public partial class SmokeTest
     public const string CombatBotFlag = "--combat-bot";
     public const string CombatQaFlag = "--qa-combate";
     public const string ScaleFlag = "--escala";
+    public const string CameraFlag = "--camera";
 
     private async Task RunLevelExtras(Level level)
     {
@@ -39,6 +40,11 @@ public partial class SmokeTest
         {
             var shots = _shotsDir is not null && DisplayServer.GetName() != "headless";
             _failures.AddRange(await new ScaleCheck(level, this, shots).Run());
+        }
+
+        if (Array.IndexOf(_args, CameraFlag) >= 0)
+        {
+            _failures.AddRange(await new CameraCheck(level, this).Run());
         }
 
         if (Array.IndexOf(_args, CombatBotFlag) >= 0)

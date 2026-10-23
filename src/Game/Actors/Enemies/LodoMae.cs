@@ -97,6 +97,7 @@ public partial class LodoMae(LevelWorld world) : Enemy("lodo_mae", world)
         Play("parado");
         CombatSfx.Play(this, CombatSound.BossRoar, Vector2.Zero);
         World.Feel.Shake(0.5f);
+        World.Camera.PullBack(CameraRig.MinPullBack, IntroSeconds);
     }
 
     public override void _ExitTree()

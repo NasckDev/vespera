@@ -19,6 +19,7 @@ public partial class LevelWorld : Node2D
 {
     private const float DoorPromptHeight = 190f;
     private const float PracaPortalHeight = 250f;
+    private const float VignetteEdge = 70f;
 
     private readonly LevelData _data;
     private readonly IReadOnlyDictionary<string, PropDef> _catalog;
@@ -113,7 +114,8 @@ public partial class LevelWorld : Node2D
 
         SpawnNpcs();
         Player = SpawnPlayer(MergedInput.LocalSolo(), SpawnPoint, RiftSession.Hunter);
-        Camera = new CameraRig(Player, Bounds, _data.ActorScale) { Name = "Camera", Zoom = new Vector2(_data.CameraZoom, _data.CameraZoom) };
+        AddChild(new LevelVignette(Bounds, VignetteEdge * _data.ActorScale) { ZIndex = -9 });
+        Camera = new CameraRig(Player, Bounds, _data.ActorScale, _data.HumanHeight) { Name = "Camera" };
         AddChild(Camera);
         Camera.MakeCurrent();
         Feel.Camera = Camera;

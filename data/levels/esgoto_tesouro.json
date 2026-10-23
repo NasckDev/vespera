@@ -15,7 +15,6 @@
   "_regua": "Régua (PLANO-V2 §2.1): arcos gradeados das paredes, medidos nos 4 chãos (corredor 90, arena 105, tesouro 120, portão do cruzamento 120; mesma pintura nas quatro salas) -> doorHeight 105, humano 79 px.",
   "doorAt": [420, 150],
   "propScale": 1.0,
-  "cameraZoom": 1.65,
   "props": [],
   "zones": [],
   "rift": {

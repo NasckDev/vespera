@@ -43,9 +43,6 @@ public sealed class LevelData
     /// <summary>Multiplica a escala de todos os objetos do catálogo nesta fase (mantém a proporção com o caçador).</summary>
     public float PropScale { get; set; } = 1f;
 
-    /// <summary>Zoom da câmera (mapa "afastado" pintado pequeno: ~2x deixa o caçador com 70-90 px na tela).</summary>
-    public float CameraZoom { get; set; } = 1f;
-
     public List<PropPlacement> Props { get; set; } = [];
 
     public List<ZoneData> Zones { get; set; } = [];

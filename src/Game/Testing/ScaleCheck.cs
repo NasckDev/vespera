@@ -10,16 +10,18 @@ using Vespera.Game.World.Rift;
 namespace Vespera.Game.Testing;
 
 /// <summary>
-/// Contrato de escala na engine (<c>--escala</c>, PLANO-V2 §2.1): em cada mapa (Praça e salas da Brecha), instancia
-/// cada ator que pode aparecer ali, mede a altura opaca renderizada (pé até o pixel opaco mais alto do quadro
-/// parado, × escala global do sprite) em px de mundo e falha se fugir mais de ±8% do alvo. Com janela e
-/// <c>--shots</c>, fotografa a "fila de escala" de cada mapa: caçadores, Lodo, Espectro e Lodo-Mãe ao lado da porta-régua.
+/// Contrato de escala na engine (<c>--escala</c>, PLANO-V2 §2.1): em cada mapa (Praça, Forjas, forja da Odete e salas
+/// da Brecha), instancia os caçadores, os NPCs, Lodo, Espectro e Lodo-Mãe, mede a altura opaca renderizada (pé até o
+/// pixel opaco mais alto do quadro parado, × escala global do sprite) em px de mundo e falha se fugir mais de ±8% do
+/// alvo. Com janela e <c>--shots</c>, fotografa a "fila de escala" de cada mapa ao lado da porta-régua.
 /// </summary>
 public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
 {
     private const float Alpha = 0.5f;
     private static readonly string[] Monsters = ["lodo", "espectro", "lodo_mae"];
     private static readonly HunterClass[] Hunters = [HunterClass.Lamina, HunterClass.Arco, HunterClass.Martelo];
+    private static readonly string[] People = ["odete", "ravi", "nilza", "benicio", "lis"];
+    private static readonly string[] CityLevels = ["forjas", "forja_interior"];
 
     private readonly List<string> _failures = [];
 
@@ -28,6 +30,7 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
     public async Task<List<string>> Run()
     {
         var rooms = new List<string> { Level.HubLevelId };
+        rooms.AddRange(CityLevels);
         rooms.AddRange(RiftSession.Brecha.Rooms);
         foreach (var room in rooms)
         {
@@ -55,6 +58,19 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
             var p = World.SpawnPlayer(new ScriptedInput(), World.ClampToFloor(start + new Vector2(dir * x, 0)), hunter);
             p.Combat.Disabled = true;
             spawned.Add(p);
+            x += gap;
+        }
+
+        foreach (var id in People)
+        {
+            var npc = new Npc(id, new NpcPlacement { Id = id, At = [0, 0], Routine = "idle" }, human)
+            {
+                Name = $"Escala_{id}",
+                Position = World.ClampToFloor(start + new Vector2(dir * x, 0)),
+            };
+            World.Entities.AddChild(npc);
+            npc.SetActive(false);
+            spawned.Add(npc);
             x += gap;
         }
 
@@ -88,6 +104,7 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
             {
                 Player p => (HunterSprites.ClassFolder(p.Hunter), p.Sprite),
                 Enemy e => (e.MonsterId, e.SpriteNode),
+                Npc n => (n.NpcId, n.SpriteNode),
                 _ => (string.Empty, null!),
             };
             var measured = Measure(sprite);
@@ -120,7 +137,7 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
     /// Mediana, nos quadros da animação parada que está tocando, da distância do pé (origem do nó) ao pixel opaco mais
     /// alto, × escala global do sprite: a mesma definição de <c>tools/art/medir_altura_em_pe.py</c>, mas medida no jogo.
     /// </summary>
-    private static float Measure(AnimatedSprite2D sprite)
+    internal static float Measure(AnimatedSprite2D sprite)
     {
         var count = sprite.SpriteFrames.GetFrameCount(sprite.Animation);
         var heights = new List<float>();
