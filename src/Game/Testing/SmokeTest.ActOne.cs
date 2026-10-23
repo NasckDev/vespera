@@ -26,6 +26,9 @@ public partial class SmokeTest
 {
     public const string ActOneFlag = "--ato1";
 
+    /// <summary>Só a captura de legibilidade dos avisos (iteração rápida da revisão visual).</summary>
+    public const string WarningsQaFlag = "--qa-avisos";
+
     private const float RaviNearPortal = 260f;
 
     /// <summary>Foto do caçador parado no ponto de chegada do mapa, com a posição e a altura dele na tela no log (folha de tamanhos).</summary>
@@ -137,6 +140,58 @@ public partial class SmokeTest
         return (Level)_router.Current!;
     }
 
+    /// <summary>
+    /// Legibilidade dos avisos (QA): Lodo, Espectro e Lodo-Mãe lado a lado, cada um parado sem aviso e com o contorno âmbar,
+    /// longe do caçador, no chão escuro da arena (o pior caso para o Espectro).
+    /// </summary>
+    private async Task CaptureWarnings(Level level)
+    {
+        await level.GoToRoom("esgoto_arena", withDirector: false);
+        await PhysicsFrames(4);
+        var world = level.World;
+        var human = world.Data.HumanHeight;
+        var row = world.PlayArea.GetCenter() + new Vector2(0, 0.6f * human);
+        world.Player.Teleport(world.ClampToFloor(row + new Vector2(0, 2.4f * human)));
+        var spawned = new System.Collections.Generic.List<Vespera.Game.Actors.Enemies.Enemy>();
+        (string Id, float X)[] layout = [("lodo", -5.2f), ("lodo", -4.3f), ("espectro", -2.9f), ("espectro", -1.8f), ("lodo_mae", 0.9f), ("lodo_mae", 4.4f)];
+        foreach (var (id, x) in layout)
+        {
+            Vespera.Game.Actors.Enemies.Enemy e = id switch
+            {
+                "lodo" => new Vespera.Game.Actors.Enemies.Lodo(world),
+                "espectro" => new Vespera.Game.Actors.Enemies.Espectro(world),
+                _ => new Vespera.Game.Actors.Enemies.LodoMae(world),
+            };
+            e.Position = row + new Vector2(x * human, 0);
+            world.AddEnemy(e);
+            spawned.Add(e);
+        }
+
+        await PhysicsFrames(3);
+        for (var i = 0; i < spawned.Count; i++)
+        {
+            spawned[i].ProcessMode = ProcessModeEnum.Disabled;
+            spawned[i].ShowWarningPose(i % 2 == 1);
+        }
+
+        foreach (var e in spawned)
+        {
+            Log.Info($"qa-aviso {e.MonsterId} em {e.GlobalPosition.Round()} visível {e.IsVisibleInTree()} anim '{e.SpriteNode.Animation}' escala {e.SpriteNode.GlobalScale.Y:0.00}");
+        }
+
+        world.Camera.FixedFocus = row + new Vector2(-0.4f * human, -1.0f * human);
+        await PhysicsFrames(10);
+        await Shot("ato1_avisos_legiveis", 0.3);
+        world.Camera.FixedFocus = null;
+        foreach (var e in spawned)
+        {
+            e.QueueFree();
+        }
+
+        await level.GoToRoom("forja_interior");
+        await PhysicsFrames(4);
+    }
+
     private async Task ActOneEpilogue(Level level)
     {
         level = await Travel(level, z => z.Target == "forjas", new Vector2(24, 0), "Level_forjas");
@@ -175,6 +230,11 @@ public partial class SmokeTest
         await Tap(Key.Escape);
         await Frames(4);
         Check(FindOverlay<InventoryScreen>() is null && !GetTree().Paused, "Esc deveria fechar o inventário");
+        if (_shotsDir is not null && DisplayServer.GetName() != "headless")
+        {
+            await CaptureWarnings(level);
+        }
+
         Log.Info($"ato I completo: rank {Progression.Rank}, arma nível {Progression.Engine.WeaponStats.Level}, " +
             $"{Progression.State.Fragmentos} Fragmentos, objetivo '{StoryService.Engine.CurrentObjective?.Title}' (em breve)");
     }

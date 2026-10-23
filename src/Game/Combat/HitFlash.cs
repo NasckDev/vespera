@@ -29,9 +29,9 @@ public sealed class HitFlash
                     near = max(near, texture(TEXTURE, UV + d).a);
                     far = max(far, texture(TEXTURE, UV + d * 1.8).a);
                 }
-                float outer = max(near, 0.6 * far);
+                float outer = max(smoothstep(0.04, 0.35, near), 0.65 * smoothstep(0.04, 0.35, far));
                 float edge = clamp(outer - c.a, 0.0, 1.0) * glow;
-                rgb = mix(rgb, glow_color.rgb, 0.18 * glow * c.a);
+                rgb = mix(rgb, glow_color.rgb, 0.22 * glow * c.a);
                 COLOR = vec4(mix(glow_color.rgb, rgb, c.a), max(c.a, edge * COLOR.a));
             } else {
                 COLOR = vec4(rgb, c.a);
@@ -58,7 +58,10 @@ public sealed class HitFlash
     /// <summary>Aviso âmbar segurado (0 desliga): intensidade do contorno brilhante; 0,3+ já é o contorno cheio.</summary>
     public float Tint { get; set; }
 
-    public Color TintColor { get; set; } = new(1f, 0.65f, 0.25f);
+    public Color TintColor { get; set; } = new(1f, 0.72f, 0.3f);
+
+    /// <summary>Espessura do contorno do aviso em texels da folha (o monstro ajusta pela escala do sprite).</summary>
+    public float GlowWidth { get; init; } = 4f;
 
     public static void ClearCache() => _shader = null;
 
@@ -87,5 +90,6 @@ public sealed class HitFlash
         _material.SetShaderParameter("flash_color", _color);
         _material.SetShaderParameter("glow", Mathf.Clamp(Tint * 3f, 0f, 1f));
         _material.SetShaderParameter("glow_color", TintColor);
+        _material.SetShaderParameter("glow_width", GlowWidth);
     }
 }

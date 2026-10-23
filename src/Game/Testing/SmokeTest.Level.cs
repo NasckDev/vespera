@@ -80,6 +80,11 @@ public partial class SmokeTest
         {
             await RunActOne(level);
         }
+
+        if (Array.IndexOf(_args, WarningsQaFlag) >= 0 && _shotsDir is not null && DisplayServer.GetName() != "headless")
+        {
+            await CaptureWarnings(level);
+        }
     }
 
     /// <summary>Bot de colisão nas outras fases do Ato I (Forjas, forja da Odete e salas da Brecha sem monstros) e volta à Praça.</summary>

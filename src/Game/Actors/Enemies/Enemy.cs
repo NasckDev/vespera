@@ -102,6 +102,22 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
     /// <summary>Toca uma animação da folha (capturas de QA).</summary>
     public void PlayAnimation(string anim) => Play(anim);
 
+    /// <summary>Espessura do contorno âmbar do aviso, em múltiplos da altura humana do mapa.</summary>
+    private const float WarningOutline = 0.07f;
+
+    /// <summary>Pose de aviso parada (contorno âmbar ligado ou não) para a revisão visual de legibilidade.</summary>
+    public void ShowWarningPose(bool warning, float tint = 0.35f)
+    {
+        Play(warning ? "aviso" : "parado");
+        if (warning)
+        {
+            Sprite.Modulate = Colors.White;
+        }
+
+        Flash.Tint = warning ? tint : 0f;
+        Flash.Update(0f);
+    }
+
     protected HitFlash Flash { get; private set; } = null!;
 
     protected EnemyHealthBar Bar { get; private set; } = null!;
@@ -128,7 +144,8 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
         Sheet = MonsterSprites.Load(MonsterId, A, SizeFactor);
         Sprite = new AnimatedSprite2D { Name = "Sprite", SpriteFrames = Sheet.Frames, Offset = Sheet.Offset, Scale = Vector2.One * Sheet.SpriteScale };
         AddChild(Sprite);
-        Flash = new HitFlash(Sprite);
+        // Contorno do aviso com a mesma espessura no mundo (~7% da altura humana) em qualquer monstro, grande ou pequeno.
+        Flash = new HitFlash(Sprite) { GlowWidth = Mathf.Clamp(WarningOutline * World.Data.HumanHeight / Sheet.SpriteScale, 3f, 16f) };
         AddChild(ContactShadow.Make(HitRadius * 2.1f, 0.4f));
         Bar = new EnemyHealthBar(Mathf.Max(34f * A * 2f, HitRadius * 1.6f), Mathf.Max(3f, 6f * A))
         {

@@ -58,7 +58,7 @@ public sealed class CombatBot(Level level, SmokeTest host)
             return;
         }
 
-        if (frames == 70)
+        if (frames == (room == RiftSession.Brecha.Rooms[^1] ? 240 : 30))
         {
             var at = level.WorldToScreen(World.Player.GlobalPosition);
             Log.Info($"qa-pos {ShotPrefix}_{room}_luta {at.X:0} {at.Y:0} {CameraCheck.OnScreenHeight(level):0.0}");

@@ -46,6 +46,7 @@ public partial class Espectro(LevelWorld world) : Enemy("espectro", world)
                 if (StateTime >= Def.Telegraph)
                 {
                     Flash.Tint = 0f;
+                    Sprite.Modulate = new Color(1f, 1f, 1f, 0.88f);
                     Enter(EnemyState.Attack);
                     Play("ataque");
                     _lungeHit = false;
@@ -91,6 +92,7 @@ public partial class Espectro(LevelWorld world) : Enemy("espectro", world)
             Enter(EnemyState.Telegraph);
             Play("aviso");
             Flash.Tint = 0.35f;
+            Sprite.Modulate = Colors.White; // materializa (opaco) durante o aviso: lê melhor no chão escuro
             CombatSfx.Play(this, CombatSound.Telegraph, Vector2.Zero, -6f);
             return Vector2.Zero;
         }
