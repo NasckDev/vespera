@@ -6,7 +6,9 @@ namespace Vespera.Game.UI;
 
 /// <summary>
 /// Controles: lista cada ação com Principal, Alternativa (teclado/mouse) e Controle. Confirmar numa coluna captura
-/// a próxima tecla/botão; conflito troca as duas ações de lugar e avisa; "Restaurar padrão" volta tudo.
+/// a próxima tecla/botão; conflito troca as duas ações de lugar e avisa; "Restaurar padrão" volta tudo. O botão do topo
+/// alterna entre as teclas do Jogador 1 e as do Jogador 2 do co-op local (metade direita do teclado ou o controle dele):
+/// cada um tem a tabela própria, gravada no mesmo arquivo.
 /// </summary>
 public partial class ControlsScreen : UiScreen
 {
@@ -21,6 +23,8 @@ public partial class ControlsScreen : UiScreen
     private Button _firstSlot = null!;
     private Timer _timeout = null!;
     private (string Action, BindingSlot Slot)? _capturing;
+    private int _player;
+    private Button _playerToggle = null!;
 
     protected override Control? DefaultFocus() => _firstSlot;
 
@@ -32,8 +36,13 @@ public partial class ControlsScreen : UiScreen
         var inner = UiKit.MakeColumn(6);
         panel.AddChild(inner);
 
+        var top = UiKit.MakeRow(24);
+        top.Alignment = BoxContainer.AlignmentMode.Center;
+        inner.AddChild(top);
+        _playerToggle = UiKit.MakeButton(string.Empty, TogglePlayer, 520);
+        top.AddChild(_playerToggle);
         _padLabel = UiKit.MakeLabel(string.Empty, UiTheme.HeadingVariation, HorizontalAlignment.Center);
-        inner.AddChild(_padLabel);
+        top.AddChild(_padLabel);
         inner.AddChild(BuildHeader());
 
         var scroll = UiKit.MakeScroll();
@@ -171,7 +180,7 @@ public partial class ControlsScreen : UiScreen
 
     private void AssignBinding(string action, BindingSlot slot, string code)
     {
-        var conflict = InputSetup.Assign(action, slot, code);
+        var conflict = InputSetup.Assign(_player, action, slot, code);
         EndCapture(conflict is null
             ? $"{InputActions.LabelOf(action)}: {GlyphNames.Describe(code, GlyphNames.DetectFamily())}"
             : $"Já usado em {InputActions.LabelOf(conflict)}: as duas ações trocaram.");
@@ -185,7 +194,7 @@ public partial class ControlsScreen : UiScreen
             return;
         }
 
-        InputSetup.Clear(action, slot);
+        InputSetup.Clear(_player, action, slot);
         EndCapture($"{InputActions.LabelOf(action)}: removido.");
     }
 
@@ -199,8 +208,16 @@ public partial class ControlsScreen : UiScreen
 
     private void ResetDefaults()
     {
-        InputSetup.ResetToDefaults();
-        _status.Text = "Controles restaurados ao padrão.";
+        InputSetup.ResetToDefaults(_player);
+        _status.Text = _player == 0 ? "Controles restaurados ao padrão." : "Teclas do Jogador 2 restauradas ao padrão.";
+        RefreshAll();
+    }
+
+    /// <summary>Alterna a tabela editada: Jogador 1 ⇄ Jogador 2 (co-op local).</summary>
+    private void TogglePlayer()
+    {
+        _player = _player == 0 ? 1 : 0;
+        _status.Text = _player == 0 ? string.Empty : "Jogador 2 do co-op: setas + teclado numérico, ou o controle dele.";
         RefreshAll();
     }
 
@@ -208,6 +225,8 @@ public partial class ControlsScreen : UiScreen
     {
         var family = GlyphNames.DetectFamily();
         _padLabel.Text = $"Controle: {GlyphNames.ConnectedPadLabel()}";
+        _playerToggle.Text = _player == 0 ? "Teclas do Jogador 1  ▸" : "Teclas do Jogador 2  ▸";
+        var table = InputSetup.TableFor(_player);
         foreach (var ((action, slot), button) in _slotButtons)
         {
             if (slot == BindingSlot.Gamepad && button.Disabled)
@@ -216,7 +235,7 @@ public partial class ControlsScreen : UiScreen
                 continue;
             }
 
-            var code = InputSetup.Table.Get(action, slot);
+            var code = table.Get(action, slot);
             button.Text = string.IsNullOrEmpty(code) ? "-" : GlyphNames.Describe(code, family);
         }
     }
