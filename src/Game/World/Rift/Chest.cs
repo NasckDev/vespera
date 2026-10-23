@@ -7,7 +7,7 @@ namespace Vespera.Game.World.Rift;
 
 /// <summary>
 /// Baú da sala do tesouro: pé com pegada sólida e sombra, aviso "Abrir o baú"; aberto, troca para a arte aberta,
-/// brilha e espalha os Fragmentos sorteados pelo Core.
+/// brilha e espalha o saque de baú sorteado pela progressão (<see cref="RiftLoot.ChestOpened"/>).
 /// </summary>
 public partial class Chest : Node2D
 {
@@ -72,7 +72,7 @@ public partial class Chest : Node2D
         AddChild(new PointLight2D { Texture = LightTexture.Get(), Color = new Color("f2a541"), Energy = 1.2f, TextureScale = 0.9f * a, Position = new Vector2(0, -30f * a) });
         CombatSfx.Play(this, CombatSound.Chest, Vector2.Zero);
         _world.Feel.Spark(GlobalPosition - new Vector2(0, 30f * a), new Color("f2a541"), 24, 360f, Vector2.Up, 70f);
-        _world.DropFragments(GlobalPosition + new Vector2(0, 10f * a), RiftSession.Rules.RollChestFragments(RiftSession.Random), spread: 90f);
+        RiftLoot.ChestOpened(_world, GlobalPosition + new Vector2(0, 10f * a));
         Opened?.Invoke(this);
     }
 }

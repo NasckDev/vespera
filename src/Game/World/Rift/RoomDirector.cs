@@ -9,7 +9,7 @@ namespace Vespera.Game.World.Rift;
 
 /// <summary>
 /// Diretor de uma sala de Brecha (camada 3): sela a saída, solta as ondas (cada monstro nasce de uma fenda no chão),
-/// abre a saída quando a sala fica limpa, cuida do baú, do Guardião, da Lanterna perdida e da fenda de saída.
+/// abre a saída quando a sala fica limpa, cuida do baú, do Guardião e da fenda de saída.
 /// Avisa a fase por <see cref="ExitRequested"/> quando o caçador sai.
 /// </summary>
 public partial class RoomDirector : Node
@@ -79,11 +79,6 @@ public partial class RoomDirector : Node
             Boss = new LodoMae(_world) { Position = new Vector2(boss.At[0], boss.At[1]) };
             Boss.Died += _ => OnBossDefeated();
             _world.AddEnemy(Boss);
-        }
-
-        if (RiftSession.Rules.IsLanternHere(RiftSession.Save, RiftSession.CurrentRoom) && RiftSession.Save.LostLantern is { } lost)
-        {
-            _world.Entities.AddChild(new LanternPickup(_world, _world.ClampToFloor(new Vector2((float)lost.X, (float)lost.Y))));
         }
 
         if (_data.Waves.Count == 0 && Boss is null)
@@ -222,10 +217,9 @@ public partial class RoomDirector : Node
 
     private void OnBossDefeated()
     {
-        RiftSession.Rules.AddGuardianLoot(RiftSession.Bag);
-        _world.Feel.Toast("A Lodo-Mãe se desfaz. +2 Gel de Lodo. A fenda de volta se abriu.");
+        RiftLoot.GuardianDefeated(_world, Boss?.GlobalPosition ?? _world.Player.GlobalPosition);
         Cleared = true;
-        var timer = GetTree().CreateTimer(1.4);
+        var timer = GetTree().CreateTimer(1.4, processAlways: false);
         timer.Timeout += OpenExitPortal;
     }
 

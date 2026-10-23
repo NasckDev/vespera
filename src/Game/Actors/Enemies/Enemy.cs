@@ -230,7 +230,7 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
         World.Feel.Spark(HitCenter, new Color("e64a8e"), 14, 320f);
         if (DropsLoot)
         {
-            World.DropFragments(GlobalPosition, RiftSession.Rules.RollFragments(MonsterId, RiftSession.Random));
+            RiftLoot.MonsterKilled(World, MonsterId, GlobalPosition, Stats.Def.Boss);
         }
 
         OnDied();

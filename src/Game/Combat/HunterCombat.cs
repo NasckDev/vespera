@@ -99,10 +99,10 @@ public sealed partial class HunterCombat : Node, IHittable
         _player.Sprite.AnimationFinished += () => Moves.OnAnimationFinished(_player.Sprite.Animation);
     }
 
-    /// <summary>Recalcula HP máximo, ataque, defesa e crítico pelo save (classe, equipamento, Lanterna perdida).</summary>
+    /// <summary>Recalcula HP máximo, ataque, defesa e crítico pela progressão (rank, arma forjada, equipamento).</summary>
     public void RefreshStats(bool fullHeal)
     {
-        Stats = new PlayerStatsCalculator(RiftSession.Db).Compute(RiftSession.Save);
+        Stats = HunterStats.Compute(RiftSession.Db, RiftSession.Save, HunterSprites.WeaponId(_player.Hunter));
         MaxHp = Stats.Hp;
         Hp = fullHeal ? MaxHp : Math.Min(Hp, MaxHp);
     }

@@ -4,13 +4,14 @@ using Vespera.Game.Combat;
 namespace Vespera.Game.World.Rift;
 
 /// <summary>
-/// Fragmento caído (moeda do Avesso): salta do monstro num arco, quica, brilha pulsando e, quando o caçador chega
-/// perto, é puxado como ímã. Cada um vale 1 na bolsa da caçada. Desenhado em código: cristal facetado magenta-âmbar.
+/// Fragmento caído (moeda do Avesso): salta do monstro num arco, quica, brilha pulsando e é puxado como ímã até o
+/// caçador. É só a imagem do saque: o valor já entrou na caçada pela <see cref="Hunter.Progression"/> quando o monstro
+/// caiu (se o caçador cair antes de pegar, os Fragmentos ficam na Lanterna do mesmo jeito). Cristal magenta-âmbar.
 /// </summary>
 public partial class FragmentPickup : Node2D
 {
     private const float PopSeconds = 0.45f;
-    private const float MagnetRadius = 150f;
+    private const float MagnetDelay = 0.35f;
     private const float CollectRadius = 14f;
     private const float MagnetAccel = 2600f;
 
@@ -46,7 +47,7 @@ public partial class FragmentPickup : Node2D
 
         var feet = player.GlobalPosition;
         var alive = !player.Combat.IsDead;
-        if (alive && (_magnet || feet.DistanceTo(GlobalPosition) < MagnetRadius * _a))
+        if (alive && (_magnet || _t > PopSeconds + MagnetDelay))
         {
             _magnet = true;
             var to = (feet - (Vector2.Up * 6f * _a)) - GlobalPosition;
@@ -82,7 +83,6 @@ public partial class FragmentPickup : Node2D
 
     private void Collect()
     {
-        RiftSession.Rules.AddFragments(RiftSession.Bag, 1);
         CombatSfx.Play(_world, CombatSound.Pickup, GlobalPosition, -6f);
         _world.Feel.Spark(GlobalPosition - new Vector2(0, 10f * _a), new Color("ff8cc4"), 5, 120f);
         QueueFree();

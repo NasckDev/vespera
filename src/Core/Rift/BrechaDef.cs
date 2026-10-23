@@ -21,15 +21,13 @@ public sealed class BrechaDef
 
     public string Bairro { get; set; } = string.Empty;
 
+    /// <summary>Id do bairro na progressão (a Lanterna perdida volta na próxima Brecha deste bairro).</summary>
+    public string NeighborhoodId { get; set; } = string.Empty;
+
+    /// <summary>Guardião desta Brecha no catálogo de progressão (<c>data/progressao/guardians.json</c>).</summary>
+    public string GuardianId { get; set; } = string.Empty;
+
     public List<string> Rooms { get; set; } = [];
-
-    public IntRange ChestFragments { get; set; }
-
-    public string GuardianMaterial { get; set; } = string.Empty;
-
-    public int GuardianMaterialCount { get; set; } = 1;
-
-    public string CoreMaterial { get; set; } = string.Empty;
 
     public Dictionary<string, RiftMonsterDef> Monsters { get; set; } = [];
 
@@ -67,9 +65,14 @@ public sealed class BrechaDef
             problems.Add("sem salas");
         }
 
+        if (NeighborhoodId.Length == 0 || GuardianId.Length == 0)
+        {
+            problems.Add("sem neighborhoodId/guardianId (Lanterna e Guardião da progressão)");
+        }
+
         foreach (var (id, monster) in Monsters)
         {
-            if (monster.Hp <= 0 || monster.Damage <= 0 || monster.Period <= 0)
+            if (monster.Hp <= 0 || monster.Damage <= 0 || monster.Period <= 0 || monster.Xp < 0)
             {
                 problems.Add($"monstro '{id}' com hp/dano/período inválido");
             }
@@ -103,7 +106,8 @@ public sealed class RiftMonsterDef
 
     public double Speed { get; set; }
 
-    public IntRange Fragments { get; set; }
+    /// <summary>XP ao matar (só monstros que dão saque; as crias da Lodo-Mãe não contam).</summary>
+    public int Xp { get; set; }
 
     public double HurtRadius { get; set; }
 

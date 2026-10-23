@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Godot;
+using Vespera.Core.Advancement;
+using Vespera.Game.Hunter;
 using Vespera.Game.Actors;
 using Vespera.Game.Actors.Enemies;
 using Vespera.Game.Boot;
@@ -37,6 +39,7 @@ public sealed class CombatQaCapture(Level level, SmokeTest host)
 
     private async Task PortalAndPicker()
     {
+        Vespera.Game.Story.StoryService.SetFlag(Vespera.Core.Story.StoryFlags.StarterBlade);
         var portal = World.Zones.First(z => z.Kind == "brecha");
         Bind();
         World.Player.Teleport(portal.GlobalPosition + new Vector2(-30f * S, 70f * S));
@@ -240,7 +243,7 @@ public sealed class CombatQaCapture(Level level, SmokeTest host)
         RiftSession.Cheat = false;
         level.EnterRift(HunterClass.Lamina);
         await WaitRoom();
-        RiftSession.Rules.AddFragments(RiftSession.Bag, 6);
+        Progression.GrantLoot(RiftSession.BreachRank, LootSource.Chest);
         Place(World.ClampToFloor(World.SpawnPoint + new Vector2(220f * S, 0)));
         World.Player.Combat.Digest(99999);
         await Frames(40);
@@ -248,7 +251,6 @@ public sealed class CombatQaCapture(Level level, SmokeTest host)
         await Until(() => !level.Switching && World.Data.Id == Level.HubLevelId, 900);
         await Frames(50);
         await host.CaptureNow("c34_26_praca_lanterna_perdida");
-        RiftSession.Save.LostLantern = null;
         World.Player.Combat.RefreshStats(fullHeal: true);
     }
 

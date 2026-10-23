@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Godot;
+using Vespera.Core.Story;
+using Vespera.Game.Story;
+using Vespera.Core.Advancement;
+using Vespera.Game.Hunter;
 using Vespera.Game.Actors;
 using Vespera.Game.Actors.Enemies;
 using Vespera.Game.Boot;
 using Vespera.Game.World;
+using Vespera.Game.UI;
 using Vespera.Game.World.Rift;
 
 namespace Vespera.Game.Testing;
@@ -26,6 +31,9 @@ public sealed class CombatBot(Level level, SmokeTest host)
     private readonly List<string> _failures = [];
     private readonly ScriptedInput _input = new();
 
+    /// <summary>Ranks celebrados durante a caçada (a tela de rank abre sozinha depois do Guardião).</summary>
+    public List<Vespera.Core.Ranks.Rank> RankUps { get; } = [];
+
     private LevelWorld World => level.World;
 
     private float S => World.Data.ActorScale;
@@ -33,7 +41,8 @@ public sealed class CombatBot(Level level, SmokeTest host)
     public async Task<List<string>> Run(HunterClass hunter)
     {
         var save = RiftSession.Save;
-        var shardsBefore = save.MaterialCount(RiftSession.Rules.FragmentMaterial);
+        var shardsBefore = RiftSession.WalletFragments;
+        var guardiansBefore = Progression.State.GuardiansDefeated.Count;
         var closedBefore = save.BrechasClosed;
         RiftSession.Cheat = true;
         await OpenPortalAndEnter(hunter);
@@ -48,11 +57,14 @@ public sealed class CombatBot(Level level, SmokeTest host)
         }
 
         await WaitUntil(() => !level.Switching && World.Data.Id == Level.HubLevelId, 600, "volta à Praça");
-        var gained = save.MaterialCount(RiftSession.Rules.FragmentMaterial) - shardsBefore;
-        Check(!RiftSession.InRift, "depois do portal de saída a caçada deveria ter acabado");
+        var gained = RiftSession.WalletFragments - shardsBefore;
+        Check(!RiftSession.InRift && !Progression.Engine.InRun, "depois do portal de saída a caçada deveria ter acabado");
         Check(save.BrechasClosed == closedBefore + 1, $"Brecha deveria contar como fechada ({save.BrechasClosed})");
-        Check(gained > 0, $"o save deveria receber Fragmentos (ganhou {gained})");
-        Check(save.MaterialCount(RiftSession.Brecha.GuardianMaterial) >= RiftSession.Brecha.GuardianMaterialCount, "o save deveria ter o Gel de Lodo do Guardião");
+        Check(gained > 0, $"a carteira deveria receber Fragmentos (ganhou {gained})");
+        Check(Progression.State.GuardiansDefeated.Contains(RiftSession.Brecha.GuardianId), "a progressão deveria registrar a Lodo-Mãe");
+        Check(Progression.State.GuardiansDefeated.Count >= guardiansBefore, "conquistas não podem sumir");
+        Check(RankUps.Contains(Vespera.Core.Ranks.Rank.D) || Progression.Rank > Vespera.Core.Ranks.Rank.E, $"a primeira caçada completa deveria subir E -> D (XP {Progression.State.Xp}, rank {Progression.Rank})");
+        Log.Info($"bot de combate: rank {Progression.Rank} com {Progression.State.Xp} XP; celebrações: [{string.Join(",", RankUps)}]");
         Log.Info($"bot de combate: {hunter} limpou {RiftSession.Brecha.Rooms.Count} salas, {killed} monstros, +{gained} Fragmentos");
         if (_failures.Count == 0)
         {
@@ -70,6 +82,17 @@ public sealed class CombatBot(Level level, SmokeTest host)
         World.Player.Teleport(portal.GlobalPosition + new Vector2(0, 40f * S));
         await host.PhysicsFrames(4);
         Check(World.Player.Focus?.Kind == "brecha", $"perto do portal o foco deveria ser a Brecha, foi '{World.Player.Focus?.Kind}'");
+        if (!StoryService.Engine.HasFlag(StoryFlags.StarterBlade))
+        {
+            // Sem a Lâmina da Odete a fenda não deixa entrar (o bot de combate testa a Brecha isolada: arma o caçador).
+            _input.Tap(InputActions.Interact);
+            await host.PhysicsFrames(4);
+            Check(!level.PickerOpen && level.Hud.PanelOpen, "sem a Lâmina da Odete o portal deveria recusar com um aviso");
+            _input.Tap(InputActions.Interact);
+            await host.PhysicsFrames(4);
+            StoryService.SetFlag(StoryFlags.StarterBlade);
+        }
+
         _input.Tap(InputActions.Interact);
         await host.PhysicsFrames(4);
         Check(level.PickerOpen, "interagir com a Brecha deveria abrir a escolha de arma");
@@ -140,6 +163,7 @@ public sealed class CombatBot(Level level, SmokeTest host)
             await WaitUntil(() => director.ExitPortal is not null, 400, "fenda de saída");
         }
 
+        await WaitUntil(() => RankUpScreen.Active is null && !host.GetTree().Paused, 400, "celebração de rank fechada");
         if (director.ExitPortal is { } portal)
         {
             World.Player.Teleport(World.ClampToFloor(portal.GlobalPosition + (Vector2.Down * 40f * S)));
@@ -157,43 +181,39 @@ public sealed class CombatBot(Level level, SmokeTest host)
         }
     }
 
-    /// <summary>Lanterna: cai com Fragmentos na bolsa, volta à Praça sem eles, entra de novo e recupera.</summary>
+    /// <summary>
+    /// Lanterna (regra da progressão): cai com Fragmentos da caçada, volta à Praça sem eles (ficam na Lanterna do bairro),
+    /// entra de novo e eles voltam à caçada logo na entrada; sair vivo leva tudo para a carteira.
+    /// </summary>
     private async Task DieAndRecoverLantern()
     {
         RiftSession.Cheat = false;
-        var save = RiftSession.Save;
         level.EnterRift(World.Player.Hunter);
         await WaitUntil(() => !level.Switching && World.Director is not null, 600, "sala para a queda");
         Bind();
-        RiftSession.Rules.AddFragments(RiftSession.Bag, 5);
-        var shards = save.MaterialCount(RiftSession.Rules.FragmentMaterial);
+        Progression.GrantLoot(RiftSession.BreachRank, LootSource.Chest);
+        var held = RiftSession.Fragments;
+        var wallet = RiftSession.WalletFragments;
+        Check(held > 0, "o saque dentro da Brecha deveria ficar na caçada");
         World.Player.Teleport(World.ClampToFloor(World.SpawnPoint + (new Vector2(260f, 0f) * S)));
         await host.PhysicsFrames(2);
         World.Player.Combat.Digest(99999);
         await WaitUntil(() => !level.Switching && World.Data.Id == Level.HubLevelId && !RiftSession.InRift, 900, "volta à Praça depois da queda");
-        Check(save.LostLantern is not null, "a queda com Fragmentos deveria deixar a Lanterna na Brecha");
-        Check(save.MaterialCount(RiftSession.Rules.FragmentMaterial) == shards, "os Fragmentos da caçada não deveriam entrar no save na queda");
+        Check(RiftSession.LanternFragments == held, $"a queda deveria deixar {held} Fragmentos na Lanterna (tem {RiftSession.LanternFragments})");
+        Check(RiftSession.WalletFragments == wallet, "os Fragmentos da caçada não deveriam entrar na carteira na queda");
         Check(!World.Player.Combat.IsDead && World.Player.Combat.Hp > 0, "o caçador deveria acordar vivo na Praça");
 
         level.EnterRift(World.Player.Hunter);
-        await WaitUntil(() => !level.Switching && World.Director is not null, 600, "sala da Lanterna");
+        await WaitUntil(() => !level.Switching && World.Director is not null, 600, "reentrada na Brecha");
         Bind();
-        var lantern = World.Entities.GetChildren().OfType<LanternPickup>().FirstOrDefault();
-        Check(lantern is not null, $"a Lanterna deveria estar na sala onde o caçador caiu (sala {World.Data.Id}, " +
-            $"lanterna em {save.LostLantern?.Room ?? "nenhuma"} {save.LostLantern?.X:0},{save.LostLantern?.Y:0}, caçador em {World.Player.GlobalPosition.Round()})");
-        if (lantern is not null)
-        {
-            World.Player.Teleport(lantern.GlobalPosition);
-            await host.PhysicsFrames(6);
-            Check(save.LostLantern is null && RiftSession.Fragments >= 5, "encostar na Lanterna deveria devolver os Fragmentos à bolsa");
-        }
+        Check(RiftSession.LanternFragments == 0 && RiftSession.Fragments >= held, "entrar de novo deveria devolver os Fragmentos da Lanterna à caçada");
+        Check(level.CombatHud.LastToast.Contains("Lanterna recuperada", System.StringComparison.Ordinal), $"a volta da Lanterna deveria ser avisada (último aviso: '{level.CombatHud.LastToast}')");
 
         RiftSession.Cheat = true;
         World.Player.Combat.Digest(99999);
         await WaitUntil(() => !level.Switching && World.Data.Id == Level.HubLevelId && !RiftSession.InRift, 900, "volta final");
-        save.LostLantern = null;
         World.Player.Combat.RefreshStats(fullHeal: true);
-        Log.Info("bot de combate: Lanterna deixada na queda e recuperada na volta");
+        Log.Info($"bot de combate: {held} Fragmentos ficaram na Lanterna na queda e voltaram na reentrada");
     }
 
     private void Bind()
@@ -206,10 +226,19 @@ public sealed class CombatBot(Level level, SmokeTest host)
     {
         for (var i = 0; i < frames && !condition(); i++)
         {
+            if (RankUpScreen.Active is { Revealed: true } celebration)
+            {
+                // O Guardião sobe o rank (E -> D): a celebração pausa o jogo; o bot a registra e fecha.
+                RankUps.Add(celebration.Change.To);
+                celebration.Close();
+            }
+
             await host.PhysicsFrames(1);
         }
 
-        Check(condition(), $"bot de combate: tempo esgotado esperando {what}");
+        Check(condition(), $"bot de combate: tempo esgotado esperando {what} (sala {World.Data.Id}, trocando {level.Switching}, " +
+            $"na Brecha {RiftSession.InRift}, pausado {host.GetTree().Paused}, celebração {RankUpScreen.Active is not null}, " +
+            $"tela {SceneRouter.Instance.Current?.Name}, foco '{World.Player.Focus?.Kind}', congelado {World.Player.Frozen}, estado {World.Player.Combat.State}, golpe ocupado {World.Player.Combat.Moves.Busy}, anim {World.Player.CurrentAnimation})");
     }
 
     private void Check(bool ok, string failure)

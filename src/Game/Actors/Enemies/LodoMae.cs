@@ -275,7 +275,7 @@ public partial class LodoMae(LevelWorld world) : Enemy("lodo_mae", world)
     {
         World.Combat.Unregister(core);
         var left = _cores.Count(c => !c.Broken);
-        RiftRules.AddMaterial(RiftSession.Bag, RiftSession.Brecha.CoreMaterial, 1);
+        RiftLoot.PartBroken(World, core.GlobalPosition);
         World.Feel.Toast(left == 0 ? "Último núcleo partido! Ela não vai mais se dividir." : $"Núcleo partido! Restam {left}.");
     }
 }

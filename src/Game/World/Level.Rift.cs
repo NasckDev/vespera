@@ -3,7 +3,9 @@ using Godot;
 using Vespera.Core.Rift;
 using Vespera.Game.Actors;
 using Vespera.Game.Boot;
+using Vespera.Core.Story;
 using Vespera.Game.Combat;
+using Vespera.Game.Story;
 using Vespera.Game.UI;
 using Vespera.Game.World.Rift;
 
@@ -11,7 +13,8 @@ namespace Vespera.Game.World;
 
 /// <summary>
 /// Fluxo da Brecha dentro da cena de jogo: escolha da arma no portal da Praça, troca de sala com fade (a vida passa
-/// de uma sala para a outra), vitória (bolsa entra no save) e queda (a bolsa fica na Lanterna, volta à Praça).
+/// de uma sala para a outra), vitória (os Fragmentos da caçada vão para a carteira) e queda (ficam na Lanterna do
+/// bairro e voltam na próxima entrada). A regra da Lanterna é a da <see cref="Hunter.Progression"/>.
 /// </summary>
 public partial class Level
 {
@@ -35,9 +38,18 @@ public partial class Level
     {
         ClosePicker();
         RiftSession.Hunter = hunter;
-        RiftSession.BeginRun();
+        var recovered = RiftSession.BeginRun();
         _carriedHp = null;
-        _ = GoToRoom(RiftSession.CurrentRoom);
+        _ = EnterFirstRoom(recovered);
+    }
+
+    private async Task EnterFirstRoom(int recovered)
+    {
+        await GoToRoom(RiftSession.CurrentRoom);
+        if (recovered > 0)
+        {
+            CombatHud.Toast($"Lanterna recuperada! +{recovered} Fragmentos de volta à caçada.");
+        }
     }
 
     /// <summary>Troca o mundo do SubViewport pela sala <paramref name="id"/> com fade para preto.</summary>
@@ -95,12 +107,11 @@ public partial class Level
             return;
         }
 
-        var fragments = RiftSession.Fragments;
-        RiftRules.CloseBrecha(RiftSession.Save, RiftSession.Bag);
-        RiftSession.EndRun();
+        RiftRules.MarkClosed(RiftSession.Save);
+        var end = RiftSession.EndRun(survived: true);
         _carriedHp = null;
         GameSession.Autosave();
-        _ = ReturnToHub($"Brecha fechada! +{fragments} Fragmentos e Gel de Lodo levados para casa.", "Esgotos do Mercado — fechada");
+        _ = ReturnToHub($"Brecha fechada! +{end?.FragmentosBanked ?? 0} Fragmentos levados para casa.", "Esgotos do Mercado — fechada");
     }
 
     private void OnPlayerDied(HunterCombat combat)
@@ -111,10 +122,7 @@ public partial class Level
             return;
         }
 
-        var lost = RiftSession.Fragments;
-        var at = combat.Player.GlobalPosition;
-        RiftSession.Rules.DropLantern(RiftSession.Save, RiftSession.Bag, RiftSession.CurrentRoom, at.X, at.Y);
-        RiftSession.EndRun();
+        var lost = RiftSession.EndRun(survived: false)?.FragmentosLeft ?? 0;
         _carriedHp = null;
         GameSession.Autosave();
         var message = lost > 0
@@ -129,10 +137,12 @@ public partial class Level
         World.Player.Combat.Revive();
         CombatHud.ShowTitle("Praça da Lanterna", subtitle);
         CombatHud.Toast(toast);
-        if (RiftSession.Save.LostLantern is not null)
+        if (RiftSession.LanternFragments > 0)
         {
-            CombatHud.Toast("Sem a Lanterna, sua vida máxima cai até você buscá-la na Brecha.");
+            CombatHud.Toast($"{RiftSession.LanternFragments} Fragmentos esperam na Lanterna. Entre de novo na Brecha para recuperá-los.");
         }
+
+        ScheduleAutoplay();
     }
 
     private void OpenPicker()
@@ -142,14 +152,24 @@ public partial class Level
             return;
         }
 
+        if (!StoryService.Engine.HasFlag(StoryFlags.StarterBlade))
+        {
+            ShowNotice("A fenda pulsa, mas você está de mãos vazias. Fale com a Odete, na forja do Bairro das Forjas.");
+            return;
+        }
+
         _hubSpawn = World.Player.GlobalPosition + new Vector2(0, PortalStepBack * World.Data.ActorScale);
         Player.Frozen = true;
-        _picker = new ClassPicker(Player.Hunter) { Name = "ClassPicker" };
+        _picker = new ClassPicker(EquippedHunter) { Name = "ClassPicker" };
         _picker.Chosen += EnterRift;
         _picker.Cancelled += ClosePicker;
         AddChild(_picker);
         MoveChild(_picker, _fade.GetIndex());
     }
+
+    /// <summary>Classe da arma equipada na progressão (a que a Odete entregou); o seletor do portal começa nela.</summary>
+    private static HunterClass EquippedHunter =>
+        Hunter.Progression.IsActive ? RiftSession.HunterFor(Hunter.Progression.Engine.ClassId) : RiftSession.Hunter;
 
     private void ClosePicker()
     {

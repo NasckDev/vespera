@@ -27,7 +27,8 @@ public class RiftRulesTest
         AssertThat(b.Monsters["lodo_mae"].Telegraph).IsEqual(0.6);
         AssertThat(b.Moves["sword"].Light.Count).IsEqual(3);
         AssertThat(b.Moves["hammer"].PartMult).IsEqual(2.0);
-        AssertThat(TestDb.Instance.Materials.ContainsKey(b.GuardianMaterial)).IsTrue();
+        AssertThat(b.NeighborhoodId).IsEqual("bairro_das_forjas");
+        AssertThat(b.GuardianId).IsEqual("lodo_mae");
     }
 
     [TestCase]
@@ -66,51 +67,44 @@ public class RiftRulesTest
     }
 
     [TestCase]
-    public void FragmentsGoToTheRunBagAsShards()
+    public void KillsGiveXpFromTheBrechaData()
     {
-        var bag = new RunBag();
-        Rules.AddFragments(bag, Rules.RollFragments("lodo", new ConstantRandom(0.99)));
-        Rules.AddFragments(bag, Rules.RollChestFragments(new ConstantRandom(0)));
-        AssertThat(Rules.Fragments(bag)).IsEqual(2 + 8);
-        AssertThat(bag.Materials.ContainsKey("estilhaco")).IsTrue();
-        Rules.AddGuardianLoot(bag);
-        AssertThat(bag.Materials["gel_lodo"]).IsEqual(2);
+        AssertThat(Rules.Xp("lodo")).IsEqual(5);
+        AssertThat(Rules.Xp("espectro")).IsEqual(8);
+        AssertThat(Rules.Xp("lodo_mae")).IsEqual(50);
+        AssertThat(Rules.Xp("dragao")).IsEqual(0);
     }
 
     [TestCase]
-    public void DeathLeavesTheBagInTheLanternAndRecoveryBringsItBack()
+    public void AFullFirstRunReachesTheXpOfRankD()
     {
-        var save = NewSave();
-        var bag = new RunBag();
-        Rules.AddFragments(bag, 7);
-        Rules.DropLantern(save, bag, "esgoto_cruzamento", 400, 500);
-        AssertThat(save.LostLantern).IsNotNull();
-        AssertThat(Rules.IsLanternHere(save, "esgoto_cruzamento")).IsTrue();
-        AssertThat(Rules.IsLanternHere(save, "esgoto_corredor")).IsFalse();
+        // As ondas reais das 4 salas (data/levels) + a Lodo-Mãe: a primeira caçada completa precisa bastar para E -> D
+        // (o Guardião é a outra condição, e ele é o fim da caçada).
+        var monsters = new List<string>();
+        foreach (var room in Brecha.Value.Rooms)
+        {
+            using var doc = System.Text.Json.JsonDocument.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Levels", $"{room}.json")));
+            if (!doc.RootElement.TryGetProperty("rift", out var rift) || !rift.TryGetProperty("waves", out var waves))
+            {
+                continue;
+            }
 
-        var next = new RunBag();
-        RiftRules.RecoverLantern(save, next);
-        AssertThat(Rules.Fragments(next)).IsEqual(7);
-        AssertThat(save.LostLantern).IsNull();
+            foreach (var wave in waves.EnumerateArray())
+            {
+                monsters.AddRange(wave.EnumerateArray().Select(s => s.GetProperty("type").GetString()!));
+            }
+        }
+
+        var catalog = Vespera.Core.Advancement.AdvancementCatalog.Load(name => File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Progressao", name)));
+        var xpForD = catalog.RankData.Ranks.First(r => r.Id == Vespera.Core.Ranks.Rank.D).Xp;
+        AssertThat(Rules.FullRunXp(monsters)).IsGreaterEqual(xpForD);
     }
 
     [TestCase]
-    public void DyingWithEmptyBagLeavesNoLantern()
+    public void ClosingTheBrechaCountsIt()
     {
         var save = NewSave();
-        Rules.DropLantern(save, new RunBag(), "esgoto_corredor", 0, 0);
-        AssertThat(save.LostLantern).IsNull();
-    }
-
-    [TestCase]
-    public void ClosingTheBrechaMergesTheBag()
-    {
-        var save = NewSave();
-        var before = save.MaterialCount("estilhaco");
-        var bag = new RunBag();
-        Rules.AddFragments(bag, 12);
-        RiftRules.CloseBrecha(save, bag);
-        AssertThat(save.MaterialCount("estilhaco")).IsEqual(before + 12);
+        RiftRules.MarkClosed(save);
         AssertThat(save.BrechasClosed).IsEqual(1);
         AssertThat(save.FirstBrechaDone).IsTrue();
     }

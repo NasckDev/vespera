@@ -1,16 +1,19 @@
 using Vespera.Core.Common;
 using Vespera.Core.Data;
+using Vespera.Core.Ranks;
 using Vespera.Core.Rift;
 using Vespera.Core.Save;
 using Vespera.Game.Actors;
 using Vespera.Game.Boot;
+using Vespera.Game.Hunter;
 
 namespace Vespera.Game.World.Rift;
 
 /// <summary>
-/// Estado da caçada em curso (fora das cenas, para sobreviver à troca de sala): a Brecha e suas regras do Core,
-/// a bolsa da caçada, a sala atual, a classe escolhida e o sorteio. Sem save ativo (teste direto da fase) usa um
-/// save temporário de jogo novo.
+/// Estado da caçada em curso (fora das cenas, para sobreviver à troca de sala): a Brecha e suas regras de combate, a sala
+/// atual, a classe escolhida e o sorteio. Fragmentos, saque, XP e a Lanterna são da <see cref="Progression"/> (fonte
+/// única): entrar chama <see cref="Progression.BeginRun"/> e sair, <see cref="Progression.EndRun"/>. Sem save ativo
+/// (teste direto da fase) usa um save temporário de jogo novo e a progressão fica de fora.
 /// </summary>
 public static class RiftSession
 {
@@ -29,7 +32,8 @@ public static class RiftSession
 
     public static SaveData Save => GameSession.Data ?? (_fallback ??= SaveData.NewGame(Db, null, SaveService.DefaultClassId));
 
-    public static RunBag Bag { get; private set; } = new();
+    /// <summary>Rank da Brecha (para o saque da progressão).</summary>
+    public static Rank BreachRank => System.Enum.TryParse<Rank>(Brecha.Rank, out var rank) ? rank : Rank.E;
 
     public static IRandom Random { get; } = new SeededRandom(20261022);
 
@@ -48,12 +52,7 @@ public static class RiftSession
     /// <summary>Classe do caçador, guardada no save como arma atual.</summary>
     public static HunterClass Hunter
     {
-        get => Save.CurrentWeapon switch
-        {
-            "bow" => HunterClass.Arco,
-            "hammer" => HunterClass.Martelo,
-            _ => HunterClass.Lamina,
-        };
+        get => HunterFor(Save.CurrentWeapon);
         set
         {
             var weapon = HunterSprites.WeaponId(value);
@@ -65,13 +64,28 @@ public static class RiftSession
         }
     }
 
-    public static int Fragments => Rules.Fragments(Bag);
+    /// <summary>Fragmentos desta caçada (ficam na Brecha se o caçador cair).</summary>
+    public static int Fragments => Progression.IsActive ? Progression.Engine.RunFragmentos : 0;
 
-    public static void BeginRun()
+    /// <summary>Fragmentos na carteira (já trazidos para a cidade).</summary>
+    public static int WalletFragments => Progression.IsActive ? Progression.State.Fragmentos : 0;
+
+    /// <summary>Fragmentos esperando na Lanterna perdida no bairro desta Brecha.</summary>
+    public static int LanternFragments => Progression.IsActive ? Progression.Engine.LanternFragmentos(Brecha.NeighborhoodId) : 0;
+
+    public static HunterClass HunterFor(string weaponId) => weaponId switch
     {
-        Bag = new RunBag();
+        "bow" => HunterClass.Arco,
+        "hammer" => HunterClass.Martelo,
+        _ => HunterClass.Lamina,
+    };
+
+    /// <summary>Entra na Brecha: começa a caçada na progressão e devolve os Fragmentos recuperados da Lanterna do bairro.</summary>
+    public static int BeginRun()
+    {
         RoomIndex = 0;
         InRift = true;
+        return Progression.IsActive ? Progression.BeginRun(Brecha.NeighborhoodId) : 0;
     }
 
     public static void AdvanceRoom()
@@ -82,18 +96,19 @@ public static class RiftSession
         }
     }
 
-    /// <summary>Volta à Praça (vitória ou morte): a bolsa já foi tratada por quem chamou.</summary>
-    public static void EndRun()
+    /// <summary>Volta à Praça: vivo leva os Fragmentos para a carteira; caído, eles ficam na Lanterna do bairro.</summary>
+    public static Core.Advancement.RunEnd? EndRun(bool survived)
     {
         InRift = false;
         RoomIndex = 0;
-        Bag = new RunBag();
+        return Progression.IsActive ? Progression.EndRun(survived) : null;
     }
 
-    /// <summary>Esquece o save temporário (troca de sessão).</summary>
+    /// <summary>Esquece o save temporário e a caçada (troca de sessão ou de cena).</summary>
     public static void Reset()
     {
         _fallback = null;
-        EndRun();
+        InRift = false;
+        RoomIndex = 0;
     }
 }

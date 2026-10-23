@@ -2,30 +2,45 @@ using Godot;
 
 namespace Vespera.Game.UI;
 
-/// <summary>Selo do rank E (CLAUDE.md §6: octógono #8A8FA8) com a letra em Pixelify e brilho âmbar fino.</summary>
+/// <summary>Selo do rank atual (octógono na cor do rank do catálogo de progressão) com a letra em Pixelify.</summary>
 public partial class RankSealIcon : Control
 {
-    private static readonly Color Seal = new("8a8fa8");
+    private Vespera.Core.Ranks.Rank _rank = Vespera.Core.Ranks.Rank.E;
+
+    public Vespera.Core.Ranks.Rank Rank
+    {
+        get => _rank;
+        set
+        {
+            if (_rank != value)
+            {
+                _rank = value;
+                QueueRedraw();
+            }
+        }
+    }
 
     public override void _Ready() => MouseFilter = MouseFilterEnum.Ignore;
 
     public override void _Draw()
     {
+        var seal = Hunter.Progression.IsActive ? RankColors.Of(_rank) : new Color("8a8fa8");
+        var letter = _rank == Vespera.Core.Ranks.Rank.Alvor ? "A" : _rank.ToString();
         var c = Size / 2f;
         var r = Mathf.Min(Size.X, Size.Y) / 2f;
         var outer = Octagon(c, r);
         var inner = Octagon(c, r * 0.8f);
         DrawColoredPolygon(Octagon(c + new Vector2(0, 4), r), new Color(0, 0, 0, 0.35f));
         DrawColoredPolygon(outer, Palette.Indigo);
-        DrawColoredPolygon(inner, Seal.Darkened(0.35f));
-        DrawPolyline([.. outer, outer[0]], Seal, 4f, true);
-        DrawPolyline([.. inner, inner[0]], Seal.Lightened(0.3f), 2f, true);
+        DrawColoredPolygon(inner, seal.Darkened(0.35f));
+        DrawPolyline([.. outer, outer[0]], seal, 4f, true);
+        DrawPolyline([.. inner, inner[0]], seal.Lightened(0.3f), 2f, true);
         var font = GD.Load<Font>("res://assets/v2/fonts/PixelifySans.ttf");
-        const int GlyphSize = 54;
-        var w = font.GetStringSize("E", HorizontalAlignment.Left, -1, GlyphSize).X;
-        var at = c + new Vector2(-w / 2f, GlyphSize * 0.36f);
-        DrawStringOutline(font, at, "E", HorizontalAlignment.Left, -1, GlyphSize, 8, Palette.Indigo);
-        DrawString(font, at, "E", HorizontalAlignment.Left, -1, GlyphSize, Palette.Cream);
+        var glyphSize = letter.Length > 1 ? 40 : 54;
+        var w = font.GetStringSize(letter, HorizontalAlignment.Left, -1, glyphSize).X;
+        var at = c + new Vector2(-w / 2f, glyphSize * 0.36f);
+        DrawStringOutline(font, at, letter, HorizontalAlignment.Left, -1, glyphSize, 8, Palette.Indigo);
+        DrawString(font, at, letter, HorizontalAlignment.Left, -1, glyphSize, Palette.Cream);
     }
 
     private static Vector2[] Octagon(Vector2 c, float r)

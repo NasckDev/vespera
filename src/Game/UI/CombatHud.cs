@@ -8,8 +8,9 @@ using Vespera.Game.World.Rift;
 namespace Vespera.Game.UI;
 
 /// <summary>
-/// HUD de caçada (camada 4): selo de rank E, vida e fôlego (barras pintadas da interface), Fragmentos da caçada,
-/// barra do Guardião com nome e núcleos, título da sala e avisos curtos. Lê o estado a cada quadro.
+/// HUD de caçada (camada 4): selo do rank, vida e fôlego (barras pintadas da interface), Fragmentos (da caçada dentro
+/// da Brecha, da carteira na cidade — os dois da <see cref="Hunter.Progression"/>), barra do Guardião com nome e
+/// núcleos, título da sala e avisos curtos. Lê o estado a cada quadro.
 /// </summary>
 public partial class CombatHud : Control
 {
@@ -24,6 +25,7 @@ public partial class CombatHud : Control
     private Label _hpText = null!;
     private Label _fragments = null!;
     private Label _className = null!;
+    private RankSealIcon _seal = null!;
     private Control _bossBox = null!;
     private TextureProgressBar _bossBar = null!;
     private Label _bossName = null!;
@@ -94,10 +96,13 @@ public partial class CombatHud : Control
         _hpText.Text = $"{combat.Hp}/{combat.MaxHp}";
         _stamina.Value = combat.StaminaFraction * 100.0;
         _stamina.Modulate = combat.StaminaFraction < 0.3 ? new Color(1f, 0.75f, 0.75f) : Colors.White;
-        var target = RiftSession.InRift ? RiftSession.Fragments : RiftSession.Save.MaterialCount(RiftSession.Rules.FragmentMaterial);
+        var target = RiftSession.InRift ? RiftSession.Fragments : RiftSession.WalletFragments;
         _shownFragments = Mathf.MoveToward(_shownFragments, target, Mathf.Max(8f, Mathf.Abs(target - _shownFragments) * 6f) * dt);
         _fragments.Text = $"{Mathf.RoundToInt(_shownFragments)}";
-        _className.Text = $"{HunterSprites.DisplayName(_world.Player.Hunter)} · Rank E" + (RiftSession.Save.LostLantern is not null ? " · sem Lanterna" : string.Empty);
+        var rank = Hunter.Progression.IsActive ? Hunter.Progression.Rank : Vespera.Core.Ranks.Rank.E;
+        _seal.Rank = rank;
+        var lantern = !RiftSession.InRift && RiftSession.LanternFragments > 0 ? $" · Lanterna na Brecha ({RiftSession.LanternFragments})" : string.Empty;
+        _className.Text = $"{HunterSprites.DisplayName(_world.Player.Hunter)} · Rank {rank}" + lantern;
     }
 
     private void UpdateBoss()
@@ -136,7 +141,8 @@ public partial class CombatHud : Control
 
     private void BuildPlayerPanel()
     {
-        AddChild(new RankSealIcon { Position = new Vector2(28, 24), Size = new Vector2(116, 116) });
+        _seal = new RankSealIcon { Position = new Vector2(28, 24), Size = new Vector2(116, 116) };
+        AddChild(_seal);
         _hp = UiAssets.MakeBar(UiAssets.BarKind.Vida);
         _hp.Position = new Vector2(150, 30);
         AddChild(_hp);

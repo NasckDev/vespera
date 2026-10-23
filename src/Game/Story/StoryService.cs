@@ -104,11 +104,8 @@ public static class StoryService
         _boundTo = null;
     }
 
-    private static int RankIndexOf()
-    {
-        var data = GameSession.Data;
-        return data is null ? 0 : SaveService.Database.Progression.RankIndex(data.Xp);
-    }
+    /// <summary>Rank do caçador para as condições da história: o da progressão da v2 (fonte única).</summary>
+    private static int RankIndexOf() => Hunter.Progression.IsActive ? (int)Hunter.Progression.Rank : 0;
 
     private static string ReadText(string name)
     {
