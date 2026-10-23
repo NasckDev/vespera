@@ -91,11 +91,22 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
             x += id == "lodo_mae" ? gap * 2f : gap;
         }
 
+        var chest = new Chest(World, World.ClampToFloor(start + new Vector2(dir * (x + (gap * 0.5f)), 0))) { Name = "Escala_bau" };
+        World.Entities.AddChild(chest);
+        spawned.Add(chest);
+
         await host.PhysicsFrames(2);
         foreach (var e in enemies)
         {
             e.ProcessMode = Node.ProcessModeEnum.Disabled;
             e.PlayAnimation("parado");
+        }
+
+        var chestOk = ScaleRegistry.WithinTolerance(chest.RenderedHeight, chest.TargetHeight);
+        Log.Info($"escala {room}: baú {chest.RenderedHeight:0.0} px (alvo {chest.TargetHeight:0.0} = {Chest.HumanFraction:0.00} humano, barris pintados ≈ 0,53) {(chestOk ? "ok" : "FORA")}");
+        if (!chestOk)
+        {
+            _failures.Add($"escala: baú em {room} mede {chest.RenderedHeight:0.0} px, alvo {chest.TargetHeight:0.0} ±8%");
         }
 
         foreach (var node in spawned)
@@ -107,6 +118,11 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
                 Npc n => (n.NpcId, n.SpriteNode),
                 _ => (string.Empty, null!),
             };
+            if (sprite is null)
+            {
+                continue;
+            }
+
             var measured = Measure(sprite);
             var target = ScaleRegistry.TargetHeight(id, human);
             var ok = ScaleRegistry.WithinTolerance(measured, target);

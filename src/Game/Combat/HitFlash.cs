@@ -3,8 +3,9 @@ using Godot;
 namespace Vespera.Game.Combat;
 
 /// <summary>
-/// Flash de impacto num sprite (material próprio com um shader de "pintar de cor"): branco por 1-2 quadros ao levar
-/// golpe; âmbar no aviso dos monstros. Com "reduzir flashes" a intensidade cai para um tom suave.
+/// Flash de impacto num sprite (material próprio): branco por 1-2 quadros ao levar golpe (pinta o corpo); o aviso âmbar
+/// dos monstros vira CONTORNO brilhante em volta da silhueta, com um calor leve por dentro, para o monstro continuar
+/// legível (antes o âmbar pintava o corpo inteiro e apagava o desenho). Com "reduzir flashes" o flash cai para um tom suave.
 /// </summary>
 public sealed class HitFlash
 {
@@ -12,9 +13,29 @@ public sealed class HitFlash
         shader_type canvas_item;
         uniform float flash : hint_range(0.0, 1.0) = 0.0;
         uniform vec4 flash_color : source_color = vec4(1.0);
+        uniform float glow : hint_range(0.0, 1.0) = 0.0;
+        uniform vec4 glow_color : source_color = vec4(1.0, 0.65, 0.25, 1.0);
+        uniform float glow_width = 4.0;
         void fragment() {
             vec4 c = texture(TEXTURE, UV) * COLOR;
-            COLOR = vec4(mix(c.rgb, flash_color.rgb, flash * c.a), c.a);
+            vec3 rgb = mix(c.rgb, flash_color.rgb, flash * c.a);
+            if (glow > 0.0) {
+                vec2 px = TEXTURE_PIXEL_SIZE * glow_width;
+                float near = 0.0;
+                float far = 0.0;
+                for (int i = 0; i < 12; i++) {
+                    float a = 6.2831853 * float(i) / 12.0;
+                    vec2 d = vec2(cos(a), sin(a)) * px;
+                    near = max(near, texture(TEXTURE, UV + d).a);
+                    far = max(far, texture(TEXTURE, UV + d * 1.8).a);
+                }
+                float outer = max(near, 0.6 * far);
+                float edge = clamp(outer - c.a, 0.0, 1.0) * glow;
+                rgb = mix(rgb, glow_color.rgb, 0.18 * glow * c.a);
+                COLOR = vec4(mix(glow_color.rgb, rgb, c.a), max(c.a, edge * COLOR.a));
+            } else {
+                COLOR = vec4(rgb, c.a);
+            }
         }
         """;
 
@@ -34,7 +55,7 @@ public sealed class HitFlash
         target.Material = _material;
     }
 
-    /// <summary>Cor fixa por cima (aviso âmbar segurado), 0 desliga.</summary>
+    /// <summary>Aviso âmbar segurado (0 desliga): intensidade do contorno brilhante; 0,3+ já é o contorno cheio.</summary>
     public float Tint { get; set; }
 
     public Color TintColor { get; set; } = new(1f, 0.65f, 0.25f);
@@ -62,15 +83,9 @@ public sealed class HitFlash
             _amount = Mathf.Max(0f, _amount - (_decay * dt));
         }
 
-        var tint = CombatFeel.ReduceFlashes ? Mathf.Min(Tint, 0.35f) : Tint;
-        if (_amount >= tint)
-        {
-            _material.SetShaderParameter("flash", _amount);
-            _material.SetShaderParameter("flash_color", _color);
-            return;
-        }
-
-        _material.SetShaderParameter("flash", tint);
-        _material.SetShaderParameter("flash_color", TintColor);
+        _material.SetShaderParameter("flash", _amount);
+        _material.SetShaderParameter("flash_color", _color);
+        _material.SetShaderParameter("glow", Mathf.Clamp(Tint * 3f, 0f, 1f));
+        _material.SetShaderParameter("glow_color", TintColor);
     }
 }
