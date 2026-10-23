@@ -164,7 +164,7 @@ public partial class SmokeTest
     private async Task TalkToNpc(Level level, string npcId, string? shot = null)
     {
         var npc = level.World.Npcs.First(n => n.NpcId == npcId);
-        await StandAt(level, npc.GlobalPosition + new Vector2(0, 60 * level.World.Data.ActorScale));
+        await StandAt(level, npc.GlobalPosition + new Vector2(0, 80 * level.World.Data.ActorScale));
         Check(level.Player.Focus?.Kind == "npc", $"perto de {npcId} o foco deveria ser o NPC, foi '{level.Player.Focus?.Kind}'");
         await PressInWorld(Key.E);
         Check(level.DialogueOpen, $"E em {npcId} deveria abrir a conversa");

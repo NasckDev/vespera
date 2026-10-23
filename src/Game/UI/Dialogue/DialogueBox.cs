@@ -217,7 +217,7 @@ public partial class DialogueBox : Control
         _portrait.Texture = texture;
         _portrait.Visible = texture is not null;
         _portraitCaption.Visible = texture is null;
-        _portraitCaption.Text = node.Speaker.Length == 0 ? string.Empty : "voz fora de cena";
+        _portraitCaption.Text = name.Length == 0 ? string.Empty : "voz fora de cena";
     }
 
     private void BuildChoiceButtons(IReadOnlyList<DialogueChoice> choices)

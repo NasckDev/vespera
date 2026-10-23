@@ -184,7 +184,7 @@ public partial class Level : Control
         {
             _hud.ClosePanel();
         }
-        var focus = Player.Focus;
+        var focus = _box.IsOpen ? null : Player.Focus;
         var deviceId = (Player.Input as MergedInput)?.DeviceId ?? Player.Input.DeviceId;
         var anchor = focus is null ? Vector2.Zero : WorldToScreen(focus.PromptAnchor);
         _hud.ShowPrompt(focus?.Prompt, anchor, InteractionHud.InteractKeyName(deviceId), dt);
