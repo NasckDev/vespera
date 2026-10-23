@@ -45,13 +45,14 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
     {
         var human = World.Data.HumanHeight;
         var door = World.Data.DoorAt is { } d ? new Vector2(d[0], d[1]) : World.SpawnPoint;
-        var start = World.ClampToFloor(door + new Vector2(60f, 50f) * World.Data.ActorScale);
+        var start = World.ClampToFloor(door + (new Vector2(0f, 50f) * World.Data.ActorScale));
+        var dir = start.X <= World.PlayArea.GetCenter().X ? 1f : -1f;
         var gap = human * 0.75f;
         var x = 0f;
         var spawned = new List<Node>();
         foreach (var hunter in Hunters)
         {
-            var p = World.SpawnPlayer(new ScriptedInput(), World.ClampToFloor(start + new Vector2(x, 0)), hunter);
+            var p = World.SpawnPlayer(new ScriptedInput(), World.ClampToFloor(start + new Vector2(dir * x, 0)), hunter);
             p.Combat.Disabled = true;
             spawned.Add(p);
             x += gap;
@@ -67,7 +68,7 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
                 "espectro" => new Espectro(World),
                 _ => new LodoMae(World),
             };
-            e.Position = World.ClampToFloor(start + new Vector2(x, 0));
+            e.Position = World.ClampToFloor(start + new Vector2(dir * x, 0));
             World.AddEnemy(e);
             enemies.Add(e);
             spawned.Add(e);
@@ -101,7 +102,7 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
 
         if (capture)
         {
-            World.Camera.FixedFocus = start + new Vector2(x * 0.45f, -human * 0.8f);
+            World.Camera.FixedFocus = start + new Vector2(dir * x * 0.45f, -human * 0.8f);
             await host.PhysicsFrames(20);
             await host.CaptureNow($"c34_escala_{room}");
             World.Camera.FixedFocus = null;

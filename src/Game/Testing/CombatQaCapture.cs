@@ -125,6 +125,8 @@ public sealed class CombatQaCapture(Level level, SmokeTest host)
             return;
         }
 
+        await Frames(110);
+
         Place(World.ClampToFloor(chest.GlobalPosition + new Vector2(-70f * S, 30f * S)));
         World.Player.Face(Vector2.Right);
         await Frames(20);

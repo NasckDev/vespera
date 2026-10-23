@@ -169,7 +169,7 @@ public sealed partial class HunterCombat : Node, IHittable
         feel?.HitStop(0.07);
         feel?.Spark(HitCenter, new Color("e85d5d"), 10, 260f);
         CombatSfx.Play(_player, CombatSound.Hurt, Vector2.Zero);
-        _player.Flash.Pulse(new Color(1f, 0.35f, 0.35f), 0.06f, 0.18f);
+        _player.Flash.Pulse(new Color(1f, 0.35f, 0.35f), 0.05f, 0.16f, 0.7f);
         Moves.Cancel();
         _knock = hit.Push;
         _invulnerable = (float)_tuning.HurtInvulnerable;

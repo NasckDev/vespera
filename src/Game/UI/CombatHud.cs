@@ -14,7 +14,7 @@ namespace Vespera.Game.UI;
 public partial class CombatHud : Control
 {
     private const float ToastSeconds = 2.8f;
-    private const float TitleSeconds = 2.6f;
+    private const float TitleSeconds = 2.0f;
     private const float BossBarWidth = 960f;
 
     private readonly Queue<string> _toasts = new();
@@ -191,9 +191,9 @@ public partial class CombatHud : Control
         _toast.Position = new Vector2(0, 360);
         _toast.Size = new Vector2(1920, 50);
         AddChild(_toast);
-        _title = new Label { HorizontalAlignment = HorizontalAlignment.Center, Position = new Vector2(0, 200), Size = new Vector2(1920, 90) };
+        _title = new Label { HorizontalAlignment = HorizontalAlignment.Center, Position = new Vector2(0, 150), Size = new Vector2(1920, 80) };
         _title.AddThemeFontOverride("font", GD.Load<Font>("res://assets/v2/fonts/PixelifySans.ttf"));
-        _title.AddThemeFontSizeOverride("font_size", 72);
+        _title.AddThemeFontSizeOverride("font_size", 60);
         _title.AddThemeColorOverride("font_color", Palette.Cream);
         _title.AddThemeColorOverride("font_outline_color", Palette.Indigo);
         _title.AddThemeConstantOverride("outline_size", 14);
@@ -201,7 +201,7 @@ public partial class CombatHud : Control
         AddChild(_title);
         _subtitle = HudLabel(38, Palette.Amber);
         _subtitle.HorizontalAlignment = HorizontalAlignment.Center;
-        _subtitle.Position = new Vector2(0, 292);
+        _subtitle.Position = new Vector2(0, 226);
         _subtitle.Size = new Vector2(1920, 50);
         _subtitle.Modulate = Colors.Transparent;
         AddChild(_subtitle);
