@@ -57,6 +57,9 @@ public partial class Player : CharacterBody2D
 
     public float MaxSpeed => BaseSpeed * _scale;
 
+    /// <summary>Posição do cursor no mundo da sala (a fase liga; null fora do jogo).</summary>
+    public static System.Func<Vector2>? MouseWorld { get; set; }
+
     /// <summary>Movimento que as cenas mandam enquanto o jogador está travado (andar sozinho); null = parado.</summary>
     public Vector2? ScriptedMove { get; set; }
 

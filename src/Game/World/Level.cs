@@ -102,7 +102,9 @@ public partial class Level : Control
         _hud = new InteractionHud { Name = "Hud" };
         AddChild(_hud);
         BuildStory();
+        StoryWatch.Ensure();
         BuildFade();
+        Player.MouseWorld = () => _viewport.CanvasTransform.AffineInverse() * GetViewport().GetMousePosition();
         MountWorld(new LevelWorld(_data, _catalog) { Name = "World" });
         GameSession.Autosave();
         ScheduleAutoplay();

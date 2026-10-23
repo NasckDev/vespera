@@ -101,9 +101,10 @@ public sealed class BowMoves(HunterCombat combat) : WeaponMoves(combat, "bow")
             P.Sprite.SpeedScale = 0f;
         }
 
-        if (move.LengthSquared() > 0.04f)
+        var mouse = MouseAim();
+        if (mouse is not null || move.LengthSquared() > 0.04f)
         {
-            Aim = move.Normalized();
+            Aim = mouse ?? move.Normalized();
             P.Face(Aim);
             var anim = HunterSprites.Resolve(P.Sprite.SpriteFrames, Charged, P.Facing);
             if (anim != P.Sprite.Animation)

@@ -43,6 +43,9 @@ public sealed class DialogueNode
 
     public string Next { get; set; } = string.Empty;
 
+    /// <summary>Desvios depois desta caixa (sem respostas): o primeiro cuja condição vale decide o próximo nó; nenhum = <see cref="Next"/>.</summary>
+    public List<DialogueEntry> Branches { get; set; } = [];
+
     public List<DialogueChoice> Choices { get; set; } = [];
 
     /// <summary>Para onde a câmera olha enquanto esta caixa está aberta: "player", "brecha", "lanterna", "mural", um id de NPC ou um tipo de objeto. Vazio = não muda.</summary>
@@ -96,6 +99,11 @@ public sealed class DialogueFile
             if (node.Next.Length > 0 && !Nodes.ContainsKey(node.Next))
             {
                 throw new FormatException($"fala '{Id}', nó '{key}': next inexistente '{node.Next}'");
+            }
+
+            foreach (var branch in node.Branches.Where(b => !Nodes.ContainsKey(b.Node)))
+            {
+                throw new FormatException($"fala '{Id}', nó '{key}': desvio aponta para '{branch.Node}'");
             }
 
             foreach (var choice in node.Choices.Where(c => c.Next.Length > 0 && !Nodes.ContainsKey(c.Next)))

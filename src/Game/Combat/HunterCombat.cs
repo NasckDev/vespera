@@ -287,7 +287,7 @@ public sealed partial class HunterCombat : Node, IHittable
         }
 
         var none = Hunter.HuntService.State.Potions <= 0;
-        _player.Feel?.Toast(none ? "Sem poções. A barraca da Praça vende (e uma flor deixa mais barato)." : "A vida já está cheia.");
+        _player.Feel?.Toast(none ? "Sem poções. A Tia Nilza vende na Praça." : "A vida já está cheia.");
     }
 
     /// <summary>Eco Viscoso (Q): avanço longo sem custo de fôlego que deixa um rastro de lodo que lentifica os monstros.</summary>

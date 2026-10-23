@@ -6,32 +6,53 @@
       "speaker": "narrador",
       "look": "lanterna",
       "fx": "glow",
-      "text": "A Brecha se fecha com um estalo de luz. Na praça, a grande lanterna brilha mais forte do que antes.",
+      "text": "A Brecha se fecha com um estalo de luz. Na praça, a grande lanterna brilha mais forte.",
       "set": ["ato1_fim_done"],
       "next": "n2"
     },
     "n2": {
       "speaker": "benicio",
       "look": "player",
-      "text": "Você conseguiu, {nome}. A Lodo-Mãe caiu e a Brecha fechou. Olhe o seu pulso: o selo agora é D.",
+      "text": "Você conseguiu, {nome}. A Lodo-Mãe caiu. Olhe o seu pulso: agora o selo é D.",
       "next": "n3"
     },
     "n3": {
       "speaker": "benicio",
-      "look": "benicio",
-      "expression": 2,
-      "text": "Cada selo novo é um passo mais perto do Alvor, o dia em que o sol volta de vez. Escrevi o seu nome no livro da Ordem.",
+      "text": "E a Lodo-Mãe deixou um Eco em você. É o poder dela, agora seu. Aperte Q para usar.",
+      "next": "n3b"
+    },
+    "n3b": {
+      "speaker": "benicio",
+      "text": "Com o Eco Viscoso você avança rápido e deixa um rastro de lodo. Os monstros que pisam nele ficam lentos.",
       "next": "n4"
     },
     "n4": {
       "speaker": "benicio",
-      "text": "Mas há más notícias. Do Pomar Alto, lá na colina, dizem que as macieiras estão apodrecendo de dentro pra fora.",
+      "look": "benicio",
+      "expression": 2,
+      "text": "Mas tenho uma notícia ruim. Chegou uma carta da Dona Celeste, lá do Pomar Alto.",
       "next": "n5"
     },
     "n5": {
       "speaker": "benicio",
+      "text": "Ela escreveu: \"As macieiras estão apodrecendo por dentro. À noite, alguma coisa anda entre as árvores.\"",
+      "next": "n6"
+    },
+    "n6": {
+      "speaker": "benicio",
       "expression": 2,
-      "text": "Ninguém sabe o motivo. Descanse, forje sua arma com a Odete e esteja pronto. A próxima Brecha vai ser lá em cima."
+      "text": "Uma Brecha nova está para abrir no pomar. Uma Brecha de rank D. Não sei o que mora lá.",
+      "next": "n7"
+    },
+    "n7": {
+      "speaker": "benicio",
+      "text": "Descanse. Melhore a arma com a Odete. Quando o caminho do Pomar abrir, você vai primeiro.",
+      "next": "n8"
+    },
+    "n8": {
+      "speaker": "narrador",
+      "look": "player",
+      "text": "Fim do Ato I. A Brecha dos esgotos continua aberta: você pode voltar para caçar quando quiser."
     }
   }
 }

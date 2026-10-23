@@ -2,7 +2,7 @@
   "id": "odete",
   "entries": [
     { "if": ["GuardianDefeated:lodo_mae", "!odete_after"], "node": "og1" },
-    { "if": ["GuardianDefeated:lodo_mae"], "node": "og_hub" },
+    { "if": ["hunt_back", "!forged", "!odete_forge_tip"], "node": "of1" },
     { "if": ["starter_blade"], "node": "ob_hub" },
     { "node": "o1" }
   ],
@@ -10,13 +10,13 @@
     "o1": {
       "speaker": "odete",
       "look": "odete",
-      "text": "Fecha a porta. O calor escapa.",
+      "text": "Feche a porta. O calor escapa.",
       "next": "o2"
     },
     "o2": {
       "speaker": "odete",
       "look": "player",
-      "text": "Selo E, recém-queimado. Mais um que chega achando que sabe lutar. Quantos como você já passaram por aquela porta?",
+      "text": "Selo E, novinho. Mais um que chega achando que sabe lutar.",
       "set": ["met_odete"],
       "choices": [
         { "text": "Preciso de uma arma.", "next": "o3a" },
@@ -31,52 +31,64 @@
     "o3b": {
       "speaker": "odete",
       "expression": 2,
-      "text": "Quem disse isso não pagou a conta. Eu não aceito elogio. Mostre a mão.",
+      "text": "Elogio não paga ferro. Mostre a mão.",
       "next": "o4"
     },
     "o4": {
       "speaker": "odete",
-      "text": "Firme. Pelo menos isso. Pegue {este} {arma}. Não é bonita, mas foi feita pra voltar inteira.",
+      "text": "Mão firme. Pegue {este} {arma}. Não é bonita, mas foi feita para voltar inteira.",
       "set": ["starter_blade"],
       "events": ["StarterBladeGiven"],
-      "objective": "brecha",
+      "objective": "cacada1",
       "next": "o5"
     },
     "o5": {
       "speaker": "odete",
-      "text": "Dentro da Brecha você vai achar Fragmentos, que são cristais do Avesso. Traga para mim e eu forjo coisa melhor. A Brecha fica na praça. Agora vá.",
+      "text": "Lá dentro você vai achar Fragmentos, cristais cor-de-rosa. Traga para mim que eu deixo essa arma mais forte.",
       "choices": [
         { "text": "Pode deixar.", "next": "o6" },
-        { "text": "Perguntar mais", "next": "m1" }
+        { "text": "E se eu cair lá dentro?", "next": "m1" }
       ]
     },
     "m1": {
       "speaker": "odete",
-      "text": "Se você cair lá dentro, os Fragmentos ficam na sua Lanterna caída. Volte e pegue de novo. As armas e peças você nunca perde.",
+      "text": "Os Fragmentos ficam caídos na sua Lanterna. Volte e pegue. A arma você nunca perde.",
       "next": "o5"
     },
     "o6": {
       "speaker": "odete",
-      "text": "Volte inteiro. Já deixei gente demais sair por aquela porta e não voltar."
+      "text": "Volte inteiro. Já vi gente demais sair por aquela porta e não voltar."
+    },
+    "of1": {
+      "speaker": "odete",
+      "look": "player",
+      "text": "Ainda inteiro. Mostre o que trouxe.",
+      "set": ["odete_forge_tip"],
+      "next": "of2"
+    },
+    "of2": {
+      "speaker": "odete",
+      "text": "Fragmentos e Gel de Lodo. Dá para melhorar a arma. Venha, eu mostro a forja.",
+      "events": ["OpenForge"]
     },
     "ob_hub": {
       "speaker": "odete",
       "text": "Ainda de pé. Isso já é mais do que a média.",
       "choices": [
-        { "text": "Quero ver a forja.", "next": "forja" },
-        { "text": "Trocar de arma.", "next": "troca" },
-        { "text": "Só passei para olhar.", "next": "olhar" }
+        { "text": "Quero melhorar a arma.", "next": "forja" },
+        { "text": "Quero trocar de arma.", "next": "troca" },
+        { "text": "Só passei para ver.", "next": "olhar" }
       ]
     },
     "forja": {
       "speaker": "odete",
-      "text": "Ferro é caro. Fragmento, mais ainda. Veja o que dá pra fazer.",
+      "text": "Ferro é caro. Fragmento, mais ainda. Veja o que dá para fazer.",
       "events": ["OpenForge"]
     },
     "troca": {
       "speaker": "odete",
       "expression": 2,
-      "text": "Quer outra arma? Posso trocar. A nova começa do nível 1, e a atual fica guardada comigo. Pense bem.",
+      "text": "Quer outra arma? Posso trocar. A nova começa no nível 1, e a atual fica guardada comigo.",
       "events": ["ChangeWeapon"]
     },
     "olhar": {
@@ -87,28 +99,19 @@
       "speaker": "odete",
       "expression": 2,
       "look": "player",
-      "text": "Você voltou. Isso é raro. A última pessoa que esperei ver voltar por aquela porta nunca voltou. O nome dela era Marisa.",
+      "text": "Você voltou da Lodo-Mãe. Isso é raro.",
       "set": ["odete_after"],
+      "next": "og1b"
+    },
+    "og1b": {
+      "speaker": "odete",
+      "text": "A última pessoa que eu esperei voltar daquela Brecha se chamava Marisa. Ela nunca voltou.",
       "next": "og2"
     },
     "og2": {
       "speaker": "odete",
-      "text": "Esqueça o que eu disse. Mostre a arma. Por hoje, você ganhou o meu respeito. Só por hoje.",
-      "next": "og_hub"
-    },
-    "og_hub": {
-      "speaker": "odete",
-      "text": "A forja está acesa. Quer alguma coisa?",
-      "choices": [
-        { "text": "Quero ver a forja.", "next": "forja" },
-        { "text": "Trocar de arma.", "next": "troca" },
-        { "text": "Nada, obrigado.", "next": "ok" }
-      ]
-    },
-    "ok": {
-      "speaker": "odete",
-      "expression": 2,
-      "text": "De nada eu não me lembro. Vá."
+      "text": "Esqueça o que eu disse. Mostre a arma. Hoje você ganhou o meu respeito.",
+      "next": "ob_hub"
     }
   }
 }
