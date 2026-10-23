@@ -1,0 +1,40 @@
+{
+  "slots": [
+    { "id": "cabeca", "name": "Cabeça" },
+    { "id": "peito", "name": "Peito" },
+    { "id": "maos", "name": "Mãos" },
+    { "id": "botas", "name": "Botas" }
+  ],
+  "sets": [
+    {
+      "id": "conjunto_lodo_mae",
+      "name": "Conjunto da Lodo-Mãe",
+      "rank": "E",
+      "guardian": "lodo_mae",
+      "pieces": [
+        { "id": "capuz_louca_trincada", "slot": "cabeca", "name": "Capuz de Louça Trincada", "stats": { "hp": 10, "defense": 2 } },
+        { "id": "peitoral_talheres", "slot": "peito", "name": "Peitoral de Talheres", "stats": { "hp": 16, "defense": 4 } },
+        { "id": "luvas_gel_seco", "slot": "maos", "name": "Luvas de Gel Seco", "stats": { "hp": 6, "defense": 2 } },
+        { "id": "botas_lodo_curtido", "slot": "botas", "name": "Botas de Lodo Curtido", "stats": { "hp": 8, "defense": 2, "speedPct": 2 } }
+      ],
+      "bonuses": [
+        { "pieces": 2, "name": "Pele Gelatinosa", "description": "+20 de vida máxima.", "stats": { "hp": 20 } },
+        { "pieces": 4, "name": "Resíduo Aproveitado", "description": "+10% de Fragmentos encontrados e +3 de defesa.", "stats": { "fragmentosPct": 10, "defense": 3 } }
+      ]
+    }
+  ],
+  "rankStatGrowth": 1.35,
+  "rareTemplates": [
+    { "slot": "cabeca", "name": "Capuz", "stats": { "hp": 8, "defense": 2 } },
+    { "slot": "peito", "name": "Gibão", "stats": { "hp": 14, "defense": 4 } },
+    { "slot": "maos", "name": "Luvas", "stats": { "hp": 5, "defense": 2 } },
+    { "slot": "botas", "name": "Botas", "stats": { "hp": 6, "defense": 1, "speedPct": 2 } }
+  ],
+  "affixes": [
+    { "id": "vigor", "name": "do Vigor", "stat": "hp", "base": 10, "perRank": 6 },
+    { "id": "bastiao", "name": "do Bastião", "stat": "defense", "base": 2, "perRank": 1.5 },
+    { "id": "ferrao", "name": "do Ferrão", "stat": "critPct", "base": 2, "perRank": 0.6 },
+    { "id": "pressa", "name": "da Pressa", "stat": "speedPct", "base": 3, "perRank": 0.8 },
+    { "id": "fartura", "name": "da Fartura", "stat": "fragmentosPct", "base": 4, "perRank": 1.2 }
+  ]
+}

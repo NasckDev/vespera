@@ -102,10 +102,10 @@ public class SaveSerializerTest
     }
 
     [TestCase]
-    public void JsonUsesCamelCaseAndVersion2()
+    public void JsonUsesCamelCaseAndCurrentVersion()
     {
         var json = SaveSerializer.ToJson(SaveData.NewGame(TestDb.Instance, "Rui", "sword"));
-        AssertThat(json).Contains("\"saveVersion\": 2");
+        AssertThat(json).Contains("\"saveVersion\": 3");
         AssertThat(json).Contains("\"classId\": \"sword\"");
         AssertThat(json).NotContains("lostLantern");
     }
@@ -120,7 +120,7 @@ public class SaveSerializerTest
 
         var s = SaveSerializer.FromJson(v1, TestDb.Instance);
 
-        AssertThat(s.SaveVersion).IsEqual(2);
+        AssertThat(s.SaveVersion).IsEqual(3);
         AssertThat(s.Xp).IsEqual(320);
         AssertThat(s.Materials).ContainsKeyValue("estilhaco", 42);
         AssertThat(s.ClassId).IsEqual("sword");

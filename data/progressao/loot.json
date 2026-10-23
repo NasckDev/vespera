@@ -1,0 +1,12 @@
+{
+  "rankWeights": { "same": 0.80, "next": 0.15, "rare": 0.05 },
+  "fragmentosRankGrowth": 1.69,
+  "materialAmount": [1, 1],
+  "guardian": { "setPieceChance": 0.30, "materialAmount": [1, 1] },
+  "sources": {
+    "monster": { "dropChance": 0.45, "rolls": 1, "fragmentos": [1, 2] },
+    "part": { "dropChance": 1.0, "rolls": 1, "fragmentos": [0, 1] },
+    "chest": { "dropChance": 1.0, "rolls": 3, "fragmentos": [5, 8] },
+    "guardian": { "dropChance": 1.0, "rolls": 4, "fragmentos": [14, 20] }
+  }
+}
