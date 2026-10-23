@@ -74,7 +74,7 @@ public partial class Espectro(LevelWorld world) : Enemy("espectro", world)
                     Enter(EnemyState.Approach);
                 }
 
-                return target is null ? Vector2.Zero : (GlobalPosition - target.GlobalPosition).Normalized() * (float)Def.Speed * 0.35f * A;
+                return target is null ? Vector2.Zero : (GlobalPosition - target.GlobalPosition).Normalized() * (float)Speed * 0.35f * A;
         }
 
         if (target is null)
@@ -88,7 +88,7 @@ public partial class Espectro(LevelWorld world) : Enemy("espectro", world)
         if (_cooldown <= 0f && distance <= LungeRange * A)
         {
             _lungeDir = to.Normalized();
-            _cooldown = (float)Def.Period;
+            _cooldown = (float)Period;
             Enter(EnemyState.Telegraph);
             Play("aviso");
             Flash.Tint = 0.35f;
@@ -102,7 +102,7 @@ public partial class Espectro(LevelWorld world) : Enemy("espectro", world)
             Play("mover");
         }
 
-        var speed = (float)Def.Speed * A;
+        var speed = (float)Speed * A;
         return distance > KeepDistance * A ? to.Normalized() * speed : Vector2.Zero;
     }
 

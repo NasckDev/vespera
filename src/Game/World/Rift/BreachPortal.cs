@@ -57,6 +57,9 @@ public partial class BreachPortal : Node2D
 
     public Interactable Zone { get; }
 
+    /// <summary>Brecha "mais forte" (a Lodo-Mãe espera no fim): borda vermelha, mais brasas, luz mais quente.</summary>
+    public bool Empowered { get; init; }
+
     /// <summary>Retângulo sólido da base (para o pé não atravessar o portal).</summary>
     public Rect2 Footprint => new(GlobalPosition.X - (_width * 0.3f), GlobalPosition.Y - (_height * 0.08f), _width * 0.6f, _height * 0.08f);
 
@@ -67,6 +70,11 @@ public partial class BreachPortal : Node2D
         _shader ??= new Shader { Code = ShaderCode };
         _material = new ShaderMaterial { Shader = _shader };
         _material.SetShaderParameter("seed", GD.Randf() * 50f);
+        if (Empowered)
+        {
+            _material.SetShaderParameter("rim_color", new Color(1f, 0.16f, 0.22f));
+            _material.SetShaderParameter("hot_color", new Color(1f, 0.72f, 0.55f));
+        }
         var image = Image.CreateEmpty(8, 8, false, Image.Format.Rgba8);
         image.Fill(Colors.White);
         var tear = new Sprite2D
@@ -82,12 +90,20 @@ public partial class BreachPortal : Node2D
         AddChild(new PointLight2D
         {
             Texture = LightTexture.Get(),
-            Color = new Color("e64a8e"),
-            Energy = 1.3f,
+            Color = Empowered ? new Color("ff3a3a") : new Color("e64a8e"),
+            Energy = Empowered ? 1.7f : 1.3f,
             TextureScale = _height * 2.4f / (2 * LightTexture.Radius),
             Position = new Vector2(0, -_height * 0.5f),
         });
-        AddChild(Motes());
+        var motes = Motes();
+        if (Empowered)
+        {
+            motes.Amount = 44;
+            motes.Color = new Color(1f, 0.35f, 0.3f, 0.9f);
+            motes.InitialVelocityMax = 60f;
+        }
+
+        AddChild(motes);
         var body = new StaticBody2D { Name = "Base", CollisionLayer = Actors.Player.WorldLayer, CollisionMask = 0 };
         body.AddChild(new CollisionShape2D
         {

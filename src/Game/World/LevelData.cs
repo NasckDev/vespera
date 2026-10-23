@@ -27,7 +27,7 @@ public sealed class LevelData
 
     /// <summary>
     /// Régua do mapa (PLANO-V2 §2.1): altura em px de mundo de uma porta pintada no chão (ou de um arco/grade
-    /// equivalente). A altura humana do mapa é 0,75 × isto; tudo o mais deriva dela.
+    /// equivalente). A altura humana do mapa é 1,0 × isto; tudo o mais deriva dela.
     /// </summary>
     public float DoorHeight { get; set; }
 
@@ -83,6 +83,15 @@ public sealed class RiftRoomData
 
     /// <summary>Passagens seladas para sempre nesta caçada [x, y, w, h] (entrada às costas, saídas que não levam a nada).</summary>
     public List<float[]> Sealed { get; set; } = [];
+
+    /// <summary>Tipo da sala na caçada (combat, elite, treasure, rest, guardian); vazio = sala fixa do JSON.</summary>
+    public string Kind { get; set; } = string.Empty;
+
+    /// <summary>Pé da lanterna de descanso [x, y] (sala de descanso), se houver.</summary>
+    public float[]? Rest { get; set; }
+
+    /// <summary>Barris e caixas que quebram [x, y].</summary>
+    public List<float[]> Breakables { get; set; } = [];
 }
 
 public sealed class RiftExitData
@@ -97,6 +106,9 @@ public sealed class SpawnData
     public string Type { get; set; } = string.Empty;
 
     public float[] At { get; set; } = [0, 0];
+
+    /// <summary>Variante de elite (maior, tingida, mais forte; ver data/cacada/cacada.json).</summary>
+    public bool Elite { get; set; }
 }
 
 public sealed class GroundData
@@ -116,6 +128,9 @@ public sealed class PropPlacement
     public float[] At { get; set; } = [0, 0];
 
     public bool Flip { get; set; }
+
+    /// <summary>Quebra com um golpe (barril, caixote, vaso): solta alguns Lumes e some até a próxima volta da Brecha.</summary>
+    public bool Breakable { get; set; }
 }
 
 /// <summary>Zona de interação sem objeto desenhado (porta pintada no chão, por exemplo).</summary>
@@ -237,10 +252,10 @@ public sealed class InteractDef
 /// <summary>Contas do contrato de escala (PLANO-V2 §2.1), puras para valer igual no jogo e nos testes.</summary>
 public static class ScaleRules
 {
-    /// <summary>Altura humana = 0,75 × porta.</summary>
-    public const float HumanPerDoor = 0.75f;
+    /// <summary>Altura humana = 1,0 × porta (revisão do playtest de 23/10: o caçador era pequeno demais para o mapa).</summary>
+    public const float HumanPerDoor = 1.0f;
 
-    /// <summary>Humano de referência da escala 1 dos atores (px); o caçador da Praça (porta 72) mede 54 = 0,432 × 125.</summary>
+    /// <summary>Humano de referência da escala 1 dos atores (px); o caçador da Praça (porta 72) mede 72 = 0,576 × 125.</summary>
     public const float ReferenceHuman = 125f;
 
     /// <summary>Tolerância do teste de altura renderizada (±8%).</summary>

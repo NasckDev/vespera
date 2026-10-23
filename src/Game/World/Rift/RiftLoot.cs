@@ -19,14 +19,14 @@ public static class RiftLoot
     private static readonly Color XpColor = new("9fd8ff");
 
     /// <summary>Monstro comum morto: XP da Brecha e um sorteio de saque de monstro.</summary>
-    public static void MonsterKilled(LevelWorld world, string monsterId, Vector2 at, bool boss)
+    public static void MonsterKilled(LevelWorld world, string monsterId, Vector2 at, bool boss, float xpMult = 1f, int rolls = 1)
     {
         if (!Progression.IsActive)
         {
             return;
         }
 
-        var xp = RiftSession.Rules.Xp(monsterId);
+        var xp = (int)System.MathF.Round(RiftSession.Rules.Xp(monsterId) * xpMult);
         if (xp > 0)
         {
             Progression.AddXp(xp);
@@ -36,9 +36,9 @@ public static class RiftLoot
             world.Feel.Number(at + new Vector2(0.35f * world.Data.HumanHeight, -lift), $"+{xp} XP", XpColor, 0.7f);
         }
 
-        if (!boss)
+        for (var i = 0; !boss && i < rolls; i++)
         {
-            Show(world, at, Progression.GrantLoot(RiftSession.BreachRank, LootSource.Monster), spread: 60f);
+            Show(world, at, Progression.GrantLoot(RiftSession.BreachRank, LootSource.Monster), spread: 60f + (i * 30f));
         }
     }
 
