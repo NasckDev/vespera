@@ -1,6 +1,6 @@
 {
   "guardians": [
-    { "id": "lodo_mae", "name": "Lodo-Mãe", "rank": "E", "brecha": "Esgotos do Mercado", "material": "nucleo_lodo_mae", "armorSet": "conjunto_lodo_mae", "echo": "eco_viscoso" },
+    { "id": "lodo_mae", "name": "Lodo-Mãe", "rank": "E", "brecha": "Esgotos do Mercado", "material": "nucleo_lodo_mae", "armorSet": "conjunto_lodo_mae", "echo": "eco_viscoso", "spoils": { "gel_de_lodo": 3 } },
     { "id": "macieira_oca", "name": "A Macieira Oca", "rank": "D", "brecha": "Pomar Podre", "material": "galho_oco", "armorSet": null, "echo": "eco_semente" },
     { "id": "farol_afogado", "name": "O Farol Afogado", "rank": "C", "brecha": "Cais Afogado", "material": "lente_do_farol", "armorSet": null, "echo": "eco_farol" },
     { "id": "velorio", "name": "A Velória", "rank": "B", "brecha": "Cemitério das Lanternas", "material": "candelabro_derretido", "armorSet": null, "echo": "eco_vela" },

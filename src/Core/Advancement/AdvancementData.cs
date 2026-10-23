@@ -172,6 +172,12 @@ public sealed record GuardianDef
     public string? ArmorSet { get; init; }
 
     public string? Echo { get; init; }
+
+    /// <summary>
+    /// Materiais comuns que o Guardião sempre deixa além do dele (id → quantidade). A Lodo-Mãe solta Gel de Lodo: garante que a
+    /// primeira caçada completa pague o primeiro upgrade da arma (3 de material primário do rank), sem depender da sorte.
+    /// </summary>
+    public IReadOnlyDictionary<string, int> Spoils { get; init; } = new Dictionary<string, int>();
 }
 
 public sealed record GuardiansFile

@@ -123,6 +123,18 @@ public class LootRollerTest
     }
 
     [TestCase]
+    public void LodoMaeAlwaysLeavesGelEnoughForTheFirstUpgrade()
+    {
+        // Espólio garantido (guardians.json "spoils"): a primeira caçada completa sempre paga os 3 de material primário do nível 2.
+        var random = new SeededRandom(7);
+        for (var i = 0; i < 200; i++)
+        {
+            var gel = Roller.Roll(Rank.E, LootSource.Guardian("lodo_mae"), random).Entries.Where(e => e.Id == "gel_de_lodo").Sum(e => e.Amount);
+            AssertThat(gel).IsGreaterEqual(3);
+        }
+    }
+
+    [TestCase]
     public void GuardianDropsASetPieceThirtyPercentOfTheTime()
     {
         var random = new SeededRandom(77);

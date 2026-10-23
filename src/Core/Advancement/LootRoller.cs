@@ -181,6 +181,11 @@ public sealed class LootRoller(AdvancementCatalog catalog)
             guardian.Rank,
             Rare: false,
             SetPiece: false));
+        foreach (var (id, amount) in guardian.Spoils)
+        {
+            var spoil = catalog.Materials[id];
+            entries.Add(new LootEntry(LootEntryKind.Material, spoil.Id, spoil.Name, amount, spoil.Rank, Rare: false, SetPiece: false));
+        }
 
         var dropsPiece = random.Chance(Config.Guardian.SetPieceChance);
         if (!dropsPiece || guardian.ArmorSet is null)

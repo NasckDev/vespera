@@ -86,6 +86,14 @@ public sealed partial class AdvancementCatalog
                 errors.Add($"Guardião '{guardian.Id}': material '{guardian.Material}' é de outro rank");
             }
 
+            foreach (var (spoil, amount) in guardian.Spoils)
+            {
+                if (!Materials.ContainsKey(spoil) || amount <= 0)
+                {
+                    errors.Add($"Guardião '{guardian.Id}': espólio '{spoil}' x{amount} inválido");
+                }
+            }
+
             if (guardian.ArmorSet is not null && !Sets.ContainsKey(guardian.ArmorSet))
             {
                 errors.Add($"Guardião '{guardian.Id}': conjunto '{guardian.ArmorSet}' não existe");
