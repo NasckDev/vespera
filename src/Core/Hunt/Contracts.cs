@@ -48,8 +48,14 @@ public sealed class RunReport
     /// <summary>Materiais trazidos (id → quantidade).</summary>
     public Dictionary<string, int> Materials { get; set; } = [];
 
+    /// <summary>Peças de equipamento achadas (nome, rank e se é rara), para a tela de resultados.</summary>
+    public List<LootLine> Items { get; set; } = [];
+
     public int MaterialCount(string id) => Materials.TryGetValue(id, out var n) ? n : 0;
 }
+
+/// <summary>Uma peça achada na caçada (tela de resultados).</summary>
+public sealed record LootLine(string Name, string Rank, bool Rare);
 
 /// <summary>Andamento de um contrato depois de uma caçada.</summary>
 public sealed record ContractProgress(Contract Contract, string Title, string Text, int Have, int Need, bool Done, ContractKindDef Reward);

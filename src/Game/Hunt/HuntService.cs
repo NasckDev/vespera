@@ -5,6 +5,7 @@ using Vespera.Core.Advancement;
 using Vespera.Core.Common;
 using Vespera.Core.Hunt;
 using Vespera.Core.Ranks;
+using Vespera.Core.Story;
 using Vespera.Game.Boot;
 using Vespera.Game.World;
 using Vespera.Game.World.Rift;
@@ -18,7 +19,7 @@ public sealed record RunSummary(
     RankStatus Before,
     RankStatus After,
     int BonusFragmentos,
-    bool GuardianJustUnlocked);
+    bool ExamJustReady);
 
 /// <summary>
 /// Caçadas da Brecha (playtest 23/10): monta a caçada a cada entrada (<see cref="RunPlanner"/>), anota o que acontece
@@ -60,8 +61,11 @@ public static class HuntService
     /// <summary>Relatório da caçada em andamento (ou da última, até a próxima entrada).</summary>
     public static RunReport? Report { get; private set; }
 
-    /// <summary>A Lodo-Mãe espera no fim das próximas caçadas.</summary>
-    public static bool GuardianUnlocked => Planner.GuardianUnlocked(State.RunsCompleted);
+    /// <summary>A Lodo-Mãe espera no fim das próximas caçadas (o Benício aprovou o exame do rank E).</summary>
+    public static bool GuardianUnlocked => Story.StoryService.Engine.HasFlag(StoryFlags.GuardianGate);
+
+    /// <summary>Caçadas completas suficientes para o Benício aceitar o exame.</summary>
+    public static bool ReadyForExam => Planner.ReadyForExam(State.RunsCompleted);
 
     /// <summary>Tem o Eco Viscoso (habilidade do Q).</summary>
     public static bool HasEcoViscoso => Progression.IsActive && Progression.State.Echoes.Contains("eco_viscoso");
@@ -103,7 +107,7 @@ public static class HuntService
         _ = Contracts;
         state.RunsStarted++;
         var seed = state.NextSeed++;
-        Plan = Planner.Plan(seed, state.RunsCompleted);
+        Plan = Planner.Plan(seed, state.RunsCompleted, GuardianUnlocked);
         Report = new RunReport { RoomCount = Plan.Rooms.Count };
         _luckActive = state.WellLuck;
         state.WellLuck = false;
@@ -226,7 +230,7 @@ public static class HuntService
         }
 
         var state = State;
-        var unlockedBefore = GuardianUnlocked;
+        var readyBefore = ReadyForExam;
         report.Survived = survived;
         report.Completed = completed;
         report.Fragmentos = end?.FragmentosBanked ?? 0;
@@ -265,7 +269,7 @@ public static class HuntService
         report.Xp = Progression.IsActive ? Progression.State.Xp - _xpAtStart : 0;
         NewDay();
         var after = Progression.IsActive ? Progression.Status : null;
-        var summary = new RunSummary(report, results, _rankAtStart ?? after!, after ?? _rankAtStart!, bonus, !unlockedBefore && GuardianUnlocked);
+        var summary = new RunSummary(report, results, _rankAtStart ?? after!, after ?? _rankAtStart!, bonus, !readyBefore && ReadyForExam);
         Plan = null;
         _luckActive = false;
         if (Progression.IsActive)
@@ -417,13 +421,20 @@ public static class HuntService
                 return;
             }
 
-            foreach (var entry in grant.Loot.Entries.Where(e => e.Kind == LootEntryKind.Material))
+            foreach (var entry in grant.Loot.Entries)
             {
-                r.Materials[entry.Id] = r.MaterialCount(entry.Id) + entry.Amount;
+                if (entry.Kind == LootEntryKind.Material)
+                {
+                    r.Materials[entry.Id] = r.MaterialCount(entry.Id) + entry.Amount;
+                }
+                else
+                {
+                    r.Items.Add(new LootLine(entry.Name, entry.Rank.ToString(), entry.Rare));
+                }
             }
         };
     }
 
-    private static string MaterialName(string id) =>
+    public static string MaterialName(string id) =>
         Progression.Catalog.Materials.TryGetValue(id, out var m) ? m.Name : id;
 }

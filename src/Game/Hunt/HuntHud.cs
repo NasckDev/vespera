@@ -3,6 +3,7 @@ using Vespera.Game.Combat;
 using Vespera.Game.Hunter;
 using Vespera.Game.UI;
 using Vespera.Game.World;
+using System.Linq;
 using Vespera.Game.World.Rift;
 
 namespace Vespera.Game.Hunt;
@@ -21,9 +22,14 @@ public partial class HuntHud : Control
     private LevelWorld? _world;
     private Label _potions = null!;
     private Label _room = null!;
+    private Label _goal = null!;
+    private Label _contracts = null!;
     private Label _lumes = null!;
     private EcoIcon _eco = null!;
     private PotionIcon _potionIcon = null!;
+
+    /// <summary>Linha do objetivo da sala (testes e capturas).</summary>
+    public string GoalText => _goal.Text;
 
     public override void _Ready()
     {
@@ -36,16 +42,23 @@ public partial class HuntHud : Control
         AddChild(_potions);
         _eco = new EcoIcon { Position = new Vector2(300, 948), Size = new Vector2(92, 92), Visible = false };
         AddChild(_eco);
-        _room = MakeLabel(40, Palette.Cream);
-        _room.HorizontalAlignment = HorizontalAlignment.Right;
-        _room.Position = new Vector2(1320, 28);
-        _room.Size = new Vector2(570, 50);
-        AddChild(_room);
-        _lumes = MakeLabel(34, Palette.Amber);
-        _lumes.HorizontalAlignment = HorizontalAlignment.Right;
-        _lumes.Position = new Vector2(1320, 80);
-        _lumes.Size = new Vector2(570, 44);
+        _room = RightLabel(40, Palette.Amber, 28);
+        _goal = RightLabel(34, Palette.Cream, 76);
+        _contracts = RightLabel(28, Palette.CreamDim, 124);
+        _contracts.AutowrapMode = TextServer.AutowrapMode.Off;
+        _lumes = MakeLabel(30, Palette.Amber);
+        _lumes.Position = new Vector2(160, 180);
         AddChild(_lumes);
+    }
+
+    private Label RightLabel(int size, Color color, float y)
+    {
+        var label = MakeLabel(size, color);
+        label.HorizontalAlignment = HorizontalAlignment.Right;
+        label.Position = new Vector2(1020, y);
+        label.Size = new Vector2(870, size + 10);
+        AddChild(label);
+        return label;
     }
 
     public void Bind(LevelWorld world) => _world = world;
@@ -60,16 +73,64 @@ public partial class HuntHud : Control
 
         Visible = true;
         var state = HuntService.State;
-        var max = HuntService.Config.Potions.Max;
-        _potions.Text = $"{state.Potions}/{max}  [R]";
+        _potions.Text = $"{state.Potions}/{HuntService.Config.Potions.Max}  [R]";
         _potionIcon.Filled = state.Potions > 0;
-        var combat = _world.Player.Combat;
         _eco.Visible = HuntService.HasEcoViscoso;
-        _eco.Fraction = combat.EcoCooldownFraction;
-        _room.Text = RiftSession.InRift && HuntService.Plan is { } plan
-            ? $"Sala {RiftSession.RoomIndex + 1}/{plan.Rooms.Count}{(plan.HasGuardian ? "  ·  Covil da Lodo-Mãe" : string.Empty)}"
-            : HuntService.GuardianUnlocked ? "A Brecha está mais forte…" : $"Caçadas completas: {state.RunsCompleted}/{HuntService.Config.GuardianAfterRuns}";
-        _lumes.Text = $"{Progression.State.Lumes} Lumes · {state.Flowers} flores";
+        _eco.Fraction = _world.Player.Combat.EcoCooldownFraction;
+        var status = Progression.Status;
+        var xp = status.Next is { } next ? $"XP {status.XpIntoRank}/{status.XpSpan} até o rank {next}" : "XP no topo";
+        _lumes.Text = $"{xp}  ·  {Progression.State.Lumes} Lumes";
+        var inRift = RiftSession.InRift && HuntService.Plan is not null;
+        _room.Visible = _goal.Visible = _contracts.Visible = inRift;
+        if (inRift)
+        {
+            UpdateRoom();
+        }
+    }
+
+    private void UpdateRoom()
+    {
+        var plan = HuntService.Plan!;
+        var director = _world!.Director;
+        var waves = director is { WaveCount: > 0 } d ? $"  ·  Onda {System.Math.Max(1, d.WavesReleased)}/{d.WaveCount}" : string.Empty;
+        _room.Text = $"Sala {RiftSession.RoomIndex + 1}/{plan.Rooms.Count}{waves}";
+        _goal.Text = RoomGoal(director);
+        var board = HuntService.Board;
+        var lines = HuntService.Contracts.Select(c => board.Evaluate(c, HuntService.Report))
+            .Select(p => $"{(p.Done ? "✔" : "·")} {p.Title} {p.Have}/{p.Need}");
+        _contracts.Text = string.Join('\n', lines);
+        _contracts.Size = new Vector2(870, 40 * 3);
+    }
+
+    /// <summary>O que fazer nesta sala, numa linha.</summary>
+    public static string RoomGoal(RoomDirector? director)
+    {
+        if (director is null)
+        {
+            return string.Empty;
+        }
+
+        if (director.Boss is { Dead: false })
+        {
+            return "Derrote a Lodo-Mãe";
+        }
+
+        if (!director.Cleared)
+        {
+            return director.Kind == "elite" ? "Vença os monstros de elite" : "Vença os monstros para abrir a passagem";
+        }
+
+        if (director.RestAvailable)
+        {
+            return "Descanse na lanterna, depois siga em frente";
+        }
+
+        if (director.Chest is { IsOpen: false })
+        {
+            return "Abra o baú do tesouro";
+        }
+
+        return RiftSession.IsLastRoom ? "Saia pela fenda e volte para a Praça" : "Siga pela passagem";
     }
 
     public static Label MakeLabel(int size, Color color)

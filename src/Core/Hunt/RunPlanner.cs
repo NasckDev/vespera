@@ -25,10 +25,11 @@ public sealed record RunPlan(int Seed, IReadOnlyList<RoomPlan> Rooms)
 
 /// <summary>
 /// Monta uma caçada (5-7 salas) a partir dos chãos do esgoto e da semente (playtest 23/10): a primeira sala é de combate
-/// leve, a dificuldade sobe sala a sala (ondas maiores, mais Espectros, elites), há no máximo uma sala de tesouro
-/// (opcional), sempre uma sala de descanso antes do fim, e o fim é o Covil — com a Lodo-Mãe só depois de
-/// <see cref="HuntConfig.GuardianAfterRuns"/> caçadas completas; antes disso, uma sala de elite.
-/// Mesma semente e mesmo estado = mesma caçada.
+/// leve (só Lodos), a dificuldade sobe sala a sala (ondas maiores, mais Espectros, elites) e caçada a caçada
+/// (<see cref="HuntConfig.RunGrowth"/>), há no máximo uma sala de tesouro (opcional), sempre uma sala de descanso antes
+/// do fim, e o fim é o Covil — com a Lodo-Mãe só quando a história abre o portão (exame do Benício); antes disso, uma
+/// sala de elite. A primeira caçada tem <see cref="HuntConfig.FirstRunRooms"/> salas. Mesma semente e mesmo estado =
+/// mesma caçada.
 /// </summary>
 public sealed class RunPlanner(HuntConfig config)
 {
@@ -38,21 +39,25 @@ public sealed class RunPlanner(HuntConfig config)
 
     public HuntConfig Config => config;
 
-    /// <summary>A Lodo-Mãe já espera no fim da caçada?</summary>
-    public bool GuardianUnlocked(int completedRuns) => completedRuns >= config.GuardianAfterRuns;
+    /// <summary>Caçadas completas suficientes para o exame do Benício?</summary>
+    public bool ReadyForExam(int completedRuns) => completedRuns >= config.GuardianAfterRuns;
 
-    public RunPlan Plan(int seed, int completedRuns)
+    /// <param name="completedRuns">Caçadas completas antes desta (deixa as ondas maiores).</param>
+    /// <param name="guardian">A Lodo-Mãe espera no fim (portão da história aberto).</param>
+    public RunPlan Plan(int seed, int completedRuns, bool guardian)
     {
         var random = new SeededRandom(seed);
-        var count = random.RangeInt(config.RoomsMin, config.RoomsMax);
-        var kinds = Layout(count, random, GuardianUnlocked(completedRuns));
+        var rolled = random.RangeInt(config.RoomsMin, config.RoomsMax);
+        var count = completedRuns == 0 && !guardian ? config.FirstRunRooms : rolled;
+        var growth = config.RunGrowth * Math.Min(completedRuns, config.RunGrowthCap);
+        var kinds = Layout(count, random, guardian);
         var rooms = new List<RoomPlan>(count);
         string? previous = null;
         for (var i = 0; i < count; i++)
         {
             var ground = i == count - 1 ? FinalGround : PickGround(kinds[i], previous, random);
             previous = ground;
-            rooms.Add(new RoomPlan(i, ground, kinds[i], Waves(ground, kinds[i], i, count, random)));
+            rooms.Add(new RoomPlan(i, ground, kinds[i], Waves(ground, kinds[i], i, count, growth, random)));
         }
 
         return new RunPlan(seed, rooms);
@@ -89,7 +94,7 @@ public sealed class RunPlanner(HuntConfig config)
         return pool[random.RangeInt(0, pool.Count - 1)];
     }
 
-    private List<IReadOnlyList<SpawnPlan>> Waves(string ground, RoomKind kind, int index, int count, IRandom random)
+    private List<IReadOnlyList<SpawnPlan>> Waves(string ground, RoomKind kind, int index, int count, double growth, IRandom random)
     {
         var waves = new List<IReadOnlyList<SpawnPlan>>();
         if (kind is RoomKind.Rest or RoomKind.Treasure or RoomKind.Guardian)
@@ -100,10 +105,12 @@ public sealed class RunPlanner(HuntConfig config)
         var spawns = config.Grounds[ground].Spawns;
         var depth = count <= 1 ? 0.0 : index / (double)(count - 1);
         var waveCount = 2 + (index >= config.ExtraWaveFromRoom ? 1 : 0);
-        var espectroShare = Math.Min(config.EspectroShareMax, config.EspectroShareStart + (config.EspectroSharePerRoom * index));
+        // A primeira sala é só de Lodos (o caçador aprende a bater e a esquivar antes do Espectro).
+        var espectroShare = index == 0 ? 0 : Math.Min(config.EspectroShareMax, config.EspectroShareStart + (config.EspectroSharePerRoom * index));
         for (var w = 0; w < waveCount; w++)
         {
-            var size = Math.Min(config.MaxWaveSize, (int)Math.Round(config.FirstWaveSize + (config.WaveSizePerRoom * index) + (w * 0.5 * depth)));
+            var extra = index == 0 ? 0 : growth;
+            var size = Math.Min(config.MaxWaveSize, (int)Math.Round(config.FirstWaveSize + (config.WaveSizePerRoom * index) + (w * 0.5 * depth) + extra));
             var points = Shuffle(spawns.Count, random).Take(size).ToList();
             var wave = new List<SpawnPlan>(size);
             var elites = EliteCount(kind, index, w, waveCount, random);

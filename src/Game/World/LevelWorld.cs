@@ -122,8 +122,6 @@ public partial class LevelWorld : Node2D
             AddProp(placement.Type, at, placement.Flip);
         }
 
-        AddChild(new AmbientFx(this) { Name = "Ambient" });
-
         foreach (var zone in _data.Zones)
         {
             AddZone(zone);
@@ -137,7 +135,7 @@ public partial class LevelWorld : Node2D
         Camera.MakeCurrent();
         Feel.Camera = Camera;
 
-        if (_data.Rift is { } rift && _withDirector)
+        if (RoomRift() is { } rift && _withDirector)
         {
             Director = new RoomDirector(this, rift);
             AddChild(Director);
@@ -145,6 +143,13 @@ public partial class LevelWorld : Node2D
     }
 
     public Vector2 SpawnPoint => new(_data.Spawn[0], _data.Spawn[1]);
+
+    /// <summary>Conteúdo da sala: o da caçada sorteada (dentro da Brecha) ou o fixo do JSON da fase.</summary>
+    private RiftRoomData? RoomRift() =>
+        _data.Rift is not null && RiftSession.InRift && HuntService.Plan is { } plan && RiftSession.RoomIndex < plan.Rooms.Count
+            && plan.Rooms[RiftSession.RoomIndex].Ground == _data.Id
+            ? HuntService.RoomRift(RiftSession.RoomIndex, _data)
+            : _data.Rift;
 
     /// <summary>Cria um caçador no ponto (pé) dado; usado pelo jogador e pelos bots de teste.</summary>
     public Player SpawnPlayer(IInputSource input, Vector2 feet, HunterClass hunter = HunterClass.Lamina)
@@ -239,9 +244,9 @@ public partial class LevelWorld : Node2D
     }
 
     /// <summary>Põe um quebrável do catálogo (barril, caixote, jarro) com o pé em <paramref name="at"/>.</summary>
-    public Breakable AddBreakable(string type, Vector2 at, string key)
+    public Breakable AddBreakable(string type, Vector2 at, string key, float extraScale = 1f)
     {
-        var breakable = new Breakable(type, _catalog[type].Scaled(_data.PropScale), this, key) { Position = at };
+        var breakable = new Breakable(type, _catalog[type].Scaled(_data.PropScale * extraScale), this, key) { Position = at };
         Entities.AddChild(breakable);
         _breakables.Add(breakable);
         breakable.TreeExited += () => _breakables.Remove(breakable);

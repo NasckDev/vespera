@@ -28,6 +28,12 @@ public static class StoryFlags
     /// <summary>Evento: Odete oferece trocar a arma (a classe). O jogo abre a confirmação e a escolha.</summary>
     public const string EventChangeWeapon = "ChangeWeapon";
 
+    /// <summary>
+    /// O Benício aprovou o exame do rank E (caçadas completas, arma forjada, contrato cumprido): a Lodo-Mãe passa a
+    /// esperar no fim da caçada. QUEM EMITE: a fala do exame (data/dialogue/benicio_quadro.json).
+    /// </summary>
+    public const string GuardianGate = "exame_e";
+
     /// <summary>Prefixo das flags de dicas já mostradas ("hint_move", "hint_attack"...). Ficam no save junto das flags da história.</summary>
     public const string HintPrefix = "hint_";
 

@@ -21,8 +21,17 @@ public sealed class HuntConfig
 
     public int RoomsMax { get; set; } = 7;
 
-    /// <summary>Caçadas completas antes de a Lodo-Mãe aparecer no fim da caçada.</summary>
+    /// <summary>Caçadas completas antes de o Benício aceitar o exame (a Lodo-Mãe só aparece com o exame aprovado).</summary>
     public int GuardianAfterRuns { get; set; } = 2;
+
+    /// <summary>Salas da primeira caçada (curta, para aprender).</summary>
+    public int FirstRunRooms { get; set; } = 5;
+
+    /// <summary>Monstros a mais por onda a cada caçada completa (a Brecha "aprende" com o caçador).</summary>
+    public double RunGrowth { get; set; } = 0.5;
+
+    /// <summary>Caçadas completas que ainda aumentam as ondas.</summary>
+    public int RunGrowthCap { get; set; } = 3;
 
     public double TreasureChance { get; set; } = 0.6;
 

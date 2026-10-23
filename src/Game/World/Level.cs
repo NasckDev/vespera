@@ -30,6 +30,7 @@ public partial class Level : Control
     private Interactable? _reading;
     private float _readingTimer;
     private float _noticeTimer;
+    private Hunt.HuntHud _huntHud = null!;
 
     public Level(LevelData data, IReadOnlyDictionary<string, PropDef> catalog)
     {
@@ -96,6 +97,8 @@ public partial class Level : Control
         AddChild(Numbers);
         CombatHud = new CombatHud { Name = "CombatHud" };
         AddChild(CombatHud);
+        _huntHud = new Hunt.HuntHud { Name = "HuntHud" };
+        AddChild(_huntHud);
         _hud = new InteractionHud { Name = "Hud" };
         AddChild(_hud);
         BuildStory();
@@ -131,6 +134,11 @@ public partial class Level : Control
     public override void _Process(double delta)
     {
         var dt = (float)delta;
+        if (RiftSession.InRift && !_switching)
+        {
+            Hunter.HuntService.AddSeconds(delta);
+        }
+
         UpdateReading(dt);
         UpdateStory();
         if (_noticeTimer > 0f && (_noticeTimer -= dt) <= 0f && _reading is null)
@@ -194,6 +202,7 @@ public partial class Level : Control
         world.Feel.NumberRequested += (at, text, color, size) => Numbers.Spawn(at, text, color, size);
         world.Feel.ToastRequested += CombatHud.Toast;
         CombatHud.Bind(world);
+        _huntHud.Bind(world);
         if (world.Director is { } director)
         {
             director.ExitRequested += OnRoomExit;
@@ -247,6 +256,17 @@ public partial class Level : Control
                 return;
             case "descer" or "saida":
                 World.Director?.RequestExit();
+                return;
+            case "rest":
+                if (World.Director?.UseRest() == true)
+                {
+                    WorldSfx.Play(World, WorldSound.LampOn, at);
+                }
+
+                return;
+            case "water" when item.OwnerProp is { Type: "poco" }:
+                WorldSfx.Play(World, WorldSound.Water, at);
+                ShowNotice(Hunter.HuntService.ThrowCoin().Message);
                 return;
             case "lamp" when item.OwnerProp is { } lamp:
                 lamp.SetLight(!lamp.LightOn);

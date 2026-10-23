@@ -28,8 +28,8 @@ public class HuntPlannerTest
     public void SameSeedSameRun()
     {
         var planner = new RunPlanner(Config);
-        var a = planner.Plan(77, 0);
-        var b = planner.Plan(77, 0);
+        var a = planner.Plan(77, 1, false);
+        var b = planner.Plan(77, 1, false);
         AssertThat(a.Rooms.Count).IsEqual(b.Rooms.Count);
         AssertThat(string.Join(",", a.Rooms.Select(r => $"{r.Ground}/{r.Kind}/{r.MonsterCount}")))
             .IsEqual(string.Join(",", b.Rooms.Select(r => $"{r.Ground}/{r.Kind}/{r.MonsterCount}")));
@@ -42,7 +42,7 @@ public class HuntPlannerTest
         var counts = new HashSet<int>();
         for (var seed = 1; seed <= 200; seed++)
         {
-            var plan = planner.Plan(seed, 0);
+            var plan = planner.Plan(seed, 1, false);
             counts.Add(plan.Rooms.Count);
             AssertThat(plan.Rooms.Count).IsBetween(5, 7);
             AssertThat(plan.Rooms[0].Kind).IsEqual(RoomKind.Combat);
@@ -61,15 +61,43 @@ public class HuntPlannerTest
     }
 
     [TestCase]
-    public void GuardianOnlyAfterTwoCompletedRuns()
+    public void GuardianOnlyWhenTheGateIsOpen()
     {
         var planner = new RunPlanner(Config);
-        AssertThat(planner.Plan(5, 0).HasGuardian).IsFalse();
-        AssertThat(planner.Plan(5, 1).HasGuardian).IsFalse();
-        var unlocked = planner.Plan(5, 2);
+        AssertThat(planner.Plan(5, 0, false).HasGuardian).IsFalse();
+        AssertThat(planner.Plan(5, 9, false).HasGuardian).IsFalse();
+        var unlocked = planner.Plan(5, 2, true);
         AssertThat(unlocked.HasGuardian).IsTrue();
         AssertThat(unlocked.Rooms[^1].Ground).IsEqual("esgoto_arena");
         AssertThat(unlocked.Rooms[^1].Waves.Count).IsEqual(0);
+    }
+
+    [TestCase]
+    public void FirstRunIsShortAndStartsGentle()
+    {
+        var planner = new RunPlanner(Config);
+        for (var seed = 1; seed <= 50; seed++)
+        {
+            var plan = planner.Plan(seed, 0, false);
+            AssertThat(plan.Rooms.Count).IsEqual(Config.FirstRunRooms);
+            AssertThat(plan.Rooms[0].Waves.Max(w => w.Count)).IsLessEqual(Config.FirstWaveSize);
+            AssertThat(plan.Rooms[0].EliteCount).IsEqual(0);
+            AssertThat(plan.Rooms[0].Waves.SelectMany(w => w).All(s => s.Monster == "lodo")).IsTrue();
+        }
+    }
+
+    [TestCase]
+    public void LaterRunsHaveMoreMonsters()
+    {
+        var planner = new RunPlanner(Config);
+        double Average(int done) => Enumerable.Range(1, 100).Average(seed =>
+        {
+            var plan = planner.Plan(seed, done, false);
+            return plan.MonsterCount / (double)plan.Rooms.Count;
+        });
+
+        AssertThat(Average(2)).IsGreater(Average(1));
+        AssertThat(Average(1)).IsGreater(Average(0));
     }
 
     [TestCase]

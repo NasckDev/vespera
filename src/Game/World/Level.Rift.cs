@@ -107,11 +107,19 @@ public partial class Level
             return;
         }
 
-        RiftRules.MarkClosed(RiftSession.Save);
-        var end = RiftSession.EndRun(survived: true);
+        var guardian = Hunter.HuntService.Plan?.HasGuardian == true;
+        if (guardian)
+        {
+            RiftRules.MarkClosed(RiftSession.Save);
+        }
+
+        var (end, summary) = RiftSession.EndRunWithSummary(survived: true, completed: true);
         _carriedHp = null;
         GameSession.Autosave();
-        _ = ReturnToHub($"Brecha fechada! +{end?.FragmentosBanked ?? 0} Fragmentos levados para casa.", "Esgotos do Mercado — fechada");
+        var toast = guardian
+            ? $"Brecha fechada! +{end?.FragmentosBanked ?? 0} Fragmentos levados para casa."
+            : $"Caçada completa! +{end?.FragmentosBanked ?? 0} Fragmentos levados para casa.";
+        _ = ReturnToHub(toast, guardian ? "Esgotos do Mercado — fechada" : "De volta, inteiro", summary, guardian);
     }
 
     private void OnPlayerDied(HunterCombat combat)
@@ -122,18 +130,31 @@ public partial class Level
             return;
         }
 
-        var lost = RiftSession.EndRun(survived: false)?.FragmentosLeft ?? 0;
+        var (end, summary) = RiftSession.EndRunWithSummary(survived: false, completed: false);
+        var lost = end?.FragmentosLeft ?? 0;
         _carriedHp = null;
         GameSession.Autosave();
         var message = lost > 0
             ? $"Você caiu. Seus {lost} Fragmentos ficaram na Lanterna, dentro da Brecha."
             : "Você caiu. A Brecha te cuspiu de volta na Praça.";
-        _ = ReturnToHub(message, "A Lanterna ficou para trás");
+        _ = ReturnToHub(message, "A Lanterna ficou para trás", summary, false);
     }
 
-    private async Task ReturnToHub(string toast, string subtitle)
+    /// <summary>Tela de resultado da última caçada (abre na Praça, antes das falas automáticas).</summary>
+    public static bool ShowResults { get; set; } = true;
+
+    private async Task ReturnToHub(string toast, string subtitle, Hunter.RunSummary? summary = null, bool closed = false)
     {
         await GoToRoom(HubLevelId, _hubSpawn);
+        if (summary is not null && ShowResults)
+        {
+            Hunt.RunResultScreen.Show(summary, closed);
+            while (Hunt.RunResultScreen.Active is not null && IsInstanceValid(this))
+            {
+                await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+            }
+        }
+
         World.Player.Combat.Revive();
         CombatHud.ShowTitle("Praça da Lanterna", subtitle);
         CombatHud.Toast(toast);
