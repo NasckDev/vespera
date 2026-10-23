@@ -93,6 +93,57 @@ public static class UiKit
         FollowFocus = true,
     };
 
+    /// <summary>
+    /// Rola a lista (o <see cref="ScrollContainer"/> acima de <paramref name="item"/>) para o item ficar inteiro à vista com
+    /// <paramref name="margin"/> px de folga para o brilho do foco; o primeiro item da coluna volta ao topo (mostra o título e a
+    /// margem de cima). Use no lugar do FollowFocus, que encosta o item na borda e corta a moldura e o brilho.
+    /// </summary>
+    public static void KeepVisible(Control item, float margin = 36f)
+    {
+        Node? node = item.GetParent();
+        while (node is not null and not ScrollContainer)
+        {
+            node = node.GetParent();
+        }
+
+        if (node is not ScrollContainer scroll || scroll.GetChildCount() == 0 || scroll.GetChild(0) is not Control content)
+        {
+            return;
+        }
+
+        var top = item.GlobalPosition.Y - content.GlobalPosition.Y;
+        var bottom = top + item.Size.Y;
+        var view = scroll.Size.Y;
+        var target = (float)scroll.ScrollVertical;
+        if (IsFirstFocusable(item))
+        {
+            target = 0f;
+        }
+        else if (top - margin < target)
+        {
+            target = top - margin;
+        }
+        else if (bottom + margin > target + view)
+        {
+            target = bottom + margin - view;
+        }
+
+        scroll.ScrollVertical = Mathf.Max(0, Mathf.RoundToInt(target));
+    }
+
+    private static bool IsFirstFocusable(Control item)
+    {
+        foreach (var child in item.GetParent().GetChildren())
+        {
+            if (child is Control { FocusMode: Control.FocusModeEnum.All } c && !c.IsQueuedForDeletion())
+            {
+                return c == item;
+            }
+        }
+
+        return false;
+    }
+
     /// <summary>Envolve o conteúdo de uma lista rolável numa margem que acomoda o brilho do foco (que sai do controle).</summary>
     public static MarginContainer PadForGlow(Control content)
     {

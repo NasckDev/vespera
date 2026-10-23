@@ -66,6 +66,7 @@ public partial class InventoryScreen : HunterScreen
         walletMargin.AddChild(walletRow);
         center.AddChild(walletMargin);
         var scroll = UiKit.MakeScroll();
+        scroll.FollowFocus = false;
         _bag = UiKit.MakeColumn(10);
         _bag.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
         scroll.AddChild(UiKit.PadForGlow(_bag));
@@ -105,6 +106,7 @@ public partial class InventoryScreen : HunterScreen
     private static ScrollContainer WrapScroll(Control child, int width)
     {
         var scroll = UiKit.MakeScroll();
+        scroll.FollowFocus = false;
         scroll.VerticalScrollMode = ScrollContainer.ScrollMode.ShowNever;
         scroll.CustomMinimumSize = new Vector2(width, 0);
         scroll.SizeFlagsHorizontal = Control.SizeFlags.ShrinkBegin;
@@ -216,6 +218,7 @@ public partial class InventoryScreen : HunterScreen
     {
         row.SetMeta("key", key);
         row.Highlighted += ShowDetail;
+        row.Highlighted += r => Callable.From(() => UiKit.KeepVisible(r)).CallDeferred();
         parent.AddChild(row);
         _rows.Add(row);
     }

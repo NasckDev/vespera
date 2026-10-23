@@ -15,6 +15,10 @@ namespace Vespera.Game.UI;
 public partial class DialogueBox : Control
 {
     private const string PanelPath = "res://assets/v2/interface/painel_dialogo.png";
+
+    /// <summary>Mesmo painel sem a moldura do retrato (narração e falas sem retrato usam a largura toda).</summary>
+    private const string NarrationPanelPath = "res://assets/v2/interface/painel_dialogo_narracao.png";
+    private const float NarrationTextX = 64f;
     private const float PanelWidth = 1500f;
     private const float PanelBottomMargin = 36f;
     private const float PanelSourceWidth = 1536f;
@@ -34,6 +38,9 @@ public partial class DialogueBox : Control
     private string _keyName = "E";
     private TextureRect _panel = null!;
     private TextureRect _portrait = null!;
+    private Control _portraitFrame = null!;
+    private Texture2D _speakerPanel = null!;
+    private Texture2D _narrationPanel = null!;
     private Label _portraitCaption = null!;
     private PanelContainer _plate = null!;
     private Label _plateName = null!;
@@ -216,9 +223,28 @@ public partial class DialogueBox : Control
 
         _portrait.Texture = texture;
         _portrait.Visible = texture is not null;
-        _portraitCaption.Visible = texture is null;
-        _portraitCaption.Text = name.Length == 0 ? string.Empty : "voz fora de cena";
+        _portraitCaption.Visible = false;
+        ApplyLayout(narration: texture is null);
     }
+
+    /// <summary>Sem retrato (narração, voz fora de cena): some a moldura vazia e o texto ocupa a largura do painel.</summary>
+    private void ApplyLayout(bool narration)
+    {
+        var k = _panel.Size.X / PanelSourceWidth;
+        var x = narration ? NarrationTextX : TextX;
+        _panel.Texture = narration ? _narrationPanel : _speakerPanel;
+        _portraitFrame.Visible = !narration;
+        _text.Position = new Vector2(x * k, TextPadTop * k);
+        _text.Size = new Vector2(_panel.Size.X - ((x + TextPadRight) * k), _panel.Size.Y - (2f * TextPadTop * k));
+        IsNarration = narration;
+        PlacePlate();
+    }
+
+    /// <summary>A caixa atual está no leiaute de narração (sem retrato, largura toda).</summary>
+    public bool IsNarration { get; private set; }
+
+    /// <summary>A moldura do retrato está à vista (para os bots).</summary>
+    public bool PortraitFrameVisible => _portraitFrame.Visible;
 
     private void BuildChoiceButtons(IReadOnlyList<DialogueChoice> choices)
     {
@@ -269,12 +295,14 @@ public partial class DialogueBox : Control
         var size = _plate.GetCombinedMinimumSize();
         _plate.Size = size;
         var k = _panel.Size.X / PanelSourceWidth;
-        _plate.Position = new Vector2(_panel.Position.X + (TextX * k), _panel.Position.Y - (size.Y * 0.55f));
+        _plate.Position = new Vector2(_panel.Position.X + ((IsNarration ? NarrationTextX : TextX) * k), _panel.Position.Y - (size.Y * 0.55f));
     }
 
     private void BuildPanel()
     {
         var texture = GD.Load<Texture2D>(PanelPath);
+        _speakerPanel = texture;
+        _narrationPanel = ResourceLoader.Exists(NarrationPanelPath) ? GD.Load<Texture2D>(NarrationPanelPath) : texture;
         var k = PanelWidth / PanelSourceWidth;
         var size = new Vector2(PanelWidth, texture.GetHeight() * k);
         _panel = new TextureRect
@@ -298,6 +326,7 @@ public partial class DialogueBox : Control
             MouseFilter = MouseFilterEnum.Ignore,
         };
         _panel.AddChild(portraitFrame);
+        _portraitFrame = portraitFrame;
         _portrait = new TextureRect
         {
             Name = "Portrait",
