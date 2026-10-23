@@ -87,6 +87,12 @@ public partial class SmokeTest : Node
             await VisitIntro();
         }
 
+        if (Array.IndexOf(_args, ProgressionFlag) >= 0)
+        {
+            await RunProgressionSmoke();
+            return;
+        }
+
         await WaitFor(() => _router.Current is TitleScreen && !_router.IsBusy && FocusText() is not null, "título");
         Check(FocusText() == "Nova história", $"foco inicial no título deveria ser 'Nova história', foi '{FocusText()}'");
         Check(FindButton("Continuar")?.Disabled == true, "Continuar deveria estar desabilitado sem save");
