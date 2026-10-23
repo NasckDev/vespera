@@ -60,6 +60,13 @@ public partial class RoomDirector : Node
             _world.AddSolid(_barrier.Rect);
         }
 
+        foreach (var r in _data.Sealed)
+        {
+            var seal = new Barrier(new Rect2(r[0], r[1], r[2], r[3]), BarrierHeight * a * 0.8f) { Name = "Sealed" };
+            _world.Entities.AddChild(seal);
+            _world.AddSolid(seal.Rect);
+        }
+
         if (_data.Chest is { } chest)
         {
             Chest = new Chest(_world, new Vector2(chest[0], chest[1])) { Name = "Chest" };

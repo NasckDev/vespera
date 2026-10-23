@@ -11,7 +11,6 @@ namespace Vespera.Game.Actors.Enemies;
 /// </summary>
 public partial class Espectro(LevelWorld world) : Enemy("espectro", world)
 {
-    private const float FloatHeight = 10f;
     private const float BobAmplitude = 4f;
     private const float LungeRange = 170f;
     private const float LungeDistance = 230f;
@@ -37,7 +36,8 @@ public partial class Espectro(LevelWorld world) : Enemy("espectro", world)
     protected override Vector2 Think(float dt)
     {
         _bob += dt * 2.6f;
-        Sprite.Position = new Vector2(0, -(FloatHeight + (Mathf.Sin(_bob) * BobAmplitude)) * A);
+        var hover = ScaleRegistry.HoverHeight(MonsterId, A * ScaleRules.ReferenceHuman);
+        Sprite.Position = new Vector2(0, -hover - (Mathf.Sin(_bob) * BobAmplitude * A));
         _cooldown -= dt;
         var target = Target;
         switch (State)

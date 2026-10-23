@@ -30,12 +30,6 @@ public static class HunterSprites
     /// <summary>Altura em pé do caçador na folha (px).</summary>
     public const float StandHeight = 112f;
 
-    /// <summary>
-    /// A régua das fases foi tirada da tira antiga (125 px opacos); a folha nova tem 112. Este fator mantém o caçador
-    /// com a mesma altura no mundo (actorScale × 125/112).
-    /// </summary>
-    public const float SheetToWorld = 125f / StandHeight;
-
     private static readonly Dictionary<HunterClass, SpriteFrames> Cache = [];
 
     public static string ClassFolder(HunterClass hunter) => hunter switch

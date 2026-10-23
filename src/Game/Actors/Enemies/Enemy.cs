@@ -96,6 +96,12 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
 
     protected AnimatedSprite2D Sprite { get; private set; } = null!;
 
+    /// <summary>Sprite do monstro (medição de escala e capturas).</summary>
+    public AnimatedSprite2D SpriteNode => Sprite;
+
+    /// <summary>Toca uma animação da folha (capturas de QA).</summary>
+    public void PlayAnimation(string anim) => Play(anim);
+
     protected HitFlash Flash { get; private set; } = null!;
 
     protected EnemyHealthBar Bar { get; private set; } = null!;

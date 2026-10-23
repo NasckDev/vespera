@@ -104,7 +104,7 @@ public partial class Player : CharacterBody2D
         };
         AddChild(feet);
 
-        var spriteScale = _scale * HunterSprites.SheetToWorld;
+        var spriteScale = SpriteScaleFor(Hunter);
         Sprite = new AnimatedSprite2D
         {
             Name = "Sprite",
@@ -168,9 +168,14 @@ public partial class Player : CharacterBody2D
     {
         Hunter = hunter;
         Sprite.SpriteFrames = HunterSprites.Build(hunter);
+        Sprite.Scale = Vector2.One * SpriteScaleFor(hunter);
         Combat.ChangeWeapon();
         PlayIdle(force: true);
     }
+
+    /// <summary>Escala da folha pelo contrato de escala (altura humana do mapa = actorScale × 125).</summary>
+    private float SpriteScaleFor(HunterClass hunter) =>
+        ScaleRegistry.SpriteScale(HunterSprites.ClassFolder(hunter), _scale * ScaleRules.ReferenceHuman);
 
     /// <summary>Vira para a direção (8 direções → baixo/cima/lado + espelho) e guarda a mira.</summary>
     public void Face(Vector2 dir)

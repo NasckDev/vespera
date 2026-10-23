@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Text.Json;
 using Godot;
+using Vespera.Game.World;
 
 namespace Vespera.Game.Actors.Enemies;
 
@@ -15,15 +16,6 @@ public sealed record MonsterSheet(SpriteFrames Frames, Vector2 Offset, float Sta
 public static class MonsterSprites
 {
     private static readonly Dictionary<string, (SpriteFrames Frames, Vector2 Offset, float Stand)> Cache = [];
-
-    /// <summary>Altura desejada em "caçadores" (1 = altura do caçador em pé).</summary>
-    public static float HeightInHunters(string id) => id switch
-    {
-        "lodo" => 0.45f,
-        "espectro" => 1.1f,
-        "lodo_mae" => 3.0f,
-        _ => 1f,
-    };
 
     public static void ClearCache() => Cache.Clear();
 
@@ -43,9 +35,8 @@ public static class MonsterSprites
             Cache[id] = entry;
         }
 
-        // Altura do caçador no mundo = 125 px da régua × actorScale (ver HunterSprites.SheetToWorld).
-        var hunterWorld = 125f * actorScale;
-        var scale = HeightInHunters(id) * sizeFactor * hunterWorld / entry.Stand;
-        return new MonsterSheet(entry.Frames, entry.Offset, entry.Stand, scale);
+        // Contrato de escala (PLANO-V2 §2.1): alvo da tabela × altura humana do mapa ÷ standing_height da folha.
+        var scale = ScaleRegistry.SpriteScale(id, actorScale * ScaleRules.ReferenceHuman, sizeFactor);
+        return new MonsterSheet(entry.Frames, entry.Offset, ScaleRegistry.StandingHeight(id), scale);
     }
 }

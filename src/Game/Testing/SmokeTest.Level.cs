@@ -20,6 +20,7 @@ public partial class SmokeTest
     public const string QaProofFlag = "--qa-prova";
     public const string CombatBotFlag = "--combat-bot";
     public const string CombatQaFlag = "--qa-combate";
+    public const string ScaleFlag = "--escala";
 
     private async Task RunLevelExtras(Level level)
     {
@@ -30,6 +31,12 @@ public partial class SmokeTest
             var failures = await bot.Run();
             _failures.AddRange(failures);
             await RunRiftCollisionBots(level);
+        }
+
+        if (Array.IndexOf(_args, ScaleFlag) >= 0)
+        {
+            var shots = _shotsDir is not null && DisplayServer.GetName() != "headless";
+            _failures.AddRange(await new ScaleCheck(level, this, shots).Run());
         }
 
         if (Array.IndexOf(_args, CombatBotFlag) >= 0)

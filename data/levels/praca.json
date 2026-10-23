@@ -11,7 +11,8 @@
   "cols": 105,
   "rows": 59,
   "spawn": [836, 640],
-  "actorScale": 0.432,
+  "doorHeight": 72,
+  "doorAt": [190, 133],
   "propScale": 1.0,
   "cameraZoom": 1.85,
   "props": [
