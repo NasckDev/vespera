@@ -127,6 +127,7 @@ public partial class LevelWorld : Node2D
             AddZone(zone);
         }
 
+        Vespera.Game.Audio.MusicDirector.Play(_data.Id);
         SpawnNpcs();
         Player = SpawnPlayer(MergedInput.LocalSolo(), SpawnPoint, RiftSession.Hunter);
         AddChild(new LevelVignette(Bounds, VignetteEdge * _data.ActorScale) { ZIndex = -9 });

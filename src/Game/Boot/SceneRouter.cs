@@ -94,6 +94,7 @@ public partial class SceneRouter : Node
         _current?.QueueFree();
         _current = factory();
         CurrentKey = key;
+        Vespera.Game.Audio.MusicDirector.Play(key);
         _stage.AddChild(_current);
 
         await FadeTo(0f);
@@ -128,6 +129,7 @@ public partial class SceneRouter : Node
 
         _current = next;
         CurrentKey = key;
+        Vespera.Game.Audio.MusicDirector.Play(key);
         _stage.AddChild(next);
 
         var tween = CreateTween();

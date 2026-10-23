@@ -47,7 +47,7 @@ public static class CombatSfx
     private const int Rate = 22050;
     private const float Gain = 0.42f;
 
-    private static readonly Dictionary<CombatSound, AudioStreamWav> Cache = [];
+    private static readonly Dictionary<CombatSound, AudioStream> Cache = [];
     private static readonly Random Rng = new(7);
 
     public static void ClearCache() => Cache.Clear();
@@ -56,7 +56,7 @@ public static class CombatSfx
     {
         if (!Cache.TryGetValue(sound, out var stream))
         {
-            stream = Wav(Build(sound));
+            stream = Vespera.Game.Audio.SoundBank.Get("combat", sound.ToString()) ?? Wav(Build(sound));
             Cache[sound] = stream;
         }
 
