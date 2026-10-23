@@ -45,9 +45,11 @@ public sealed class CameraCheck(Level level, SmokeTest host)
     }
 
     /// <summary>Altura do caçador em px da tela 1080p, pelas transformações (o mesmo cálculo da fila de escala, × câmera).</summary>
-    public static float OnScreenHeight(Level level)
+    public static float OnScreenHeight(Level level) => OnScreenHeight(level, level.Player);
+
+    /// <summary>Como <see cref="OnScreenHeight(Level)"/>, para qualquer caçador da sala (co-op).</summary>
+    public static float OnScreenHeight(Level level, Actors.Player player)
     {
-        var player = level.Player;
         var world = ScaleCheck.Measure(player.Sprite);
         var feet = level.WorldToScreen(player.GlobalPosition);
         var head = level.WorldToScreen(player.GlobalPosition - new Vector2(0, world));

@@ -85,6 +85,11 @@ public partial class SmokeTest
         {
             await CaptureWarnings(level);
         }
+
+        if (Array.IndexOf(_args, CoopBotFlag) >= 0)
+        {
+            await RunCoop((Level)_router.Current!);
+        }
     }
 
     /// <summary>Bot de colisão nas outras fases do Ato I (Forjas, forja da Odete e salas da Brecha sem monstros) e volta à Praça.</summary>
