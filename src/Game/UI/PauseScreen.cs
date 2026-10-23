@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Godot;
 using Vespera.Game.Boot;
+using Vespera.Game.Hunter;
 
 namespace Vespera.Game.UI;
 
@@ -42,6 +43,12 @@ public partial class PauseScreen : UiScreen
         panel.AddChild(UiKit.PadForGlow(column));
         var buttons = new List<Control>();
         _resume = Add(column, buttons, "Continuar", Resume);
+        if (Progression.IsActive)
+        {
+            Add(column, buttons, "Inventário", () => InventoryScreen.Open());
+            Add(column, buttons, "Caçador", () => CharacterScreen.Open());
+        }
+
         Add(column, buttons, "Opções", () => SceneRouter.Instance.Push(ScreenKeys.Options));
         Add(column, buttons, "Controles", () => SceneRouter.Instance.Push(ScreenKeys.Controls));
         Add(column, buttons, "Ajuda", () => SceneRouter.Instance.Push(ScreenKeys.Help));
