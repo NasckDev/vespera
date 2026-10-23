@@ -34,11 +34,60 @@ public sealed class CombatBot(Level level, SmokeTest host)
     /// <summary>Ranks celebrados durante a caçada (a tela de rank abre sozinha depois do Guardião).</summary>
     public List<Vespera.Core.Ranks.Rank> RankUps { get; } = [];
 
+    /// <summary>Fotografa a caçada (QA visual): cada sala, golpe com pausa no impacto, avisos e a celebração de rank.</summary>
+    public bool Shots { get; init; }
+
+    /// <summary>Prefixo dos nomes das capturas.</summary>
+    public string ShotPrefix { get; init; } = "caca";
+
+    private readonly HashSet<string> _shot = [];
+
+    private async Task ShotOnce(string name)
+    {
+        if (Shots && _shot.Add(name))
+        {
+            await host.CaptureNow($"{ShotPrefix}_{name}");
+        }
+    }
+
+    /// <summary>Capturas de momentos da luta (uma vez cada): golpe acertando (hit-stop), avisos âmbar dos monstros.</summary>
+    private async Task ShotMoments(string room, int frames)
+    {
+        if (!Shots)
+        {
+            return;
+        }
+
+        if (frames == 70)
+        {
+            var at = level.WorldToScreen(World.Player.GlobalPosition);
+            Log.Info($"qa-pos {ShotPrefix}_{room}_luta {at.X:0} {at.Y:0} {CameraCheck.OnScreenHeight(level):0.0}");
+            await ShotOnce($"{room}_luta");
+        }
+
+        if (Engine.TimeScale < 1.0 && !_shot.Contains("golpe_hitstop_a"))
+        {
+            await ShotOnce("golpe_hitstop_a");
+            await host.PhysicsFrames(2);
+            await ShotOnce("golpe_hitstop_b");
+        }
+
+        foreach (var enemy in World.Enemies)
+        {
+            if (GodotObject.IsInstanceValid(enemy) && enemy.State == EnemyState.Telegraph)
+            {
+                await ShotOnce(enemy switch { LodoMae => "lodo_mae_aviso", Espectro => "espectro_aviso", _ => "lodo_aviso" });
+            }
+        }
+    }
+
     private LevelWorld World => level.World;
 
     private float S => World.Data.ActorScale;
 
-    public async Task<List<string>> Run(HunterClass hunter)
+    /// <param name="hunter">Arma da caçada; null = a que o seletor do portal oferece (a equipada).</param>
+    /// <param name="lanternTest">Depois da caçada, cai de propósito para provar a Lanterna.</param>
+    public async Task<List<string>> Run(HunterClass? hunter, bool lanternTest = true)
     {
         var save = RiftSession.Save;
         var shardsBefore = RiftSession.WalletFragments;
@@ -65,8 +114,8 @@ public sealed class CombatBot(Level level, SmokeTest host)
         Check(Progression.State.GuardiansDefeated.Count >= guardiansBefore, "conquistas não podem sumir");
         Check(RankUps.Contains(Vespera.Core.Ranks.Rank.D) || Progression.Rank > Vespera.Core.Ranks.Rank.E, $"a primeira caçada completa deveria subir E -> D (XP {Progression.State.Xp}, rank {Progression.Rank})");
         Log.Info($"bot de combate: rank {Progression.Rank} com {Progression.State.Xp} XP; celebrações: [{string.Join(",", RankUps)}]");
-        Log.Info($"bot de combate: {hunter} limpou {RiftSession.Brecha.Rooms.Count} salas, {killed} monstros, +{gained} Fragmentos");
-        if (_failures.Count == 0)
+        Log.Info($"bot de combate: {hunter?.ToString() ?? "arma equipada"} limpou {RiftSession.Brecha.Rooms.Count} salas, {killed} monstros, +{gained} Fragmentos");
+        if (_failures.Count == 0 && lanternTest)
         {
             await DieAndRecoverLantern();
         }
@@ -75,7 +124,7 @@ public sealed class CombatBot(Level level, SmokeTest host)
         return _failures;
     }
 
-    private async Task OpenPortalAndEnter(HunterClass hunter)
+    private async Task OpenPortalAndEnter(HunterClass? hunter)
     {
         var portal = World.Zones.First(z => z.Kind == "brecha");
         Bind();
@@ -96,7 +145,9 @@ public sealed class CombatBot(Level level, SmokeTest host)
         _input.Tap(InputActions.Interact);
         await host.PhysicsFrames(4);
         Check(level.PickerOpen, "interagir com a Brecha deveria abrir a escolha de arma");
-        level.EnterRift(hunter);
+        var equipped = RiftSession.HunterFor(Progression.Engine.ClassId);
+        Check(level.Picker?.Selected == equipped, $"o seletor deveria começar na arma equipada ({equipped}), está em {level.Picker?.Selected}");
+        level.EnterRift(hunter ?? level.Picker?.Selected ?? equipped);
         await WaitUntil(() => !level.Switching && World.Director is not null, 600, "primeira sala");
         Check(World.Data.Id == RiftSession.Brecha.Rooms[0], $"primeira sala deveria ser {RiftSession.Brecha.Rooms[0]}, foi {World.Data.Id}");
     }
@@ -137,6 +188,7 @@ public sealed class CombatBot(Level level, SmokeTest host)
                 _input.Tap(frames % 96 == 0 ? InputActions.Heavy : InputActions.Attack);
             }
 
+            await ShotMoments(room, frames);
             await host.PhysicsFrames(1);
         }
 
@@ -230,6 +282,7 @@ public sealed class CombatBot(Level level, SmokeTest host)
             {
                 // O Guardião sobe o rank (E -> D): a celebração pausa o jogo; o bot a registra e fecha.
                 RankUps.Add(celebration.Change.To);
+                await ShotOnce($"rank_{celebration.Change.To}");
                 celebration.Close();
             }
 

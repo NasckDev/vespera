@@ -75,15 +75,22 @@ public partial class SmokeTest
         {
             await RunStoryBot(level);
         }
+
+        if (Array.IndexOf(_args, ActOneFlag) >= 0)
+        {
+            await RunActOne(level);
+        }
     }
 
-    /// <summary>Bot de colisão em cada sala da Brecha (sem monstros: o diretor fica desligado) e volta à Praça.</summary>
+    /// <summary>Bot de colisão nas outras fases do Ato I (Forjas, forja da Odete e salas da Brecha sem monstros) e volta à Praça.</summary>
     private async Task RunRiftCollisionBots(Level level)
     {
-        foreach (var room in RiftSession.Brecha.Rooms)
+        string[] city = ["forjas", "forja_interior"];
+        foreach (var room in city.Concat(RiftSession.Brecha.Rooms))
         {
             await level.GoToRoom(room, withDirector: false);
             await PhysicsFrames(4);
+            level.World.SetNpcsActive(false);
             Log.Info($"bot de colisão na sala {room}:");
             _failures.AddRange((await new CollisionBot(level.World, this).Run()).Select(f => $"{room}: {f}"));
         }

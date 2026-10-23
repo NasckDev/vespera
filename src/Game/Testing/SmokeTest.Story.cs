@@ -71,13 +71,20 @@ public partial class SmokeTest
 
         await TalkToNpc(level, "odete");
         Check(events.Contains(StoryFlags.EventOpenForge), "a primeira opção da Odete deveria pedir a forja (OpenForge)");
-        Check(level.Hud.PanelOpen, "sem a tela de Forja, o gancho deveria avisar que a forja abre em breve");
-        await PressInWorld(Key.E);
+        await WaitFor(() => FindOverlay<ForgeScreen>() is not null, "forja aberta pela conversa (ForgeScreen.Open)");
+        await Tap(Key.Escape);
+        await Frames(4);
+        Check(FindOverlay<ForgeScreen>() is null && !GetTree().Paused, "Esc deveria fechar a forja");
+        await Seconds(0.4);
 
         StoryService.SetFlag(StoryFlags.GuardianDefeatedLodoMae);
         Check(StoryService.Engine.ObjectiveId == "ato2", $"depois do Guardião o objetivo deveria ser o Ato II, é '{StoryService.Engine.ObjectiveId}'");
         await TalkToNpc(level, "odete", shot: "story_09_odete_depois");
         Check(StoryService.Engine.HasFlag("odete_after"), "a fala nova da Odete deveria ter rodado");
+        await WaitFor(() => FindOverlay<ForgeScreen>() is not null, "forja depois da fala nova");
+        await Tap(Key.Escape);
+        await Frames(4);
+        await Seconds(0.4);
         Check(StoryService.Engine.CurrentObjective?.Locked == true, "o objetivo do Ato II deveria estar 'em breve'");
 
         StoryService.Engine.EventRaised -= OnEvent;

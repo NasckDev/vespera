@@ -23,7 +23,17 @@ public partial class ClassPicker : Control
     private readonly PanelContainer[] _cards = new PanelContainer[3];
     private int _index;
 
-    public ClassPicker(HunterClass current) => _index = Array.IndexOf(Order, current);
+    private readonly HunterClass _equipped;
+
+    /// <param name="equipped">Classe da arma equipada (a da Odete): o seletor começa nela; as outras ficam para teste.</param>
+    public ClassPicker(HunterClass equipped)
+    {
+        _equipped = equipped;
+        _index = Math.Max(0, Array.IndexOf(Order, equipped));
+    }
+
+    /// <summary>Classe destacada agora.</summary>
+    public HunterClass Selected => Order[_index];
 
     public event Action<HunterClass>? Chosen;
 
@@ -40,7 +50,7 @@ public partial class ClassPicker : Control
         column.GrowVertical = GrowDirection.Both;
         AddChild(column);
         column.AddChild(UiKit.MakeLabel("Esgotos do Mercado · Brecha E", UiTheme.HeadingVariation, HorizontalAlignment.Center));
-        column.AddChild(UiKit.MakeLabel("Escolha a arma da caçada", null, HorizontalAlignment.Center));
+        column.AddChild(UiKit.MakeLabel($"Sua arma: {HunterSprites.DisplayName(_equipped)}. As outras ficam liberadas para teste.", null, HorizontalAlignment.Center));
         var row = UiKit.MakeRow(28);
         row.Alignment = BoxContainer.AlignmentMode.Center;
         column.AddChild(row);

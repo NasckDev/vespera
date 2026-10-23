@@ -33,6 +33,9 @@ public partial class Level
 
     public bool PickerOpen => _picker is not null;
 
+    /// <summary>Seletor de arma aberto no portal (bots conferem a arma padrão).</summary>
+    public ClassPicker? Picker => _picker;
+
     /// <summary>Entra na Brecha com a classe escolhida (usado pelo seletor e pelo bot de combate).</summary>
     public void EnterRift(HunterClass hunter)
     {
