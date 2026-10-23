@@ -164,7 +164,7 @@ public class StoryTest
         runner.Start();
 
         AssertThat(runner.CurrentId).IsEqual("ob_hub");
-        AssertThat(runner.Choices.Count).IsEqual(2);
+        AssertThat(runner.Choices.Count).IsEqual(3);
         runner.Advance(0);
 
         AssertThat(events).ContainsExactly(StoryFlags.EventOpenForge);
