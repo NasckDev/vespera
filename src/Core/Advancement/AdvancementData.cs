@@ -197,6 +197,9 @@ public sealed record HunterMaterialDef
 
     public required string Source { get; init; }
 
+    /// <summary>Nome do ícone em <c>assets/v2/itens/materiais/</c> (sem extensão), vindo da v0.1.</summary>
+    public required string Icon { get; init; }
+
     /// <summary>"gdd" (nome vindo do GDD) ou "proposta" (preenchido para fechar a escada; revisar com o design).</summary>
     public required string Origin { get; init; }
 

@@ -117,6 +117,11 @@ public sealed partial class AdvancementCatalog
                 errors.Add($"material '{material.Id}': comum precisa de peso > 0");
             }
 
+            if (string.IsNullOrWhiteSpace(material.Icon))
+            {
+                errors.Add($"material '{material.Id}': sem ícone");
+            }
+
             if (material.Origin is not ("gdd" or "proposta"))
             {
                 errors.Add($"material '{material.Id}': origem deve ser 'gdd' ou 'proposta'");

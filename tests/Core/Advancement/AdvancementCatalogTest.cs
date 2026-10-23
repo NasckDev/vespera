@@ -115,6 +115,31 @@ public class AdvancementCatalogTest
     }
 
     [TestCase]
+    public void EveryMaterialAndWeaponIconFileExists()
+    {
+        var root = AppContext.BaseDirectory;
+        while (root is not null && !File.Exists(Path.Combine(root, "Vespera.sln")))
+        {
+            root = Path.GetDirectoryName(root);
+        }
+
+        AssertThat(root).IsNotNull();
+        foreach (var material in Catalog.MaterialList)
+        {
+            AssertThat(File.Exists(Path.Combine(root!, "assets", "v2", "itens", "materiais", material.Icon + ".png"))).IsTrue();
+        }
+
+        foreach (var step in Catalog.Ranks)
+        {
+            foreach (var slot in new[] { "lamina_01", "arco_02", "martelo_04", "cabeca_06", "peito_07", "maos_08", "botas_10", "amuleto_14" })
+            {
+                var file = $"{step.Id.ToString().ToLowerInvariant()}_{slot}.png";
+                AssertThat(File.Exists(Path.Combine(root!, "assets", "v2", "itens", "icones", file))).IsTrue();
+            }
+        }
+    }
+
+    [TestCase]
     public void DuplicateMaterialIsRejected()
     {
         var ex = CatchData(() => AdvTestData.LoadPatched(
