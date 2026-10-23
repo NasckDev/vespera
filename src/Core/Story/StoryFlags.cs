@@ -7,7 +7,7 @@ namespace Vespera.Core.Story;
 public static class StoryFlags
 {
     /// <summary>
-    /// O Lodo-Mãe (Guardião do Ato I) foi derrotado. QUEM ESCUTA: Odete muda a fala e o objetivo vai para o Ato II.
+    /// A Lodo-Mãe (Guardiã do Ato I) foi derrotado. QUEM ESCUTA: Odete muda a fala e o objetivo vai para o Ato II.
     /// QUEM EMITE: o combate, ao morrer o Guardião (<c>StoryService.SetFlag(StoryFlags.GuardianDefeatedLodoMae)</c>).
     /// </summary>
     public const string GuardianDefeatedLodoMae = "GuardianDefeated:lodo_mae";
