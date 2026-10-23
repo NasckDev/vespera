@@ -5,13 +5,19 @@ using Vespera.Game.Boot;
 
 namespace Vespera.Game.UI;
 
-/// <summary>Escolha do espaço de save para Nova história (confirma antes de sobrescrever) ou Continuar.</summary>
+/// <summary>
+/// Escolha do espaço de save para Nova história (confirma antes de sobrescrever), Continuar ou Co-op local (espaço com
+/// história continua; vazio começa uma nova). No co-op o J1 é o dono do espaço e o J2 entra como convidado nele.
+/// </summary>
 public partial class SlotScreen(SlotScreen.Mode mode) : UiScreen
 {
     public enum Mode
     {
         NewGame,
         Continue,
+
+        /// <summary>Depois da tela de entrada do co-op: qualquer espaço serve.</summary>
+        Coop,
     }
 
     private Label _status = null!;
@@ -22,11 +28,22 @@ public partial class SlotScreen(SlotScreen.Mode mode) : UiScreen
 
     protected override void Build()
     {
-        var title = mode == Mode.NewGame ? "Nova história" : "Continuar";
+        var title = mode switch
+        {
+            Mode.NewGame => "Nova história",
+            Mode.Coop => "Co-op local",
+            _ => "Continuar",
+        };
         var panel = BuildPage(title, out var column, sideMargin: 260);
         var inner = UiKit.MakeColumn(16);
         panel.AddChild(UiKit.PadForGlow(inner));
-        inner.AddChild(UiKit.MakeLabel(mode == Mode.NewGame ? "Escolha onde guardar" : "Escolha o espaço", UiTheme.HeadingVariation, HorizontalAlignment.Center));
+        var caption = mode switch
+        {
+            Mode.NewGame => "Escolha onde guardar",
+            Mode.Coop => "História do J1 (o J2 joga como convidado neste espaço)",
+            _ => "Escolha o espaço",
+        };
+        inner.AddChild(UiKit.MakeLabel(caption, UiTheme.HeadingVariation, HorizontalAlignment.Center));
 
         var all = new List<Control>();
         for (var slot = 1; slot <= SaveService.SlotCount; slot++)
@@ -56,7 +73,7 @@ public partial class SlotScreen(SlotScreen.Mode mode) : UiScreen
 
     private void Choose(int slot, bool exists)
     {
-        if (mode == Mode.Continue)
+        if (mode == Mode.Continue || (mode == Mode.Coop && exists))
         {
             Begin(slot, SaveService.Load(slot), "Não foi possível ler este save.");
             return;
@@ -82,6 +99,13 @@ public partial class SlotScreen(SlotScreen.Mode mode) : UiScreen
         }
 
         GameSession.Begin(slot, data);
-        SceneRouter.Instance.GoTo(mode == Mode.NewGame ? ScreenKeys.Prologue : ScreenKeys.AfterPrologue);
+        var fresh = mode == Mode.NewGame || (mode == Mode.Coop && data.Story.Flags.Count == 0 && string.IsNullOrEmpty(data.Story.LevelId));
+        if (mode == Mode.Coop && Game.Coop.CoopSession.Pending is { } roster)
+        {
+            Game.Coop.CoopSession.Begin(roster);
+            GameSession.Autosave();
+        }
+
+        SceneRouter.Instance.GoTo(fresh ? ScreenKeys.Prologue : ScreenKeys.AfterPrologue);
     }
 }
