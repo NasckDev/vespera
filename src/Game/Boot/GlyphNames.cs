@@ -26,6 +26,15 @@ public static class GlyphNames
         [Key.Tab] = "Tab",
         [Key.Enter] = "Enter",
         [Key.Backspace] = "Apagar",
+        [Key.KpEnter] = "Num Enter",
+        [Key.Kp0] = "Num 0",
+        [Key.Kp1] = "Num 1",
+        [Key.Kp2] = "Num 2",
+        [Key.Kp3] = "Num 3",
+        [Key.KpAdd] = "Num +",
+        [Key.KpSubtract] = "Num -",
+        [Key.KpMultiply] = "Num *",
+        [Key.KpPeriod] = "Num ,",
     };
 
     public static string Describe(string code, PadFamily family)

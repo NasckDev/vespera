@@ -44,9 +44,11 @@ public static class CoopFraming
 
     /// <summary>
     /// Ajusta a velocidade de um jogador para ele não abrir o grupo além de <paramref name="maxSpan"/>: a velocidade que
-    /// sairia do limite para na borda; já fora dele, não deixa ir mais longe e puxa de volta (<paramref name="pull"/> por segundo).
+    /// sairia do limite para na borda; já fora dele, não deixa ir mais longe e puxa de volta (<paramref name="pull"/> por segundo,
+    /// no máximo <paramref name="maxPull"/> px/s: um puxão suave, não um tranco).
     /// </summary>
-    public static Vector2 Constrain(Vector2 position, Vector2 velocity, IReadOnlyList<Vector2> others, Vector2 maxSpan, float pull, float dt)
+    public static Vector2 Constrain(Vector2 position, Vector2 velocity, IReadOnlyList<Vector2> others, Vector2 maxSpan, float pull, float dt,
+        float maxPull = float.MaxValue)
     {
         if (others.Count == 0 || dt <= 0)
         {
@@ -55,8 +57,8 @@ public static class CoopFraming
 
         var (min, max) = Bounds(others);
         return new Vector2(
-            Axis(position.X, velocity.X, max.X - maxSpan.X, min.X + maxSpan.X, pull, dt),
-            Axis(position.Y, velocity.Y, max.Y - maxSpan.Y, min.Y + maxSpan.Y, pull, dt));
+            Axis(position.X, velocity.X, max.X - maxSpan.X, min.X + maxSpan.X, pull, dt, maxPull),
+            Axis(position.Y, velocity.Y, max.Y - maxSpan.Y, min.Y + maxSpan.Y, pull, dt, maxPull));
     }
 
     /// <summary>Está além do limite em algum eixo (para mostrar o aviso de coleira).</summary>
@@ -72,7 +74,7 @@ public static class CoopFraming
             || position.Y > min.Y + maxSpan.Y + tolerance || position.Y < max.Y - maxSpan.Y - tolerance;
     }
 
-    private static float Axis(float p, float v, float lo, float hi, float pull, float dt)
+    private static float Axis(float p, float v, float lo, float hi, float pull, float dt, float maxPull)
     {
         if (lo > hi)
         {
@@ -84,12 +86,12 @@ public static class CoopFraming
 
         if (p > hi)
         {
-            return MathF.Min(v, 0f) - ((p - hi) * pull);
+            return MathF.Max(MathF.Min(v, 0f) - ((p - hi) * pull), -MathF.Max(maxPull, -MathF.Min(v, 0f)));
         }
 
         if (p < lo)
         {
-            return MathF.Max(v, 0f) + ((lo - p) * pull);
+            return MathF.Min(MathF.Max(v, 0f) + ((lo - p) * pull), MathF.Max(maxPull, MathF.Max(v, 0f)));
         }
 
         var next = p + (v * dt);

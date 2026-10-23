@@ -5,6 +5,7 @@ using Vespera.Game.Actors.Enemies;
 using Vespera.Game.Boot;
 using Vespera.Game.Combat;
 using Vespera.Game.Components;
+using Vespera.Game.Coop;
 using Vespera.Game.Story;
 using Vespera.Game.UI;
 using Vespera.Game.World.Rift;
@@ -94,6 +95,7 @@ public partial class Level : Control
 
         Numbers = new FloatingNumbers(WorldToScreen) { Name = "Numbers" };
         AddChild(Numbers);
+        BuildCoop();
         CombatHud = new CombatHud { Name = "CombatHud" };
         AddChild(CombatHud);
         _hud = new InteractionHud { Name = "Hud" };
@@ -116,6 +118,7 @@ public partial class Level : Control
     {
         Engine.TimeScale = 1.0;
         UnbindStory();
+        UnbindCoop();
         NpcSprites.ClearCache();
         HunterSprites.ClearCache();
         MonsterSprites.ClearCache();
@@ -139,11 +142,21 @@ public partial class Level : Control
             _hud.ClosePanel();
         }
 
-        var focus = DialogueOpen ? null : Player.Focus;
-        var deviceId = (Player.Input as MergedInput)?.DeviceId ?? Player.Input.DeviceId;
+        PollGuestPause();
+        var who = DialogueOpen ? null : FocusedPlayer();
+        var focus = who?.Focus;
         var anchor = focus is null ? Vector2.Zero : WorldToScreen(focus.PromptAnchor);
-        var prompt = _picker is null && !Player.Combat.IsDead ? focus?.Prompt : null;
-        _hud.ShowPrompt(prompt, anchor, InteractionHud.InteractKeyName(deviceId), dt);
+        var prompt = _picker is null ? focus?.Prompt : null;
+        if (prompt is not null && IsCoop)
+        {
+            // No co-op o aviso diz de quem é a vez e mostra o botão daquele jogador.
+            prompt = $"{CoopSession.TagOf(who!.Slot)} · {prompt}";
+        }
+
+        var key = who is null ? InteractionHud.InteractKeyName(Player.Input.DeviceId)
+            : IsCoop ? InputGlyphs.Describe(who.Input, InputActions.Interact)
+            : InteractionHud.InteractKeyName((who.Input as MergedInput)?.DeviceId ?? who.Input.DeviceId);
+        _hud.ShowPrompt(prompt, anchor, key, dt);
     }
 
     public Vector2 WorldToScreen(Vector2 world) => _viewport.CanvasTransform * world;
@@ -167,14 +180,7 @@ public partial class Level : Control
         }
 
         GetViewport().SetInputAsHandled();
-        if (_reading is not null)
-        {
-            CloseReading();
-            return;
-        }
-
-        GetTree().Paused = true;
-        SceneRouter.Instance.Push(ScreenKeys.Pause);
+        OpenPause();
     }
 
     private FloatingNumbers Numbers { get; set; } = null!;
@@ -184,8 +190,7 @@ public partial class Level : Control
     {
         World = world;
         _viewport.AddChild(world);
-        world.Player.InteractRequested += OnInteract;
-        world.Player.Combat.Died += OnPlayerDied;
+        BindParty(world);
         world.Feel.NumberRequested += (at, text, color, size) => Numbers.Spawn(at, text, color, size);
         world.Feel.ToastRequested += CombatHud.Toast;
         CombatHud.Bind(world);
@@ -199,6 +204,13 @@ public partial class Level : Control
 
     private void OnInteract(Player player, Interactable? item)
     {
+        if (DialogueOpen && player.Slot > 0)
+        {
+            // O J2 avança a conversa pelo botão dele (a caixa só ouve a InputMap, que é do J1).
+            _box.Press();
+            return;
+        }
+
         if (_picker is not null || DialogueBlocksInteraction)
         {
             return;
@@ -218,7 +230,7 @@ public partial class Level : Control
         }
 
         var at = item.GlobalPosition;
-        if (item.Dialogue.Length > 0 && StartDialogue(item.Dialogue, item.OwnerNpc as Npc))
+        if (item.Dialogue.Length > 0 && StartDialogue(item.Dialogue, item.OwnerNpc as Npc, player))
         {
             WorldSfx.Play(World, WorldSound.Paper, at);
             return;
@@ -226,7 +238,7 @@ public partial class Level : Control
 
         if (item.Kind == "exit" && item.Target.Length > 0)
         {
-            Player.Frozen = true;
+            SetPartyFrozen(true);
             WorldSfx.Play(World, WorldSound.Chime, at);
             GameEntry.Travel(item.Target, item.TargetSpawn);
             return;
@@ -234,6 +246,9 @@ public partial class Level : Control
 
         switch (item.Kind)
         {
+            case "brecha" when IsCoop:
+                EnterRiftAsParty();
+                return;
             case "brecha":
                 OpenPicker();
                 return;
@@ -249,36 +264,43 @@ public partial class Level : Control
                 return;
             case "board":
                 WorldSfx.Play(World, WorldSound.Paper, at);
-                OpenReading(item, item.Title, freeze: true);
+                OpenReading(item, item.Title, freeze: true, player);
                 return;
             case "water":
                 WorldSfx.Play(World, WorldSound.Water, at);
-                OpenReading(item, string.Empty, freeze: false);
+                OpenReading(item, string.Empty, freeze: false, player);
                 return;
             case "door" or "exit":
                 WorldSfx.Play(World, WorldSound.DoorLocked, at);
-                OpenReading(item, string.Empty, freeze: false);
+                OpenReading(item, string.Empty, freeze: false, player);
                 return;
             default:
                 WorldSfx.Play(World, WorldSound.Chime, at);
-                OpenReading(item, string.Empty, freeze: false);
+                OpenReading(item, string.Empty, freeze: false, player);
                 return;
         }
     }
 
-    private void OpenReading(Interactable item, string title, bool freeze)
+    private void OpenReading(Interactable item, string title, bool freeze, Player reader)
     {
         _reading = item;
+        _readingPlayer = reader;
         _readingTimer = freeze ? -1f : FlavorSeconds;
-        Player.Frozen = freeze;
-        var key = InteractionHud.InteractKeyName(Player.Input.DeviceId);
+        reader.Frozen = freeze;
+        var key = IsCoop ? InputGlyphs.Describe(reader.Input, InputActions.Interact) : InteractionHud.InteractKeyName(reader.Input.DeviceId);
         _hud.OpenPanel(title, item.Text, $"{key}: fechar");
     }
 
     private void CloseReading()
     {
         _reading = null;
-        Player.Frozen = false;
+        var reader = _readingPlayer ?? Player;
+        _readingPlayer = null;
+        if (IsInstanceValid(reader))
+        {
+            reader.Frozen = false;
+        }
+
         _hud.ClosePanel();
     }
 
@@ -307,7 +329,8 @@ public partial class Level : Control
 
         var shape = _reading.GetChild<CollisionShape2D>(0).Shape as CircleShape2D;
         var reach = (shape?.Radius ?? 64f) * LeaveDistance;
-        if (Player.GlobalPosition.DistanceTo(_reading.GlobalPosition) > reach)
+        var reader = _readingPlayer is not null && IsInstanceValid(_readingPlayer) ? _readingPlayer : Player;
+        if (reader.GlobalPosition.DistanceTo(_reading.GlobalPosition) > reach)
         {
             CloseReading();
         }

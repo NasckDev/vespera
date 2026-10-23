@@ -5,6 +5,7 @@ using Vespera.Game.Actors;
 using Vespera.Game.Boot;
 using Vespera.Core.Story;
 using Vespera.Game.Combat;
+using Vespera.Game.Coop;
 using Vespera.Game.Story;
 using Vespera.Game.UI;
 using Vespera.Game.World.Rift;
@@ -64,7 +65,7 @@ public partial class Level
         }
 
         _switching = true;
-        World.Player.Frozen = true;
+        SetPartyFrozen(true);
         await FadeTo(1f);
         CloseReading();
         Numbers.Clear();
@@ -92,6 +93,7 @@ public partial class Level
         if (_carriedHp is { } hp)
         {
             World.Player.Combat.SetHp(hp);
+            RestorePartyHp();
         }
 
         if (World.Director is { } director)
@@ -102,7 +104,8 @@ public partial class Level
 
     private void OnRoomExit()
     {
-        _carriedHp = World.Player.Combat.Hp;
+        _carriedHp = World.Player.Combat.IsDowned ? CoopSession.Rules.RevivedHp(World.Player.Combat.MaxHp) : World.Player.Combat.Hp;
+        CarryPartyHp();
         if (!RiftSession.IsLastRoom)
         {
             RiftSession.AdvanceRoom();
@@ -113,8 +116,11 @@ public partial class Level
         RiftRules.MarkClosed(RiftSession.Save);
         var end = RiftSession.EndRun(survived: true);
         _carriedHp = null;
+        _carriedHps.Clear();
         GameSession.Autosave();
-        _ = ReturnToHub($"Brecha fechada! +{end?.FragmentosBanked ?? 0} Fragmentos levados para casa.", "Esgotos do Mercado — fechada");
+        var guest = RiftSession.GuestEnd is { } g ? $" {CoopSession.TagOf(1)}: +{g.FragmentosBanked}." : string.Empty;
+        var lead = IsCoop ? $"{CoopSession.TagOf(0)}: +" : "+";
+        _ = ReturnToHub($"Brecha fechada! {lead}{end?.FragmentosBanked ?? 0} Fragmentos levados para casa.{guest}", "Esgotos do Mercado — fechada");
     }
 
     private void OnPlayerDied(HunterCombat combat)
@@ -137,7 +143,10 @@ public partial class Level
     private async Task ReturnToHub(string toast, string subtitle)
     {
         await GoToRoom(HubLevelId, _hubSpawn);
-        World.Player.Combat.Revive();
+        foreach (var p in World.Players)
+        {
+            p.Combat.Revive();
+        }
         CombatHud.ShowTitle("Praça da Lanterna", subtitle);
         CombatHud.Toast(toast);
         if (RiftSession.LanternFragments > 0)

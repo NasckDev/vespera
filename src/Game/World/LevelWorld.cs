@@ -22,6 +22,9 @@ public partial class LevelWorld : Node2D
     private const float PracaPortalHeight = 250f;
     private const float VignetteEdge = 70f;
 
+    /// <summary>Velocidade máxima do puxão da coleira, em múltiplos da velocidade do caçador (suave, nunca um tranco).</summary>
+    private const float TetherMaxPull = 1.1f;
+
     private readonly LevelData _data;
     private readonly IReadOnlyDictionary<string, PropDef> _catalog;
     private readonly bool _withDirector;
@@ -64,6 +67,9 @@ public partial class LevelWorld : Node2D
     public CombatFeel Feel { get; private set; } = null!;
 
     public RoomDirector? Director { get; private set; }
+
+    /// <summary>Reanimar e queda do grupo no co-op (sem efeito com um jogador só).</summary>
+    public PartyDirector Party { get; private set; } = null!;
 
     public IReadOnlyList<Prop> Props => _props;
 
@@ -128,6 +134,8 @@ public partial class LevelWorld : Node2D
         AddChild(Camera);
         Camera.MakeCurrent();
         Feel.Camera = Camera;
+        Party = new PartyDirector(this) { Name = "Party" };
+        AddChild(Party);
 
         if (_data.Rift is { } rift && _withDirector)
         {
@@ -175,7 +183,9 @@ public partial class LevelWorld : Node2D
 
         _players.Add(player);
         _players.Sort((a, b) => a.Slot.CompareTo(b.Slot));
-        player.Ready += () => player.ApplyIdentity(CoopSession.ColorOf(member.Slot), member.CapeTint);
+
+        // O caçador já entrou na árvore (e passou pelo _Ready) no AddChild: o contorno pode ir agora.
+        player.ApplyIdentity(CoopSession.ColorOf(member.Slot), member.CapeTint);
         PlayerAdded?.Invoke(player);
         return player;
     }
@@ -252,7 +262,7 @@ public partial class LevelWorld : Node2D
         var span = Camera.PartySpan;
         var v = Vespera.Core.Coop.CoopFraming.Constrain(new System.Numerics.Vector2(player.GlobalPosition.X, player.GlobalPosition.Y),
             new System.Numerics.Vector2(velocity.X, velocity.Y), others, new System.Numerics.Vector2(span.X, span.Y),
-            (float)CoopSession.Rules.Camera.TetherPull, dt);
+            (float)CoopSession.Rules.Camera.TetherPull, dt, TetherMaxPull * player.MaxSpeed);
         return new Vector2(v.X, v.Y);
     }
 

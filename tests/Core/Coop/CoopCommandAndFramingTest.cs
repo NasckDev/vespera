@@ -87,6 +87,10 @@ public class CoopCommandAndFramingTest
         AssertThat(CoopFraming.Constrain(outside, new Vector2(300, 0), other, span, 2.5f, dt).X < 0f).IsTrue();
         AssertThat(CoopFraming.Constrain(outside, new Vector2(-300, 0), other, span, 2.5f, dt).X <= -300f).IsTrue();
         AssertThat(CoopFraming.Exceeds(outside, other, span)).IsTrue();
+
+        // O puxão é limitado (suave): bem longe, no máximo maxPull px/s de volta.
+        var veryFar = new Vector2(span.X + 5000f, 0);
+        AssertThat(CoopFraming.Constrain(veryFar, Vector2.Zero, other, span, 2.5f, dt, maxPull: 120f).X).IsEqual(-120f);
         AssertThat(CoopFraming.Exceeds(new Vector2(10, 10), other, span)).IsFalse();
     }
 

@@ -57,6 +57,14 @@ public partial class Player : CharacterBody2D
         Flash.Update(0f);
     }
 
+    /// <summary>Volta ao visual solo (sem contorno nem capa trocada).</summary>
+    public void ClearIdentity()
+    {
+        Flash.Outline = 0f;
+        Flash.Cape = 0f;
+        Flash.Update(0f);
+    }
+
     public IInputSource Input { get; set; }
 
     public HunterClass Hunter { get; private set; }
