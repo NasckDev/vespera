@@ -84,7 +84,7 @@ public partial class SmokeTest
 
         await TalkToNpc(level, "odete");
         Check(StoryService.Engine.HasFlag(StoryFlags.StarterBlade), "Odete deveria entregar a lâmina inicial");
-        Check(StoryService.Engine.ObjectiveId == "brecha", $"objetivo depois da Odete: '{StoryService.Engine.ObjectiveId}'");
+        Check(StoryService.Engine.ObjectiveId == "cacada1", $"objetivo depois da Odete: '{StoryService.Engine.ObjectiveId}'");
         Check(events.Contains(StoryFlags.EventStarterBladeGiven), "deveria ter avisado StarterBladeGiven");
         Check(GameSession.Data?.Story.Has(StoryFlags.StarterBlade) == true, "a flag deveria estar no save em andamento");
 
