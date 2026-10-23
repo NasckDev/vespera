@@ -42,9 +42,13 @@ public static class RiftSession
 
     public static int RoomIndex { get; private set; }
 
-    public static string CurrentRoom => Brecha.Rooms[RoomIndex];
+    /// <summary>Chão (fase) da sala atual: o da caçada sorteada; sem caçada, a lista fixa do JSON da Brecha.</summary>
+    public static string CurrentRoom => HuntService.Plan is { } plan ? plan.Rooms[RoomIndex].Ground : Brecha.Rooms[RoomIndex];
 
-    public static bool IsLastRoom => RoomIndex >= Brecha.Rooms.Count - 1;
+    /// <summary>Salas desta caçada (5-7, sorteadas a cada entrada).</summary>
+    public static int RoomCount => HuntService.Plan?.Rooms.Count ?? Brecha.Rooms.Count;
+
+    public static bool IsLastRoom => RoomIndex >= RoomCount - 1;
 
     /// <summary>Bot de combate: caçador invulnerável e dano ×10 para a caçada automática caber no teste.</summary>
     public static bool Cheat { get; set; }
@@ -80,10 +84,14 @@ public static class RiftSession
         _ => HunterClass.Lamina,
     };
 
-    /// <summary>Entra na Brecha: começa a caçada na progressão e devolve os Fragmentos recuperados da Lanterna do bairro.</summary>
+    /// <summary>
+    /// Entra na Brecha: monta a caçada (salas sorteadas, ver <see cref="HuntService"/>), começa a caçada na progressão e
+    /// devolve os Fragmentos recuperados da Lanterna do bairro.
+    /// </summary>
     public static int BeginRun()
     {
         RoomIndex = 0;
+        HuntService.BeginRun();
         InRift = true;
         return Progression.IsActive ? Progression.BeginRun(Brecha.NeighborhoodId) : 0;
     }
@@ -97,11 +105,16 @@ public static class RiftSession
     }
 
     /// <summary>Volta à Praça: vivo leva os Fragmentos para a carteira; caído, eles ficam na Lanterna do bairro.</summary>
-    public static Core.Advancement.RunEnd? EndRun(bool survived)
+    public static Core.Advancement.RunEnd? EndRun(bool survived) => EndRunWithSummary(survived, completed: survived).End;
+
+    /// <summary>Como <see cref="EndRun"/>, com o resumo da caçada (contratos pagos, XP, rank) para a tela de resultados.</summary>
+    public static (Core.Advancement.RunEnd? End, RunSummary? Summary) EndRunWithSummary(bool survived, bool completed)
     {
+        var end = Progression.IsActive ? Progression.EndRun(survived) : null;
+        var summary = HuntService.EndRun(survived, completed, end);
         InRift = false;
         RoomIndex = 0;
-        return Progression.IsActive ? Progression.EndRun(survived) : null;
+        return (end, summary);
     }
 
     /// <summary>Esquece o save temporário e a caçada (troca de sessão ou de cena).</summary>
@@ -110,5 +123,6 @@ public static class RiftSession
         _fallback = null;
         InRift = false;
         RoomIndex = 0;
+        HuntService.Reset();
     }
 }

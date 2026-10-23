@@ -19,6 +19,9 @@ public abstract class WeaponMoves
     private const float AssistReach = 1.4f;
     private const float ChestHeight = 34f;
 
+    /// <summary>Golpes com alcance acima disto (px na escala 1) são tiros, sem rastro de corte.</summary>
+    private const float MeleeTrailMaxRange = 400f;
+
     private readonly HashSet<int> _framesDone = [];
     private float _lunge;
 
@@ -160,6 +163,13 @@ public abstract class WeaponMoves
 
         var landed = 0;
         var killed = false;
+        var look = WeaponLook.Current;
+        if (arc > 0f && range < MeleeTrailMaxRange * S)
+        {
+            // Rastro do corte na cor do nível da arma (aço → âmbar → âmbar vivo).
+            world.AddFx(new SlashTrail(origin, dir, range * 0.92f, arc, range * (heavy ? 0.34f : 0.26f), look));
+        }
+
         foreach (var target in world.Combat.InSector(origin, dir, range, arc, Team.Hunters))
         {
             var push = (target.HitCenter - origin).Normalized() * knockback * S;
@@ -173,8 +183,8 @@ public abstract class WeaponMoves
             landed++;
             killed |= outcome.Killed;
             var sparkDir = (target.HitCenter - origin).Normalized();
-            world.Feel.Spark(target.HitCenter - (sparkDir * target.HitRadius * 0.5f), heavy ? new Color("ffc46b") : new Color("ffe2a8"),
-                heavy ? 16 : 9, heavy ? 420f : 300f, sparkDir, 70f);
+            world.Feel.Spark(target.HitCenter - (sparkDir * target.HitRadius * 0.5f), heavy ? look.Spark.Lightened(0.1f) : look.Spark,
+                (heavy ? 16 : 9) + look.SparkBonus, (heavy ? 420f : 300f) * look.TrailScale, sparkDir, 70f + (look.SparkBonus * 4f));
         }
 
         if (landed > 0)
@@ -203,7 +213,7 @@ public abstract class WeaponMoves
         var bestScore = float.MaxValue;
         foreach (var target in world.Combat.Targets)
         {
-            if (target.Team == Team.Hunters || !target.CanBeHit)
+            if (target.Team == Team.Hunters || !target.CanBeHit || target is World.Breakable)
             {
                 continue;
             }

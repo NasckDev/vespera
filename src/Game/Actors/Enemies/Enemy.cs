@@ -35,6 +35,11 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
 
     private readonly DamageCalculator _damage = new(RiftSession.Db.Rules.Combat);
     private float _fade = -1f;
+    private float _slow;
+    private Color? _tint;
+
+    /// <summary>Fator da velocidade enquanto pisa no lodo do Eco Viscoso.</summary>
+    private const float SlowFactor = 0.4f;
 
     protected Enemy(string monsterId, LevelWorld world, float sizeFactor = 1f)
     {
@@ -55,7 +60,28 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
 
     public RiftMonsterDef Def => Stats.Def;
 
-    public float SizeFactor { get; }
+    public float SizeFactor { get; private set; }
+
+    /// <summary>Variante de elite (maior, tingida, mais vida, dano e agressividade; ver data/cacada/cacada.json).</summary>
+    public bool Elite { get; private set; }
+
+    /// <summary>Multiplicadores da variante de elite (1 no monstro comum).</summary>
+    public float DamageMult { get; private set; } = 1f;
+
+    public float SpeedMult { get; private set; } = 1f;
+
+    public float PeriodMult { get; private set; } = 1f;
+
+    public float XpMult { get; private set; } = 1f;
+
+    /// <summary>Lentificado pelo rastro do Eco Viscoso.</summary>
+    public bool Slowed => _slow > 0f;
+
+    /// <summary>Velocidade de referência (dados × elite).</summary>
+    protected double Speed => Def.Speed * SpeedMult;
+
+    /// <summary>Intervalo entre ataques (dados × elite: menor = mais agressivo).</summary>
+    protected double Period => Def.Period * PeriodMult;
 
     public double Hp { get; protected set; }
 
@@ -143,6 +169,11 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
 
         Sheet = MonsterSprites.Load(MonsterId, A, SizeFactor);
         Sprite = new AnimatedSprite2D { Name = "Sprite", SpriteFrames = Sheet.Frames, Offset = Sheet.Offset, Scale = Vector2.One * Sheet.SpriteScale };
+        if (_tint is { } tint)
+        {
+            Sprite.SelfModulate = tint;
+        }
+
         AddChild(Sprite);
         // Contorno do aviso com a mesma espessura no mundo (~7% da altura humana) em qualquer monstro, grande ou pequeno.
         Flash = new HitFlash(Sprite) { GlowWidth = Mathf.Clamp(WarningOutline * World.Data.HumanHeight / Sheet.SpriteScale, 3f, 16f) };
@@ -171,6 +202,12 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
         }
 
         var desired = Think(dt);
+        _slow = Mathf.Max(0f, _slow - dt);
+        if (_slow > 0f)
+        {
+            desired *= SlowFactor;
+        }
+
         Knock = Knock.MoveToward(Vector2.Zero, 1500f * A * dt);
         Velocity = desired + Knock + Separation();
         MoveAndSlide();
@@ -191,8 +228,9 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
         Hp = Math.Max(0, Hp - result.Damage);
         Flash.Pulse(Colors.White, 0.05f, 0.12f);
         Bar.Set((float)(Hp / MaxHp));
+        var size = (result.Crit ? 1.35f : hit.Heavy ? 1.15f : 1f) * WeaponLook.NumberScale;
         World.Feel.Number(HitCenter - new Vector2(0, HitRadius * 0.6f), result.Damage.ToString(),
-            result.Crit ? new Color("f2a541") : new Color("f4e7c6"), result.Crit ? 1.35f : hit.Heavy ? 1.15f : 1f);
+            result.Crit ? new Color("f2a541") : WeaponLook.Current.Number, size);
         if (!Unstoppable)
         {
             Knock = hit.Push;
@@ -245,14 +283,36 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
         Play("morte");
         CombatSfx.Play(this, CombatSound.Kill, Vector2.Zero);
         World.Feel.Spark(HitCenter, new Color("e64a8e"), 14, 320f);
+        Hunter.HuntService.Killed(Elite, Stats.Def.Boss);
         if (DropsLoot)
         {
-            RiftLoot.MonsterKilled(World, MonsterId, GlobalPosition, Stats.Def.Boss);
+            RiftLoot.MonsterKilled(World, MonsterId, GlobalPosition, Stats.Def.Boss, XpMult, Elite ? 2 : 1);
         }
 
         OnDied();
         Died?.Invoke(this);
     }
+
+    /// <summary>
+    /// Transforma em elite (chamar antes de entrar na árvore): ×escala, tinta, ×vida, ×dano, ×velocidade, intervalo menor
+    /// e ×XP.
+    /// </summary>
+    public void MakeElite(Vespera.Core.Hunt.EliteDef def)
+    {
+        Elite = true;
+        SizeFactor *= (float)def.Scale;
+        MaxHp *= def.Hp;
+        Hp = MaxHp;
+        DamageMult = (float)def.Damage;
+        SpeedMult = (float)def.Speed;
+        PeriodMult = (float)def.Period;
+        XpMult = (float)def.Xp;
+        _tint = new Color(def.Tint);
+        Name = $"{MonsterId}_elite";
+    }
+
+    /// <summary>Pisa no lodo do Eco Viscoso: anda mais devagar por <paramref name="seconds"/>.</summary>
+    public void Slow(float seconds) => _slow = Mathf.Max(_slow, seconds);
 
     /// <summary>Velocidade desejada neste quadro (px/s do mundo).</summary>
     protected abstract Vector2 Think(float dt);
@@ -309,7 +369,7 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
         }
 
         var dir = (c.HitCenter - center).Normalized();
-        var info = new HitInfo(Stats.Damage * damageMult, center, dir * push * A, 0.06, 1, false, 0);
+        var info = new HitInfo(Stats.Damage * damageMult * DamageMult, center, dir * push * A, 0.06, 1, false, 0);
         return c.ReceiveHit(info).Landed;
     }
 

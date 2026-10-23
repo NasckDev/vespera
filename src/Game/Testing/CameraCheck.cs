@@ -10,14 +10,14 @@ namespace Vespera.Game.Testing;
 
 /// <summary>
 /// Tamanho do caçador NA TELA (<c>--camera</c>): em cada mapa do Ato I, mede a altura opaca do caçador pelas transformações
-/// (sprite × câmera × viewport, em px de uma tela 1920×1080) e exige 95–125 px (regra: ~110 px em todo mapa). Na arena,
+/// (sprite × câmera × viewport, em px de uma tela 1920×1080) e exige 130–150 px (regra: ~140 px em todo mapa). Na arena,
 /// mede também durante a apresentação da Lodo-Mãe (a câmera pode se afastar até 0,8×) e depois dela. Confere ainda que a
 /// câmera não mostra nada fora do chão pintado quando o mapa é maior que a tela.
 /// </summary>
 public sealed class CameraCheck(Level level, SmokeTest host)
 {
-    public const float MinOnScreen = 95f;
-    public const float MaxOnScreen = 125f;
+    public const float MinOnScreen = 130f;
+    public const float MaxOnScreen = 150f;
     private static readonly string[] CityLevels = ["praca", "forjas", "forja_interior"];
 
     private readonly List<string> _failures = [];

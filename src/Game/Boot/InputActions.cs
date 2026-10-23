@@ -18,6 +18,7 @@ public static class InputActions
     public const string Skill = "skill";
     public const string Interact = "interact";
     public const string Lantern = "lantern";
+    public const string Potion = "potion";
     public const string Inventory = "inventory";
     public const string Pause = "pause";
     public const string Journal = "journal";
@@ -34,6 +35,7 @@ public static class InputActions
         new(Skill, "Habilidade"),
         new(Interact, "Interagir"),
         new(Lantern, "Lanterna"),
+        new(Potion, "Beber poção"),
         new(Inventory, "Inventário"),
         new(Journal, "Diário"),
         new(Pause, "Pausa"),

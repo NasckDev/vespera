@@ -22,14 +22,14 @@ public class StoryLevelsTest
     }
 
     [TestCase]
-    public void ScaleRegistry_HumanIsThreeQuartersOfDoorAndTargetsFollowTable()
+    public void ScaleRegistry_HumanIsOneDoorAndTargetsFollowTable()
     {
-        AssertThat(ScaleRegistry.HumanHeight(72f)).IsEqual(54f);
+        AssertThat(ScaleRegistry.HumanHeight(72f)).IsEqual(72f);
         var human = ScaleRegistry.HumanHeight(100f);
-        AssertThat(ScaleRegistry.TargetHeight("benicio", human)).IsEqual(71.25f);
-        AssertThat(ScaleRegistry.TargetHeight("lis", human)).IsEqual(56.25f);
+        AssertThat(ScaleRegistry.TargetHeight("benicio", human)).IsEqual(95f);
+        AssertThat(ScaleRegistry.TargetHeight("lis", human)).IsEqual(75f);
         AssertThat(ScaleRegistry.TargetHeight("odete", human)).IsEqual(ScaleRegistry.TargetHeight("ravi", human));
-        AssertThat(Math.Abs(ScaleRegistry.HunterScale(72f) - 0.432f)).IsLess(0.001f);
+        AssertThat(Math.Abs(ScaleRegistry.HunterScale(72f) - 0.576f)).IsLess(0.001f);
     }
 
     [TestCase]

@@ -6,7 +6,7 @@ namespace Vespera.Game.World;
 
 /// <summary>
 /// Câmera da fase. O zoom NÃO é escolhido por mapa: sai da régua (PLANO-V2 §2.1) para o caçador ter
-/// <see cref="HunterScreenHeight"/> px na tela de 1080p em todo mapa (zoom = 110 ÷ altura humana do mapa em px de
+/// <see cref="HunterScreenHeight"/> px na tela de 1080p em todo mapa (zoom = 140 ÷ altura humana do mapa em px de
 /// mundo). Segue o jogador com suavização e olha à frente do movimento; fica presa ao chão pintado e, se o mapa for menor
 /// que a tela nesse zoom, centraliza o eixo (o resto vira moldura escura, ver <see cref="LevelVignette"/>).
 /// O alvo fica no peito do caçador (não no pé), para o enquadramento não cortar a cabeça perto das bordas.
@@ -14,7 +14,7 @@ namespace Vespera.Game.World;
 public partial class CameraRig : Camera2D
 {
     /// <summary>Altura do caçador na tela de 1080p (px), igual em todos os mapas.</summary>
-    public const float HunterScreenHeight = 110f;
+    public const float HunterScreenHeight = 140f;
 
     /// <summary>Quanto a câmera pode se afastar no máximo (apresentação do Guardião).</summary>
     public const float MinPullBack = 0.8f;
@@ -38,7 +38,7 @@ public partial class CameraRig : Camera2D
     private float _zoomFactor = 1f;
     private Tween? _pull;
 
-    /// <param name="humanHeight">Altura humana do mapa em px de mundo (0,75 × porta pintada).</param>
+    /// <param name="humanHeight">Altura humana do mapa em px de mundo (1,0 × porta pintada).</param>
     public CameraRig(Player target, Rect2 bounds, float actorScale, float humanHeight)
     {
         _target = target;
@@ -66,7 +66,7 @@ public partial class CameraRig : Camera2D
     /// <summary>Ponto fixo para a câmera (capturas de revisão); null = segue o jogador.</summary>
     public Vector2? FixedFocus { get; set; }
 
-    /// <summary>Zoom pela régua: 110 px de caçador na tela ÷ altura humana do mapa em px de mundo.</summary>
+    /// <summary>Zoom pela régua: 140 px de caçador na tela ÷ altura humana do mapa em px de mundo.</summary>
     public static float ZoomFor(float humanHeight) => humanHeight > 0f ? HunterScreenHeight / humanHeight : 1f;
 
     public override void _Ready()

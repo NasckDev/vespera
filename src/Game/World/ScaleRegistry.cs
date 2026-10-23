@@ -13,7 +13,7 @@ public sealed record ScaleEntry(float Height, string Sheet, float Hover = 0f, st
 
 /// <summary>
 /// Registro único do contrato de escala (PLANO-V2 §2.1). O mapa declara <c>doorHeight</c> (px de mundo, medido numa
-/// porta pintada); a altura humana do mapa é 0,75 × porta (<see cref="ScaleRules.HumanHeight"/>); cada ator tem uma
+/// porta pintada); a altura humana do mapa é 1,0 × porta (<see cref="ScaleRules.HumanHeight"/>); cada ator tem uma
 /// altura-alvo em múltiplos dela (tabela abaixo); a escala do sprite = altura-alvo ÷ altura opaca em pé medida na folha
 /// (<c>standing_height</c>, gravada por <c>tools/art/medir_altura_em_pe.py</c> e <c>tools/art/import_npcs.py</c>).
 /// Ator novo = uma linha aqui. Lógica pura: quem lê o arquivo é <see cref="ReadText"/> (FileAccess no jogo, disco nos testes).

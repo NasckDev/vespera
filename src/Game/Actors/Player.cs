@@ -20,13 +20,20 @@ public partial class Player : CharacterBody2D
     public const uint WorldLayer = 1;
     public const uint PlayerLayer = 2;
 
-    /// <summary>Velocidade máxima na escala 1 (px/s). Casada com a passada da folha de andar.</summary>
-    public const float BaseSpeed = 210f;
+    /// <summary>
+    /// Velocidade máxima na escala 1 (px/s). Playtest 23/10 ("mapas enormes para andar"): era 210; com 360 a Praça
+    /// (x 240→1432, entre as cabeceiras das pontes) se atravessa em menos de 6 s (medido por <c>--escala</c>).
+    /// </summary>
+    public const float BaseSpeed = 360f;
+
+    /// <summary>Velocidade em que a passada da folha de andar casa com o chão (a animação acelera na mesma razão).</summary>
+    public const float StrideSpeed = 210f;
     public const float FeetHalfWidth = 22f;
     public const float FeetHalfHeight = 11f;
 
-    private const float Acceleration = 1500f;
-    private const float Deceleration = 2100f;
+    // Arranque e frenagem curtos (~0,08 s até a velocidade máxima): o caçador responde na hora.
+    private const float Acceleration = 4800f;
+    private const float Deceleration = 6000f;
     private const float FacingHysteresis = 1.15f;
 
     private readonly List<Interactable> _nearby = [];
@@ -250,7 +257,7 @@ public partial class Player : CharacterBody2D
                 Sprite.Play(walk);
             }
 
-            Sprite.SpeedScale = Mathf.Clamp(speed / MaxSpeed, 0.35f, 1.2f);
+            Sprite.SpeedScale = Mathf.Clamp(speed / MaxSpeed, 0.35f, 1.2f) * (BaseSpeed / StrideSpeed);
             return;
         }
 

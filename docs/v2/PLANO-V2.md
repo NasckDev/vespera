@@ -50,7 +50,10 @@ Pedido do dono (22/10): "tamanho dos players, monstros e NPC dentro do mapa tem 
 
 - **O mapa é a régua.** Cada `data/levels/<id>.json` declara `doorHeight` em px de mundo, medido numa porta pintada do
   chão (ou, num mapa sem porta, na altura de um elemento equivalente: arco, grade de esgoto, bancada = 0,45 porta).
-- **Altura humana do mapa** = `0,75 × doorHeight`. Tudo deriva dela; não existe `actorScale` escolhido à mão por mapa.
+- **Altura humana do mapa** = `1,0 × doorHeight` (revisão do playtest de 23/10: "mapas enormes, todo o resto minúsculo"; antes era 0,75).
+  Tudo deriva dela; não existe `actorScale` escolhido à mão por mapa.
+- **Câmera:** o zoom sai da régua para o caçador ter **~140 px de altura numa tela de 1080p** em todo mapa (aceito 130–150 px,
+  conferido por `--camera`; na apresentação do Guardião a câmera pode se afastar até 0,8×).
 - **Tabela de alturas** (altura do corpo, pés à cabeça, sem arma nem efeito), em múltiplos da altura humana:
 
   | Ator | Altura | Ator | Altura |

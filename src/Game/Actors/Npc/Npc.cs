@@ -39,7 +39,7 @@ public partial class Npc : CharacterBody2D
     private float _stuck;
     private int _patrolStep;
 
-    /// <param name="humanHeight">Altura humana do mapa (0,75 × porta pintada); a escala vem do <see cref="ScaleRegistry"/>.</param>
+    /// <param name="humanHeight">Altura humana do mapa (1,0 × porta pintada); a escala vem do <see cref="ScaleRegistry"/>.</param>
     public Npc(string id, NpcPlacement placement, float humanHeight)
     {
         _id = id;
@@ -150,7 +150,7 @@ public partial class Npc : CharacterBody2D
         }
 
         var dir = to.Normalized();
-        Velocity = dir * Player.BaseSpeed * _hunterScale * WalkSpeedFactor;
+        Velocity = dir * Player.StrideSpeed * _hunterScale * WalkSpeedFactor;
         MoveAndSlide();
         FaceDirection(dir);
         Play(walking: true);
