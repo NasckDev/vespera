@@ -9,7 +9,7 @@ Um prompt por imagem. Anexe as tiras de caminhada (mostram o personagem exato) e
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
 
-Please create ONE sprite strip for this game. Subject: young hunter with a short red cape, cloth tunic, leather belt with an old brass lantern, worn boots, holding a sword.
+Please create ONE sprite strip for this game. Subject: young hunter with messy dark-brown hair (no hood), a short red scarf, dark steel armor with brass trim, a brass lantern in the left hand, holding a steel sword in the right hand.
 Animation: first sword slash: wind-up, fast horizontal swing leaving a glowing amber arc trail, recovery. Exactly 5 frames. facing DOWN, towards the camera.
 The character is shown in the attached walking strips; copy its exact look. Stage 1 = apprentice hunter, simple worn gear.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
@@ -25,7 +25,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
 
-Please create ONE sprite strip for this game. Subject: young hunter with a short red cape, cloth tunic, leather belt with an old brass lantern, worn boots, holding a sword.
+Please create ONE sprite strip for this game. Subject: young hunter with messy dark-brown hair (no hood), a short red scarf, dark steel armor with brass trim, a brass lantern in the left hand, holding a steel sword in the right hand.
 Animation: first sword slash: wind-up, fast horizontal swing leaving a glowing amber arc trail, recovery. Exactly 5 frames. facing UP, back turned to the camera.
 The character is shown in the attached walking strips; copy its exact look. Stage 1 = apprentice hunter, simple worn gear.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
@@ -41,7 +41,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
 
-Please create ONE sprite strip for this game. Subject: young hunter with a short red cape, cloth tunic, leather belt with an old brass lantern, worn boots, holding a sword.
+Please create ONE sprite strip for this game. Subject: young hunter with messy dark-brown hair (no hood), a short red scarf, dark steel armor with brass trim, a brass lantern in the left hand, holding a steel sword in the right hand.
 Animation: first sword slash: wind-up, fast horizontal swing leaving a glowing amber arc trail, recovery. Exactly 5 frames. facing RIGHT, side view.
 The character is shown in the attached walking strips; copy its exact look. Stage 1 = apprentice hunter, simple worn gear.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
@@ -57,7 +57,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
 
-Please create ONE sprite strip for this game. Subject: young hunter with a short red cape, cloth tunic, leather belt with an old brass lantern, worn boots, holding a sword.
+Please create ONE sprite strip for this game. Subject: young hunter with messy dark-brown hair (no hood), a short red scarf, dark steel armor with brass trim, a brass lantern in the left hand, holding a steel sword in the right hand.
 Animation: second sword slash: backhand diagonal swing with a glowing amber arc trail, recovery. Exactly 5 frames. facing DOWN, towards the camera.
 The character is shown in the attached walking strips; copy its exact look. Stage 1 = apprentice hunter, simple worn gear.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
@@ -73,7 +73,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
 
-Please create ONE sprite strip for this game. Subject: young hunter with a short red cape, cloth tunic, leather belt with an old brass lantern, worn boots, holding a sword.
+Please create ONE sprite strip for this game. Subject: young hunter with messy dark-brown hair (no hood), a short red scarf, dark steel armor with brass trim, a brass lantern in the left hand, holding a steel sword in the right hand.
 Animation: second sword slash: backhand diagonal swing with a glowing amber arc trail, recovery. Exactly 5 frames. facing UP, back turned to the camera.
 The character is shown in the attached walking strips; copy its exact look. Stage 1 = apprentice hunter, simple worn gear.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
@@ -89,7 +89,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
 
-Please create ONE sprite strip for this game. Subject: young hunter with a short red cape, cloth tunic, leather belt with an old brass lantern, worn boots, holding a sword.
+Please create ONE sprite strip for this game. Subject: young hunter with messy dark-brown hair (no hood), a short red scarf, dark steel armor with brass trim, a brass lantern in the left hand, holding a steel sword in the right hand.
 Animation: second sword slash: backhand diagonal swing with a glowing amber arc trail, recovery. Exactly 5 frames. facing RIGHT, side view.
 The character is shown in the attached walking strips; copy its exact look. Stage 1 = apprentice hunter, simple worn gear.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
@@ -105,7 +105,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
 
-Please create ONE sprite strip for this game. Subject: young hunter with a short red cape, cloth tunic, leather belt with an old brass lantern, worn boots, holding a sword.
+Please create ONE sprite strip for this game. Subject: young hunter with messy dark-brown hair (no hood), a short red scarf, dark steel armor with brass trim, a brass lantern in the left hand, holding a steel sword in the right hand.
 Animation: finishing strike: big overhead downward slash with a stronger amber trail and a small impact spark. Exactly 5 frames. facing DOWN, towards the camera.
 The character is shown in the attached walking strips; copy its exact look. Stage 1 = apprentice hunter, simple worn gear.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
@@ -121,7 +121,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
 
-Please create ONE sprite strip for this game. Subject: young hunter with a short red cape, cloth tunic, leather belt with an old brass lantern, worn boots, holding a sword.
+Please create ONE sprite strip for this game. Subject: young hunter with messy dark-brown hair (no hood), a short red scarf, dark steel armor with brass trim, a brass lantern in the left hand, holding a steel sword in the right hand.
 Animation: finishing strike: big overhead downward slash with a stronger amber trail and a small impact spark. Exactly 5 frames. facing UP, back turned to the camera.
 The character is shown in the attached walking strips; copy its exact look. Stage 1 = apprentice hunter, simple worn gear.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
@@ -137,7 +137,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
 
-Please create ONE sprite strip for this game. Subject: young hunter with a short red cape, cloth tunic, leather belt with an old brass lantern, worn boots, holding a sword.
+Please create ONE sprite strip for this game. Subject: young hunter with messy dark-brown hair (no hood), a short red scarf, dark steel armor with brass trim, a brass lantern in the left hand, holding a steel sword in the right hand.
 Animation: finishing strike: big overhead downward slash with a stronger amber trail and a small impact spark. Exactly 5 frames. facing RIGHT, side view.
 The character is shown in the attached walking strips; copy its exact look. Stage 1 = apprentice hunter, simple worn gear.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
@@ -153,7 +153,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
 
-Please create ONE sprite strip for this game. Subject: young hunter with a short red cape, cloth tunic, leather belt with an old brass lantern, worn boots, holding a sword.
+Please create ONE sprite strip for this game. Subject: young hunter with messy dark-brown hair (no hood), a short red scarf, dark steel armor with brass trim, a brass lantern in the left hand, holding a steel sword in the right hand.
 Animation: heavy attack: 2 frames charging (the sword glows amber) then 6 frames of a full spinning slash. Exactly 8 frames. facing RIGHT, side view.
 The character is shown in the attached walking strips; copy its exact look. Stage 1 = apprentice hunter, simple worn gear.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
@@ -169,7 +169,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
 
-Please create ONE sprite strip for this game. Subject: young hunter with a short red cape, cloth tunic, leather belt with an old brass lantern, worn boots, holding a sword.
+Please create ONE sprite strip for this game. Subject: young hunter with messy dark-brown hair (no hood), a short red scarf, dark steel armor with brass trim, a brass lantern in the left hand, holding a steel sword in the right hand.
 Animation: idle: standing still and breathing, the cape moving slightly. Exactly 4 frames. facing DOWN, towards the camera.
 The character is shown in the attached walking strips; copy its exact look. Stage 1 = apprentice hunter, simple worn gear.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
@@ -185,7 +185,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
 
-Please create ONE sprite strip for this game. Subject: young hunter with a short red cape, cloth tunic, leather belt with an old brass lantern, worn boots, holding a sword.
+Please create ONE sprite strip for this game. Subject: young hunter with messy dark-brown hair (no hood), a short red scarf, dark steel armor with brass trim, a brass lantern in the left hand, holding a steel sword in the right hand.
 Animation: idle: standing still and breathing, the cape moving slightly. Exactly 4 frames. facing UP, back turned to the camera.
 The character is shown in the attached walking strips; copy its exact look. Stage 1 = apprentice hunter, simple worn gear.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
@@ -201,7 +201,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
 
-Please create ONE sprite strip for this game. Subject: young hunter with a short red cape, cloth tunic, leather belt with an old brass lantern, worn boots, holding a sword.
+Please create ONE sprite strip for this game. Subject: young hunter with messy dark-brown hair (no hood), a short red scarf, dark steel armor with brass trim, a brass lantern in the left hand, holding a steel sword in the right hand.
 Animation: idle: standing still and breathing, the cape moving slightly. Exactly 4 frames. facing RIGHT, side view.
 The character is shown in the attached walking strips; copy its exact look. Stage 1 = apprentice hunter, simple worn gear.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
@@ -217,7 +217,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
 
-Please create ONE sprite strip for this game. Subject: young hunter with a short red cape, cloth tunic, leather belt with an old brass lantern, worn boots, holding a sword.
+Please create ONE sprite strip for this game. Subject: young hunter with messy dark-brown hair (no hood), a short red scarf, dark steel armor with brass trim, a brass lantern in the left hand, holding a steel sword in the right hand.
 Animation: dodge roll: a quick forward roll and back on the feet. Exactly 5 frames. facing DOWN, towards the camera.
 The character is shown in the attached walking strips; copy its exact look. Stage 1 = apprentice hunter, simple worn gear.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
@@ -233,7 +233,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
 
-Please create ONE sprite strip for this game. Subject: young hunter with a short red cape, cloth tunic, leather belt with an old brass lantern, worn boots, holding a sword.
+Please create ONE sprite strip for this game. Subject: young hunter with messy dark-brown hair (no hood), a short red scarf, dark steel armor with brass trim, a brass lantern in the left hand, holding a steel sword in the right hand.
 Animation: dodge roll: a quick forward roll and back on the feet. Exactly 5 frames. facing UP, back turned to the camera.
 The character is shown in the attached walking strips; copy its exact look. Stage 1 = apprentice hunter, simple worn gear.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
@@ -249,7 +249,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
 
-Please create ONE sprite strip for this game. Subject: young hunter with a short red cape, cloth tunic, leather belt with an old brass lantern, worn boots, holding a sword.
+Please create ONE sprite strip for this game. Subject: young hunter with messy dark-brown hair (no hood), a short red scarf, dark steel armor with brass trim, a brass lantern in the left hand, holding a steel sword in the right hand.
 Animation: dodge roll: a quick forward roll and back on the feet. Exactly 5 frames. facing RIGHT, side view.
 The character is shown in the attached walking strips; copy its exact look. Stage 1 = apprentice hunter, simple worn gear.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
@@ -265,7 +265,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
 
-Please create ONE sprite strip for this game. Subject: young hunter with a short red cape, cloth tunic, leather belt with an old brass lantern, worn boots, holding a sword.
+Please create ONE sprite strip for this game. Subject: young hunter with messy dark-brown hair (no hood), a short red scarf, dark steel armor with brass trim, a brass lantern in the left hand, holding a steel sword in the right hand.
 Animation: getting hit: flinches backwards. Exactly 2 frames. facing DOWN, towards the camera.
 The character is shown in the attached walking strips; copy its exact look. Stage 1 = apprentice hunter, simple worn gear.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
@@ -281,7 +281,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
 
-Please create ONE sprite strip for this game. Subject: young hunter with a short red cape, cloth tunic, leather belt with an old brass lantern, worn boots, holding a sword.
+Please create ONE sprite strip for this game. Subject: young hunter with messy dark-brown hair (no hood), a short red scarf, dark steel armor with brass trim, a brass lantern in the left hand, holding a steel sword in the right hand.
 Animation: getting hit: flinches backwards. Exactly 2 frames. facing UP, back turned to the camera.
 The character is shown in the attached walking strips; copy its exact look. Stage 1 = apprentice hunter, simple worn gear.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
@@ -297,7 +297,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
 
-Please create ONE sprite strip for this game. Subject: young hunter with a short red cape, cloth tunic, leather belt with an old brass lantern, worn boots, holding a sword.
+Please create ONE sprite strip for this game. Subject: young hunter with messy dark-brown hair (no hood), a short red scarf, dark steel armor with brass trim, a brass lantern in the left hand, holding a steel sword in the right hand.
 Animation: getting hit: flinches backwards. Exactly 2 frames. facing RIGHT, side view.
 The character is shown in the attached walking strips; copy its exact look. Stage 1 = apprentice hunter, simple worn gear.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
@@ -313,7 +313,7 @@ Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid 
 ```
 I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeira, a lantern-lit coastal town. Twenty years ago the sun did not rise for a whole year. Since then, every dusk, glowing magenta rifts called Breaches open into the Underside, an inverted copy of the town made of everything people lost or threw away. Monsters there are 'echoes' of human things. Hunters of the Order of the Lantern go in carrying lanterns. Mood: melancholic but hopeful; cozy warm town versus eerie rifts.
 
-Please create ONE sprite strip for this game. Subject: young hunter with a short red cape, cloth tunic, leather belt with an old brass lantern, worn boots, holding a sword.
+Please create ONE sprite strip for this game. Subject: young hunter with messy dark-brown hair (no hood), a short red scarf, dark steel armor with brass trim, a brass lantern in the left hand, holding a steel sword in the right hand.
 Animation: death: falls to the ground; in the last frame the lantern rolls away and goes out. Exactly 7 frames. facing RIGHT, side view.
 The character is shown in the attached walking strips; copy its exact look. Stage 1 = apprentice hunter, simple worn gear.
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
