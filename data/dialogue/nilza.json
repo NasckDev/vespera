@@ -1,68 +1,83 @@
 {
   "id": "nilza",
   "entries": [
-    { "if": ["!met_nilza"], "node": "n1" },
-    { "if": ["GuardianDefeated:lodo_mae", "!nilza_sopa"], "node": "s1" },
-    { "node": "hub" }
+    {
+      "if": [
+        "!met_nilza"
+      ],
+      "node": "n1"
+    },
+    {
+      "node": "hub"
+    }
   ],
   "nodes": {
     "n1": {
       "speaker": "nilza",
       "look": "nilza",
-      "text": "Ai, menino, que cara de cansado! Eu sou a Tia Nilza. Eu cuido da sopa e das poções da praça.",
-      "set": ["met_nilza"],
+      "expression": 2,
+      "text": "Primeira Brecha e já volta inteiro. Come.",
+      "set": [
+        "met_nilza"
+      ],
+      "events": [
+        "GivePotion"
+      ],
       "next": "n2"
     },
     "n2": {
       "speaker": "nilza",
+      "text": "Depois vai na Odete, que essa lâmina tá chorando.",
+      "objective": "forja",
+      "choices": [
+        {
+          "text": "Vou lá.",
+          "next": ""
+        },
+        {
+          "text": "Perguntar mais",
+          "next": "nm1"
+        }
+      ]
+    },
+    "nm1": {
+      "speaker": "nilza",
+      "text": "Meu marido pescava. O mar não devolveu.",
+      "next": "nm2"
+    },
+    "nm2": {
+      "speaker": "nilza",
       "expression": 2,
-      "text": "Tome esta poção. É por conta da casa, só desta vez.",
-      "events": ["GivePotion"],
-      "next": "n3"
-    },
-    "n3": {
-      "speaker": "nilza",
-      "text": "No meio da luta, aperte R para beber. Ela cura uma boa parte da sua vida.",
-      "next": "n4"
-    },
-    "n4": {
-      "speaker": "nilza",
-      "text": "Quando quiser mais, venha falar comigo. Cabem três na bolsa."
+      "text": "Abri isso aqui com o que a Ordem pagou. Come."
     },
     "hub": {
       "speaker": "nilza",
       "text": "Chegou com fome ou com pressa?",
       "choices": [
-        { "text": "Comprar uma poção (14 Lumes).", "next": "compra" },
-        { "text": "Como eu ganho Lumes?", "next": "lumes" },
-        { "text": "Nada agora, obrigado.", "next": "tchau" }
+        {
+          "text": "Comprar uma poção (14 Lumes).",
+          "next": "compra"
+        },
+        {
+          "text": "Perguntar mais",
+          "next": "nm1"
+        },
+        {
+          "text": "Nada agora.",
+          "next": "tchau"
+        }
       ]
     },
     "compra": {
       "speaker": "nilza",
       "text": "Deixa eu ver o que tem no caldeirão.",
-      "events": ["BuyPotion"]
-    },
-    "lumes": {
-      "speaker": "nilza",
-      "text": "Quebre barris e caixotes lá dentro. E cumpra os contratos do mural do Benício. Ele paga bem.",
-      "next": "hub"
+      "events": [
+        "BuyPotion"
+      ]
     },
     "tchau": {
       "speaker": "nilza",
-      "text": "Volte inteiro, ouviu? A sopa esfria rápido."
-    },
-    "s1": {
-      "speaker": "nilza",
-      "expression": 2,
-      "text": "O Ravi já me contou! Você venceu a Lodo-Mãe. A sopa de hoje é por conta dele.",
-      "set": ["nilza_sopa"],
-      "next": "s2"
-    },
-    "s2": {
-      "speaker": "nilza",
-      "text": "Esta é a Sopa da Véspera. Minha avó fazia no ano em que o sol sumiu. Ela dizia que sopa quente espanta o escuro.",
-      "next": "hub"
+      "text": "Então vai. A sopa esfria rápido."
     }
   }
 }

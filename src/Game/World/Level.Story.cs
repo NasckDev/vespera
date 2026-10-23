@@ -17,6 +17,9 @@ public partial class Level
 {
     private const float AutoplayDelay = 0.7f;
     private const float DialogueCooldown = 0.3f;
+    private const int WeaponChangeFragments = 10;
+    private const int MapLumes = 10;
+    private const string MapFlag = "mapa_lis";
 
     private readonly List<string> _pendingEvents = [];
     private DialogueBox _box = null!;
@@ -90,7 +93,7 @@ public partial class Level
         }
 
         // A chegada começa na tela preta (a cena faz o fade): sem isto o jogador apareceria um instante no meio da praça.
-        if (StoryService.Engine.AutoplayFor(World.Data.Id)?.Dialogue == "chegada")
+        if (StoryService.Engine.AutoplayFor(World.Data.Id)?.Stage is "arrival" or "morning")
         {
             _fade.Color = _fade.Color with { A = 1f };
         }
@@ -100,7 +103,7 @@ public partial class Level
 
     private void UpdateStory()
     {
-        _storyHud.Visible = !_box.IsOpen && !_sceneBusy && !RiftSession.InRift;
+        _storyHud.Visible = !_box.IsOpen && (!_sceneBusy || _freeRoam) && !RiftSession.InRift;
         if (_box.IsOpen)
         {
             Player.Frozen = true;
@@ -141,9 +144,17 @@ public partial class Level
             {
                 ForgeScreen.Open();
             }
+            else if (name == StoryFlags.EventChooseWeapon)
+            {
+                OpenWeaponChange(free: true);
+            }
             else if (name == StoryFlags.EventChangeWeapon)
             {
-                OpenWeaponChange();
+                OpenWeaponChange(free: false);
+            }
+            else if (name == StoryFlags.EventBuyMap)
+            {
+                BuyMap();
             }
             else if (name == StoryFlags.EventOpenContracts)
             {
@@ -161,19 +172,25 @@ public partial class Level
     }
 
     /// <summary>"Trocar de arma" da Odete: escolha da arma nova, confirmação, e o caçador troca de folha e de golpes na hora.</summary>
-    private void OpenWeaponChange()
+    private void OpenWeaponChange(bool free)
     {
+        var current = EquippedHunter;
+        if (!free && Hunter.Progression.IsActive && Hunter.Progression.State.Fragmentos < WeaponChangeFragments)
+        {
+            ShowNotice($"Trocar de arma custa {WeaponChangeFragments} Fragmentos. Você tem {Hunter.Progression.State.Fragmentos}.");
+            return;
+        }
+
         GetTree().Paused = true;
-        var current = RiftSession.Hunter;
         SceneRouter.Instance.Push(new ClassSelectScreen(
-            chosen => ConfirmWeaponChange(chosen, current),
+            chosen => ConfirmWeaponChange(chosen, current, free),
             current,
-            "Trocar de arma",
-            "Trocar para esta arma",
+            free ? "Qual vai levar?" : "Trocar de arma",
+            free ? "Levar esta arma" : $"Trocar ({WeaponChangeFragments} Fragmentos)",
             () => GetTree().Paused = false));
     }
 
-    private void ConfirmWeaponChange(HunterClass chosen, HunterClass current)
+    private void ConfirmWeaponChange(HunterClass chosen, HunterClass current, bool free)
     {
         if (chosen == current)
         {
@@ -181,13 +198,19 @@ public partial class Level
             return;
         }
 
+        var cost = free ? "De graça, desta vez." : $"Custa {WeaponChangeFragments} Fragmentos.";
         SceneRouter.Instance.Push(new ConfirmScreen(
-            $"Trocar {HunterSprites.DisplayName(current)} por {HunterSprites.DisplayName(chosen)}? A arma nova começa no nível 1; a atual fica guardada.",
-            () => ApplyWeaponChange(chosen)));
+            $"Levar {HunterSprites.DisplayName(chosen)} no lugar de {HunterSprites.DisplayName(current)}? {cost} A arma atual fica guardada.",
+            () => ApplyWeaponChange(chosen, free)));
     }
 
-    private void ApplyWeaponChange(HunterClass chosen)
+    private void ApplyWeaponChange(HunterClass chosen, bool free)
     {
+        if (!free && Hunter.Progression.IsActive)
+        {
+            Hunter.Progression.State.Fragmentos -= WeaponChangeFragments;
+        }
+
         if (GameSession.Data is { } data)
         {
             SaveService.ChangeClass(data, HunterSprites.WeaponId(chosen));
@@ -218,6 +241,20 @@ public partial class Level
         var state = Hunter.HuntService.State;
         state.Potions = System.Math.Min(Hunter.HuntService.Config.Potions.Max, state.Potions + 1);
         CombatHud.Toast($"Você ganhou uma poção! ({state.Potions} na bolsa)");
+        GameSession.Autosave();
+    }
+
+    /// <summary>Mapa da Lis (ROTEIRO-V2 §3, 9:30): paga 10 Lumes. O efeito dentro da Brecha (sala do tesouro marcada) ainda é do lado da caçada.</summary>
+    private void BuyMap()
+    {
+        if (!Hunter.Progression.IsActive || !Hunter.Progression.Engine.TrySpendLumes(MapLumes))
+        {
+            ShowNotice($"O mapa custa {MapLumes} Lumes.");
+            return;
+        }
+
+        StoryService.SetFlag(MapFlag);
+        CombatHud.Toast($"Mapa da Lis: -{MapLumes} Lumes");
         GameSession.Autosave();
     }
 

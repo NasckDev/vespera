@@ -1,113 +1,110 @@
 {
   "id": "ravi",
   "entries": [
-    { "if": ["GuardianDefeated:lodo_mae"], "node": "rg1" },
-    { "if": ["hunt_2", "!ravi_rival"], "node": "rv1" },
-    { "if": ["fell_once", "!ravi_fell"], "node": "rf1" },
-    { "if": ["hunt_back"], "node": "rd1" },
-    { "if": ["starter_blade"], "node": "rb1" },
-    { "if": ["met_ravi"], "node": "rr1" },
-    { "if": ["!registered"], "node": "rp1" },
-    { "node": "r1" }
+    {
+      "if": [
+        "hunt_1",
+        "!ravi_placar"
+      ],
+      "node": "p1"
+    },
+    {
+      "if": [
+        "ato1_fim_done"
+      ],
+      "node": "rg1"
+    },
+    {
+      "if": [
+        "met_ravi"
+      ],
+      "node": "hub"
+    },
+    {
+      "node": "r1"
+    }
   ],
   "nodes": {
-    "rp1": {
-      "speaker": "ravi",
-      "expression": 2,
-      "text": "Ei! Primeiro fale com o Mestre Benício, lá no mural. Ele não gosta de esperar."
-    },
     "r1": {
       "speaker": "ravi",
-      "text": "Selo E também, né? Dá para ver de longe. Eu sou o Ravi!",
+      "look": "ravi",
+      "expression": 2,
+      "text": "Opa, era minha! Tá, vai você.",
+      "set": [
+        "met_ravi"
+      ],
       "next": "r2"
     },
     "r2": {
       "speaker": "ravi",
-      "expression": 2,
-      "text": "Vamos apostar: quem chegar primeiro na Lodo-Mãe ganha. Quem perder paga a sopa da Tia Nilza.",
+      "look": "player",
+      "text": "Aposto a sopa que eu fecho mais salas que você.",
       "choices": [
-        { "text": "Fechado! Vai ser uma corrida.", "next": "r3a" },
-        { "text": "Eu só quero ajudar a cidade.", "next": "r3b" },
-        { "text": "Quem é você?", "next": "m1" }
+        {
+          "text": "Apostado.",
+          "next": ""
+        },
+        {
+          "text": "Perguntar mais",
+          "next": "rm1"
+        }
       ]
     },
-    "m1": {
+    "rm1": {
       "speaker": "ravi",
-      "text": "Eu moro nas Ruas Baixas. Quero ser caçador para tirar minha família de lá.",
-      "next": "r2"
+      "text": "Minha mãe lava roupa nas Ruas Baixas.",
+      "next": "rm2"
     },
-    "r3a": {
+    "rm2": {
       "speaker": "ravi",
       "expression": 2,
-      "text": "Isso! Então corre. Você precisa de uma arma. A Odete fica na Forja, depois da ponte a oeste.",
-      "set": ["met_ravi"],
-      "objective": "odete"
+      "text": "Caçador de selo C ganha em um mês o que ela ganha no ano.",
+      "choices": [
+        {
+          "text": "Apostado.",
+          "next": ""
+        }
+      ]
     },
-    "r3b": {
+    "p1": {
       "speaker": "ravi",
-      "text": "Que sem graça. Mas tudo bem. Pegue uma arma com a Odete, na Forja, depois da ponte a oeste.",
-      "set": ["met_ravi"],
-      "objective": "odete"
+      "look": "ravi",
+      "text": "Duas salas. Você?",
+      "set": [
+        "ravi_placar"
+      ],
+      "choices": [
+        {
+          "text": "Todas.",
+          "next": "p2"
+        }
+      ]
     },
-    "rr1": {
-      "speaker": "ravi",
-      "text": "A Forja da Odete fica depois da ponte, a oeste. Se ela gritar com você, é bom sinal."
-    },
-    "rb1": {
-      "speaker": "ravi",
-      "expression": 2,
-      "text": "Já tem arma? Então vai! A Brecha está logo ali.",
-      "next": "rb2"
-    },
-    "rb2": {
-      "speaker": "ravi",
-      "text": "Dica de amigo: quando um monstro brilhar laranja, ele vai atacar. Aperte esquivar e saia do lugar."
-    },
-    "rf1": {
-      "speaker": "ravi",
-      "text": "Soube que você caiu lá dentro. Eu também caí na primeira vez. Duas vezes, na verdade.",
-      "set": ["ravi_fell"],
-      "next": "rf2"
-    },
-    "rf2": {
+    "p2": {
       "speaker": "ravi",
       "expression": 2,
-      "text": "Volte lá. A sua Lanterna ficou caída com os Fragmentos. É só entrar de novo para pegar."
-    },
-    "rd1": {
-      "speaker": "ravi",
-      "text": "Voltou! Eu já estou na terceira caçada. Ou na segunda. Mas parece a terceira.",
-      "next": "rd2"
-    },
-    "rd2": {
-      "speaker": "ravi",
-      "text": "Ouvi dizer que a Tia Nilza vende poções. Eu sempre levo uma. Aperte R para beber no meio da luta."
-    },
-    "rv1": {
-      "speaker": "ravi",
-      "expression": 2,
-      "text": "Duas caçadas completas? Você está me alcançando!",
-      "set": ["ravi_rival"],
-      "next": "rv2"
-    },
-    "rv2": {
-      "speaker": "ravi",
-      "text": "Eu ainda não passei no exame do Benício. Ele diz que eu bato muito e esquivo pouco.",
-      "next": "rv3"
-    },
-    "rv3": {
-      "speaker": "ravi",
-      "text": "Se você passar primeiro, eu pago a sopa. Mas só se você voltar inteiro, combinado?"
+      "text": "…Sopa por minha conta. Vem.",
+      "objective": "nilza"
     },
     "rg1": {
       "speaker": "ravi",
       "expression": 2,
-      "text": "Você venceu a Lodo-Mãe? Sozinho? Eu senti o chão tremer daqui!",
-      "next": "rg2"
+      "text": "Selo D! E eu aqui no E.",
+      "next": "hub"
     },
-    "rg2": {
+    "hub": {
       "speaker": "ravi",
-      "text": "Tá bom, você ganhou a aposta. A sopa da Tia Nilza é por minha conta."
+      "text": "A aposta continua. Vai caçar.",
+      "choices": [
+        {
+          "text": "Perguntar mais",
+          "next": "rm1"
+        },
+        {
+          "text": "Até mais.",
+          "next": ""
+        }
+      ]
     }
   }
 }

@@ -3,130 +3,51 @@
   "entries": [
     {
       "if": [
-        "GuardianDefeated:lodo_mae"
+        "hunt_2",
+        "!exame_e"
       ],
-      "node": "g1"
+      "node": "ex1"
     },
     {
-      "if": [
-        "exame_e"
-      ],
-      "node": "pronto"
-    },
-    {
-      "if": [
-        "hunt_back"
-      ],
       "node": "hub"
-    },
-    {
-      "if": [
-        "starter_blade"
-      ],
-      "node": "lembra_brecha"
-    },
-    {
-      "if": [
-        "met_ravi"
-      ],
-      "node": "lembra_odete"
-    },
-    {
-      "if": [
-        "registered"
-      ],
-      "node": "lembra_ravi"
-    },
-    {
-      "node": "b1"
     }
   ],
   "nodes": {
-    "b1": {
-      "speaker": "benicio",
-      "look": "benicio",
-      "text": "Bem-vindo, {nome}. Eu sou o Mestre Benício, da Ordem da Lanterna. A Ordem cuida de quem enfrenta as Brechas.",
-      "next": "b2"
-    },
-    "b2": {
+    "ex1": {
       "speaker": "benicio",
       "look": "brecha",
-      "expression": 2,
-      "text": "Aquela Brecha vai crescer se ninguém entrar. Lá dentro moram monstros do Avesso. E lá dentro ficam os Fragmentos.",
-      "next": "b3"
-    },
-    "b3": {
-      "speaker": "benicio",
-      "look": "benicio",
-      "text": "Fragmentos são cristais que mantêm as lanternas da cidade acesas. Sem eles, o escuro volta. Por isso existem caçadores.",
-      "choices": [
-        {
-          "text": "Entendi. Eu vou caçar.",
-          "next": "b4"
-        },
-        {
-          "text": "O que é o Avesso?",
-          "next": "m1"
-        }
-      ]
-    },
-    "m1": {
-      "speaker": "benicio",
-      "text": "O Avesso é uma Lumeira de cabeça para baixo. É feito de tudo o que a cidade esqueceu. Os monstros são pedaços desse esquecimento.",
-      "next": "m2"
-    },
-    "m2": {
-      "speaker": "benicio",
-      "expression": 2,
-      "text": "Ninguém sabe por que o selo apareceu em você. Nem a Ordem sabe.",
-      "next": "b3"
-    },
-    "b4": {
-      "speaker": "benicio",
-      "look": "player",
-      "text": "Mas você está de mãos vazias. Vá até a Odete, a ferreira. A Forja fica depois da ponte, a oeste.",
+      "text": "Hoje eu entro com você. Não pra ajudar.",
       "set": [
-        "registered"
+        "exame_e"
       ],
-      "next": "b5"
-    },
-    "b5": {
-      "speaker": "benicio",
-      "look": "ravi",
-      "text": "Ah, e aquele rapaz ali também é selo E. Se ele vier falar com você, escute.",
-      "objective": "ravi"
-    },
-    "lembra_ravi": {
-      "speaker": "benicio",
-      "text": "O Ravi está aqui na praça. Fale com ele. Depois, vá até a Forja da Odete, a oeste."
-    },
-    "lembra_odete": {
-      "speaker": "benicio",
-      "text": "A Forja da Odete fica depois da ponte, a oeste. Ela tem gênio forte, mas faz as melhores armas."
-    },
-    "lembra_brecha": {
-      "speaker": "benicio",
-      "look": "brecha",
-      "text": "Agora você tem uma arma. Entre na Brecha e chegue até o fim. Se cair, volte: a sua Lanterna guarda o que você juntou."
+      "objective": "lodo_mae"
     },
     "hub": {
       "speaker": "benicio",
-      "text": "Voltou inteiro. Bom. Em que posso ajudar?",
+      "look": "mural",
+      "text": "Quadro de contratos. Pega um antes da véspera.",
       "choices": [
         {
-          "text": "Quero fazer o exame.",
-          "next": "ex1"
-        },
-        {
-          "text": "Ver os contratos do mural.",
+          "text": "Ver os contratos.",
           "next": "contratos"
         },
         {
-          "text": "Por que existe um exame?",
-          "next": "porque"
+          "text": "Perguntar mais",
+          "if": [
+            "!benicio_avesso"
+          ],
+          "next": "m1"
         },
         {
-          "text": "Nada, até logo.",
+          "text": "Perguntar sobre o selo",
+          "if": [
+            "benicio_avesso",
+            "!benicio_selo"
+          ],
+          "next": "m2"
+        },
+        {
+          "text": "Até mais.",
           "next": "tchau"
         }
       ]
@@ -134,125 +55,31 @@
     "contratos": {
       "speaker": "benicio",
       "look": "mural",
-      "text": "Cada contrato vale para a próxima caçada. Cumpra e eu pago em XP, Fragmentos e Lumes.",
+      "text": "Cumpre e eu pago. Escolhe.",
       "events": [
         "OpenContracts"
       ]
     },
-    "porque": {
+    "m1": {
       "speaker": "benicio",
-      "expression": 2,
-      "text": "No fundo dessa Brecha mora a Lodo-Mãe. Quem vai até ela sem preparo não volta.",
-      "next": "porque2"
-    },
-    "porque2": {
-      "speaker": "benicio",
-      "text": "Por isso eu examino antes. Duas caçadas completas, uma arma melhorada na forja e experiência suficiente.",
+      "text": "O Avesso? É Lumeira de cabeça pra baixo. Tudo que a gente joga fora cai lá.",
+      "set": [
+        "benicio_avesso"
+      ],
       "next": "hub"
     },
-    "ex1": {
-      "speaker": "benicio",
-      "look": "player",
-      "text": "Deixe-me ver se você está pronto.",
-      "branches": [
-        {
-          "if": [
-            "!hunt_2"
-          ],
-          "node": "falta_cacada"
-        },
-        {
-          "if": [
-            "!forged"
-          ],
-          "node": "falta_forja"
-        },
-        {
-          "if": [
-            "!xp_ready"
-          ],
-          "node": "falta_xp"
-        },
-        {
-          "node": "ex_ok"
-        }
-      ]
-    },
-    "falta_cacada": {
-      "speaker": "benicio",
-      "text": "Ainda não. Quero ver você voltar inteiro de duas caçadas completas. Por enquanto, você tem menos que isso."
-    },
-    "falta_forja": {
-      "speaker": "benicio",
-      "text": "Ainda não. Essa arma está do jeito que a Odete entregou. Peça para ela melhorar a arma."
-    },
-    "falta_xp": {
-      "speaker": "benicio",
-      "text": "Quase. Falta experiência. Faça mais uma caçada. Os contratos do mural dão XP a mais."
-    },
-    "ex_ok": {
+    "m2": {
       "speaker": "benicio",
       "expression": 2,
-      "text": "Duas caçadas, arma forjada, experiência de sobra. Você passou no exame, {nome}.",
+      "text": "Selo não escolhe à toa. O seu queimou sozinho. Nunca vi.",
       "set": [
-        "exame_e"
+        "benicio_selo"
       ],
-      "next": "ex_ok2"
-    },
-    "ex_ok2": {
-      "speaker": "benicio",
-      "look": "brecha",
-      "fx": "shake",
-      "text": "Sinta isso. A Brecha percebeu. Agora ela vai levar você até a Lodo-Mãe.",
-      "next": "ex_ok3"
-    },
-    "ex_ok3": {
-      "speaker": "benicio",
-      "look": "benicio",
-      "text": "Ela tem três núcleos brilhando no corpo. Quebre os três. E quando ela pular, saia de baixo.",
-      "objective": "lodo_mae"
-    },
-    "pronto": {
-      "speaker": "benicio",
-      "look": "brecha",
-      "text": "A Lodo-Mãe espera no fim da Brecha. Compre poções com a Tia Nilza antes de ir.",
-      "choices": [
-        {
-          "text": "Ver os contratos do mural.",
-          "next": "contratos"
-        },
-        {
-          "text": "Estou pronto.",
-          "next": "tchau"
-        }
-      ]
+      "next": "hub"
     },
     "tchau": {
       "speaker": "benicio",
-      "text": "Que a lanterna ilumine o seu caminho."
-    },
-    "g1": {
-      "speaker": "benicio",
-      "text": "Você fechou a Brecha, {nome}. A cidade está mais segura por sua causa.",
-      "choices": [
-        {
-          "text": "Ver os contratos do mural.",
-          "next": "contratos"
-        },
-        {
-          "text": "E o Pomar Alto?",
-          "next": "g2"
-        },
-        {
-          "text": "Até logo.",
-          "next": "tchau"
-        }
-      ]
-    },
-    "g2": {
-      "speaker": "benicio",
-      "expression": 2,
-      "text": "A Dona Celeste pediu ajuda. O caminho para o Pomar ainda está fechado. Quando abrir, você vai primeiro."
+      "text": "Vai. A véspera não espera."
     }
   }
 }

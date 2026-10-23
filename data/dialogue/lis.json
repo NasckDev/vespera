@@ -1,86 +1,113 @@
 {
   "id": "lis",
   "entries": [
-    { "if": ["GuardianDefeated:lodo_mae"], "node": "pos" },
-    { "if": ["exame_e"], "node": "mae1" },
-    { "if": ["hunt_back"], "node": "salas1" },
-    { "if": ["met_lis"], "node": "again" },
-    { "node": "l1" }
+    {
+      "if": [
+        "odete_marisa",
+        "!maca_done"
+      ],
+      "node": "a1"
+    },
+    {
+      "if": [
+        "met_odete",
+        "!met_lis"
+      ],
+      "node": "l1"
+    },
+    {
+      "if": [
+        "met_lis"
+      ],
+      "node": "hub"
+    },
+    {
+      "node": "cedo"
+    }
   ],
   "nodes": {
+    "cedo": {
+      "speaker": "lis",
+      "look": "lis",
+      "text": "De noite eu não vendo mapa. Volta de manhã."
+    },
     "l1": {
       "speaker": "lis",
-      "text": "Oi! Eu sou a Lis. Eu desenho mapas da Brecha. Para quem é novo, é de graça.",
+      "look": "lis",
+      "text": "Hoje abre no Bairro das Forjas.",
+      "set": [
+        "met_lis"
+      ],
+      "objective": "cacada2",
       "next": "l2"
     },
     "l2": {
       "speaker": "lis",
-      "expression": 2,
-      "text": "Cada vez que você entra, as salas mudam de lugar. Mas eu sempre sei onde ela vai abrir.",
-      "set": ["met_lis"],
+      "look": "player",
+      "text": "Quer ver por dentro antes? Dez Lumes.",
       "choices": [
-        { "text": "Obrigado pela ajuda.", "next": "l3" },
-        { "text": "Como você sabe?", "next": "m1" }
+        {
+          "text": "Comprar o mapa (10 Lumes).",
+          "next": "mapa"
+        },
+        {
+          "text": "Perguntar mais",
+          "next": "lm1"
+        },
+        {
+          "text": "Agora não.",
+          "next": "quadro"
+        }
       ]
     },
-    "m1": {
-      "speaker": "lis",
-      "text": "Eu sinto um friozinho nas costas, um pouco antes. E os monstros nunca chegam perto de mim.",
-      "next": "m2"
-    },
-    "m2": {
+    "mapa": {
       "speaker": "lis",
       "expression": 2,
-      "text": "Eu nasci no ano em que o sol sumiu. Será que é por isso? Não conte para ninguém, tá?",
-      "next": "l3"
+      "text": "Tá na mão. Agora pega um contrato no quadro.",
+      "events": [
+        "BuyMap"
+      ]
     },
-    "l3": {
+    "quadro": {
       "speaker": "lis",
-      "text": "Lá embaixo, quebre os barris. Às vezes tem Lumes dentro. Às vezes, um Fragmento!"
+      "text": "Então pega um contrato no quadro do Benício."
     },
-    "again": {
-      "speaker": "lis",
-      "text": "Barris têm Lumes. Fendas no chão soltam monstros. Boa sorte, selo E."
-    },
-    "salas1": {
-      "speaker": "lis",
-      "text": "Desenhei as salas novas! Tem três que você precisa conhecer.",
-      "next": "salas2"
-    },
-    "salas2": {
-      "speaker": "lis",
-      "text": "Sala com lanterna no chão: é de descanso. Chegue perto e interaja para recuperar vida.",
-      "next": "salas3"
-    },
-    "salas3": {
-      "speaker": "lis",
-      "text": "Monstro laranja e maior: é de elite. Bate mais forte, mas deixa mais coisas.",
-      "next": "salas4"
-    },
-    "salas4": {
+    "lm1": {
       "speaker": "lis",
       "expression": 2,
-      "text": "E às vezes aparece uma sala com baú. Abra! Dentro sempre tem Fragmentos."
+      "text": "Os bichos não chegam perto de mim. Não sei por quê.",
+      "set": [
+        "lis_segredo"
+      ],
+      "next": "lm2"
     },
-    "mae1": {
+    "lm2": {
       "speaker": "lis",
+      "text": "Não conta pra Ordem. Vai, pega um contrato."
+    },
+    "hub": {
+      "speaker": "lis",
+      "text": "Mapa novo só amanhã. Vai caçar.",
+      "choices": [
+        {
+          "text": "Perguntar mais",
+          "next": "lm1"
+        },
+        {
+          "text": "Até mais.",
+          "next": ""
+        }
+      ]
+    },
+    "a1": {
+      "speaker": "lis",
+      "look": "lis",
       "expression": 2,
-      "text": "Você vai atrás da Lodo-Mãe? Eu desenhei ela. Olha: três bolinhas brilhando nas costas.",
-      "next": "mae2"
-    },
-    "mae2": {
-      "speaker": "lis",
-      "text": "Quando ela pula, aparece uma sombra no chão. Saia da sombra. Quando ela engole alguém, bata sem parar."
-    },
-    "pos": {
-      "speaker": "lis",
-      "text": "Desde que a Lodo-Mãe caiu, o friozinho nas costas mudou de lugar. Agora vem lá do Pomar Alto.",
-      "next": "pos2"
-    },
-    "pos2": {
-      "speaker": "lis",
-      "expression": 2,
-      "text": "Lá as maçãs estão podres por dentro. Igual às coisas que o Avesso guarda. Tenho medo, sabia?"
+      "text": "Isso veio do Pomar Alto. Maçã não nasce dessa cor.",
+      "set": [
+        "maca_done"
+      ],
+      "objective": "ato2"
     }
   }
 }

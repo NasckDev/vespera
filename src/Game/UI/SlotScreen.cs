@@ -72,12 +72,12 @@ public partial class SlotScreen(SlotScreen.Mode mode) : UiScreen
         StartNew(slot);
     }
 
-    /// <summary>Depois do espaço, a escolha da arma (uma vez só); o save nasce já com ela, e então vem o prólogo.</summary>
-    private void StartNew(int slot)
-    {
-        SceneRouter.Instance.Push(new ClassSelectScreen(
-            hunter => Begin(slot, SaveService.StartNew(slot, HunterSprites.WeaponId(hunter)), "Não foi possível gravar o save.")));
-    }
+    /// <summary>
+    /// Jogo novo começa com a Lâmina enferrujada (ROTEIRO-V2 §4.3): a arma definitiva é escolhida na Odete depois do
+    /// exame, já tendo testado as três. Depois do espaço vêm as duas cartelas de abertura.
+    /// </summary>
+    private void StartNew(int slot) =>
+        Begin(slot, SaveService.StartNew(slot, HunterSprites.WeaponId(HunterClass.Lamina)), "Não foi possível gravar o save.");
 
     private void Begin(int slot, SaveData? data, string failure)
     {
