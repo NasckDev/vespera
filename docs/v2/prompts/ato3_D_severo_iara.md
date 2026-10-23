@@ -1,6 +1,6 @@
 # Parte D1 · Capitão Severo e Iara: retratos
 
-Um prompt por imagem. Respeite a idade descrita (a Lis é criança).
+Um prompt por imagem. Respeite a idade descrita (Severo tem ~60 anos; Iara, ~32).
 
 ### D1-01 · `retrato_severo_1.png` · Capitão Severo (neutral, grumpy and closed)
 

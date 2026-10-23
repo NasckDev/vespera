@@ -187,6 +187,7 @@ def main():
             "ato3_A_cenarios.md": maps("Ato III · Cenários do Mercado das Marés e do Cais Afogado (6 imagens)", INTRO_MAPS, MAPS_ATO3),
             "ato3_C_monstros.md": g.monsters().replace("Monstros do Ato I", "Monstros do Ato III (Cais Afogado)"),
             "ato3_D_severo_iara.md": g.portraits().replace("Retratos de diálogo dos NPCs", "Capitão Severo e Iara: retratos")
+                                       .replace("(a Lis é criança)", "(Severo tem ~60 anos; Iara, ~32)")
                                      + "\n\n" + g.npc_walks().replace("NPCs andando pela cidade", "Capitão Severo e Iara andando"),
             "ato4_A_cenarios.md": maps("Ato IV · Cenários do Cemitério das Lanternas (2 imagens: bairro e arena)", INTRO_MAPS, MAPS_ATO4),
             "ato5_A_cenarios.md": maps("Ato V · Cenários da Torre do Sino (2 imagens: bairro e arena)", INTRO_MAPS, MAPS_ATO5),
