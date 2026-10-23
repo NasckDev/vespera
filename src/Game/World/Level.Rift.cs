@@ -63,6 +63,10 @@ public partial class Level
         World.Player.Frozen = true;
         await FadeTo(1f);
         CloseReading();
+
+        // Aviso da sala anterior não atravessa a porta (senão o primeiro Interagir da sala nova só fecharia o aviso).
+        _noticeTimer = 0f;
+        _hud.ClosePanel();
         Numbers.Clear();
         var old = World;
         _data = LoadData(id);

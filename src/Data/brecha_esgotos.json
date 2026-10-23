@@ -12,7 +12,7 @@
   "monsters": {
     "lodo": { "name": "Lodo", "hp": 28, "damage": 9, "speed": 260, "xp": 2, "hurtRadius": 30, "contactRadius": 34, "period": 1.2, "telegraph": 0.35 },
     "espectro": { "name": "Espectro", "hp": 24, "damage": 11, "speed": 120, "xp": 4, "hurtRadius": 34, "contactRadius": 40, "period": 2.6, "telegraph": 0.55 },
-    "lodo_mae": { "name": "LODO-MÃE", "hp": 760, "damage": 16, "speed": 110, "xp": 50, "hurtRadius": 120, "contactRadius": 130, "period": 2.0, "telegraph": 0.6, "boss": true }
+    "lodo_mae": { "name": "LODO-MÃE", "hp": 640, "damage": 16, "speed": 110, "xp": 50, "hurtRadius": 120, "contactRadius": 130, "period": 2.0, "telegraph": 0.6, "boss": true }
   },
   "boss": {
     "phases": [0.66, 0.33],

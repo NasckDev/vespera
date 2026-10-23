@@ -173,8 +173,19 @@ public sealed partial class CombatBot(Level level, SmokeTest host)
         {
             World.Player.Teleport(World.ClampToFloor(portal.GlobalPosition + (Vector2.Down * 40f * S)));
             await host.PhysicsFrames(6);
-            await TapInteract();
-            await host.PhysicsFrames(6);
+            var room = RiftSession.RoomIndex;
+            for (var attempt = 0; attempt < 5 && !level.Switching && RiftSession.InRift && RiftSession.RoomIndex == room; attempt++)
+            {
+                // Como um jogador: se o aperto não pegou (aviso na tela, golpe acabando), aperta de novo.
+                if (attempt > 0)
+                {
+                    Log.Info($"bot: Interagir na fenda não pegou (tentativa {attempt + 1}); foco '{World.Player.Focus?.Kind}', painel {level.Hud.PanelOpen}");
+                }
+
+                await TapInteract();
+                await host.PhysicsFrames(20);
+            }
+
             return;
         }
 

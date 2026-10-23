@@ -7,7 +7,7 @@ namespace Vespera.Game.Combat;
 /// <summary>
 /// Arco (PLANO-V2 §7): tocar o ataque solta uma flecha; segurar (ou o pesado) puxa a corda e carrega — cheia, a flecha
 /// de luz atravessa todos no caminho. A flecha sai no quadro em que a corda solta. Enquanto puxa, o caçador fica
-/// parado e só gira a mira.
+/// parado e só gira a mira; a flecha comum deixa andar devagar (recuar atirando).
 /// </summary>
 public sealed class BowMoves(HunterCombat combat) : WeaponMoves(combat, "bow")
 {
@@ -16,6 +16,7 @@ public sealed class BowMoves(HunterCombat combat) : WeaponMoves(combat, "bow")
     private const float HoldToCharge = 0.18f;
     private const float ArrowSpeed = 1500f;
     private const float ChargedSpeed = 2100f;
+    private const float KiteMoveScale = 0.55f;
 
     private float _held = -1f;
     private bool _charging;
@@ -57,7 +58,8 @@ public sealed class BowMoves(HunterCombat combat) : WeaponMoves(combat, "bow")
             CombatSfx.Play(P, CombatSound.BowDraw, Vector2.Zero, -8f);
         }
 
-        return Busy ? AttackMotion(dt, 0f) : MotionOrder.Free;
+        // Identidade do Arco (PLANO §7: "longo, kiting"): dá para andar devagar enquanto atira a flecha comum.
+        return Busy ? AttackMotion(dt, KiteMoveScale) : MotionOrder.Free;
     }
 
     public override void Cancel()
