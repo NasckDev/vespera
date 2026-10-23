@@ -1,0 +1,60 @@
+{
+  "id": "final/morte",
+  "entries": [
+    {
+      "if": [
+        "final_morte_5"
+      ],
+      "node": "m5"
+    },
+    {
+      "if": [
+        "final_morte_4"
+      ],
+      "node": "m4"
+    },
+    {
+      "if": [
+        "final_morte_3"
+      ],
+      "node": "m3"
+    },
+    {
+      "if": [
+        "final_morte_2"
+      ],
+      "node": "m2"
+    },
+    {
+      "if": [
+        "final_morte_1"
+      ],
+      "node": "m1"
+    },
+    {
+      "node": "m1"
+    }
+  ],
+  "nodes": {
+    "m1": {
+      "speaker": "vigia",
+      "text": "Cada vez que cai, ele acende uma a mais. Para de cair."
+    },
+    "m2": {
+      "speaker": "odete",
+      "text": "Eu te tirei de lá. Na próxima, eu entro junto até o fim. Não discute."
+    },
+    "m3": {
+      "speaker": "nilza",
+      "text": "Ele tá te vendo cair da mesma forma. Muda a forma."
+    },
+    "m4": {
+      "speaker": "lis",
+      "text": "Eu fiquei do lado dele. Ele não me viu. Ele só vê você."
+    },
+    "m5": {
+      "speaker": "benicio",
+      "text": "Caiu na primeira. Levanta na primeira. A Ordem anota: Alvor em andamento."
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "ato3/farol",
+  "entries": [
+    {
+      "node": "a"
+    }
+  ],
+  "nodes": {
+    "a": {
+      "speaker": "farol",
+      "text": "Eu apaguei por uma noite.",
+      "fx": "shake"
+    }
+  }
+}

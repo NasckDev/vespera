@@ -1,0 +1,84 @@
+{
+  "id": "ato6/morte",
+  "entries": [
+    {
+      "if": [
+        "ato6_morte_6"
+      ],
+      "node": "m6"
+    },
+    {
+      "if": [
+        "ato6_morte_5"
+      ],
+      "node": "m5"
+    },
+    {
+      "if": [
+        "ato6_morte_4"
+      ],
+      "node": "m4"
+    },
+    {
+      "if": [
+        "ato6_morte_3"
+      ],
+      "node": "m3"
+    },
+    {
+      "if": [
+        "ato6_morte_2"
+      ],
+      "node": "m2"
+    },
+    {
+      "if": [
+        "ato6_morte_1"
+      ],
+      "node": "m1"
+    },
+    {
+      "node": "m1"
+    }
+  ],
+  "nodes": {
+    "m1": {
+      "speaker": "nilza",
+      "text": "A sopa te levantou uma vez. A segunda fui eu, carregando."
+    },
+    "m2": {
+      "speaker": "celeste",
+      "text": "Você caiu entre as casas penduradas. Eu segurei pelo pé."
+    },
+    "m3": {
+      "speaker": "odete",
+      "text": "A lâmina nova voltou sem você. Eu levei ela de volta lá dentro. Vai buscar as duas."
+    },
+    "m4": {
+      "speaker": "mae_ravi",
+      "text": "Eu rezei pra sua lanterna. Nunca rezei pra lanterna."
+    },
+    "m5": {
+      "speaker": "vigia",
+      "text": "Pergunta quatro: se você pudesse fechar tudo e não voltar, fechava?",
+      "choices": [
+        {
+          "text": "Fechava.",
+          "set": [
+            "vigia_p4_fechava"
+          ]
+        },
+        {
+          "text": "Não.",
+          "set": [
+            "vigia_p4_nao"
+          ]
+        }
+      ]
+    },
+    "m6": {
+      "speaker": "benicio",
+      "text": "Caiu com selo SS. A Ordem não tem página pra isso. Eu fiz uma."
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "id": "ato4/nilza",
+  "entries": [
+    {
+      "if": [
+        "ravi_rota_b"
+      ],
+      "node": "b1"
+    },
+    {
+      "node": "a"
+    }
+  ],
+  "nodes": {
+    "a": {
+      "speaker": "nilza",
+      "text": "Come. Cemitério dá fome, não sei por quê."
+    },
+    "b1": {
+      "speaker": "nilza",
+      "text": "O Ravi voltou diferente. Fala menos.",
+      "expression": 2,
+      "next": "b2"
+    },
+    "b2": {
+      "speaker": "nilza",
+      "text": "Eu prefiro ele falando."
+    }
+  }
+}

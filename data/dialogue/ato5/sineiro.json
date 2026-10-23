@@ -1,0 +1,34 @@
+{
+  "id": "ato5/sineiro",
+  "entries": [
+    {
+      "if": [
+        "sineiro_fase_3"
+      ],
+      "node": "c"
+    },
+    {
+      "if": [
+        "sineiro_fase_2"
+      ],
+      "node": "b"
+    },
+    {
+      "node": "a"
+    }
+  ],
+  "nodes": {
+    "a": {
+      "speaker": "sineiro",
+      "text": "FESTA"
+    },
+    "b": {
+      "speaker": "sineiro",
+      "text": "CORDA"
+    },
+    "c": {
+      "speaker": "sineiro",
+      "text": "CULPA"
+    }
+  }
+}

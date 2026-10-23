@@ -1,0 +1,50 @@
+{
+  "id": "ato6/mae_ravi",
+  "entries": [
+    {
+      "if": [
+        "met_mae_ravi"
+      ],
+      "node": "h1"
+    },
+    {
+      "node": "a1"
+    }
+  ],
+  "nodes": {
+    "a1": {
+      "speaker": "mae_ravi",
+      "text": "Você é o amigo dele.",
+      "look": "mae_ravi",
+      "set": [
+        "met_mae_ravi"
+      ],
+      "next": "a2"
+    },
+    "a2": {
+      "speaker": "mae_ravi",
+      "text": "Traz ele inteiro. Ou traz você. Não quero duas lanternas.",
+      "expression": 2,
+      "objective": "ato6_brecha"
+    },
+    "h1": {
+      "speaker": "mae_ravi",
+      "text": "A janela tá aberta hoje.",
+      "choices": [
+        {
+          "text": "O Ravi fala de mim?",
+          "next": "pm1_1"
+        },
+        {
+          "text": "Até mais."
+        }
+      ]
+    },
+    "pm1_1": {
+      "speaker": "mae_ravi",
+      "text": "Ele falava de você todo dia. Agora fala de você e da sopa.",
+      "expression": 2,
+      "next": "h1"
+    }
+  }
+}

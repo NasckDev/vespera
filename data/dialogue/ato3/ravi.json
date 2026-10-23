@@ -1,0 +1,21 @@
+{
+  "id": "ato3/ravi",
+  "entries": [
+    {
+      "node": "a1"
+    }
+  ],
+  "nodes": {
+    "a1": {
+      "speaker": "ravi",
+      "text": "Passei no exame D! Sem medo dessa vez.",
+      "look": "ravi",
+      "expression": 2,
+      "next": "a2"
+    },
+    "a2": {
+      "speaker": "ravi",
+      "text": "Mentira. Com medo, mas passei."
+    }
+  }
+}

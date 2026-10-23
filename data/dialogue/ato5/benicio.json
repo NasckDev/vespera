@@ -1,0 +1,151 @@
+{
+  "id": "ato5/benicio",
+  "entries": [
+    {
+      "if": [
+        "ato5_depois"
+      ],
+      "node": "h1"
+    },
+    {
+      "if": [
+        "GuardianDefeated:sineiro_mudo"
+      ],
+      "node": "c1"
+    },
+    {
+      "if": [
+        "ato5_porta",
+        "!ato5_confissao"
+      ],
+      "node": "b1"
+    },
+    {
+      "if": [
+        "ato5_confissao"
+      ],
+      "node": "h1"
+    },
+    {
+      "node": "a1"
+    }
+  ],
+  "nodes": {
+    "a1": {
+      "speaker": "benicio",
+      "text": "Esta é a última Brecha que a Ordem controla. Abre dentro da minha casa.",
+      "look": "benicio",
+      "set": [
+        "ato5_porta"
+      ],
+      "next": "a2"
+    },
+    "a2": {
+      "speaker": "benicio",
+      "text": "Eu devia ter contado antes.",
+      "expression": 2
+    },
+    "b1": {
+      "speaker": "benicio",
+      "text": "Fui eu que toquei. Faz vinte anos.",
+      "look": "sino",
+      "expression": 2,
+      "set": [
+        "ato5_confissao"
+      ],
+      "next": "b2"
+    },
+    "b2": {
+      "speaker": "benicio",
+      "text": "A Ordem queria chamar de volta quem a gente perdeu. Veio tudo junto.",
+      "next": "b3"
+    },
+    "b3": {
+      "speaker": "benicio",
+      "text": "Lá dentro o sino toca. Aqui fora, não.",
+      "next": "b4"
+    },
+    "b4": {
+      "speaker": "benicio",
+      "text": "Você não vai ouvir nada. Olha.",
+      "objective": "ato5_brecha"
+    },
+    "c1": {
+      "speaker": "benicio",
+      "text": "Você viu o que ele escreveu.",
+      "look": "benicio",
+      "expression": 2,
+      "set": [
+        "ato5_depois"
+      ],
+      "next": "c2"
+    },
+    "c2": {
+      "speaker": "benicio",
+      "text": "Eu puxei a corda. Mais ninguém.",
+      "next": "c3"
+    },
+    "c3": {
+      "speaker": "benicio",
+      "text": "O selo queimou em você no dia em que a lanterna saiu daqui.",
+      "next": "c4"
+    },
+    "c4": {
+      "speaker": "benicio",
+      "text": "Eu tava rezando pra alguém fechar a praça. O sino ouviu.",
+      "next": "c5"
+    },
+    "c5": {
+      "speaker": "benicio",
+      "text": "Alvor é como chamavam o primeiro raio de sol. Ninguém mais usa.",
+      "next": "c6"
+    },
+    "c6": {
+      "speaker": "benicio",
+      "text": "O povo diz 'Deus'. Eu digo Alvor. Era o nome que a Marisa escolheu.",
+      "next": "c7"
+    },
+    "c7": {
+      "speaker": "benicio",
+      "text": "S.",
+      "events": [
+        "BurnSeal:S"
+      ],
+      "next": "c8"
+    },
+    "c8": {
+      "speaker": "benicio",
+      "text": "Eu não posso mais te examinar. Você já passou de mim.",
+      "expression": 2,
+      "objective": "ato6"
+    },
+    "h1": {
+      "speaker": "benicio",
+      "text": "Pergunte.",
+      "choices": [
+        {
+          "text": "Por que escondeu?",
+          "next": "pm1_1"
+        },
+        {
+          "text": "E o badalo?",
+          "next": "pm2_1"
+        },
+        {
+          "text": "Até logo."
+        }
+      ]
+    },
+    "pm1_1": {
+      "speaker": "benicio",
+      "text": "Por que escondi? Porque a cidade precisava de uma Ordem. Não de um culpado.",
+      "expression": 2,
+      "next": "h1"
+    },
+    "pm2_1": {
+      "speaker": "benicio",
+      "text": "O badalo tá comigo. Guardado. Não pergunta onde.",
+      "next": "h1"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "ato6/lis",
+  "entries": [
+    {
+      "node": "a1"
+    }
+  ],
+  "nodes": {
+    "a1": {
+      "speaker": "lis",
+      "text": "A grande lanterna da praça piscou hoje de madrugada.",
+      "look": "lanterna",
+      "next": "a2"
+    },
+    "a2": {
+      "speaker": "lis",
+      "text": "Ela nunca pisca.",
+      "expression": 2
+    }
+  }
+}

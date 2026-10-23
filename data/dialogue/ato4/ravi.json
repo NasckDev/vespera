@@ -1,0 +1,66 @@
+{
+  "id": "ato4/ravi",
+  "entries": [
+    {
+      "if": [
+        "ravi_cena_ato4"
+      ],
+      "node": "x"
+    },
+    {
+      "if": [
+        "ruas_rompeu",
+        "ravi_lanterna_recuperada"
+      ],
+      "node": "b1"
+    },
+    {
+      "if": [
+        "ruas_fechada_a_tempo"
+      ],
+      "node": "a1"
+    },
+    {
+      "node": "x"
+    }
+  ],
+  "nodes": {
+    "a1": {
+      "speaker": "ravi",
+      "text": "Eu ia entrar. Juro que ia.",
+      "look": "ravi",
+      "set": [
+        "ravi_rota_a",
+        "ravi_cena_ato4"
+      ],
+      "next": "a2"
+    },
+    "a2": {
+      "speaker": "ravi",
+      "text": "Tá. Você ganhou essa. A sopa é minha.",
+      "expression": 2
+    },
+    "b1": {
+      "speaker": "ravi",
+      "text": "Eu entrei.",
+      "look": "ravi",
+      "set": [
+        "ravi_rota_b",
+        "ravi_cena_ato4"
+      ],
+      "events": [
+        "HideRivalScore"
+      ],
+      "next": "b2"
+    },
+    "b2": {
+      "speaker": "ravi",
+      "text": "Não faz mais aposta comigo, tá?",
+      "expression": 2
+    },
+    "x": {
+      "speaker": "ravi",
+      "text": "As Ruas Baixas tão quietas hoje. Quieto demais."
+    }
+  }
+}

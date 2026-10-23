@@ -1,0 +1,35 @@
+{
+  "id": "final/praca",
+  "entries": [
+    {
+      "node": "a1"
+    }
+  ],
+  "nodes": {
+    "a1": {
+      "speaker": "benicio",
+      "text": "É a mesma. A primeira.",
+      "look": "lanterna",
+      "fx": "shake",
+      "next": "a2"
+    },
+    "a2": {
+      "speaker": "benicio",
+      "text": "Eu não vou pedir desculpa de novo. Vou segurar a porta.",
+      "expression": 2,
+      "next": "b1"
+    },
+    "b1": {
+      "speaker": "odete",
+      "text": "Eu entro até a praça de baixo. Depois é você.",
+      "look": "odete",
+      "next": "b2"
+    },
+    "b2": {
+      "speaker": "odete",
+      "text": "Eu prometi pra ela que eu não entrava mais. Prometi faz tempo.",
+      "expression": 2,
+      "objective": "final_reflexo"
+    }
+  }
+}

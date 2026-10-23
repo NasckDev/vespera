@@ -1,0 +1,51 @@
+{
+  "id": "ato7/avesso",
+  "entries": [
+    {
+      "node": "a1"
+    }
+  ],
+  "nodes": {
+    "a1": {
+      "speaker": "avesso",
+      "text": "Fica. Aqui ninguém se perde.",
+      "fx": "shake",
+      "next": "a2"
+    },
+    "a2": {
+      "speaker": "avesso",
+      "text": "Aqui a Marisa volta inteira.",
+      "choices": [
+        {
+          "text": "Ficar.",
+          "set": [
+            "avesso_ficou"
+          ],
+          "next": "ficar"
+        },
+        {
+          "text": "Voltar.",
+          "set": [
+            "avesso_recusado"
+          ],
+          "next": "voltar"
+        }
+      ]
+    },
+    "ficar": {
+      "speaker": "narrador",
+      "text": "Tudo escurece. Uma colher bate numa tigela.",
+      "events": [
+        "SoftGameOver:sopa"
+      ]
+    },
+    "voltar": {
+      "speaker": "narrador",
+      "text": "A Brecha fecha atrás de você.",
+      "fx": "glow",
+      "events": [
+        "CloseBreach"
+      ]
+    }
+  }
+}

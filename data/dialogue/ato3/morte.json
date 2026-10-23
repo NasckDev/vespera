@@ -1,0 +1,70 @@
+{
+  "id": "ato3/morte",
+  "entries": [
+    {
+      "if": [
+        "ato3_morte_6"
+      ],
+      "node": "m6"
+    },
+    {
+      "if": [
+        "ato3_morte_5"
+      ],
+      "node": "m5"
+    },
+    {
+      "if": [
+        "ato3_morte_4"
+      ],
+      "node": "m4"
+    },
+    {
+      "if": [
+        "ato3_morte_3"
+      ],
+      "node": "m3"
+    },
+    {
+      "if": [
+        "ato3_morte_2"
+      ],
+      "node": "m2"
+    },
+    {
+      "if": [
+        "ato3_morte_1"
+      ],
+      "node": "m1"
+    },
+    {
+      "node": "m1"
+    }
+  ],
+  "nodes": {
+    "m1": {
+      "speaker": "severo",
+      "text": "A maré te trouxe de volta. Nunca traz ninguém."
+    },
+    "m2": {
+      "speaker": "nilza",
+      "text": "Você tava cheirando a sal e lanterna. Lanterna acesa."
+    },
+    "m3": {
+      "speaker": "odete",
+      "text": "Duas lanternas lá dentro agora. A sua e a dela. Vai buscar a sua."
+    },
+    "m4": {
+      "speaker": "benicio",
+      "text": "Caiu na água. Eu anotei 'voltou'. Faz com que eu esteja certo."
+    },
+    "m5": {
+      "speaker": "ravi",
+      "text": "O Severo ficou no cais a noite toda com uma corda. Pra que corda."
+    },
+    "m6": {
+      "speaker": "lis",
+      "text": "A lanterna que você achou chamou a sua. Eu ouvi as duas."
+    }
+  }
+}

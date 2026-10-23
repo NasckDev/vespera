@@ -1,0 +1,16 @@
+{
+  "id": "ato5/severo",
+  "entries": [
+    {
+      "node": "a"
+    }
+  ],
+  "nodes": {
+    "a": {
+      "speaker": "severo",
+      "text": "Então não foi o farol.",
+      "look": "severo",
+      "expression": 2
+    }
+  }
+}
