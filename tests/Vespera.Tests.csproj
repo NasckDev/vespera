@@ -40,12 +40,14 @@
     <None Include="..\src\Data\*.json" Link="Data/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\data\levels\*.json" Link="Levels/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\data\progressao\*.json" Link="Progressao/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\data\dialogue\*.json" Link="Dialogue/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <!-- Lógica pura da camada de jogo (sem Godot) testada fora da engine. -->
   <ItemGroup>
     <Compile Include="..\src\Game\Boot\BindingTable.cs" Link="Game/BindingTable.cs" />
     <Compile Include="..\src\Game\World\LevelData.cs" Link="Game/LevelData.cs" />
+    <Compile Include="..\src\Game\World\ScaleRegistry.cs" Link="Game/ScaleRegistry.cs" />
     <Compile Include="..\src\Game\World\LevelGrid.cs" Link="Game/LevelGrid.cs" />
     <Compile Include="..\src\Game\World\CollisionMath.cs" Link="Game/CollisionMath.cs" />
   </ItemGroup>

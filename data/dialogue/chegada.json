@@ -1,0 +1,21 @@
+{
+  "id": "chegada",
+  "entries": [{ "node": "a" }],
+  "nodes": {
+    "a": {
+      "speaker": "narrador",
+      "text": "Lumeira. Há vinte anos o sol sumiu por um ano inteiro, e a cidade ainda acende as lanternas antes do fim da tarde. Por via das dúvidas.",
+      "next": "b"
+    },
+    "b": {
+      "speaker": "narrador",
+      "text": "No seu pulso, o selo queimado ainda arde: uma letra, E. Na mão, uma lanterna velha que foi de alguém que você nunca conheceu.",
+      "set": ["arrival_done"],
+      "next": "c"
+    },
+    "c": {
+      "speaker": "benicio",
+      "text": "Mais um que chega pela véspera. Venha até o quadro, caçador. Já tenho o seu nome na ponta da pena."
+    }
+  }
+}

@@ -11,9 +11,10 @@
   "cols": 105,
   "rows": 59,
   "spawn": [836, 640],
-  "actorScale": 0.432,
+  "doorHeight": 72,
   "propScale": 1.0,
   "cameraZoom": 1.85,
+  "lineup": [585, 340],
   "props": [
     {
       "type": "lanterna_bronze",
@@ -68,7 +69,9 @@
       "at": [22, 455],
       "radius": 40,
       "prompt": "Atravessar a ponte",
-      "text": "Bairro das Forjas — trancado, em breve."
+      "text": "",
+      "target": "forjas",
+      "spawn": [1580, 540]
     },
     {
       "kind": "exit",
@@ -76,6 +79,47 @@
       "radius": 40,
       "prompt": "Atravessar a ponte",
       "text": "Mercado das Marés — trancado, em breve."
+    }
+  ],
+  "npcs": [
+    {
+      "id": "lis",
+      "at": [1200, 400],
+      "facing": "down",
+      "routine": "idle",
+      "dialogue": "lis",
+      "prompt": "Falar com Lis",
+      "_note": "Vendedora de mapas, na frente da barraca de lona."
+    },
+    {
+      "id": "benicio",
+      "at": [722, 262],
+      "facing": "down",
+      "routine": "idle",
+      "dialogue": "benicio_quadro",
+      "prompt": "Falar com Benício",
+      "_note": "Estacionário ao lado do quadro de contratos (sem tira de andar): parado de frente, vira de lado ao falar."
+    },
+    {
+      "id": "ravi",
+      "at": [880, 724],
+      "facing": "side",
+      "routine": "patrol",
+      "path": [[1010, 724]],
+      "dialogue": "ravi",
+      "prompt": "Falar com Ravi",
+      "if": ["!starter_blade"],
+      "_note": "Antes de ter a lâmina: patrulha perto do ponto de nascimento."
+    },
+    {
+      "id": "ravi",
+      "at": [940, 560],
+      "facing": "up",
+      "routine": "idle",
+      "dialogue": "ravi",
+      "prompt": "Falar com Ravi",
+      "if": ["starter_blade"],
+      "_note": "Depois da lâmina: espera perto da Brecha (ajustar a posição quando o portal do combate estiver fixo)."
     }
   ],
   "authoring": {

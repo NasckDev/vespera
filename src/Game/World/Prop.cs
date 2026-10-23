@@ -171,6 +171,7 @@ public partial class Prop : Node2D
             Name = "Interaction",
             Title = interact.Title,
             Text = interact.Text,
+            Dialogue = interact.Dialogue,
             OwnerProp = this,
             Position = new Vector2(footprint.X + (footprint.W / 2f), footprint.Y + (footprint.H / 2f)),
         };

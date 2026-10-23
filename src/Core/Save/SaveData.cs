@@ -84,6 +84,12 @@ public sealed class SaveData
     /// </summary>
     public HunterProgress Hunter { get; set; } = new();
 
+    /// <summary>
+    /// Flags, objetivo e fase da história (Prólogo + Atos). Faz parte da versão 3; saves v1/v2 sem "story" carregam com a
+    /// história zerada e um save v2 que já tinha o bloco (build de testes da história) o mantém. Ver SaveSerializer.Sanitize.
+    /// </summary>
+    public Vespera.Core.Story.StoryProgress Story { get; set; } = new();
+
     public DateTimeOffset SavedAt { get; set; }
 
     /// <summary>Jogo novo (<c>newSave(name, cls)</c>, <c>core.js:208-212</c>): só a arma da classe, nível 1.</summary>

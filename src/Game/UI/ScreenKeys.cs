@@ -9,6 +9,7 @@ public static class ScreenKeys
     public const string Help = "help";
     public const string Credits = "credits";
     public const string Pause = "pause";
+    public const string Journal = "journal";
     public const string SlotsNew = "slots_new";
     public const string SlotsContinue = "slots_continue";
     public const string Game = "game";

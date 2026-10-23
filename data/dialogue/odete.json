@@ -1,0 +1,110 @@
+{
+  "id": "odete",
+  "entries": [
+    { "if": ["GuardianDefeated:lodo_mae", "!odete_after"], "node": "og1" },
+    { "if": ["GuardianDefeated:lodo_mae"], "node": "og_hub" },
+    { "if": ["starter_blade"], "node": "ob_hub" },
+    { "node": "o1" }
+  ],
+  "nodes": {
+    "o1": {
+      "speaker": "odete",
+      "text": "Fecha a porta. O calor escapa.",
+      "next": "o2"
+    },
+    "o2": {
+      "speaker": "odete",
+      "text": "Selo E. Recente. Ainda cheira a cinza de cartório.",
+      "set": ["met_odete"],
+      "choices": [
+        { "text": "Preciso de uma arma.", "next": "o3a" },
+        { "text": "Disseram que você faz as melhores lâminas.", "next": "o3b" }
+      ]
+    },
+    "o3a": {
+      "speaker": "odete",
+      "text": "Todo mundo precisa de alguma coisa. Quantos do seu selo já passaram por essa porta? E quantos voltaram pra agradecer?",
+      "next": "o4"
+    },
+    "o3b": {
+      "speaker": "odete",
+      "expression": 2,
+      "text": "Quem disse isso não pagou a conta. Eu não aceito elogio.",
+      "next": "o4"
+    },
+    "o4": {
+      "speaker": "odete",
+      "text": "Mostre a mão.",
+      "next": "o5"
+    },
+    "o5": {
+      "speaker": "odete",
+      "text": "Firme. Pelo menos isso.",
+      "next": "o6"
+    },
+    "o6": {
+      "speaker": "odete",
+      "text": "Esta aqui. Não é bonita, nem tem nome. Foi feita pra voltar inteira. A que sai e não volta, eu não forjo mais.",
+      "set": ["starter_blade"],
+      "events": ["StarterBladeGiven"],
+      "objective": "brecha",
+      "next": "o7"
+    },
+    "o7": {
+      "speaker": "odete",
+      "text": "A Brecha da praça desce para os Esgotos do Mercado. Quando o Lodo-Mãe cair, se cair, volte. Quero ver como a lâmina ficou.",
+      "next": "o8"
+    },
+    "o8": {
+      "speaker": "narrador",
+      "text": "Odete já virou o rosto de volta para o fogo."
+    },
+    "ob_hub": {
+      "speaker": "odete",
+      "text": "Ainda de pé. Isso já é mais do que a média.",
+      "choices": [
+        { "text": "Quero ver a forja.", "next": "forja" },
+        { "text": "Só passei para olhar.", "next": "olhar" }
+      ]
+    },
+    "forja": {
+      "speaker": "odete",
+      "text": "Ferro é caro. Fragmento, mais ainda. Veja o que dá pra fazer.",
+      "events": ["OpenForge"]
+    },
+    "olhar": {
+      "speaker": "odete",
+      "text": "Então olhe. Não toque em nada que brilhe."
+    },
+    "og1": {
+      "speaker": "odete",
+      "expression": 2,
+      "text": "Lodo-Mãe. Eu já enfrentei uma parecida. Faz muito tempo. Não saí inteira, e ninguém voltou pra me agradecer.",
+      "set": ["odete_after"],
+      "next": "og2"
+    },
+    "og2": {
+      "speaker": "odete",
+      "text": "Você voltou. E a lâmina também. Por hoje, isso basta.",
+      "next": "og3"
+    },
+    "og3": {
+      "speaker": "odete",
+      "text": "O Pomar Alto fica na colina. A estrada está interditada, mas não vai ficar pra sempre. Quando abrir, volte aqui antes de subir.",
+      "next": "og_hub"
+    },
+    "og_hub": {
+      "speaker": "odete",
+      "text": "A forja está acesa. Quer alguma coisa?",
+      "choices": [
+        { "text": "Quero ver a forja.", "next": "forja" },
+        { "text": "Nada, obrigado.", "next": "ok" }
+      ]
+    },
+    "ok": {
+      "speaker": "odete",
+      "expression": 2,
+      "text": "De nada eu não me lembro. Vá."
+    }
+  }
+}

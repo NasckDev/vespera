@@ -1,0 +1,29 @@
+{
+  "id": "lis",
+  "entries": [
+    { "if": ["met_lis"], "node": "again" },
+    { "node": "l1" }
+  ],
+  "nodes": {
+    "l1": {
+      "speaker": "lis",
+      "text": "Mapa! Mapa da Brecha de hoje! Desenhei de manhã, antes de ela abrir. Pra novato é de graça.",
+      "next": "l2"
+    },
+    "l2": {
+      "speaker": "lis",
+      "expression": 2,
+      "text": "Não faz essa cara. Eu sempre sei onde ela vai abrir. Só não sei por quê.",
+      "set": ["met_lis"],
+      "next": "l3"
+    },
+    "l3": {
+      "speaker": "lis",
+      "text": "Cuidado lá embaixo: o chão escorrega e o Lodo gosta de louça. Se ouvir tilintar, não é tesouro."
+    },
+    "again": {
+      "speaker": "lis",
+      "text": "O mapa não muda. A Brecha é que muda de ideia. Boa sorte, selo E."
+    }
+  }
+}

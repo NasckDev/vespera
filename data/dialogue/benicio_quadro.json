@@ -1,0 +1,80 @@
+{
+  "id": "benicio_quadro",
+  "entries": [
+    { "if": ["GuardianDefeated:lodo_mae"], "node": "g1" },
+    { "if": ["starter_blade"], "node": "lembra_brecha" },
+    { "if": ["met_ravi"], "node": "lembra_odete" },
+    { "if": ["registered"], "node": "lembra_ravi" },
+    { "node": "b1" }
+  ],
+  "nodes": {
+    "b1": {
+      "speaker": "benicio",
+      "text": "{nome}. Selo E, queimado há pouco, ainda vermelho nas bordas. Anotado.",
+      "next": "b2"
+    },
+    "b2": {
+      "speaker": "benicio",
+      "expression": 2,
+      "text": "É o mais baixo dos selos. E o único que a Ordem aceita sem fazer pergunta.",
+      "next": "b3"
+    },
+    "b3": {
+      "speaker": "benicio",
+      "text": "Escute, porque só digo uma vez. Toda véspera, quando o céu vira cobre, o Avesso arranha o ar da cidade. É o que sobra quando Lumeira esquece alguma coisa.",
+      "next": "b4"
+    },
+    "b4": {
+      "speaker": "benicio",
+      "expression": 2,
+      "text": "Hoje arranhou aqui mesmo, na praça: uma Brecha pequena que desce para os Esgotos do Mercado. Se ninguém a fechar com luz antes do escuro, ela cresce.",
+      "next": "b5"
+    },
+    "b5": {
+      "speaker": "benicio",
+      "text": "Alguém precisa descer.",
+      "choices": [
+        { "text": "Eu desço.", "next": "b6" },
+        { "text": "Por que eu?", "next": "b5b" }
+      ]
+    },
+    "b5b": {
+      "speaker": "benicio",
+      "expression": 2,
+      "text": "Porque o selo queimou em você, e não em outro. A Ordem não sabe mais do que isso. Eu, menos ainda.",
+      "next": "b6"
+    },
+    "b6": {
+      "speaker": "benicio",
+      "text": "Com as mãos vazias, não. Antes, visite Odete, na Forja, do outro lado da ponte a oeste. Tem gênio ruim e as melhores lâminas de Lumeira.",
+      "set": ["registered"],
+      "next": "b7"
+    },
+    "b7": {
+      "speaker": "benicio",
+      "text": "E há um rapaz fazendo barulho por aí. Também é selo E. Se ele lhe perguntar algo, finja que não ouviu.",
+      "objective": "ravi"
+    },
+    "lembra_ravi": {
+      "speaker": "benicio",
+      "text": "Já está anotado, {nome}. O rapaz barulhento anda pela praça. Pergunte o que ele quer e mande-o parar de assustar os pombos."
+    },
+    "lembra_odete": {
+      "speaker": "benicio",
+      "text": "A ponte a oeste leva às Forjas. Odete não gosta de visita. Vá mesmo assim."
+    },
+    "lembra_brecha": {
+      "speaker": "benicio",
+      "text": "A Brecha continua aberta no meio da praça. A luz da lanterna é sua. O resto é caminho."
+    },
+    "g1": {
+      "speaker": "benicio",
+      "text": "Lodo-Mãe. Escrevi o nome no livro da Ordem, ao lado dos que a cidade esqueceu e agora lembra.",
+      "next": "g2"
+    },
+    "g2": {
+      "speaker": "benicio",
+      "text": "O próximo caminho sobe para o Pomar Alto. A estrada ainda está interditada. Volte quando o sino lembrar de tocar."
+    }
+  }
+}

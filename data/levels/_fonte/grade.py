@@ -139,7 +139,7 @@ def cmd_previa(level_id, out, hunters_arg=""):
     level = load(level_id)
     props = json.loads((ROOT / "data" / "levels" / "props.json").read_text(encoding="utf-8"))
     img = ground_image(level)
-    actor = level.get("actorScale", 1.0)
+    actor = level.get("actorScale") or 0.75 * level["doorHeight"] / 123.0  # contrato de escala (PLANO-V2 §2.1)
     hunter = Image.open(ROOT / "assets/v2/personagens/lamina/lamina_e1_andar_baixo.png").convert("RGBA").crop((0, 0, 192, 192))
     hunter = hunter.resize((round(192 * actor), round(192 * actor)), Image.LANCZOS)
     items = [(p["at"][1], p) for p in level["props"]]

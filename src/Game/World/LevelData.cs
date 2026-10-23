@@ -25,8 +25,23 @@ public sealed class LevelData
 
     public float[] Spawn { get; set; } = [0, 0];
 
-    /// <summary>Escala dos personagens nesta fase (o caçador fica com ~1/1,3 da altura de uma porta pintada).</summary>
-    public float ActorScale { get; set; } = 1f;
+    /// <summary>
+    /// Altura (px de mundo) de uma porta pintada do chão: a régua do mapa (PLANO-V2 §2.1). A altura humana é
+    /// 0,75 x isto e tudo deriva dela via <see cref="ScaleRegistry"/>. 0 = mapa antigo, vale <see cref="ActorScale"/> do JSON.
+    /// </summary>
+    public float DoorHeight { get; set; }
+
+    private float _actorScale = 1f;
+
+    /// <summary>Escala do caçador nesta fase: derivada de <see cref="DoorHeight"/> quando ele existe (não se escolhe à mão).</summary>
+    public float ActorScale
+    {
+        get => DoorHeight > 0 ? ScaleRegistry.HunterScale(DoorHeight) : _actorScale;
+        set => _actorScale = value;
+    }
+
+    /// <summary>Porta de referência efetiva (declarada, ou deduzida da escala antiga).</summary>
+    public float EffectiveDoorHeight => DoorHeight > 0 ? DoorHeight : ScaleRegistry.DoorHeightFor(_actorScale);
 
     /// <summary>Multiplica a escala de todos os objetos do catálogo nesta fase (mantém a proporção com o caçador).</summary>
     public float PropScale { get; set; } = 1f;
@@ -37,6 +52,12 @@ public sealed class LevelData
     public List<PropPlacement> Props { get; set; } = [];
 
     public List<ZoneData> Zones { get; set; } = [];
+
+    /// <summary>NPCs da fase (posição pelo pé, rotina e fala). "if" filtra por flags da história ao carregar.</summary>
+    /// <summary>Pé do primeiro ator da "fila de escala" (captura de revisão: caçador e NPCs lado a lado junto a uma porta).</summary>
+    public float[] Lineup { get; set; } = [];
+
+    public List<NpcPlacement> Npcs { get; set; } = [];
 
     public List<string> Grid { get; set; } = [];
 }
@@ -72,6 +93,38 @@ public sealed class ZoneData
     public string Prompt { get; set; } = string.Empty;
 
     public string Text { get; set; } = string.Empty;
+
+    /// <summary>Fase de destino (saída com transição); vazio = trancada, mostra <see cref="Text"/>.</summary>
+    public string Target { get; set; } = string.Empty;
+
+    /// <summary>Onde o jogador nasce na fase de destino (pé, em px do mundo dela).</summary>
+    public float[] Spawn { get; set; } = [];
+
+    /// <summary>Id de uma fala em data/dialogue (zona do tipo "talk").</summary>
+    public string Dialogue { get; set; } = string.Empty;
+}
+
+/// <summary>NPC posicionado numa fase. <see cref="Routine"/>: "idle" fica parado; "patrol" anda entre os pontos de <see cref="Path"/>.</summary>
+public sealed class NpcPlacement
+{
+    public string Id { get; set; } = string.Empty;
+
+    public float[] At { get; set; } = [0, 0];
+
+    /// <summary>"down", "up", "left" ou "right".</summary>
+    public string Facing { get; set; } = "down";
+
+    public string Routine { get; set; } = "idle";
+
+    public List<float[]> Path { get; set; } = [];
+
+    public string Dialogue { get; set; } = string.Empty;
+
+    public string Prompt { get; set; } = string.Empty;
+
+    /// <summary>Condições de história (mesma sintaxe das falas) para o NPC existir nesta fase.</summary>
+    [JsonPropertyName("if")]
+    public List<string> Conditions { get; set; } = [];
 }
 
 /// <summary>
@@ -106,7 +159,7 @@ public sealed class PropDef
         Interact = Interact is null ? null : new InteractDef
         {
             Kind = Interact.Kind, Prompt = Interact.Prompt, PromptOff = Interact.PromptOff, Title = Interact.Title,
-            Text = Interact.Text, Radius = Interact.Radius * factor,
+            Text = Interact.Text, Dialogue = Interact.Dialogue, Radius = Interact.Radius * factor,
         },
     };
 
@@ -136,6 +189,9 @@ public sealed class InteractDef
     public string Title { get; set; } = string.Empty;
 
     public string Text { get; set; } = string.Empty;
+
+    /// <summary>Id de uma fala em data/dialogue; se preenchido, interagir abre a conversa em vez do painel de texto.</summary>
+    public string Dialogue { get; set; } = string.Empty;
 
     /// <summary>Alcance da interação em px do mundo; 0 = automático (meia pegada + folga).</summary>
     public float Radius { get; set; }

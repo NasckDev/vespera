@@ -20,6 +20,7 @@ public static class InputActions
     public const string Lantern = "lantern";
     public const string Inventory = "inventory";
     public const string Pause = "pause";
+    public const string Journal = "journal";
 
     public static readonly IReadOnlyList<ActionInfo> Remappable =
     [
@@ -34,6 +35,7 @@ public static class InputActions
         new(Interact, "Interagir"),
         new(Lantern, "Lanterna"),
         new(Inventory, "Inventário"),
+        new(Journal, "Diário"),
         new(Pause, "Pausa"),
     ];
 
