@@ -121,7 +121,7 @@ public partial class RunResultScreen(RunSummary summary, bool brechaClosed) : Hu
             Line(box, $"{mark} {c.Title}: {c.Have}/{c.Need}", c.Done ? Good : Palette.CreamDim);
             if (c.Done)
             {
-                Line(box, $"   +{c.Reward.Xp} XP  +{c.Reward.Fragmentos} Fragmentos  +{c.Reward.Lumes} Lumes", Palette.Amber);
+                Line(box, $"   +{c.Reward.Xp} XP · +{c.Reward.Fragmentos} Frag. · +{c.Reward.Lumes} Lumes", Palette.Amber);
             }
         }
 
