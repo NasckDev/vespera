@@ -72,6 +72,7 @@ public partial class Level
 
     private void OnWorldMounted()
     {
+        CombatHud.ClearToasts();
         if (_carriedHp is { } hp)
         {
             World.Player.Combat.SetHp(hp);

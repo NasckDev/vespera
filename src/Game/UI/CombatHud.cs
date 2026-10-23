@@ -14,7 +14,7 @@ namespace Vespera.Game.UI;
 public partial class CombatHud : Control
 {
     private const float ToastSeconds = 2.8f;
-    private const float TitleSeconds = 3.2f;
+    private const float TitleSeconds = 2.6f;
     private const float BossBarWidth = 960f;
 
     private readonly Queue<string> _toasts = new();
@@ -56,6 +56,13 @@ public partial class CombatHud : Control
         {
             _toasts.Dequeue();
         }
+    }
+
+    /// <summary>Esquece os avisos da sala anterior.</summary>
+    public void ClearToasts()
+    {
+        _toasts.Clear();
+        _toastTime = 0f;
     }
 
     /// <summary>Título grande da sala ao entrar (some sozinho).</summary>
@@ -154,7 +161,7 @@ public partial class CombatHud : Control
 
     private void BuildBossBar()
     {
-        _bossBox = new Control { Position = new Vector2((1920 - BossBarWidth) / 2f, 30), Size = new Vector2(BossBarWidth, 110), MouseFilter = MouseFilterEnum.Ignore, Visible = false };
+        _bossBox = new Control { Position = new Vector2((1920 - BossBarWidth) / 2f, 1080 - 150), Size = new Vector2(BossBarWidth, 110), MouseFilter = MouseFilterEnum.Ignore, Visible = false };
         AddChild(_bossBox);
         _bossName = new Label { HorizontalAlignment = HorizontalAlignment.Center, Size = new Vector2(BossBarWidth, 56) };
         _bossName.AddThemeFontOverride("font", GD.Load<Font>("res://assets/v2/fonts/PixelifySans.ttf"));
@@ -181,10 +188,10 @@ public partial class CombatHud : Control
     {
         _toast = HudLabel(36, Palette.Cream);
         _toast.HorizontalAlignment = HorizontalAlignment.Center;
-        _toast.Position = new Vector2(0, 170);
+        _toast.Position = new Vector2(0, 360);
         _toast.Size = new Vector2(1920, 50);
         AddChild(_toast);
-        _title = new Label { HorizontalAlignment = HorizontalAlignment.Center, Position = new Vector2(0, 360), Size = new Vector2(1920, 90) };
+        _title = new Label { HorizontalAlignment = HorizontalAlignment.Center, Position = new Vector2(0, 200), Size = new Vector2(1920, 90) };
         _title.AddThemeFontOverride("font", GD.Load<Font>("res://assets/v2/fonts/PixelifySans.ttf"));
         _title.AddThemeFontSizeOverride("font_size", 72);
         _title.AddThemeColorOverride("font_color", Palette.Cream);
@@ -194,7 +201,7 @@ public partial class CombatHud : Control
         AddChild(_title);
         _subtitle = HudLabel(38, Palette.Amber);
         _subtitle.HorizontalAlignment = HorizontalAlignment.Center;
-        _subtitle.Position = new Vector2(0, 456);
+        _subtitle.Position = new Vector2(0, 292);
         _subtitle.Size = new Vector2(1920, 50);
         _subtitle.Modulate = Colors.Transparent;
         AddChild(_subtitle);

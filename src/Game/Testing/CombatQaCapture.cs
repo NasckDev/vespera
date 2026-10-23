@@ -125,14 +125,17 @@ public sealed class CombatQaCapture(Level level, SmokeTest host)
             return;
         }
 
-        Place(World.ClampToFloor(chest.GlobalPosition + new Vector2(0, 46f * S)));
-        _input.Move = Vector2.Up * 0.2f;
-        await Frames(3);
-        _input.Move = Vector2.Zero;
+        Place(World.ClampToFloor(chest.GlobalPosition + new Vector2(-70f * S, 30f * S)));
+        World.Player.Face(Vector2.Right);
         await Frames(20);
         await host.CaptureNow("c34_12_bau");
+        Place(World.ClampToFloor(chest.GlobalPosition + new Vector2(0, 40f * S)), snap: false);
+        await Frames(3);
         _input.Tap(InputActions.Interact);
-        await Frames(14);
+        await Frames(3);
+        Place(World.ClampToFloor(chest.GlobalPosition + new Vector2(-70f * S, 30f * S)), snap: false);
+        World.Player.Face(Vector2.Right);
+        await Frames(12);
         await host.CaptureNow("c34_13_bau_aberto");
         await Frames(100);
         await host.CaptureNow("c34_14_fenda_descer");

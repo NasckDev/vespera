@@ -90,7 +90,7 @@ public partial class Espectro(LevelWorld world) : Enemy("espectro", world)
             _cooldown = (float)Def.Period;
             Enter(EnemyState.Telegraph);
             Play("aviso");
-            Flash.Tint = 0.5f;
+            Flash.Tint = 0.35f;
             CombatSfx.Play(this, CombatSound.Telegraph, Vector2.Zero, -6f);
             return Vector2.Zero;
         }
