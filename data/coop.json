@@ -1,0 +1,21 @@
+{
+  "_doc": "Regras do co-op (GDD §5.8, PLANO-V2 camada 8). Índice das listas = número de jogadores - 1 (1 a 4). Lido por Vespera.Core.Coop.CoopRules.",
+  "maxPlayers": 4,
+  "enemyHpMultiplier": [1.0, 1.5, 2.0, 2.5],
+  "extraEnemiesPerWavePerPlayer": 1,
+  "_bossDamage": "Dano do Guardião não cresce linear com os jogadores: x1,15 no co-op (3-4 jogadores: provisório, mesmo valor até o online).",
+  "bossDamageMultiplier": [1.0, 1.15, 1.15, 1.15],
+  "revive": {
+    "_doc": "Segurar interagir perto do aliado caído. Raio em alturas humanas do mapa; vida devolvida em fração da máxima.",
+    "holdSeconds": 2.0,
+    "radius": 1.1,
+    "hpFraction": 0.4,
+    "decayPerSecond": 1.0
+  },
+  "camera": {
+    "_doc": "Câmera compartilhada: o zoom só abre até o caçador ter minHunterPx na tela 1080p; margem da borda em alturas humanas.",
+    "minHunterPx": 85,
+    "edgeMargin": 0.9,
+    "tetherPull": 2.5
+  }
+}

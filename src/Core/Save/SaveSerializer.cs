@@ -125,6 +125,7 @@ public static class SaveSerializer
         data.Quests ??= new QuestProgress();
         data.Story ??= new Vespera.Core.Story.StoryProgress();
         data.Story.Sanitize();
+        data.Guest?.Sanitize(db.Classes.Keys.ToList());
         data.Quests.Counters ??= [];
         data.Quests.ClosedThemes ??= [];
         if (data.LostLantern is { } lost)
