@@ -26,22 +26,19 @@ public sealed class LevelData
     public float[] Spawn { get; set; } = [0, 0];
 
     /// <summary>
-    /// Altura (px de mundo) de uma porta pintada do chão: a régua do mapa (PLANO-V2 §2.1). A altura humana é
-    /// 0,75 x isto e tudo deriva dela via <see cref="ScaleRegistry"/>. 0 = mapa antigo, vale <see cref="ActorScale"/> do JSON.
+    /// Régua do mapa (PLANO-V2 §2.1): altura em px de mundo de uma porta pintada no chão (ou de um arco/grade
+    /// equivalente). A altura humana do mapa é 0,75 × isto; tudo o mais deriva dela.
     /// </summary>
     public float DoorHeight { get; set; }
 
-    private float _actorScale = 1f;
+    /// <summary>Altura humana do mapa em px de mundo (<see cref="ScaleRules.HumanPerDoor"/> × porta).</summary>
+    public float HumanHeight => ScaleRules.HumanHeight(DoorHeight);
 
-    /// <summary>Escala do caçador nesta fase: derivada de <see cref="DoorHeight"/> quando ele existe (não se escolhe à mão).</summary>
-    public float ActorScale
-    {
-        get => DoorHeight > 0 ? ScaleRegistry.HunterScale(DoorHeight) : _actorScale;
-        set => _actorScale = value;
-    }
-
-    /// <summary>Porta de referência efetiva (declarada, ou deduzida da escala antiga).</summary>
-    public float EffectiveDoorHeight => DoorHeight > 0 ? DoorHeight : ScaleRegistry.DoorHeightFor(_actorScale);
+    /// <summary>
+    /// Escala dos atores derivada da porta (velocidades, pés e alcances são dados na escala 1 = humano de
+    /// <see cref="ScaleRules.ReferenceHuman"/> px). Nunca é escolhida à mão por mapa.
+    /// </summary>
+    public float ActorScale => ScaleRegistry.HunterScale(DoorHeight);
 
     /// <summary>Multiplica a escala de todos os objetos do catálogo nesta fase (mantém a proporção com o caçador).</summary>
     public float PropScale { get; set; } = 1f;
@@ -53,13 +50,56 @@ public sealed class LevelData
 
     public List<ZoneData> Zones { get; set; } = [];
 
-    /// <summary>NPCs da fase (posição pelo pé, rotina e fala). "if" filtra por flags da história ao carregar.</summary>
     /// <summary>Pé do primeiro ator da "fila de escala" (captura de revisão: caçador e NPCs lado a lado junto a uma porta).</summary>
     public float[] Lineup { get; set; } = [];
 
+    /// <summary>NPCs da fase (posição pelo pé, rotina e fala). "if" filtra por flags da história ao carregar.</summary>
     public List<NpcPlacement> Npcs { get; set; } = [];
 
     public List<string> Grid { get; set; } = [];
+
+    /// <summary>Pé da porta (ou arco) usada como régua, para a captura "fila de escala".</summary>
+    public float[]? DoorAt { get; set; }
+
+    /// <summary>Sala de Brecha: ondas, saída selada, baú, Guardião (null na cidade).</summary>
+    public RiftRoomData? Rift { get; set; }
+}
+
+/// <summary>Conteúdo de uma sala de Brecha (camada 3): ondas de monstros, saída que só abre com a sala limpa.</summary>
+public sealed class RiftRoomData
+{
+    public string Title { get; set; } = string.Empty;
+
+    /// <summary>Saída por passagem: barreira [x, y, w, h] que sela e o gatilho [x, y, w, h] além dela.</summary>
+    public RiftExitData? Exit { get; set; }
+
+    /// <summary>Ondas em ordem; a próxima entra quando a anterior morre toda.</summary>
+    public List<List<SpawnData>> Waves { get; set; } = [];
+
+    /// <summary>Pé do baú [x, y], se houver.</summary>
+    public float[]? Chest { get; set; }
+
+    public SpawnData? Boss { get; set; }
+
+    /// <summary>Fenda de saída [x, y] que abre quando a sala acaba (sem passagem pintada).</summary>
+    public float[]? ExitPortal { get; set; }
+
+    /// <summary>Passagens seladas para sempre nesta caçada [x, y, w, h] (entrada às costas, saídas que não levam a nada).</summary>
+    public List<float[]> Sealed { get; set; } = [];
+}
+
+public sealed class RiftExitData
+{
+    public float[] Barrier { get; set; } = [0, 0, 0, 0];
+
+    public float[] Trigger { get; set; } = [0, 0, 0, 0];
+}
+
+public sealed class SpawnData
+{
+    public string Type { get; set; } = string.Empty;
+
+    public float[] At { get; set; } = [0, 0];
 }
 
 public sealed class GroundData
@@ -197,6 +237,21 @@ public sealed class InteractDef
     public float Radius { get; set; }
 }
 
+/// <summary>Contas do contrato de escala (PLANO-V2 §2.1), puras para valer igual no jogo e nos testes.</summary>
+public static class ScaleRules
+{
+    /// <summary>Altura humana = 0,75 × porta.</summary>
+    public const float HumanPerDoor = 0.75f;
+
+    /// <summary>Humano de referência da escala 1 dos atores (px); o caçador da Praça (porta 72) mede 54 = 0,432 × 125.</summary>
+    public const float ReferenceHuman = 125f;
+
+    /// <summary>Tolerância do teste de altura renderizada (±8%).</summary>
+    public const float Tolerance = 0.08f;
+
+    public static float HumanHeight(float doorHeight) => doorHeight * HumanPerDoor;
+}
+
 /// <summary>Leitura e validação dos JSON de fase e de objetos.</summary>
 public static class LevelJson
 {
@@ -218,6 +273,11 @@ public static class LevelJson
         if (string.IsNullOrEmpty(level.Ground.Texture))
         {
             throw new FormatException($"fase '{level.Id}': sem textura de chão");
+        }
+
+        if (level.DoorHeight <= 0)
+        {
+            throw new FormatException($"fase '{level.Id}': sem doorHeight (régua do contrato de escala, PLANO-V2 §2.1)");
         }
 
         return level;

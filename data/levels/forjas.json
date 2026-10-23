@@ -12,6 +12,7 @@
   "rows": 59,
   "spawn": [1580, 540],
   "doorHeight": 85,
+  "doorAt": [250, 330],
   "propScale": 1.0,
   "cameraZoom": 1.55,
   "lineup": [400, 560],

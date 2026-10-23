@@ -29,6 +29,8 @@
 # Binários que não devem ter diff
 *.ico binary
 *.svg text
+*.jpg filter=lfs diff=lfs merge=lfs -text
+*.jpeg filter=lfs diff=lfs merge=lfs -text
 
 # Referências de arte ficam fora do LFS para que links diretos (raw) entreguem a imagem a geradores externos
 docs/v2/referencias/*.png -filter -diff -merge -text

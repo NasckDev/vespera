@@ -41,6 +41,7 @@
     <None Include="..\data\levels\*.json" Link="Levels/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\data\progressao\*.json" Link="Progressao/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\data\dialogue\*.json" Link="Dialogue/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\assets\v2\sprites\**\*.json" Link="Sprites/%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <!-- Lógica pura da camada de jogo (sem Godot) testada fora da engine. -->

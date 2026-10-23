@@ -25,6 +25,7 @@ public partial class Boot : Node
             GameSettings.SuppressWindowChanges = true;
         }
 
+        World.ScaleRegistry.ReadText = UserFile.ReadText;
         GameSettings.Load();
         InputSetup.Initialize();
         GameSettings.Apply(GetTree());

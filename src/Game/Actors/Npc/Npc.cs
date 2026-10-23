@@ -39,13 +39,13 @@ public partial class Npc : CharacterBody2D
     private float _stuck;
     private int _patrolStep;
 
-    /// <param name="doorHeight">Régua do mapa (px de mundo da porta pintada); a escala vem do <see cref="ScaleRegistry"/>.</param>
-    public Npc(string id, NpcPlacement placement, float doorHeight)
+    /// <param name="humanHeight">Altura humana do mapa (0,75 × porta pintada); a escala vem do <see cref="ScaleRegistry"/>.</param>
+    public Npc(string id, NpcPlacement placement, float humanHeight)
     {
         _id = id;
         _placement = placement;
-        _scale = ScaleRegistry.ActorScale(id, doorHeight, NpcSprites.StandingHeight(id));
-        _hunterScale = ScaleRegistry.HunterScale(doorHeight);
+        _scale = ScaleRegistry.SpriteScale(id, humanHeight);
+        _hunterScale = humanHeight / ScaleRules.ReferenceHuman;
         _hasWalk = NpcSprites.HasWalk(id);
     }
 
@@ -53,7 +53,7 @@ public partial class Npc : CharacterBody2D
     public float SpriteScale => _scale;
 
     /// <summary>Altura do corpo em px de mundo (altura em pé x escala).</summary>
-    public float BodyHeight => NpcSprites.StandingHeight(_id) * _scale;
+    public float BodyHeight => ScaleRegistry.StandingHeight(_id) * _scale;
 
     private float PromptHeight => BodyHeight + PromptMargin;
 
@@ -92,7 +92,7 @@ public partial class Npc : CharacterBody2D
         {
             Name = "Sprite",
             SpriteFrames = NpcSprites.Build(_id),
-            Offset = HunterSprites.FootOffset,
+            Offset = NpcSprites.FootOffset,
             Scale = new Vector2(_scale, _scale),
         };
         AddChild(_sprite);

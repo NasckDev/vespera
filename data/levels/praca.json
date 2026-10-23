@@ -12,6 +12,7 @@
   "rows": 59,
   "spawn": [836, 640],
   "doorHeight": 72,
+  "doorAt": [190, 133],
   "propScale": 1.0,
   "cameraZoom": 1.85,
   "lineup": [585, 340],
@@ -50,6 +51,13 @@
     }
   ],
   "zones": [
+    {
+      "kind": "brecha",
+      "at": [1118, 478],
+      "radius": 46,
+      "prompt": "Entrar na Brecha",
+      "text": "Esgotos do Mercado · Rank E"
+    },
     {
       "kind": "exit",
       "at": [836, 24],

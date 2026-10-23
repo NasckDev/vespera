@@ -94,20 +94,19 @@ public partial class SmokeTest
     private async Task CheckScaleContract(Level level, string name)
     {
         var data = level.World.Data;
-        var door = data.EffectiveDoorHeight;
-        var human = ScaleRegistry.HumanHeight(door);
-        var hunter = OpaqueHeight(HunterSprites.Build(HunterClass.Lamina).GetFrameTexture(HunterSprites.IdleAnimation(Facing.Down), 0)) * data.ActorScale;
+        var human = data.HumanHeight;
+        var hunter = OpaqueHeight(HunterSprites.Build(HunterClass.Lamina).GetFrameTexture(HunterSprites.IdleAnimation(Facing.Down), 0)) * level.Player.Sprite.Scale.Y;
         Check(Within(hunter, human), $"{name}: caçador com {hunter:0.0} px, alvo {human:0.0} px (±8%)");
         var row = new List<Npc>();
         var lineup = data.Lineup.Length == 2 ? new Vector2(data.Lineup[0], data.Lineup[1]) : level.World.SpawnPoint;
         var spacing = human;
         foreach (var id in ScaleActors)
         {
-            var npc = new Npc(id, new NpcPlacement { Id = id, At = [0, 0], Routine = "idle" }, door) { Name = $"Lineup_{id}" };
+            var npc = new Npc(id, new NpcPlacement { Id = id, At = [0, 0], Routine = "idle" }, human) { Name = $"Lineup_{id}" };
             level.World.Entities.AddChild(npc);
             var frames = NpcSprites.Build(id);
             var measured = OpaqueHeight(frames.GetFrameTexture(NpcSprites.Animation(false, Facing.Down), 0)) * npc.SpriteScale;
-            var wanted = ScaleRegistry.TargetHeight(id, door);
+            var wanted = ScaleRegistry.TargetHeight(id, human);
             Check(Within(measured, wanted), $"{name}: {id} com {measured:0.0} px, alvo {wanted:0.0} px (±8%)");
             row.Add(npc);
         }

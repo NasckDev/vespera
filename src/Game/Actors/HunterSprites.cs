@@ -18,17 +18,17 @@ public enum Facing
 }
 
 /// <summary>
-/// Monta as <see cref="SpriteFrames"/> do caçador a partir das tiras de andar (células 192x192, pé em (96,176)).
-/// Andar = todos os quadros da tira; parado = um quadro neutro da mesma tira (ainda não há folha de idle).
-/// O lado é desenhado olhando para a direita; a esquerda espelha.
+/// Folhas de animação do caçador (assets/v2/sprites/&lt;classe&gt;/&lt;classe&gt;_e1.tres): células 256x256 com o pé em
+/// (128, 232) e ~112 px de altura em pé. Nomes das animações = verbo_direção (andar_baixo, ataque1_lado...);
+/// o lado olha para a direita e a esquerda espelha. Também guarda os quadros de impacto conferidos à mão.
 /// </summary>
 public static class HunterSprites
 {
-    public const int CellSize = 192;
-    public const float FootY = 176f;
+    public const int CellSize = 256;
+    public const float FootY = 232f;
 
-    /// <summary>Quadros por segundo da caminhada na velocidade máxima (6 quadros = 1 ciclo de 2 passos em 0,5 s).</summary>
-    public const float WalkFps = 12f;
+    /// <summary>Altura em pé do caçador na folha (px).</summary>
+    public const float StandHeight = 112f;
 
     private static readonly Dictionary<HunterClass, SpriteFrames> Cache = [];
 
@@ -39,14 +39,30 @@ public static class HunterSprites
         _ => "lamina",
     };
 
-    public static string WalkAnimation(Facing facing) => $"walk_{Name(facing)}";
+    /// <summary>Id da arma no save/Core para a classe.</summary>
+    public static string WeaponId(HunterClass hunter) => hunter switch
+    {
+        HunterClass.Arco => "bow",
+        HunterClass.Martelo => "hammer",
+        _ => "sword",
+    };
 
-    public static string IdleAnimation(Facing facing) => $"idle_{Name(facing)}";
+    public static string DisplayName(HunterClass hunter) => hunter switch
+    {
+        HunterClass.Arco => "Arco",
+        HunterClass.Martelo => "Martelo",
+        _ => "Lâmina",
+    };
 
-    /// <summary>Deslocamento do <see cref="AnimatedSprite2D"/> centralizado para que o pé fique na origem do nó.</summary>
+    public static string WalkAnimation(Facing facing) => Anim("andar", facing);
+
+    public static string IdleAnimation(Facing facing) => Anim("parado", facing);
+
+    public static string Anim(string verb, Facing facing) => $"{verb}_{Suffix(facing)}";
+
+    /// <summary>Deslocamento do sprite centralizado para que o pé fique na origem do nó.</summary>
     public static Vector2 FootOffset => new(0, (CellSize / 2f) - FootY);
 
-    /// <summary>Solta as folhas em cache (chamado ao sair da fase, para não vazar recursos no fim do jogo).</summary>
     public static void ClearCache() => Cache.Clear();
 
     public static SpriteFrames Build(HunterClass hunter)
@@ -56,77 +72,39 @@ public static class HunterSprites
             return cached;
         }
 
-        var frames = new SpriteFrames();
-        frames.RemoveAnimation("default");
-        foreach (var facing in new[] { Facing.Down, Facing.Up, Facing.Side })
-        {
-            var folder = ClassFolder(hunter);
-            var path = $"res://assets/v2/personagens/{folder}/{folder}_e1_andar_{StripName(facing)}.png";
-            var strip = GD.Load<Texture2D>(path);
-            var count = strip.GetWidth() / CellSize;
-            var walk = WalkAnimation(facing);
-            frames.AddAnimation(walk);
-            frames.SetAnimationLoopMode(walk, SpriteFrames.LoopMode.Linear);
-            frames.SetAnimationSpeed(walk, WalkFps * count / 6f);
-            for (var i = 0; i < count; i++)
-            {
-                frames.AddFrame(walk, Cell(strip, i));
-            }
-
-            var idle = IdleAnimation(facing);
-            frames.AddAnimation(idle);
-            frames.SetAnimationLoopMode(idle, SpriteFrames.LoopMode.None);
-            frames.AddFrame(idle, Cell(strip, ClosestStanceFrame(strip, count)));
-        }
-
+        var folder = ClassFolder(hunter);
+        var frames = GD.Load<SpriteFrames>($"res://assets/v2/sprites/{folder}/{folder}_e1.tres");
         Cache[hunter] = frames;
         return frames;
     }
 
-    /// <summary>Quadro de passada mais fechada (menor largura opaca na faixa dos pés), usado como pose parada.</summary>
-    private static int ClosestStanceFrame(Texture2D strip, int count)
+    /// <summary>Animação do verbo na direção; cai para o lado quando a folha só tem o lado (pesado, morte).</summary>
+    public static string Resolve(SpriteFrames frames, string verb, Facing facing)
     {
-        const int FeetTop = 156;
-        const float Opaque = 0.5f;
-        var image = strip.GetImage();
-        var best = 0;
-        var bestSpan = int.MaxValue;
-        for (var i = 0; i < count; i++)
-        {
-            int min = CellSize, max = -1;
-            for (var y = FeetTop; y <= (int)FootY; y++)
-            {
-                for (var x = 0; x < CellSize; x++)
-                {
-                    if (image.GetPixel((i * CellSize) + x, y).A >= Opaque)
-                    {
-                        min = Mathf.Min(min, x);
-                        max = Mathf.Max(max, x);
-                    }
-                }
-            }
-
-            if (max >= 0 && max - min < bestSpan)
-            {
-                bestSpan = max - min;
-                best = i;
-            }
-        }
-
-        return best;
+        var name = Anim(verb, facing);
+        return frames.HasAnimation(name) ? name : Anim(verb, Facing.Side);
     }
 
-    private static AtlasTexture Cell(Texture2D strip, int index) =>
-        new() { Atlas = strip, Region = new Rect2(index * CellSize, 0, CellSize, CellSize) };
-
-    private static string Name(Facing facing) => facing switch
+    /// <summary>
+    /// Quadros de impacto (base 0) conferidos nas folhas de contato. O JSON da arte usa "maior área opaca", que erra
+    /// no Martelo (ataque1_lado apontava o quadro 0, ainda parado): ali o impacto é o 4 (golpe) e o 5 (chão).
+    /// </summary>
+    public static int[] HitFrames(HunterClass hunter, string verb, Facing facing) => (hunter, verb) switch
     {
-        Facing.Up => "up",
-        Facing.Side => "side",
-        _ => "down",
+        (HunterClass.Lamina, "pesado") => [2, 4, 6],
+        (HunterClass.Lamina, _) => [2],
+        (HunterClass.Martelo, "ataque1") => [4],
+        (HunterClass.Martelo, "ataque2") => [2],
+        (HunterClass.Martelo, "pesado") => [6],
+        (HunterClass.Arco, "tiro") => [facing == Facing.Down ? 2 : 3],
+        (HunterClass.Arco, "tiro_carregado") => [facing == Facing.Up ? 3 : 4],
+        _ => [2],
     };
 
-    private static string StripName(Facing facing) => facing switch
+    /// <summary>Quadro em que o Arco segura a corda puxada enquanto carrega.</summary>
+    public const int BowHoldFrame = 2;
+
+    private static string Suffix(Facing facing) => facing switch
     {
         Facing.Up => "cima",
         Facing.Side => "lado",

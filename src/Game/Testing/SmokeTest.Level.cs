@@ -2,7 +2,10 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Godot;
+using Vespera.Game.Actors;
+using Vespera.Game.Boot;
 using Vespera.Game.World;
+using Vespera.Game.World.Rift;
 
 namespace Vespera.Game.Testing;
 
@@ -15,6 +18,9 @@ public partial class SmokeTest
     public const string BotFlag = "--bot";
     public const string QaFlag = "--qa";
     public const string QaProofFlag = "--qa-prova";
+    public const string CombatBotFlag = "--combat-bot";
+    public const string CombatQaFlag = "--qa-combate";
+    public const string ScaleFlag = "--escala";
 
     private async Task RunLevelExtras(Level level)
     {
@@ -26,6 +32,23 @@ public partial class SmokeTest
             var failures = await bot.Run();
             _failures.AddRange(failures);
             level.World.SetNpcsActive(true);
+            await RunRiftCollisionBots(level);
+        }
+
+        if (Array.IndexOf(_args, ScaleFlag) >= 0)
+        {
+            var shots = _shotsDir is not null && DisplayServer.GetName() != "headless";
+            _failures.AddRange(await new ScaleCheck(level, this, shots).Run());
+        }
+
+        if (Array.IndexOf(_args, CombatBotFlag) >= 0)
+        {
+            _failures.AddRange(await new CombatBot(level, this).Run(HunterClass.Lamina));
+        }
+
+        if (Array.IndexOf(_args, CombatQaFlag) >= 0 && _shotsDir is not null && DisplayServer.GetName() != "headless")
+        {
+            await new CombatQaCapture(level, this).Run();
         }
 
         var canShoot = _shotsDir is not null && DisplayServer.GetName() != "headless";
@@ -46,6 +69,21 @@ public partial class SmokeTest
         {
             await RunStoryBot(level);
         }
+    }
+
+    /// <summary>Bot de colisão em cada sala da Brecha (sem monstros: o diretor fica desligado) e volta à Praça.</summary>
+    private async Task RunRiftCollisionBots(Level level)
+    {
+        foreach (var room in RiftSession.Brecha.Rooms)
+        {
+            await level.GoToRoom(room, withDirector: false);
+            await PhysicsFrames(4);
+            Log.Info($"bot de colisão na sala {room}:");
+            _failures.AddRange((await new CollisionBot(level.World, this).Run()).Select(f => $"{room}: {f}"));
+        }
+
+        await level.GoToRoom(Level.HubLevelId);
+        await PhysicsFrames(4);
     }
 
     private async Task CheckInteractions(Level level)
@@ -103,4 +141,7 @@ public partial class SmokeTest
     }
 
     internal async Task Capture(string name) => await Shot(name);
+
+    /// <summary>Captura sem esperar a cena assentar (sequências quadro a quadro).</summary>
+    internal async Task CaptureNow(string name) => await Shot(name, 0);
 }
