@@ -142,7 +142,6 @@ public partial class Level : Control
             _hud.ClosePanel();
         }
 
-        PollGuestPause();
         var who = DialogueOpen ? null : FocusedPlayer();
         var focus = who?.Focus;
         var anchor = focus is null ? Vector2.Zero : WorldToScreen(focus.PromptAnchor);

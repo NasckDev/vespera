@@ -138,7 +138,12 @@ public partial class Level
         return string.Join(" / ", World.Players.Select(p => InputGlyphs.Describe(p.Input, InputActions.Interact)).Distinct());
     }
 
-    /// <summary>Pausa pedida pelo J2 (a fonte dele não passa pela InputMap).</summary>
+    /// <summary>
+    /// Pausa pedida pelo J2 (a fonte dele não passa pela InputMap). Lida no passo de física, o mesmo em que o comando é
+    /// amostrado: num quadro lento com dois passos, o aperto não se perde.
+    /// </summary>
+    public override void _PhysicsProcess(double delta) => PollGuestPause();
+
     private void PollGuestPause()
     {
         if (!IsCoop || !SceneRouter.Instance.IsActive(this) || DialogueOpen || _switching)
@@ -226,6 +231,12 @@ public partial class Level
     /// <summary>Entrar na Brecha em grupo: cada um com a classe que escolheu na entrada (sem o seletor do portal).</summary>
     private void EnterRiftAsParty()
     {
+        // Os dois podem apertar no mesmo quadro (ou de novo durante o fade): só a primeira entrada começa a caçada.
+        if (_switching || RiftSession.InRift)
+        {
+            return;
+        }
+
         if (!StoryService.Engine.HasFlag(StoryFlags.StarterBlade))
         {
             ShowNotice("A fenda pulsa, mas vocês estão de mãos vazias. Fale com a Odete, na forja do Bairro das Forjas.");

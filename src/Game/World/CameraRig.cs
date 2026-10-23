@@ -121,11 +121,10 @@ public partial class CameraRig : Camera2D
     public void Snap()
     {
         _lead = Vector2.Zero;
-        if (Shared)
-        {
-            _partyFactor = Frame().ZoomFactor;
-            ApplyZoom();
-        }
+
+        // Solo (inclusive logo depois de o J2 sair) volta ao zoom da regra; co-op enquadra o grupo na hora.
+        _partyFactor = Shared ? Frame().ZoomFactor : 1f;
+        ApplyZoom();
 
         _center = Clamp(Focus());
         GlobalPosition = _center;
