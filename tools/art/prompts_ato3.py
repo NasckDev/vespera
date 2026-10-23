@@ -20,7 +20,7 @@ REF_SALA = (REPO_CAMPANHA + "estilo_sala_esgoto.png", "sala de Brecha aprovada d
 REF_ARENA = (REPO_CAMPANHA + "estilo_arena_esgoto.png", "arena aprovada do Ato I (Lodo-Mãe)")
 REFS_BY_KIND = {"hub": [REF_PRACA, REF_BAIRRO], "sala": [REF_SALA, REF_PRANCHA], "arena": [REF_ARENA, REF_PRANCHA]}
 
-BREACH = ("Inside a Breach the Underside copies this place exactly as it was BEFORE the Year Without Dawn, twenty years ago, "
+BREACH = ("Inside a Breach the Underside copies this place exactly as it was BEFORE the Year Without Sun, twenty years ago, "
           "but kept too long: rotten, partly inverted, lit by faint magenta rift light. ")
 
 # (id, arquivo, título, tipo, descrição)
@@ -33,16 +33,17 @@ MAPS_ATO3 = [
      "stone breakwater wall with many small names carved into it (no readable letters, just scratch marks). Lantern posts with "
      "amber light along the quay. Quay exits centered on the LEFT and RIGHT edges. The middle of the quay is free of objects."),
     ("A14", "chao_cais_pier.png", "Cais Afogado: Píer das Bandeirolas", "sala",
-     "A dungeon room inside the 'Drowned Docks' Breach. " + BREACH + "It is the harbour on the night of the Lantern Festival, the "
-     "minute the great tide rose: a straight flooded wooden PIER running left to right through the middle, open exits centered on "
+     "A dungeon room inside the 'Drowned Docks' Breach. " + BREACH + "It is the harbour on the night of the Lantern Festival twenty years ago, "
+     "festival decorations still up: a straight flooded wooden PIER running left to right through the middle, open exits centered on "
      "the LEFT and RIGHT edges. Above and below the pier: dark sea water with floating unlit paper lanterns, festival bunting "
      "hanging soaked from poles, puddles on the planks, mooring posts, broken crates. Upside-down boats float high in the dark sky "
      "area at the top edge. Rain drops rising upwards. Dim cold light."),
     ("A15", "chao_cais_mercado.png", "Cais Afogado: Mercado Submerso", "sala",
-     "A dungeon room inside the 'Drowned Docks' Breach. " + BREACH + "A plus-shaped crossing of wet cobblestone and planks with four "
-     "open exits exactly centered on the top, bottom, left and right edges. In the four corners: tipped-over fish market stalls "
-     "with torn canvas, fish frozen in mid-air above them, tangled nets, baskets, sea water pooling. A round iron mooring bollard "
-     "in the center of the crossing. Thin magenta cracks between the stones."),
+     "A dungeon room inside the 'Drowned Docks' Breach. " + BREACH + "The FLOODED ROOM: a plus-shaped crossing of cobblestone and planks "
+     "covered by shallow, knee-deep clear sea water (the floor is visible under the water), with four open exits exactly centered on "
+     "the top, bottom, left and right edges. In the four corners: tipped-over fish market stalls with torn canvas, fish frozen in "
+     "mid-air above them, tangled nets, baskets. In the center, a small DRY raised round stone above the water, left EMPTY (an old "
+     "hunter's lantern will be placed there later). Thin magenta cracks between the stones under the water."),
     ("A16", "chao_cais_barco.png", "Cais Afogado: Barco Virado (descanso)", "sala",
      "A dungeon room inside the 'Drowned Docks' Breach: a small peaceful REST room INSIDE the hull of a huge capsized fishing boat, "
      "seen from above: curved wooden ribs of the hull form the walls, dry planks as the floor, an old hanging net, a small stool "
@@ -56,7 +57,8 @@ MAPS_ATO3 = [
      "glowing crystals between the rocks. Single open entrance centered on the BOTTOM edge."),
     ("A18", "chao_cais_arena.png", "Cais Afogado: arena do Farol Afogado", "arena",
      "The BOSS ARENA of the 'Drowned Docks' Breach: a large round ROCKY PLATFORM at the foot of an enormous dark lighthouse that "
-     "rises at the top edge of the image (only its base and lower tower visible, huge, cracked, covered in barnacles). Stormy sea "
+     "rises at the top edge of the image (only its base and lower tower visible, huge, cracked, covered in barnacles). The OUTER RING of "
+     "the platform is a little lower than the center, wet and covered in shallow puddles (it will flood during the fight). Stormy sea "
      "all around the platform, waves breaking on the rim, broken boat planks and festival bunting caught on the rocks, magenta "
      "light in the cracks. A wide flat walkable center (completely empty) and a single entrance (a short plank bridge) centered "
      "on the BOTTOM edge."),
@@ -69,8 +71,8 @@ MAPS_ATO4 = [
      "with a closed door and, next to it, an old wooden bench under a cypress (the Watcher's bench). Low stone walls, cypress "
      "trees, iron gates, wilted flowers. A small Order kiosk with a lantern sign near the left path. Path exits centered on the "
      "LEFT, RIGHT and BOTTOM edges. The middle of the paths is free of objects."),
-    ("A20", "chao_cemiterio_arena.png", "Cemitério Invertido: arena da Velória", "arena",
-     "The BOSS ARENA of the 'Inverted Cemetery' Breach. " + BREACH + "A large round stone ALTAR courtyard covered in thousands of "
+    ("A20", "chao_cemiterio_arena.png", "Cemitério das Lanternas (Brecha): arena da Velória", "arena",
+     "The BOSS ARENA of the 'Cemetery of Lanterns' Breach. " + BREACH + "A large round stone ALTAR courtyard covered in thousands of "
      "melted candles of every size, wax dripping UPWARDS, puddles of hardened wax on the floor, hanging upside-down tombstones "
      "and cypress roots growing from the dark sky area at the top edge. A ring of tall candelabras around the edge. A wide flat "
      "walkable center (completely empty) and a single entrance centered on the BOTTOM edge."),
@@ -80,13 +82,13 @@ MAPS_ATO5 = [
     ("A21", "chao_torre.png", "Torre do Sino (bairro)", "hub",
      "The Bell Tower district of Lumeira at dusk, headquarters of the Order of the Lantern: a large stone courtyard (walkable) with "
      "a training yard (wooden dummies and racks of practice weapons against the walls). At the top-center a tall stone BELL "
-     "TOWER with a huge bronze bell visible in its open belfry (the bell hangs still, silent). To the left, a stately archive "
+     "TOWER with a huge bronze bell visible in its open belfry (the bell hangs still and silent and has NO clapper inside). To the left, a stately archive "
      "building with tall windows; to the right, a smaller office with an iron-bound treasury door. Order banners with a small "
      "golden lantern emblem (no letters). Lantern posts with amber light. Exits centered on the LEFT, RIGHT and BOTTOM edges. "
      "The middle of the courtyard is free of objects."),
     ("A22", "chao_torre_arena.png", "Torre do Sino Mudo: arena do Sineiro Mudo", "arena",
-     "The BOSS ARENA of the 'Silent Bell Tower' Breach. " + BREACH + "The inside of the belfry at the top of the tower on the dawn "
-     "after the great storm: a large round stone floor ringed by broken stone arches open to a dark sky, long bell ropes "
+     "The BOSS ARENA of the 'Silent Bell Tower' Breach. " + BREACH + "The inside of the belfry at the top of the tower on the night "
+     "of the Lantern Festival twenty years ago, when the bell was rung: a large round stone floor ringed by broken stone arches open to a dark sky, long bell ropes "
      "hanging from the darkness above, archive papers floating weightless in the air, stone gargoyle perches on the rim, the "
      "shadow of a giant bell on the floor. A wide flat walkable center (completely empty) and a single entrance (a stair "
      "opening) centered on the BOTTOM edge."),
@@ -101,7 +103,8 @@ MAPS_ATO6 = [
      "Paper lanterns with amber light. Exits centered on the LEFT, RIGHT and BOTTOM edges. The middle of the alleys is free of objects."),
     ("A24", "chao_ruas_arena.png", "Ruas Invertidas: arena do Inquilino", "arena",
      "The BOSS ARENA of the 'Inverted Streets' Breach. " + BREACH + "The empty lot of the Lower Streets, but with the demolished "
-     "houses standing again around it as broken ghostly walls, doors opening onto the dark sky, clotheslines stretched in every "
+     "houses standing again around it as broken ghostly walls, and more wooden houses HANGING UPSIDE DOWN from the dark sky at "
+     "the top edge like from a ceiling (roofs pointing down, stilts pointing up), doors opening onto the dark sky, clotheslines stretched in every "
      "direction above, scattered furniture (chairs, a crib, drawers) on the ground near the edges, deep stilt holes in the dirt. "
      "A wide flat walkable center (completely empty) and a single entrance centered on the BOTTOM edge."),
 ]
@@ -143,10 +146,6 @@ NPCS_ATO3 = [
      "a grumpy harbour master around 60, the old lighthouse keeper: a thick grey-white beard, weathered sunburned face, a "
      "dark blue wool sailor coat with brass buttons and a knitted cap, rope-scarred calloused hands, smells of salt; a normal "
      "adult man (1.0x the hunter height)", ("neutral, grumpy and closed", "pained, guilty, eyes wet")),
-    ("iara", "Iara",
-     "a fishmonger woman around 32, Severo's daughter: dark hair tied up under a headscarf, strong arms, a worn leather apron "
-     "over rolled-up sleeves, a fish knife on the belt, a tired and ironic look; a normal adult woman (1.0x the hunter height)",
-     ("neutral, tired and ironic", "singing softly, eyes closed")),
 ]
 
 
@@ -177,6 +176,60 @@ def _swap(**values):
 INTRO_MAPS = ("Os mapas do Ato I (Praça, Forjas, esgoto) estão aprovados e são o modelo de estilo; as referências anexadas "
               "mostram o padrão de bairro (hub), de sala de Brecha e de arena.")
 
+NPC_VIGIA = [
+    ("vigia", "o Vigia",
+     "a mysterious hooded figure who only appears at night in the cemetery: a deep hood that hides the face in shadow, a long "
+     "dark weathered cloak of an old-fashioned lantern hunter, worn leather bracers and boots, a faint magenta glow at the edges "
+     "of the cloak; a normal adult (1.0x the hunter height). In walking strips the hood stays UP and the face stays in shadow",
+     ("hood up, the face completely hidden in shadow, only a faint magenta glint where the eyes are",
+      "hood lowered for the first time: the face of a YOUNG woman around 25 with the tired, old eyes of a 55-year-old woman, "
+      "impossible and simple, short dark hair, a faint magenta glow on the skin, a calm sad expression")),
+]
+
+NPC_MAE_RAVI = [
+    ("mae_ravi", "Mãe do Ravi",
+     "a washerwoman from the poor Lower Streets, around 45: worn work-reddened hands, a faded headscarf over dark hair with grey "
+     "strands, a simple patched dress with rolled-up sleeves, a wet apron, firm and tired, dignified; a normal adult woman "
+     "(1.0x the hunter height)",
+     ("neutral, firm and tired", "worried, holding back tears")),
+]
+
+MONSTER_INQUILINO = [
+    ("inquilino", "Inquilino (Guardião, chefe rank S)",
+     "a HUGE boss that is a whole two-storey wooden HOUSE from the poor Lower Streets walking on FOUR tall wooden stilt legs: "
+     "weathered planks, a patched roof, a crooked chimney, one big WINDOW lit from inside with warm amber light (it is the "
+     "'face' that speaks), a front DOOR in the middle that can open like a mouth, laundry still hanging from a line on its side. "
+     "It is a HOUSE, not a person: no arms, no face drawn on it. SCALE: about 3x the hunter height",
+     [("parado", 6, "idle, swaying on its stilts, the window light pulsing slowly"),
+      ("andar", 8, "walking forward heavily on its four stilt legs, planks creaking"),
+      ("esmagar", 8, "raises its front legs and stomps down hard, dust and splinters flying"),
+      ("arremessar", 8, "throws furniture (a chair, a drawer, a crib) out of its window towards the front"),
+      ("puxar", 8, "the front door bursts open and a strong wind pulls everything towards the dark inside of the house"),
+      ("morte", 10, "the stilts break one by one and the house collapses into a pile of planks, the window light goes out")]),
+]
+
+
+def npc_md(npcs, title, age_note):
+    old = _swap(NPCS=npcs)
+    try:
+        return (g.portraits().replace("Retratos de diálogo dos NPCs", f"{title}: retratos").replace("(a Lis é criança)", age_note)
+                + "\n\n" + g.npc_walks().replace("NPCs andando pela cidade", f"{title} andando"))
+    finally:
+        _swap(**old)
+
+
+def extra_files():
+    old = _swap(MONSTERS=MONSTER_INQUILINO)
+    try:
+        inquilino = g.monsters().replace("Monstros do Ato I", "Ato VI · Guardião Inquilino (Ruas Invertidas)")
+    finally:
+        _swap(**old)
+    return {
+        "ato4_D_vigia.md": npc_md(NPC_VIGIA, "Ato IV · o Vigia", "(o Vigia é Marisa, ou o eco dela)"),
+        "ato6_D_mae_ravi.md": npc_md(NPC_MAE_RAVI, "Ato VI · Mãe do Ravi", "(a Mãe do Ravi tem ~45 anos)"),
+        "ato6_C_inquilino.md": inquilino,
+    }
+
 
 def main():
     out = g.OUT
@@ -186,15 +239,16 @@ def main():
         files = {
             "ato3_A_cenarios.md": maps("Ato III · Cenários do Mercado das Marés e do Cais Afogado (6 imagens)", INTRO_MAPS, MAPS_ATO3),
             "ato3_C_monstros.md": g.monsters().replace("Monstros do Ato I", "Monstros do Ato III (Cais Afogado)"),
-            "ato3_D_severo_iara.md": g.portraits().replace("Retratos de diálogo dos NPCs", "Capitão Severo e Iara: retratos")
-                                       .replace("(a Lis é criança)", "(Severo tem ~60 anos; Iara, ~32)")
-                                     + "\n\n" + g.npc_walks().replace("NPCs andando pela cidade", "Capitão Severo e Iara andando"),
+            "ato3_D_severo.md": g.portraits().replace("Retratos de diálogo dos NPCs", "Capitão Severo: retratos")
+                                  .replace("(a Lis é criança)", "(Severo tem ~60 anos)")
+                                + "\n\n" + g.npc_walks().replace("NPCs andando pela cidade", "Capitão Severo andando"),
             "ato4_A_cenarios.md": maps("Ato IV · Cenários do Cemitério das Lanternas (2 imagens: bairro e arena)", INTRO_MAPS, MAPS_ATO4),
             "ato5_A_cenarios.md": maps("Ato V · Cenários da Torre do Sino (2 imagens: bairro e arena)", INTRO_MAPS, MAPS_ATO5),
             "ato6_A_cenarios.md": maps("Ato VI · Cenários das Ruas Baixas (2 imagens: bairro e arena)", INTRO_MAPS, MAPS_ATO6),
         }
     finally:
         _swap(**old)
+    files.update(extra_files())
     for name, text in files.items():
         (out / name).write_text(text, encoding="utf-8")
         print(name, text.count("### "), "prompts", len(text), "chars")

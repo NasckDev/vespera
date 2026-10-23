@@ -19,7 +19,7 @@ FORMAT: one single full image, landscape 16:9, the highest resolution you can pr
 Do NOT add: text, letters, numbers, logos, watermark, UI, frame or border, grid lines, extra characters.
 ```
 
-### A20 · `chao_cemiterio_arena.png` · Cemitério Invertido: arena da Velória
+### A20 · `chao_cemiterio_arena.png` · Cemitério das Lanternas (Brecha): arena da Velória
 
 **Anexe estas referências antes de mandar:** [arena aprovada do Ato I (Lodo-Mãe)](https://raw.githubusercontent.com/NasckDev/vespera/campanha/docs/v2/referencias/estilo_arena_esgoto.png) · [prancha de mapas (estilo)](https://raw.githubusercontent.com/NasckDev/vespera/v2/docs/v2/referencias/estilo_prancha_mapas.png)
 
@@ -28,7 +28,7 @@ I am making VÉSPERA, a 2D pixel-art action RPG for PC. It takes place in Lumeir
 
 Please create ONE game map background image for this game.
 
-WHAT TO DRAW: The BOSS ARENA of the 'Inverted Cemetery' Breach. Inside a Breach the Underside copies this place exactly as it was BEFORE the Year Without Dawn, twenty years ago, but kept too long: rotten, partly inverted, lit by faint magenta rift light. A large round stone ALTAR courtyard covered in thousands of melted candles of every size, wax dripping UPWARDS, puddles of hardened wax on the floor, hanging upside-down tombstones and cypress roots growing from the dark sky area at the top edge. A ring of tall candelabras around the edge. A wide flat walkable center (completely empty) and a single entrance centered on the BOTTOM edge.
+WHAT TO DRAW: The BOSS ARENA of the 'Cemetery of Lanterns' Breach. Inside a Breach the Underside copies this place exactly as it was BEFORE the Year Without Sun, twenty years ago, but kept too long: rotten, partly inverted, lit by faint magenta rift light. A large round stone ALTAR courtyard covered in thousands of melted candles of every size, wax dripping UPWARDS, puddles of hardened wax on the floor, hanging upside-down tombstones and cypress roots growing from the dark sky area at the top edge. A ring of tall candelabras around the edge. A wide flat walkable center (completely empty) and a single entrance centered on the BOTTOM edge.
 
 STYLE: detailed hand-painted pixel art, crisp pixel clusters, dark selective outlines, no blur, no smooth vector look, no 3D render look. Palette: lantern amber #F2A541, rift magenta #E64A8E, deep indigo #1B1F3B shadows, violet #4A2C6B, cream #F4E7C6 highlights, moss green #5C8C4A, earth brown #8A5A3C, stone grey-blue #6B6F8A, water teal #3C7A8A. Light always comes from the TOP-LEFT. Match the attached reference images as closely as possible.
 CAMERA: straight top-down view, everything axis-aligned like the attached plaza: walls, streets and exits run perfectly horizontal or vertical, no diagonal or isometric angle. Walls and objects are seen slightly from the front (3/4 top-down), the floor from above.
