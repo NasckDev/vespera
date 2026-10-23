@@ -92,7 +92,7 @@ public class StoryLevelsTest
             var level = Load(id);
             AssertThat(level.Lineup.Length).IsEqual(2);
             var human = ScaleRegistry.HumanHeight(level.DoorHeight);
-            for (var i = 0; i <= 3; i++)
+            for (var i = 0; i <= 5; i++)
             {
                 AssertThat(FeetFit(level, level.Lineup[0] + (i * human), level.Lineup[1])).IsTrue();
             }

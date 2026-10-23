@@ -79,17 +79,18 @@
       "radius": 40,
       "prompt": "Atravessar a ponte",
       "text": "Mercado das Marés — trancado, em breve."
-    },
-    {
-      "kind": "talk",
-      "at": [1200, 396],
-      "radius": 60,
-      "prompt": "Falar com Lis",
-      "dialogue": "lis",
-      "text": ""
     }
   ],
   "npcs": [
+    {
+      "id": "lis",
+      "at": [1200, 400],
+      "facing": "down",
+      "routine": "idle",
+      "dialogue": "lis",
+      "prompt": "Falar com Lis",
+      "_note": "Vendedora de mapas, na frente da barraca de lona."
+    },
     {
       "id": "benicio",
       "at": [722, 262],

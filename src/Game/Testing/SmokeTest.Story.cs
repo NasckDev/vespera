@@ -23,6 +23,8 @@ public partial class SmokeTest
 
     private const int MaxDialogueSteps = 90;
 
+    private readonly HashSet<string> _portraitShots = [];
+
     private static void ConfigureStory() => StoryService.SuppressAutoplay = true;
 
     private async Task RunStoryBot(Level start)
@@ -55,6 +57,7 @@ public partial class SmokeTest
         Check(StoryService.Engine.HasFlag(StoryFlags.MetRavi), "Ravi deveria se apresentar");
         Check(StoryService.Engine.ObjectiveId == "odete", $"objetivo depois do Ravi: '{StoryService.Engine.ObjectiveId}'");
 
+        await TalkToNpc(level, "lis");
         await OpenAndCloseJournal();
 
         level = await Travel(level, z => z.Target == "forjas", new Vector2(24, 0), "Level_forjas");
@@ -82,7 +85,7 @@ public partial class SmokeTest
     }
 
     private const float ScaleTolerance = 0.08f;
-    private static readonly string[] ScaleActors = ["odete", "ravi", "benicio"];
+    private static readonly string[] ScaleActors = ["odete", "ravi", "benicio", "lis", "nilza"];
 
     /// <summary>
     /// Contrato de escala (PLANO-V2 §2.1): em cada mapa, mede a altura opaca renderizada (px de mundo) do caçador e de
@@ -177,8 +180,18 @@ public partial class SmokeTest
     /// <summary>Aperta Interagir até a conversa fechar (a 1ª aperto de cada caixa completa o texto; a 2ª avança).</summary>
     private async Task SkipDialogue(Level level)
     {
+        var shot = new HashSet<string>();
         for (var i = 0; i < MaxDialogueSteps && level.DialogueOpen; i++)
         {
+            // Uma foto por retrato diferente (falante + expressão), com o texto todo na caixa.
+            var key = $"{level.Dialogue.SpeakerName}|{level.Dialogue.CurrentNodeId}";
+            if (_portraitShots.Contains(level.Dialogue.SpeakerName + level.Dialogue.Expression) is false && shot.Add(key))
+            {
+                _portraitShots.Add(level.Dialogue.SpeakerName + level.Dialogue.Expression);
+                level.Dialogue.Complete();
+                await Shot($"dialogo_{System.Text.RegularExpressions.Regex.Replace(level.Dialogue.SpeakerName, "[^A-Za-z0-9]+", "_")}_{level.Dialogue.Expression}", 0.5);
+            }
+
             await PressInWorld(Key.E);
         }
 

@@ -36,7 +36,7 @@ OUT = ROOT / "assets" / "v2" / "sprites" / "npcs"
 
 CELL = 192
 FEET = (96, 176)
-NPC_HEIGHT = {"odete": 118, "ravi": 124}
+NPC_HEIGHT = {"odete": 118, "ravi": 124, "lis": 118, "nilza": 118}
 FRAMES = {"parado": 4, "andar": 6}
 DIRECTIONS = ("baixo", "cima", "lado")
 PORTRAITS = ("odete", "ravi", "nilza", "lis")

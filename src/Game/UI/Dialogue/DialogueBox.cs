@@ -58,6 +58,8 @@ public partial class DialogueBox : Control
 
     public string SpeakerName => _plate.Visible ? _plateName.Text : string.Empty;
 
+    public int Expression => _runner?.Current?.Expression ?? 1;
+
     public string CurrentNodeId => _runner?.CurrentId ?? string.Empty;
 
     public IReadOnlyList<Button> ChoiceButtons => _choiceButtons;
