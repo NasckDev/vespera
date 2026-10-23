@@ -62,7 +62,7 @@ public static class HuntService
     public static RunReport? Report { get; private set; }
 
     /// <summary>A Lodo-Mãe espera no fim das próximas caçadas (o Benício aprovou o exame do rank E).</summary>
-    public static bool GuardianUnlocked => Story.StoryService.Engine.HasFlag(StoryFlags.GuardianGate) || ReadyForExam;
+    public static bool GuardianUnlocked => Story.StoryService.Engine.HasFlag(StoryFlags.GuardianGate);
 
     /// <summary>Caçadas completas suficientes para o Benício aceitar o exame.</summary>
     public static bool ReadyForExam => Planner.ReadyForExam(State.RunsCompleted);
