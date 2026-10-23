@@ -28,6 +28,7 @@ public partial class Boot : Node
         World.ScaleRegistry.ReadText = UserFile.ReadText;
         GameSettings.Load();
         InputSetup.Initialize();
+        AddChild(new InputDevices { Name = "InputDevices" });
         GameSettings.Apply(GetTree());
         ApplyTheme();
         UiAssets.InstallCursor();

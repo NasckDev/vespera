@@ -92,9 +92,17 @@ public static class StoryService
 
     public static DialogueRunner? StartDialogue(string id)
     {
-        var runner = new DialogueRunner(LoadDialogue(id), Engine, PlayerName);
+        var runner = new DialogueRunner(LoadDialogue(id), Engine, PlayerName, WeaponTokens());
         return runner.Start() ? runner : null;
     }
+
+    /// <summary>Fichas {arma} (artigo de gênero certo) e {este} para as falas da arma da classe do caçador.</summary>
+    public static Dictionary<string, string> WeaponTokens() => (GameSession.Data?.ClassId ?? SaveService.DefaultClassId) switch
+    {
+        "bow" => new() { ["arma"] = "arco", ["este"] = "este", ["armaNome"] = "Arco" },
+        "hammer" => new() { ["arma"] = "martelo", ["este"] = "este", ["armaNome"] = "Martelo" },
+        _ => new() { ["arma"] = "lâmina", ["este"] = "esta", ["armaNome"] = "Lâmina" },
+    };
 
     public static void ClearCache()
     {

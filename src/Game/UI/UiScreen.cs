@@ -27,6 +27,23 @@ public abstract partial class UiScreen : Control
         CallDeferred(nameof(FocusDefault));
     }
 
+    /// <summary>
+    /// Botão direito do mouse volta, em qualquer ponto da tela. Fica em <c>_Input</c> porque os painéis (que param o mouse)
+    /// engolem o clique antes do <c>_UnhandledInput</c>. Telas que capturam botões (Controles) sobrescrevem <c>_Input</c>.
+    /// </summary>
+    public override void _Input(InputEvent @event)
+    {
+        if (@event is not InputEventMouseButton { Pressed: true, ButtonIndex: MouseButton.Right }
+            || !CanGoBack || !IsVisibleInTree() || !SceneRouter.Instance.IsActive(this))
+        {
+            return;
+        }
+
+        GetViewport().SetInputAsHandled();
+        UiSfx.Play(UiSound.Back);
+        Back();
+    }
+
     public override void _UnhandledInput(InputEvent @event)
     {
         if (!CanGoBack || !@event.IsActionPressed("ui_cancel") || !IsVisibleInTree() || !SceneRouter.Instance.IsActive(this))

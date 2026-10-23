@@ -1,4 +1,5 @@
 using Godot;
+using Vespera.Game.Boot;
 
 namespace Vespera.Game.UI;
 
@@ -29,7 +30,12 @@ public partial class FocusGlow : Control
         owner.FocusEntered += () => Toggle(true);
         owner.FocusExited += () => Toggle(false);
         owner.VisibilityChanged += () => Toggle(owner.HasFocus());
+        InputDevices.Changed += OnDeviceChanged;
     }
+
+    public override void _ExitTree() => InputDevices.Changed -= OnDeviceChanged;
+
+    private void OnDeviceChanged() => QueueRedraw();
 
     public override void _Process(double delta)
     {
@@ -48,6 +54,11 @@ public partial class FocusGlow : Control
         }
 
         DrawRect(rect.Grow(1f), new Color(Palette.Amber, 0.7f + (0.3f * pulse)), filled: false, width: 3f);
+
+        if (InputDevices.Current == LastDevice.Mouse)
+        {
+            return;
+        }
 
         var bob = Mathf.Sin((float)_time * PulseSpeed * 0.5f) * 4f;
         DrawDiamond(new Vector2(-Outset - DiamondGap - bob, Size.Y / 2f));

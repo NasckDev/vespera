@@ -4,28 +4,28 @@
   "objectives": [
     {
       "id": "quadro",
-      "title": "Ir ao quadro da Ordem",
-      "text": "Alguém chamou pelo seu nome. Aproxime-se do quadro de avisos, no meio da praça."
+      "title": "Falar com o Mestre Benício",
+      "text": "O Mestre Benício chamou você. Ele está ao lado do quadro de avisos, no meio da praça. Chegue perto dele e aperte o botão de interagir."
     },
     {
       "id": "ravi",
-      "title": "Falar com o rapaz da praça",
-      "text": "Um rapaz de selo E anda pela praça fazendo barulho. Ele parece saber mais do que diz."
+      "title": "Falar com o Ravi",
+      "text": "Ravi é um rapaz de selo E, como você. Ele anda pela praça e quer lhe propor uma corrida."
     },
     {
       "id": "odete",
-      "title": "Visitar a Forja da Odete",
-      "text": "Atravesse a ponte a oeste até o Bairro das Forjas e peça a Odete uma arma digna de um caçador."
+      "title": "Pegar uma arma com a Odete",
+      "text": "A Odete é a ferreira. A Forja dela fica depois da ponte, a oeste da praça. Ela vai lhe dar a sua primeira arma."
     },
     {
       "id": "brecha",
-      "title": "Fechar a Brecha dos Esgotos do Mercado",
-      "text": "A Brecha aberta na praça leva aos Esgotos do Mercado. Entre, derrote a Lodo-Mãe e feche-a antes do escuro."
+      "title": "Fechar a Brecha da praça",
+      "text": "A Brecha da praça leva aos Esgotos do Mercado. Entre, vença os monstros e o chefe no fim, a Lodo-Mãe. Quando ela cair, a Brecha se fecha."
     },
     {
       "id": "ato2",
       "title": "Pomar Alto",
-      "text": "O próximo caminho sobe para o Pomar Alto. Em breve.",
+      "text": "As macieiras do Pomar Alto estão apodrecendo. O caminho ainda está fechado. Em breve.",
       "locked": true
     }
   ],
@@ -33,7 +33,9 @@
     { "when": "GuardianDefeated:lodo_mae", "objective": "ato2", "set": ["act1_done"] }
   ],
   "autoplay": [
-    { "level": "praca", "dialogue": "chegada", "if": ["!arrival_done"] }
+    { "level": "praca", "dialogue": "chegada", "if": ["!arrival_done"] },
+    { "level": "praca", "dialogue": "ravi", "npc": "ravi", "if": ["registered", "!met_ravi"] },
+    { "level": "praca", "dialogue": "ato1_fim", "npc": "benicio", "if": ["act1_done", "!ato1_fim_done"] }
   ],
   "speakers": {
     "narrador": { "name": "" },

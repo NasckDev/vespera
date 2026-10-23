@@ -41,6 +41,9 @@ public sealed class AutoplayDef
 
     public string Dialogue { get; set; } = string.Empty;
 
+    /// <summary>Id do NPC que anda até o jogador antes da fala (vazio = ninguém; a cena da chegada não tem NPC).</summary>
+    public string Npc { get; set; } = string.Empty;
+
     [JsonPropertyName("if")]
     public List<string> Conditions { get; set; } = [];
 }

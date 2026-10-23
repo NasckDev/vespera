@@ -54,6 +54,9 @@ public partial class DialogueBox : Control
 
     public event Action? Closed;
 
+    /// <summary>Uma caixa nova apareceu (a fase move a câmera e dispara os efeitos de cena).</summary>
+    public event Action<DialogueNode>? NodeShown;
+
     public bool IsOpen => _runner is not null;
 
     public bool Typing => _runner is not null && _typed < _total;
@@ -126,7 +129,15 @@ public partial class DialogueBox : Control
 
         var interact = @event.IsActionPressed(InputActions.Interact);
         var accept = @event.IsActionPressed("ui_accept");
-        var click = @event is InputEventMouseButton { Pressed: true, ButtonIndex: MouseButton.Left } mouse && _panel.GetGlobalRect().HasPoint(mouse.GlobalPosition);
+        var click = @event is InputEventMouseButton { Pressed: true, ButtonIndex: MouseButton.Left } mouse
+            && (!HasChoices || _panel.GetGlobalRect().HasPoint(mouse.GlobalPosition));
+        if (@event.IsActionPressed("ui_cancel"))
+        {
+            GetViewport().SetInputAsHandled();
+            SkipAll();
+            return;
+        }
+
         if (!interact && !accept && !click)
         {
             return;
@@ -150,6 +161,24 @@ public partial class DialogueBox : Control
         }
 
         Advance(0);
+    }
+
+    /// <summary>Pula a conversa: aplica os efeitos do que falta e fecha (ou para na próxima escolha).</summary>
+    public void SkipAll()
+    {
+        if (_runner is null)
+        {
+            return;
+        }
+
+        if (_runner.SkipToEnd())
+        {
+            Show(_runner);
+            Complete();
+            return;
+        }
+
+        Close();
     }
 
     /// <summary>Mostra o texto inteiro agora (primeiro aperto durante a digitação).</summary>
@@ -195,7 +224,8 @@ public partial class DialogueBox : Control
         _typed = 0f;
         _text.VisibleCharacters = 0;
         ClearChoices();
-        _hint.Text = $"{_keyName}  continuar";
+        _hint.Text = $"{InputDevices.KeyName(InputActions.Interact)}  continuar    {(InputDevices.Current == LastDevice.Pad ? "B" : "Esc")}  pular";
+        NodeShown?.Invoke(node);
         if (runner.Choices.Count > 0)
         {
             BuildChoiceButtons(runner.Choices);
@@ -352,8 +382,8 @@ public partial class DialogueBox : Control
 
         _hint = UiKit.MakeLabel(string.Empty, UiTheme.DimVariation, HorizontalAlignment.Right);
         _hint.Name = "Hint";
-        _hint.Size = new Vector2(420f, 40f);
-        _hint.Position = new Vector2(size.X - 420f - (46f * k), size.Y - 54f);
+        _hint.Size = new Vector2(640f, 40f);
+        _hint.Position = new Vector2(size.X - 640f - (46f * k), size.Y - 54f);
         _hint.MouseFilter = MouseFilterEnum.Ignore;
         _panel.AddChild(_hint);
     }

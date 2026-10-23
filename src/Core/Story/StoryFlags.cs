@@ -22,6 +22,15 @@ public static class StoryFlags
     /// <summary>Evento (não flag): Odete abriu a forja. A tela de Forja escuta <c>StoryEngine.EventRaised</c>.</summary>
     public const string EventOpenForge = "OpenForge";
 
+    /// <summary>Fim do Ato I (a cena da lanterna, do selo D e do gancho do Pomar Alto) já tocou.</summary>
+    public const string Ato1FimDone = "ato1_fim_done";
+
+    /// <summary>Evento: Odete oferece trocar a arma (a classe). O jogo abre a confirmação e a escolha.</summary>
+    public const string EventChangeWeapon = "ChangeWeapon";
+
+    /// <summary>Prefixo das flags de dicas já mostradas ("hint_move", "hint_attack"...). Ficam no save junto das flags da história.</summary>
+    public const string HintPrefix = "hint_";
+
     /// <summary>Evento: a Lâmina inicial passou para as mãos do jogador (a economia pode reagir).</summary>
     public const string EventStarterBladeGiven = "StarterBladeGiven";
 }

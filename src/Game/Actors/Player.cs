@@ -50,6 +50,9 @@ public partial class Player : CharacterBody2D
 
     public float MaxSpeed => BaseSpeed * _scale;
 
+    /// <summary>Movimento que as cenas mandam enquanto o jogador está travado (andar sozinho); null = parado.</summary>
+    public Vector2? ScriptedMove { get; set; }
+
     /// <summary>Movimento travado (painel de leitura aberto, cutscene).</summary>
     public bool Frozen { get; set; }
 
@@ -126,7 +129,7 @@ public partial class Player : CharacterBody2D
     public override void _PhysicsProcess(double delta)
     {
         var dt = (float)delta;
-        var move = Frozen ? Vector2.Zero : Input.Move;
+        var move = Frozen ? (ScriptedMove ?? Vector2.Zero) : Input.Move;
         var order = Combat.Step(dt, move);
         if (order.Velocity is { } forced)
         {
