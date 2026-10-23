@@ -168,6 +168,28 @@ def hunter(cls):
     return "\n".join(out)
 
 
+def hunter_restyle(cls, style_classes):
+    """Refaz uma classe no mesmo estilo das outras, para o trio parecer do mesmo jogo."""
+    subject, label = CLASSES[cls]
+    refs = ([(f"{c}_andar_{d}.png", f"estilo {c} ({d})") for c in style_classes for d in ("baixo", "lado")]
+            + [(f"{cls}_andar_baixo.png", f"identidade do {cls}")])
+    extra = (f"ART STYLE IS MANDATORY: draw in EXACTLY the same style as the attached {' and '.join(style_classes)} hunters "
+             "(same chunky stylized proportions and head size, same thick dark outline, same level of detail and shading, "
+             f"same palette mood). The {label} hunter must look like the third member of the same trio. "
+             "Keep only his identity (short red cape, tunic, brass lantern, sword) from the identity reference.")
+    out = [f"# Caçador {label}, estágio 1 — refazer no estilo do Arco e do Martelo", "",
+           "No playtest as 3 classes pareciam de jogos diferentes. Refaça o Lâmina no estilo dos outros dois. "
+           "Um prompt por imagem; anexe as referências indicadas.", ""]
+    anims = [("andar", 6, "walking cycle, legs and arms visibly swinging", True)] + CLASS_ANIMS[cls] + COMMON_ANIMS
+    n = 1
+    for anim, frames, desc, all_dirs in anims:
+        for d, facing in (DIRS if all_dirs else [DIRS[2]]):
+            out.append(block(f"R-{cls}-{n:02d}", f"{cls}_e1_{anim}_{d}.png", f"{anim} ({d})", refs,
+                             sprite_body(subject, desc, frames, facing, extra)))
+            n += 1
+    return "\n".join(out)
+
+
 def monsters():
     refs = [("estilo_monstros.png", "estilo de monstros"), ("estilo_chefes.png", "estilo de chefes")]
     out = ["# Parte C · Monstros do Ato I", "",
@@ -219,7 +241,8 @@ def npc_walks():
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     files = {"A_cenarios.md": maps(), "B_lamina.md": hunter("lamina"), "B_arco.md": hunter("arco"),
-             "B_martelo.md": hunter("martelo"), "C_monstros.md": monsters(), "D1_retratos.md": portraits(),
+             "B_martelo.md": hunter("martelo"), "C_monstros.md": monsters(),
+             "R_lamina_restyle.md": hunter_restyle("lamina", ["arco", "martelo"]), "D1_retratos.md": portraits(),
              "D2_npcs_andando.md": npc_walks()}
     for name, text in files.items():
         (OUT / name).write_text(text, encoding="utf-8")
