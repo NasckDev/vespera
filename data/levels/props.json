@@ -211,5 +211,103 @@
       "text": "A Lanterna da Praça. Dizem que ela nunca apagou, nem no Ano Sem Alvor."
     },
     "_medida": "135 px de mundo / 484 px nativos (2,5x o caçador; base de ~80 px cabe no disco de ~295 px)"
+  },
+  "bigorna": {
+    "texture": "res://assets/v2/objetos/bairro_das_forjas/mine_anvil.png",
+    "scale": 0.492,
+    "anchor": [33, 61],
+    "footprint": [-25, -18, 50, 18],
+    "occludes": false,
+    "_medida": "30 px de mundo / 61 px nativos (bigorna ~0,42 porta)"
+  },
+  "bigorna_pesada": {
+    "texture": "res://assets/v2/objetos/bairro_das_forjas/mine_anvil_heavy.png",
+    "scale": 0.333,
+    "anchor": [49, 100],
+    "footprint": [-37, -27, 74, 27],
+    "occludes": false,
+    "_medida": "34 px de mundo / 102 px nativos (bigorna grande ~0,47 porta)"
+  },
+  "suporte_armas": {
+    "texture": "res://assets/v2/objetos/bairro_das_forjas/common_weapon_rack.png",
+    "scale": 0.299,
+    "anchor": [102, 130],
+    "footprint": [-80, -60, 159, 60],
+    "occludes": true,
+    "_medida": "40 px de mundo / 134 px nativos (suporte de lanças ~0,55 porta)"
+  },
+  "barril_carvao": {
+    "texture": "res://assets/v2/objetos/bairro_das_forjas/mine_barrel_mine.png",
+    "scale": 0.5,
+    "anchor": [25, 60],
+    "footprint": [-19, -14, 37, 14],
+    "occludes": false,
+    "_medida": "30 px de mundo / 60 px nativos (barril ~0,42 porta)"
+  },
+  "monte_carvao": {
+    "texture": "res://assets/v2/objetos/bairro_das_forjas/mine_coal_heap.png",
+    "scale": 0.283,
+    "anchor": [48, 103],
+    "footprint": [-36, -27, 72, 27],
+    "occludes": false,
+    "_medida": "30 px de mundo / 106 px nativos (monte de carvão ~0,42 porta)"
+  },
+  "pilha_carvao": {
+    "texture": "res://assets/v2/objetos/bairro_das_forjas/mine_coal_pile.png",
+    "scale": 0.414,
+    "anchor": [41, 57],
+    "footprint": [-32, -23, 63, 23],
+    "occludes": false,
+    "_medida": "24 px de mundo / 58 px nativos (carvão espalhado ~0,33 porta)"
+  },
+  "caixote_minerio": {
+    "texture": "res://assets/v2/objetos/bairro_das_forjas/mine_crate_ore.png",
+    "scale": 0.329,
+    "anchor": [44, 83],
+    "footprint": [-34, -25, 67, 25],
+    "occludes": false,
+    "_medida": "28 px de mundo / 85 px nativos (caixote de minério ~0,39 porta)"
+  },
+  "caixote_ferramentas": {
+    "texture": "res://assets/v2/objetos/bairro_das_forjas/mine_crate_tools.png",
+    "scale": 0.418,
+    "anchor": [32, 66],
+    "footprint": [-24, -18, 48, 18],
+    "occludes": false,
+    "_medida": "28 px de mundo / 67 px nativos (caixote de ferramentas ~0,39 porta)"
+  },
+  "fornalha_cano": {
+    "texture": "res://assets/v2/objetos/bairro_das_forjas/mine_furnace_pipe.png",
+    "scale": 0.405,
+    "anchor": [62, 154],
+    "footprint": [-48, -42, 96, 42],
+    "occludes": true,
+    "light": { "offset": [0, -35], "color": "#ff8a3d", "energy": 0.9, "radius": 60 },
+    "_medida": "64 px de mundo / 158 px nativos (fornalha com cano ~0,9 porta)"
+  },
+  "fornalha_alta": {
+    "texture": "res://assets/v2/objetos/bairro_das_forjas/mine_furnace_tall.png",
+    "scale": 0.444,
+    "anchor": [42, 166],
+    "footprint": [-32, -28, 64, 28],
+    "occludes": true,
+    "light": { "offset": [0, -30], "color": "#ff8a3d", "energy": 0.9, "radius": 60 },
+    "_medida": "76 px de mundo / 171 px nativos (fornalha alta ~1,05 porta)"
+  },
+  "rocha_minerio": {
+    "texture": "res://assets/v2/objetos/bairro_das_forjas/mine_ore_rock.png",
+    "scale": 0.462,
+    "anchor": [29, 76],
+    "footprint": [-22, -19, 44, 19],
+    "occludes": true,
+    "_medida": "36 px de mundo / 78 px nativos (rocha de minério ~0,5 porta)"
+  },
+  "carrinho_mao": {
+    "texture": "res://assets/v2/objetos/bairro_das_forjas/mine_wheelbarrow_mine.png",
+    "scale": 0.509,
+    "anchor": [33, 54],
+    "footprint": [-25, -18, 50, 18],
+    "occludes": false,
+    "_medida": "28 px de mundo / 55 px nativos (carrinho de mão ~0,39 porta)"
   }
 }

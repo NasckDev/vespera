@@ -45,3 +45,6 @@ desktop.ini
 # Python
 __pycache__/
 *.pyc
+
+# --- Pacotes licenciados (uso no jogo permitido, redistribuição proibida): fora do git ---
+/licenciados/
