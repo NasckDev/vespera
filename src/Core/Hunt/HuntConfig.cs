@@ -27,6 +27,9 @@ public sealed class HuntConfig
     /// <summary>Salas da primeira caçada (curta, para aprender).</summary>
     public int FirstRunRooms { get; set; } = 5;
 
+    /// <summary>Salas da caçada com a Lodo-Mãe (contando o descanso e o covil): mais curta, o chefe é a prova.</summary>
+    public int GuardianRunRooms { get; set; } = 5;
+
     /// <summary>Monstros a mais por onda a cada caçada completa (a Brecha "aprende" com o caçador).</summary>
     public double RunGrowth { get; set; } = 0.5;
 

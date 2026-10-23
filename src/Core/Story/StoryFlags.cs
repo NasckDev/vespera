@@ -34,6 +34,40 @@ public static class StoryFlags
     /// </summary>
     public const string GuardianGate = "exame_e";
 
+    /// <summary>Voltou da Brecha pelo menos uma vez (viva ou caída). QUEM EMITE: o fim da caçada (HuntService).</summary>
+    public const string HuntBack = "hunt_back";
+
+    /// <summary>Primeira e segunda caçadas completas (saiu pela fenda da última sala). QUEM EMITE: o fim da caçada.</summary>
+    public const string HuntOne = "hunt_1";
+
+    public const string HuntTwo = "hunt_2";
+
+    /// <summary>Caiu dentro da Brecha pelo menos uma vez.</summary>
+    public const string FellOnce = "fell_once";
+
+    /// <summary>Melhorou a arma na forja pelo menos uma vez.</summary>
+    public const string Forged = "forged";
+
+    /// <summary>Comprou uma poção da Tia Nilza.</summary>
+    public const string PotionBought = "potion_bought";
+
+    /// <summary>Cumpriu um contrato do mural.</summary>
+    public const string ContractDone = "contract_done";
+
+    /// <summary>O XP já alcança o próximo rank (falta só a conquista: Guardião/exame).</summary>
+    public const string XpReady = "xp_ready";
+
+    public const string MetNilza = "met_nilza";
+
+    /// <summary>Evento: a Tia Nilza dá uma poção de presente.</summary>
+    public const string EventGivePotion = "GivePotion";
+
+    /// <summary>Evento: comprar uma poção na Tia Nilza.</summary>
+    public const string EventBuyPotion = "BuyPotion";
+
+    /// <summary>Evento: abrir a tela de contratos do mural.</summary>
+    public const string EventOpenContracts = "OpenContracts";
+
     /// <summary>Prefixo das flags de dicas já mostradas ("hint_move", "hint_attack"...). Ficam no save junto das flags da história.</summary>
     public const string HintPrefix = "hint_";
 

@@ -1,31 +1,43 @@
 {
   "id": "chegada",
-  "entries": [{ "node": "a" }],
+  "entries": [
+    {
+      "node": "a"
+    }
+  ],
   "nodes": {
     "a": {
       "speaker": "narrador",
       "look": "lanterna",
-      "text": "Esta é Lumeira. No meio da praça fica a grande lanterna de bronze, que nunca apaga. Faz vinte anos que o sol sumiu por um ano inteiro, e desde então a cidade acende as luzes antes de escurecer.",
-      "set": ["arrival_done"],
+      "text": "Esta é Lumeira. Há vinte anos, o sol sumiu por um ano inteiro. A cidade sobreviveu porque nunca deixou as lanternas apagarem.",
+      "set": [
+        "arrival_done"
+      ],
       "next": "b"
     },
     "b": {
       "speaker": "narrador",
       "look": "player",
-      "text": "Você chegou hoje. No pulso tem um selo com a letra E: é o seu rank, o mais baixo de todos. Na mão, uma lanterna velha que era de alguém que você nunca conheceu.",
-      "next": "c"
+      "text": "Você chegou hoje. Na mão, uma lanterna velha que a Ordem mandou para você, com uma carta: \"O selo queimou no seu pulso. Venha.\"",
+      "next": "b2"
     },
     "c": {
       "speaker": "narrador",
       "look": "brecha",
       "fx": "shake",
-      "text": "Então o ar da praça se rasga. É uma Brecha: uma porta para o Avesso, um mundo de monstros. Elas se abrem no fim da tarde, todo dia.",
+      "text": "De repente, o ar da praça se rasga. Isso é uma Brecha: uma porta para o Avesso, um mundo cheio de monstros.",
       "next": "d"
     },
     "d": {
       "speaker": "benicio",
       "look": "benicio",
-      "text": "Você aí, de lanterna na mão! Venha até o quadro de avisos. Eu sou da Ordem da Lanterna e preciso falar com você."
+      "text": "Ei, você, com a lanterna na mão! Venha falar comigo, aqui no mural."
+    },
+    "b2": {
+      "speaker": "narrador",
+      "look": "player",
+      "text": "O selo tem a letra E. É o rank mais baixo de todos. Você não sabe de quem era a lanterna.",
+      "next": "c"
     }
   }
 }

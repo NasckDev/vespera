@@ -72,6 +72,28 @@ public class StoryTest
     }
 
     [TestCase]
+    public void Engine_TriggerWithConditionOnlyMovesObjectiveWhenConditionHolds()
+    {
+        const string json = """
+            {
+              "startObjective": "a",
+              "objectives": [ { "id": "a", "title": "A" }, { "id": "b", "title": "B" }, { "id": "c", "title": "C" } ],
+              "triggers": [
+                { "when": "x", "if": ["objective:a"], "objective": "b" },
+                { "when": "y", "if": ["x"], "objective": "c", "set": ["z"] }
+              ]
+            }
+            """;
+        var engine = new StoryEngine(new StoryProgress(), StoryScript.Parse(json));
+        engine.BeginCampaignIfNew();
+        engine.SetFlag("y");
+        AssertThat(engine.ObjectiveId).IsEqual("a");
+        AssertThat(engine.HasFlag("z")).IsFalse();
+        engine.SetFlag("x");
+        AssertThat(engine.ObjectiveId).IsEqual("b");
+    }
+
+    [TestCase]
     [ThrowsException(typeof(ArgumentException))]
     public void Engine_UnknownObjectiveIsRejected() => NewEngine().SetObjective("nao_existe");
 
@@ -149,7 +171,7 @@ public class StoryTest
         RunToEnd(Runner("odete", engine));
 
         AssertThat(engine.HasFlag(StoryFlags.StarterBlade)).IsTrue();
-        AssertThat(engine.ObjectiveId).IsEqual("brecha");
+        AssertThat(engine.ObjectiveId).IsEqual("cacada1");
         AssertThat(events).Contains(StoryFlags.EventStarterBladeGiven);
     }
 
@@ -226,6 +248,33 @@ public class StoryTest
         AssertThat(engine.HasFlag("escolheu")).IsTrue();
         AssertThat(runner.Advance()).IsFalse();
         AssertThat(runner.Finished).IsTrue();
+    }
+
+    [TestCase]
+    public void Runner_BranchesPickTheFirstMatchingNodeAfterTheBox()
+    {
+        const string json = """
+            {
+              "id": "t",
+              "entries": [ { "node": "a" } ],
+              "nodes": {
+                "a": { "speaker": "benicio", "text": "Deixe-me ver.", "branches": [ { "if": ["!x"], "node": "falta" }, { "node": "ok" } ] },
+                "falta": { "speaker": "benicio", "text": "Falta x." },
+                "ok": { "speaker": "benicio", "text": "Tudo certo." }
+              }
+            }
+            """;
+        var engine = NewEngine();
+        var runner = new DialogueRunner(DialogueFile.Parse(json), engine, "Rui");
+        runner.Start();
+        runner.Advance();
+        AssertThat(runner.CurrentId).IsEqual("falta");
+
+        engine.SetFlag("x");
+        runner = new DialogueRunner(DialogueFile.Parse(json), engine, "Rui");
+        runner.Start();
+        runner.Advance();
+        AssertThat(runner.CurrentId).IsEqual("ok");
     }
 
     [TestCase]

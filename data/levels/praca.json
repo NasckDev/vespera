@@ -89,6 +89,7 @@
     }
   ],
   "npcs": [
+    {"id": "nilza", "at": [560, 600], "facing": "down", "routine": "idle", "dialogue": "nilza", "prompt": "Falar com Tia Nilza", "_note": "Poções e sopa (Ato I). Vem até o jogador na primeira volta da Brecha e dá uma poção."},
     {
       "id": "lis",
       "at": [1200, 400],

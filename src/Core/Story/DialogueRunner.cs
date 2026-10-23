@@ -73,7 +73,7 @@ public sealed class DialogueRunner
         }
         else
         {
-            next = Current.Next;
+            next = Current.Branches.FirstOrDefault(b => StoryConditions.Evaluate(b.Conditions, _story))?.Node ?? Current.Next;
         }
 
         if (next.Length == 0)

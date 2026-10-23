@@ -62,7 +62,7 @@ public static class HuntService
     public static RunReport? Report { get; private set; }
 
     /// <summary>A Lodo-Mãe espera no fim das próximas caçadas (o Benício aprovou o exame do rank E).</summary>
-    public static bool GuardianUnlocked => Story.StoryService.Engine.HasFlag(StoryFlags.GuardianGate) || ReadyForExam;
+    public static bool GuardianUnlocked => Story.StoryService.Engine.HasFlag(StoryFlags.GuardianGate);
 
     /// <summary>Caçadas completas suficientes para o Benício aceitar o exame.</summary>
     public static bool ReadyForExam => Planner.ReadyForExam(State.RunsCompleted);
@@ -266,6 +266,7 @@ public static class HuntService
         }
 
         state.Deaths += survived ? 0 : 1;
+        MarkStory(survived, completed, results.Any(r => r.Done));
         report.Xp = Progression.IsActive ? Progression.State.Xp - _xpAtStart : 0;
         NewDay();
         var after = Progression.IsActive ? Progression.Status : null;
@@ -282,6 +283,32 @@ public static class HuntService
             $"{report.DamageTaken} de dano levado, {report.Seconds:0} s, {report.Fragmentos}+{bonus} Fragmentos, {report.Xp} XP, " +
             $"contratos {results.Count(r => r.Done)}/{results.Count}; caçadas completas {state.RunsCompleted}");
         return summary;
+    }
+
+    /// <summary>Avisa a história do que a caçada deixou (voltou, completou 1 ou 2, caiu, cumpriu contrato).</summary>
+    private static void MarkStory(bool survived, bool completed, bool contract)
+    {
+        Story.StoryService.SetFlag(StoryFlags.HuntBack);
+        if (!survived)
+        {
+            Story.StoryService.SetFlag(StoryFlags.FellOnce);
+        }
+
+        if (contract)
+        {
+            Story.StoryService.SetFlag(StoryFlags.ContractDone);
+        }
+
+        if (survived && completed)
+        {
+            Story.StoryService.SetFlag(StoryFlags.HuntOne);
+            if (State.RunsCompleted >= 2)
+            {
+                Story.StoryService.SetFlag(StoryFlags.HuntTwo);
+            }
+        }
+
+        Story.StoryWatch.Refresh();
     }
 
     /// <summary>Volta da Brecha = um novo "dia": contratos sorteados de novo, flores e quebráveis renovam.</summary>

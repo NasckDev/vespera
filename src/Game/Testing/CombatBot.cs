@@ -22,13 +22,15 @@ namespace Vespera.Game.Testing;
 /// derrota a Lodo-Mãe e volta pela fenda. Depois cai de propósito para provar a Lanterna (bolsa fica na Brecha) e a
 /// recupera. Falha se algo travar ou se o save não receber o saque.
 /// </summary>
-public sealed class CombatBot(Level level, SmokeTest host)
+public sealed partial class CombatBot(Level level, SmokeTest host)
 {
     private const int RoomFrameLimit = 60 * 120;
     private const int StuckFrames = 75;
     private const float AttackReach = 48f;
 
     private readonly List<string> _failures = [];
+
+    public IReadOnlyList<string> Failures => _failures;
     private readonly ScriptedInput _input = new();
 
     /// <summary>Ranks celebrados durante a caçada (a tela de rank abre sozinha depois do Guardião).</summary>
@@ -95,27 +97,19 @@ public sealed class CombatBot(Level level, SmokeTest host)
         var guardiansBefore = Progression.State.GuardiansDefeated.Count;
         var closedBefore = save.BrechasClosed;
         RiftSession.Cheat = true;
-        await OpenPortalAndEnter(hunter);
-        var killed = 0;
-        foreach (var room in RiftSession.Brecha.Rooms)
-        {
-            killed += await ClearRoom(room);
-            if (_failures.Count > 0)
-            {
-                break;
-            }
-        }
 
-        await WaitUntil(() => !level.Switching && World.Data.Id == Level.HubLevelId, 600, "volta à Praça");
+        // O teste isolado da Brecha quer a Lodo-Mãe no fim: abre o portão do exame do Benício.
+        StoryService.SetFlag(StoryFlags.GuardianGate);
+        await OpenPortalAndEnter(hunter);
+        var metrics = await PlayRooms();
         var gained = RiftSession.WalletFragments - shardsBefore;
         Check(!RiftSession.InRift && !Progression.Engine.InRun, "depois do portal de saída a caçada deveria ter acabado");
         Check(save.BrechasClosed == closedBefore + 1, $"Brecha deveria contar como fechada ({save.BrechasClosed})");
         Check(gained > 0, $"a carteira deveria receber Fragmentos (ganhou {gained})");
         Check(Progression.State.GuardiansDefeated.Contains(RiftSession.Brecha.GuardianId), "a progressão deveria registrar a Lodo-Mãe");
         Check(Progression.State.GuardiansDefeated.Count >= guardiansBefore, "conquistas não podem sumir");
-        Check(RankUps.Contains(Vespera.Core.Ranks.Rank.D) || Progression.Rank > Vespera.Core.Ranks.Rank.E, $"a primeira caçada completa deveria subir E -> D (XP {Progression.State.Xp}, rank {Progression.Rank})");
         Log.Info($"bot de combate: rank {Progression.Rank} com {Progression.State.Xp} XP; celebrações: [{string.Join(",", RankUps)}]");
-        Log.Info($"bot de combate: {hunter?.ToString() ?? "arma equipada"} limpou {RiftSession.Brecha.Rooms.Count} salas, {killed} monstros, +{gained} Fragmentos");
+        Log.Info($"bot de combate: {hunter?.ToString() ?? "arma equipada"} limpou {metrics.Rooms} salas, {metrics.Kills} monstros, +{gained} Fragmentos");
         if (_failures.Count == 0 && lanternTest)
         {
             await DieAndRecoverLantern();
@@ -135,10 +129,10 @@ public sealed class CombatBot(Level level, SmokeTest host)
         if (!StoryService.Engine.HasFlag(StoryFlags.StarterBlade))
         {
             // Sem a Lâmina da Odete a fenda não deixa entrar (o bot de combate testa a Brecha isolada: arma o caçador).
-            _input.Tap(InputActions.Interact);
+            await TapInteract();
             await host.PhysicsFrames(4);
             Check(!RiftSession.InRift && level.Hud.PanelOpen, "sem a Lâmina da Odete o portal deveria recusar com um aviso");
-            _input.Tap(InputActions.Interact);
+            await TapInteract();
             await host.PhysicsFrames(4);
             StoryService.SetFlag(StoryFlags.StarterBlade);
         }
@@ -153,62 +147,17 @@ public sealed class CombatBot(Level level, SmokeTest host)
             level.EnterRift(other);
         }
         await WaitUntil(() => !level.Switching && World.Director is not null, 600, "primeira sala");
-        Check(World.Data.Id == RiftSession.Brecha.Rooms[0], $"primeira sala deveria ser {RiftSession.Brecha.Rooms[0]}, foi {World.Data.Id}");
-    }
-
-    private async Task<int> ClearRoom(string room)
-    {
-        await WaitUntil(() => !level.Switching && World.Data.Id == room && World.Director is not null, 600, $"sala {room}");
-        Bind();
-        var director = World.Director!;
-        var seen = new HashSet<Enemy>();
-        var frames = 0;
-        var stuck = 0;
-        var lastDistance = float.MaxValue;
-        while (!director.Cleared && frames++ < RoomFrameLimit)
-        {
-            var target = director.Alive.OrderBy(e => e.GlobalPosition.DistanceTo(World.Player.GlobalPosition)).FirstOrDefault();
-            if (target is null)
-            {
-                _input.Move = Vector2.Zero;
-                await host.PhysicsFrames(1);
-                continue;
-            }
-
-            seen.Add(target);
-            var to = target.GlobalPosition - World.Player.GlobalPosition;
-            var distance = to.Length();
-            stuck = distance < lastDistance - 0.5f || distance < AttackReach * S ? 0 : stuck + 1;
-            lastDistance = distance;
-            if (stuck > StuckFrames)
-            {
-                World.Player.Teleport(World.ClampToFloor(target.GlobalPosition + (Vector2.Down * 30f * S)));
-                stuck = 0;
-            }
-
-            _input.Move = distance > AttackReach * S * 0.8f ? to.Normalized() : Vector2.Zero;
-            if (distance < (AttackReach + target.HitRadius) * S * 1.6f && frames % 8 == 0)
-            {
-                _input.Tap(frames % 96 == 0 ? InputActions.Heavy : InputActions.Attack);
-            }
-
-            await ShotMoments(room, frames);
-            await host.PhysicsFrames(1);
-        }
-
-        _input.Move = Vector2.Zero;
-        Check(director.Cleared, $"sala {room} não ficou limpa em {RoomFrameLimit / 60} s");
-        await CollectAndLeave(director);
-        return seen.Count;
+        Check(World.Data.Id == RiftSession.CurrentRoom, $"primeira sala deveria ser {RiftSession.CurrentRoom} (da caçada sorteada), foi {World.Data.Id}");
     }
 
     private async Task CollectAndLeave(RoomDirector director)
     {
+        await RestAndBreak(director);
         if (director.Chest is { } chest)
         {
             World.Player.Teleport(World.ClampToFloor(chest.GlobalPosition + (Vector2.Down * 40f * S)));
             await host.PhysicsFrames(4);
-            _input.Tap(InputActions.Interact);
+            await TapInteract();
             await host.PhysicsFrames(6);
             Check(chest.IsOpen, "interagir com o baú deveria abri-lo");
         }
@@ -216,7 +165,15 @@ public sealed class CombatBot(Level level, SmokeTest host)
         await host.PhysicsFrames(90);
         if (director.ExitPortal is null && World.Data.Rift?.ExitPortal is not null)
         {
-            await WaitUntil(() => director.ExitPortal is not null, 400, "fenda de saída");
+            var waited = 0;
+            while (director.ExitPortal is null && waited < 1200)
+            {
+                await WaitUntil(() => director.ExitPortal is not null, 60, string.Empty, quiet: true);
+                waited += 60;
+            }
+
+            Log.Info($"bot: fenda de saída {(director.ExitPortal is null ? "NÃO abriu" : "abriu")} depois de ~{waited + 90} quadros (pausado {host.GetTree().Paused})");
+            Check(director.ExitPortal is not null, "bot de combate: a fenda de saída não abriu");
         }
 
         await WaitUntil(() => RankUpScreen.Active is null && !host.GetTree().Paused, 400, "celebração de rank fechada");
@@ -224,8 +181,19 @@ public sealed class CombatBot(Level level, SmokeTest host)
         {
             World.Player.Teleport(World.ClampToFloor(portal.GlobalPosition + (Vector2.Down * 40f * S)));
             await host.PhysicsFrames(6);
-            _input.Tap(InputActions.Interact);
-            await host.PhysicsFrames(6);
+            var room = RiftSession.RoomIndex;
+            for (var attempt = 0; attempt < 5 && !level.Switching && RiftSession.InRift && RiftSession.RoomIndex == room; attempt++)
+            {
+                // Como um jogador: se o aperto não pegou (aviso na tela, golpe acabando), aperta de novo.
+                if (attempt > 0)
+                {
+                    Log.Info($"bot: Interagir na fenda não pegou (tentativa {attempt + 1}); foco '{World.Player.Focus?.Kind}', painel {level.Hud.PanelOpen}");
+                }
+
+                await TapInteract();
+                await host.PhysicsFrames(20);
+            }
+
             return;
         }
 
@@ -255,6 +223,7 @@ public sealed class CombatBot(Level level, SmokeTest host)
         await host.PhysicsFrames(2);
         World.Player.Combat.Digest(99999);
         await WaitUntil(() => !level.Switching && World.Data.Id == Level.HubLevelId && !RiftSession.InRift, 900, "volta à Praça depois da queda");
+        await CloseResults();
         Check(RiftSession.LanternFragments == held, $"a queda deveria deixar {held} Fragmentos na Lanterna (tem {RiftSession.LanternFragments})");
         Check(RiftSession.WalletFragments == wallet, "os Fragmentos da caçada não deveriam entrar na carteira na queda");
         Check(!World.Player.Combat.IsDead && World.Player.Combat.Hp > 0, "o caçador deveria acordar vivo na Praça");
@@ -268,6 +237,7 @@ public sealed class CombatBot(Level level, SmokeTest host)
         RiftSession.Cheat = true;
         World.Player.Combat.Digest(99999);
         await WaitUntil(() => !level.Switching && World.Data.Id == Level.HubLevelId && !RiftSession.InRift, 900, "volta final");
+        await CloseResults();
         World.Player.Combat.RefreshStats(fullHeal: true);
         Log.Info($"bot de combate: {held} Fragmentos ficaram na Lanterna na queda e voltaram na reentrada");
     }
@@ -278,7 +248,7 @@ public sealed class CombatBot(Level level, SmokeTest host)
         _input.Move = Vector2.Zero;
     }
 
-    private async Task WaitUntil(Func<bool> condition, int frames, string what)
+    private async Task WaitUntil(Func<bool> condition, int frames, string what, bool quiet = false)
     {
         for (var i = 0; i < frames && !condition(); i++)
         {
@@ -293,7 +263,7 @@ public sealed class CombatBot(Level level, SmokeTest host)
             await host.PhysicsFrames(1);
         }
 
-        Check(condition(), $"bot de combate: tempo esgotado esperando {what} (sala {World.Data.Id}, trocando {level.Switching}, " +
+        Check(quiet || condition(), $"bot de combate: tempo esgotado esperando {what} (sala {World.Data.Id}, trocando {level.Switching}, " +
             $"na Brecha {RiftSession.InRift}, pausado {host.GetTree().Paused}, celebração {RankUpScreen.Active is not null}, " +
             $"tela {SceneRouter.Instance.Current?.Name}, foco '{World.Player.Focus?.Kind}', congelado {World.Player.Frozen}, estado {World.Player.Combat.State}, golpe ocupado {World.Player.Combat.Moves.Busy}, anim {World.Player.CurrentAnimation})");
     }
