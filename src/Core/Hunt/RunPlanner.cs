@@ -111,9 +111,15 @@ public sealed class RunPlanner(HuntConfig config)
         {
             var extra = index == 0 ? 0 : growth;
             var size = Math.Min(config.MaxWaveSize, (int)Math.Round(config.FirstWaveSize + (config.WaveSizePerRoom * index) + (w * 0.5 * depth) + extra));
+            if (kind == RoomKind.Elite)
+            {
+                // Sala de elite: menos monstros, cada um mais perigoso (o playtest do bot caía sempre aqui).
+                size = Math.Max(2, size - 2);
+            }
+
             var points = Shuffle(spawns.Count, random).Take(size).ToList();
             var wave = new List<SpawnPlan>(size);
-            var elites = EliteCount(kind, index, w, waveCount, random);
+            var elites = EliteCount(kind, index, w, waveCount, growth > 0, random);
             for (var s = 0; s < size; s++)
             {
                 var monster = random.NextDouble() < espectroShare ? Espectro : Lodo;
@@ -127,12 +133,12 @@ public sealed class RunPlanner(HuntConfig config)
         return waves;
     }
 
-    private int EliteCount(RoomKind kind, int index, int wave, int waveCount, IRandom random)
+    private int EliteCount(RoomKind kind, int index, int wave, int waveCount, bool veteran, IRandom random)
     {
         if (kind == RoomKind.Elite)
         {
-            // Sala de elite: um elite por onda e dois na última.
-            return wave == waveCount - 1 ? 2 : 1;
+            // Sala de elite: um elite por onda; dois na última depois da primeira caçada completa.
+            return veteran && wave == waveCount - 1 ? 2 : 1;
         }
 
         return index >= config.EliteChanceFromRoom && random.NextDouble() < config.EliteChance ? 1 : 0;

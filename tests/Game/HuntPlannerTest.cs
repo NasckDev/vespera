@@ -51,6 +51,7 @@ public class HuntPlannerTest
             AssertThat(plan.Rooms.Count(r => r.Kind == RoomKind.Treasure)).IsLessEqual(1);
             AssertThat(plan.MonsterCount).IsGreaterEqual(20);
             AssertThat(plan.Rooms[^1].EliteCount).IsGreaterEqual(2);
+            AssertThat(plan.Rooms[^1].MonsterCount).IsLess(plan.MonsterCount / 2);
             foreach (var room in plan.Rooms)
             {
                 AssertThat(Config.Grounds[room.Ground].Kinds).Contains(room.Kind);

@@ -37,7 +37,7 @@
       "critPct": 3.0,
       "partBreakPct": 5.0,
       "tiers": [
-        { "rank": "E", "name": "Arco do Cais", "damage": 11 },
+        { "rank": "E", "name": "Arco do Cais", "damage": 14 },
         { "rank": "D", "name": "Arco do Peixe-Lanterna", "damage": 22 },
         { "rank": "C", "name": "Arco dos Ossos", "damage": 32 },
         { "rank": "B", "name": "Arco da Fornalha", "damage": 52 },
@@ -55,7 +55,7 @@
       "critPct": 2.0,
       "partBreakPct": 11.0,
       "tiers": [
-        { "rank": "E", "name": "Martelo da Doca", "damage": 17 },
+        { "rank": "E", "name": "Martelo da Doca", "damage": 22 },
         { "rank": "D", "name": "Martelo de Âncora", "damage": 32 },
         { "rank": "C", "name": "Martelo da Lápide", "damage": 55 },
         { "rank": "B", "name": "Martelo da Bigorna", "damage": 76 },

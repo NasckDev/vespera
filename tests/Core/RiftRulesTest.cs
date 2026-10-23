@@ -43,7 +43,7 @@ public class RiftRulesTest
     {
         var lodo = Rules.Stats("lodo");
         AssertThat(Rules.RankIndex).IsEqual(0);
-        AssertThat(lodo.Hp).IsEqual(34.0);
+        AssertThat(lodo.Hp).IsEqual(28.0);
         AssertThat(lodo.Damage).IsEqual(9.0);
         AssertThrown(() => Rules.Stats("dragao")).IsInstanceOf<ArgumentException>();
     }

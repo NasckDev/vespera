@@ -1,13 +1,19 @@
 {
   "id": "ato1_fim",
-  "entries": [{ "node": "n1" }],
+  "entries": [
+    {
+      "node": "n1"
+    }
+  ],
   "nodes": {
     "n1": {
       "speaker": "narrador",
       "look": "lanterna",
       "fx": "glow",
       "text": "A Brecha se fecha com um estalo de luz. Na praça, a grande lanterna brilha mais forte.",
-      "set": ["ato1_fim_done"],
+      "set": [
+        "ato1_fim_done"
+      ],
       "next": "n2"
     },
     "n2": {
@@ -47,12 +53,26 @@
     "n7": {
       "speaker": "benicio",
       "text": "Descanse. Melhore a arma com a Odete. Quando o caminho do Pomar abrir, você vai primeiro.",
-      "next": "n8"
+      "next": "n7b"
     },
     "n8": {
       "speaker": "narrador",
       "look": "player",
       "text": "Fim do Ato I. A Brecha dos esgotos continua aberta: você pode voltar para caçar quando quiser."
+    },
+    "n7b": {
+      "speaker": "narrador",
+      "look": "player",
+      "fx": "glow",
+      "text": "Nesse momento, a sua lanterna pisca três vezes. A chama se inclina para o leste, na direção do Pomar Alto.",
+      "next": "n7c"
+    },
+    "n7c": {
+      "speaker": "benicio",
+      "expression": 2,
+      "look": "player",
+      "text": "Lanternas não fazem isso, {nome}. A não ser que alguém do outro lado esteja chamando.",
+      "next": "n8"
     }
   }
 }

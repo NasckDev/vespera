@@ -49,11 +49,29 @@ public partial class SmokeTest
         progress.Flags.Clear();
         progress.ObjectiveId = string.Empty;
         StoryService.Engine.BeginCampaignIfNew();
+        ApplyClassFlag(start);
         var level = await ActOnePrologue(start);
         level = await ActOneForge(level);
         level = await ActOneBackToPraca(level);
         level = await ActOneArc(level);
         await ActOneEpilogue(level);
+    }
+
+    /// <summary><c>--classe=bow|hammer|sword</c>: joga o Ato I com outra arma (comparação de classes no QA).</summary>
+    private void ApplyClassFlag(Level start)
+    {
+        var arg = System.Array.Find(_args, a => a.StartsWith("--classe=", System.StringComparison.Ordinal));
+        if (arg is null || GameSession.Data is not { } data)
+        {
+            return;
+        }
+
+        var weapon = arg["--classe=".Length..];
+        SaveService.ChangeClass(data, weapon);
+        Progression.Reset();
+        RiftSession.Hunter = RiftSession.HunterFor(weapon);
+        start.Player.SetHunter(RiftSession.Hunter);
+        Log.Info($"ato I com a classe {weapon} ({Progression.Engine.ClassId})");
     }
 
     private async Task<Level> ActOnePrologue(Level level)

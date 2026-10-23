@@ -1,13 +1,45 @@
 {
   "id": "benicio_quadro",
   "entries": [
-    { "if": ["GuardianDefeated:lodo_mae"], "node": "g1" },
-    { "if": ["exame_e"], "node": "pronto" },
-    { "if": ["hunt_back"], "node": "hub" },
-    { "if": ["starter_blade"], "node": "lembra_brecha" },
-    { "if": ["met_ravi"], "node": "lembra_odete" },
-    { "if": ["registered"], "node": "lembra_ravi" },
-    { "node": "b1" }
+    {
+      "if": [
+        "GuardianDefeated:lodo_mae"
+      ],
+      "node": "g1"
+    },
+    {
+      "if": [
+        "exame_e"
+      ],
+      "node": "pronto"
+    },
+    {
+      "if": [
+        "hunt_back"
+      ],
+      "node": "hub"
+    },
+    {
+      "if": [
+        "starter_blade"
+      ],
+      "node": "lembra_brecha"
+    },
+    {
+      "if": [
+        "met_ravi"
+      ],
+      "node": "lembra_odete"
+    },
+    {
+      "if": [
+        "registered"
+      ],
+      "node": "lembra_ravi"
+    },
+    {
+      "node": "b1"
+    }
   ],
   "nodes": {
     "b1": {
@@ -20,21 +52,27 @@
       "speaker": "benicio",
       "look": "brecha",
       "expression": 2,
-      "text": "Aquela Brecha vai crescer se ninguém fizer nada. Lá dentro moram monstros do Avesso.",
+      "text": "Aquela Brecha vai crescer se ninguém entrar. Lá dentro moram monstros do Avesso. E lá dentro ficam os Fragmentos.",
       "next": "b3"
     },
     "b3": {
       "speaker": "benicio",
       "look": "benicio",
-      "text": "O seu trabalho é caçar lá dentro e voltar inteiro. Cada caçada deixa você mais forte.",
+      "text": "Fragmentos são cristais que mantêm as lanternas da cidade acesas. Sem eles, o escuro volta. Por isso existem caçadores.",
       "choices": [
-        { "text": "Entendi. Eu faço isso.", "next": "b4" },
-        { "text": "O que é o Avesso?", "next": "m1" }
+        {
+          "text": "Entendi. Eu vou caçar.",
+          "next": "b4"
+        },
+        {
+          "text": "O que é o Avesso?",
+          "next": "m1"
+        }
       ]
     },
     "m1": {
       "speaker": "benicio",
-      "text": "O Avesso é uma Lumeira de cabeça para baixo. É feito de tudo o que a cidade esqueceu.",
+      "text": "O Avesso é uma Lumeira de cabeça para baixo. É feito de tudo o que a cidade esqueceu. Os monstros são pedaços desse esquecimento.",
       "next": "m2"
     },
     "m2": {
@@ -47,7 +85,9 @@
       "speaker": "benicio",
       "look": "player",
       "text": "Mas você está de mãos vazias. Vá até a Odete, a ferreira. A Forja fica depois da ponte, a oeste.",
-      "set": ["registered"],
+      "set": [
+        "registered"
+      ],
       "next": "b5"
     },
     "b5": {
@@ -73,17 +113,31 @@
       "speaker": "benicio",
       "text": "Voltou inteiro. Bom. Em que posso ajudar?",
       "choices": [
-        { "text": "Quero fazer o exame.", "next": "ex1" },
-        { "text": "Ver os contratos do mural.", "next": "contratos" },
-        { "text": "Por que existe um exame?", "next": "porque" },
-        { "text": "Nada, até logo.", "next": "tchau" }
+        {
+          "text": "Quero fazer o exame.",
+          "next": "ex1"
+        },
+        {
+          "text": "Ver os contratos do mural.",
+          "next": "contratos"
+        },
+        {
+          "text": "Por que existe um exame?",
+          "next": "porque"
+        },
+        {
+          "text": "Nada, até logo.",
+          "next": "tchau"
+        }
       ]
     },
     "contratos": {
       "speaker": "benicio",
       "look": "mural",
       "text": "Cada contrato vale para a próxima caçada. Cumpra e eu pago em XP, Fragmentos e Lumes.",
-      "events": ["OpenContracts"]
+      "events": [
+        "OpenContracts"
+      ]
     },
     "porque": {
       "speaker": "benicio",
@@ -101,10 +155,27 @@
       "look": "player",
       "text": "Deixe-me ver se você está pronto.",
       "branches": [
-        { "if": ["!hunt_2"], "node": "falta_cacada" },
-        { "if": ["!forged"], "node": "falta_forja" },
-        { "if": ["!xp_ready"], "node": "falta_xp" },
-        { "node": "ex_ok" }
+        {
+          "if": [
+            "!hunt_2"
+          ],
+          "node": "falta_cacada"
+        },
+        {
+          "if": [
+            "!forged"
+          ],
+          "node": "falta_forja"
+        },
+        {
+          "if": [
+            "!xp_ready"
+          ],
+          "node": "falta_xp"
+        },
+        {
+          "node": "ex_ok"
+        }
       ]
     },
     "falta_cacada": {
@@ -123,7 +194,9 @@
       "speaker": "benicio",
       "expression": 2,
       "text": "Duas caçadas, arma forjada, experiência de sobra. Você passou no exame, {nome}.",
-      "set": ["exame_e"],
+      "set": [
+        "exame_e"
+      ],
       "next": "ex_ok2"
     },
     "ex_ok2": {
@@ -144,8 +217,14 @@
       "look": "brecha",
       "text": "A Lodo-Mãe espera no fim da Brecha. Compre poções com a Tia Nilza antes de ir.",
       "choices": [
-        { "text": "Ver os contratos do mural.", "next": "contratos" },
-        { "text": "Estou pronto.", "next": "tchau" }
+        {
+          "text": "Ver os contratos do mural.",
+          "next": "contratos"
+        },
+        {
+          "text": "Estou pronto.",
+          "next": "tchau"
+        }
       ]
     },
     "tchau": {
@@ -156,9 +235,18 @@
       "speaker": "benicio",
       "text": "Você fechou a Brecha, {nome}. A cidade está mais segura por sua causa.",
       "choices": [
-        { "text": "Ver os contratos do mural.", "next": "contratos" },
-        { "text": "E o Pomar Alto?", "next": "g2" },
-        { "text": "Até logo.", "next": "tchau" }
+        {
+          "text": "Ver os contratos do mural.",
+          "next": "contratos"
+        },
+        {
+          "text": "E o Pomar Alto?",
+          "next": "g2"
+        },
+        {
+          "text": "Até logo.",
+          "next": "tchau"
+        }
       ]
     },
     "g2": {
