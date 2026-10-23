@@ -308,6 +308,11 @@ public partial class LevelWorld : Node2D
         var at = new Vector2(zone.At[0], zone.At[1]);
         if (zone.Kind == "brecha")
         {
+            if (!RiftSession.InRift)
+            {
+                RiftSession.Select(zone.Brecha);
+            }
+
             // Depois de N caçadas completas a Brecha "fica mais forte": fenda maior e vermelha (a Lodo-Mãe espera no fim).
             var empowered = Progression.IsActive && Hunter.HuntService.GuardianUnlocked;
             var portal = new BreachPortal(PracaPortalHeight * _data.ActorScale * (empowered ? 1.2f : 1f), zone.Kind, zone.Prompt, zone.Radius)
@@ -317,18 +322,21 @@ public partial class LevelWorld : Node2D
                 Empowered = empowered,
             };
             portal.Zone.Text = zone.Text;
+            portal.Zone.Target = zone.Brecha;
             Entities.AddChild(portal);
             _solids.Add(portal.Footprint);
             _zones.Add(portal.Zone);
             return;
         }
 
+        // Saída trancada pela história (ex.: Praça → Pomar Alto só depois da Lodo-Mãe): vira placa com o aviso.
+        var locked = zone.Requires.Count > 0 && !Vespera.Core.Story.StoryConditions.Evaluate(zone.Requires, Story.StoryService.Engine);
         var area = new Interactable(zone.Kind, zone.Prompt, zone.Radius)
         {
             Name = $"zone_{zone.Kind}_{_zones.Count}",
-            Text = zone.Text,
+            Text = locked ? zone.LockedText : zone.Text,
             Dialogue = zone.Dialogue,
-            Target = zone.Target,
+            Target = locked ? string.Empty : zone.Target,
             TargetSpawn = zone.Spawn,
             Position = at,
             PromptAnchor = at - new Vector2(0, DoorPromptHeight * _data.ActorScale),

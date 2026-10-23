@@ -33,9 +33,7 @@ public sealed record RunPlan(int Seed, IReadOnlyList<RoomPlan> Rooms)
 /// </summary>
 public sealed class RunPlanner(HuntConfig config)
 {
-    private const string Lodo = "lodo";
-    private const string Espectro = "espectro";
-    private const string FinalGround = "esgoto_arena";
+    private const float SwarmOffset = 40f;
 
     public HuntConfig Config => config;
 
@@ -55,7 +53,7 @@ public sealed class RunPlanner(HuntConfig config)
         string? previous = null;
         for (var i = 0; i < count; i++)
         {
-            var ground = i == count - 1 ? FinalGround : PickGround(kinds[i], previous, random);
+            var ground = i == count - 1 ? config.FinalGround : PickGround(kinds[i], previous, random);
             previous = ground;
             rooms.Add(new RoomPlan(i, ground, kinds[i], Waves(ground, kinds[i], i, count, growth, random)));
         }
@@ -122,9 +120,15 @@ public sealed class RunPlanner(HuntConfig config)
             var elites = EliteCount(kind, index, w, waveCount, growth > 0, random);
             for (var s = 0; s < size; s++)
             {
-                var monster = random.NextDouble() < espectroShare ? Espectro : Lodo;
+                var second = random.NextDouble() < espectroShare;
+                var monster = second ? config.SecondMonster : config.CommonMonster;
                 var p = spawns[points[s]];
                 wave.Add(new SpawnPlan(monster, p[0], p[1], s < elites));
+                // Enxame: o segundo monstro chega em bando, nos arredores do mesmo ponto (o diretor prende ao chão).
+                for (var k = 1; second && k < config.SecondSwarm; k++)
+                {
+                    wave.Add(new SpawnPlan(monster, p[0] + (SwarmOffset * (k % 2 == 0 ? 1 : -1)), p[1] + (SwarmOffset * 0.5f * k), false));
+                }
             }
 
             waves.Add(wave);

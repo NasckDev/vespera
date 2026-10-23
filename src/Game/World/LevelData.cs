@@ -154,6 +154,14 @@ public sealed class ZoneData
 
     /// <summary>Id de uma fala em data/dialogue (zona do tipo "talk").</summary>
     public string Dialogue { get; set; } = string.Empty;
+
+    /// <summary>Zona "brecha": id da Brecha (<c>RiftSession.BrechaFiles</c>); vazio = Esgotos do Mercado.</summary>
+    public string Brecha { get; set; } = string.Empty;
+
+    /// <summary>Saída que só abre com estas condições de história (mesma sintaxe das falas); senão mostra <see cref="LockedText"/>.</summary>
+    public List<string> Requires { get; set; } = [];
+
+    public string LockedText { get; set; } = string.Empty;
 }
 
 /// <summary>NPC posicionado numa fase. <see cref="Routine"/>: "idle" fica parado; "patrol" anda entre os pontos de <see cref="Path"/>.</summary>

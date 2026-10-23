@@ -30,18 +30,44 @@ public static class HuntService
 {
     public const string ConfigFile = "res://data/cacada/cacada.json";
 
-    private static HuntConfig? _config;
-    private static RunPlanner? _planner;
+    private static readonly Dictionary<string, (HuntConfig Config, RunPlanner Planner)> Loaded = [];
     private static bool _luckActive;
     private static RankStatus? _rankAtStart;
     private static int _xpAtStart;
     private static int _hitsAtRoomStart;
     private static bool _subscribed;
 
-    public static HuntConfig Config => _config ??= HuntConfig.Parse(UserFile.ReadText(ConfigFile)
-        ?? throw new InvalidOperationException($"Dado do jogo ausente: {ConfigFile}"));
+    /// <summary>Regras de caçada da Brecha escolhida (<see cref="BrechaDef.Hunt"/>; Ato I: <see cref="ConfigFile"/>).</summary>
+    public static HuntConfig Config => Rules.Config;
 
-    public static RunPlanner Planner => _planner ??= new RunPlanner(Config);
+    public static RunPlanner Planner => Rules.Planner;
+
+    private static (HuntConfig Config, RunPlanner Planner) Rules
+    {
+        get
+        {
+            var file = RiftSession.Brecha.Hunt.Length > 0 ? RiftSession.Brecha.Hunt : ConfigFile;
+            if (!Loaded.TryGetValue(file, out var rules))
+            {
+                var config = HuntConfig.Parse(UserFile.ReadText(file) ?? throw new InvalidOperationException($"Dado do jogo ausente: {file}"));
+                rules = (config, new RunPlanner(config));
+                Loaded[file] = rules;
+            }
+
+            return rules;
+        }
+    }
+
+    /// <summary>A Brecha escolhida não é a do Ato I (contagem de caçadas e portão do Guardião pela história).</summary>
+    private static bool OtherBrecha => RiftSession.Brecha.Id != "esgotos_do_mercado";
+
+    /// <summary>Flag de história de uma caçada nesta Brecha (<c>pomar_podre:hunt_1</c>, <c>pomar_podre:hunt_2</c>).</summary>
+    public static string BrechaFlag(string suffix) => $"{RiftSession.Brecha.Id}:{suffix}";
+
+    /// <summary>Caçadas completas nesta Brecha (Ato I: o contador do save; outras: as flags da história).</summary>
+    public static int BrechaRunsCompleted => !OtherBrecha
+        ? State.RunsCompleted
+        : Story.StoryService.Engine.HasFlag(BrechaFlag("hunt_2")) ? 2 : Story.StoryService.Engine.HasFlag(BrechaFlag("hunt_1")) ? 1 : 0;
 
     public static ContractBoard Board => new(Config, MaterialName);
 
@@ -62,7 +88,9 @@ public static class HuntService
     public static RunReport? Report { get; private set; }
 
     /// <summary>A Lodo-Mãe espera no fim das próximas caçadas (o Benício aprovou o exame do rank E).</summary>
-    public static bool GuardianUnlocked => Story.StoryService.Engine.HasFlag(StoryFlags.GuardianGate);
+    public static bool GuardianUnlocked => OtherBrecha
+        ? BrechaRunsCompleted >= Config.GuardianAfterRuns
+        : Story.StoryService.Engine.HasFlag(StoryFlags.GuardianGate);
 
     /// <summary>Caçadas completas suficientes para o Benício aceitar o exame.</summary>
     public static bool ReadyForExam => Planner.ReadyForExam(State.RunsCompleted);
@@ -107,7 +135,7 @@ public static class HuntService
         _ = Contracts;
         state.RunsStarted++;
         var seed = state.NextSeed++;
-        Plan = Planner.Plan(seed, state.RunsCompleted, GuardianUnlocked);
+        Plan = Planner.Plan(seed, BrechaRunsCompleted, GuardianUnlocked);
         Report = new RunReport { RoomCount = Plan.Rooms.Count };
         _luckActive = state.WellLuck;
         state.WellLuck = false;
@@ -129,7 +157,7 @@ public static class HuntService
         {
             RoomKind.Rest => "Descanso",
             RoomKind.Treasure => "Tesouro",
-            RoomKind.Guardian => "Covil da Lodo-Mãe",
+            RoomKind.Guardian => OtherBrecha ? $"Covil da {GuardianName}" : "Covil da Lodo-Mãe",
             RoomKind.Elite when last => "Covil",
             RoomKind.Elite => "Ninho de elite",
             _ => ground.Rift?.Title.Split('—')[^1].Trim() ?? "Galeria",
@@ -299,6 +327,17 @@ public static class HuntService
             Story.StoryService.SetFlag(StoryFlags.ContractDone);
         }
 
+        if (survived && completed && OtherBrecha)
+        {
+            var had = BrechaRunsCompleted;
+            Story.StoryService.SetFlag(BrechaFlag(had >= 1 ? "hunt_2" : "hunt_1"));
+        }
+
+        if (!survived && OtherBrecha)
+        {
+            Story.StoryService.SetFlag(BrechaFlag("fell"));
+        }
+
         if (survived && completed)
         {
             Story.StoryService.SetFlag(StoryFlags.HuntOne);
@@ -461,6 +500,11 @@ public static class HuntService
             }
         };
     }
+
+    /// <summary>Nome do Guardião da Brecha escolhida (catálogo de monstros da Brecha).</summary>
+    private static string GuardianName => RiftSession.Brecha.Monsters.TryGetValue(RiftSession.Brecha.GuardianId, out var m)
+        ? System.Globalization.CultureInfo.GetCultureInfo("pt-BR").TextInfo.ToTitleCase(m.Name.ToLowerInvariant())
+        : RiftSession.Brecha.GuardianId;
 
     public static string MaterialName(string id) =>
         Progression.Catalog.Materials.TryGetValue(id, out var m) ? m.Name : id;

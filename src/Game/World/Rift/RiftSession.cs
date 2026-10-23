@@ -19,16 +19,47 @@ public static class RiftSession
 {
     public const string BrechaFile = "res://src/Data/brecha_esgotos.json";
 
-    private static BrechaDef? _brecha;
+    /// <summary>Brechas jogáveis por id (zona "brecha" da fase com <c>"brecha": "&lt;id&gt;"</c>; sem id = esgotos).</summary>
+    public static readonly System.Collections.Generic.Dictionary<string, string> BrechaFiles = new()
+    {
+        ["esgotos_do_mercado"] = BrechaFile,
+        ["pomar_podre"] = "res://src/Data/brecha_pomar.json",
+    };
+
+    private static readonly System.Collections.Generic.Dictionary<string, BrechaDef> Loaded = [];
+    private static string _selected = "esgotos_do_mercado";
     private static RiftRules? _rules;
     private static SaveData? _fallback;
 
     public static GameDatabase Db => SaveService.Database;
 
-    public static BrechaDef Brecha => _brecha ??= BrechaDef.Parse(UserFile.ReadText(BrechaFile)
-        ?? throw new System.InvalidOperationException($"Dado do jogo ausente: {BrechaFile}"));
+    /// <summary>A Brecha escolhida (a última em que o caçador entrou ou vai entrar).</summary>
+    public static BrechaDef Brecha => Load(_selected);
 
     public static RiftRules Rules => _rules ??= new RiftRules(Db, Brecha);
+
+    /// <summary>Escolhe a Brecha da próxima caçada (fora da Brecha). Id vazio ou desconhecido = esgotos.</summary>
+    public static void Select(string? brechaId)
+    {
+        var id = !string.IsNullOrEmpty(brechaId) && BrechaFiles.ContainsKey(brechaId) ? brechaId : "esgotos_do_mercado";
+        if (id != _selected)
+        {
+            _selected = id;
+            _rules = null;
+        }
+    }
+
+    public static BrechaDef Load(string id)
+    {
+        if (!Loaded.TryGetValue(id, out var def))
+        {
+            var file = BrechaFiles[id];
+            def = BrechaDef.Parse(UserFile.ReadText(file) ?? throw new System.InvalidOperationException($"Dado do jogo ausente: {file}"));
+            Loaded[id] = def;
+        }
+
+        return def;
+    }
 
     public static SaveData Save => GameSession.Data ?? (_fallback ??= SaveData.NewGame(Db, null, SaveService.DefaultClassId));
 
