@@ -14,11 +14,41 @@ public static class NpcSprites
     public const float IdleFps = 4f;
     public const float WalkFps = 12f;
 
-    private static readonly Dictionary<string, SpriteFrames> Cache = [];
+    private const float FallbackStanding = 120f;
 
-    public static bool Exists(string id) => ResourceLoader.Exists($"{Folder}/npc_{id}_andar_baixo.png");
+    private static readonly Dictionary<string, SpriteFrames> Cache = [];
+    private static Dictionary<string, float>? _standing;
+
+    /// <summary>O NPC tem arte aprovada (ao menos a tira "parado" de frente).</summary>
+    public static bool Exists(string id) => ResourceLoader.Exists($"{Folder}/npc_{id}_parado_baixo.png");
+
+    /// <summary>Tem tiras de andar (Benício não tem: fica estacionário).</summary>
+    public static bool HasWalk(string id) => ResourceLoader.Exists($"{Folder}/npc_{id}_andar_baixo.png");
 
     public static void ClearCache() => Cache.Clear();
+
+    /// <summary>
+    /// Altura opaca (px da célula 192) do NPC em pé, de <c>npcs.json</c> (gravada pelo importador). A escala do sprite é
+    /// altura-alvo ÷ este valor (<see cref="Vespera.Game.World.ScaleRegistry"/>).
+    /// </summary>
+    public static float StandingHeight(string id)
+    {
+        if (_standing is null)
+        {
+            _standing = [];
+            var json = Godot.FileAccess.GetFileAsString($"{Folder}/npcs.json");
+            if (!string.IsNullOrEmpty(json))
+            {
+                var data = Json.ParseString(json).AsGodotDictionary();
+                foreach (var key in data.Keys)
+                {
+                    _standing[key.AsString()] = data[key].AsGodotDictionary()["standing_height"].AsSingle();
+                }
+            }
+        }
+
+        return _standing.TryGetValue(id, out var height) ? height : FallbackStanding;
+    }
 
     public static string Animation(bool walking, Facing facing) => $"{(walking ? "walk" : "idle")}_{FacingName(facing)}";
 
@@ -34,7 +64,10 @@ public static class NpcSprites
         foreach (var facing in new[] { Facing.Down, Facing.Up, Facing.Side })
         {
             AddStrip(frames, id, facing, walking: false);
-            AddStrip(frames, id, facing, walking: true);
+            if (HasWalk(id))
+            {
+                AddStrip(frames, id, facing, walking: true);
+            }
         }
 
         Cache[id] = frames;
@@ -48,7 +81,7 @@ public static class NpcSprites
         var name = Animation(walking, facing);
         frames.AddAnimation(name);
         frames.SetAnimationLoopMode(name, SpriteFrames.LoopMode.Linear);
-        frames.SetAnimationSpeed(name, walking ? WalkFps * count / 6f : IdleFps);
+        frames.SetAnimationSpeed(name, walking ? WalkFps * count / 6f : (count >= 4 ? IdleFps : IdleFps / 2.5f));
         for (var i = 0; i < count; i++)
         {
             frames.AddFrame(name, new AtlasTexture

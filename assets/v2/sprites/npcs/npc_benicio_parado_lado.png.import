@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://brp75wt5w40w3"
-path="res://.godot/imported/chao_forjas.jpg-503456211e4dc6f95233fc82b421401f.ctex"
+uid="uid://bi7dfc4y6i0tm"
+path="res://.godot/imported/npc_benicio_parado_lado.png-91fac1efd420adfb87c377632e89fab1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/v2/cenarios/forjas/chao_forjas.jpg"
-dest_files=["res://.godot/imported/chao_forjas.jpg-503456211e4dc6f95233fc82b421401f.ctex"]
+source_file="res://assets/v2/sprites/npcs/npc_benicio_parado_lado.png"
+dest_files=["res://.godot/imported/npc_benicio_parado_lado.png-91fac1efd420adfb87c377632e89fab1.ctex"]
 
 [params]
 

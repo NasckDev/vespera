@@ -25,8 +25,23 @@ public sealed class LevelData
 
     public float[] Spawn { get; set; } = [0, 0];
 
-    /// <summary>Escala dos personagens nesta fase (o caçador fica com ~1/1,3 da altura de uma porta pintada).</summary>
-    public float ActorScale { get; set; } = 1f;
+    /// <summary>
+    /// Altura (px de mundo) de uma porta pintada do chão: a régua do mapa (PLANO-V2 §2.1). A altura humana é
+    /// 0,75 x isto e tudo deriva dela via <see cref="ScaleRegistry"/>. 0 = mapa antigo, vale <see cref="ActorScale"/> do JSON.
+    /// </summary>
+    public float DoorHeight { get; set; }
+
+    private float _actorScale = 1f;
+
+    /// <summary>Escala do caçador nesta fase: derivada de <see cref="DoorHeight"/> quando ele existe (não se escolhe à mão).</summary>
+    public float ActorScale
+    {
+        get => DoorHeight > 0 ? ScaleRegistry.HunterScale(DoorHeight) : _actorScale;
+        set => _actorScale = value;
+    }
+
+    /// <summary>Porta de referência efetiva (declarada, ou deduzida da escala antiga).</summary>
+    public float EffectiveDoorHeight => DoorHeight > 0 ? DoorHeight : ScaleRegistry.DoorHeightFor(_actorScale);
 
     /// <summary>Multiplica a escala de todos os objetos do catálogo nesta fase (mantém a proporção com o caçador).</summary>
     public float PropScale { get; set; } = 1f;
@@ -39,6 +54,9 @@ public sealed class LevelData
     public List<ZoneData> Zones { get; set; } = [];
 
     /// <summary>NPCs da fase (posição pelo pé, rotina e fala). "if" filtra por flags da história ao carregar.</summary>
+    /// <summary>Pé do primeiro ator da "fila de escala" (captura de revisão: caçador e NPCs lado a lado junto a uma porta).</summary>
+    public float[] Lineup { get; set; } = [];
+
     public List<NpcPlacement> Npcs { get; set; } = [];
 
     public List<string> Grid { get; set; } = [];

@@ -1,5 +1,5 @@
 {
-  "_doc": "Roteiro geral do Prólogo + Ato I. Objetivos em ordem de campanha (o Diário usa a ordem). Regras: quando a flag 'when' liga, aplica o objetivo. Retratos: {0} vira 1 (neutro) ou 2 (expressão). Benício NÃO tem arte aprovada: sem retrato, só a placa de nome (voz fora de cena). Flags/eventos documentados em src/Core/Story/StoryFlags.cs.",
+  "_doc": "Roteiro geral do Prólogo + Ato I. Objetivos em ordem de campanha (o Diário usa a ordem). Regras: quando a flag 'when' liga, aplica o objetivo. Retratos: {0} vira 1 (neutro) ou 2 (expressão). Benício: retrato 1 = composto (de lado), 2 = severo (de frente). Flags/eventos documentados em src/Core/Story/StoryFlags.cs.",
   "startObjective": "quadro",
   "objectives": [
     {
@@ -37,7 +37,7 @@
   ],
   "speakers": {
     "narrador": { "name": "" },
-    "benicio": { "name": "Mestre Benício" },
+    "benicio": { "name": "Mestre Benício", "portrait": "res://assets/v2/sprites/npcs/retrato_benicio_{0}.png" },
     "odete": { "name": "Odete", "portrait": "res://assets/v2/sprites/npcs/retrato_odete_{0}.png" },
     "ravi": { "name": "Ravi", "portrait": "res://assets/v2/sprites/npcs/retrato_ravi_{0}.png" },
     "lis": { "name": "Lis", "portrait": "res://assets/v2/sprites/npcs/retrato_lis_{0}.png" },

@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="..\src\Game\Boot\BindingTable.cs" Link="Game/BindingTable.cs" />
     <Compile Include="..\src\Game\World\LevelData.cs" Link="Game/LevelData.cs" />
+    <Compile Include="..\src\Game\World\ScaleRegistry.cs" Link="Game/ScaleRegistry.cs" />
     <Compile Include="..\src\Game\World\LevelGrid.cs" Link="Game/LevelGrid.cs" />
     <Compile Include="..\src\Game\World\CollisionMath.cs" Link="Game/CollisionMath.cs" />
   </ItemGroup>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Godot;
 using Vespera.Core.Story;
+using Vespera.Game.Actors;
 using Vespera.Game.Boot;
 using Vespera.Game.Story;
 using Vespera.Game.UI;
@@ -36,6 +37,7 @@ public partial class SmokeTest
         progress.Flags.Clear();
         progress.ObjectiveId = string.Empty;
         StoryService.Engine.BeginCampaignIfNew();
+        await CheckScaleContract(level, "praca");
         level.PlayAutoplay();
         await WaitFor(() => level.DialogueOpen, "fala de chegada");
         Check(level.Dialogue.CurrentNodeId == "a", $"a conversa deveria começar na narração, está em '{level.Dialogue.CurrentNodeId}'");
@@ -77,6 +79,73 @@ public partial class SmokeTest
 
         StoryService.Engine.EventRaised -= OnEvent;
         Log.Info("história OK: chegada, quadro, Ravi, forja, Odete, Guardião");
+    }
+
+    private const float ScaleTolerance = 0.08f;
+    private static readonly string[] ScaleActors = ["odete", "ravi", "benicio"];
+
+    /// <summary>
+    /// Contrato de escala (PLANO-V2 §2.1): em cada mapa, mede a altura opaca renderizada (px de mundo) do caçador e de
+    /// cada NPC e exige o alvo da tabela dentro de ±8%; depois fotografa a "fila de escala" (caçador, Odete, Ravi, Benício).
+    /// </summary>
+    private async Task CheckScaleContract(Level level, string name)
+    {
+        var data = level.World.Data;
+        var door = data.EffectiveDoorHeight;
+        var human = ScaleRegistry.HumanHeight(door);
+        var hunter = OpaqueHeight(HunterSprites.Build(HunterClass.Lamina).GetFrameTexture(HunterSprites.IdleAnimation(Facing.Down), 0)) * data.ActorScale;
+        Check(Within(hunter, human), $"{name}: caçador com {hunter:0.0} px, alvo {human:0.0} px (±8%)");
+        var row = new List<Npc>();
+        var lineup = data.Lineup.Length == 2 ? new Vector2(data.Lineup[0], data.Lineup[1]) : level.World.SpawnPoint;
+        var spacing = human;
+        foreach (var id in ScaleActors)
+        {
+            var npc = new Npc(id, new NpcPlacement { Id = id, At = [0, 0], Routine = "idle" }, door) { Name = $"Lineup_{id}" };
+            level.World.Entities.AddChild(npc);
+            var frames = NpcSprites.Build(id);
+            var measured = OpaqueHeight(frames.GetFrameTexture(NpcSprites.Animation(false, Facing.Down), 0)) * npc.SpriteScale;
+            var wanted = ScaleRegistry.TargetHeight(id, door);
+            Check(Within(measured, wanted), $"{name}: {id} com {measured:0.0} px, alvo {wanted:0.0} px (±8%)");
+            row.Add(npc);
+        }
+
+        for (var i = 0; i < row.Count; i++)
+        {
+            row[i].GlobalPosition = lineup + new Vector2((i + 1) * spacing, 0);
+            row[i].SetActive(false);
+        }
+
+        await StandAt(level, lineup);
+        level.World.Camera.FixedFocus = lineup + new Vector2(spacing * (row.Count / 2f), -human / 2f);
+        await PhysicsFrames(3);
+        await Shot($"escala_{name}");
+        level.World.Camera.FixedFocus = null;
+        foreach (var npc in row)
+        {
+            npc.QueueFree();
+        }
+    }
+
+    private static bool Within(float measured, float wanted) => Mathf.Abs(measured - wanted) <= wanted * ScaleTolerance;
+
+    private static float OpaqueHeight(Texture2D texture)
+    {
+        var image = texture.GetImage();
+        int top = -1, bottom = -1;
+        for (var y = 0; y < image.GetHeight(); y++)
+        {
+            for (var x = 0; x < image.GetWidth(); x++)
+            {
+                if (image.GetPixel(x, y).A >= 0.5f)
+                {
+                    top = top < 0 ? y : top;
+                    bottom = y;
+                    break;
+                }
+            }
+        }
+
+        return bottom - top + 1;
     }
 
     private async Task TalkToProp(Level level, string type)
@@ -127,6 +196,7 @@ public partial class SmokeTest
         var next = (Level)_router.Current!;
         await Frames(4);
         await Shot($"story_{expectedName}");
+        await CheckScaleContract(next, expectedName.Replace("Level_", string.Empty, StringComparison.Ordinal));
         if (Array.IndexOf(_args, BotFlag) >= 0)
         {
             next.World.SetNpcsActive(false);

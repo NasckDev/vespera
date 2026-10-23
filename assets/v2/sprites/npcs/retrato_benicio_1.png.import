@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cl2xgr7kru3li"
-path="res://.godot/imported/chao_forja_interior.jpg-331bd665042be894bd82aa1bb5277e9c.ctex"
+uid="uid://bkgdvv7rgylsp"
+path="res://.godot/imported/retrato_benicio_1.png-1c9fa455deffe74b5a51a7893ac19041.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/v2/cenarios/forja_interior/chao_forja_interior.jpg"
-dest_files=["res://.godot/imported/chao_forja_interior.jpg-331bd665042be894bd82aa1bb5277e9c.ctex"]
+source_file="res://assets/v2/sprites/npcs/retrato_benicio_1.png"
+dest_files=["res://.godot/imported/retrato_benicio_1.png-1c9fa455deffe74b5a51a7893ac19041.ctex"]
 
 [params]
 

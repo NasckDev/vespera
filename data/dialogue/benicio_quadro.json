@@ -15,6 +15,7 @@
     },
     "b2": {
       "speaker": "benicio",
+      "expression": 2,
       "text": "É o mais baixo dos selos. E o único que a Ordem aceita sem fazer pergunta.",
       "next": "b3"
     },
@@ -25,6 +26,7 @@
     },
     "b4": {
       "speaker": "benicio",
+      "expression": 2,
       "text": "Hoje arranhou aqui mesmo, na praça: uma Brecha pequena que desce para os Esgotos do Mercado. Se ninguém a fechar com luz antes do escuro, ela cresce.",
       "next": "b5"
     },
@@ -38,6 +40,7 @@
     },
     "b5b": {
       "speaker": "benicio",
+      "expression": 2,
       "text": "Porque o selo queimou em você, e não em outro. A Ordem não sabe mais do que isso. Eu, menos ainda.",
       "next": "b6"
     },

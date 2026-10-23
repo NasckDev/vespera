@@ -119,7 +119,7 @@ public partial class LevelWorld : Node2D
                 continue;
             }
 
-            var npc = new Npc(placement.Id, placement, _data.ActorScale)
+            var npc = new Npc(placement.Id, placement, _data.EffectiveDoorHeight)
             {
                 Name = $"Npc_{placement.Id}_{_npcs.Count}",
                 Position = new Vector2(placement.At[0], placement.At[1]),

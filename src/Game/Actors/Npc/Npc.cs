@@ -14,17 +14,19 @@ public partial class Npc : CharacterBody2D
 {
     public const uint NpcLayer = Player.WorldLayer;
     private const float FeetRadius = 16f;
+    private const float PromptMargin = 14f;
     private const float WalkSpeedFactor = 0.42f;
     private const float ArriveDistance = 4f;
     private const float WaitMin = 2.2f;
     private const float WaitSpread = 2.6f;
     private const float TalkReach = 150f;
-    private const float PromptHeight = 128f;
     private const float StuckGiveUp = 0.8f;
 
     private readonly string _id;
     private readonly NpcPlacement _placement;
     private readonly float _scale;
+    private readonly float _hunterScale;
+    private readonly bool _hasWalk;
     private readonly List<Vector2> _path = [];
     private AnimatedSprite2D _sprite = null!;
     private CollisionShape2D _feet = null!;
@@ -37,12 +39,23 @@ public partial class Npc : CharacterBody2D
     private float _stuck;
     private int _patrolStep;
 
-    public Npc(string id, NpcPlacement placement, float actorScale)
+    /// <param name="doorHeight">Régua do mapa (px de mundo da porta pintada); a escala vem do <see cref="ScaleRegistry"/>.</param>
+    public Npc(string id, NpcPlacement placement, float doorHeight)
     {
         _id = id;
         _placement = placement;
-        _scale = actorScale;
+        _scale = ScaleRegistry.ActorScale(id, doorHeight, NpcSprites.StandingHeight(id));
+        _hunterScale = ScaleRegistry.HunterScale(doorHeight);
+        _hasWalk = NpcSprites.HasWalk(id);
     }
+
+    /// <summary>Escala do sprite (altura-alvo ÷ altura em pé).</summary>
+    public float SpriteScale => _scale;
+
+    /// <summary>Altura do corpo em px de mundo (altura em pé x escala).</summary>
+    public float BodyHeight => NpcSprites.StandingHeight(_id) * _scale;
+
+    private float PromptHeight => BodyHeight + PromptMargin;
 
     public string NpcId => _id;
 
@@ -93,7 +106,7 @@ public partial class Npc : CharacterBody2D
             PromptAnchor = Vector2.Zero,
         };
         AddChild(Interaction);
-        Interaction.PromptAnchor = GlobalPosition + new Vector2(0, -PromptHeight * _scale);
+        Interaction.PromptAnchor = GlobalPosition + new Vector2(0, -PromptHeight);
 
         _path.Add(GlobalPosition);
         foreach (var point in _placement.Path)
@@ -109,7 +122,7 @@ public partial class Npc : CharacterBody2D
     public override void _PhysicsProcess(double delta)
     {
         var dt = (float)delta;
-        Interaction.PromptAnchor = GlobalPosition + new Vector2(0, -PromptHeight * _scale);
+        Interaction.PromptAnchor = GlobalPosition + new Vector2(0, -PromptHeight);
         if (!_active || _held || _placement.Routine != "patrol" || _path.Count < 2)
         {
             Velocity = Vector2.Zero;
@@ -134,7 +147,7 @@ public partial class Npc : CharacterBody2D
         }
 
         var dir = to.Normalized();
-        Velocity = dir * Player.BaseSpeed * _scale * WalkSpeedFactor;
+        Velocity = dir * Player.BaseSpeed * _hunterScale * WalkSpeedFactor;
         MoveAndSlide();
         FaceDirection(dir);
         Play(walking: true);
@@ -157,6 +170,7 @@ public partial class Npc : CharacterBody2D
         if (!held)
         {
             _wait = WaitMin;
+            SetFacingFromName(_placement.Facing);
         }
 
         Play(walking: false);
@@ -222,7 +236,7 @@ public partial class Npc : CharacterBody2D
 
     private void Play(bool walking)
     {
-        var animation = NpcSprites.Animation(walking, _facing);
+        var animation = NpcSprites.Animation(walking && _hasWalk, _facing);
         _sprite.FlipH = _facing == Facing.Side && _faceLeft;
         if (_sprite.Animation != animation)
         {
