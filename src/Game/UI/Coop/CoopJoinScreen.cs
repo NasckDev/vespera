@@ -58,7 +58,8 @@ public partial class CoopJoinScreen : UiScreen
 
     protected override void Build()
     {
-        AddChild(UiKit.MakeBackdrop(showArt: _level is null));
+        // Arte do título também na entrada pela pausa: o jogo atrás (HUD, objetivo) brigava com o texto.
+        AddChild(UiKit.MakeBackdrop(showArt: true));
         var root = UiKit.MakeMargin(120, 30, 120, 30);
         AddChild(root);
         var column = UiKit.MakeColumn(14);

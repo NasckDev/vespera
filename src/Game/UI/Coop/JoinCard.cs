@@ -110,10 +110,10 @@ public partial class JoinCard : PanelContainer
             _sprite.Play(HunterSprites.IdleAnimation(Facing.Down));
         }
 
-        _flash.Outline = 0.9f;
+        _flash.Outline = 0.95f;
         _flash.OutlineColor = _color;
-        _flash.OutlineWidth = 2.5f;
-        _flash.Cape = capeTint ? 1f : 0f;
+        _flash.OutlineWidth = 3f;
+        _flash.Cape = capeTint ? 0.85f : 0f;
         _flash.Update(0f);
         _className.Text = slot.Ready || slot.Locked ? HunterSprites.DisplayName(hunter) : $"◀   {HunterSprites.DisplayName(hunter)}   ▶";
         _blurb.Text = (blurb ?? string.Empty) + (capeTint ? "\n(mesma classe: sua capa ganha outro tom)" : string.Empty);

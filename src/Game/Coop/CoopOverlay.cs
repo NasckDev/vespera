@@ -76,8 +76,9 @@ public partial class CoopOverlay(Level level) : Control
 
     private void DrawDowned(LevelWorld world, Player downed, Color color)
     {
+        // O anel fica ACIMA do caçador caído (o corpo deitado continua à vista) e a dica acima do anel.
         var feet = level.WorldToScreen(downed.GlobalPosition);
-        var center = level.WorldToScreen(downed.GlobalPosition - new Vector2(0, 0.55f * world.Data.HumanHeight));
+        var center = level.WorldToScreen(downed.GlobalPosition - new Vector2(0, 0.95f * world.Data.HumanHeight));
         var beat = 0.5f + (0.5f * Mathf.Sin(_time * 5f));
 
         // Mancha pulsando no chão: dá para achar o caído no meio da luta.
@@ -103,7 +104,7 @@ public partial class CoopOverlay(Level level) : Control
             : $"{CoopSession.TagOf(helper.Slot)}: segure {InputGlyphs.Describe(helper.Input, InputActions.Interact)} para reanimar";
         var hintColor = helper is null ? Palette.Cream : CoopSession.ColorOf(helper.Slot);
         var size = _font.GetStringSize(text, HorizontalAlignment.Center, -1, HintFontSize);
-        var at = center + new Vector2(-size.X / 2f, RingRadius + 36f);
+        var at = center + new Vector2(-size.X / 2f, -RingRadius - 22f);
         DrawRect(new Rect2(at - new Vector2(10f, size.Y - 2f), new Vector2(size.X + 20f, size.Y + 8f)), new Color(Palette.Indigo, 0.78f));
         DrawString(_font, at, text, HorizontalAlignment.Left, -1, HintFontSize, hintColor);
     }

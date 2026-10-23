@@ -91,21 +91,24 @@ public static class RiftLoot
     private static void ShowAll(LevelWorld world, Vector2 at, System.Collections.Generic.IReadOnlyList<OwnedLoot> grants, float spread)
     {
         var coop = grants.Count > 1;
+        var line = 0;
         foreach (var owned in grants)
         {
-            // No co-op, o saque de cada um sai do lado dele do monstro e o texto leva a etiqueta (J1, J2) na cor do dono.
+            // No co-op os cristais de cada um saem do lado dele do monstro; os nomes do saque ficam numa coluna só
+            // (J1 primeiro, J2 embaixo), cada linha com a etiqueta e a cor do dono, sem um texto pisar no outro.
             var side = coop ? (owned.OwnerSlot == 0 ? -1f : 1f) * 0.35f * world.Data.HumanHeight : 0f;
-            Show(world, at + new Vector2(side, 0f), owned.Grant, spread, coop ? owned.OwnerSlot : -1);
+            world.DropFragments(at + new Vector2(side, 0f), owned.Grant.FragmentosGained, spread, owned.OwnerSlot);
+            line = ShowNames(world, at, owned.Grant, coop ? owned.OwnerSlot : -1, line);
         }
     }
 
-    private static void Show(LevelWorld world, Vector2 at, LootGrant grant, float spread, int owner)
+    /// <summary>Nomes do saque empilhados acima do monstro a partir da linha <paramref name="line"/>; devolve a próxima linha livre.</summary>
+    private static int ShowNames(LevelWorld world, Vector2 at, LootGrant grant, int owner, int line)
     {
-        world.DropFragments(at, grant.FragmentosGained, spread, System.Math.Max(0, owner));
         var human = world.Data.HumanHeight;
-        var i = 0;
+        var i = line;
         var tag = owner >= 0 ? $"{CoopSession.TagOf(owner)} " : string.Empty;
-        var x = owner <= 0 ? -0.35f : 0.35f;
+        const float x = -0.35f;
         foreach (var entry in grant.Loot.Entries)
         {
             var text = entry.Kind == LootEntryKind.Material ? $"{tag}+{entry.Amount} {entry.Name}" : $"{tag}{entry.Name}";
@@ -113,6 +116,8 @@ public static class RiftLoot
             var color = entry.Rare || entry.SetPiece ? RareColor : owner >= 0 ? CoopSession.ColorOf(owner).Lightened(0.35f) : LootColor;
             world.Feel.Number(at2, text, color, 0.7f);
         }
+
+        return i;
     }
 
     /// <summary>Resumo do saque do J2 no aviso (o do J1 já vem no começo).</summary>

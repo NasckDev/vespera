@@ -18,6 +18,9 @@ public partial class Level
     private const float AutoplayDelay = 0.7f;
     private const float DialogueCooldown = 0.3f;
 
+    /// <summary>Altura do painel do J2 na HUD (o quadro do objetivo desce para baixo dele no co-op).</summary>
+    private const float GuestPanelHeight = 170f;
+
     private readonly List<string> _pendingEvents = [];
     private DialogueBox _box = null!;
     private StoryHud _storyHud = null!;
@@ -96,6 +99,7 @@ public partial class Level
     private void UpdateStory()
     {
         _storyHud.Visible = !_box.IsOpen && !RiftSession.InRift;
+        _storyHud.TopOffset = IsCoop ? GuestPanelHeight : 0f;
         if (_box.IsOpen)
         {
             SetPartyFrozen(true);

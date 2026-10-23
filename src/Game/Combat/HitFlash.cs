@@ -62,7 +62,7 @@ public sealed class HitFlash
                     float a = 6.2831853 * float(i) / 8.0;
                     near = max(near, texture(TEXTURE, UV + vec2(cos(a), sin(a)) * px).a);
                 }
-                float edge = clamp(smoothstep(0.1, 0.5, near) - c.a, 0.0, 1.0) * outline;
+                float edge = clamp(smoothstep(0.05, 0.3, near) - c.a, 0.0, 1.0) * outline;
                 COLOR = vec4(mix(outline_color.rgb, rgb, c.a), max(c.a, edge * COLOR.a));
             } else {
                 COLOR = vec4(rgb, c.a);
@@ -100,7 +100,7 @@ public sealed class HitFlash
     public Color OutlineColor { get; set; } = Colors.White;
 
     /// <summary>Espessura do contorno fixo em texels da folha.</summary>
-    public float OutlineWidth { get; set; } = 2.5f;
+    public float OutlineWidth { get; set; } = 4f;
 
     /// <summary>Capa recolorida (0 desliga, 1 cheio) para o matiz <see cref="CapeHue"/> (0..1): mesmo personagem, outro jogador.</summary>
     public float Cape { get; set; }

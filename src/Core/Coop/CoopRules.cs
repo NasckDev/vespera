@@ -24,7 +24,7 @@ public sealed class CoopCameraTuning
     public double MinHunterPx { get; set; } = 85;
 
     /// <summary>Folga entre o caçador e a borda da tela, em alturas humanas.</summary>
-    public double EdgeMargin { get; set; } = 0.9;
+    public double EdgeMargin { get; set; } = 1.3;
 
     /// <summary>Força do puxão de volta quando um jogador ficou além do limite (fração da distância por segundo).</summary>
     public double TetherPull { get; set; } = 2.5;

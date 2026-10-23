@@ -26,6 +26,24 @@ public partial class StoryHud : Control
 
     public string TrackerText => _tracker.Visible ? _trackerTitle.Text : string.Empty;
 
+    /// <summary>Desce o quadro do objetivo (no co-op o painel do J2 ocupa o canto de cima à direita).</summary>
+    public float TopOffset
+    {
+        get => _topOffset;
+        set
+        {
+            if (Mathf.IsEqualApprox(_topOffset, value))
+            {
+                return;
+            }
+
+            _topOffset = value;
+            _tracker.Position = new Vector2(_tracker.Position.X, Margin + value);
+        }
+    }
+
+    private float _topOffset;
+
     public string ToastText => _toast.Visible ? _toastTitle.Text : string.Empty;
 
     public override void _Ready()
@@ -72,7 +90,7 @@ public partial class StoryHud : Control
         _tracker.ResetSize();
         var size = _tracker.GetCombinedMinimumSize();
         _tracker.Size = size;
-        _tracker.Position = new Vector2(1920f - Margin - size.X, Margin);
+        _tracker.Position = new Vector2(1920f - Margin - size.X, Margin + _topOffset);
     }
 
     private void PlaceToast()

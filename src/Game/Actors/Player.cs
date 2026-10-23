@@ -29,7 +29,10 @@ public partial class Player : CharacterBody2D
     private const float Deceleration = 2100f;
     private const float FacingHysteresis = 1.15f;
     private const float TeammateNudge = 240f;
-    private const float OutlineAlpha = 0.9f;
+    private const float OutlineAlpha = 0.95f;
+
+    /// <summary>Capa do J2 na mesma classe: tom trocado, mas sem pintar o resto da roupa (sutil).</summary>
+    private const float CapeTintStrength = 0.85f;
 
     private readonly List<Interactable> _nearby = [];
     private Facing _facing = Facing.Down;
@@ -53,7 +56,7 @@ public partial class Player : CharacterBody2D
     {
         Flash.Outline = OutlineAlpha;
         Flash.OutlineColor = color;
-        Flash.Cape = capeTint ? 1f : 0f;
+        Flash.Cape = capeTint ? CapeTintStrength : 0f;
         Flash.Update(0f);
     }
 
