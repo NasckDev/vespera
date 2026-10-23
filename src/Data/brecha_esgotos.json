@@ -45,7 +45,7 @@
       "heavyCharge": 0.45, "partMult": 1
     },
     "bow": {
-      "light": [1.0], "lightRange": [900], "lightArc": [0], "lightKnockback": [90], "lightHitStop": [0.04],
+      "light": [1.0], "lightRange": [900], "lightArc": [0], "lightKnockback": [220], "lightHitStop": [0.04],
       "heavy": 2.6, "heavyRange": 1300, "heavyKnockback": 260, "heavyHitStop": 0.08, "heavyCharge": 0.6, "partMult": 0.9
     },
     "hammer": {

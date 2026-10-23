@@ -63,6 +63,7 @@ public partial class Level
     {
         _storyHud = new StoryHud { Name = "StoryHud" };
         AddChild(_storyHud);
+        AddChild(new HintHud(this));
         _box = new DialogueBox { Name = "Dialogue" };
         AddChild(_box);
         _box.Closed += OnDialogueClosed;

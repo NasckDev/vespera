@@ -37,7 +37,7 @@
       "critPct": 3.0,
       "partBreakPct": 5.0,
       "tiers": [
-        { "rank": "E", "name": "Arco do Cais", "damage": 14 },
+        { "rank": "E", "name": "Arco do Cais", "damage": 16 },
         { "rank": "D", "name": "Arco do Peixe-Lanterna", "damage": 22 },
         { "rank": "C", "name": "Arco dos Ossos", "damage": 32 },
         { "rank": "B", "name": "Arco da Fornalha", "damage": 52 },
