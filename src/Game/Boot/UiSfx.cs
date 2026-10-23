@@ -18,7 +18,7 @@ public static class UiSfx
     private const float Gain = 0.32f;
     private const int PlayerCount = 3;
 
-    private static readonly AudioStreamWav?[] Streams = new AudioStreamWav?[Enum.GetValues<UiSound>().Length];
+    private static readonly AudioStream?[] Streams = new AudioStream?[Enum.GetValues<UiSound>().Length];
     private static AudioStreamPlayer[]? _players;
     private static int _next;
 
@@ -42,7 +42,7 @@ public static class UiSfx
 
         var player = _players[_next];
         _next = (_next + 1) % PlayerCount;
-        player.Stream = Streams[(int)sound] ??= Build(sound);
+        player.Stream = Streams[(int)sound] ??= Vespera.Game.Audio.SoundBank.Get("ui", sound.ToString()) ?? Build(sound);
         player.Play();
     }
 

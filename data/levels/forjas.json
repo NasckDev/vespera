@@ -5,7 +5,7 @@
     "texture": "res://assets/v2/cenarios/definitivos/chao_forjas.png",
     "scale": 1.0,
     "filter": "linear",
-    "_note": "Chão definitivo do GPT (1672x941, vista de cima alinhada aos eixos). Régua: porta arqueada de casa ~85 px (à esquerda, x 220-280 / y 245-330); portão grande da forja ~160 px (porta de celeiro, 1,9x); altura humana = 0,75 x 85 = 64 px; câmera 1,55x deixa o caçador com ~100 px na tela em 1080p (como na Praça)."
+    "_note": "ChÃ£o definitivo do GPT (1672x941, vista de cima alinhada aos eixos). RÃ©gua: porta arqueada de casa ~85 px (Ã  esquerda, x 220-280 / y 245-330); portÃ£o grande da forja ~160 px (porta de celeiro, 1,9x); altura humana = 0,75 x 85 = 64 px; cÃ¢mera 1,55x deixa o caÃ§ador com ~100 px na tela em 1080p (como na PraÃ§a)."
   },
   "cell": 16,
   "cols": 105,
@@ -13,9 +13,28 @@
   "spawn": [1580, 540],
   "doorHeight": 85,
   "doorAt": [250, 330],
-  "propScale": 1.0,
+  "propScale": 1.75,
   "lineup": [400, 560],
-  "props": [],
+  "props": [
+    {"type": "monte_carvao", "at": [215, 470]},
+    {"type": "bigorna_pesada", "at": [310, 486]},
+    {"type": "suporte_armas", "at": [430, 458]},
+    {"type": "fornalha_alta", "at": [540, 452]},
+    {"type": "barril_carvao", "at": [180, 528]},
+    {"type": "pilha_carvao", "at": [250, 540]},
+    {"type": "caixote", "at": [1100, 474]},
+    {"type": "caixote_minerio", "at": [1180, 468]},
+    {"type": "caixote_ferramentas", "at": [1238, 482]},
+    {"type": "carrinho_mao", "at": [1320, 500]},
+    {"type": "barril", "at": [1400, 468]},
+    {"type": "rocha_minerio", "at": [1462, 478]},
+    {"type": "poste_lampiao", "at": [250, 712]},
+    {"type": "barril", "at": [430, 716]},
+    {"type": "pilha_carvao", "at": [620, 716]},
+    {"type": "caixote", "at": [1180, 712]},
+    {"type": "barril", "at": [1240, 716]},
+    {"type": "poste_lampiao", "at": [1420, 712]}
+  ],
   "zones": [
     {
       "kind": "exit",
@@ -30,7 +49,7 @@
       "kind": "exit",
       "at": [1648, 542],
       "radius": 50,
-      "prompt": "Voltar à Praça",
+      "prompt": "Voltar Ã  PraÃ§a",
       "text": "",
       "target": "praca",
       "spawn": [100, 455]
@@ -40,12 +59,12 @@
       "at": [24, 542],
       "radius": 50,
       "prompt": "Seguir pela rua",
-      "text": "Rua dos Ferreiros — trancada, em breve."
+      "text": "Rua dos Ferreiros â€” trancada, em breve."
     }
   ],
   "npcs": [],
   "authoring": {
-    "_note": "Polígonos em px do mundo (chão 1x). 'python data/levels/_fonte/grade.py poligonos forjas' regrava 'grid'. Plaza + dois corredores laterais (entre os lampiões) + pátio da escadaria do portão; terraço dos fundos e canal ficam bloqueados.",
+    "_note": "PolÃ­gonos em px do mundo (chÃ£o 1x). 'python data/levels/_fonte/grade.py poligonos forjas' regrava 'grid'. Plaza + dois corredores laterais (entre os lampiÃµes) + pÃ¡tio da escadaria do portÃ£o; terraÃ§o dos fundos e canal ficam bloqueados.",
     "walkable": [
       [
         [130, 440],

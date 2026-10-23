@@ -23,7 +23,7 @@ public static class WorldSfx
     private const int MixRate = 22050;
     private const float Gain = 0.4f;
 
-    private static readonly Dictionary<WorldSound, AudioStreamWav> Streams = [];
+    private static readonly Dictionary<WorldSound, AudioStream> Streams = [];
 
     public static void ClearCache() => Streams.Clear();
 
@@ -32,7 +32,7 @@ public static class WorldSfx
     {
         if (!Streams.TryGetValue(sound, out var stream))
         {
-            stream = Build(sound);
+            stream = Vespera.Game.Audio.SoundBank.Get("world", sound.ToString()) ?? Build(sound);
             Streams[sound] = stream;
         }
 

@@ -62,7 +62,8 @@ MAPS = [
 ]
 
 CLASSES = {
-    "lamina": ("young hunter with a short red cape, cloth tunic, leather belt with an old brass lantern, worn boots, holding a sword",
+    "lamina": ("young hunter with messy dark-brown hair (no hood), a short red scarf, dark steel armor with brass trim, a brass "
+               "lantern in the left hand, holding a steel sword in the right hand",
                "Lâmina (espada)"),
     "arco": ("hooded hunter with a deep red-violet hood and cape, light leather armor, an old brass lantern on the belt, holding a wooden bow",
              "Arco"),
@@ -171,19 +172,29 @@ def hunter(cls):
 def hunter_restyle(cls, style_classes):
     """Refaz uma classe no mesmo estilo das outras, para o trio parecer do mesmo jogo."""
     subject, label = CLASSES[cls]
-    refs = ([(f"{c}_andar_{d}.png", f"estilo {c} ({d})") for c in style_classes for d in ("baixo", "lado")]
-            + [(f"{cls}_andar_baixo.png", f"identidade do {cls}")])
-    extra = (f"ART STYLE IS MANDATORY: draw in EXACTLY the same style as the attached {' and '.join(style_classes)} hunters "
-             "(same chunky stylized proportions and head size, same thick dark outline, same level of detail and shading, "
-             f"same palette mood). The {label} hunter must look like the third member of the same trio. "
-             "Keep only his identity (short red cape, tunic, brass lantern, sword) from the identity reference.")
     out = [f"# Caçador {label}, estágio 1 — refazer no estilo do Arco e do Martelo", "",
            "No playtest as 3 classes pareciam de jogos diferentes. Refaça o Lâmina no estilo dos outros dois. "
-           "Um prompt por imagem; anexe as referências indicadas.", ""]
+           "Um prompt por imagem; anexe as 3 referências indicadas (pose, identidade, estilo).", "",
+           "> **NÃO aceito montagem por código.** A entrega anterior girou/recortou os pixels da imagem de frente "
+           "(\"pixel rig\"): de lado o rosto virou mancha, de costas virou bloco, e a esquiva era a imagem girando. "
+           "Cada quadro tem que ser DESENHADO pelo gerador de imagem (GPT/Gemini), como foram o Arco e o Martelo.", ""]
     anims = [("andar", 6, "walking cycle, legs and arms visibly swinging", True)] + CLASS_ANIMS[cls] + COMMON_ANIMS
     n = 1
     for anim, frames, desc, all_dirs in anims:
         for d, facing in (DIRS if all_dirs else [DIRS[2]]):
+            pose = f"{cls}_andar_{d}.png" if anim == "andar" else f"{cls}_pose_{anim}_{d}.png"
+            style = style_classes[0] if d != "baixo" or len(style_classes) == 1 else style_classes[1]
+            refs = [(pose, "1 · guia de pose (tira antiga)"), (f"{cls}_novo_estilo.png", "2 · identidade nova"),
+                    (f"{style}_andar_{d}.png", f"3 · estilo ({style}, {d})")]
+            extra = ("THREE images are attached. IMAGE 1 is the POSE GUIDE: an older strip of this same animation. Copy its "
+                     "number of frames, the order of the poses, the body, arm, leg and sword positions and the motion of every "
+                     "frame exactly, but IGNORE its drawing style. IMAGE 2 is the CHARACTER: copy his face, messy dark-brown "
+                     "hair (no hood), short red scarf, dark steel armor with brass trim, steel sword and brass lantern exactly. "
+                     f"IMAGE 3 is the ART STYLE: the {style} hunter of the same game; same chunky proportions, head size, thick "
+                     "dark outline, shading and palette, so the three hunters look like one trio. "
+                     "DRAW every frame as new artwork. Do NOT produce frames by rotating, warping, cutting or pasting the pixels "
+                     "of the attached images, and do NOT write code to build them: a side or back view must be really drawn "
+                     "from that angle (side view shows the profile; back view shows the back of the head and the back of the armor).")
             out.append(block(f"R-{cls}-{n:02d}", f"{cls}_e1_{anim}_{d}.png", f"{anim} ({d})", refs,
                              sprite_body(subject, desc, frames, facing, extra)))
             n += 1

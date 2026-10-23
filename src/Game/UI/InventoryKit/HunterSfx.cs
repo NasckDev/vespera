@@ -23,7 +23,7 @@ public static class HunterSfx
     private const int MixRate = 22050;
     private const float Gain = 0.4f;
 
-    private static readonly AudioStreamWav?[] Streams = new AudioStreamWav?[Enum.GetValues<HunterSound>().Length];
+    private static readonly AudioStream?[] Streams = new AudioStream?[Enum.GetValues<HunterSound>().Length];
 
     public static void Play(HunterSound sound)
     {
@@ -32,7 +32,7 @@ public static class HunterSfx
             return;
         }
 
-        var player = new AudioStreamPlayer { Bus = "SFX", ProcessMode = Node.ProcessModeEnum.Always, Stream = Streams[(int)sound] ??= Build(sound) };
+        var player = new AudioStreamPlayer { Bus = "SFX", ProcessMode = Node.ProcessModeEnum.Always, Stream = Streams[(int)sound] ??= Vespera.Game.Audio.SoundBank.Get("hunter", sound.ToString()) ?? Build(sound) };
         host.AddChild(player);
         player.Finished += player.QueueFree;
         player.Play();

@@ -1,0 +1,77 @@
+{
+  "_doc": "Som de cada evento do jogo. Chave = enum do código (CombatSound, WorldSound, UiSound, HunterSound); valor = arquivo res://. Evento fora da lista toca o som sintetizado provisório. 'musica' = trilha por mapa (id do nível) ou tela (ScreenKeys); vazio = silêncio (vídeos têm áudio próprio). Arquivos de assets/v2/audio vêm do Ninja Adventure Asset Pack (CC0, Pixel-boy e AAA).",
+  "combat": {
+    "Swing": "res://assets/v2/audio/sfx/corte.wav",
+    "SwingHeavy": "res://assets/v2/audio/sfx/corte_pesado.wav",
+    "Spin": "res://assets/v2/audio/sfx/giro.wav",
+    "HammerSwing": "res://assets/v2/audio/sfx/balanco_martelo.wav",
+    "Hit": "res://assets/v2/audio/sfx/acerto.wav",
+    "HitHeavy": "res://assets/v2/audio/sfx/acerto_pesado.wav",
+    "Kill": "res://assets/v2/audio/sfx/abate.wav",
+    "Dodge": "res://assets/v2/audio/sfx/esquiva.wav",
+    "Hurt": "res://assets/v2/audio/sfx/dano.wav",
+    "Fall": "res://assets/v2/audio/sfx/queda.wav",
+    "BowShot": "res://assets/v2/audio/sfx/flecha.wav",
+    "BowCharged": "res://assets/v2/audio/sfx/flecha_carregada.wav",
+    "ArrowHit": "res://assets/v2/audio/sfx/flecha_acerto.wav",
+    "Slam": "res://assets/v2/audio/sfx/pancada.wav",
+    "LodoHop": "res://assets/v2/audio/sfx/lodo_pulo.wav",
+    "LodoLand": "res://assets/v2/audio/sfx/lodo_queda.wav",
+    "Ghost": "res://assets/v2/audio/sfx/espectro.wav",
+    "GhostLunge": "res://assets/v2/audio/sfx/espectro_bote.wav",
+    "Telegraph": "res://assets/v2/audio/sfx/aviso.wav",
+    "BossLand": "res://assets/v2/audio/sfx/chefe_queda.wav",
+    "Swallow": "res://assets/v2/audio/sfx/engolir.wav",
+    "Split": "res://assets/v2/audio/sfx/dividir.wav",
+    "CoreBreak": "res://assets/v2/audio/sfx/nucleo_quebra.wav",
+    "Pickup": "res://assets/v2/audio/sfx/pegar.wav",
+    "Chest": "res://assets/v2/audio/sfx/bau.wav",
+    "BarrierUp": "res://assets/v2/audio/sfx/barreira_sobe.wav",
+    "BarrierDown": "res://assets/v2/audio/sfx/barreira_cai.wav",
+    "Portal": "res://assets/v2/audio/sfx/portal.wav"
+  },
+  "world": {
+    "LampOn": "res://assets/v2/audio/sfx/lampiao.wav",
+    "Water": "res://assets/v2/audio/sfx/agua.wav",
+    "Chime": "res://assets/v2/audio/sfx/sino.wav"
+  },
+  "ui": {
+    "Move": "res://assets/v2/audio/sfx/menu_mover.wav",
+    "Confirm": "res://assets/v2/audio/sfx/menu_ok.wav",
+    "Back": "res://assets/v2/audio/sfx/menu_voltar.wav",
+    "Deny": "res://assets/v2/audio/sfx/menu_negado.wav"
+  },
+  "hunter": {
+    "Forge": "res://assets/v2/audio/sfx/forja.wav",
+    "RankUp": "res://assets/v2/audio/jingles/subiu_rank.wav",
+    "Equip": "res://assets/v2/audio/sfx/equipar.wav"
+  },
+  "jingle": {
+    "contrato": "res://assets/v2/audio/jingles/contrato.wav",
+    "derrota": "res://assets/v2/audio/jingles/derrota.wav",
+    "segredo": "res://assets/v2/audio/jingles/segredo.wav",
+    "cura": "res://assets/v2/audio/sfx/cura.wav"
+  },
+  "musica": {
+    "title": "res://assets/v2/audio/musica/titulo.ogg",
+    "options": "res://assets/v2/audio/musica/titulo.ogg",
+    "controls": "res://assets/v2/audio/musica/titulo.ogg",
+    "help": "res://assets/v2/audio/musica/titulo.ogg",
+    "slots_new": "res://assets/v2/audio/musica/titulo.ogg",
+    "slots_continue": "res://assets/v2/audio/musica/titulo.ogg",
+    "credits": "res://assets/v2/audio/musica/creditos.ogg",
+    "intro": "",
+    "prologue": "",
+    "praca": "res://assets/v2/audio/musica/praca.ogg",
+    "forjas": "res://assets/v2/audio/musica/forjas.ogg",
+    "forja_interior": "res://assets/v2/audio/musica/forja_interior.ogg",
+    "esgoto_corredor": "res://assets/v2/audio/musica/brecha.ogg",
+    "esgoto_cruzamento": "res://assets/v2/audio/musica/brecha.ogg",
+    "esgoto_tesouro": "res://assets/v2/audio/musica/brecha.ogg",
+    "esgoto_arena": "res://assets/v2/audio/musica/guardiao.ogg",
+    "tensao": "res://assets/v2/audio/musica/tensao.ogg",
+    "melancolia": "res://assets/v2/audio/musica/melancolia.ogg",
+    "vitoria": "res://assets/v2/audio/musica/vitoria.ogg",
+    "misterio": "res://assets/v2/audio/musica/misterio.ogg"
+  }
+}
