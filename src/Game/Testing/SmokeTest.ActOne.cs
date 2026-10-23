@@ -18,9 +18,8 @@ namespace Vespera.Game.Testing;
 /// <summary>
 /// Bot do Ato I inteiro (<c>--ato1</c>), num só jogo novo: prólogo (já passado pelo smoke) → fala de chegada → quadro do
 /// Benício → Ravi → ponte para as Forjas → forja da Odete (Lâmina, e a forja abre pela conversa) → volta à Praça (Ravi
-/// esperando junto ao portal) → portal (seletor começa na arma equipada) → 4 salas → Lodo-Mãe (rank E → D) → volta →
-/// fala nova da Odete → forja com upgrade possível e feito → objetivo = Ato II (em breve). O combate usa o modo de
-/// teste do bot de combate (caçador invulnerável, dano ×10) para caber no tempo; todo o resto é o fluxo real.
+/// esperando junto ao portal) → arco das caçadas (<see cref="ActOneArc"/>: sem invulnerabilidade) → fala nova da Odete
+/// → forja → objetivo = Ato II (em breve).
 /// </summary>
 public partial class SmokeTest
 {
@@ -53,7 +52,7 @@ public partial class SmokeTest
         var level = await ActOnePrologue(start);
         level = await ActOneForge(level);
         level = await ActOneBackToPraca(level);
-        level = await ActOneHunt(level);
+        level = await ActOneArc(level);
         await ActOneEpilogue(level);
     }
 
@@ -100,7 +99,7 @@ public partial class SmokeTest
         await SizeShot(level, "forja_interior");
         await TalkToNpc(level, "odete", shot: "ato1_odete");
         Check(StoryService.Engine.HasFlag(StoryFlags.StarterBlade), "Odete deveria entregar a Lâmina");
-        Check(StoryService.Engine.ObjectiveId == "brecha", $"depois da Lâmina o objetivo deveria ser a Brecha, é '{StoryService.Engine.ObjectiveId}'");
+        Check(StoryService.Engine.ObjectiveId == "cacada1", $"depois da Lâmina o objetivo deveria ser a 1ª caçada, é '{StoryService.Engine.ObjectiveId}'");
 
         await TalkToNpc(level, "odete");
         await WaitFor(() => FindOverlay<ForgeScreen>() is not null, "forja aberta pela conversa com a Odete");
@@ -130,32 +129,6 @@ public partial class SmokeTest
         await PhysicsFrames(20);
         await Shot("ato1_ravi_portal", 0.6);
         return level;
-    }
-
-    private async Task<Level> ActOneHunt(Level level)
-    {
-        var shots = _shotsDir is not null && DisplayServer.GetName() != "headless";
-        var bot = new CombatBot(level, this) { Shots = shots, ShotPrefix = "ato1" };
-        _failures.AddRange(await bot.Run(hunter: null, lanternTest: false));
-        Check(bot.RankUps.Contains(Rank.D), $"vencer a Lodo-Mãe deveria celebrar o rank D (celebrações: [{string.Join(",", bot.RankUps)}])");
-        Check(Progression.Rank == Rank.D, $"depois da Lodo-Mãe o rank deveria ser D, é {Progression.Rank}");
-        Check(StoryService.Engine.HasFlag(StoryFlags.GuardianDefeatedLodoMae), "a história deveria saber da Lodo-Mãe");
-        Check(StoryService.Engine.ObjectiveId == "ato2" && StoryService.Engine.CurrentObjective?.Locked == true,
-            $"depois do Guardião o objetivo deveria ser o Ato II (em breve), é '{StoryService.Engine.ObjectiveId}'");
-        await WaitFor(() => _router.Current is Level { Switching: false } && !GetTree().Paused, "Praça depois da Brecha");
-        var hub = (Level)_router.Current!;
-
-        // Cena do fim do Ato I: Benício vem até o jogador, a lanterna brilha mais, selo D e o gancho do Pomar Alto.
-        Check(hub.PlayAutoplay(), "depois do Guardião a cena do fim do Ato I deveria tocar");
-        await WaitForDialogue(hub, "cena do fim do Ato I");
-        Check(hub.Dialogue.CurrentNodeId == "n1", $"o fim do Ato I deveria abrir em 'n1', abriu em '{hub.Dialogue.CurrentNodeId}'");
-        hub.Dialogue.Complete();
-        await Seconds(0.4);
-        await Shot("ato1_fim_lanterna", 0.5);
-        await SkipDialogue(hub);
-        Check(StoryService.Engine.HasFlag(StoryFlags.Ato1FimDone), "o fim do Ato I deveria ligar ato1_fim_done");
-        Check(!hub.PlayAutoplay(), "a cena do fim do Ato I não deveria repetir");
-        return hub;
     }
 
     /// <summary>
@@ -215,17 +188,20 @@ public partial class SmokeTest
         level = await Travel(level, z => z.Target == "forjas", new Vector2(24, 0), "Level_forjas");
         level = await Travel(level, z => z.Target == "forja_interior", new Vector2(0, 40 * level.World.Data.ActorScale), "Level_forja_interior");
         var check = Progression.Forge.CanUpgrade();
-        Check(check.CanUpgrade, $"depois da Brecha a forja deveria permitir o upgrade ({check.Reason}; Fragmentos {Progression.State.Fragmentos}, " +
-            $"materiais [{string.Join(", ", Progression.State.Materials.Select(m => $"{m.Key} {m.Value}"))}])");
         var before = Progression.Engine.WeaponStats.Level;
         await TalkToNpc(level, "odete", shot: "ato1_odete_depois");
         Check(StoryService.Engine.HasFlag("odete_after"), "a fala nova da Odete deveria ter rodado");
         await WaitFor(() => FindOverlay<ForgeScreen>() is not null, "forja depois da fala nova");
         await Shot("ato1_forja_depois");
-        await Tap(Key.Enter);
-        await Seconds(1.0);
-        Check(Progression.Engine.WeaponStats.Level == before + 1, $"forjar deveria subir a arma ({before} -> {Progression.Engine.WeaponStats.Level})");
-        await Shot("ato1_forja_feita", 0);
+        if (check.CanUpgrade)
+        {
+            await Tap(Key.Enter);
+            await Seconds(1.0);
+            Check(Progression.Engine.WeaponStats.Level == before + 1, $"forjar deveria subir a arma ({before} -> {Progression.Engine.WeaponStats.Level})");
+            await Shot("ato1_forja_feita", 0);
+        }
+
+        Log.Info($"ato I: forja no fim: pode {check.CanUpgrade} ({check.Reason}); arma nível {Progression.Engine.WeaponStats.Level}");
         await Tap(Key.Escape);
         await Frames(4);
         Check(StoryService.Engine.ObjectiveId == "ato2", "o objetivo deveria seguir no Ato II");

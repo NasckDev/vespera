@@ -43,7 +43,7 @@ public class RiftRulesTest
     {
         var lodo = Rules.Stats("lodo");
         AssertThat(Rules.RankIndex).IsEqual(0);
-        AssertThat(lodo.Hp).IsEqual(28.0);
+        AssertThat(lodo.Hp).IsEqual(34.0);
         AssertThat(lodo.Damage).IsEqual(9.0);
         AssertThrown(() => Rules.Stats("dragao")).IsInstanceOf<ArgumentException>();
     }
@@ -69,35 +69,26 @@ public class RiftRulesTest
     [TestCase]
     public void KillsGiveXpFromTheBrechaData()
     {
-        AssertThat(Rules.Xp("lodo")).IsEqual(5);
-        AssertThat(Rules.Xp("espectro")).IsEqual(8);
+        AssertThat(Rules.Xp("lodo")).IsEqual(2);
+        AssertThat(Rules.Xp("espectro")).IsEqual(4);
         AssertThat(Rules.Xp("lodo_mae")).IsEqual(50);
         AssertThat(Rules.Xp("dragao")).IsEqual(0);
     }
 
     [TestCase]
-    public void AFullFirstRunReachesTheXpOfRankD()
+    public void TheXpOfRankDNeedsTwoHunts()
     {
-        // As ondas reais das 4 salas (data/levels) + a Lodo-Mãe: a primeira caçada completa precisa bastar para E -> D
-        // (o Guardião é a outra condição, e ele é o fim da caçada).
-        var monsters = new List<string>();
-        foreach (var room in Brecha.Value.Rooms)
-        {
-            using var doc = System.Text.Json.JsonDocument.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Levels", $"{room}.json")));
-            if (!doc.RootElement.TryGetProperty("rift", out var rift) || !rift.TryGetProperty("waves", out var waves))
-            {
-                continue;
-            }
-
-            foreach (var wave in waves.EnumerateArray())
-            {
-                monsters.AddRange(wave.EnumerateArray().Select(s => s.GetProperty("type").GetString()!));
-            }
-        }
+        // Playtest 23/10 (Ato I de 25-35 min): uma caçada sozinha não basta para o XP do rank D; duas, sim
+        // (o exame do Benício pede as duas). Média de 50 sementes, sem elites nem contratos.
+        var config = Vespera.Core.Hunt.HuntConfig.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Cacada", "cacada.json")));
+        var planner = new Vespera.Core.Hunt.RunPlanner(config);
+        double RunXp(int done) => Enumerable.Range(1, 50).Average(seed =>
+            planner.Plan(seed, done, false).Rooms.SelectMany(r => r.Waves).SelectMany(w => w).Sum(m => Rules.Xp(m.Monster) * (m.Elite ? config.Elite.Xp : 1)));
 
         var catalog = Vespera.Core.Advancement.AdvancementCatalog.Load(name => File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Progressao", name)));
         var xpForD = catalog.RankData.Ranks.First(r => r.Id == Vespera.Core.Ranks.Rank.D).Xp;
-        AssertThat(Rules.FullRunXp(monsters)).IsGreaterEqual(xpForD);
+        AssertThat(RunXp(0)).IsLess(xpForD);
+        AssertThat(RunXp(0) + RunXp(1)).IsGreaterEqual(xpForD);
     }
 
     [TestCase]

@@ -70,6 +70,8 @@ public class HuntPlannerTest
         AssertThat(unlocked.HasGuardian).IsTrue();
         AssertThat(unlocked.Rooms[^1].Ground).IsEqual("esgoto_arena");
         AssertThat(unlocked.Rooms[^1].Waves.Count).IsEqual(0);
+        AssertThat(unlocked.Rooms.Count).IsEqual(Config.GuardianRunRooms);
+        AssertThat(unlocked.Rooms[^2].Kind).IsEqual(RoomKind.Rest);
     }
 
     [TestCase]

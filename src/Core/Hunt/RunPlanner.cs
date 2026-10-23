@@ -48,7 +48,7 @@ public sealed class RunPlanner(HuntConfig config)
     {
         var random = new SeededRandom(seed);
         var rolled = random.RangeInt(config.RoomsMin, config.RoomsMax);
-        var count = completedRuns == 0 && !guardian ? config.FirstRunRooms : rolled;
+        var count = guardian ? config.GuardianRunRooms : completedRuns == 0 ? config.FirstRunRooms : rolled;
         var growth = config.RunGrowth * Math.Min(completedRuns, config.RunGrowthCap);
         var kinds = Layout(count, random, guardian);
         var rooms = new List<RoomPlan>(count);

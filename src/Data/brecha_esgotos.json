@@ -7,11 +7,11 @@
   "bairro": "Bairro das Forjas",
   "neighborhoodId": "bairro_das_forjas",
   "guardianId": "lodo_mae",
-  "_xp": "XP por morte. Uma caçada completa (11 Lodos, 3 Espectros e a Lodo-Mãe) dá 5x11 + 8x3 + 50 = 129 XP, acima dos 120 do rank D: vencer o Guardião na primeira caçada sobe E -> D. Fragmentos e materiais vêm do saque da progressão (data/progressao/loot.json).",
+  "_xp": "XP por morte (playtest 23/10: o Ato I tem 3-4 caçadas). Uma caçada de 5-7 salas tem 30-55 monstros: ~70-130 XP; o XP do rank D (120) chega na 2ª caçada, junto com o exame do Benício. A Lodo-Mãe dá 50. Elites valem 3x. Fragmentos e materiais vêm do saque da progressão (data/progressao/loot.json).",
   "rooms": ["esgoto_corredor", "esgoto_cruzamento", "esgoto_tesouro", "esgoto_arena"],
   "monsters": {
-    "lodo": { "name": "Lodo", "hp": 28, "damage": 9, "speed": 260, "xp": 5, "hurtRadius": 30, "contactRadius": 34, "period": 1.2, "telegraph": 0.35 },
-    "espectro": { "name": "Espectro", "hp": 24, "damage": 11, "speed": 120, "xp": 8, "hurtRadius": 34, "contactRadius": 40, "period": 2.6, "telegraph": 0.55 },
+    "lodo": { "name": "Lodo", "hp": 34, "damage": 9, "speed": 260, "xp": 2, "hurtRadius": 30, "contactRadius": 34, "period": 1.2, "telegraph": 0.35 },
+    "espectro": { "name": "Espectro", "hp": 30, "damage": 11, "speed": 120, "xp": 4, "hurtRadius": 34, "contactRadius": 40, "period": 2.6, "telegraph": 0.55 },
     "lodo_mae": { "name": "LODO-MÃE", "hp": 480, "damage": 16, "speed": 110, "xp": 50, "hurtRadius": 120, "contactRadius": 130, "period": 2.0, "telegraph": 0.6, "boss": true }
   },
   "boss": {

@@ -207,8 +207,15 @@ public partial class SmokeTest
     private async Task SkipDialogue(Level level)
     {
         var shot = new HashSet<string>();
+        var lastNode = string.Empty;
         for (var i = 0; i < MaxDialogueSteps && level.DialogueOpen; i++)
         {
+            if (level.Dialogue.CurrentNodeId != lastNode)
+            {
+                lastNode = level.Dialogue.CurrentNodeId;
+                _dialogueChars += level.Dialogue.FullText.Length;
+            }
+
             // Uma foto por retrato diferente (falante + expressão), com o texto todo na caixa.
             var key = $"{level.Dialogue.SpeakerName}|{level.Dialogue.CurrentNodeId}";
             if (_portraitShots.Contains(level.Dialogue.SpeakerName + level.Dialogue.Expression) is false && shot.Add(key))
@@ -230,6 +237,8 @@ public partial class SmokeTest
         var zone = from.World.Zones.First(pick);
         await StandAt(from, zone.GlobalPosition + offset);
         Check(from.Player.Focus == zone, $"perto da saída para {expectedName} o foco deveria ser a saída");
+        Log.Info($"viagem para {expectedName}: foco '{from.Player.Focus?.Kind}', congelado {from.Player.Frozen}, estado {from.Player.Combat.State}, " +
+            $"conversa {from.DialogueOpen}, cena {from.SceneBusy}, painel {from.Hud.PanelOpen}, pausado {GetTree().Paused}, sobreposições {_router.OverlayDepth}");
         await PressInWorld(Key.E);
         await WaitFor(() => _router.Current is Level l && l.Name == expectedName && !_router.IsBusy, $"chegar em {expectedName}");
         var next = (Level)_router.Current!;
