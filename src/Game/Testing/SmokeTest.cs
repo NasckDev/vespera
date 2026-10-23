@@ -114,6 +114,7 @@ public partial class SmokeTest : Node
         await VisitControls();
         await VisitHelp();
         await VisitCredits();
+        await VisitMouseTitleAndOptions();
         await StartNewGameAndPause();
         await ContinueAndQuit();
     }
@@ -214,6 +215,7 @@ public partial class SmokeTest : Node
         await OpenFromTitle("Nova história");
         await Shot("07_espacos");
         await Tap(Key.Enter);
+        await ChooseClassWithMouse();
         await WaitFor(() => _router.Current is PrologueScreen && !_router.IsBusy, "prólogo");
         Check(GameSession.IsActive, "sessão deveria estar ativa durante o prólogo");
         await Seconds(1.2);
@@ -233,6 +235,7 @@ public partial class SmokeTest : Node
         Check(level.Player.CurrentAnimation.StartsWith("andar", StringComparison.Ordinal) || level.Player.CurrentAnimation.StartsWith("parado", StringComparison.Ordinal),
             $"animação inesperada: {level.Player.CurrentAnimation}");
         await Shot("08_jogo");
+        await VisitMouseDialogue(level);
         await RunLevelExtras(level);
 
         await Tap(Key.Escape);

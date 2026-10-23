@@ -72,10 +72,27 @@ public static class SaveService
     public static void Delete(int slot) => UserFile.Delete(UserPaths.SlotFile(slot));
 
     /// <summary>Cria e grava um jogo novo no espaço (a classe é escolhida só na camada de classes).</summary>
-    public static SaveData? StartNew(int slot)
+    public static SaveData? StartNew(int slot) => StartNew(slot, DefaultClassId);
+
+    /// <summary>Jogo novo com a arma escolhida na tela de "Nova história" (sword, bow ou hammer).</summary>
+    public static SaveData? StartNew(int slot, string classId)
     {
-        var data = SaveData.NewGame(Database, DefaultName, DefaultClassId);
+        var data = SaveData.NewGame(Database, DefaultName, classId);
         return Save(slot, data) ? data : null;
+    }
+
+    /// <summary>Troca a arma (classe) de um save em andamento; a arma nova começa no nível 1 e a antiga continua guardada.</summary>
+    public static void ChangeClass(SaveData data, string classId)
+    {
+        if (!Database.Classes.ContainsKey(classId))
+        {
+            throw new ArgumentException($"Classe desconhecida: '{classId}'.", nameof(classId));
+        }
+
+        data.ClassId = classId;
+        data.CurrentWeapon = classId;
+        data.Weapons.TryAdd(classId, 1);
+        data.Hunter.WeaponLevels.TryAdd(classId, 1);
     }
 
     private static string ReadDataFile(string name) =>

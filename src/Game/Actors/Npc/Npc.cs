@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Godot;
 using Vespera.Game.Components;
 using Vespera.Game.World;
@@ -21,6 +22,7 @@ public partial class Npc : CharacterBody2D
     private const float WaitSpread = 2.6f;
     private const float TalkReach = 150f;
     private const float StuckGiveUp = 0.8f;
+    private const float SceneSpeedFactor = 0.75f;
 
     private readonly string _id;
     private readonly NpcPlacement _placement;
@@ -38,6 +40,9 @@ public partial class Npc : CharacterBody2D
     private float _wait;
     private float _stuck;
     private int _patrolStep;
+    private Vector2? _goal;
+    private TaskCompletionSource? _arrival;
+    private float _goalTime;
 
     /// <param name="humanHeight">Altura humana do mapa (1,0 × porta pintada); a escala vem do <see cref="ScaleRegistry"/>.</param>
     public Npc(string id, NpcPlacement placement, float humanHeight)
@@ -126,6 +131,12 @@ public partial class Npc : CharacterBody2D
     {
         var dt = (float)delta;
         Interaction.PromptAnchor = GlobalPosition + new Vector2(0, -PromptHeight);
+        if (_goal is { } scriptGoal)
+        {
+            StepToGoal(scriptGoal, dt);
+            return;
+        }
+
         if (!_active || _held || _placement.Routine != "patrol" || _path.Count < 2)
         {
             Velocity = Vector2.Zero;
@@ -159,6 +170,44 @@ public partial class Npc : CharacterBody2D
         {
             NextWaypoint();
         }
+    }
+
+    /// <summary>Posição de origem da fase (para onde o NPC volta depois de uma cena).</summary>
+    public Vector2 Home => new(_placement.At[0], _placement.At[1]);
+
+    /// <summary>
+    /// Anda até <paramref name="goal"/> (cena): termina ao chegar, ao travar numa parede ou depois de
+    /// <paramref name="timeout"/> segundos, e a tarefa devolvida completa nesse momento.
+    /// </summary>
+    public Task WalkTo(Vector2 goal, float timeout = 6f)
+    {
+        _arrival?.TrySetResult();
+        _arrival = new TaskCompletionSource();
+        _goal = goal;
+        _goalTime = timeout;
+        _stuck = 0f;
+        return _arrival.Task;
+    }
+
+    private void StepToGoal(Vector2 goal, float dt)
+    {
+        _goalTime -= dt;
+        var to = goal - GlobalPosition;
+        _stuck = GetRealVelocity().Length() < 2f * _scale ? _stuck + dt : 0f;
+        if (to.Length() <= ArriveDistance * _scale + 2f || _goalTime <= 0f || _stuck > StuckGiveUp)
+        {
+            _goal = null;
+            Velocity = Vector2.Zero;
+            Play(walking: false);
+            _arrival?.TrySetResult();
+            return;
+        }
+
+        var dir = to.Normalized();
+        Velocity = dir * Player.BaseSpeed * _hunterScale * SceneSpeedFactor;
+        MoveAndSlide();
+        FaceDirection(dir);
+        Play(walking: true);
     }
 
     /// <summary>Segura a rotina (conversa em andamento): para e, se houver jogador, vira o rosto para ele.</summary>

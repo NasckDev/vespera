@@ -1,0 +1,37 @@
+{
+  "id": "ato1_fim",
+  "entries": [{ "node": "n1" }],
+  "nodes": {
+    "n1": {
+      "speaker": "narrador",
+      "look": "lanterna",
+      "fx": "glow",
+      "text": "A Brecha se fecha com um estalo de luz. Na praça, a grande lanterna brilha mais forte do que antes.",
+      "set": ["ato1_fim_done"],
+      "next": "n2"
+    },
+    "n2": {
+      "speaker": "benicio",
+      "look": "player",
+      "text": "Você conseguiu, {nome}. A Lodo-Mãe caiu e a Brecha fechou. Olhe o seu pulso: o selo agora é D.",
+      "next": "n3"
+    },
+    "n3": {
+      "speaker": "benicio",
+      "look": "benicio",
+      "expression": 2,
+      "text": "Cada selo novo é um passo mais perto do Alvor, o dia em que o sol volta de vez. Escrevi o seu nome no livro da Ordem.",
+      "next": "n4"
+    },
+    "n4": {
+      "speaker": "benicio",
+      "text": "Mas há más notícias. Do Pomar Alto, lá na colina, dizem que as macieiras estão apodrecendo de dentro pra fora.",
+      "next": "n5"
+    },
+    "n5": {
+      "speaker": "benicio",
+      "expression": 2,
+      "text": "Ninguém sabe o motivo. Descanse, forje sua arma com a Odete e esteja pronto. A próxima Brecha vai ser lá em cima."
+    }
+  }
+}

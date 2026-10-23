@@ -9,9 +9,11 @@ public sealed class DialogueRunner
     private readonly DialogueFile _file;
     private readonly StoryEngine _story;
     private readonly string _playerName;
+    private readonly IReadOnlyDictionary<string, string> _tokens;
 
-    public DialogueRunner(DialogueFile file, StoryEngine story, string playerName)
+    public DialogueRunner(DialogueFile file, StoryEngine story, string playerName, IReadOnlyDictionary<string, string>? tokens = null)
     {
+        _tokens = tokens ?? new Dictionary<string, string>();
         _file = file;
         _story = story;
         _playerName = playerName;
@@ -27,7 +29,7 @@ public sealed class DialogueRunner
     public IReadOnlyList<DialogueChoice> Choices { get; private set; } = [];
 
     /// <summary>Texto da caixa atual com {nome} resolvido.</summary>
-    public string Text => Current is null ? string.Empty : Current.Text.Replace("{nome}", _playerName, StringComparison.Ordinal);
+    public string Text => Current is null ? string.Empty : Resolve(Current.Text);
 
     /// <summary>Abre a conversa. Falso se nenhuma entrada vale (o personagem não tem nada a dizer).</summary>
     public bool Start()
@@ -84,6 +86,29 @@ public sealed class DialogueRunner
 
         Enter(next);
         return true;
+    }
+
+    /// <summary>Pula o texto: aplica os efeitos das caixas seguintes até uma escolha ou o fim. Falso se a conversa acabou.</summary>
+    public bool SkipToEnd()
+    {
+        while (Current is not null && Choices.Count == 0)
+        {
+            Advance();
+        }
+
+        return Current is not null;
+    }
+
+    /// <summary>Texto com {nome} e as fichas extras (ex.: {arma}) resolvidas.</summary>
+    public string Resolve(string text)
+    {
+        var result = text.Replace("{nome}", _playerName, StringComparison.Ordinal);
+        foreach (var (key, value) in _tokens)
+        {
+            result = result.Replace("{" + key + "}", value, StringComparison.Ordinal);
+        }
+
+        return result;
     }
 
     private void Enter(string id)

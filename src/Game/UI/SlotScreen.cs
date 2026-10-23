@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Godot;
 using Vespera.Core.Save;
+using Vespera.Game.Actors;
 using Vespera.Game.Boot;
 
 namespace Vespera.Game.UI;
@@ -71,7 +72,12 @@ public partial class SlotScreen(SlotScreen.Mode mode) : UiScreen
         StartNew(slot);
     }
 
-    private void StartNew(int slot) => Begin(slot, SaveService.StartNew(slot), "Não foi possível gravar o save.");
+    /// <summary>Depois do espaço, a escolha da arma (uma vez só); o save nasce já com ela, e então vem o prólogo.</summary>
+    private void StartNew(int slot)
+    {
+        SceneRouter.Instance.Push(new ClassSelectScreen(
+            hunter => Begin(slot, SaveService.StartNew(slot, HunterSprites.WeaponId(hunter)), "Não foi possível gravar o save.")));
+    }
 
     private void Begin(int slot, SaveData? data, string failure)
     {

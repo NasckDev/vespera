@@ -7,19 +7,33 @@
   "nodes": {
     "l1": {
       "speaker": "lis",
-      "text": "Mapa! Mapa da Brecha de hoje! Desenhei de manhã, antes de ela abrir. Pra novato é de graça.",
+      "text": "Mapa! Mapa da Brecha de hoje! Eu desenhei hoje cedo, antes de ela abrir. Pra novato é de graça.",
       "next": "l2"
     },
     "l2": {
       "speaker": "lis",
       "expression": 2,
-      "text": "Não faz essa cara. Eu sempre sei onde ela vai abrir. Só não sei por quê.",
+      "text": "Eu sempre sei onde a Brecha vai abrir. Sinto um friozinho nas costas, um pouco antes. Mas não sei por quê.",
       "set": ["met_lis"],
+      "choices": [
+        { "text": "Obrigado pelo mapa.", "next": "l3" },
+        { "text": "Perguntar mais", "next": "m1" }
+      ]
+    },
+    "m1": {
+      "speaker": "lis",
+      "text": "Os adultos dizem que é imaginação. Mas nunca erro. E tem outra coisa estranha: os monstros nunca chegam perto de mim.",
+      "next": "m2"
+    },
+    "m2": {
+      "speaker": "lis",
+      "expression": 2,
+      "text": "Eu nasci no ano em que o sol sumiu. Será que é por isso? Não conta pra ninguém, tá?",
       "next": "l3"
     },
     "l3": {
       "speaker": "lis",
-      "text": "Cuidado lá embaixo: o chão escorrega e o Lodo gosta de louça. Se ouvir tilintar, não é tesouro."
+      "text": "Cuidado lá embaixo: o chão escorrega. Se ouvir um tilintar de louça, não é tesouro. É o Lodo."
     },
     "again": {
       "speaker": "lis",

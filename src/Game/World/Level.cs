@@ -132,7 +132,6 @@ public partial class Level : Control
     {
         var dt = (float)delta;
         UpdateReading(dt);
-        UpdatePicker();
         UpdateStory();
         if (_noticeTimer > 0f && (_noticeTimer -= dt) <= 0f && _reading is null)
         {
@@ -142,7 +141,7 @@ public partial class Level : Control
         var focus = DialogueOpen ? null : Player.Focus;
         var deviceId = (Player.Input as MergedInput)?.DeviceId ?? Player.Input.DeviceId;
         var anchor = focus is null ? Vector2.Zero : WorldToScreen(focus.PromptAnchor);
-        var prompt = _picker is null && !Player.Combat.IsDead ? focus?.Prompt : null;
+        var prompt = !Player.Combat.IsDead && !_sceneBusy ? focus?.Prompt : null;
         _hud.ShowPrompt(prompt, anchor, InteractionHud.InteractKeyName(deviceId), dt);
     }
 
@@ -158,6 +157,12 @@ public partial class Level : Control
 
         if (HandleJournalKey(@event))
         {
+            return;
+        }
+
+        if (@event.IsActionPressed(InputActions.Pause) && SkipSceneIfBusy())
+        {
+            GetViewport().SetInputAsHandled();
             return;
         }
 
@@ -199,7 +204,7 @@ public partial class Level : Control
 
     private void OnInteract(Player player, Interactable? item)
     {
-        if (_picker is not null || DialogueBlocksInteraction)
+        if (SkipSceneIfBusy() || DialogueBlocksInteraction)
         {
             return;
         }
@@ -235,7 +240,7 @@ public partial class Level : Control
         switch (item.Kind)
         {
             case "brecha":
-                OpenPicker();
+                EnterFromPortal();
                 return;
             case "chest":
                 World.Director?.Chest?.Open();

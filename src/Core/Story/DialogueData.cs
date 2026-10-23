@@ -44,6 +44,12 @@ public sealed class DialogueNode
     public string Next { get; set; } = string.Empty;
 
     public List<DialogueChoice> Choices { get; set; } = [];
+
+    /// <summary>Para onde a câmera olha enquanto esta caixa está aberta: "player", "brecha", "lanterna", "mural", um id de NPC ou um tipo de objeto. Vazio = não muda.</summary>
+    public string Look { get; set; } = string.Empty;
+
+    /// <summary>Efeito de cena junto da caixa: "shake" (o ar da Brecha treme) ou "glow" (a lanterna da praça brilha mais).</summary>
+    public string Fx { get; set; } = string.Empty;
 }
 
 /// <summary>Porta de entrada: a primeira cuja condição vale decide por onde a conversa começa.</summary>

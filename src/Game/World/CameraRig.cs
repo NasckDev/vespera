@@ -66,6 +66,9 @@ public partial class CameraRig : Camera2D
     /// <summary>Ponto fixo para a câmera (capturas de revisão); null = segue o jogador.</summary>
     public Vector2? FixedFocus { get; set; }
 
+    /// <summary>Prende um ponto ao chão pintado como a câmera faz (as cenas movem o foco sem mostrar o vazio).</summary>
+    public Vector2 ClampPoint(Vector2 point) => Clamp(point);
+
     /// <summary>Zoom pela régua: 140 px de caçador na tela ÷ altura humana do mapa em px de mundo.</summary>
     public static float ZoomFor(float humanHeight) => humanHeight > 0f ? HunterScreenHeight / humanHeight : 1f;
 

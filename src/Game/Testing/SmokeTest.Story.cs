@@ -25,7 +25,23 @@ public partial class SmokeTest
 
     private readonly HashSet<string> _portraitShots = [];
 
-    private static void ConfigureStory() => StoryService.SuppressAutoplay = true;
+    private static void ConfigureStory()
+    {
+        StoryService.SuppressAutoplay = true;
+        Level.SceneSpeed = 20f;
+    }
+
+    /// <summary>Espera a conversa abrir depois de uma cena de entrada (a cena anda e espera antes de falar).</summary>
+    private async Task WaitForDialogue(Level level, string what)
+    {
+        for (var i = 0; i < 4000 && !level.DialogueOpen; i++)
+        {
+            await Frames(1);
+        }
+
+        Check(level.DialogueOpen, $"tempo esgotado esperando: {what}");
+        await Frames(2);
+    }
 
     private async Task RunStoryBot(Level start)
     {
@@ -41,7 +57,7 @@ public partial class SmokeTest
         StoryService.Engine.BeginCampaignIfNew();
         await CheckScaleContract(level, "praca");
         level.PlayAutoplay();
-        await WaitFor(() => level.DialogueOpen, "fala de chegada");
+        await WaitForDialogue(level, "fala de chegada");
         Check(level.Dialogue.CurrentNodeId == "a", $"a conversa deveria começar na narração, está em '{level.Dialogue.CurrentNodeId}'");
         await Shot("story_01_chegada");
         await SkipDialogue(level);
@@ -53,6 +69,9 @@ public partial class SmokeTest
         Check(StoryService.Engine.ObjectiveId == "ravi", $"objetivo depois do quadro: '{StoryService.Engine.ObjectiveId}'");
         Check(StoryService.Engine.RankIndex == 0, "o caçador deveria estar no selo E");
 
+        Check(level.PlayAutoplay(), "depois do quadro o Ravi deveria vir desafiar");
+        await WaitForDialogue(level, "desafio do Ravi");
+        await SkipDialogue(level);
         await TalkToNpc(level, "ravi");
         Check(StoryService.Engine.HasFlag(StoryFlags.MetRavi), "Ravi deveria se apresentar");
         Check(StoryService.Engine.ObjectiveId == "odete", $"objetivo depois do Ravi: '{StoryService.Engine.ObjectiveId}'");
