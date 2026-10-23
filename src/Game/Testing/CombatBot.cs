@@ -215,6 +215,7 @@ public sealed partial class CombatBot(Level level, SmokeTest host)
         await host.PhysicsFrames(2);
         World.Player.Combat.Digest(99999);
         await WaitUntil(() => !level.Switching && World.Data.Id == Level.HubLevelId && !RiftSession.InRift, 900, "volta à Praça depois da queda");
+        await CloseResults();
         Check(RiftSession.LanternFragments == held, $"a queda deveria deixar {held} Fragmentos na Lanterna (tem {RiftSession.LanternFragments})");
         Check(RiftSession.WalletFragments == wallet, "os Fragmentos da caçada não deveriam entrar na carteira na queda");
         Check(!World.Player.Combat.IsDead && World.Player.Combat.Hp > 0, "o caçador deveria acordar vivo na Praça");
@@ -228,6 +229,7 @@ public sealed partial class CombatBot(Level level, SmokeTest host)
         RiftSession.Cheat = true;
         World.Player.Combat.Digest(99999);
         await WaitUntil(() => !level.Switching && World.Data.Id == Level.HubLevelId && !RiftSession.InRift, 900, "volta final");
+        await CloseResults();
         World.Player.Combat.RefreshStats(fullHeal: true);
         Log.Info($"bot de combate: {held} Fragmentos ficaram na Lanterna na queda e voltaram na reentrada");
     }
