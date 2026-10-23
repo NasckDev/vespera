@@ -1,0 +1,110 @@
+{
+  "character": "carrapicho",
+  "anchor": [
+    96,
+    182
+  ],
+  "stand_height_px": 70,
+  "facing": "olha para a direita; para a esquerda use flip_h",
+  "scale_class": 0.1449,
+  "stand_height_source_px": 483.0,
+  "hit_frame_method": "quadro de maior área opaca (índice base 0), só para ataques",
+  "frame_counts": {
+    "parado": 4,
+    "mover": 6,
+    "aviso": 3,
+    "ataque": 4,
+    "morte": 6
+  },
+  "atlas": "carrapicho_atlas.png",
+  "cell": [
+    192,
+    192
+  ],
+  "animations": {
+    "parado": {
+      "row": 0,
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "scale": 0.1449,
+      "source": "carrapicho_parado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        1910,
+        1943,
+        1959,
+        1905
+      ],
+      "note": null
+    },
+    "mover": {
+      "row": 1,
+      "frames": 6,
+      "fps": 10,
+      "loop": true,
+      "scale": 0.1966,
+      "source": "carrapicho_mover.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        2037,
+        2080,
+        2166,
+        2092,
+        2099,
+        2142
+      ],
+      "note": "reescalada: guarda -26% vs parado"
+    },
+    "aviso": {
+      "row": 2,
+      "frames": 3,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.1246,
+      "source": "carrapicho_aviso.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        2234,
+        2464,
+        2703
+      ],
+      "note": "reescalada: guarda +16% vs parado"
+    },
+    "ataque": {
+      "row": 3,
+      "frames": 4,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.1449,
+      "source": "carrapicho_ataque.png",
+      "hit_frame": 2,
+      "opaque_area_per_frame": [
+        1742,
+        1839,
+        2044,
+        1711
+      ],
+      "note": null
+    },
+    "morte": {
+      "row": 4,
+      "frames": 6,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.1449,
+      "source": "carrapicho_morte.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        1470,
+        1456,
+        1327,
+        1206,
+        1014,
+        647
+      ],
+      "note": null
+    }
+  },
+  "standing_height": 70
+}

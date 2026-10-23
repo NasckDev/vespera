@@ -36,10 +36,12 @@ OUT = ROOT / "assets" / "v2" / "sprites" / "npcs"
 
 CELL = 192
 FEET = (96, 176)
-NPC_HEIGHT = {"odete": 118, "ravi": 124, "lis": 118, "nilza": 118}
+NPC_HEIGHT = {"odete": 118, "ravi": 124, "lis": 118, "nilza": 118, "celeste": 118}
+# NPCs cujas tiras vieram em tamanhos diferentes entre si (Celeste: parado_lado maior): escala por tira, não por animação.
+PER_STRIP_SCALE = {"celeste"}
 FRAMES = {"parado": 4, "andar": 6}
 DIRECTIONS = ("baixo", "cima", "lado")
-PORTRAITS = ("odete", "ravi", "nilza", "lis")
+PORTRAITS = ("odete", "ravi", "nilza", "lis", "celeste")
 PORTRAIT_SIZE = 512
 JOIN = 3
 
@@ -80,6 +82,8 @@ def build_npc(npc: str) -> None:
         print(f"{npc} {anim}: altura de referência {reference:.0f}px na fonte -> {NPC_HEIGHT[npc]}px (escala {scales[anim]:.3f})")
     for (anim, direction), strip in loaded.items():
         strip.scale = scales[anim]
+        if npc in PER_STRIP_SCALE:
+            strip.scale = NPC_HEIGHT[npc] / float(np.median([f.height for f in strip.frames]))
         strip.fixed_anchor = (
             float(np.median([f.feet_x for f in strip.frames])),
             float(np.median([f.bottom for f in strip.frames])),
@@ -157,13 +161,17 @@ def write_registry() -> None:
     print("npcs.json:", registry)
 
 
-def build_portraits() -> None:
+def build_portraits(only: set[str] | None = None) -> None:
     for npc in PORTRAITS:
+        if only and npc not in only:
+            continue
         for n in (1, 2):
             image = Image.open(SRC / f"retrato_{npc}_{n}.png").convert("RGB")
             keyed = chroma_key(image).resize((PORTRAIT_SIZE, PORTRAIT_SIZE), Image.LANCZOS)
             keyed.save(OUT / f"retrato_{npc}_{n}.png", optimize=True)
             print(f"  retrato_{npc}_{n}.png")
+    if only:
+        return
     for n in (1, 2):
         image = Image.open(BENICIO_SRC / f"retrato_benicio_{n}.png").convert("RGB")
         chroma_key(image).resize((PORTRAIT_SIZE, PORTRAIT_SIZE), Image.LANCZOS).save(OUT / f"retrato_benicio_{n}.png", optimize=True)
@@ -171,12 +179,16 @@ def build_portraits() -> None:
 
 
 def main() -> int:
+    """Sem argumentos refaz todos; com ids (ex.: celeste) refaz só esses (o npcs.json é sempre regravado inteiro)."""
     OUT.mkdir(parents=True, exist_ok=True)
+    only = set(sys.argv[1:]) or None
     for npc in NPC_HEIGHT:
-        build_npc(npc)
-    build_benicio()
+        if not only or npc in only:
+            build_npc(npc)
+    if not only:
+        build_benicio()
     write_registry()
-    build_portraits()
+    build_portraits(only)
     return 0
 
 
