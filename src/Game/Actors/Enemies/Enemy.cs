@@ -284,6 +284,10 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
         CombatSfx.Play(this, CombatSound.Kill, Vector2.Zero);
         World.Feel.Spark(HitCenter, new Color("e64a8e"), 14, 320f);
         Hunter.HuntService.Killed(Elite, Stats.Def.Boss);
+        if (Hunter.HuntService.Bless.HealOnKill > 0 && World.Player is { } hunter)
+        {
+            hunter.Combat.Heal(Hunter.HuntService.Bless.HealOnKill);
+        }
         if (DropsLoot)
         {
             RiftLoot.MonsterKilled(World, MonsterId, GlobalPosition, Stats.Def.Boss, XpMult, Elite ? 2 : 1);

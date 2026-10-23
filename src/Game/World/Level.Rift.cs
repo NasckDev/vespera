@@ -47,6 +47,9 @@ public partial class Level
         await GoToRoom(RiftSession.CurrentRoom);
         if (recovered > 0)
         {
+            // ROTEIRO-V2 §6.1: pegar a Lanterna de volta dá a bênção Teimosia (+10% de dano até fechar a Brecha).
+            Hunter.HuntService.AddBlessing(Hunter.HuntService.BlessingCatalog.Teimosia.Id);
+            CombatHud.Toast("Bênção: Teimosia (+10% de dano nesta caçada)");
             CombatHud.Toast($"Lanterna recuperada! +{recovered} Fragmentos de volta à caçada.");
         }
     }

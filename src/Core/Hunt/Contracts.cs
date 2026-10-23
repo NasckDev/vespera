@@ -48,6 +48,9 @@ public sealed class RunReport
     /// <summary>Materiais trazidos (id → quantidade).</summary>
     public Dictionary<string, int> Materials { get; set; } = [];
 
+    /// <summary>Bênçãos escolhidas nesta caçada (ids).</summary>
+    public List<string> Blessings { get; set; } = [];
+
     /// <summary>Peças de equipamento achadas (nome, rank e se é rara), para a tela de resultados.</summary>
     public List<LootLine> Items { get; set; } = [];
 

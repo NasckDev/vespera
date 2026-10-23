@@ -301,12 +301,50 @@ public partial class RoomDirector : Node
         if (!quiet)
         {
             _world.Feel.Toast("Sala limpa. O selo da passagem se desfez.");
+            HealOnClear();
+            OfferBlessing();
         }
 
         if (_data.ExitPortal is not null && Chest is null && Boss is null)
         {
             OpenExitPortal();
         }
+    }
+
+    /// <summary>Bênção da Sopa "Prato Cheio": cura ao limpar a sala.</summary>
+    private void HealOnClear()
+    {
+        var pct = HuntService.Bless.HealOnClearPct;
+        if (pct > 0 && _world.Player is { } player)
+        {
+            player.Combat.Heal((int)System.Math.Round(player.Combat.MaxHp * pct / 100));
+        }
+    }
+
+    /// <summary>A lanterna oferece 3 bênçãos (ROTEIRO-V2 §5.1); escolher aplica na hora (vida máxima inclusive).</summary>
+    private void OfferBlessing()
+    {
+        if (!RiftSession.InRift || !Hunter.Progression.IsActive || !IsInsideTree())
+        {
+            return;
+        }
+
+        var offer = HuntService.OfferBlessings();
+        Hunt.BlessingScreen.Show(offer, id =>
+        {
+            var player = _world.Player;
+            var before = player.Combat.MaxHp;
+            HuntService.AddBlessing(id);
+            player.Combat.RefreshStats(fullHeal: false);
+            var gained = player.Combat.MaxHp - before;
+            if (gained > 0)
+            {
+                player.Combat.Heal(gained);
+            }
+
+            var name = HuntService.BlessingCatalog.Find(id)?.Name ?? id;
+            _world.Feel.Toast($"Bênção: {name}");
+        });
     }
 
     private void OnBossDefeated()

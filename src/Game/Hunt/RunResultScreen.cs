@@ -29,6 +29,9 @@ public partial class RunResultScreen(RunSummary summary, bool brechaClosed) : Hu
 
     public string Headline { get; private set; } = string.Empty;
 
+    /// <summary>Linha de personagem mostrada (testes).</summary>
+    public string LineText { get; private set; } = string.Empty;
+
     public static void Show(RunSummary summary, bool brechaClosed) => Open(new RunResultScreen(summary, brechaClosed));
 
     protected override Control? DefaultFocus() => _continue;
@@ -55,6 +58,14 @@ public partial class RunResultScreen(RunSummary summary, bool brechaClosed) : Hu
         body.AddChild(BuildLoot(report));
         body.AddChild(BuildContracts());
         column.AddChild(BuildXp());
+        if (summary.Line is { } line)
+        {
+            var quote = UiKit.MakeLabel($"{line.Who}: \"{line.Text}\"", UiTheme.ReadingVariation, HorizontalAlignment.Center);
+            quote.AddThemeColorOverride("font_color", Palette.Cream);
+            column.AddChild(quote);
+            LineText = quote.Text;
+        }
+
         if (StoryService.Engine.CurrentObjective is { Locked: false } objective)
         {
             column.AddChild(UiKit.MakeLabel($"Próximo passo: {objective.Title}", UiTheme.HeadingVariation, HorizontalAlignment.Center));
@@ -75,9 +86,16 @@ public partial class RunResultScreen(RunSummary summary, bool brechaClosed) : Hu
         Line(box, $"Golpes levados: {r.HitsTaken} ({r.DamageTaken} de vida)", r.HitsTaken == 0 ? Good : null);
         var frag = r.Survived ? $"Fragmentos trazidos: {r.Fragmentos}" : "Fragmentos: ficaram na Lanterna, dentro da Brecha";
         Line(box, frag + (summary.BonusFragmentos > 0 ? $" (+{summary.BonusFragmentos} do poço)" : string.Empty), r.Survived ? null : Bad);
+        Line(box, $"Salas: Você {summary.YourRooms} — Ravi {summary.RaviRooms}", Palette.Amber);
+        if (summary.Blessings is { Count: > 0 } blessings)
+        {
+            var names = blessings.Select(id => HuntService.BlessingCatalog.Find(id)?.Name ?? id);
+            Line(box, $"Bênçãos: {string.Join(", ", names)}", Palette.CreamDim);
+        }
+
         if (!r.Survived)
         {
-            Line(box, "Entre de novo para buscar a Lanterna. Armas e peças nunca se perdem.", Palette.CreamDim);
+            Line(box, "Sua Lanterna ficou acesa lá dentro. Volte e pegue: ganha a bênção Teimosia. Rank, arma e Lumes nunca se perdem.", Palette.CreamDim);
         }
 
         return box;
