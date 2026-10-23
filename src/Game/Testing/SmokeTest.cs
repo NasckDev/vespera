@@ -55,6 +55,15 @@ public partial class SmokeTest : Node
         CallDeferred(nameof(StartRun));
     }
 
+    /// <summary>Ao encerrar (sucesso, falha, tempo esgotado ou botão Sair) apaga a pasta de usuário desta execução.</summary>
+    public override void _ExitTree()
+    {
+        if (Array.IndexOf(_args, UserPaths.KeepUserDirFlag) < 0)
+        {
+            UserPaths.DeleteIsolatedRoot();
+        }
+    }
+
     private async void StartRun()
     {
         try

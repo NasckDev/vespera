@@ -7,7 +7,7 @@ namespace Vespera.Game.Boot;
 
 /// <summary>
 /// Cena principal: carrega opções e atalhos, aplica o tema, registra as telas no <see cref="SceneRouter"/> e abre o título.
-/// Com <c>-- --smoke-test</c> usa uma pasta de usuário isolada e roda o roteiro automático.
+/// Com <c>-- --smoke-test</c> usa uma pasta de usuário isolada por execução (<c>--user-dir=nome</c>) e roda o roteiro automático.
 /// </summary>
 public partial class Boot : Node
 {
@@ -21,7 +21,7 @@ public partial class Boot : Node
         var smoke = Array.IndexOf(args, SmokeFlag) >= 0;
         if (smoke)
         {
-            UserPaths.UseIsolatedRoot("smoke");
+            UserPaths.UseTestRoot(args);
             GameSettings.SuppressWindowChanges = true;
         }
 
