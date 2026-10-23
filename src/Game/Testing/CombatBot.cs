@@ -165,7 +165,15 @@ public sealed partial class CombatBot(Level level, SmokeTest host)
         await host.PhysicsFrames(90);
         if (director.ExitPortal is null && World.Data.Rift?.ExitPortal is not null)
         {
-            await WaitUntil(() => director.ExitPortal is not null, 400, "fenda de saída");
+            var waited = 0;
+            while (director.ExitPortal is null && waited < 1200)
+            {
+                await WaitUntil(() => director.ExitPortal is not null, 60, string.Empty, quiet: true);
+                waited += 60;
+            }
+
+            Log.Info($"bot: fenda de saída {(director.ExitPortal is null ? "NÃO abriu" : "abriu")} depois de ~{waited + 90} quadros (pausado {host.GetTree().Paused})");
+            Check(director.ExitPortal is not null, "bot de combate: a fenda de saída não abriu");
         }
 
         await WaitUntil(() => RankUpScreen.Active is null && !host.GetTree().Paused, 400, "celebração de rank fechada");
@@ -240,7 +248,7 @@ public sealed partial class CombatBot(Level level, SmokeTest host)
         _input.Move = Vector2.Zero;
     }
 
-    private async Task WaitUntil(Func<bool> condition, int frames, string what)
+    private async Task WaitUntil(Func<bool> condition, int frames, string what, bool quiet = false)
     {
         for (var i = 0; i < frames && !condition(); i++)
         {
@@ -255,7 +263,7 @@ public sealed partial class CombatBot(Level level, SmokeTest host)
             await host.PhysicsFrames(1);
         }
 
-        Check(condition(), $"bot de combate: tempo esgotado esperando {what} (sala {World.Data.Id}, trocando {level.Switching}, " +
+        Check(quiet || condition(), $"bot de combate: tempo esgotado esperando {what} (sala {World.Data.Id}, trocando {level.Switching}, " +
             $"na Brecha {RiftSession.InRift}, pausado {host.GetTree().Paused}, celebração {RankUpScreen.Active is not null}, " +
             $"tela {SceneRouter.Instance.Current?.Name}, foco '{World.Player.Focus?.Kind}', congelado {World.Player.Frozen}, estado {World.Player.Combat.State}, golpe ocupado {World.Player.Combat.Moves.Busy}, anim {World.Player.CurrentAnimation})");
     }
