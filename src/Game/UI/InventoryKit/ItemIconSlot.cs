@@ -67,7 +67,9 @@ public partial class ItemIconSlot : Control
         }
 
         var inner = Mathf.Min(Size.X, Size.Y) - (Pad * 2);
-        var scale = Mathf.Max(1, Mathf.FloorToInt(inner / Mathf.Max(_icon.GetWidth(), _icon.GetHeight())));
+        // Ícone pequeno cresce em passos inteiros (nítido); ícone maior que o espaço encolhe até caber (não vaza da moldura).
+        var largest = Mathf.Max(_icon.GetWidth(), _icon.GetHeight());
+        var scale = largest > inner ? inner / largest : Mathf.Max(1, Mathf.FloorToInt(inner / largest));
         var drawSize = new Vector2(_icon.GetWidth(), _icon.GetHeight()) * scale;
         var origin = (Size - drawSize) / 2f;
         if (_rank is not null && !_ghost)

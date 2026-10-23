@@ -125,12 +125,15 @@ public class LootRollerTest
     [TestCase]
     public void LodoMaeAlwaysLeavesGelEnoughForTheFirstUpgrade()
     {
-        // Espólio garantido (guardians.json "spoils"): a primeira caçada completa sempre paga os 3 de material primário do nível 2.
+        // Espólio garantido (guardians.json "spoils"): a Lodo-Mãe sozinha já paga o material primário do nível 1 -> 2.
+        var cost = new WeaponForge(Catalog, new RankLadder(Catalog)).Cost(1)!;
+        var needed = cost.Materials.GetValueOrDefault("gel_de_lodo");
+        AssertThat(needed).IsGreater(0);
         var random = new SeededRandom(7);
         for (var i = 0; i < 200; i++)
         {
             var gel = Roller.Roll(Rank.E, LootSource.Guardian("lodo_mae"), random).Entries.Where(e => e.Id == "gel_de_lodo").Sum(e => e.Amount);
-            AssertThat(gel).IsGreaterEqual(3);
+            AssertThat(gel).IsGreaterEqual(needed);
         }
     }
 

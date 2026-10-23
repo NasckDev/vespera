@@ -102,7 +102,8 @@ public partial class CombatHud : Control
         var rank = Hunter.Progression.IsActive ? Hunter.Progression.Rank : Vespera.Core.Ranks.Rank.E;
         _seal.Rank = rank;
         var lantern = !RiftSession.InRift && RiftSession.LanternFragments > 0 ? $" · Lanterna na Brecha ({RiftSession.LanternFragments})" : string.Empty;
-        _className.Text = $"{HunterSprites.DisplayName(_world.Player.Hunter)} · Rank {rank}" + lantern;
+        var armed = Story.StoryService.Engine.HasFlag(Vespera.Core.Story.StoryFlags.StarterBlade) || RiftSession.InRift;
+        _className.Text = $"{(armed ? HunterSprites.DisplayName(_world.Player.Hunter) : "Sem arma")} · Rank {rank}" + lantern;
     }
 
     private void UpdateBoss()

@@ -30,7 +30,10 @@ public static class RiftLoot
         if (xp > 0)
         {
             Progression.AddXp(xp);
-            world.Feel.Number(at - new Vector2(0, 40f * world.Data.ActorScale), $"+{xp} XP", XpColor, 0.8f);
+
+            // Acima do número de dano (que nasce no corpo) e um pouco ao lado, para os dois não se misturarem.
+            var lift = (boss ? 2.2f : 1.25f) * world.Data.HumanHeight;
+            world.Feel.Number(at + new Vector2(0.35f * world.Data.HumanHeight, -lift), $"+{xp} XP", XpColor, 0.7f);
         }
 
         if (!boss)
@@ -79,12 +82,13 @@ public static class RiftLoot
     private static void Show(LevelWorld world, Vector2 at, LootGrant grant, float spread)
     {
         world.DropFragments(at, grant.FragmentosGained, spread);
-        var lift = 70f * world.Data.ActorScale;
+        var human = world.Data.HumanHeight;
         var i = 0;
         foreach (var entry in grant.Loot.Entries)
         {
             var text = entry.Kind == LootEntryKind.Material ? $"+{entry.Amount} {entry.Name}" : entry.Name;
-            world.Feel.Number(at - new Vector2(0, lift + (i++ * 22f * world.Data.ActorScale)), text, entry.Rare || entry.SetPiece ? RareColor : LootColor, 0.75f);
+            var at2 = at + new Vector2(-0.35f * human, -(0.9f * human) - (i++ * 0.32f * human));
+            world.Feel.Number(at2, text, entry.Rare || entry.SetPiece ? RareColor : LootColor, 0.7f);
         }
     }
 

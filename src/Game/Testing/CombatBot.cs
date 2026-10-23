@@ -72,9 +72,10 @@ public sealed class CombatBot(Level level, SmokeTest host)
             await ShotOnce("golpe_hitstop_b");
         }
 
-        foreach (var enemy in World.Enemies)
+        foreach (var enemy in World.Enemies.ToList())
         {
-            if (GodotObject.IsInstanceValid(enemy) && enemy.State == EnemyState.Telegraph)
+            if (GodotObject.IsInstanceValid(enemy) && enemy.State == EnemyState.Telegraph
+                && (enemy is LodoMae || enemy.GlobalPosition.DistanceTo(World.Player.GlobalPosition) > 0.9f * World.Data.HumanHeight))
             {
                 await ShotOnce(enemy switch { LodoMae => "lodo_mae_aviso", Espectro => "espectro_aviso", _ => "lodo_aviso" });
             }

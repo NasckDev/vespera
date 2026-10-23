@@ -117,6 +117,9 @@ public partial class SmokeTest
         var distance = ravi.Count == 0 ? float.MaxValue : ravi[0].GlobalPosition.DistanceTo(portal);
         Check(distance <= RaviNearPortal, $"depois da Lâmina o Ravi deveria esperar junto ao portal (a {distance:0} px dele)");
         Log.Info($"ato I: de volta à Praça; Ravi a {distance:0} px do portal");
+        await StandAt(level, level.World.ClampToFloor(portal + new Vector2(-0.6f * level.World.Data.HumanHeight, 1.6f * level.World.Data.HumanHeight)));
+        await PhysicsFrames(20);
+        await Shot("ato1_ravi_portal", 0.6);
         return level;
     }
 
