@@ -26,6 +26,7 @@ public partial class RoomDirector : Node
     /// <summary>Altura humana da Praça, onde o catálogo de objetos foi medido.</summary>
     private const float PracaHuman = 72f;
     private const string RestProp = "lanterna_chao";
+    private const string StandProp = "suporte_armas";
 
     private readonly LevelWorld _world;
     private readonly RiftRoomData _data;
@@ -115,6 +116,7 @@ public partial class RoomDirector : Node
 
         PlaceBreakables();
         PlaceRest();
+        PlaceWeaponStand();
         HuntService.RoomStarted();
         if (_data.Waves.Count == 0 && Guardian is null)
         {
@@ -159,6 +161,59 @@ public partial class RoomDirector : Node
         };
         _world.Entities.AddChild(_rest);
         _world.Feel.Toast("Sala de descanso: chegue perto da lanterna e interaja para recuperar vida.");
+    }
+
+    /// <summary>Suporte de arma na primeira sala (ROTEIRO-V2 §4.3): pegar troca a arma só nesta caçada.</summary>
+    public Interactable? WeaponStand { get; private set; }
+
+    /// <summary>
+    /// Primeira sala das caçadas 1 e 2 do Ato I: um Arco (1ª) ou um Martelo (2ª) largado num suporte perto da entrada.
+    /// Apoio visual: o <c>suporte_armas</c> do catálogo das Forjas, até a arte da issue #42.
+    /// </summary>
+    private void PlaceWeaponStand()
+    {
+        if (RiftSession.RoomIndex != 0 || HuntService.StandWeapon is not { } weapon || !_world.Catalog.ContainsKey(StandProp))
+        {
+            return;
+        }
+
+        var hunter = RiftSession.HunterFor(weapon);
+        if (hunter == RiftSession.Hunter)
+        {
+            return;
+        }
+
+        var human = _world.Data.HumanHeight;
+        var feet = _world.ClampToFloor(_world.SpawnPoint + new Vector2(1.6f * human, -0.4f * human));
+        var stand = _world.AddProp(StandProp, feet);
+        stand.Scale = Vector2.One * (human / PracaHuman);
+        var name = Actors.HunterSprites.DisplayName(hunter);
+        WeaponStand = new Interactable("weapon_stand", $"Pegar o {name}", 0.9f * human)
+        {
+            Name = "WeaponStand",
+            Target = weapon,
+            Position = feet,
+            PromptAnchor = feet - new Vector2(0, 1.2f * human),
+        };
+        _world.Entities.AddChild(WeaponStand);
+        _world.Feel.Toast($"Um {name} largado no suporte. Pegue para testar nesta caçada.");
+    }
+
+    /// <summary>Pega a arma do suporte: troca a folha e os golpes do caçador até o fim da caçada.</summary>
+    public bool TakeStandWeapon()
+    {
+        if (WeaponStand is not { } stand || _world.Player is not { } player)
+        {
+            return false;
+        }
+
+        var hunter = RiftSession.HunterFor(stand.Target);
+        RiftSession.Hunter = hunter;
+        player.SetHunter(hunter);
+        stand.QueueFree();
+        WeaponStand = null;
+        _world.Feel.Toast($"Você pegou o {Actors.HunterSprites.DisplayName(hunter)}. Só nesta caçada.");
+        return true;
     }
 
     /// <summary>Usa a lanterna de descanso: cura parte da vida máxima (uma vez por sala).</summary>

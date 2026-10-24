@@ -19,15 +19,15 @@
       "critPct": 2.0,
       "partBreakPct": 5.0,
       "tiers": [
-        { "rank": "E", "name": "Lâmina de Ferro Frio", "damage": 12 },
-        { "rank": "D", "name": "Espada das Marés", "damage": 23 },
-        { "rank": "C", "name": "Espada do Velório", "damage": 40 },
-        { "rank": "B", "name": "Espada de Ferro Negro", "damage": 55 },
-        { "rank": "A", "name": "Espada da Vinha Ancião", "damage": 86 },
-        { "rank": "S", "name": "Espada do Vitral", "damage": 132 },
-        { "rank": "SS", "name": "Lâmina das Cinco Brechas", "damage": 168 },
-        { "rank": "SSS", "name": "Espada Maré-Morta", "damage": 239 },
-        { "rank": "Alvor", "name": "Espada do Primeiro Sol", "damage": 415 }
+        { "rank": "E", "name": "Lâmina Enferrujada", "damage": 12 },
+        { "rank": "D", "name": "Lâmina da Forja", "damage": 23 },
+        { "rank": "C", "name": "Lâmina do Pomar", "damage": 40 },
+        { "rank": "B", "name": "Lâmina da Maré", "damage": 55 },
+        { "rank": "A", "name": "Lâmina de Vela", "damage": 86 },
+        { "rank": "S", "name": "Lâmina do Sino", "damage": 132 },
+        { "rank": "SS", "name": "Lâmina de Rua", "damage": 168 },
+        { "rank": "SSS", "name": "Lâmina do Avesso", "damage": 239 },
+        { "rank": "Alvor", "name": "Lâmina do Alvor", "damage": 415 }
       ]
     },
     {
@@ -37,15 +37,15 @@
       "critPct": 3.0,
       "partBreakPct": 5.0,
       "tiers": [
-        { "rank": "E", "name": "Arco do Cais", "damage": 17 },
-        { "rank": "D", "name": "Arco do Peixe-Lanterna", "damage": 22 },
-        { "rank": "C", "name": "Arco dos Ossos", "damage": 32 },
-        { "rank": "B", "name": "Arco da Fornalha", "damage": 52 },
-        { "rank": "A", "name": "Arco de Seiva Régia", "damage": 81 },
-        { "rank": "S", "name": "Arco do Halo", "damage": 108 },
-        { "rank": "SS", "name": "Arco do Eclipse de Lumeira", "damage": 159 },
-        { "rank": "SSS", "name": "Arco do Caçador de Ecos", "damage": 226 },
-        { "rank": "Alvor", "name": "Arco de Mil Amanheceres", "damage": 392 }
+        { "rank": "E", "name": "Arco de Caça Velho", "damage": 17 },
+        { "rank": "D", "name": "Arco da Forja", "damage": 22 },
+        { "rank": "C", "name": "Arco do Pomar", "damage": 32 },
+        { "rank": "B", "name": "Arco da Maré", "damage": 52 },
+        { "rank": "A", "name": "Arco de Vela", "damage": 81 },
+        { "rank": "S", "name": "Arco do Sino", "damage": 108 },
+        { "rank": "SS", "name": "Arco de Rua", "damage": 159 },
+        { "rank": "SSS", "name": "Arco do Avesso", "damage": 226 },
+        { "rank": "Alvor", "name": "Arco do Alvor", "damage": 392 }
       ]
     },
     {
@@ -55,15 +55,15 @@
       "critPct": 2.0,
       "partBreakPct": 11.0,
       "tiers": [
-        { "rank": "E", "name": "Martelo da Doca", "damage": 22 },
-        { "rank": "D", "name": "Martelo de Âncora", "damage": 32 },
-        { "rank": "C", "name": "Martelo da Lápide", "damage": 55 },
-        { "rank": "B", "name": "Martelo da Bigorna", "damage": 76 },
-        { "rank": "A", "name": "Martelo do Golem Verde", "damage": 119 },
-        { "rank": "S", "name": "Martelo do Nórtex", "damage": 182 },
-        { "rank": "SS", "name": "Martelo do Colosso Ressurgido", "damage": 232 },
-        { "rank": "SSS", "name": "Martelo do Sol Submerso", "damage": 330 },
-        { "rank": "Alvor", "name": "Martelo do Novo Dia", "damage": 573 }
+        { "rank": "E", "name": "Marreta da Doca", "damage": 22 },
+        { "rank": "D", "name": "Martelo da Forja", "damage": 32 },
+        { "rank": "C", "name": "Martelo do Pomar", "damage": 55 },
+        { "rank": "B", "name": "Martelo de Âncora", "damage": 76 },
+        { "rank": "A", "name": "Martelo da Lápide", "damage": 119 },
+        { "rank": "S", "name": "Martelo do Sino", "damage": 182 },
+        { "rank": "SS", "name": "Marreta de Rua", "damage": 232 },
+        { "rank": "SSS", "name": "Martelo do Avesso", "damage": 330 },
+        { "rank": "Alvor", "name": "Martelo do Alvor", "damage": 573 }
       ]
     }
   ]

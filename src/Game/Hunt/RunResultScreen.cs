@@ -17,6 +17,7 @@ namespace Vespera.Game.Hunt;
 public partial class RunResultScreen(RunSummary summary, bool brechaClosed) : HunterScreen
 {
     private const int IconSize = 64;
+    private const int BlessingIconSize = 40;
     private static readonly Color Good = new("8fe39a");
     private static readonly Color Bad = new("ff8a7a");
 
@@ -89,8 +90,32 @@ public partial class RunResultScreen(RunSummary summary, bool brechaClosed) : Hu
         Line(box, $"Salas: Você {summary.YourRooms} — Ravi {summary.RaviRooms}", Palette.Amber);
         if (summary.Blessings is { Count: > 0 } blessings)
         {
-            var names = blessings.Select(id => HuntService.BlessingCatalog.Find(id)?.Name ?? id);
-            Line(box, $"Bênçãos: {string.Join(", ", names)}", Palette.CreamDim);
+            Line(box, "Bênçãos:", Palette.CreamDim);
+            var row = UiKit.MakeRow(18);
+            foreach (var id in blessings)
+            {
+                var def = HuntService.BlessingCatalog.Find(id);
+                var family = def is not null && HuntService.BlessingCatalog.Families.TryGetValue(def.Family, out var f) ? f : null;
+                var cell = UiKit.MakeRow(6);
+                if (def is not null && BlessingScreen.FamilyIcon(def.Family) is { } icon)
+                {
+                    cell.AddChild(new TextureRect
+                    {
+                        Texture = icon,
+                        ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+                        StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered,
+                        CustomMinimumSize = new Vector2(BlessingIconSize, BlessingIconSize),
+                    });
+                }
+
+                var label = UiKit.MakeLabel(def?.Name ?? id, UiTheme.ReadingVariation);
+                label.AddThemeColorOverride("font_color", family is null ? Palette.CreamDim : new Color(family.Color).Lerp(Palette.Cream, 0.3f));
+                label.SizeFlagsVertical = SizeFlags.ShrinkCenter;
+                cell.AddChild(label);
+                row.AddChild(cell);
+            }
+
+            box.AddChild(row);
         }
 
         if (!r.Survived)

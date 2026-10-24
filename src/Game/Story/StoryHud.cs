@@ -14,6 +14,7 @@ public partial class StoryHud : Control
     private const float FadeSpeed = 4f;
     private const float Margin = 28f;
     private const float MaxWidth = 640f;
+    private const float ToastGap = 18f;
 
     private PanelContainer _tracker = null!;
     private Label _trackerTitle = null!;
@@ -80,13 +81,15 @@ public partial class StoryHud : Control
         _toast.ResetSize();
         var size = _toast.GetCombinedMinimumSize();
         _toast.Size = size;
-        _toast.Position = new Vector2((1920f - size.X) / 2f, 150f);
+        // Abaixo do painel do objetivo (painel 23/10: o aviso tampava o "Objetivo" e cortava a palavra).
+        var below = _tracker.Visible ? _tracker.Position.Y + _tracker.Size.Y + ToastGap : 150f;
+        _toast.Position = new Vector2((1920f - size.X) / 2f, Mathf.Max(150f, below));
     }
 
     private void BuildTracker()
     {
         _tracker = new PanelContainer { Name = "Tracker", MouseFilter = MouseFilterEnum.Ignore, Visible = false };
-        _tracker.AddThemeStyleboxOverride("panel", Bubble(new Color(Palette.Indigo, 0.82f), new Color(Palette.Amber, 0.7f), 14, 8));
+        _tracker.AddThemeStyleboxOverride("panel", Bubble(new Color(Palette.Indigo, 0.93f), new Color(Palette.Amber, 0.85f), 18, 10));
         var column = UiKit.MakeColumn(0);
         column.AddChild(UiKit.MakeLabel("Objetivo", UiTheme.HeadingVariation));
         _trackerTitle = UiKit.MakeWrapped(string.Empty, UiTheme.ReadingVariation);

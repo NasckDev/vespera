@@ -15,7 +15,16 @@ namespace Vespera.Game.Hunt;
 public partial class BlessingScreen(IReadOnlyList<BlessingDef> offer, Action<string> onPick) : HunterScreen
 {
     private const int CardWidth = 440;
+    private const int IconSize = 112;
+    private const string IconFolder = "res://assets/v2/interface/bencaos/";
     private readonly List<Button> _cards = [];
+
+    /// <summary>Ícone pintado da família (issue #43: chama, vigilia, sopa, mapa, aposta); null se faltar a arte.</summary>
+    public static Texture2D? FamilyIcon(string family)
+    {
+        var path = $"{IconFolder}{family}.png";
+        return ResourceLoader.Exists(path) ? GD.Load<Texture2D>(path) : null;
+    }
 
     public static BlessingScreen? Active { get; private set; }
 
@@ -89,7 +98,7 @@ public partial class BlessingScreen(IReadOnlyList<BlessingDef> offer, Action<str
     {
         var color = new Color(family.Color);
         var card = UiKit.MakeButton(string.Empty, () => Choose(index), CardWidth);
-        card.CustomMinimumSize = new Vector2(CardWidth, 360);
+        card.CustomMinimumSize = new Vector2(CardWidth, 440);
         var style = new StyleBoxFlat { BgColor = new Color(Palette.Indigo, 0.96f), BorderColor = color, AntiAliasing = true };
         style.SetBorderWidthAll(5);
         style.SetCornerRadiusAll(14);
@@ -105,6 +114,18 @@ public partial class BlessingScreen(IReadOnlyList<BlessingDef> offer, Action<str
         var box = UiKit.MakeColumn(14);
         box.MouseFilter = MouseFilterEnum.Ignore;
         margin.AddChild(box);
+        if (FamilyIcon(b.Family) is { } icon)
+        {
+            box.AddChild(new TextureRect
+            {
+                Texture = icon,
+                ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+                StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered,
+                CustomMinimumSize = new Vector2(0, IconSize),
+                MouseFilter = MouseFilterEnum.Ignore,
+            });
+        }
+
         var tag = UiKit.MakeLabel($"{family.Name} · {family.Who}", UiTheme.DimVariation, HorizontalAlignment.Center);
         tag.AddThemeColorOverride("font_color", color);
         var name = UiKit.MakeLabel(b.Name, UiTheme.HeadingVariation, HorizontalAlignment.Center);

@@ -158,6 +158,9 @@ public partial class Level
     private async Task ReturnToHub(string toast, string subtitle, Hunter.RunSummary? summary = null, bool closed = false)
     {
         var hub = RiftSession.Brecha.Hub.Length > 0 ? RiftSession.Brecha.Hub : HubLevelId;
+
+        // A arma do suporte (ROTEIRO-V2 §4.3) vale só na caçada: na volta o caçador está de novo com a arma equipada.
+        RiftSession.Hunter = EquippedHunter;
         await GoToRoom(hub, _hubSpawn);
         if (summary is not null && ShowResults)
         {

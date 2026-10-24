@@ -80,6 +80,9 @@ public static class StoryFlags
     /// <summary>Evento: comprar o mapa da Lis (10 Lumes).</summary>
     public const string EventBuyMap = "BuyMap";
 
+    /// <summary>Evento: comprar a sopa da Nilza (bônus de vida máxima na próxima caçada).</summary>
+    public const string EventBuySoup = "BuySoup";
+
     /// <summary>Prefixo do evento do Benício que queima o selo do ato (<c>BurnSeal:B</c>, <c>BurnSeal:A</c>, <c>BurnSeal:S</c>...).</summary>
     public const string EventBurnSealPrefix = "BurnSeal:";
 
