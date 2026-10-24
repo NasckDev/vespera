@@ -157,20 +157,23 @@ public partial class SmokeTest
     /// <summary>Uma conversa avança com o clique do mouse e a segunda caixa responde a uma escolha clicada.</summary>
     private async Task VisitMouseDialogue(Level level)
     {
-        Check(level.StartDialogue("lis"), "mouse: a conversa com a Lis deveria abrir");
+        Check(level.StartDialogue("ravi"), "mouse: a conversa com o Ravi deveria abrir");
         await Frames(4);
         level.Dialogue.Complete();
         var first = level.Dialogue.CurrentNodeId;
         await MouseClick(new Vector2(960, 900));
         Check(level.Dialogue.CurrentNodeId != first, $"mouse: clicar deveria avançar a fala (continua em '{first}')");
-        await WaitFor(() => level.Dialogue.HasChoices, "escolhas da Lis");
-        var choice = level.Dialogue.ChoiceButtons[0];
+        await WaitFor(() => level.Dialogue.HasChoices, "escolhas do Ravi");
+        var choice = level.Dialogue.ChoiceButtons[1];
         await Frames(2);
         await MouseClick(CenterOf(choice));
-        Check(level.Dialogue.CurrentNodeId == "l3", $"mouse: clicar na escolha deveria ir ao nó l3 (está em '{level.Dialogue.CurrentNodeId}')");
+        Check(level.Dialogue.CurrentNodeId == "rm1", $"mouse: 'Perguntar mais' deveria ir ao nó rm1 (está em '{level.Dialogue.CurrentNodeId}')");
         level.Dialogue.Complete();
         await MouseClick(new Vector2(960, 900));
-        Check(!level.DialogueOpen, "mouse: o último clique deveria fechar a conversa");
+        await WaitFor(() => level.Dialogue.HasChoices, "fim da pergunta do Ravi");
+        await Frames(2);
+        await MouseClick(CenterOf(level.Dialogue.ChoiceButtons[0]));
+        Check(!level.DialogueOpen, "mouse: a última escolha deveria fechar a conversa");
         await Seconds(0.4);
     }
 }
