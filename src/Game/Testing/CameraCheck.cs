@@ -28,6 +28,7 @@ public sealed class CameraCheck(Level level, SmokeTest host, bool shots = false)
     {
         var rooms = new List<string>(CityLevels);
         rooms.AddRange(RiftSession.Brecha.Rooms);
+        rooms.AddRange(["ruas_baixas", "ruas_arena"]);
         foreach (var room in rooms)
         {
             await level.GoToRoom(room, withDirector: false);
@@ -36,7 +37,7 @@ public sealed class CameraCheck(Level level, SmokeTest host, bool shots = false)
             await host.PhysicsFrames(2);
             Expect(room, MinOnScreen, MaxOnScreen);
             CheckFraming(room);
-            if (shots && System.Array.IndexOf(CityLevels, room) >= 0)
+            if (shots && (System.Array.IndexOf(CityLevels, room) >= 0 || room.StartsWith("ruas_", System.StringComparison.Ordinal)))
             {
                 await Shoot(room);
             }

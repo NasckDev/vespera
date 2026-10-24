@@ -25,6 +25,9 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
     private static readonly string[] People = ["odete", "ravi", "nilza", "benicio", "lis", "celeste"];
     private static readonly string[] CityLevels = ["forjas", "forja_interior"];
 
+    /// <summary>Ato VI: hub das Ruas Baixas e arena do Inquilino (com a mãe do Ravi na fila de gente).</summary>
+    private static readonly string[] RuasLevels = ["ruas_baixas", "ruas_arena"];
+
     private readonly List<string> _failures = [];
 
     private LevelWorld World => level.World;
@@ -35,6 +38,7 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
         rooms.AddRange(CityLevels);
         rooms.AddRange(RiftSession.Brecha.Rooms);
         rooms.AddRange(PomarLevels);
+        rooms.AddRange(RuasLevels);
         foreach (var room in rooms)
         {
             await level.GoToRoom(room, withDirector: false);
@@ -64,7 +68,7 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
             x += gap;
         }
 
-        foreach (var id in People)
+        foreach (var id in room.StartsWith("ruas_", System.StringComparison.Ordinal) ? [.. People, "mae_ravi"] : People)
         {
             var npc = new Npc(id, new NpcPlacement { Id = id, At = [0, 0], Routine = "idle" }, human)
             {
@@ -79,9 +83,9 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
 
         var enemies = new List<Enemy>();
         var pomar = room.StartsWith("pomar_", System.StringComparison.Ordinal);
-        foreach (var id in pomar ? PomarMonsters : Monsters)
+        foreach (var id in room.StartsWith("ruas_", System.StringComparison.Ordinal) ? ["inquilino"] : pomar ? PomarMonsters : Monsters)
         {
-            var guardian = id is "lodo_mae" or "macieira_oca";
+            var guardian = id is "lodo_mae" or "macieira_oca" or "inquilino";
             x += guardian ? gap * 1.6f : 0f;
             var e = guardian ? EnemyFactory.Guardian(id, World) : EnemyFactory.Create(id, World);
             e.Position = World.ClampToFloor(start + new Vector2(dir * x, 0));
