@@ -1,0 +1,110 @@
+{
+  "character": "rato_lanterna",
+  "anchor": [
+    96,
+    182
+  ],
+  "stand_height_px": 44,
+  "facing": "olha para a direita; para a esquerda use flip_h",
+  "scale_class": 0.2173,
+  "stand_height_source_px": 202.5,
+  "hit_frame_method": "quadro de maior área opaca (índice base 0), só para ataques",
+  "frame_counts": {
+    "parado": 4,
+    "correr": 6,
+    "aviso": 3,
+    "ataque": 4,
+    "morte": 6
+  },
+  "atlas": "rato_lanterna_atlas.png",
+  "cell": [
+    192,
+    192
+  ],
+  "animations": {
+    "parado": {
+      "row": 0,
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "scale": 0.2173,
+      "source": "rato_lanterna_parado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        2530,
+        2567,
+        2693,
+        2613
+      ],
+      "note": null
+    },
+    "correr": {
+      "row": 1,
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.2173,
+      "source": "rato_lanterna_correr.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        1526,
+        1463,
+        1403,
+        1506,
+        1548,
+        1556
+      ],
+      "note": null
+    },
+    "aviso": {
+      "row": 2,
+      "frames": 3,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.1705,
+      "source": "rato_lanterna_aviso.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        2548,
+        2692,
+        2646
+      ],
+      "note": "reescalada: guarda +27% vs parado"
+    },
+    "ataque": {
+      "row": 3,
+      "frames": 4,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.2173,
+      "source": "rato_lanterna_ataque.png",
+      "hit_frame": 1,
+      "opaque_area_per_frame": [
+        2526,
+        2711,
+        2707,
+        2489
+      ],
+      "note": null
+    },
+    "morte": {
+      "row": 4,
+      "frames": 6,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.2173,
+      "source": "rato_lanterna_morte.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        1948,
+        1701,
+        1811,
+        1646,
+        1516,
+        1451
+      ],
+      "note": null
+    }
+  },
+  "standing_height": 44
+}

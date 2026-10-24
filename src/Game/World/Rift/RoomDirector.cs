@@ -50,7 +50,11 @@ public partial class RoomDirector : Node
 
     public bool Cleared { get; private set; }
 
-    public LodoMae? Boss { get; private set; }
+    /// <summary>A Lodo-Mãe (Ato I), se for ela o Guardião desta sala.</summary>
+    public LodoMae? Boss => Guardian as LodoMae;
+
+    /// <summary>O Guardião desta sala (qualquer um: Lodo-Mãe, Macieira Oca).</summary>
+    public Enemy? Guardian { get; private set; }
 
     public Chest? Chest { get; private set; }
 
@@ -103,15 +107,16 @@ public partial class RoomDirector : Node
 
         if (_data.Boss is { } boss)
         {
-            Boss = new LodoMae(_world) { Position = new Vector2(boss.At[0], boss.At[1]) };
-            Boss.Died += _ => OnBossDefeated();
-            _world.AddEnemy(Boss);
+            Guardian = EnemyFactory.Guardian(boss.Type, _world);
+            Guardian.Position = new Vector2(boss.At[0], boss.At[1]);
+            Guardian.Died += _ => OnBossDefeated();
+            _world.AddEnemy(Guardian);
         }
 
         PlaceBreakables();
         PlaceRest();
         HuntService.RoomStarted();
-        if (_data.Waves.Count == 0 && Boss is null)
+        if (_data.Waves.Count == 0 && Guardian is null)
         {
             Clear(quiet: true);
         }
@@ -175,7 +180,7 @@ public partial class RoomDirector : Node
     public override void _Process(double delta)
     {
         var dt = (float)delta;
-        if (!Cleared && Boss is null)
+        if (!Cleared && Guardian is null)
         {
             TickWaves(dt);
         }
@@ -283,7 +288,7 @@ public partial class RoomDirector : Node
                 crack.Release();
                 _pending--;
 
-                Enemy enemy = spawn.Type == "espectro" ? new Espectro(_world) : new Lodo(_world) { StartDelay = (float)GD.RandRange(0.0, 0.6) };
+                var enemy = EnemyFactory.Create(spawn.Type, _world);
                 if (spawn.Elite)
                 {
                     enemy.MakeElite(HuntService.Config.Elite);
@@ -335,7 +340,7 @@ public partial class RoomDirector : Node
             OfferBlessing();
         }
 
-        if (_data.ExitPortal is not null && Chest is null && Boss is null)
+        if (_data.ExitPortal is not null && Chest is null && Guardian is null)
         {
             OpenExitPortal();
         }
@@ -380,7 +385,7 @@ public partial class RoomDirector : Node
     private void OnBossDefeated()
     {
         HuntService.GuardianFight(_bossSeconds, RiftSession.Brecha.Boss.Cores, Boss?.CoresBroken ?? 0);
-        RiftLoot.GuardianDefeated(_world, Boss?.GlobalPosition ?? _world.Player.GlobalPosition);
+        RiftLoot.GuardianDefeated(_world, Guardian?.GlobalPosition ?? _world.Player.GlobalPosition);
         Cleared = true;
         var timer = GetTree().CreateTimer(1.4, processAlways: false);
         timer.Timeout += OpenExitPortal;

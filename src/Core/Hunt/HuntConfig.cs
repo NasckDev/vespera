@@ -19,6 +19,18 @@ public sealed class HuntConfig
 
     public int RoomsMin { get; set; } = 5;
 
+    /// <summary>Chão da última sala (Covil do Guardião). Ato I: esgoto_arena; Ato II: pomar_arena.</summary>
+    public string FinalGround { get; set; } = "esgoto_arena";
+
+    /// <summary>Monstro comum da Brecha (a primeira sala só tem dele).</summary>
+    public string CommonMonster { get; set; } = "lodo";
+
+    /// <summary>Segundo monstro, sorteado com a fatia <see cref="EspectroShareStart"/>... (Ato I: Espectro; Ato II: Rato-Lanterna).</summary>
+    public string SecondMonster { get; set; } = "espectro";
+
+    /// <summary>Quantos nascem juntos quando sai o segundo monstro (enxame: Rato-Lanterna 3; Espectro 1).</summary>
+    public int SecondSwarm { get; set; } = 1;
+
     public int RoomsMax { get; set; } = 7;
 
     /// <summary>Caçadas completas antes de o Benício aceitar o exame (a Lodo-Mãe só aparece com o exame aprovado).</summary>

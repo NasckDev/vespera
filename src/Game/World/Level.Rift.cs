@@ -128,7 +128,7 @@ public partial class Level
         var toast = guardian
             ? $"Brecha fechada! +{end?.FragmentosBanked ?? 0} Fragmentos levados para casa."
             : $"Caçada completa! +{end?.FragmentosBanked ?? 0} Fragmentos levados para casa.";
-        _ = ReturnToHub(toast, guardian ? "Esgotos do Mercado — fechada" : "De volta, inteiro", summary, guardian);
+        _ = ReturnToHub(toast, guardian ? $"{RiftSession.Brecha.Name} — fechada" : "De volta, inteiro", summary, guardian);
     }
 
     private void OnPlayerDied(HunterCombat combat)
@@ -154,7 +154,8 @@ public partial class Level
 
     private async Task ReturnToHub(string toast, string subtitle, Hunter.RunSummary? summary = null, bool closed = false)
     {
-        await GoToRoom(HubLevelId, _hubSpawn);
+        var hub = RiftSession.Brecha.Hub.Length > 0 ? RiftSession.Brecha.Hub : HubLevelId;
+        await GoToRoom(hub, _hubSpawn);
         if (summary is not null && ShowResults)
         {
             Hunt.RunResultScreen.Show(summary, closed);
@@ -165,7 +166,7 @@ public partial class Level
         }
 
         World.Player.Combat.Revive();
-        CombatHud.ShowTitle("Praça da Lanterna", subtitle);
+        CombatHud.ShowTitle(World.Data.Name, subtitle);
         CombatHud.Toast(toast);
         if (RiftSession.LanternFragments > 0)
         {

@@ -67,7 +67,8 @@ public static class RiftLoot
     /// <summary>Guardião vencido: conquista e saque garantido na progressão, flag na história. Pode subir o rank (E → D).</summary>
     public static void GuardianDefeated(LevelWorld world, Vector2 at)
     {
-        StoryService.SetFlag(StoryFlags.GuardianDefeatedLodoMae);
+        var guardianId = RiftSession.Brecha.GuardianId;
+        StoryService.SetFlag(guardianId == "lodo_mae" ? StoryFlags.GuardianDefeatedLodoMae : $"GuardianDefeated:{guardianId}");
         if (!Progression.IsActive)
         {
             return;
@@ -76,7 +77,8 @@ public static class RiftLoot
         var result = Progression.RecordGuardianKill(RiftSession.Brecha.GuardianId);
         Show(world, at, result.Loot, spread: 120f);
         var echo = result.EchoGained is { } e ? $" Eco absorvido: {e.Name}." : string.Empty;
-        world.Feel.Toast(Summary("A Lodo-Mãe se desfaz", result.Loot.Loot) + echo);
+        var fall = guardianId == "lodo_mae" ? "A Lodo-Mãe se desfaz" : "A Macieira Oca racha e cai";
+        world.Feel.Toast(Summary(fall, result.Loot.Loot) + echo);
     }
 
     private static void Show(LevelWorld world, Vector2 at, LootGrant grant, float spread)

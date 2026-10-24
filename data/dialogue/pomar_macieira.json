@@ -1,0 +1,20 @@
+{
+  "id": "pomar_macieira",
+  "_doc": "Fala de morador do Pomar Alto (voz atrás da cerca/janela; sem sprite de morador ainda).",
+  "entries": [
+    {
+      "node": "a"
+    }
+  ],
+  "nodes": {
+    "a": {
+      "speaker": "celeste",
+      "text": "Essa ainda dá fruta vermelha. É a última.",
+      "next": "b"
+    },
+    "b": {
+      "speaker": "celeste",
+      "text": "Não arranca nenhuma. Deixa ela em paz."
+    }
+  }
+}

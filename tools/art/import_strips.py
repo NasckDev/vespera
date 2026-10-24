@@ -66,8 +66,13 @@ MONSTERS = {
     "lodo": {"height": 48, "cell": 128},
     "espectro": {"height": 96, "cell": 192},
     "lodo_mae": {"height": 260, "cell": 384},
+    # Ato II (issue #27): as tiras vieram em tamanhos diferentes entre si; "normalize" reescala cada tira cuja altura
+    # de guarda (1º quadro) foge >15% da de 'parado', como nos caçadores.
+    "carrapicho": {"height": 70, "cell": 192, "normalize": True},
+    "rato_lanterna": {"height": 44, "cell": 192, "normalize": True},
+    "macieira_oca": {"height": 300, "cell": 448, "normalize": True},
 }
-MONSTER_MARGIN = {"lodo": 8, "espectro": 12, "lodo_mae": 16}  # folga entre o pé e a borda de baixo da célula
+MONSTER_MARGIN = {"lodo": 8, "espectro": 12, "lodo_mae": 16, "carrapicho": 10, "rato_lanterna": 10, "macieira_oca": 16}  # folga entre o pé e a borda de baixo da célula
 
 PLANTED_ANIMS = {"parado", "dano"}  # pés no mesmo lugar: realinha o x por quadro (a fonte desloca os quadros dentro da fatia)
 LOOP_ANIMS = {"parado", "andar", "mover"}
@@ -481,12 +486,15 @@ def monster_of(file_stem: str) -> tuple[str, str]:
     raise ValueError(file_stem)
 
 
-def build_monsters() -> dict:
+def build_monsters(only: set[str] | None = None) -> dict:
     spec = json.loads((GERADO / "monstros" / "animacoes.json").read_text(encoding="utf-8"))
-    grouped: dict[str, list[Strip]] = {name: [] for name in MONSTERS}
+    names = [name for name in MONSTERS if not only or name in only]
+    grouped: dict[str, list[Strip]] = {name: [] for name in names}
     for entry in spec["animations"]:
         path = GERADO / "monstros" / entry["file"]
         monster, anim = monster_of(path.stem)
+        if monster not in grouped:
+            continue
         strip = load_strip(path, entry["frames"], anim, "lado")
         grouped[monster].append(strip)
     result = {}
@@ -497,6 +505,12 @@ def build_monsters() -> dict:
         scale = config["height"] / stand
         for strip in strips:
             strip.scale = scale
+            if config.get("normalize"):
+                ref = reference_height(strip)
+                deviation = ref / stand - 1.0
+                if strip.anim != "parado" and abs(deviation) > DEVIATION_LIMIT:
+                    strip.scale = config["height"] / ref
+                    strip.note = f"reescalada: guarda {deviation:+.0%} vs parado"
         cell = fit_cell(strips, config["cell"], MONSTER_MARGIN[monster])
         feet = (cell // 2, cell - MONSTER_MARGIN[monster])
         animations = [make_animation(s.anim, s.anim, s, cell, feet) for s in strips]
@@ -532,6 +546,7 @@ def print_report(title: str, animations: list[Animation]) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("target", choices=["hunters", "monsters", "all"])
+    parser.add_argument("--only", help="monstros separados por vírgula (padrão: todos)")
     parser.add_argument("--walk-dir", type=Path, help="pasta com lamina/arco/martelo/*_andar_*_6q_REFERENCIA.png")
     args = parser.parse_args()
     if args.target in ("hunters", "all"):
@@ -542,7 +557,8 @@ def main() -> int:
                   + (f", andar {result['report'].get('walk_scale', 0):.4f}" if "walk_scale" in result["report"] else ""))
             print_report(cls, result["animations"])
     if args.target in ("monsters", "all"):
-        for monster, result in build_monsters().items():
+        only = set(args.only.split(",")) if args.only else None
+        for monster, result in build_monsters(only).items():
             print(f"{monster}: escala {result['scale']:.4f}")
             print_report(monster, result["animations"])
     return 0

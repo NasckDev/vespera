@@ -1,0 +1,127 @@
+{
+  "character": "macieira_oca",
+  "anchor": [
+    224,
+    432
+  ],
+  "stand_height_px": 300,
+  "facing": "olha para a direita; para a esquerda use flip_h",
+  "scale_class": 0.6356,
+  "stand_height_source_px": 472.0,
+  "hit_frame_method": "quadro de maior área opaca (índice base 0), só para ataques",
+  "frame_counts": {
+    "parado": 6,
+    "lancar": 8,
+    "raizes": 8,
+    "andar": 8,
+    "morte": 10
+  },
+  "atlas": "macieira_oca_atlas.png",
+  "cell": [
+    448,
+    448
+  ],
+  "animations": {
+    "parado": {
+      "row": 0,
+      "frames": 6,
+      "fps": 6,
+      "loop": true,
+      "scale": 0.6356,
+      "source": "macieira_oca_parado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        41393,
+        41598,
+        40103,
+        39684,
+        39937,
+        40180
+      ],
+      "note": null
+    },
+    "lancar": {
+      "row": 1,
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.8043,
+      "source": "macieira_oca_lancar.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        38359,
+        37065,
+        38282,
+        36440,
+        36568,
+        33372,
+        37401,
+        37483
+      ],
+      "note": "reescalada: guarda -21% vs parado"
+    },
+    "raizes": {
+      "row": 2,
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.7853,
+      "source": "macieira_oca_raizes.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        35973,
+        33180,
+        32025,
+        38169,
+        38942,
+        35374,
+        37298,
+        35477
+      ],
+      "note": "reescalada: guarda -19% vs parado"
+    },
+    "andar": {
+      "row": 3,
+      "frames": 8,
+      "fps": 10,
+      "loop": true,
+      "scale": 0.6356,
+      "source": "macieira_oca_andar.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        30058,
+        29540,
+        25430,
+        25312,
+        25271,
+        27021,
+        27087,
+        25750
+      ],
+      "note": null
+    },
+    "morte": {
+      "row": 4,
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.9646,
+      "source": "macieira_oca_morte.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        36924,
+        34791,
+        36123,
+        34360,
+        32213,
+        30899,
+        27770,
+        20065,
+        14009,
+        12361
+      ],
+      "note": "reescalada: guarda -34% vs parado"
+    }
+  },
+  "standing_height": 299
+}

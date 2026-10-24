@@ -29,6 +29,12 @@ public sealed class BrechaDef
 
     public List<string> Rooms { get; set; } = [];
 
+    /// <summary>Fase do bairro para onde a Brecha devolve o caçador (Ato I: praca; Ato II: pomar_alto).</summary>
+    public string Hub { get; set; } = "praca";
+
+    /// <summary>Regras de caçada desta Brecha (res://, formato de data/cacada/cacada.json).</summary>
+    public string Hunt { get; set; } = "res://data/cacada/cacada.json";
+
     public Dictionary<string, RiftMonsterDef> Monsters { get; set; } = [];
 
     public BossTuning Boss { get; set; } = new();

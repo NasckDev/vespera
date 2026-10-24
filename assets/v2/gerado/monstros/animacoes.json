@@ -798,6 +798,833 @@
           "h": 768
         }
       ]
+    },
+    {
+      "file": "carrapicho_parado.png",
+      "frames": 4,
+      "frame_width": 443,
+      "frame_height": 887,
+      "columns": 4,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/27",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        },
+        {
+          "index": 1,
+          "x": 444,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        },
+        {
+          "index": 2,
+          "x": 887,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        },
+        {
+          "index": 3,
+          "x": 1330,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        }
+      ]
+    },
+    {
+      "file": "carrapicho_mover.png",
+      "frames": 6,
+      "frame_width": 362,
+      "frame_height": 724,
+      "columns": 6,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/27",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 362,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 724,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 1086,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 4,
+          "x": 1448,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 5,
+          "x": 1810,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "carrapicho_aviso.png",
+      "frames": 3,
+      "frame_width": 591,
+      "frame_height": 887,
+      "columns": 3,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/27",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 591,
+          "h": 887
+        },
+        {
+          "index": 1,
+          "x": 591,
+          "y": 0,
+          "w": 591,
+          "h": 887
+        },
+        {
+          "index": 2,
+          "x": 1183,
+          "y": 0,
+          "w": 591,
+          "h": 887
+        }
+      ]
+    },
+    {
+      "file": "carrapicho_ataque.png",
+      "frames": 4,
+      "frame_width": 443,
+      "frame_height": 887,
+      "columns": 4,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/27",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        },
+        {
+          "index": 1,
+          "x": 444,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        },
+        {
+          "index": 2,
+          "x": 887,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        },
+        {
+          "index": 3,
+          "x": 1330,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        }
+      ]
+    },
+    {
+      "file": "carrapicho_morte.png",
+      "frames": 6,
+      "frame_width": 362,
+      "frame_height": 724,
+      "columns": 6,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/27",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 362,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 724,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 1086,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 4,
+          "x": 1448,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 5,
+          "x": 1810,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "rato_lanterna_parado.png",
+      "frames": 4,
+      "frame_width": 543,
+      "frame_height": 724,
+      "columns": 4,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/27",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 543,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 1086,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 1629,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "rato_lanterna_correr.png",
+      "frames": 6,
+      "frame_width": 362,
+      "frame_height": 724,
+      "columns": 6,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/27",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 362,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 724,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 1086,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 4,
+          "x": 1448,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 5,
+          "x": 1810,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "rato_lanterna_aviso.png",
+      "frames": 3,
+      "frame_width": 724,
+      "frame_height": 724,
+      "columns": 3,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/27",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 724,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 724,
+          "y": 0,
+          "w": 724,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 1448,
+          "y": 0,
+          "w": 724,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "rato_lanterna_ataque.png",
+      "frames": 4,
+      "frame_width": 543,
+      "frame_height": 724,
+      "columns": 4,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/27",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 543,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 1086,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 1629,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "rato_lanterna_morte.png",
+      "frames": 6,
+      "frame_width": 362,
+      "frame_height": 724,
+      "columns": 6,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/27",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 362,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 724,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 1086,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 4,
+          "x": 1448,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 5,
+          "x": 1810,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "macieira_oca_parado.png",
+      "frames": 6,
+      "frame_width": 362,
+      "frame_height": 724,
+      "columns": 6,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/27",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 362,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 724,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 1086,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 4,
+          "x": 1448,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 5,
+          "x": 1810,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "macieira_oca_lancar.png",
+      "frames": 8,
+      "frame_width": 271,
+      "frame_height": 724,
+      "columns": 8,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/27",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 272,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 543,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 814,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 4,
+          "x": 1086,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 5,
+          "x": 1358,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 6,
+          "x": 1629,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 7,
+          "x": 1900,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "macieira_oca_raizes.png",
+      "frames": 8,
+      "frame_width": 271,
+      "frame_height": 724,
+      "columns": 8,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/27",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 272,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 543,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 814,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 4,
+          "x": 1086,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 5,
+          "x": 1358,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 6,
+          "x": 1629,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 7,
+          "x": 1900,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "macieira_oca_andar.png",
+      "frames": 8,
+      "frame_width": 271,
+      "frame_height": 724,
+      "columns": 8,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/27",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 272,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 543,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 814,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 4,
+          "x": 1086,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 5,
+          "x": 1358,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 6,
+          "x": 1629,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 7,
+          "x": 1900,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "macieira_oca_morte.png",
+      "frames": 10,
+      "frame_width": 198,
+      "frame_height": 793,
+      "columns": 10,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/27",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 198,
+          "h": 793
+        },
+        {
+          "index": 1,
+          "x": 198,
+          "y": 0,
+          "w": 198,
+          "h": 793
+        },
+        {
+          "index": 2,
+          "x": 397,
+          "y": 0,
+          "w": 198,
+          "h": 793
+        },
+        {
+          "index": 3,
+          "x": 595,
+          "y": 0,
+          "w": 198,
+          "h": 793
+        },
+        {
+          "index": 4,
+          "x": 793,
+          "y": 0,
+          "w": 198,
+          "h": 793
+        },
+        {
+          "index": 5,
+          "x": 992,
+          "y": 0,
+          "w": 198,
+          "h": 793
+        },
+        {
+          "index": 6,
+          "x": 1190,
+          "y": 0,
+          "w": 198,
+          "h": 793
+        },
+        {
+          "index": 7,
+          "x": 1388,
+          "y": 0,
+          "w": 198,
+          "h": 793
+        },
+        {
+          "index": 8,
+          "x": 1586,
+          "y": 0,
+          "w": 198,
+          "h": 793
+        },
+        {
+          "index": 9,
+          "x": 1785,
+          "y": 0,
+          "w": 198,
+          "h": 793
+        }
+      ]
     }
   ]
 }

@@ -19,8 +19,10 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
 {
     private const float Alpha = 0.5f;
     private static readonly string[] Monsters = ["lodo", "espectro", "lodo_mae"];
+    private static readonly string[] PomarMonsters = ["carrapicho", "rato_lanterna", "macieira_oca"];
+    private static readonly string[] PomarLevels = ["pomar_alto", "pomar_corredor", "pomar_cruzamento", "pomar_descanso", "pomar_arena"];
     private static readonly HunterClass[] Hunters = [HunterClass.Lamina, HunterClass.Arco, HunterClass.Martelo];
-    private static readonly string[] People = ["odete", "ravi", "nilza", "benicio", "lis"];
+    private static readonly string[] People = ["odete", "ravi", "nilza", "benicio", "lis", "celeste"];
     private static readonly string[] CityLevels = ["forjas", "forja_interior"];
 
     private readonly List<string> _failures = [];
@@ -32,6 +34,7 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
         var rooms = new List<string> { Level.HubLevelId };
         rooms.AddRange(CityLevels);
         rooms.AddRange(RiftSession.Brecha.Rooms);
+        rooms.AddRange(PomarLevels);
         foreach (var room in rooms)
         {
             await level.GoToRoom(room, withDirector: false);
@@ -75,20 +78,17 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
         }
 
         var enemies = new List<Enemy>();
-        foreach (var id in Monsters)
+        var pomar = room.StartsWith("pomar_", System.StringComparison.Ordinal);
+        foreach (var id in pomar ? PomarMonsters : Monsters)
         {
-            x += id == "lodo_mae" ? gap * 1.6f : 0f;
-            Enemy e = id switch
-            {
-                "lodo" => new Lodo(World),
-                "espectro" => new Espectro(World),
-                _ => new LodoMae(World),
-            };
+            var guardian = id is "lodo_mae" or "macieira_oca";
+            x += guardian ? gap * 1.6f : 0f;
+            var e = guardian ? EnemyFactory.Guardian(id, World) : EnemyFactory.Create(id, World);
             e.Position = World.ClampToFloor(start + new Vector2(dir * x, 0));
             World.AddEnemy(e);
             enemies.Add(e);
             spawned.Add(e);
-            x += id == "lodo_mae" ? gap * 2f : gap;
+            x += guardian ? gap * 2f : gap;
         }
 
         var chest = new Chest(World, World.ClampToFloor(start + new Vector2(dir * (x + (gap * 0.5f)), 0))) { Name = "Escala_bau" };

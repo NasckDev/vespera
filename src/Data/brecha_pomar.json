@@ -1,0 +1,169 @@
+{
+  "_doc": "Brecha D do Ato II (ROTEIRO-V2 §13: 'O Pomar que Lembra'). O pomar como era antes do Ano Sem Sol. Mesmo formato de brecha_esgotos.json; velocidades na escala 1 do caçador. Caçadas: data/cacada/cacada_pomar.json.",
+  "id": "pomar_podre",
+  "lanternId": 2,
+  "name": "Pomar Podre",
+  "rank": "D",
+  "bairro": "Pomar Alto",
+  "neighborhoodId": "pomar_alto",
+  "guardianId": "macieira_oca",
+  "hub": "pomar_alto",
+  "hunt": "res://data/cacada/cacada_pomar.json",
+  "_xp": "Caçada típica: ~22 Carrapichos (6 XP) + ~12 Ratos (2 XP) ~ 155 XP; a Macieira Oca dá 90. Duas caçadas + o Covil levam o caçador do D (120) ao C (320).",
+  "rooms": [
+    "pomar_corredor",
+    "pomar_cruzamento",
+    "pomar_descanso",
+    "pomar_arena"
+  ],
+  "monsters": {
+    "carrapicho": {
+      "name": "Carrapicho",
+      "hp": 46,
+      "damage": 13,
+      "speed": 95,
+      "xp": 6,
+      "hurtRadius": 34,
+      "contactRadius": 38,
+      "period": 2.2,
+      "telegraph": 0.6
+    },
+    "rato_lanterna": {
+      "name": "Rato-Lanterna",
+      "hp": 16,
+      "damage": 8,
+      "speed": 330,
+      "xp": 2,
+      "hurtRadius": 22,
+      "contactRadius": 30,
+      "period": 1.6,
+      "telegraph": 0.45
+    },
+    "macieira_oca": {
+      "name": "MACIEIRA OCA",
+      "hp": 1100,
+      "damage": 20,
+      "speed": 55,
+      "xp": 90,
+      "hurtRadius": 120,
+      "contactRadius": 120,
+      "period": 2.4,
+      "telegraph": 0.75,
+      "boss": true
+    }
+  },
+  "boss": {
+    "_doc": "Macieira Oca: 3 fases (66% e 33%). Fase 1 maçãs; fase 2 + raízes em linha e anda; fase 3 tudo mais rápido e chama Ratos-Lanterna.",
+    "phases": [
+      0.66,
+      0.33
+    ],
+    "cores": 0,
+    "coreHp": 1,
+    "splitBase": 0,
+    "spawnPerJump": 2,
+    "maxMinions": 4,
+    "swallowSeconds": 0,
+    "swallowDamagePerSecond": 0
+  },
+  "hunter": {
+    "staminaMax": 100,
+    "dodgeCost": 30,
+    "staminaRegen": 55,
+    "staminaRegenDelay": 0.45,
+    "dodgeSeconds": 0.3,
+    "dodgeInvulnerable": 0.25,
+    "dodgeDistance": 260,
+    "hurtInvulnerable": 0.7,
+    "hurtStun": 0.28,
+    "hurtKnockback": 300,
+    "comboBuffer": 0.28,
+    "comboWindow": 0.42
+  },
+  "moves": {
+    "sword": {
+      "light": [
+        1.0,
+        1.1,
+        1.7
+      ],
+      "lightRange": [
+        120,
+        120,
+        140
+      ],
+      "lightArc": [
+        2.2,
+        2.2,
+        2.6
+      ],
+      "lightKnockback": [
+        160,
+        160,
+        340
+      ],
+      "lightHitStop": [
+        0.05,
+        0.05,
+        0.09
+      ],
+      "heavy": 0.9,
+      "heavyRange": 150,
+      "heavyKnockback": 260,
+      "heavyHitStop": 0.07,
+      "heavyCharge": 0.45,
+      "partMult": 1
+    },
+    "bow": {
+      "light": [
+        1.0
+      ],
+      "lightRange": [
+        900
+      ],
+      "lightArc": [
+        0
+      ],
+      "lightKnockback": [
+        220
+      ],
+      "lightHitStop": [
+        0.04
+      ],
+      "heavy": 2.6,
+      "heavyRange": 1300,
+      "heavyKnockback": 260,
+      "heavyHitStop": 0.08,
+      "heavyCharge": 0.6,
+      "partMult": 0.9
+    },
+    "hammer": {
+      "light": [
+        1.0,
+        1.25
+      ],
+      "lightRange": [
+        130,
+        130
+      ],
+      "lightArc": [
+        2.4,
+        2.8
+      ],
+      "lightKnockback": [
+        320,
+        380
+      ],
+      "lightHitStop": [
+        0.1,
+        0.12
+      ],
+      "heavy": 1.6,
+      "heavyRange": 230,
+      "heavyKnockback": 460,
+      "heavyHitStop": 0.12,
+      "heavyCharge": 0.5,
+      "partMult": 2
+    }
+  }
+}

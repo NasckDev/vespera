@@ -251,6 +251,7 @@ public partial class Level : Control
         switch (item.Kind)
         {
             case "brecha":
+                RiftSession.Select(item.Target);
                 EnterFromPortal();
                 return;
             case "chest":

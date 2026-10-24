@@ -61,8 +61,12 @@
       "kind": "exit",
       "at": [836, 24],
       "radius": 40,
-      "prompt": "Seguir pela rua",
-      "text": "Rua do Sino — trancado, em breve."
+      "prompt": "Subir para o Pomar Alto",
+      "text": "",
+      "target": "pomar_alto",
+      "spawn": [842, 860],
+      "requires": ["GuardianDefeated:lodo_mae"],
+      "lockedText": "A escadaria do Pomar Alto está fechada. Feche primeiro a Brecha dos esgotos."
     },
     {
       "kind": "exit",
