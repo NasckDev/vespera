@@ -1,5 +1,5 @@
 {
-  "_doc": "Ato I do ROTEIRO-V2 (§3, §4, §13). Objetivos em ordem de campanha (o Diário usa a ordem); título = até 5 palavras, sempre na tela. Regras: quando a flag 'when' liga e as condições 'if' valem, aplica o objetivo. Flags que o jogo liga sozinho: hunt_back, hunt_1/hunt_2, fell_once, forged, potion_bought, contract_done, xp_ready, exame_e, eco_viscoso. Autoplay: 'stage' = 'arrival' (estrada + Lodo + Brecha abrindo) ou 'morning' (a noite passa antes da fala). Perguntas = página do Diário (§7). Retratos: {0} vira 1 (neutro) ou 2 (expressão). Ato II (ROTEIRO-V2 §13): met_celeste, pomar_podre:hunt_1/hunt_2 (caçadas completas no Pomar), pomar_podre:fell_1..6 (quedas), GuardianDefeated:macieira_oca -> act2_done.",
+  "_doc": "Ato I do ROTEIRO-V2 (§3, §4, §13). Objetivos em ordem de campanha (o Diário usa a ordem); título = até 5 palavras, sempre na tela. Regras: quando a flag 'when' liga e as condições 'if' valem, aplica o objetivo. Flags que o jogo liga sozinho: hunt_back, hunt_1/hunt_2, fell_once, forged, potion_bought, contract_done, xp_ready, exame_e, eco_viscoso. Autoplay: 'stage' = 'arrival' (estrada + Lodo + Brecha abrindo) ou 'morning' (a noite passa antes da fala). Perguntas = página do Diário (§7). Retratos: {0} vira 1 (neutro) ou 2 (expressão). Ato II (ROTEIRO-V2 §13): met_celeste, pomar_podre:hunt_1/hunt_2 (caçadas completas no Pomar), pomar_podre:fell_1..6 (quedas), GuardianDefeated:macieira_oca -> act2_done. Atos IV e V (ROTEIRO-V2 §13, §8.1): flags calculadas 'noite', 'vigia_perguntou_hoje', 'ravi_no_avesso' (NightState/NightFlags); met_vigia abre a Brecha B das Ruas Baixas (RaviRescue: ruas_brecha_aberta, ruas_aviso_2/3, ruas_rompeu, ruas_fechada_a_tempo); eco_slot_1 (UnlockEchoSlot:1).",
   "startObjective": "estrada",
   "objectives": [
     {
@@ -82,6 +82,38 @@
       "title": "Procure o Severo (em breve)",
       "text": "O faroleiro procura gente que não tem medo de água. O caminho do cais abre no Ato III. Em breve.",
       "locked": true
+    },
+    {
+      "id": "ato4",
+      "title": "Vá ao Cemitério das Lanternas",
+      "text": "O Cemitério fica depois da ponte leste do Pomar Alto. Tem um homem lá que só aparece de noite."
+    },
+    {
+      "id": "ato4_brecha",
+      "title": "Brecha do Cemitério (em breve)",
+      "text": "O Vigia guarda seu Eco. A Brecha do Cemitério das Lanternas ainda está selada. Em breve.",
+      "locked": true
+    },
+    {
+      "id": "ato4_fecho",
+      "title": "Fale com o Benício",
+      "text": "A Velória caiu. O Benício espera você no Cemitério."
+    },
+    {
+      "id": "ato5",
+      "title": "Vá à Torre do Sino",
+      "text": "A Torre do Sino fica depois do Cemitério, pela ponte leste. O Benício pediu: não toca em nada lá."
+    },
+    {
+      "id": "ato5_brecha",
+      "title": "Brecha do Sino (em breve)",
+      "text": "A Brecha abriu dentro da Torre. Lá dentro você não vai ouvir nada. Ainda está selada. Em breve.",
+      "locked": true
+    },
+    {
+      "id": "ato5_fecho",
+      "title": "Fale com o Benício",
+      "text": "O Sineiro Mudo caiu. O Benício espera você na Torre."
     }
   ],
   "triggers": [
@@ -127,6 +159,20 @@
     {
       "when": "ato2_fim_done",
       "objective": "ato3"
+    },
+    {
+      "when": "GuardianDefeated:velora",
+      "objective": "ato4_fecho",
+      "set": [
+        "act4_done"
+      ]
+    },
+    {
+      "when": "GuardianDefeated:sineiro_mudo",
+      "objective": "ato5_fecho",
+      "set": [
+        "act5_done"
+      ]
     }
   ],
   "autoplay": [
@@ -295,6 +341,148 @@
         "act2_done",
         "!ato2_fim_done"
       ]
+    },
+    {
+      "level": "cemiterio",
+      "dialogue": "ato4/benicio",
+      "npc": "benicio",
+      "if": [
+        "GuardianDefeated:velora",
+        "!ato4_fecho_benicio"
+      ]
+    },
+    {
+      "level": "cemiterio",
+      "dialogue": "ato4/benicio",
+      "npc": "benicio",
+      "if": [
+        "!exame_b_visto"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato4/aviso_ruas",
+      "npc": "lis",
+      "if": [
+        "ruas_brecha_aberta",
+        "!ruas_aviso_1_visto",
+        "!ruas_aviso_2",
+        "!ruas_fechada_a_tempo"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato4/aviso_ruas",
+      "npc": "nilza",
+      "if": [
+        "ruas_aviso_2",
+        "!ruas_aviso_2_visto",
+        "!ruas_aviso_3",
+        "!ruas_fechada_a_tempo"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato4/aviso_ruas",
+      "npc": "ravi",
+      "if": [
+        "ruas_aviso_3",
+        "!ruas_aviso_3_visto",
+        "!ruas_rompeu",
+        "!ruas_fechada_a_tempo"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato4/ravi",
+      "npc": "ravi",
+      "if": [
+        "ruas_fechada_a_tempo",
+        "!ravi_cena_ato4"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato4/ravi",
+      "npc": "ravi",
+      "if": [
+        "ruas_rompeu",
+        "ravi_lanterna_recuperada",
+        "!ravi_cena_ato4"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato4/nilza",
+      "npc": "nilza",
+      "if": [
+        "ravi_rota_b",
+        "!ato4_nilza_b"
+      ]
+    },
+    {
+      "level": "forja_interior",
+      "dialogue": "ato4/odete",
+      "npc": "odete",
+      "if": [
+        "GuardianDefeated:velora",
+        "!ato4_odete"
+      ]
+    },
+    {
+      "level": "torre",
+      "dialogue": "ato5/benicio",
+      "npc": "benicio",
+      "if": [
+        "GuardianDefeated:sineiro_mudo",
+        "!ato5_depois"
+      ]
+    },
+    {
+      "level": "torre",
+      "dialogue": "ato5/benicio",
+      "npc": "benicio",
+      "if": [
+        "!ato5_porta"
+      ]
+    },
+    {
+      "level": "torre",
+      "dialogue": "ato5/benicio",
+      "npc": "benicio",
+      "if": [
+        "ato5_porta",
+        "!ato5_confissao"
+      ]
+    },
+    {
+      "level": "forja_interior",
+      "dialogue": "ato5/odete",
+      "npc": "odete",
+      "if": [
+        "ato5_confissao",
+        "!ato5_odete"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato5/ravi",
+      "npc": "ravi",
+      "if": [
+        "ato5_depois",
+        "!ato5_ravi"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato5/lis",
+      "npc": "lis",
+      "stage": "morning",
+      "if": [
+        "ato5_depois",
+        "ato5_ravi",
+        "!ato5_lis"
+      ]
     }
   ],
   "questions": [
@@ -321,6 +509,18 @@
         "odete_marisa"
       ],
       "text": "Quem foi Marisa? A Odete esperou ela voltar."
+    },
+    {
+      "if": [
+        "met_vigia"
+      ],
+      "text": "Quem é o Vigia? Ele reconheceu a sua lanterna."
+    },
+    {
+      "if": [
+        "ato5_confissao"
+      ],
+      "text": "Por que o sino emudeceu? Foi o Benício que tocou."
     }
   ],
   "speakers": {
@@ -359,6 +559,16 @@
     },
     "menino": {
       "name": "Menino (atrás da cerca)"
+    },
+    "vigia": {
+      "name": "O Vigia",
+      "portrait": "res://assets/v2/sprites/npcs/retrato_vigia_{0}.png"
+    },
+    "velora": {
+      "name": "Velória"
+    },
+    "sineiro": {
+      "name": "Sineiro Mudo"
     }
   }
 }

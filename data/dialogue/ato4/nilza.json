@@ -20,7 +20,10 @@
       "speaker": "nilza",
       "text": "O Ravi voltou diferente. Fala menos.",
       "expression": 2,
-      "next": "b2"
+      "next": "b2",
+      "set": [
+        "ato4_nilza_b"
+      ]
     },
     "b2": {
       "speaker": "nilza",

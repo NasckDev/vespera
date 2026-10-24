@@ -303,25 +303,32 @@ public partial class LevelWorld : Node2D
         f.Size.X > 0 && CollisionMath.CapsuleHitsRect(capsule.X0, capsule.X1, capsule.Y, capsule.R,
             new RectF(f.Position.X, f.Position.Y, f.Size.X, f.Size.Y), tolerance);
 
+    /// <summary>Tipo da zona de uma Brecha selada (interagir só mostra o aviso).</summary>
+    public const string SealedBrechaKind = "brecha_selada";
+
     private void AddZone(ZoneData zone)
     {
         var at = new Vector2(zone.At[0], zone.At[1]);
         if (zone.Kind == "brecha")
         {
-            if (!RiftSession.InRift)
+            // Brecha ainda sem salas e monstros (id fora de RiftSession.BrechaFiles): a fenda aparece, mas está selada
+            // e mostra o aviso "em breve" (lockedText) em vez de levar para dentro.
+            var sealedBrecha = zone.Brecha.Length > 0 && !RiftSession.BrechaFiles.ContainsKey(zone.Brecha);
+            if (!RiftSession.InRift && !sealedBrecha)
             {
                 RiftSession.Select(zone.Brecha);
             }
 
             // Depois de N caçadas completas a Brecha "fica mais forte": fenda maior e vermelha (a Lodo-Mãe espera no fim).
-            var empowered = Progression.IsActive && Hunter.HuntService.GuardianUnlocked;
-            var portal = new BreachPortal(PracaPortalHeight * _data.ActorScale * (empowered ? 1.2f : 1f), zone.Kind, zone.Prompt, zone.Radius)
+            var empowered = !sealedBrecha && Progression.IsActive && Hunter.HuntService.GuardianUnlocked;
+            var kind = sealedBrecha ? SealedBrechaKind : zone.Kind;
+            var portal = new BreachPortal(PracaPortalHeight * _data.ActorScale * (empowered ? 1.2f : 1f), kind, zone.Prompt, zone.Radius)
             {
                 Name = "BrechaPortal",
                 Position = at,
                 Empowered = empowered,
             };
-            portal.Zone.Text = zone.Text;
+            portal.Zone.Text = sealedBrecha && zone.LockedText.Length > 0 ? zone.LockedText : zone.Text;
             portal.Zone.Target = zone.Brecha;
             Entities.AddChild(portal);
             _solids.Add(portal.Footprint);

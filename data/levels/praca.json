@@ -130,7 +130,7 @@
       "routine": "idle",
       "dialogue": "ravi",
       "prompt": "Falar com Ravi",
-      "if": ["starter_blade"],
+      "if": ["starter_blade", "!ravi_no_avesso"],
       "_note": "Depois da lâmina: espera perto da Brecha (ajustar a posição quando o portal do combate estiver fixo)."
     }
   ],

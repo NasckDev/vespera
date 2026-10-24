@@ -469,6 +469,7 @@ public static class HuntService
         state.Contracts = Board.Roll(new SeededRandom(state.NextSeed + (state.Returns * 7919)), GuardianUnlocked);
         state.FlowersLeft = Config.Flowers.PerReturn;
         state.Broken.Clear();
+        Story.StoryService.NightFalls();
     }
 
     /// <summary>Bebe uma poção: cura <see cref="PotionDef.HealPct"/> da vida máxima. Falso sem poção ou com a vida cheia.</summary>

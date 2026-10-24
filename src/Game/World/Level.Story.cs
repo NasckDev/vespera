@@ -168,6 +168,10 @@ public partial class Level
             {
                 BuyPotion();
             }
+            else
+            {
+                HandleNightEvent(name);
+            }
         }
     }
 
