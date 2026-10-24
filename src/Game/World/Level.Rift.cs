@@ -102,6 +102,8 @@ public partial class Level
         {
             CombatHud.ShowTitle(RiftSession.Brecha.Name, director.Title.Split('—')[^1].Trim());
         }
+
+        ShowExamObserver();
     }
 
     private void OnRoomExit()
