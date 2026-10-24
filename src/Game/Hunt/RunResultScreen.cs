@@ -91,7 +91,10 @@ public partial class RunResultScreen(RunSummary summary, bool brechaClosed) : Hu
         if (summary.Blessings is { Count: > 0 } blessings)
         {
             Line(box, "Bênçãos:", Palette.CreamDim);
-            var row = UiKit.MakeRow(18);
+            // Flow (quebra linha): uma fila com 4+ bênçãos alargava a coluna e empurrava o painel para fora da tela.
+            var row = new HFlowContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill };
+            row.AddThemeConstantOverride("h_separation", 18);
+            row.AddThemeConstantOverride("v_separation", 6);
             foreach (var id in blessings)
             {
                 var def = HuntService.BlessingCatalog.Find(id);
@@ -227,9 +230,11 @@ public partial class RunResultScreen(RunSummary summary, bool brechaClosed) : Hu
     {
         var row = UiKit.MakeRow(14);
         row.AddChild(new ItemIconSlot(IconSize, icon, rank) { CustomMinimumSize = new Vector2(IconSize, IconSize) });
-        var label = UiKit.MakeLabel($"{text}{tag}", UiTheme.ReadingVariation);
+        // Quebra linha em vez de alargar a coluna (nomes de peça por rank são longos: "Botas Remendadas do Ferrão").
+        var label = UiKit.MakeWrapped($"{text}{tag}", UiTheme.ReadingVariation);
         label.AddThemeColorOverride("font_color", RankColors.Of(rank).Lerp(Palette.Cream, 0.35f));
         label.SizeFlagsVertical = SizeFlags.ShrinkCenter;
+        label.SizeFlagsHorizontal = SizeFlags.ExpandFill;
         row.AddChild(label);
         return row;
     }
