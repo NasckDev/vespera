@@ -1,0 +1,28 @@
+{
+  "id": "ato3/mares_pesca",
+  "_doc": "Ponto de pesca no fim do píer (mecânica nova do Ato III). Só pesca depois de falar com o Severo.",
+  "entries": [
+    {
+      "if": [
+        "met_severo"
+      ],
+      "node": "a"
+    },
+    {
+      "node": "b"
+    }
+  ],
+  "nodes": {
+    "a": {
+      "speaker": "severo",
+      "text": "Puxa quando o olho de vidro brilhar.",
+      "events": [
+        "OpenFishing"
+      ]
+    },
+    "b": {
+      "speaker": "narrador",
+      "text": "A vara é do Severo. Fala com ele antes."
+    }
+  }
+}

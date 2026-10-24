@@ -10,7 +10,10 @@
       "speaker": "nilza",
       "text": "A Odete passou aqui às cinco da manhã e pediu sopa.",
       "look": "nilza",
-      "next": "a2"
+      "next": "a2",
+      "set": [
+        "ato3_manha_nilza"
+      ]
     },
     "a2": {
       "speaker": "nilza",
