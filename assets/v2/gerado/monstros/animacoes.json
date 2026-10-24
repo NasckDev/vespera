@@ -1625,6 +1625,426 @@
           "h": 793
         }
       ]
+    },
+    {
+      "file": "inquilino_parado.png",
+      "frames": 6,
+      "frame_width": 362,
+      "frame_height": 724,
+      "columns": 6,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "loop": true,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/38",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 362,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 724,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 1086,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 4,
+          "x": 1448,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 5,
+          "x": 1810,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "inquilino_andar.png",
+      "frames": 8,
+      "frame_width": 271,
+      "frame_height": 724,
+      "columns": 8,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "loop": true,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/38",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 272,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 543,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 814,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 4,
+          "x": 1086,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 5,
+          "x": 1358,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 6,
+          "x": 1629,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 7,
+          "x": 1900,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "inquilino_esmagar.png",
+      "frames": 8,
+      "frame_width": 271,
+      "frame_height": 724,
+      "columns": 8,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/38",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 272,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 543,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 814,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 4,
+          "x": 1086,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 5,
+          "x": 1358,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 6,
+          "x": 1629,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 7,
+          "x": 1900,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "inquilino_arremessar.png",
+      "frames": 8,
+      "frame_width": 271,
+      "frame_height": 724,
+      "columns": 8,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/38",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 272,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 543,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 814,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 4,
+          "x": 1086,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 5,
+          "x": 1358,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 6,
+          "x": 1629,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 7,
+          "x": 1900,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "inquilino_puxar.png",
+      "frames": 8,
+      "frame_width": 271,
+      "frame_height": 724,
+      "columns": 8,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/38",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 272,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 543,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 814,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 4,
+          "x": 1086,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 5,
+          "x": 1358,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 6,
+          "x": 1629,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        },
+        {
+          "index": 7,
+          "x": 1900,
+          "y": 0,
+          "w": 271,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "inquilino_morte.png",
+      "frames": 10,
+      "frame_width": 217,
+      "frame_height": 724,
+      "columns": 10,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/38",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 217,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 217,
+          "y": 0,
+          "w": 217,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 434,
+          "y": 0,
+          "w": 217,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 652,
+          "y": 0,
+          "w": 217,
+          "h": 724
+        },
+        {
+          "index": 4,
+          "x": 869,
+          "y": 0,
+          "w": 217,
+          "h": 724
+        },
+        {
+          "index": 5,
+          "x": 1086,
+          "y": 0,
+          "w": 217,
+          "h": 724
+        },
+        {
+          "index": 6,
+          "x": 1303,
+          "y": 0,
+          "w": 217,
+          "h": 724
+        },
+        {
+          "index": 7,
+          "x": 1520,
+          "y": 0,
+          "w": 217,
+          "h": 724
+        },
+        {
+          "index": 8,
+          "x": 1738,
+          "y": 0,
+          "w": 217,
+          "h": 724
+        },
+        {
+          "index": 9,
+          "x": 1955,
+          "y": 0,
+          "w": 217,
+          "h": 724
+        }
+      ]
     }
   ]
 }

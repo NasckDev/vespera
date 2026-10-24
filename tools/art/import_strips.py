@@ -74,6 +74,10 @@ MONSTERS = {
 }
 MONSTER_MARGIN = {"lodo": 8, "espectro": 12, "lodo_mae": 16, "carrapicho": 10, "rato_lanterna": 10, "macieira_oca": 16}  # folga entre o pé e a borda de baixo da célula
 
+# Ato VI (issue #38): o Inquilino, a casa que anda (Guardião, ~3 caçadores).
+MONSTERS["inquilino"] = {"height": 300, "cell": 448, "normalize": True}
+MONSTER_MARGIN["inquilino"] = 16
+
 PLANTED_ANIMS = {"parado", "dano"}  # pés no mesmo lugar: realinha o x por quadro (a fonte desloca os quadros dentro da fatia)
 LOOP_ANIMS = {"parado", "andar", "mover"}
 HIT_ANIMS = re.compile(r"^(ataque\d*|pesado|tiro|tiro_carregado|engolir|dividir)$")

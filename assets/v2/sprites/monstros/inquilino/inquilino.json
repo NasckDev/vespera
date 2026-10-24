@@ -1,0 +1,148 @@
+{
+  "character": "inquilino",
+  "anchor": [
+    224,
+    432
+  ],
+  "stand_height_px": 300,
+  "facing": "olha para a direita; para a esquerda use flip_h",
+  "scale_class": 0.5046,
+  "stand_height_source_px": 594.5,
+  "hit_frame_method": "quadro de maior área opaca (índice base 0), só para ataques",
+  "frame_counts": {
+    "parado": 6,
+    "andar": 8,
+    "esmagar": 8,
+    "arremessar": 8,
+    "puxar": 8,
+    "morte": 10
+  },
+  "atlas": "inquilino_atlas.png",
+  "cell": [
+    448,
+    448
+  ],
+  "animations": {
+    "parado": {
+      "row": 0,
+      "frames": 6,
+      "fps": 6,
+      "loop": true,
+      "scale": 0.5046,
+      "source": "inquilino_parado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        28362,
+        27225,
+        26965,
+        26454,
+        26379,
+        26031
+      ],
+      "note": null
+    },
+    "andar": {
+      "row": 1,
+      "frames": 8,
+      "fps": 10,
+      "loop": true,
+      "scale": 0.6085,
+      "source": "inquilino_andar.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        27826,
+        26638,
+        27982,
+        26665,
+        27879,
+        25874,
+        27331,
+        27959
+      ],
+      "note": "reescalada: guarda -17% vs parado"
+    },
+    "esmagar": {
+      "row": 2,
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.6397,
+      "source": "inquilino_esmagar.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        28437,
+        27063,
+        26809,
+        26901,
+        33221,
+        33323,
+        28495,
+        24756
+      ],
+      "note": "reescalada: guarda -21% vs parado"
+    },
+    "arremessar": {
+      "row": 3,
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.5964,
+      "source": "inquilino_arremessar.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        26816,
+        25727,
+        25126,
+        25280,
+        24822,
+        24997,
+        25831,
+        25043
+      ],
+      "note": "reescalada: guarda -15% vs parado"
+    },
+    "puxar": {
+      "row": 4,
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.5046,
+      "source": "inquilino_puxar.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        20909,
+        20600,
+        21902,
+        21761,
+        22929,
+        21412,
+        21366,
+        19346
+      ],
+      "note": null
+    },
+    "morte": {
+      "row": 5,
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.7212,
+      "source": "inquilino_morte.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        25455,
+        25161,
+        25675,
+        25869,
+        23920,
+        24584,
+        21868,
+        16465,
+        12323,
+        9988
+      ],
+      "note": "reescalada: guarda -30% vs parado"
+    }
+  },
+  "standing_height": 300
+}
