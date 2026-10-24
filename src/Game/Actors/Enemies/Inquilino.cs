@@ -205,7 +205,6 @@ public partial class Inquilino(LevelWorld world) : Enemy("inquilino", world)
     /// <summary>A casa fala pela janela acesa: a frase sobe da janela e fica no aviso da tela.</summary>
     private void Speak(string line)
     {
-        Flash.Pulse(WindowColor, 0.1f, 0.5f);
         World.Feel.Number(Window, line, WindowColor, 1.6f);
         World.Feel.Toast($"A janela acende: \"{line}\"");
     }

@@ -54,6 +54,7 @@ public sealed class CameraCheck(Level level, SmokeTest host, bool shots = false)
             RiftSession.Cheat = cheat;
         }
 
+        RiftSession.Select(null); // as Ruas Baixas escolheram a Brecha delas; a intro do chefe é a da Lodo-Mãe
         await CheckBossIntro();
         await level.GoToRoom(Level.HubLevelId);
         await host.PhysicsFrames(4);
