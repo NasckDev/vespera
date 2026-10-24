@@ -298,11 +298,13 @@ public static class HuntService
     }
 
     /// <summary>O caçador esquivou (estatística para o Reflexo).</summary>
-    public static void Dodged()
+    public static void Dodged(float directionX = 0f)
     {
         if (RiftSession.InRift)
         {
             State.Stats.Dodges++;
+            State.Stats.DodgesLeft += directionX < -0.2f ? 1 : 0;
+            State.Stats.DodgesRight += directionX > 0.2f ? 1 : 0;
         }
     }
 

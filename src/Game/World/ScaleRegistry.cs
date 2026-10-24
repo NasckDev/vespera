@@ -42,6 +42,8 @@ public static class ScaleRegistry
         ["carrapicho"] = new(0.50f, Sprites + "monstros/carrapicho/carrapicho.json"),
         ["rato_lanterna"] = new(0.30f, Sprites + "monstros/rato_lanterna/rato_lanterna.json"),
         ["macieira_oca"] = new(3.00f, Sprites + "monstros/macieira_oca/macieira_oca.json"),
+        ["mae_ravi"] = new(0.98f, Npcs, Key: "mae_ravi"),
+        ["inquilino"] = new(3.00f, Sprites + "monstros/inquilino/inquilino.json"),
     };
 
     private static readonly Dictionary<string, float> Standing = [];

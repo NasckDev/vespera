@@ -17,6 +17,7 @@ public static class EnemyFactory
     public static Enemy Guardian(string type, LevelWorld world) => type switch
     {
         "macieira_oca" => new MacieiraOca(world),
+        "inquilino" => new Inquilino(world),
         _ => new LodoMae(world),
     };
 }

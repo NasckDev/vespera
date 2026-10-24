@@ -3,37 +3,43 @@
   "entries": [
     {
       "if": [
-        "ato6_morte_6"
+        "ato6_morte_6",
+        "!morte_ruas_6"
       ],
       "node": "m6"
     },
     {
       "if": [
-        "ato6_morte_5"
+        "ato6_morte_5",
+        "!morte_ruas_5"
       ],
       "node": "m5"
     },
     {
       "if": [
-        "ato6_morte_4"
+        "ato6_morte_4",
+        "!morte_ruas_4"
       ],
       "node": "m4"
     },
     {
       "if": [
-        "ato6_morte_3"
+        "ato6_morte_3",
+        "!morte_ruas_3"
       ],
       "node": "m3"
     },
     {
       "if": [
-        "ato6_morte_2"
+        "ato6_morte_2",
+        "!morte_ruas_2"
       ],
       "node": "m2"
     },
     {
       "if": [
-        "ato6_morte_1"
+        "ato6_morte_1",
+        "!morte_ruas_1"
       ],
       "node": "m1"
     },
@@ -44,19 +50,31 @@
   "nodes": {
     "m1": {
       "speaker": "nilza",
-      "text": "A sopa te levantou uma vez. A segunda fui eu, carregando."
+      "text": "A sopa te levantou uma vez. A segunda fui eu, carregando.",
+      "set": [
+        "morte_ruas_1"
+      ]
     },
     "m2": {
       "speaker": "celeste",
-      "text": "Você caiu entre as casas penduradas. Eu segurei pelo pé."
+      "text": "Você caiu entre as casas penduradas. Eu segurei pelo pé.",
+      "set": [
+        "morte_ruas_2"
+      ]
     },
     "m3": {
       "speaker": "odete",
-      "text": "A lâmina nova voltou sem você. Eu levei ela de volta lá dentro. Vai buscar as duas."
+      "text": "A lâmina nova voltou sem você. Eu levei ela de volta lá dentro. Vai buscar as duas.",
+      "set": [
+        "morte_ruas_3"
+      ]
     },
     "m4": {
       "speaker": "mae_ravi",
-      "text": "Eu rezei pra sua lanterna. Nunca rezei pra lanterna."
+      "text": "Eu rezei pra sua lanterna. Nunca rezei pra lanterna.",
+      "set": [
+        "morte_ruas_4"
+      ]
     },
     "m5": {
       "speaker": "vigia",
@@ -74,11 +92,17 @@
             "vigia_p4_nao"
           ]
         }
+      ],
+      "set": [
+        "morte_ruas_5"
       ]
     },
     "m6": {
       "speaker": "benicio",
-      "text": "Caiu com selo SS. A Ordem não tem página pra isso. Eu fiz uma."
+      "text": "Caiu com selo SS. A Ordem não tem página pra isso. Eu fiz uma.",
+      "set": [
+        "morte_ruas_6"
+      ]
     }
   }
 }
