@@ -51,8 +51,6 @@ public partial class SmokeTest
         StoryService.Engine.BeginCampaignIfNew();
         ApplyClassFlag(start);
         var level = await ActOnePrologue(start);
-        level = await ActOneForge(level);
-        level = await ActOneBackToPraca(level);
         level = await ActOneArc(level);
         await ActOneEpilogue(level);
     }
@@ -74,38 +72,28 @@ public partial class SmokeTest
         Log.Info($"ato I com a classe {weapon} ({Progression.Engine.ClassId})");
     }
 
+    /// <summary>Chegada v2: estrada (borda sul), Lodo no caminho, Brecha abrindo, Benício e a aposta do Ravi.</summary>
     private async Task<Level> ActOnePrologue(Level level)
     {
-        Check(StoryService.Engine.ObjectiveId == "quadro", $"jogo novo deveria começar no objetivo do quadro, está em '{StoryService.Engine.ObjectiveId}'");
+        Check(StoryService.Engine.ObjectiveId == "estrada", $"jogo novo deveria começar na estrada, está em '{StoryService.Engine.ObjectiveId}'");
         await SizeShot(level, "praca");
         Check(Progression.Rank == Rank.E, "jogo novo deveria começar no rank E");
-        level.PlayAutoplay();
-        await WaitForDialogue(level, "fala de chegada");
-        level.Dialogue.Complete();
-        Check(level.Dialogue.IsNarration && !level.Dialogue.PortraitFrameVisible,
-            "a narração (sem retrato) deveria esconder a moldura vazia e usar a largura toda");
-        await Shot("ato1_dialogo_narracao", 0.5);
+        Check(level.PlayAutoplay(), "a chegada deveria tocar sozinha");
+        await WaitForDialogue(level, "Benício na Brecha aberta");
+        Check(level.Dialogue.CurrentNodeId == "a", $"a chegada deveria abrir no Benício, abriu em '{level.Dialogue.CurrentNodeId}'");
+        Check(level.Player.GetNodeOrNull<PointLight2D>("OwnLantern") is not null, "a lanterna do caçador deveria acender sozinha");
+        await Shot("ato1_chegada_benicio", 0.5);
         await SkipDialogue(level);
         Check(StoryService.Engine.HasFlag(StoryFlags.ArrivalDone), "a chegada deveria ligar arrival_done");
-
-        await TalkToProp(level, "mural");
-        Check(StoryService.Engine.HasFlag(StoryFlags.Registered), "o quadro do Benício deveria registrar o caçador");
-        Check(level.PlayAutoplay(), "depois do quadro o Ravi deveria vir desafiar");
-        await WaitForDialogue(level, "desafio do Ravi");
-        Check(level.Dialogue.CurrentNodeId == "r1", $"o desafio deveria abrir em 'r1', abriu em '{level.Dialogue.CurrentNodeId}'");
-        await Shot("ato1_ravi_desafio", 0.5);
+        Check(StoryService.Engine.HasFlag(StoryFlags.StarterBlade), "o caçador deveria chegar com a Lâmina enferrujada");
+        Check(StoryService.Engine.ObjectiveId == "cacada1", $"depois do Benício o objetivo deveria ser fechar a Brecha, é '{StoryService.Engine.ObjectiveId}'");
+        Check(level.PlayAutoplay(), "depois do Benício o Ravi deveria chegar correndo");
+        await WaitForDialogue(level, "aposta do Ravi");
+        Check(level.Dialogue.CurrentNodeId == "r1", $"a aposta deveria abrir em 'r1', abriu em '{level.Dialogue.CurrentNodeId}'");
+        await Shot("ato1_ravi_aposta", 0.5);
         await SkipDialogue(level);
-        Check(StoryService.Engine.HasFlag(StoryFlags.MetRavi), "o desafio do Ravi deveria ligar met_ravi");
-        await TalkToNpc(level, "ravi");
-        Check(StoryService.Engine.ObjectiveId == "odete", $"depois do Ravi o objetivo deveria ser a Odete, é '{StoryService.Engine.ObjectiveId}'");
-
-        // Sem a Lâmina o portal recusa.
-        var portal = level.World.Zones.First(z => z.Kind == "brecha");
-        await StandAt(level, portal.GlobalPosition + new Vector2(0, 40f * level.World.Data.ActorScale));
-        await PressInWorld(Key.E);
-        Check(!RiftSession.InRift && level.Hud.PanelOpen, "sem arma o portal deveria recusar com um aviso");
-        await PressInWorld(Key.E);
-        Log.Info("ato I: prólogo, quadro e Ravi OK; portal recusa sem arma");
+        Check(StoryService.Engine.HasFlag(StoryFlags.MetRavi), "a aposta do Ravi deveria ligar met_ravi");
+        Log.Info("ato I: estrada, Lodo, Brecha abrindo, Benício e Ravi OK");
         return level;
     }
 
@@ -201,28 +189,24 @@ public partial class SmokeTest
         await PhysicsFrames(4);
     }
 
+    /// <summary>Fecho v2: Odete (escolha da arma + Marisa) na Forja e, de manhã, a maçã roxa da Lis na Praça.</summary>
     private async Task ActOneEpilogue(Level level)
     {
         level = await Travel(level, z => z.Target == "forjas", new Vector2(24, 0), "Level_forjas");
         level = await Travel(level, z => z.Target == "forja_interior", new Vector2(0, 40 * level.World.Data.ActorScale), "Level_forja_interior");
-        var check = Progression.Forge.CanUpgrade();
-        var before = Progression.Engine.WeaponStats.Level;
-        await TalkToNpc(level, "odete", shot: "ato1_odete_depois");
-        Check(StoryService.Engine.HasFlag("odete_after"), "a fala nova da Odete deveria ter rodado");
-        await WaitFor(() => FindOverlay<ForgeScreen>() is not null, "forja depois da fala nova");
-        await Shot("ato1_forja_depois");
-        if (check.CanUpgrade)
-        {
-            await Tap(Key.Enter);
-            await Seconds(1.0);
-            Check(Progression.Engine.WeaponStats.Level == before + 1, $"forjar deveria subir a arma ({before} -> {Progression.Engine.WeaponStats.Level})");
-            await Shot("ato1_forja_feita", 0);
-        }
-
-        Log.Info($"ato I: forja no fim: pode {check.CanUpgrade} ({check.Reason}); arma nível {Progression.Engine.WeaponStats.Level}");
+        await PlayPendingScenes(level);
+        Check(StoryService.Engine.HasFlag("odete_marisa"), "a Odete deveria falar da Marisa no fecho");
+        Check(StoryService.Engine.HasFlag(StoryFlags.WeaponChosen), "a Odete deveria oferecer a escolha da arma");
+        await WaitFor(() => FindOverlay<ClassSelectScreen>() is not null, "escolha da arma na Odete");
+        await Shot("ato1_odete_escolha_arma");
         await Tap(Key.Escape);
         await Frames(4);
-        Check(StoryService.Engine.ObjectiveId == "ato2", "o objetivo deveria seguir no Ato II");
+        await Seconds(0.4);
+        Check(!GetTree().Paused, "cancelar a escolha deveria despausar");
+        level = await Travel(level, z => z.Target == "forjas", new Vector2(0, -30 * level.World.Data.ActorScale), "Level_forjas");
+        level = await Travel(level, z => z.Target == "praca", new Vector2(-24, 0), "Level_praca");
+        await PlayPendingScenes(level);
+        Check(StoryService.Engine.ObjectiveId == "ato2", $"o objetivo final deveria ser o Pomar Alto, é '{StoryService.Engine.ObjectiveId}'");
 
         InventoryScreen.Open();
         await WaitFor(() => FindOverlay<InventoryScreen>() is not null, "inventário");

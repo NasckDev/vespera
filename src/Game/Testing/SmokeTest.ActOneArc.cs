@@ -33,9 +33,12 @@ public partial class SmokeTest
     {
         level = await HuntUntil(level, StoryFlags.HuntOne, "caca1");
         Check(StoryService.Engine.ObjectiveId == "forja", $"depois da 1ª caçada o objetivo deveria ser a forja, é '{StoryService.Engine.ObjectiveId}'");
-        Check(Flag(StoryFlags.MetNilza), "na volta da Brecha a Tia Nilza deveria vir dar a poção");
+        Check(Flag(StoryFlags.MetNilza), "na volta da Brecha a Tia Nilza deveria vir dar a sopa");
+        Check(Flag("ravi_placar"), "na volta da Brecha o Ravi deveria perguntar o placar");
 
         level = await ActOneForgeUpgrade(level);
+        await PlayPendingScenes(level);
+        Check(Flag(StoryFlags.MetLis) && StoryService.Engine.ObjectiveId == "cacada2", $"de manhã a Lis deveria vender o mapa (objetivo '{StoryService.Engine.ObjectiveId}')");
         level = await ActOneTown(level);
         level = await HuntUntil(level, StoryFlags.HuntTwo, "caca2");
         level = await ActOneExam(level);
@@ -45,8 +48,7 @@ public partial class SmokeTest
         Check(_scenes.Contains("ato1_fim"), $"a cena do fim do Ato I deveria tocar (cenas: {string.Join(",", _scenes)})");
         Check(Flag(StoryFlags.Ato1FimDone), "o fim do Ato I deveria ligar ato1_fim_done");
         Check(HuntService.HasEcoViscoso, "a Lodo-Mãe deveria deixar o Eco Viscoso");
-        Check(StoryService.Engine.ObjectiveId == "ato2" && StoryService.Engine.CurrentObjective?.Locked == true,
-            $"o objetivo final deveria ser o Ato II (em breve), é '{StoryService.Engine.ObjectiveId}'");
+        Check(StoryService.Engine.ObjectiveId == "odete_fim", $"depois do selo D o objetivo deveria ser a Odete, é '{StoryService.Engine.ObjectiveId}'");
         LogActOneNumbers();
         return level;
     }
@@ -134,7 +136,7 @@ public partial class SmokeTest
         if (check.CanUpgrade)
         {
             Check(Flag(StoryFlags.Forged), "com recursos, a forja deveria melhorar a arma");
-            Check(StoryService.Engine.ObjectiveId is "cacada2" or "exame", $"depois de forjar o objetivo deveria ser a 2ª caçada, é '{StoryService.Engine.ObjectiveId}'");
+            Check(StoryService.Engine.ObjectiveId == "manha", $"depois de forjar o objetivo deveria ser a 2ª caçada, é '{StoryService.Engine.ObjectiveId}'");
         }
         else
         {
@@ -176,8 +178,8 @@ public partial class SmokeTest
                 level = await ActOneForgeUpgrade(level);
             }
 
-            await OpenTalk(level, "benicio");
-            await Choose(level, "Quero fazer o exame");
+            Check(level.PlayAutoplay(), "depois da 2ª caçada o Benício deveria vir para o exame");
+            await WaitForDialogue(level, "exame do Benício");
             Log.Info($"ato I: exame do Benício: nó '{level.Dialogue.CurrentNodeId}' — {level.Dialogue.FullText}");
             await Shot($"ato1_exame_{i}", 0.4);
             await SkipDialogue(level);

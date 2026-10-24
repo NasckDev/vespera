@@ -56,58 +56,62 @@ public partial class SmokeTest
         progress.ObjectiveId = string.Empty;
         StoryService.Engine.BeginCampaignIfNew();
         await CheckScaleContract(level, "praca");
-        level.PlayAutoplay();
-        await WaitForDialogue(level, "fala de chegada");
-        Check(level.Dialogue.CurrentNodeId == "a", $"a conversa deveria começar na narração, está em '{level.Dialogue.CurrentNodeId}'");
+        Check(StoryService.Engine.ObjectiveId == "estrada", $"jogo novo deveria começar na estrada, está em '{StoryService.Engine.ObjectiveId}'");
+        Check(level.PlayAutoplay(), "a chegada deveria tocar");
+        await WaitForDialogue(level, "Benício na Brecha aberta");
+        Check(level.Dialogue.CurrentNodeId == "a", $"a chegada deveria abrir no Benício, está em '{level.Dialogue.CurrentNodeId}'");
         await Shot("story_01_chegada");
         await SkipDialogue(level);
         Check(StoryService.Engine.HasFlag(StoryFlags.ArrivalDone), "a chegada deveria ligar arrival_done");
-        Check(StoryService.Engine.ObjectiveId == "quadro", $"objetivo depois da chegada: '{StoryService.Engine.ObjectiveId}'");
+        Check(StoryService.Engine.HasFlag(StoryFlags.StarterBlade), "o caçador deveria chegar com a Lâmina");
+        Check(StoryService.Engine.ObjectiveId == "cacada1", $"objetivo depois da chegada: '{StoryService.Engine.ObjectiveId}'");
 
-        await TalkToProp(level, "mural");
-        Check(StoryService.Engine.HasFlag(StoryFlags.Registered), "o quadro do Benício deveria registrar o caçador");
-        Check(StoryService.Engine.ObjectiveId == "ravi", $"objetivo depois do quadro: '{StoryService.Engine.ObjectiveId}'");
-        Check(StoryService.Engine.RankIndex == 0, "o caçador deveria estar no selo E");
-
-        Check(level.PlayAutoplay(), "depois do quadro o Ravi deveria vir desafiar");
-        await WaitForDialogue(level, "desafio do Ravi");
+        Check(level.PlayAutoplay(), "depois do Benício o Ravi deveria vir apostar");
+        await WaitForDialogue(level, "aposta do Ravi");
         await SkipDialogue(level);
-        await TalkToNpc(level, "ravi");
-        Check(StoryService.Engine.HasFlag(StoryFlags.MetRavi), "Ravi deveria se apresentar");
-        Check(StoryService.Engine.ObjectiveId == "odete", $"objetivo depois do Ravi: '{StoryService.Engine.ObjectiveId}'");
+        Check(StoryService.Engine.HasFlag(StoryFlags.MetRavi), "Ravi deveria apostar");
 
         await TalkToNpc(level, "lis");
         await OpenAndCloseJournal();
 
+        StoryService.SetFlag(StoryFlags.HuntOne);
+        Check(StoryService.Engine.ObjectiveId == "nilza", $"depois da 1ª Brecha o objetivo deveria ser a Nilza, é '{StoryService.Engine.ObjectiveId}'");
+        Check(level.PlayAutoplay(), "na volta o Ravi deveria perguntar o placar");
+        await WaitForDialogue(level, "placar do Ravi");
+        await SkipDialogue(level);
+        Check(level.PlayAutoplay(), "depois do placar a Nilza deveria vir com a sopa");
+        await WaitForDialogue(level, "sopa da Nilza");
+        await SkipDialogue(level);
+        Check(events.Contains(StoryFlags.EventGivePotion), "a Nilza deveria dar a sopa (GivePotion)");
+        Check(StoryService.Engine.ObjectiveId == "forja", $"depois da Nilza o objetivo deveria ser a forja, é '{StoryService.Engine.ObjectiveId}'");
+
         level = await Travel(level, z => z.Target == "forjas", new Vector2(24, 0), "Level_forjas");
         level = await Travel(level, z => z.Target == "forja_interior", new Vector2(0, 40 * level.World.Data.ActorScale), "Level_forja_interior");
-
         await TalkToNpc(level, "odete");
-        Check(StoryService.Engine.HasFlag(StoryFlags.StarterBlade), "Odete deveria entregar a lâmina inicial");
-        Check(StoryService.Engine.ObjectiveId == "cacada1", $"objetivo depois da Odete: '{StoryService.Engine.ObjectiveId}'");
-        Check(events.Contains(StoryFlags.EventStarterBladeGiven), "deveria ter avisado StarterBladeGiven");
-        Check(GameSession.Data?.Story.Has(StoryFlags.StarterBlade) == true, "a flag deveria estar no save em andamento");
-
-        await TalkToNpc(level, "odete");
-        Check(events.Contains(StoryFlags.EventOpenForge), "a primeira opção da Odete deveria pedir a forja (OpenForge)");
+        Check(events.Contains(StoryFlags.EventOpenForge), "a Odete deveria pedir os Fragmentos (OpenForge)");
         await WaitFor(() => FindOverlay<ForgeScreen>() is not null, "forja aberta pela conversa (ForgeScreen.Open)");
         await Tap(Key.Escape);
         await Frames(4);
         Check(FindOverlay<ForgeScreen>() is null && !GetTree().Paused, "Esc deveria fechar a forja");
         await Seconds(0.4);
+        Check(StoryService.Engine.ObjectiveId == "manha", $"depois da Odete o objetivo deveria ser a manhã, é '{StoryService.Engine.ObjectiveId}'");
 
         StoryService.SetFlag(StoryFlags.GuardianDefeatedLodoMae);
-        Check(StoryService.Engine.ObjectiveId == "ato2", $"depois do Guardião o objetivo deveria ser o Ato II, é '{StoryService.Engine.ObjectiveId}'");
-        await TalkToNpc(level, "odete", shot: "story_09_odete_depois");
-        Check(StoryService.Engine.HasFlag("odete_after"), "a fala nova da Odete deveria ter rodado");
-        await WaitFor(() => FindOverlay<ForgeScreen>() is not null, "forja depois da fala nova");
+        StoryService.SetFlag(StoryFlags.Ato1FimDone);
+        Check(level.PlayAutoplay(), "no fecho a Odete deveria chamar na Forja");
+        await WaitForDialogue(level, "fecho da Odete");
+        await Shot("story_09_odete_fecho", 0.4);
+        await SkipDialogue(level);
+        Check(StoryService.Engine.HasFlag("odete_marisa"), "a Odete deveria falar da Marisa");
+        await WaitFor(() => FindOverlay<ClassSelectScreen>() is not null, "escolha da arma na Odete");
         await Tap(Key.Escape);
         await Frames(4);
         await Seconds(0.4);
-        Check(StoryService.Engine.CurrentObjective?.Locked == true, "o objetivo do Ato II deveria estar 'em breve'");
+        Check(!GetTree().Paused, "cancelar a escolha deveria despausar");
+        Check(StoryService.Engine.ObjectiveId == "dormir", $"depois da Odete o objetivo deveria ser dormir, é '{StoryService.Engine.ObjectiveId}'");
 
         StoryService.Engine.EventRaised -= OnEvent;
-        Log.Info("história OK: chegada, quadro, Ravi, forja, Odete, Guardião");
+        Log.Info("história OK: chegada, Ravi, placar, Nilza, Odete, fecho com a Marisa");
     }
 
     private const float ScaleTolerance = 0.08f;

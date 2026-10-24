@@ -200,7 +200,7 @@ public class StoryTest
             AssertThat(o.Title.Split(' ', StringSplitOptions.RemoveEmptyEntries).Length).IsLessEqual(5);
         }
 
-        string[] files = ["chegada", "ravi", "nilza", "odete", "lis", "benicio_quadro", "ato1_fim", "morte_ato1", "exame_benicio"];
+        string[] files = ["chegada", "ravi", "nilza", "odete", "lis", "benicio_quadro", "ato1_fim", "exame_benicio"];
         foreach (var id in files)
         {
             foreach (var node in LoadDialogue(id).Nodes.Values)
@@ -211,7 +211,7 @@ public class StoryTest
             }
         }
 
-        AssertThat(LoadDialogue("morte_ato1").Nodes.Count).IsEqual(6);
+
     }
 
     [TestCase]
