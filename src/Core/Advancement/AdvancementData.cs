@@ -331,6 +331,11 @@ public sealed record RareTemplateDef
     public required string Name { get; init; }
 
     public required StatBlock Stats { get; init; }
+
+    /// <summary>Nome próprio da peça por rank (id do rank → nome), ligado ao tema do ícone (issue #44); sem entrada usa <see cref="Name"/>.</summary>
+    public IReadOnlyDictionary<string, string> RankNames { get; init; } = new Dictionary<string, string>();
+
+    public string NameFor(Rank rank) => RankNames.TryGetValue(rank.ToString(), out var name) ? name : Name;
 }
 
 public sealed record AffixDef
