@@ -25,6 +25,12 @@ public partial class SmokeTest
 
     private async Task RunLevelExtras(Level level)
     {
+        if (Array.IndexOf(_args, ClicksFlag) >= 0)
+        {
+            await RunClickProbe(level);
+            return;
+        }
+
         await CheckInteractions(level);
         if (Array.IndexOf(_args, BotFlag) >= 0)
         {
