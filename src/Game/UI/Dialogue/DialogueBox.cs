@@ -152,7 +152,8 @@ public partial class DialogueBox : Control
 
         if (HasChoices)
         {
-            if (interact && GetViewport().GuiGetFocusOwner() is Button focused && _choiceButtons.Contains(focused))
+            // Enter/Espaço (ui_accept) também escolhem: este _Input marca o evento como tratado, então o botão não o vê.
+            if ((interact || accept) && GetViewport().GuiGetFocusOwner() is Button focused && _choiceButtons.Contains(focused))
             {
                 focused.EmitSignal(BaseButton.SignalName.Pressed);
             }

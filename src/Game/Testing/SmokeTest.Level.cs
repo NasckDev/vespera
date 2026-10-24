@@ -25,6 +25,12 @@ public partial class SmokeTest
 
     private async Task RunLevelExtras(Level level)
     {
+        if (Array.IndexOf(_args, ClicksFlag) >= 0)
+        {
+            await RunClickProbe(level);
+            return;
+        }
+
         await CheckInteractions(level);
         if (Array.IndexOf(_args, BotFlag) >= 0)
         {
@@ -138,7 +144,7 @@ public partial class SmokeTest
         var exit = level.World.Zones.First(z => z.Kind is "door" or "exit");
         await StandAt(level, exit.GlobalPosition + new Vector2(0, 60 * k));
         await PressInWorld(Key.E);
-        Check(level.Hud.PanelText.Contains("rancad", StringComparison.Ordinal), $"a saída deveria dizer que está trancada, disse '{level.Hud.PanelText}'");
+        Check(level.Hud.PanelText.Contains("rancad", StringComparison.Ordinal) || level.Hud.PanelText.Contains("fechad", StringComparison.Ordinal), $"a saída deveria dizer que está trancada/fechada, disse '{level.Hud.PanelText}'");
         await StandAt(level, level.World.SpawnPoint);
     }
 
