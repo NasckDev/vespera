@@ -10,17 +10,17 @@ public partial class HelpScreen : UiScreen
 {
     // Cada página cabe em ~6 linhas de 46 caracteres (corpo de 20 px na grade de 480x270).
     private const string ObjectiveOne =
-        "Há vinte anos o sol se pôs sobre Lumeira e não voltou por um ano inteiro: o Ano Sem Alvor. " +
+        "Há vinte anos o sol não nasceu sobre Lumeira por um ano inteiro: o Ano Sem Sol. " +
         "Foi quando as Brechas se abriram para o Avesso, uma Lumeira invertida.";
 
     private const string ObjectiveTwo =
         "Você chegou com um selo E no pulso e uma lanterna velha. Toda véspera uma Brecha abre num bairro: " +
         "entre, derrote os monstros e o Guardião, traga Fragmentos e forje armas melhores. " +
-        "No fim do caminho está o Alvor, quando o sol volta de vez.";
+        "No fim do caminho está o Alvor, o selo mais alto da Ordem.";
 
     private const string RanksText =
-        "E, D, C, B, A, S, SS, SSS e Alvor. Você sobe por XP e por conquista: vença o Guardião do rank e, " +
-        "em C, A, S e SSS, passe no exame da Ordem. Cada rank dá mais vida e um novo selo.";
+        "E, D, C, B, A, S, SS, SSS e Alvor. Você sobe por XP e por conquista: vença o Guardião do rank " +
+        "com a Ordem de olho (o exame é a própria Brecha). Cada rank dá mais vida e um novo selo.";
 
     private const string LootText =
         "Cada Brecha mostra o poder recomendado. O loot vem do rank dela (80%), do rank seguinte (15%) e raros (5%). " +
