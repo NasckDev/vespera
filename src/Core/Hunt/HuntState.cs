@@ -34,11 +34,20 @@ public sealed class HuntState
 
     public int TotalKills { get; set; }
 
+    /// <summary>Salas limpas em todas as caçadas (placar contra o Ravi).</summary>
+    public int TotalRooms { get; set; }
+
+    /// <summary>Salas do Ravi no placar: ele anda quase no mesmo passo, um pouco atrás com o tempo.</summary>
+    public int RaviRooms => 3 + (int)(TotalRooms * 0.85);
+
     /// <summary>Semente da próxima caçada (anda a cada entrada).</summary>
     public int NextSeed { get; set; } = 20261023;
 
     /// <summary>Quebráveis já quebrados neste "dia" (id do mapa + índice), para a Praça não virar mina de Lumes.</summary>
     public List<string> Broken { get; set; } = [];
+
+    /// <summary>Estatísticas de combate desde o Ato I (o Reflexo do Final copia o estilo do jogador).</summary>
+    public CombatStats Stats { get; set; } = new();
 
     /// <summary>Normaliza depois de carregar um save (nada negativo, listas presentes).</summary>
     public void Sanitize(int maxPotions)
@@ -48,6 +57,28 @@ public sealed class HuntState
         Potions = Math.Clamp(Potions, 0, maxPotions);
         Flowers = Math.Max(0, Flowers);
         Contracts ??= [];
+        Stats ??= new CombatStats();
+        Stats.Weapons ??= [];
+        Stats.Blessings ??= [];
         Broken ??= [];
     }
+}
+
+/// <summary>
+/// Registro do estilo de luta (ROTEIRO-V2 §9 "Todos"): caçadas por arma, bênçãos escolhidas, esquivas, golpes levados e
+/// Lanternas perdidas. Taxa de esquiva = esquivas ÷ (esquivas + golpes levados).
+/// </summary>
+public sealed class CombatStats
+{
+    public Dictionary<string, int> Weapons { get; set; } = [];
+
+    public Dictionary<string, int> Blessings { get; set; } = [];
+
+    public int Dodges { get; set; }
+
+    public int HitsTaken { get; set; }
+
+    public int LanternsLost { get; set; }
+
+    public double DodgeRate => Dodges + HitsTaken == 0 ? 0 : Dodges / (double)(Dodges + HitsTaken);
 }

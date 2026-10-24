@@ -131,8 +131,16 @@ public partial class SmokeTest
         await Tap(Key.Escape);
         await Frames(4);
         await Seconds(0.4);
-        Check(Flag(StoryFlags.Forged), "depois da 1ª caçada deveria dar para forjar (Fragmentos e materiais suficientes)");
-        Check(StoryService.Engine.ObjectiveId is "cacada2" or "exame", $"depois de forjar o objetivo deveria ser a 2ª caçada, é '{StoryService.Engine.ObjectiveId}'");
+        if (check.CanUpgrade)
+        {
+            Check(Flag(StoryFlags.Forged), "com recursos, a forja deveria melhorar a arma");
+            Check(StoryService.Engine.ObjectiveId is "cacada2" or "exame", $"depois de forjar o objetivo deveria ser a 2ª caçada, é '{StoryService.Engine.ObjectiveId}'");
+        }
+        else
+        {
+            Log.Info("ato I: ainda faltam materiais para forjar (o sorteio do saque); o bot volta à forja depois da próxima caçada");
+        }
+
         level = await Travel(level, z => z.Target == "forjas", new Vector2(0, -30 * level.World.Data.ActorScale), "Level_forjas");
         return await Travel(level, z => z.Target == "praca", new Vector2(-24, 0), "Level_praca");
     }
@@ -163,6 +171,11 @@ public partial class SmokeTest
     {
         for (var i = 0; i < MaxHuntTries && !Flag(StoryFlags.GuardianGate); i++)
         {
+            if (!Flag(StoryFlags.Forged) && Progression.Forge.CanUpgrade().CanUpgrade)
+            {
+                level = await ActOneForgeUpgrade(level);
+            }
+
             await OpenTalk(level, "benicio");
             await Choose(level, "Quero fazer o exame");
             Log.Info($"ato I: exame do Benício: nó '{level.Dialogue.CurrentNodeId}' — {level.Dialogue.FullText}");

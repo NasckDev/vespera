@@ -1,0 +1,59 @@
+{
+  "id": "ato3/benicio",
+  "entries": [
+    {
+      "if": [
+        "GuardianDefeated:farol_afogado",
+        "!ato3_fecho_benicio"
+      ],
+      "node": "f1"
+    },
+    {
+      "if": [
+        "exame_c_visto"
+      ],
+      "node": "x1"
+    },
+    {
+      "node": "e1"
+    }
+  ],
+  "nodes": {
+    "e1": {
+      "speaker": "benicio",
+      "text": "Hoje eu não entro. Hoje eu só espero na saída.",
+      "look": "brecha",
+      "set": [
+        "exame_c_visto"
+      ],
+      "objective": "ato3_brecha",
+      "next": "e2"
+    },
+    "e2": {
+      "speaker": "benicio",
+      "text": "Se demorar, eu anoto.",
+      "expression": 2
+    },
+    "f1": {
+      "speaker": "benicio",
+      "text": "B.",
+      "look": "player",
+      "events": [
+        "BurnSeal:B"
+      ],
+      "set": [
+        "ato3_fecho_benicio"
+      ],
+      "next": "f2"
+    },
+    "f2": {
+      "speaker": "benicio",
+      "text": "Agora você entra no Cemitério. Leve a lanterna acesa. A sua.",
+      "objective": "ato4"
+    },
+    "x1": {
+      "speaker": "benicio",
+      "text": "A Brecha do cais está aberta. Eu espero na saída."
+    }
+  }
+}

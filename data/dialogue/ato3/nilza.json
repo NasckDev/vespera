@@ -1,0 +1,41 @@
+{
+  "id": "ato3/nilza",
+  "entries": [
+    {
+      "node": "a1"
+    }
+  ],
+  "nodes": {
+    "a1": {
+      "speaker": "nilza",
+      "text": "A Odete passou aqui às cinco da manhã e pediu sopa.",
+      "look": "nilza",
+      "next": "a2"
+    },
+    "a2": {
+      "speaker": "nilza",
+      "text": "Em vinte anos ela nunca pediu.",
+      "expression": 2,
+      "choices": [
+        {
+          "text": "Seu marido...",
+          "next": "pm1_1"
+        },
+        {
+          "text": "Até mais."
+        }
+      ]
+    },
+    "pm1_1": {
+      "speaker": "nilza",
+      "text": "Meu marido tá naquela Brecha. Não vai lá procurar.",
+      "next": "pm1_2"
+    },
+    "pm1_2": {
+      "speaker": "nilza",
+      "text": "Eu já procurei.",
+      "expression": 2,
+      "next": "a2"
+    }
+  }
+}

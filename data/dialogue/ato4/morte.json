@@ -1,0 +1,70 @@
+{
+  "id": "ato4/morte",
+  "entries": [
+    {
+      "if": [
+        "ato4_morte_6"
+      ],
+      "node": "m6"
+    },
+    {
+      "if": [
+        "ato4_morte_5"
+      ],
+      "node": "m5"
+    },
+    {
+      "if": [
+        "ato4_morte_4"
+      ],
+      "node": "m4"
+    },
+    {
+      "if": [
+        "ato4_morte_3"
+      ],
+      "node": "m3"
+    },
+    {
+      "if": [
+        "ato4_morte_2"
+      ],
+      "node": "m2"
+    },
+    {
+      "if": [
+        "ato4_morte_1"
+      ],
+      "node": "m1"
+    },
+    {
+      "node": "m1"
+    }
+  ],
+  "nodes": {
+    "m1": {
+      "speaker": "vigia",
+      "text": "Você caiu do meu lado. Eu te empurrei de volta. Pergunta três fica pra próxima."
+    },
+    "m2": {
+      "speaker": "nilza",
+      "text": "Um homem de capuz te deixou na porta. Não entrou."
+    },
+    "m3": {
+      "speaker": "odete",
+      "text": "Quem te trouxe deixou um recado: 'ela ainda carrega bem'. Eu não entendi."
+    },
+    "m4": {
+      "speaker": "benicio",
+      "text": "Caiu no Cemitério. Eu olhei a lista. Seu nome não entrou."
+    },
+    "m5": {
+      "speaker": "ravi",
+      "text": "Eu fui buscar sua lanterna. Não consegui. Desculpa."
+    },
+    "m6": {
+      "speaker": "lis",
+      "text": "O homem do capuz chorou. Eu não sabia que eco chorava."
+    }
+  }
+}

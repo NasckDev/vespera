@@ -1,0 +1,70 @@
+{
+  "id": "ato7/morte",
+  "entries": [
+    {
+      "if": [
+        "ato7_morte_6"
+      ],
+      "node": "m6"
+    },
+    {
+      "if": [
+        "ato7_morte_5"
+      ],
+      "node": "m5"
+    },
+    {
+      "if": [
+        "ato7_morte_4"
+      ],
+      "node": "m4"
+    },
+    {
+      "if": [
+        "ato7_morte_3"
+      ],
+      "node": "m3"
+    },
+    {
+      "if": [
+        "ato7_morte_2"
+      ],
+      "node": "m2"
+    },
+    {
+      "if": [
+        "ato7_morte_1"
+      ],
+      "node": "m1"
+    },
+    {
+      "node": "m1"
+    }
+  ],
+  "nodes": {
+    "m1": {
+      "speaker": "vigia",
+      "text": "Você caiu fundo. Eu te carreguei por três bairros. Não me agradece. Fecha."
+    },
+    "m2": {
+      "speaker": "celeste",
+      "text": "Você morreu de verdade dessa vez. O Avesso te devolveu. Ele faz isso com quem quer."
+    },
+    "m3": {
+      "speaker": "nilza",
+      "text": "A cidade inteira te esperou acordada. Até a Odete."
+    },
+    "m4": {
+      "speaker": "benicio",
+      "text": "Caiu. Levantou. Eu parei de anotar. Eu tô só olhando."
+    },
+    "m5": {
+      "speaker": "lis",
+      "text": "Dessa vez eu entrei pra te buscar. Nenhum bicho me viu."
+    },
+    "m6": {
+      "speaker": "odete",
+      "text": "Perdeu a lanterna de novo. Lá embaixo tá cheio de luz sua. Vai ser difícil amanhã."
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "id": "ato7/lis",
+  "entries": [
+    {
+      "if": [
+        "ato7_lis_noite"
+      ],
+      "node": "c"
+    },
+    {
+      "if": [
+        "ato7_vespera_final"
+      ],
+      "node": "b1"
+    },
+    {
+      "node": "a1"
+    }
+  ],
+  "nodes": {
+    "a1": {
+      "speaker": "lis",
+      "text": "Tá anoitecendo às duas da tarde. Eu não tô com medo.",
+      "look": "lis",
+      "next": "a2"
+    },
+    "a2": {
+      "speaker": "lis",
+      "text": "Devia estar?",
+      "expression": 2
+    },
+    "b1": {
+      "speaker": "lis",
+      "text": "Se alguém tocar o sino, eu quero estar perto.",
+      "look": "lis",
+      "set": [
+        "ato7_lis_noite"
+      ],
+      "next": "b2"
+    },
+    "b2": {
+      "speaker": "lis",
+      "text": "Eu acho que eu lembro do som.",
+      "expression": 2,
+      "choices": [
+        {
+          "text": "Fica perto da Ordem, então.",
+          "set": [
+            "lis_apresentada"
+          ]
+        },
+        {
+          "text": "Ninguém precisa saber. Vem comigo.",
+          "set": [
+            "lis_escondida"
+          ]
+        }
+      ]
+    },
+    "c": {
+      "speaker": "lis",
+      "text": "Eu lembro do som. Juro."
+    }
+  }
+}

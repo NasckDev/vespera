@@ -1,0 +1,33 @@
+{
+  "_doc": "Bênçãos da Lanterna (ROTEIRO-V2 §5.1): ao limpar uma sala de combate a lanterna oferece 3 cartas e o caçador escolhe 1. Valem só até o fim da caçada. Cinco famílias com a cor de um personagem. Efeitos somam: damagePct, critPct, partPct, dodgeDistancePct, dodgeInvulnerable (s), dodgeCostPct, hurtInvulnerable (s), maxHp, healOnClearPct, healOnKill, potionPct, fragmentPct, lumesPerBreakable, speedPct, lowHpDamagePct (com menos de metade da vida).",
+  "families": {
+    "chama": { "name": "Chama", "who": "Odete", "color": "#f2a541" },
+    "vigilia": { "name": "Vigília", "who": "Benício", "color": "#f4e7c6" },
+    "sopa": { "name": "Sopa", "who": "Nilza", "color": "#7fd36a" },
+    "mapa": { "name": "Mapa", "who": "Lis", "color": "#6fb7ff" },
+    "aposta": { "name": "Aposta", "who": "Ravi", "color": "#e64a8e" }
+  },
+  "blessings": [
+    { "id": "brasa", "family": "chama", "name": "Brasa", "text": "+15% de dano.", "damagePct": 15 },
+    { "id": "tempera", "family": "chama", "name": "Têmpera", "text": "+8% de dano e +5% de crítico.", "damagePct": 8, "critPct": 5 },
+    { "id": "forja_viva", "family": "chama", "name": "Forja Viva", "text": "Partes e núcleos quebram 50% mais rápido.", "partPct": 50 },
+    { "id": "faisca", "family": "chama", "name": "Faísca", "text": "+12% de crítico.", "critPct": 12 },
+    { "id": "passo_longo", "family": "vigilia", "name": "Passo Longo", "text": "A esquiva vai 30% mais longe.", "dodgeDistancePct": 30 },
+    { "id": "olho_aberto", "family": "vigilia", "name": "Olho Aberto", "text": "Fica intocável um pouco mais na esquiva.", "dodgeInvulnerable": 0.12 },
+    { "id": "folego", "family": "vigilia", "name": "Fôlego", "text": "Esquivar gasta 35% menos fôlego.", "dodgeCostPct": -35 },
+    { "id": "couro_grosso", "family": "vigilia", "name": "Couro Grosso", "text": "Depois de levar um golpe, fica intocável por mais tempo.", "hurtInvulnerable": 0.35 },
+    { "id": "caldo_forte", "family": "sopa", "name": "Caldo Forte", "text": "+25 de vida máxima (e cura 25).", "maxHp": 25 },
+    { "id": "prato_cheio", "family": "sopa", "name": "Prato Cheio", "text": "Cura 15% da vida ao limpar cada sala.", "healOnClearPct": 15 },
+    { "id": "pao_quente", "family": "sopa", "name": "Pão Quente", "text": "Cada monstro vencido cura 2 de vida.", "healOnKill": 2 },
+    { "id": "colherada", "family": "sopa", "name": "Colherada", "text": "As poções curam 50% a mais.", "potionPct": 50 },
+    { "id": "bolso_fundo", "family": "mapa", "name": "Bolso Fundo", "text": "+30% de Fragmentos se voltar inteiro.", "fragmentPct": 30 },
+    { "id": "faro", "family": "mapa", "name": "Faro", "text": "Barris e caixotes dão +3 Lumes.", "lumesPerBreakable": 3 },
+    { "id": "rota_curta", "family": "mapa", "name": "Rota Curta", "text": "Anda 12% mais rápido.", "speedPct": 12 },
+    { "id": "mapa_da_lis", "family": "mapa", "name": "Mapa da Lis", "text": "+15% de Fragmentos e +1 Lume por barril.", "fragmentPct": 15, "lumesPerBreakable": 1 },
+    { "id": "tudo_ou_nada", "family": "aposta", "name": "Tudo ou Nada", "text": "Dano em dobro com menos de metade da vida.", "lowHpDamagePct": 100 },
+    { "id": "mao_pesada", "family": "aposta", "name": "Mão Pesada", "text": "+35% de dano, mas -20 de vida máxima.", "damagePct": 35, "maxHp": -20 },
+    { "id": "sorte_do_ravi", "family": "aposta", "name": "Sorte do Ravi", "text": "+18% de crítico, -10% de dano.", "critPct": 18, "damagePct": -10 },
+    { "id": "aposta_alta", "family": "aposta", "name": "Aposta Alta", "text": "+60% de Fragmentos se voltar inteiro, mas -15 de vida máxima.", "fragmentPct": 60, "maxHp": -15 }
+  ],
+  "teimosia": { "id": "teimosia", "family": "chama", "name": "Teimosia", "text": "Você pegou sua Lanterna de volta: +10% de dano até o fim da caçada.", "damagePct": 10 }
+}

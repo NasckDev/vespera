@@ -55,7 +55,7 @@ public partial class Player : CharacterBody2D
 
     public float ActorScale => _scale;
 
-    public float MaxSpeed => BaseSpeed * _scale;
+    public float MaxSpeed => BaseSpeed * _scale * (1f + ((float)Vespera.Game.Hunter.HuntService.Bless.SpeedPct / 100f));
 
     /// <summary>Posição do cursor no mundo da sala (a fase liga; null fora do jogo).</summary>
     public static System.Func<Vector2>? MouseWorld { get; set; }

@@ -5,6 +5,7 @@ using Godot;
 using Vespera.Game.Actors.Enemies;
 using Vespera.Game.Combat;
 using Vespera.Game.Components;
+using Vespera.Core.Common;
 using Vespera.Game.Hunter;
 
 namespace Vespera.Game.World.Rift;
@@ -35,6 +36,9 @@ public partial class RoomDirector : Node
     private bool _exitSent;
     private int _pending;
     private bool _waveOut;
+    private double _bossSeconds;
+    private string _eliteModifier = string.Empty;
+    private static readonly string[] EliteModifiers = ["blindado", "veloz", "faminto", "gemeo"];
     private Interactable? _rest;
 
     public RoomDirector(LevelWorld world, RiftRoomData data)
@@ -90,7 +94,11 @@ public partial class RoomDirector : Node
         {
             Chest = new Chest(_world, new Vector2(chest[0], chest[1])) { Name = "Chest" };
             _world.Entities.AddChild(Chest);
-            Chest.Opened += _ => OpenExitPortal();
+            Chest.Opened += _ =>
+            {
+                HuntService.TreasureOpened();
+                OpenExitPortal();
+            };
         }
 
         if (_data.Boss is { } boss)
@@ -172,6 +180,11 @@ public partial class RoomDirector : Node
             TickWaves(dt);
         }
 
+        if (Boss is { Engaged: true, Dead: false })
+        {
+            _bossSeconds += dt;
+        }
+
         if (Cleared && !_exitSent && _data.Exit is { } exit && _world.Player is { } player)
         {
             var t = exit.Trigger;
@@ -232,7 +245,8 @@ public partial class RoomDirector : Node
         _timer = WaveGap;
         if (wave.Any(w => w.Elite))
         {
-            _world.Feel.Toast("Cuidado: um monstro de ELITE (maior e laranja). Bate mais forte e deixa mais saque.");
+            _eliteModifier = EliteModifiers[RiftSession.Random.RangeInt(0, EliteModifiers.Length - 1)];
+            _world.Feel.Toast($"Cuidado: ELITE {Enemy.ModifierName(_eliteModifier)}. Derrubar dá saque melhor.");
         }
         else if (_nextWave > 1)
         {
@@ -273,6 +287,11 @@ public partial class RoomDirector : Node
                 if (spawn.Elite)
                 {
                     enemy.MakeElite(HuntService.Config.Elite);
+                    enemy.ApplyModifier(_eliteModifier);
+                    if (_eliteModifier == "gemeo")
+                    {
+                        SpawnTwin(spawn, at);
+                    }
                 }
 
                 enemy.Position = at;
@@ -281,6 +300,17 @@ public partial class RoomDirector : Node
                 _world.Feel.Spark(at - new Vector2(0, 10f * a), new Color("e64a8e"), 14, 220f, Vector2.Up, 60f);
             };
         };
+    }
+
+    /// <summary>Elite Gêmeo: um segundo elite igual nasce ao lado.</summary>
+    private void SpawnTwin(SpawnData spawn, Vector2 at)
+    {
+        Enemy twin = spawn.Type == "espectro" ? new Espectro(_world) : new Lodo(_world);
+        twin.MakeElite(HuntService.Config.Elite);
+        twin.ApplyModifier("gemeo");
+        twin.Position = _world.ClampToFloor(at + new Vector2(0.8f * _world.Data.HumanHeight, 0));
+        _world.AddEnemy(twin);
+        _wave.Add(twin);
     }
 
     private void Clear(bool quiet)
@@ -301,6 +331,8 @@ public partial class RoomDirector : Node
         if (!quiet)
         {
             _world.Feel.Toast("Sala limpa. O selo da passagem se desfez.");
+            HealOnClear();
+            OfferBlessing();
         }
 
         if (_data.ExitPortal is not null && Chest is null && Boss is null)
@@ -309,8 +341,45 @@ public partial class RoomDirector : Node
         }
     }
 
+    /// <summary>Bênção da Sopa "Prato Cheio": cura ao limpar a sala.</summary>
+    private void HealOnClear()
+    {
+        var pct = HuntService.Bless.HealOnClearPct;
+        if (pct > 0 && _world.Player is { } player)
+        {
+            player.Combat.Heal((int)System.Math.Round(player.Combat.MaxHp * pct / 100));
+        }
+    }
+
+    /// <summary>A lanterna oferece 3 bênçãos (ROTEIRO-V2 §5.1); escolher aplica na hora (vida máxima inclusive).</summary>
+    private void OfferBlessing()
+    {
+        if (!RiftSession.InRift || !Hunter.Progression.IsActive || !IsInsideTree())
+        {
+            return;
+        }
+
+        var offer = HuntService.OfferBlessings();
+        Hunt.BlessingScreen.Show(offer, id =>
+        {
+            var player = _world.Player;
+            var before = player.Combat.MaxHp;
+            HuntService.AddBlessing(id);
+            player.Combat.RefreshStats(fullHeal: false);
+            var gained = player.Combat.MaxHp - before;
+            if (gained > 0)
+            {
+                player.Combat.Heal(gained);
+            }
+
+            var name = HuntService.BlessingCatalog.Find(id)?.Name ?? id;
+            _world.Feel.Toast($"Bênção: {name}");
+        });
+    }
+
     private void OnBossDefeated()
     {
+        HuntService.GuardianFight(_bossSeconds, RiftSession.Brecha.Boss.Cores, Boss?.CoresBroken ?? 0);
         RiftLoot.GuardianDefeated(_world, Boss?.GlobalPosition ?? _world.Player.GlobalPosition);
         Cleared = true;
         var timer = GetTree().CreateTimer(1.4, processAlways: false);

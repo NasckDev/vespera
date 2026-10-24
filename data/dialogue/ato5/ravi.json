@@ -1,0 +1,38 @@
+{
+  "id": "ato5/ravi",
+  "entries": [
+    {
+      "if": [
+        "ravi_rota_b"
+      ],
+      "node": "b1"
+    },
+    {
+      "node": "a1"
+    }
+  ],
+  "nodes": {
+    "a1": {
+      "speaker": "ravi",
+      "text": "S! A Nilza falou que agora você é quase deus.",
+      "look": "ravi",
+      "expression": 2,
+      "next": "a2"
+    },
+    "a2": {
+      "speaker": "ravi",
+      "text": "Deus paga sopa?"
+    },
+    "b1": {
+      "speaker": "ravi",
+      "text": "S.",
+      "look": "ravi",
+      "next": "b2"
+    },
+    "b2": {
+      "speaker": "ravi",
+      "text": "Fecha a das Ruas Baixas por mim. Eu não entro mais.",
+      "expression": 2
+    }
+  }
+}

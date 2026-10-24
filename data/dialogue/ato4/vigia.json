@@ -1,0 +1,184 @@
+{
+  "id": "ato4/vigia",
+  "entries": [
+    {
+      "if": [
+        "vigia_e_marisa"
+      ],
+      "node": "h1"
+    },
+    {
+      "if": [
+        "GuardianDefeated:velora",
+        "!vigia_lanterna"
+      ],
+      "node": "r1"
+    },
+    {
+      "if": [
+        "met_vigia",
+        "hunt_cemiterio_1",
+        "!vigia_p2_sim",
+        "!vigia_p2_naosei",
+        "!vigia_p2_nao"
+      ],
+      "node": "s1"
+    },
+    {
+      "if": [
+        "met_vigia"
+      ],
+      "node": "h1"
+    },
+    {
+      "node": "p1"
+    }
+  ],
+  "nodes": {
+    "p1": {
+      "speaker": "vigia",
+      "text": "Você carrega uma lanterna que já atravessou.",
+      "look": "vigia",
+      "set": [
+        "met_vigia"
+      ],
+      "next": "p2"
+    },
+    "p2": {
+      "speaker": "vigia",
+      "text": "Pergunta um: você sabia disso?",
+      "choices": [
+        {
+          "text": "Sim.",
+          "set": [
+            "vigia_p1_sim"
+          ],
+          "next": "e1"
+        },
+        {
+          "text": "Não.",
+          "set": [
+            "vigia_p1_nao"
+          ],
+          "next": "e1"
+        },
+        {
+          "text": "Não entendi.",
+          "set": [
+            "vigia_p1_naoentendi"
+          ],
+          "next": "e1"
+        }
+      ]
+    },
+    "e1": {
+      "speaker": "vigia",
+      "text": "Quando um Guardião cai, às vezes deixa um pedaço. Chama Eco.",
+      "events": [
+        "UnlockEchoSlot:1"
+      ],
+      "next": "e2"
+    },
+    "e2": {
+      "speaker": "vigia",
+      "text": "Eu guardo. Você usa. Depois a gente acerta.",
+      "objective": "ato4_brecha"
+    },
+    "s1": {
+      "speaker": "vigia",
+      "text": "Pergunta dois: se alguém que você perdeu voltasse diferente, você aceitava?",
+      "look": "vigia",
+      "choices": [
+        {
+          "text": "Aceitava.",
+          "set": [
+            "vigia_p2_sim"
+          ],
+          "next": "h1"
+        },
+        {
+          "text": "Não sei.",
+          "set": [
+            "vigia_p2_naosei"
+          ],
+          "next": "h1"
+        },
+        {
+          "text": "Não.",
+          "set": [
+            "vigia_p2_nao"
+          ],
+          "next": "h1"
+        }
+      ]
+    },
+    "r1": {
+      "speaker": "vigia",
+      "text": "Essa lanterna. Eu dei pra Odete segurar um minuto.",
+      "look": "vigia",
+      "set": [
+        "vigia_lanterna"
+      ],
+      "next": "r2"
+    },
+    "r2": {
+      "speaker": "vigia",
+      "text": "Faz vinte anos de minuto.",
+      "expression": 2,
+      "choices": [
+        {
+          "text": "Qual é o seu nome?",
+          "next": "nome1"
+        },
+        {
+          "text": "(Ficar em silêncio)"
+        }
+      ]
+    },
+    "nome1": {
+      "speaker": "vigia",
+      "text": "Eu era a Marisa.",
+      "expression": 2,
+      "set": [
+        "vigia_e_marisa"
+      ],
+      "next": "nome2"
+    },
+    "nome2": {
+      "speaker": "vigia",
+      "text": "O que saiu de lá e ficou aqui no escuro, não sei o nome."
+    },
+    "h1": {
+      "speaker": "vigia",
+      "text": "Volte à noite. Eu lembro do que você disse.",
+      "choices": [
+        {
+          "text": "Por que o capuz?",
+          "next": "pm1_1"
+        },
+        {
+          "text": "E a Lis?",
+          "next": "pm2_1"
+        },
+        {
+          "text": "Até a próxima noite."
+        }
+      ]
+    },
+    "pm1_1": {
+      "speaker": "vigia",
+      "text": "Por que capuz? Porque o rosto que eu tenho não é o que eu lembro.",
+      "next": "h1"
+    },
+    "pm2_1": {
+      "speaker": "vigia",
+      "text": "A Lis? A única que o Avesso nunca tocou.",
+      "next": "pm2_2"
+    },
+    "pm2_2": {
+      "speaker": "vigia",
+      "text": "Ele não leva o que devolveu.",
+      "next": "h1"
+    }
+  }
+}

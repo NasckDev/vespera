@@ -1,0 +1,130 @@
+{
+  "id": "ato3/severo",
+  "entries": [
+    {
+      "if": [
+        "severo_viu_lanterna"
+      ],
+      "node": "h1"
+    },
+    {
+      "if": [
+        "lanterna_m"
+      ],
+      "node": "m1"
+    },
+    {
+      "if": [
+        "met_severo"
+      ],
+      "node": "h1"
+    },
+    {
+      "node": "i1"
+    }
+  ],
+  "nodes": {
+    "i1": {
+      "speaker": "severo",
+      "text": "Sabe nadar? Lá dentro não adianta.",
+      "look": "severo",
+      "set": [
+        "met_severo"
+      ],
+      "next": "i2"
+    },
+    "i2": {
+      "speaker": "severo",
+      "text": "Mas pelo menos você vai saber de que lado tá o ar.",
+      "next": "i3"
+    },
+    "i3": {
+      "speaker": "severo",
+      "text": "Na véspera o mar traz coisa de lá. Peixe com olho de vidro.",
+      "events": [
+        "UnlockFishing"
+      ],
+      "next": "i4"
+    },
+    "i4": {
+      "speaker": "severo",
+      "text": "A Nilza paga bem. Não come cru.",
+      "objective": "ato3_pesca"
+    },
+    "h1": {
+      "speaker": "severo",
+      "text": "Maré boa hoje. Quer pescar ou quer perguntar?",
+      "choices": [
+        {
+          "text": "Pescar.",
+          "next": "pesca"
+        },
+        {
+          "text": "O farol?",
+          "next": "pm1_1"
+        },
+        {
+          "text": "Marisa?",
+          "next": "pm2_1",
+          "if": [
+            "lanterna_m"
+          ]
+        },
+        {
+          "text": "Até mais."
+        }
+      ]
+    },
+    "pm1_1": {
+      "speaker": "severo",
+      "text": "O farol? Apagado desde aquela noite.",
+      "look": "farol",
+      "next": "pm1_2"
+    },
+    "pm1_2": {
+      "speaker": "severo",
+      "text": "Eu tentei. A chama não pega.",
+      "next": "h1"
+    },
+    "pm2_1": {
+      "speaker": "severo",
+      "text": "Marisa e Odete entravam juntas. Saíam juntas.",
+      "next": "pm2_2"
+    },
+    "pm2_2": {
+      "speaker": "severo",
+      "text": "Até o dia.",
+      "expression": 2,
+      "next": "h1"
+    },
+    "pesca": {
+      "speaker": "severo",
+      "text": "A vara tá ali. Puxa quando o olho de vidro brilhar.",
+      "events": [
+        "OpenFishing"
+      ]
+    },
+    "m1": {
+      "speaker": "severo",
+      "text": "Onde achou isso.",
+      "look": "player",
+      "expression": 2,
+      "set": [
+        "severo_viu_lanterna"
+      ],
+      "next": "m2"
+    },
+    "m2": {
+      "speaker": "severo",
+      "text": "Marisa. Ela me pediu pra manter o farol aceso.",
+      "look": "farol",
+      "next": "m3"
+    },
+    "m3": {
+      "speaker": "severo",
+      "text": "Eu fui pra festa.",
+      "expression": 2,
+      "objective": "ato3_odete"
+    }
+  }
+}

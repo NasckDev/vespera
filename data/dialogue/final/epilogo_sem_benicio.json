@@ -1,0 +1,51 @@
+{
+  "id": "final/epilogo_sem_benicio",
+  "entries": [
+    {
+      "node": "n1"
+    }
+  ],
+  "nodes": {
+    "n1": {
+      "speaker": "nilza",
+      "text": "Senta. Hoje a sopa é de graça.",
+      "look": "nilza",
+      "next": "n2"
+    },
+    "n2": {
+      "speaker": "nilza",
+      "text": "Pra deus, pelo menos.",
+      "expression": 2,
+      "next": "r1"
+    },
+    "r1": {
+      "speaker": "ravi",
+      "text": "Você venceu a aposta. Todas.",
+      "look": "ravi",
+      "expression": 2,
+      "next": "r2"
+    },
+    "r2": {
+      "speaker": "ravi",
+      "text": "Eu vou tentar o exame C amanhã. Sem medo. Jura.",
+      "next": "l1"
+    },
+    "l1": {
+      "speaker": "lis",
+      "text": "Abriu uma no mar.",
+      "look": "lis",
+      "next": "l2"
+    },
+    "l2": {
+      "speaker": "lis",
+      "text": "Quer ver por dentro antes?",
+      "expression": 2,
+      "set": [
+        "parte1_fim"
+      ],
+      "events": [
+        "EndPart1"
+      ]
+    }
+  }
+}
