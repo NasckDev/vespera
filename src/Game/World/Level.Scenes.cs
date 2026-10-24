@@ -63,6 +63,30 @@ public partial class Level
         _sceneBusy = true;
         _skipScene = false;
         Player.Frozen = true;
+        Npc? npc = null;
+        try
+        {
+            npc = await StageAutoplay(auto);
+        }
+        catch (System.Exception ex)
+        {
+            Log.Error($"cena '{auto.Dialogue}' falhou: {ex.Message}");
+        }
+        finally
+        {
+            _sceneBusy = false;
+            _freeRoam = false;
+        }
+
+        if (!StartDialogue(auto.Dialogue, npc))
+        {
+            Player.Frozen = false;
+        }
+    }
+
+    /// <summary>Encenação antes da fala (estrada/Brecha, manhã, NPC que se aproxima); devolve quem vai falar.</summary>
+    private async Task<Npc?> StageAutoplay(AutoplayDef auto)
+    {
         var npc = auto.Npc.Length > 0 ? World.Npcs.FirstOrDefault(n => n.NpcId == auto.Npc) : null;
         if (auto.Stage == "arrival")
         {
@@ -78,11 +102,7 @@ public partial class Level
             await StageApproach(npc);
         }
 
-        _sceneBusy = false;
-        if (!StartDialogue(auto.Dialogue, npc))
-        {
-            Player.Frozen = false;
-        }
+        return npc;
     }
 
     /// <summary>
@@ -105,21 +125,21 @@ public partial class Level
         {
             Position = World.ClampToFloor(start.Lerp(World.SpawnPoint, 0.45f) + new Vector2(-human * 2.5f, 0)),
         };
-        // Bots (SceneSpeed > 1) pulam o Lodo: ele bate de verdade e não há queda fora da Brecha.
-        if (SceneSpeed <= 1f)
-        {
-            World.AddEnemy(lodo);
-            await WaitUntil(() => !IsInstanceValid(lodo) || lodo.IsQueuedForDeletion() || lodo.Dead, RoadLodoSeconds, () => lodo.Die());
-        }
-        else
-        {
-            lodo.QueueFree();
-        }
+        World.AddEnemy(lodo);
+        await WaitUntil(() => !IsInstanceValid(lodo) || lodo.IsQueuedForDeletion() || lodo.Dead, RoadLodoSeconds, () => KillIfAlive(lodo));
         await WaitUntil(() => Player.GlobalPosition.DistanceTo(World.SpawnPoint) < human * PlazaReachHumans, RoadWalkSeconds, null);
         _freeRoam = false;
         Player.Frozen = true;
         await WalkPlayerTo(World.SpawnPoint);
         await OpenRift();
+    }
+
+    private static void KillIfAlive(Vespera.Game.Actors.Enemies.Enemy enemy)
+    {
+        if (IsInstanceValid(enemy) && !enemy.Dead)
+        {
+            enemy.Die();
+        }
     }
 
     /// <summary>A Brecha abre: tremor, clarão magenta na fenda e a lanterna do caçador acendendo sem ninguém tocar.</summary>
