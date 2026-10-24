@@ -24,6 +24,7 @@ public static class RiftSession
     {
         ["esgotos_do_mercado"] = BrechaFile,
         ["pomar_podre"] = "res://src/Data/brecha_pomar.json",
+        ["cais_afogado"] = "res://src/Data/brecha_cais.json",
     };
 
     private static readonly System.Collections.Generic.Dictionary<string, BrechaDef> Loaded = [];

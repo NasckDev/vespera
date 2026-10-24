@@ -104,6 +104,7 @@ public partial class Level
         }
 
         ShowExamObserver();
+        ShowActThree();
     }
 
     private void OnRoomExit()

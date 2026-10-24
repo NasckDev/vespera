@@ -59,7 +59,10 @@ public partial class Player : CharacterBody2D
 
     public float ActorScale => _scale;
 
-    public float MaxSpeed => BaseSpeed * _scale * (1f + ((float)Vespera.Game.Hunter.HuntService.Bless.SpeedPct / 100f));
+    /// <summary>Multiplicador de velocidade na água (Ato III: anel alagado da arena do Farol); 1 = chão seco.</summary>
+    public float Wade { get; set; } = 1f;
+
+    public float MaxSpeed => BaseSpeed * _scale * Wade * (1f + ((float)Vespera.Game.Hunter.HuntService.Bless.SpeedPct / 100f));
 
     /// <summary>Posição do cursor no mundo da sala (a fase liga; null fora do jogo).</summary>
     public static System.Func<Vector2>? MouseWorld { get; set; }

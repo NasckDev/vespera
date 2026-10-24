@@ -1,0 +1,22 @@
+{
+  "id": "ato3/mares_farol",
+  "_doc": "Porta do farol com corrente, no Mercado das Marés. Mesmas falas do 'Perguntar mais' do Severo (§13).",
+  "entries": [
+    {
+      "node": "a"
+    }
+  ],
+  "nodes": {
+    "a": {
+      "speaker": "severo",
+      "look": "farol",
+      "text": "Apagado desde aquela noite.",
+      "next": "b"
+    },
+    "b": {
+      "speaker": "severo",
+      "expression": 2,
+      "text": "Eu tentei. A chama não pega."
+    }
+  }
+}

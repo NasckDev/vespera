@@ -67,6 +67,8 @@ public sealed class RunPlanner(HuntConfig config)
                 break;
             }
         }
+
+        Require(grounds, kinds);
         for (var i = 0; i < count; i++)
         {
             rooms.Add(new RoomPlan(i, grounds[i], kinds[i], Waves(grounds[i], kinds[i], i, count, growth, random)));
@@ -137,6 +139,28 @@ public sealed class RunPlanner(HuntConfig config)
         }
     }
 
+    /// <summary>
+    /// <see cref="HuntConfig.RequiredGround"/>: se o sorteio deixou o chão de fora, ele toma o lugar da primeira sala
+    /// de combate depois da entrada (nunca a primeira nem a última; como não estava em lugar nenhum, não repete vizinho).
+    /// </summary>
+    private void Require(string[] grounds, List<RoomKind> kinds)
+    {
+        var required = config.RequiredGround;
+        if (required.Length == 0 || grounds.Contains(required) || !config.Grounds.TryGetValue(required, out var def))
+        {
+            return;
+        }
+
+        for (var i = 1; i < grounds.Length - 1; i++)
+        {
+            if (kinds[i] == RoomKind.Combat && def.Kinds.Contains(RoomKind.Combat))
+            {
+                grounds[i] = required;
+                return;
+            }
+        }
+    }
+
     private string PickGround(RoomKind kind, string? previous, IRandom random)
     {
         var options = config.Grounds.Where(g => g.Value.Kinds.Contains(kind)).Select(g => g.Key).OrderBy(id => id, StringComparer.Ordinal).ToList();
@@ -175,10 +199,18 @@ public sealed class RunPlanner(HuntConfig config)
             {
                 var second = random.NextDouble() < espectroShare;
                 var monster = second ? config.SecondMonster : config.CommonMonster;
+                var swarm = second ? config.SecondSwarm : 1;
+                // Terceiro monstro (só nas Brechas que têm): sorteado entre os comuns, depois da primeira sala.
+                if (!second && index > 0 && config.ThirdMonster.Length > 0 && random.NextDouble() < config.ThirdShare)
+                {
+                    monster = config.ThirdMonster;
+                    swarm = config.ThirdSwarm;
+                }
+
                 var p = spawns[points[s]];
                 wave.Add(new SpawnPlan(monster, p[0], p[1], s < elites));
                 // Enxame: o segundo monstro chega em bando, nos arredores do mesmo ponto (o diretor prende ao chão).
-                for (var k = 1; second && k < config.SecondSwarm; k++)
+                for (var k = 1; k < swarm; k++)
                 {
                     wave.Add(new SpawnPlan(monster, p[0] + (SwarmOffset * (k % 2 == 0 ? 1 : -1)), p[1] + (SwarmOffset * 0.5f * k), false));
                 }

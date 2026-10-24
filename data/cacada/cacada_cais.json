@@ -1,0 +1,503 @@
+{
+  "_doc": "Caçadas da Brecha do Cais Afogado (Ato III, rank C). Mesmo formato de cacada.json. Afogado é o monstro comum; o Ancoreiro é o segundo; a Lanterna-Afogada (terceiro) chega em dupla. O Mercado Submerso (sala alagada, onde fica a lanterna 'M.') entra em toda caçada. O Farol Afogado só espera no fim depois de 2 caçadas e da Odete receber a lanterna (guardianFlag). Pontos de data/levels/_fonte/cais_grounds.json.",
+  "roomsMin": 5,
+  "roomsMax": 7,
+  "guardianAfterRuns": 2,
+  "treasureChance": 0.65,
+  "restHealPct": 0.5,
+  "runGrowth": 0.3,
+  "runGrowthCap": 2,
+  "guardianRunRooms": 5,
+  "firstWaveSize": 3,
+  "waveSizePerRoom": 0.6,
+  "maxWaveSize": 5,
+  "extraWaveFromRoom": 2,
+  "espectroShareStart": 0.2,
+  "espectroSharePerRoom": 0.06,
+  "espectroShareMax": 0.4,
+  "eliteChanceFromRoom": 2,
+  "eliteChance": 0.3,
+  "elite": {
+    "scale": 1.15,
+    "hp": 2.4,
+    "damage": 1.25,
+    "speed": 1.2,
+    "period": 0.7,
+    "xp": 2,
+    "tint": "#ff9d6e"
+  },
+  "grounds": {
+    "cais_pier": {
+      "kinds": [
+        "combat",
+        "elite"
+      ],
+      "spawns": [
+        [
+          1640,
+          408
+        ],
+        [
+          856,
+          488
+        ],
+        [
+          472,
+          408
+        ],
+        [
+          1240,
+          408
+        ],
+        [
+          1432,
+          488
+        ],
+        [
+          664,
+          456
+        ],
+        [
+          1048,
+          440
+        ],
+        [
+          1160,
+          488
+        ],
+        [
+          552,
+          488
+        ],
+        [
+          1544,
+          472
+        ],
+        [
+          936,
+          408
+        ],
+        [
+          776,
+          408
+        ],
+        [
+          1352,
+          408
+        ],
+        [
+          1304,
+          488
+        ]
+      ],
+      "breakables": [
+        [
+          280,
+          488
+        ],
+        [
+          360,
+          408
+        ],
+        [
+          408,
+          488
+        ]
+      ]
+    },
+    "cais_mercado": {
+      "kinds": [
+        "combat",
+        "elite"
+      ],
+      "spawns": [
+        [
+          1640,
+          392
+        ],
+        [
+          776,
+          904
+        ],
+        [
+          1160,
+          168
+        ],
+        [
+          520,
+          168
+        ],
+        [
+          840,
+          40
+        ],
+        [
+          1096,
+          664
+        ],
+        [
+          568,
+          632
+        ],
+        [
+          1320,
+          440
+        ],
+        [
+          456,
+          408
+        ],
+        [
+          1080,
+          408
+        ],
+        [
+          856,
+          680
+        ],
+        [
+          728,
+          248
+        ],
+        [
+          952,
+          232
+        ],
+        [
+          648,
+          456
+        ]
+      ],
+      "breakables": [
+        [
+          280,
+          440
+        ],
+        [
+          968,
+          552
+        ],
+        [
+          1480,
+          376
+        ]
+      ]
+    },
+    "cais_barco": {
+      "kinds": [
+        "rest",
+        "treasure"
+      ],
+      "spawns": [
+        [
+          360,
+          552
+        ],
+        [
+          1288,
+          584
+        ],
+        [
+          792,
+          40
+        ],
+        [
+          1096,
+          264
+        ],
+        [
+          584,
+          296
+        ],
+        [
+          616,
+          552
+        ],
+        [
+          1048,
+          552
+        ],
+        [
+          888,
+          232
+        ],
+        [
+          1192,
+          424
+        ],
+        [
+          744,
+          312
+        ],
+        [
+          1000,
+          392
+        ],
+        [
+          488,
+          456
+        ],
+        [
+          488,
+          648
+        ],
+        [
+          1160,
+          648
+        ]
+      ],
+      "breakables": [
+        [
+          808,
+          664
+        ],
+        [
+          952,
+          664
+        ],
+        [
+          664,
+          424
+        ]
+      ],
+      "rest": [
+        836,
+        450
+      ]
+    },
+    "cais_quebramar": {
+      "kinds": [
+        "combat",
+        "elite",
+        "treasure"
+      ],
+      "spawns": [
+        [
+          1000,
+          488
+        ],
+        [
+          680,
+          408
+        ],
+        [
+          968,
+          280
+        ],
+        [
+          792,
+          280
+        ],
+        [
+          824,
+          488
+        ],
+        [
+          680,
+          536
+        ],
+        [
+          888,
+          376
+        ],
+        [
+          680,
+          296
+        ],
+        [
+          744,
+          184
+        ],
+        [
+          920,
+          184
+        ],
+        [
+          1000,
+          376
+        ],
+        [
+          776,
+          392
+        ],
+        [
+          920,
+          456
+        ],
+        [
+          872,
+          264
+        ]
+      ],
+      "breakables": [
+        [
+          984,
+          712
+        ],
+        [
+          712,
+          728
+        ],
+        [
+          840,
+          648
+        ]
+      ]
+    },
+    "cais_arena": {
+      "kinds": [
+        "combat",
+        "elite",
+        "rest",
+        "guardian"
+      ],
+      "spawns": [
+        [
+          376,
+          456
+        ],
+        [
+          1288,
+          472
+        ],
+        [
+          648,
+          536
+        ],
+        [
+          1016,
+          536
+        ],
+        [
+          1096,
+          296
+        ],
+        [
+          568,
+          296
+        ],
+        [
+          808,
+          488
+        ],
+        [
+          680,
+          392
+        ],
+        [
+          1128,
+          440
+        ],
+        [
+          536,
+          440
+        ],
+        [
+          984,
+          392
+        ],
+        [
+          1144,
+          600
+        ],
+        [
+          952,
+          264
+        ],
+        [
+          712,
+          264
+        ]
+      ],
+      "breakables": [
+        [
+          872,
+          680
+        ],
+        [
+          728,
+          648
+        ],
+        [
+          536,
+          600
+        ]
+      ],
+      "rest": [
+        620,
+        560
+      ]
+    }
+  },
+  "contracts": {
+    "offered": 3,
+    "kinds": {
+      "cacada": {
+        "title": "Caçada",
+        "text": "Feche uma caçada inteira (sem cair).",
+        "xp": 10,
+        "fragmentos": 6,
+        "lumes": 18
+      },
+      "coleta": {
+        "title": "Coleta",
+        "text": "Traga {n} {item} de uma caçada.",
+        "min": 3,
+        "max": 5,
+        "xp": 8,
+        "fragmentos": 4,
+        "lumes": 14
+      },
+      "protecao": {
+        "title": "Proteção",
+        "text": "Sobreviva a {n} ondas numa caçada.",
+        "min": 5,
+        "max": 8,
+        "xp": 8,
+        "fragmentos": 5,
+        "lumes": 12
+      },
+      "sem_dano": {
+        "title": "Sem dano",
+        "text": "Termine uma sala de combate sem levar golpe.",
+        "xp": 6,
+        "fragmentos": 3,
+        "lumes": 16
+      }
+    },
+    "materials": [
+      "bronze_salgado",
+      "corda_encharcada"
+    ]
+  },
+  "potions": {
+    "price": 14,
+    "flowerPrice": 5,
+    "max": 3,
+    "healPct": 0.4,
+    "drinkSeconds": 0.6
+  },
+  "flowers": {
+    "perReturn": 3
+  },
+  "well": {
+    "price": 1,
+    "fragmentBonusPct": 25
+  },
+  "breakables": {
+    "lumes": [
+      1,
+      3
+    ],
+    "fragmentChance": 0.15
+  },
+  "finalGround": "cais_arena",
+  "commonMonster": "afogado",
+  "secondMonster": "ancoreiro",
+  "secondSwarm": 1,
+  "thirdMonster": "lanterna_afogada",
+  "thirdShare": 0.25,
+  "thirdSwarm": 2,
+  "requiredGround": "cais_mercado",
+  "guardianFlag": "odete_lanterna_m"
+}

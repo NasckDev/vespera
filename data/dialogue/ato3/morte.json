@@ -1,41 +1,48 @@
 {
   "id": "ato3/morte",
+  "_doc": "Falas de morte do Ato III (ROTEIRO-V2 §13), uma por queda, em ordem (flags cais_afogado:fell_N do HuntService), tocadas na volta ao Mercado das Marés.",
   "entries": [
     {
       "if": [
-        "ato3_morte_6"
+        "cais_afogado:fell_1",
+        "!morte_cais_1"
       ],
-      "node": "m6"
+      "node": "m1"
     },
     {
       "if": [
-        "ato3_morte_5"
-      ],
-      "node": "m5"
-    },
-    {
-      "if": [
-        "ato3_morte_4"
-      ],
-      "node": "m4"
-    },
-    {
-      "if": [
-        "ato3_morte_3"
-      ],
-      "node": "m3"
-    },
-    {
-      "if": [
-        "ato3_morte_2"
+        "cais_afogado:fell_2",
+        "!morte_cais_2"
       ],
       "node": "m2"
     },
     {
       "if": [
-        "ato3_morte_1"
+        "cais_afogado:fell_3",
+        "!morte_cais_3"
       ],
-      "node": "m1"
+      "node": "m3"
+    },
+    {
+      "if": [
+        "cais_afogado:fell_4",
+        "!morte_cais_4"
+      ],
+      "node": "m4"
+    },
+    {
+      "if": [
+        "cais_afogado:fell_5",
+        "!morte_cais_5"
+      ],
+      "node": "m5"
+    },
+    {
+      "if": [
+        "cais_afogado:fell_6",
+        "!morte_cais_6"
+      ],
+      "node": "m6"
     },
     {
       "node": "m1"
@@ -44,27 +51,57 @@
   "nodes": {
     "m1": {
       "speaker": "severo",
-      "text": "A maré te trouxe de volta. Nunca traz ninguém."
+      "look": "severo",
+      "text": "A maré te trouxe de volta. Nunca traz ninguém.",
+      "set": [
+        "morte_cais_1"
+      ]
     },
     "m2": {
       "speaker": "nilza",
-      "text": "Você tava cheirando a sal e lanterna. Lanterna acesa."
+      "look": "nilza",
+      "text": "Você tava cheirando a sal e lanterna. Lanterna acesa.",
+      "set": [
+        "morte_cais_2"
+      ]
+    },
+    "m3b": {
+      "speaker": "odete",
+      "expression": 2,
+      "text": "Vai buscar a sua."
     },
     "m3": {
       "speaker": "odete",
-      "text": "Duas lanternas lá dentro agora. A sua e a dela. Vai buscar a sua."
+      "look": "odete",
+      "text": "Duas lanternas lá dentro agora. A sua e a dela.",
+      "set": [
+        "morte_cais_3"
+      ],
+      "next": "m3b"
     },
     "m4": {
       "speaker": "benicio",
-      "text": "Caiu na água. Eu anotei 'voltou'. Faz com que eu esteja certo."
+      "look": "benicio",
+      "text": "Caiu na água. Eu anotei 'voltou'. Faz com que eu esteja certo.",
+      "set": [
+        "morte_cais_4"
+      ]
     },
     "m5": {
       "speaker": "ravi",
-      "text": "O Severo ficou no cais a noite toda com uma corda. Pra que corda."
+      "look": "ravi",
+      "text": "O Severo ficou no cais a noite toda com uma corda. Pra que corda.",
+      "set": [
+        "morte_cais_5"
+      ]
     },
     "m6": {
       "speaker": "lis",
-      "text": "A lanterna que você achou chamou a sua. Eu ouvi as duas."
+      "look": "lis",
+      "text": "A lanterna que você achou chamou a sua. Eu ouvi as duas.",
+      "set": [
+        "morte_cais_6"
+      ]
     }
   }
 }

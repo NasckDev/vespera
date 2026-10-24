@@ -1,5 +1,5 @@
 {
-  "_doc": "Ato I do ROTEIRO-V2 (§3, §4, §13). Objetivos em ordem de campanha (o Diário usa a ordem); título = até 5 palavras, sempre na tela. Regras: quando a flag 'when' liga e as condições 'if' valem, aplica o objetivo. Flags que o jogo liga sozinho: hunt_back, hunt_1/hunt_2, fell_once, forged, potion_bought, contract_done, xp_ready, exame_e, eco_viscoso. Autoplay: 'stage' = 'arrival' (estrada + Lodo + Brecha abrindo) ou 'morning' (a noite passa antes da fala). Perguntas = página do Diário (§7). Retratos: {0} vira 1 (neutro) ou 2 (expressão). Ato II (ROTEIRO-V2 §13): met_celeste, pomar_podre:hunt_1/hunt_2 (caçadas completas no Pomar), pomar_podre:fell_1..6 (quedas), GuardianDefeated:macieira_oca -> act2_done.",
+  "_doc": "Ato I do ROTEIRO-V2 (§3, §4, §13). Objetivos em ordem de campanha (o Diário usa a ordem); título = até 5 palavras, sempre na tela. Regras: quando a flag 'when' liga e as condições 'if' valem, aplica o objetivo. Flags que o jogo liga sozinho: hunt_back, hunt_1/hunt_2, fell_once, forged, potion_bought, contract_done, xp_ready, exame_e, eco_viscoso. Autoplay: 'stage' = 'arrival' (estrada + Lodo + Brecha abrindo) ou 'morning' (a noite passa antes da fala). Perguntas = página do Diário (§7). Retratos: {0} vira 1 (neutro) ou 2 (expressão). Ato II (ROTEIRO-V2 §13): met_celeste, pomar_podre:hunt_1/hunt_2 (caçadas completas no Pomar), pomar_podre:fell_1..6 (quedas), GuardianDefeated:macieira_oca -> act2_done. Ato III (ROTEIRO-V2 §13): met_severo, pescou, exame_c_visto, cais_afogado:hunt_1/hunt_2, lanterna_m (sala alagada), severo_viu_lanterna, odete_lanterna_m (abre o Farol), cais_afogado:fell_1..6, GuardianDefeated:farol_afogado -> act3_done.",
   "startObjective": "estrada",
   "objectives": [
     {
@@ -79,8 +79,53 @@
     },
     {
       "id": "ato3",
-      "title": "Procure o Severo (em breve)",
-      "text": "O faroleiro procura gente que não tem medo de água. O caminho do cais abre no Ato III. Em breve.",
+      "title": "Procure o Severo no cais",
+      "text": "O Severo procura gente que não tem medo de água. Atravesse a ponte a leste da praça até o Mercado das Marés."
+    },
+    {
+      "id": "ato3_pesca",
+      "title": "Pesque no fim do píer",
+      "text": "Na véspera o mar traz peixe do Avesso. Puxe a linha quando o olho de vidro brilhar. A Nilza paga bem."
+    },
+    {
+      "id": "ato3_exame",
+      "title": "Fale com o Benício",
+      "text": "O Benício espera ao lado da Brecha do cais. Hoje é o exame do selo C."
+    },
+    {
+      "id": "ato3_brecha",
+      "title": "Entre na Brecha do cais",
+      "text": "O Benício espera na saída. Volte inteiro de uma caçada no Cais Afogado."
+    },
+    {
+      "id": "ato3_lanterna",
+      "title": "Procure na sala alagada",
+      "text": "No Mercado Submerso, a sala alagada da Brecha, tem uma pedra seca no meio. Tem alguma coisa nela."
+    },
+    {
+      "id": "ato3_severo",
+      "title": "Mostre a lanterna ao Severo",
+      "text": "A lanterna da sala alagada tem um \"M.\" gravado. É igual à sua. O Severo está no cais."
+    },
+    {
+      "id": "ato3_odete",
+      "title": "Leve a lanterna à Odete",
+      "text": "Marisa. A Odete precisa ver isto. Ela está na Forja."
+    },
+    {
+      "id": "ato3_guardiao",
+      "title": "Vença o Farol Afogado",
+      "text": "No fim da Brecha do cais espera o Farol Afogado. Saia das faixas e círculos âmbar; quando a arena alagar, fique na pedra seca."
+    },
+    {
+      "id": "ato3_fecho",
+      "title": "Fale com o Benício",
+      "text": "O Farol Afogado caiu. O Benício espera você no Mercado das Marés."
+    },
+    {
+      "id": "ato4",
+      "title": "Vá ao Cemitério (em breve)",
+      "text": "Tem um homem no Cemitério que só aparece de noite. O caminho abre no Ato IV. Em breve.",
       "locked": true
     }
   ],
@@ -127,6 +172,41 @@
     {
       "when": "ato2_fim_done",
       "objective": "ato3"
+    },
+    {
+      "when": "met_severo",
+      "if": [
+        "objective:ato3"
+      ],
+      "objective": "ato3_pesca"
+    },
+    {
+      "when": "pescou",
+      "if": [
+        "objective:ato3_pesca"
+      ],
+      "objective": "ato3_exame"
+    },
+    {
+      "when": "cais_afogado:hunt_1",
+      "if": [
+        "!lanterna_m"
+      ],
+      "objective": "ato3_lanterna"
+    },
+    {
+      "when": "lanterna_m",
+      "if": [
+        "!severo_viu_lanterna"
+      ],
+      "objective": "ato3_severo"
+    },
+    {
+      "when": "GuardianDefeated:farol_afogado",
+      "objective": "ato3_fecho",
+      "set": [
+        "act3_done"
+      ]
     }
   ],
   "autoplay": [
@@ -295,6 +375,109 @@
         "act2_done",
         "!ato2_fim_done"
       ]
+    },
+    {
+      "level": "mares",
+      "dialogue": "ato3/severo",
+      "npc": "severo",
+      "if": [
+        "!met_severo"
+      ]
+    },
+    {
+      "level": "mares",
+      "dialogue": "ato3/severo",
+      "npc": "severo",
+      "if": [
+        "lanterna_m",
+        "!severo_viu_lanterna"
+      ]
+    },
+    {
+      "level": "forja_interior",
+      "dialogue": "ato3/odete",
+      "npc": "odete",
+      "if": [
+        "severo_viu_lanterna",
+        "!odete_lanterna_m"
+      ]
+    },
+    {
+      "level": "mares",
+      "dialogue": "ato3/morte",
+      "if": [
+        "cais_afogado:fell_1",
+        "!morte_cais_1"
+      ]
+    },
+    {
+      "level": "mares",
+      "dialogue": "ato3/morte",
+      "if": [
+        "cais_afogado:fell_2",
+        "!morte_cais_2"
+      ]
+    },
+    {
+      "level": "mares",
+      "dialogue": "ato3/morte",
+      "if": [
+        "cais_afogado:fell_3",
+        "!morte_cais_3"
+      ]
+    },
+    {
+      "level": "mares",
+      "dialogue": "ato3/morte",
+      "if": [
+        "cais_afogado:fell_4",
+        "!morte_cais_4"
+      ]
+    },
+    {
+      "level": "mares",
+      "dialogue": "ato3/morte",
+      "if": [
+        "cais_afogado:fell_5",
+        "!morte_cais_5"
+      ]
+    },
+    {
+      "level": "mares",
+      "dialogue": "ato3/morte",
+      "if": [
+        "cais_afogado:fell_6",
+        "!morte_cais_6"
+      ]
+    },
+    {
+      "level": "mares",
+      "dialogue": "ato3/benicio",
+      "npc": "benicio",
+      "if": [
+        "act3_done",
+        "rank>=B",
+        "!ato3_fecho_benicio"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato3/nilza",
+      "npc": "nilza",
+      "stage": "morning",
+      "if": [
+        "ato3_fecho_benicio",
+        "!ato3_manha_nilza"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato3/lis",
+      "npc": "lis",
+      "if": [
+        "ato3_manha_nilza",
+        "!ato3_manha_lis"
+      ]
     }
   ],
   "questions": [
@@ -321,6 +504,12 @@
         "odete_marisa"
       ],
       "text": "Quem foi Marisa? A Odete esperou ela voltar."
+    },
+    {
+      "if": [
+        "lanterna_m"
+      ],
+      "text": "Por que a lanterna \"M.\" é igual à minha?"
     }
   ],
   "speakers": {
@@ -359,6 +548,13 @@
     },
     "menino": {
       "name": "Menino (atrás da cerca)"
+    },
+    "severo": {
+      "name": "Capitão Severo",
+      "portrait": "res://assets/v2/sprites/npcs/retrato_severo_{0}.png"
+    },
+    "farol": {
+      "name": "Farol Afogado"
     }
   }
 }

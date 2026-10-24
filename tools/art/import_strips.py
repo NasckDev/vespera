@@ -71,8 +71,13 @@ MONSTERS = {
     "carrapicho": {"height": 70, "cell": 192, "normalize": True},
     "rato_lanterna": {"height": 44, "cell": 192, "normalize": True},
     "macieira_oca": {"height": 300, "cell": 448, "normalize": True},
+    # Ato III (issue #30): mesmas regras do Ato II (tiras de tamanhos diferentes, "normalize").
+    "afogado": {"height": 120, "cell": 256, "normalize": True},
+    "lanterna_afogada": {"height": 64, "cell": 192, "normalize": True},
+    "ancoreiro": {"height": 72, "cell": 192, "normalize": True},
+    "farol_afogado": {"height": 300, "cell": 448, "normalize": True},
 }
-MONSTER_MARGIN = {"lodo": 8, "espectro": 12, "lodo_mae": 16, "carrapicho": 10, "rato_lanterna": 10, "macieira_oca": 16}  # folga entre o pé e a borda de baixo da célula
+MONSTER_MARGIN = {"lodo": 8, "espectro": 12, "lodo_mae": 16, "carrapicho": 10, "rato_lanterna": 10, "macieira_oca": 16, "afogado": 12, "lanterna_afogada": 10, "ancoreiro": 10, "farol_afogado": 16}  # folga entre o pé e a borda de baixo da célula
 
 PLANTED_ANIMS = {"parado", "dano"}  # pés no mesmo lugar: realinha o x por quadro (a fonte desloca os quadros dentro da fatia)
 LOOP_ANIMS = {"parado", "andar", "mover"}

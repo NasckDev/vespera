@@ -11,12 +11,16 @@ public static class EnemyFactory
         "espectro" => new Espectro(world),
         "carrapicho" => new Carrapicho(world) { StartDelay = (float)GD.RandRange(0.0, 0.8) },
         "rato_lanterna" => new RatoLanterna(world) { StartDelay = (float)GD.RandRange(0.0, 0.5) },
+        "afogado" => new Afogado(world) { StartDelay = (float)GD.RandRange(0.0, 0.8) },
+        "ancoreiro" => new Ancoreiro(world) { StartDelay = (float)GD.RandRange(0.0, 0.8) },
+        "lanterna_afogada" => new LanternaAfogada(world) { StartDelay = (float)GD.RandRange(0.0, 0.6) },
         _ => new Lodo(world) { StartDelay = (float)GD.RandRange(0.0, 0.6) },
     };
 
     public static Enemy Guardian(string type, LevelWorld world) => type switch
     {
         "macieira_oca" => new MacieiraOca(world),
+        "farol_afogado" => new FarolAfogado(world),
         _ => new LodoMae(world),
     };
 }
