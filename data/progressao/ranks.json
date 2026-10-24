@@ -11,7 +11,7 @@
     { "id": "E", "title": "Aprendiz", "xp": 0, "stage": 0, "color": "#9BA3AA", "rarity": "Comum", "guardian": "lodo_mae", "exam": false },
     { "id": "D", "title": "Vigia", "xp": 120, "stage": 0, "color": "#4DBA90", "rarity": "Incomum", "guardian": "macieira_oca", "exam": false },
     { "id": "C", "title": "Lanterneiro", "xp": 320, "stage": 1, "color": "#5CA8FF", "rarity": "Raro", "guardian": "farol_afogado", "exam": true },
-    { "id": "B", "title": "Sentinela", "xp": 650, "stage": 1, "color": "#C879EF", "rarity": "Épico", "guardian": "velorio", "exam": false },
+    { "id": "B", "title": "Sentinela", "xp": 650, "stage": 1, "color": "#C879EF", "rarity": "Épico", "guardian": "velora", "exam": false },
     { "id": "A", "title": "Caçador", "xp": 1100, "stage": 2, "color": "#F6B544", "rarity": "Lendário", "guardian": "sineiro_mudo", "exam": true },
     { "id": "S", "title": "Arauto", "xp": 1800, "stage": 2, "color": "#E45178", "rarity": "Mítico", "guardian": "inquilino", "exam": true },
     { "id": "SS", "title": "Crepuscular", "xp": 2800, "stage": 3, "color": "#A77BFF", "rarity": "Único", "guardian": "guardiao_revertido", "exam": false },

@@ -11,7 +11,10 @@
       "text": "O Benício me contou hoje. Vinte anos.",
       "look": "odete",
       "expression": 2,
-      "next": "a2"
+      "next": "a2",
+      "set": [
+        "ato5_odete"
+      ]
     },
     "a2": {
       "speaker": "odete",

@@ -15,6 +15,9 @@ public sealed class StoryProgress
     /// <summary>Fase onde o jogador estava no último save (vazio = a fase inicial).</summary>
     public string LevelId { get; set; } = string.Empty;
 
+    /// <summary>Relógio de noites (Vigia, Brecha B das Ruas Baixas). Ver <see cref="NightState"/>.</summary>
+    public NightState Night { get; set; } = new();
+
     public bool Has(string flag) => Flags.Contains(flag);
 
     /// <summary>Liga a flag; devolve verdadeiro se ela era nova.</summary>
@@ -35,5 +38,7 @@ public sealed class StoryProgress
         Flags = [.. (Flags ?? []).Where(f => !string.IsNullOrWhiteSpace(f)).Distinct()];
         ObjectiveId ??= string.Empty;
         LevelId ??= string.Empty;
+        Night ??= new NightState();
+        Night.Sanitize();
     }
 }

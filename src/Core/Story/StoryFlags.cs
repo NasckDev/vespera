@@ -80,6 +80,12 @@ public static class StoryFlags
     /// <summary>Evento: comprar o mapa da Lis (10 Lumes).</summary>
     public const string EventBuyMap = "BuyMap";
 
+    /// <summary>Prefixo do evento do Benício que queima o selo do ato (<c>BurnSeal:B</c>, <c>BurnSeal:A</c>, <c>BurnSeal:S</c>...).</summary>
+    public const string EventBurnSealPrefix = "BurnSeal:";
+
+    /// <summary>Flag gravada quando o selo <paramref name="rank"/> é queimado (<c>selo_queimado_b</c>).</summary>
+    public static string SealBurnedFlag(string rank) => $"selo_queimado_{rank.ToLowerInvariant()}";
+
     /// <summary>A escolha da arma na Odete já foi feita: trocar de novo custa Fragmentos.</summary>
     public const string WeaponChosen = "arma_escolhida";
 

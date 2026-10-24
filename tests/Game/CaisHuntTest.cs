@@ -176,7 +176,7 @@ public class CaisHuntTest
         engine.SetFlag("GuardianDefeated:farol_afogado");
         AssertThat(engine.ObjectiveId).IsEqual("ato3_fecho");
         AssertThat(engine.HasFlag("act3_done")).IsTrue();
-        AssertThat(engine.Script.Objective("ato4")?.Locked == true).IsTrue();
+        AssertThat(engine.Script.Objective("ato4")?.Locked == false).IsTrue();
     }
 
     [TestCase]

@@ -9,7 +9,10 @@
     "a": {
       "speaker": "lis",
       "text": "A Nilza tá cozinhando uma coisa há três dias. Disse que é pra você.",
-      "look": "lis"
+      "look": "lis",
+      "set": [
+        "ato5_lis"
+      ]
     }
   }
 }

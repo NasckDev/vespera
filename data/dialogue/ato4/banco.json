@@ -1,0 +1,41 @@
+{
+  "id": "ato4/banco",
+  "_doc": "Banco debaixo do cipreste, no Cemitério das Lanternas (o banco do Vigia). De dia deixa esperar a noite (evento WaitNight).",
+  "entries": [
+    {
+      "if": [
+        "noite"
+      ],
+      "node": "n"
+    },
+    {
+      "node": "d"
+    }
+  ],
+  "nodes": {
+    "d": {
+      "speaker": "",
+      "text": "Um banco velho debaixo do cipreste. Dá pra esperar a noite aqui.",
+      "choices": [
+        {
+          "text": "Esperar a noite",
+          "next": "w"
+        },
+        {
+          "text": "Agora não."
+        }
+      ]
+    },
+    "w": {
+      "speaker": "",
+      "text": "O sol desce atrás da capela. As lanternas dos túmulos ficam mais fortes.",
+      "events": [
+        "WaitNight"
+      ]
+    },
+    "n": {
+      "speaker": "",
+      "text": "Já é noite. O banco está frio."
+    }
+  }
+}

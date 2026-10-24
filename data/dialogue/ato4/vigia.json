@@ -17,7 +17,7 @@
     {
       "if": [
         "met_vigia",
-        "hunt_cemiterio_1",
+        "!vigia_perguntou_hoje",
         "!vigia_p2_sim",
         "!vigia_p2_naosei",
         "!vigia_p2_nao"
@@ -180,5 +180,6 @@
       "text": "Ele não leva o que devolveu.",
       "next": "h1"
     }
-  }
+  },
+  "_doc": "Uma pergunta por noite: 'vigia_perguntou_hoje' é calculada (NightFlags). O Vigia só está no banco com 'noite'."
 }

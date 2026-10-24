@@ -195,6 +195,7 @@ public partial class Level
     private async Task StageMorning()
     {
         _fade.Color = _fade.Color with { A = 1f };
+        StoryService.Dawn();
         Player.Teleport(World.SpawnPoint);
         await SceneWait(MorningHold);
         await FadeFrom(1f, ArrivalFadeSeconds);
@@ -348,10 +349,16 @@ public partial class Level
             case "player":
                 return PlayerChest;
             case "brecha":
-                var zone = World.Zones.FirstOrDefault(z => z.Kind == "brecha");
+                var zone = World.Zones.FirstOrDefault(z => z.Kind is "brecha" or LevelWorld.SealedBrechaKind);
                 return zone is null ? null : zone.GlobalPosition + new Vector2(0, -human * 0.4f);
             case "lanterna":
                 return World.Props.FirstOrDefault(p => p.Type == "lanterna_bronze") is { } lantern ? lantern.GlobalPosition + new Vector2(0, -human * 1.2f) : null;
+        }
+
+        // Zona sem objeto desenhado que serve de ponto de câmera (ex.: "sino" na Torre).
+        if (World.Zones.FirstOrDefault(z => z.Kind == target) is { } spot)
+        {
+            return spot.GlobalPosition;
         }
 
         if (World.Npcs.FirstOrDefault(n => n.NpcId == target) is { } npc)

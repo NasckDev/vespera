@@ -18,7 +18,7 @@ public sealed class CameraCheck(Level level, SmokeTest host, bool shots = false)
 {
     public const float MinOnScreen = 130f;
     public const float MaxOnScreen = 150f;
-    private static readonly string[] CityLevels = ["praca", "forjas", "forja_interior"];
+    private static readonly string[] CityLevels = ["praca", "forjas", "forja_interior", "cemiterio", "torre"];
     private static readonly string[] CaisLevels = ["mares", "cais_pier", "cais_mercado", "cais_barco", "cais_quebramar", "cais_arena"];
 
     private readonly List<string> _failures = [];

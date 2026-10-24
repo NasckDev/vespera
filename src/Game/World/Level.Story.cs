@@ -168,11 +168,33 @@ public partial class Level
             {
                 BuyPotion();
             }
+            else if (name.StartsWith(StoryFlags.EventBurnSealPrefix, System.StringComparison.Ordinal))
+            {
+                BurnSeal(name[StoryFlags.EventBurnSealPrefix.Length..]);
+            }
             else
             {
-                HandleActThreeEvent(name);
+                if (!HandleActThreeEvent(name))
+                {
+                    HandleNightEvent(name);
+                }
             }
         }
+    }
+
+    /// <summary>
+    /// Benício queima o selo do ato (<c>BurnSeal:B</c> no fecho do Ato III, <c>A</c> no IV, <c>S</c> no V...). Único ponto que
+    /// trata o evento: só registra a flag <see cref="StoryFlags.SealBurnedFlag"/>; o rank em si continua vindo de XP/Guardião/exame.
+    /// </summary>
+    private static void BurnSeal(string rank)
+    {
+        if (!System.Enum.TryParse<Vespera.Core.Ranks.Rank>(rank, ignoreCase: false, out _))
+        {
+            GD.PushWarning($"BurnSeal com selo desconhecido: '{rank}'");
+            return;
+        }
+
+        StoryService.SetFlag(StoryFlags.SealBurnedFlag(rank));
     }
 
     /// <summary>"Trocar de arma" da Odete: escolha da arma nova, confirmação, e o caçador troca de folha e de golpes na hora.</summary>
