@@ -117,6 +117,16 @@ public partial class SmokeTest
         await SkipDialogue(level);
         Check(!level.DialogueOpen, "a fala do mural deveria fechar");
 
+        // A 1ª resposta do quadro (v2) é "Ver os contratos.": fecha o mural para seguir.
+        if (Vespera.Game.Hunt.ContractsScreen.Active is { } contracts)
+        {
+            contracts.Close();
+            await Frames(4);
+            await Seconds(0.4);
+        }
+
+        Check(!GetTree().Paused, "depois do mural o jogo deveria voltar a correr");
+
         var lamp = level.World.Props.First(p => p.Interaction?.Kind == "lamp");
         await StandAt(level, lamp.GlobalPosition + new Vector2(0, 50 * k));
         var before = lamp.LightOn;
