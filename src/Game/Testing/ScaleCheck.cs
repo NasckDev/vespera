@@ -22,7 +22,8 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
     private static readonly string[] PomarMonsters = ["carrapicho", "rato_lanterna", "macieira_oca"];
     private static readonly string[] PomarLevels = ["pomar_alto", "pomar_corredor", "pomar_cruzamento", "pomar_descanso", "pomar_arena"];
     private static readonly HunterClass[] Hunters = [HunterClass.Lamina, HunterClass.Arco, HunterClass.Martelo];
-    private static readonly string[] People = ["odete", "ravi", "nilza", "benicio", "lis", "celeste"];
+    private static readonly string[] People = ["odete", "ravi", "nilza", "benicio", "lis", "celeste", "vigia"];
+    private static readonly string[] Ato45Levels = ["cemiterio", "torre"];
     private static readonly string[] CityLevels = ["forjas", "forja_interior"];
 
     private readonly List<string> _failures = [];
@@ -35,6 +36,7 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
         rooms.AddRange(CityLevels);
         rooms.AddRange(RiftSession.Brecha.Rooms);
         rooms.AddRange(PomarLevels);
+        rooms.AddRange(Ato45Levels);
         foreach (var room in rooms)
         {
             await level.GoToRoom(room, withDirector: false);
