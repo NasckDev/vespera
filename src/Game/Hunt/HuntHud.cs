@@ -25,6 +25,12 @@ public partial class HuntHud : Control
     private Label _goal = null!;
     private Label _contracts = null!;
     private Label _lumes = null!;
+    private Label _soup = null!;
+    private Label _map = null!;
+    private static readonly Color MapBlue = new("6fb7ff");
+
+    /// <summary>Linhas da sopa da Nilza e do mapa da Lis (testes e capturas; vazias quando inativas).</summary>
+    public string PerksText => (_soup.Visible ? _soup.Text : string.Empty) + (_map.Visible ? "\n" + _map.Text : string.Empty);
     private EcoIcon _eco = null!;
     private PotionIcon _potionIcon = null!;
 
@@ -49,6 +55,13 @@ public partial class HuntHud : Control
         _lumes = MakeLabel(30, Palette.Amber);
         _lumes.Position = new Vector2(160, 180);
         AddChild(_lumes);
+        _soup = MakeLabel(30, Slime);
+        _soup.Position = new Vector2(160, 222);
+        _soup.Text = Core.Hunt.RunPerks.SoupLabel;
+        AddChild(_soup);
+        _map = RightLabel(28, MapBlue, 254);
+        _map.AutowrapMode = TextServer.AutowrapMode.WordSmart;
+        _map.Size = new Vector2(870, 80);
     }
 
     private Label RightLabel(int size, Color color, float y)
@@ -82,9 +95,16 @@ public partial class HuntHud : Control
         _lumes.Text = $"{xp}  ·  {Progression.State.Lumes} Lumes";
         var inRift = RiftSession.InRift && HuntService.Plan is not null;
         _room.Visible = _goal.Visible = _contracts.Visible = inRift;
+        _soup.Visible = inRift && HuntService.SoupActive;
+        _map.Visible = inRift && HuntService.MapActive;
         if (inRift)
         {
             UpdateRoom();
+        }
+
+        if (_map.Visible)
+        {
+            _map.Text = Core.Hunt.RunPerks.MapLine(HuntService.Plan!.Rooms.Select(r => r.Kind).ToList(), RiftSession.RoomIndex);
         }
     }
 

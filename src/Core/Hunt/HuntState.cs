@@ -30,6 +30,12 @@ public sealed class HuntState
     /// <summary>Moeda jogada no poço: a próxima caçada rende mais Fragmentos.</summary>
     public bool WellLuck { get; set; }
 
+    /// <summary>Tomou a sopa da Nilza: a próxima caçada começa com mais vida máxima (<see cref="RunPerks"/>).</summary>
+    public bool SoupReady { get; set; }
+
+    /// <summary>Comprou o mapa da Lis: a próxima caçada mostra o tipo de cada sala e o tesouro.</summary>
+    public bool MapReady { get; set; }
+
     public double BestRunSeconds { get; set; }
 
     public int TotalKills { get; set; }

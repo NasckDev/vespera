@@ -20,6 +20,7 @@ public partial class Level
     private const int WeaponChangeFragments = 10;
     private const int MapLumes = 10;
     private const string MapFlag = "mapa_lis";
+    private const int SoupLumes = 6;
 
     private readonly List<string> _pendingEvents = [];
     private DialogueBox _box = null!;
@@ -168,6 +169,10 @@ public partial class Level
             {
                 BuyPotion();
             }
+            else if (name == StoryFlags.EventBuySoup)
+            {
+                BuySoup();
+            }
         }
     }
 
@@ -240,7 +245,29 @@ public partial class Level
     {
         var state = Hunter.HuntService.State;
         state.Potions = System.Math.Min(Hunter.HuntService.Config.Potions.Max, state.Potions + 1);
+        Hunter.HuntService.ServeSoup();
+        CombatHud.Toast($"Sopa da Nilza: +{Core.Hunt.RunPerks.SoupMaxHpPct:0}% de vida máxima na próxima caçada.");
         CombatHud.Toast($"Você ganhou uma poção! ({state.Potions} na bolsa)");
+        GameSession.Autosave();
+    }
+
+    /// <summary>Sopa da Nilza comprada (ROTEIRO-V2 §3, 7:00): comida = bônus visível na próxima caçada.</summary>
+    private void BuySoup()
+    {
+        if (Hunter.HuntService.State.SoupReady)
+        {
+            ShowNotice("Você já comeu. A sopa vale para a próxima caçada.");
+            return;
+        }
+
+        if (!Hunter.Progression.IsActive || !Hunter.Progression.Engine.TrySpendLumes(SoupLumes))
+        {
+            ShowNotice($"A sopa custa {SoupLumes} Lumes.");
+            return;
+        }
+
+        Hunter.HuntService.ServeSoup();
+        CombatHud.Toast($"Sopa da Nilza: +{Core.Hunt.RunPerks.SoupMaxHpPct:0}% de vida máxima na próxima caçada. -{SoupLumes} Lumes");
         GameSession.Autosave();
     }
 
@@ -254,7 +281,8 @@ public partial class Level
         }
 
         StoryService.SetFlag(MapFlag);
-        CombatHud.Toast($"Mapa da Lis: -{MapLumes} Lumes");
+        Hunter.HuntService.HandMap();
+        CombatHud.Toast($"Mapa da Lis: -{MapLumes} Lumes. Na próxima caçada você vê cada sala e onde está o tesouro.");
         GameSession.Autosave();
     }
 

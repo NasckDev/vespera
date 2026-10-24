@@ -114,7 +114,8 @@ public sealed partial class HunterCombat : Node, IHittable
     public void RefreshStats(bool fullHeal)
     {
         Stats = HunterStats.Compute(RiftSession.Db, RiftSession.Save, HunterSprites.WeaponId(_player.Hunter));
-        MaxHp = Math.Max(1, Stats.Hp + Hunter.HuntService.Bless.MaxHp);
+        var soup = Hunter.HuntService.SoupActive ? Core.Hunt.RunPerks.SoupBonus(Stats.Hp) : 0;
+        MaxHp = Math.Max(1, Stats.Hp + Hunter.HuntService.Bless.MaxHp + soup);
         Hp = fullHeal ? MaxHp : Math.Min(Hp, MaxHp);
     }
 

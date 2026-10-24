@@ -80,6 +80,9 @@ public static class StoryFlags
     /// <summary>Evento: comprar o mapa da Lis (10 Lumes).</summary>
     public const string EventBuyMap = "BuyMap";
 
+    /// <summary>Evento: comprar a sopa da Nilza (bônus de vida máxima na próxima caçada).</summary>
+    public const string EventBuySoup = "BuySoup";
+
     /// <summary>A escolha da arma na Odete já foi feita: trocar de novo custa Fragmentos.</summary>
     public const string WeaponChosen = "arma_escolhida";
 

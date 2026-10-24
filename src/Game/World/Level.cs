@@ -257,6 +257,13 @@ public partial class Level : Control
             case "chest":
                 World.Director?.Chest?.Open();
                 return;
+            case "weapon_stand":
+                if (World.Director?.TakeStandWeapon() == true)
+                {
+                    WorldSfx.Play(World, WorldSound.Chime, at);
+                }
+
+                return;
             case "descer" or "saida":
                 World.Director?.RequestExit();
                 return;
