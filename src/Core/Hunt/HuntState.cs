@@ -80,5 +80,10 @@ public sealed class CombatStats
 
     public int LanternsLost { get; set; }
 
+    /// <summary>Esquivas para a esquerda e para a direita (o Reflexo diz para que lado o jogador esquiva).</summary>
+    public int DodgesLeft { get; set; }
+
+    public int DodgesRight { get; set; }
+
     public double DodgeRate => Dodges + HitsTaken == 0 ? 0 : Dodges / (double)(Dodges + HitsTaken);
 }

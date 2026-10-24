@@ -44,6 +44,11 @@ public sealed class RunPlanner(HuntConfig config)
     /// <param name="guardian">A Lodo-Mãe espera no fim (portão da história aberto).</param>
     public RunPlan Plan(int seed, int completedRuns, bool guardian)
     {
+        if (config.GuardianOnly)
+        {
+            return new RunPlan(seed, [new RoomPlan(0, config.FinalGround, RoomKind.Guardian, [])]);
+        }
+
         var random = new SeededRandom(seed);
         var rolled = random.RangeInt(config.RoomsMin, config.RoomsMax);
         var count = guardian ? config.GuardianRunRooms : completedRuns == 0 ? config.FirstRunRooms : rolled;

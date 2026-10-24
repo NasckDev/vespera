@@ -48,6 +48,8 @@ public static class ScaleRegistry
         ["lanterna_afogada"] = new(0.50f, Sprites + "monstros/lanterna_afogada/lanterna_afogada.json", Hover: 0.35f),
         ["farol_afogado"] = new(3.00f, Sprites + "monstros/farol_afogado/farol_afogado.json"),
         ["vigia"] = new(1.00f, Npcs, Key: "vigia"),
+        ["mae_ravi"] = new(0.98f, Npcs, Key: "mae_ravi"),
+        ["inquilino"] = new(3.00f, Sprites + "monstros/inquilino/inquilino.json"),
     };
 
     private static readonly Dictionary<string, float> Standing = [];

@@ -44,6 +44,8 @@
     <None Include="..\data\dialogue\*.json" Link="Dialogue/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\data\dialogue\ato4\*.json" Link="Dialogue/ato4/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\data\dialogue\ato5\*.json" Link="Dialogue/ato5/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\data\dialogue\final\*.json" Link="Dialogue/final/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\data\dialogue\ato6\*.json" Link="Dialogue/ato6/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\assets\v2\sprites\**\*.json" Link="Sprites/%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 

@@ -153,6 +153,32 @@
       "id": "ato5_fecho",
       "title": "Fale com o Benício",
       "text": "O Sineiro Mudo caiu. O Benício espera você na Torre."
+    },
+    {
+      "id": "ato6",
+      "title": "Desça às Ruas Baixas",
+      "text": "A rua a oeste das Forjas desce para as Ruas Baixas. A Tia Nilza está cozinhando faz três dias."
+    },
+    {
+      "id": "ato6_mae",
+      "title": "Visite a mãe do Ravi",
+      "text": "A casa da mãe do Ravi tem tábuas na janela, nas palafitas à esquerda."
+    },
+    {
+      "id": "ato6_brecha",
+      "title": "Vença o Inquilino",
+      "text": "A Brecha abriu no terreno das casas derrubadas. Lá dentro, uma casa anda. Saia dos círculos âmbar e da faixa da porta."
+    },
+    {
+      "id": "ato6_fecho",
+      "title": "Fale com o Benício",
+      "text": "O Inquilino caiu. O Benício espera você na praça. A Odete está na forja."
+    },
+    {
+      "id": "ato7",
+      "title": "A cidade de baixo",
+      "text": "A grande lanterna da praça piscou. O Ato VII abre em breve.",
+      "locked": true
     }
   ],
   "triggers": [
@@ -246,6 +272,60 @@
       "objective": "ato5_fecho",
       "set": [
         "act5_done"
+      ]
+    },
+    {
+      "when": "GuardianDefeated:sineiro_mudo",
+      "objective": "ato6"
+    },
+    {
+      "when": "met_mae_ravi",
+      "if": [
+        "!GuardianDefeated:inquilino"
+      ],
+      "objective": "ato6_brecha"
+    },
+    {
+      "when": "GuardianDefeated:inquilino",
+      "objective": "ato6_fecho",
+      "set": [
+        "act6_done"
+      ]
+    },
+    {
+      "when": "ruas_invertidas:fell_1",
+      "set": [
+        "ato6_morte_1"
+      ]
+    },
+    {
+      "when": "ruas_invertidas:fell_2",
+      "set": [
+        "ato6_morte_2"
+      ]
+    },
+    {
+      "when": "ruas_invertidas:fell_3",
+      "set": [
+        "ato6_morte_3"
+      ]
+    },
+    {
+      "when": "ruas_invertidas:fell_4",
+      "set": [
+        "ato6_morte_4"
+      ]
+    },
+    {
+      "when": "ruas_invertidas:fell_5",
+      "set": [
+        "ato6_morte_5"
+      ]
+    },
+    {
+      "when": "ruas_invertidas:fell_6",
+      "set": [
+        "ato6_morte_6"
       ]
     }
   ],
@@ -660,6 +740,80 @@
         "ato5_ravi",
         "!ato5_lis"
       ]
+    },
+    {
+      "level": "ruas_baixas",
+      "dialogue": "ato6/nilza",
+      "npc": "nilza",
+      "if": [
+        "!ato6_sopa"
+      ]
+    },
+    {
+      "level": "forja_interior",
+      "dialogue": "ato6/odete",
+      "npc": "odete",
+      "if": [
+        "GuardianDefeated:inquilino",
+        "!arma_duas_vesperas"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato6/benicio",
+      "npc": "benicio",
+      "if": [
+        "act6_done",
+        "objective:ato6_fecho"
+      ]
+    },
+    {
+      "level": "ruas_baixas",
+      "dialogue": "ato6/morte",
+      "if": [
+        "ato6_morte_1",
+        "!morte_ruas_1"
+      ]
+    },
+    {
+      "level": "ruas_baixas",
+      "dialogue": "ato6/morte",
+      "if": [
+        "ato6_morte_2",
+        "!morte_ruas_2"
+      ]
+    },
+    {
+      "level": "ruas_baixas",
+      "dialogue": "ato6/morte",
+      "if": [
+        "ato6_morte_3",
+        "!morte_ruas_3"
+      ]
+    },
+    {
+      "level": "ruas_baixas",
+      "dialogue": "ato6/morte",
+      "if": [
+        "ato6_morte_4",
+        "!morte_ruas_4"
+      ]
+    },
+    {
+      "level": "ruas_baixas",
+      "dialogue": "ato6/morte",
+      "if": [
+        "ato6_morte_5",
+        "!morte_ruas_5"
+      ]
+    },
+    {
+      "level": "ruas_baixas",
+      "dialogue": "ato6/morte",
+      "if": [
+        "ato6_morte_6",
+        "!morte_ruas_6"
+      ]
     }
   ],
   "questions": [
@@ -759,6 +913,16 @@
     },
     "sineiro": {
       "name": "Sineiro Mudo"
+    },
+    "mae_ravi": {
+      "name": "Mãe do Ravi",
+      "portrait": "res://assets/v2/sprites/npcs/retrato_mae_ravi_{0}.png"
+    },
+    "inquilino": {
+      "name": "Inquilino (pela janela)"
+    },
+    "reflexo": {
+      "name": "O Reflexo"
     }
   }
 }

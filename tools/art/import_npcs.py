@@ -42,6 +42,9 @@ PER_STRIP_SCALE = {"celeste", "severo", "vigia"}
 FRAMES = {"parado": 4, "andar": 6}
 DIRECTIONS = ("baixo", "cima", "lado")
 PORTRAITS = ("odete", "ravi", "nilza", "lis", "celeste", "severo", "vigia")
+# Ato VI (issue #37): a mãe do Ravi.
+NPC_HEIGHT["mae_ravi"] = 116
+PORTRAITS = (*PORTRAITS, "mae_ravi")
 PORTRAIT_SIZE = 512
 JOIN = 3
 

@@ -330,7 +330,7 @@ public sealed partial class HunterCombat : Node, IHittable
         var bless = Hunter.HuntService.Bless;
         _dodgeVelocity = dir * (float)(_tuning.DodgeDistance * (1 + (bless.DodgeDistancePct / 100)) * Scale / _tuning.DodgeSeconds);
         _invulnerable = Mathf.Max(_invulnerable, (float)(_tuning.DodgeInvulnerable + bless.DodgeInvulnerable));
-        Hunter.HuntService.Dodged();
+        Hunter.HuntService.Dodged(dir.X);
         Enter(HunterState.Dodging);
         _player.PlayAnimation("esquiva", restart: true, fitSeconds: (float)_tuning.DodgeSeconds);
         CombatSfx.Play(_player, CombatSound.Dodge, Vector2.Zero);
