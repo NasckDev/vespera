@@ -58,7 +58,7 @@ Pedido do dono (22/10): "tamanho dos players, monstros e NPC dentro do mapa tem 
 
   | Ator | Altura | Ator | Altura |
   |---|---|---|---|
-  | Caçador (Lâmina, Arco, Martelo) | 1,00 | Lodo | 0,35 (na canela/joelho) |
+  | Caçador (Lâmina, Arco, Martelo) | 1,00 | Lodo | 0,55 (na cintura; revisão do painel de 23/10: a 0,35 sumia na tela) |
   | Odete, Ravi, Nilza | 1,00 | Espectro | 1,00 (flutua 0,15 acima do chão) |
   | Benício (curvado) | 0,95 | Lodo-Mãe (Guardião) | 3,00 |
   | Lis (criança) | 0,75 | Objetos | medidos contra o equivalente pintado no chão |
