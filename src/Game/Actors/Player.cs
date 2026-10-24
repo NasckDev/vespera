@@ -36,11 +36,15 @@ public partial class Player : CharacterBody2D
     private const float Deceleration = 6000f;
     private const float FacingHysteresis = 1.15f;
 
+    /// <summary>Quanto um "interagir" espera o caçador ficar livre (fim do golpe, da esquiva, do susto).</summary>
+    private const float InteractBufferSeconds = 0.6f;
+
     private readonly List<Interactable> _nearby = [];
     private Facing _facing = Facing.Down;
     private bool _faceLeft;
     private Vector2 _aim = Vector2.Down;
     private readonly float _scale;
+    private float _interactBuffer;
 
     public Player(IInputSource input, HunterClass hunter, float actorScale)
     {
@@ -161,10 +165,30 @@ public partial class Player : CharacterBody2D
         Flash.Update(dt);
         UpdateFocus();
 
-        // A borda de "interagir" é consultada todo quadro; travado (lendo), o aperto serve para fechar.
-        var pressed = Input.IsJustPressed(InputActions.Interact);
-        if (pressed && (Focus is not null || Frozen) && Combat.State == HunterState.Free && !Combat.Moves.Busy)
+        StepInteract(dt);
+    }
+
+    /// <summary>
+    /// "Interagir" é consultado todo tique e fica guardado por <see cref="InteractBufferSeconds"/>: apertado no fim de um
+    /// golpe, na esquiva ou um instante antes de o objeto entrar no alcance, vale assim que o caçador puder agir (antes o
+    /// aperto era descartado e o jogador tinha de apertar de novo). Travado (lendo), o aperto serve para fechar.
+    /// </summary>
+    private void StepInteract(float dt)
+    {
+        if (Input.IsJustPressed(InputActions.Interact))
         {
+            _interactBuffer = InteractBufferSeconds;
+        }
+
+        if (_interactBuffer <= 0f)
+        {
+            return;
+        }
+
+        _interactBuffer -= dt;
+        if ((Focus is not null || Frozen) && Combat.State == HunterState.Free && !Combat.Moves.Busy)
+        {
+            _interactBuffer = 0f;
             InteractRequested?.Invoke(this, Focus);
         }
     }
