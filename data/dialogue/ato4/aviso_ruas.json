@@ -1,0 +1,48 @@
+{
+  "id": "ato4/aviso_ruas",
+  "entries": [
+    {
+      "if": [
+        "ruas_aviso_3"
+      ],
+      "node": "c"
+    },
+    {
+      "if": [
+        "ruas_aviso_2"
+      ],
+      "node": "b"
+    },
+    {
+      "node": "a"
+    }
+  ],
+  "nodes": {
+    "a": {
+      "speaker": "lis",
+      "text": "Abriu uma nas Ruas Baixas. Ninguém foi.",
+      "look": "lis",
+      "set": [
+        "ruas_aviso_1_visto"
+      ]
+    },
+    "b": {
+      "speaker": "nilza",
+      "text": "Tá rompendo lá embaixo. A mãe do Ravi fechou a janela com tábua.",
+      "look": "nilza",
+      "expression": 2,
+      "set": [
+        "ruas_aviso_2_visto"
+      ]
+    },
+    "c": {
+      "speaker": "ravi",
+      "text": "Se você não for, eu vou.",
+      "look": "ravi",
+      "expression": 2,
+      "set": [
+        "ruas_aviso_3_visto"
+      ]
+    }
+  }
+}

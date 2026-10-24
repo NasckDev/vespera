@@ -1,0 +1,15 @@
+{
+  "id": "ato4/velora",
+  "entries": [
+    {
+      "node": "a"
+    }
+  ],
+  "nodes": {
+    "a": {
+      "speaker": "velora",
+      "text": "Qual delas é você?",
+      "fx": "shake"
+    }
+  }
+}

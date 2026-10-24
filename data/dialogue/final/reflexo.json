@@ -1,0 +1,44 @@
+{
+  "id": "final/reflexo",
+  "entries": [
+    {
+      "if": [
+        "reflexo_min_4"
+      ],
+      "node": "d"
+    },
+    {
+      "if": [
+        "reflexo_min_3"
+      ],
+      "node": "c"
+    },
+    {
+      "if": [
+        "reflexo_min_2"
+      ],
+      "node": "b"
+    },
+    {
+      "node": "a"
+    }
+  ],
+  "nodes": {
+    "a": {
+      "speaker": "reflexo",
+      "text": "Você esquiva pra {lado_esquiva}."
+    },
+    "b": {
+      "speaker": "reflexo",
+      "text": "Você escolhe {familia_medo} quando tá com medo."
+    },
+    "c": {
+      "speaker": "reflexo",
+      "text": "Você me deixou aqui {lanternas_perdidas} vezes."
+    },
+    "d": {
+      "speaker": "reflexo",
+      "text": "Eu sou o que você perdeu. Eu sou bom nisso."
+    }
+  }
+}

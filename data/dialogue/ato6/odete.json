@@ -1,0 +1,72 @@
+{
+  "id": "ato6/odete",
+  "entries": [
+    {
+      "if": [
+        "GuardianDefeated:inquilino",
+        "!arma_duas_vesperas"
+      ],
+      "node": "a1"
+    },
+    {
+      "node": "h1"
+    }
+  ],
+  "nodes": {
+    "a1": {
+      "speaker": "odete",
+      "text": "Eu guardei o aço dela vinte anos.",
+      "look": "odete",
+      "set": [
+        "arma_duas_vesperas"
+      ],
+      "next": "a2"
+    },
+    "a2": {
+      "speaker": "odete",
+      "text": "Duas vésperas: a dela e a sua. Pega.",
+      "expression": 2,
+      "events": [
+        "GiveLegendaryWeapon"
+      ]
+    },
+    "h1": {
+      "speaker": "odete",
+      "text": "A forja tá acesa.",
+      "choices": [
+        {
+          "text": "Quero melhorar a arma.",
+          "next": "forja"
+        },
+        {
+          "text": "E se a Marisa voltar diferente?",
+          "next": "pm1_1",
+          "if": [
+            "vigia_e_marisa"
+          ]
+        },
+        {
+          "text": "Nada agora."
+        }
+      ]
+    },
+    "pm1_1": {
+      "speaker": "odete",
+      "text": "Se a Marisa voltar diferente? Eu aceito.",
+      "expression": 2,
+      "next": "pm1_2"
+    },
+    "pm1_2": {
+      "speaker": "odete",
+      "text": "Já aceitei no dia em que ela entrou.",
+      "next": "h1"
+    },
+    "forja": {
+      "speaker": "odete",
+      "text": "Mostra.",
+      "events": [
+        "OpenForge"
+      ]
+    }
+  }
+}

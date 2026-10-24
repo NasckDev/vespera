@@ -1,0 +1,42 @@
+{
+  "id": "ato3/odete",
+  "entries": [
+    {
+      "node": "o1"
+    }
+  ],
+  "nodes": {
+    "o1": {
+      "speaker": "odete",
+      "text": "Deixa aí em cima.",
+      "look": "odete",
+      "set": [
+        "odete_lanterna_m"
+      ],
+      "next": "o2"
+    },
+    "o2": {
+      "speaker": "odete",
+      "text": "Vai embora.",
+      "expression": 2,
+      "choices": [
+        {
+          "text": "(Sair)",
+          "next": "o3"
+        }
+      ],
+      "next": "o3"
+    },
+    "o3": {
+      "speaker": "odete",
+      "text": "Espera.",
+      "next": "o4"
+    },
+    "o4": {
+      "speaker": "odete",
+      "text": "Obrigada.",
+      "expression": 2,
+      "objective": "ato3_guardiao"
+    }
+  }
+}

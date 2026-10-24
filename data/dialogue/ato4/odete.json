@@ -1,0 +1,24 @@
+{
+  "id": "ato4/odete",
+  "entries": [
+    {
+      "node": "a1"
+    }
+  ],
+  "nodes": {
+    "a1": {
+      "speaker": "odete",
+      "text": "Não me conta onde ele fica.",
+      "look": "odete",
+      "expression": 2,
+      "set": [
+        "ato4_odete"
+      ],
+      "next": "a2"
+    },
+    "a2": {
+      "speaker": "odete",
+      "text": "Se eu for lá, eu não volto."
+    }
+  }
+}

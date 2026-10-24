@@ -1,0 +1,19 @@
+{
+  "id": "ato6/benicio",
+  "entries": [
+    {
+      "node": "a"
+    }
+  ],
+  "nodes": {
+    "a": {
+      "speaker": "benicio",
+      "text": "SS. Eu nunca escrevi isso num livro.",
+      "look": "benicio",
+      "events": [
+        "BurnSeal:SS"
+      ],
+      "objective": "ato7"
+    }
+  }
+}

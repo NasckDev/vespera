@@ -1,0 +1,84 @@
+{
+  "id": "ato5/morte",
+  "entries": [
+    {
+      "if": [
+        "ato5_morte_6"
+      ],
+      "node": "m6"
+    },
+    {
+      "if": [
+        "ato5_morte_5"
+      ],
+      "node": "m5"
+    },
+    {
+      "if": [
+        "ato5_morte_4"
+      ],
+      "node": "m4"
+    },
+    {
+      "if": [
+        "ato5_morte_3"
+      ],
+      "node": "m3"
+    },
+    {
+      "if": [
+        "ato5_morte_2"
+      ],
+      "node": "m2"
+    },
+    {
+      "if": [
+        "ato5_morte_1"
+      ],
+      "node": "m1"
+    },
+    {
+      "node": "m1"
+    }
+  ],
+  "nodes": {
+    "m1": {
+      "speaker": "benicio",
+      "text": "Caiu na minha Torre. Eu mesmo te carreguei. A escada é longa."
+    },
+    "m2": {
+      "speaker": "nilza",
+      "text": "O velho da Ordem te trouxe no colo. Parecia pai."
+    },
+    "m3": {
+      "speaker": "vigia",
+      "text": "Você caiu onde o sino bate. Eu ouvi daqui. Pergunta três: você toca?",
+      "choices": [
+        {
+          "text": "Toco.",
+          "set": [
+            "vigia_p3_toco"
+          ]
+        },
+        {
+          "text": "Não sei.",
+          "set": [
+            "vigia_p3_naosei"
+          ]
+        }
+      ]
+    },
+    "m4": {
+      "speaker": "odete",
+      "text": "Duas vezes no mesmo lugar. Caçador aprende ou morre. Você tá aprendendo?"
+    },
+    "m5": {
+      "speaker": "ravi",
+      "text": "Eu não entro na Torre. Mas eu fiquei na porta."
+    },
+    "m6": {
+      "speaker": "lis",
+      "text": "O sino sem badalo mexeu. Eu vi daqui de baixo."
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "id": "final/antes",
+  "entries": [
+    {
+      "node": "a"
+    }
+  ],
+  "nodes": {
+    "a": {
+      "speaker": "narrador",
+      "text": "Fale com quem quiser antes de entrar.",
+      "choices": [
+        {
+          "text": "Odete",
+          "next": "o"
+        },
+        {
+          "text": "Severo",
+          "next": "s"
+        },
+        {
+          "text": "Celeste",
+          "next": "c"
+        },
+        {
+          "text": "Mãe do Ravi",
+          "if": [
+            "met_mae_ravi"
+          ],
+          "next": "m"
+        },
+        {
+          "text": "Entrar."
+        }
+      ]
+    },
+    "o": {
+      "speaker": "odete",
+      "text": "Se ela tiver lá embaixo, eu não vou olhar. Se eu olhar, eu fico.",
+      "next": "a"
+    },
+    "s": {
+      "speaker": "severo",
+      "text": "O farol acendeu sozinho hoje. Vinte anos.",
+      "next": "a"
+    },
+    "c": {
+      "speaker": "celeste",
+      "text": "Se eu sumir, cuida da horta. Tem semente pra três anos.",
+      "next": "a"
+    },
+    "m": {
+      "speaker": "mae_ravi",
+      "text": "Eu dei a lanterna dele pra ele de novo. Ele é homem, decide.",
+      "next": "a"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "id": "ato3/lanterna_m",
+  "entries": [
+    {
+      "if": [
+        "lanterna_m"
+      ],
+      "node": "b"
+    },
+    {
+      "node": "a"
+    }
+  ],
+  "nodes": {
+    "a": {
+      "speaker": "narrador",
+      "text": "Lanterna de caçador, gravada: \"M.\" Igual à sua.",
+      "look": "player",
+      "set": [
+        "lanterna_m"
+      ],
+      "events": [
+        "ItemFound:lanterna_m"
+      ]
+    },
+    "b": {
+      "speaker": "narrador",
+      "text": "Só a marca da lanterna ficou na pedra molhada."
+    }
+  }
+}

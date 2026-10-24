@@ -1,0 +1,27 @@
+{
+  "id": "ato6/ravi",
+  "entries": [
+    {
+      "if": [
+        "ravi_rota_b"
+      ],
+      "node": "b"
+    },
+    {
+      "node": "a"
+    }
+  ],
+  "nodes": {
+    "a": {
+      "speaker": "ravi",
+      "text": "As Ruas Baixas tão com lampião novo. Minha mãe chorou.",
+      "look": "ravi",
+      "expression": 2
+    },
+    "b": {
+      "speaker": "ravi",
+      "text": "Minha mãe parou de fechar a janela. Obrigado.",
+      "look": "ravi"
+    }
+  }
+}
