@@ -141,6 +141,7 @@ public static class HuntService
     /// <summary>A Lodo-Mãe espera no fim das próximas caçadas (o Benício aprovou o exame do rank E).</summary>
     public static bool GuardianUnlocked => OtherBrecha
         ? BrechaRunsCompleted >= Config.GuardianAfterRuns
+            && (Config.GuardianFlag.Length == 0 || Story.StoryService.Engine.HasFlag(Config.GuardianFlag))
         : Story.StoryService.Engine.HasFlag(StoryFlags.GuardianGate);
 
     /// <summary>Caçadas completas suficientes para o Benício aceitar o exame.</summary>

@@ -74,10 +74,21 @@ public static class RiftLoot
             return;
         }
 
+        // Ato III: o exame C é a própria Brecha do cais, com o Benício esperando na saída (ROTEIRO-V2 §13, fala 3).
+        if (guardianId == "farol_afogado")
+        {
+            Progression.TryPassExam(Vespera.Core.Ranks.Rank.C);
+        }
+
         var result = Progression.RecordGuardianKill(RiftSession.Brecha.GuardianId);
         Show(world, at, result.Loot, spread: 120f);
         var echo = result.EchoGained is { } e ? $" Eco absorvido: {e.Name}." : string.Empty;
-        var fall = guardianId == "lodo_mae" ? "A Lodo-Mãe se desfaz" : "A Macieira Oca racha e cai";
+        var fall = guardianId switch
+        {
+            "lodo_mae" => "A Lodo-Mãe se desfaz",
+            "farol_afogado" => "O Farol Afogado acende uma última vez e afunda",
+            _ => "A Macieira Oca racha e cai",
+        };
         world.Feel.Toast(Summary(fall, result.Loot.Loot) + echo);
     }
 
