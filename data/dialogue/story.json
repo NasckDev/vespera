@@ -64,7 +64,7 @@
     },
     {
       "id": "pomar1",
-      "title": "Entre na Brecha do Pomar Podre",
+      "title": "Entre na Brecha do Pomar",
       "text": "A Brecha do Pomar abriu a oeste, perto da cerca. Lá dentro é o pomar de antes do Ano Sem Sol. Volte inteiro de duas caçadas."
     },
     {
@@ -74,12 +74,12 @@
     },
     {
       "id": "ato2_fecho",
-      "title": "Volte à praça e fale com o Benício",
+      "title": "Fale com o Benício",
       "text": "A Macieira Oca caiu. O Benício espera você na praça."
     },
     {
       "id": "ato3",
-      "title": "O Severo procura você (em breve)",
+      "title": "Procure o Severo (em breve)",
       "text": "O faroleiro procura gente que não tem medo de água. O caminho do cais abre no Ato III. Em breve.",
       "locked": true
     }
