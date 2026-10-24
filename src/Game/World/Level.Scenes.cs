@@ -105,8 +105,16 @@ public partial class Level
         {
             Position = World.ClampToFloor(start.Lerp(World.SpawnPoint, 0.45f) + new Vector2(-human * 2.5f, 0)),
         };
-        World.AddEnemy(lodo);
-        await WaitUntil(() => !IsInstanceValid(lodo) || lodo.IsQueuedForDeletion() || lodo.Dead, RoadLodoSeconds, () => lodo.Die());
+        // Bots (SceneSpeed > 1) pulam o Lodo: ele bate de verdade e não há queda fora da Brecha.
+        if (SceneSpeed <= 1f)
+        {
+            World.AddEnemy(lodo);
+            await WaitUntil(() => !IsInstanceValid(lodo) || lodo.IsQueuedForDeletion() || lodo.Dead, RoadLodoSeconds, () => lodo.Die());
+        }
+        else
+        {
+            lodo.QueueFree();
+        }
         await WaitUntil(() => Player.GlobalPosition.DistanceTo(World.SpawnPoint) < human * PlazaReachHumans, RoadWalkSeconds, null);
         _freeRoam = false;
         Player.Frozen = true;
