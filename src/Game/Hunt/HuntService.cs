@@ -126,7 +126,7 @@ public static class HuntService
             var state = State;
             if (state.Contracts.Count == 0)
             {
-                state.Contracts = Board.Roll(new SeededRandom(state.NextSeed + (state.Returns * 7919)));
+                state.Contracts = Board.Roll(new SeededRandom(state.NextSeed + (state.Returns * 7919)), GuardianUnlocked);
             }
 
             return state.Contracts;
@@ -228,6 +228,7 @@ public static class HuntService
         if (combat && r.HitsTaken == _hitsAtRoomStart)
         {
             r.FlawlessRooms++;
+            r.FirstRoomFlawless |= RiftSession.RoomIndex == 0;
         }
     }
 
@@ -239,12 +240,14 @@ public static class HuntService
         }
     }
 
-    public static void Killed(bool elite, bool boss)
+    public static void Killed(bool elite, bool boss, string monsterId = "")
     {
         if (Report is not { } r || !RiftSession.InRift)
         {
             return;
         }
+
+        r.EspectroKills += monsterId == "espectro" ? 1 : 0;
 
         r.Kills++;
         r.EliteKills += elite ? 1 : 0;
@@ -269,6 +272,36 @@ public static class HuntService
         if (RiftSession.InRift)
         {
             State.Stats.Dodges++;
+        }
+    }
+
+    /// <summary>Vida no fim da caçada (contrato "Volta inteira").</summary>
+    public static void SetEndHp(double fraction)
+    {
+        if (Report is { } r)
+        {
+            r.EndHpFraction = fraction;
+        }
+    }
+
+    /// <summary>O baú da sala do tesouro foi aberto.</summary>
+    public static void TreasureOpened()
+    {
+        if (Report is { } r && RiftSession.InRift)
+        {
+            r.TreasureFound = true;
+        }
+    }
+
+    /// <summary>A Lodo-Mãe caiu: tempo de luta e núcleos quebrados (contratos do Guardião; núcleos contam como quebras).</summary>
+    public static void GuardianFight(double seconds, int cores, int broken)
+    {
+        if (Report is { } r)
+        {
+            r.GuardianSeconds = seconds;
+            r.GuardianCores = cores;
+            r.GuardianCoresBroken = broken;
+            r.Breaks += broken;
         }
     }
 
@@ -384,7 +417,7 @@ public static class HuntService
     {
         var state = State;
         state.Returns++;
-        state.Contracts = Board.Roll(new SeededRandom(state.NextSeed + (state.Returns * 7919)));
+        state.Contracts = Board.Roll(new SeededRandom(state.NextSeed + (state.Returns * 7919)), GuardianUnlocked);
         state.FlowersLeft = Config.Flowers.PerReturn;
         state.Broken.Clear();
     }
@@ -469,6 +502,11 @@ public static class HuntService
     /// <summary>Quebrável quebrado: alguns Lumes (e às vezes um Fragmento). Devolve (lumes, fragmentos).</summary>
     public static (int Lumes, int Fragmentos) BreakableLoot(string key)
     {
+        if (RiftSession.InRift && Report is { } run)
+        {
+            run.Breaks++;
+        }
+
         if (key.Length > 0 && !State.Broken.Contains(key))
         {
             State.Broken.Add(key);

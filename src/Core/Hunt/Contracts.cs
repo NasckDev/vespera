@@ -48,6 +48,27 @@ public sealed class RunReport
     /// <summary>Materiais trazidos (id → quantidade).</summary>
     public Dictionary<string, int> Materials { get; set; } = [];
 
+    /// <summary>Barris, caixotes e núcleos quebrados.</summary>
+    public int Breaks { get; set; }
+
+    public int EspectroKills { get; set; }
+
+    /// <summary>Abriu o baú da sala do tesouro.</summary>
+    public bool TreasureFound { get; set; }
+
+    /// <summary>Saiu da sala 1 sem levar golpe.</summary>
+    public bool FirstRoomFlawless { get; set; }
+
+    /// <summary>Vida no fim (0 a 1).</summary>
+    public double EndHpFraction { get; set; }
+
+    /// <summary>Segundos de luta com o Guardião (0 = sem Guardião).</summary>
+    public double GuardianSeconds { get; set; }
+
+    public int GuardianCores { get; set; }
+
+    public int GuardianCoresBroken { get; set; }
+
     /// <summary>Bênçãos escolhidas nesta caçada (ids).</summary>
     public List<string> Blessings { get; set; } = [];
 
@@ -70,9 +91,11 @@ public sealed record ContractProgress(Contract Contract, string Title, string Te
 /// </summary>
 public sealed class ContractBoard(HuntConfig config, Func<string, string> materialName)
 {
-    public List<Contract> Roll(IRandom random)
+    /// <summary>Sorteia <see cref="ContractsDef.Offered"/> contratos diferentes; os de Guardião só com a Lodo-Mãe no fim.</summary>
+    public List<Contract> Roll(IRandom random, bool guardian = false)
     {
-        var kinds = config.Contracts.Kinds.Keys.OrderBy(k => k, StringComparer.Ordinal).ToList();
+        var kinds = config.Contracts.Kinds.Where(k => guardian || !k.Value.Guardian).Select(k => k.Key)
+            .OrderBy(k => k, StringComparer.Ordinal).ToList();
         var picked = new List<Contract>();
         while (picked.Count < config.Contracts.Offered && kinds.Count > 0)
         {
@@ -96,15 +119,24 @@ public sealed class ContractBoard(HuntConfig config, Func<string, string> materi
     public ContractProgress Evaluate(Contract contract, RunReport? report)
     {
         var def = config.Contracts.Kinds[contract.Kind];
-        var have = report is null ? 0 : contract.Kind switch
+        var r = report;
+        var have = r is null ? 0 : contract.Kind switch
         {
-            "cacada" => report.Completed && report.Survived ? 1 : 0,
-            "coleta" => report.Survived ? report.MaterialCount(contract.Material) : 0,
-            "protecao" => report.WavesSurvived,
-            "sem_dano" => report.FlawlessRooms,
+            "cacada" => r.Completed && r.Survived ? 1 : 0,
+            "coleta" => r.Survived ? r.MaterialCount(contract.Material) : 0,
+            "protecao" => r.WavesSurvived,
+            "sem_dano" => r.FlawlessRooms,
+            "quebrar" => r.Breaks,
+            "sala1_sem_dano" => r.FirstRoomFlawless ? 1 : 0,
+            "espectros" => r.EspectroKills,
+            "tesouro" => r.TreasureFound ? 1 : 0,
+            "vida_cheia" => r.Survived && r.Completed && r.EndHpFraction >= 0.9 ? 1 : 0,
+            "guardiao_rapido" => r.GuardianDefeated && r.GuardianSeconds > 0 && r.GuardianSeconds <= Math.Max(1, def.Target) ? 1 : 0,
+            "guardiao_partes" => r.GuardianCores > 0 && r.GuardianCoresBroken >= r.GuardianCores ? 1 : 0,
             _ => 0,
         };
-        var need = contract.Kind is "cacada" or "sem_dano" ? 1 : contract.Target;
+        var counted = contract.Kind is "coleta" or "protecao" or "quebrar" or "espectros";
+        var need = counted ? contract.Target : 1;
         return new ContractProgress(contract, def.Title, Describe(contract), Math.Min(have, need), need, have >= need, def);
     }
 

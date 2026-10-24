@@ -74,6 +74,15 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
 
     public float XpMult { get; private set; } = 1f;
 
+    /// <summary>Dano recebido (Blindado recebe menos).</summary>
+    public double DamageTakenMult { get; private set; } = 1;
+
+    /// <summary>Modificador do elite (ROTEIRO-V2 §5.3): blindado, veloz, faminto ou gemeo; vazio no monstro comum.</summary>
+    public string Modifier { get; private set; } = string.Empty;
+
+    /// <summary>Sorteios de saque ao morrer (elite 2, Faminto 4).</summary>
+    public int LootRolls { get; private set; } = 1;
+
     /// <summary>Lentificado pelo rastro do Eco Viscoso.</summary>
     public bool Slowed => _slow > 0f;
 
@@ -224,7 +233,7 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
         var face = Sprite.FlipH ? -1 : 1;
         var side = DamageCalculator.HitSide(hit.From.X, GlobalPosition.X, face);
         var ctx = new MonsterHitContext(side, 0, hit.CritChance, null, [], []);
-        var result = _damage.ToMonster(hit.Damage, ctx, RiftSession.Random);
+        var result = _damage.ToMonster(hit.Damage * DamageTakenMult, ctx, RiftSession.Random);
         Hp = Math.Max(0, Hp - result.Damage);
         Flash.Pulse(Colors.White, 0.05f, 0.12f);
         Bar.Set((float)(Hp / MaxHp));
@@ -283,14 +292,14 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
         Play("morte");
         CombatSfx.Play(this, CombatSound.Kill, Vector2.Zero);
         World.Feel.Spark(HitCenter, new Color("e64a8e"), 14, 320f);
-        Hunter.HuntService.Killed(Elite, Stats.Def.Boss);
+        Hunter.HuntService.Killed(Elite, Stats.Def.Boss, MonsterId);
         if (Hunter.HuntService.Bless.HealOnKill > 0 && World.Player is { } hunter)
         {
             hunter.Combat.Heal(Hunter.HuntService.Bless.HealOnKill);
         }
         if (DropsLoot)
         {
-            RiftLoot.MonsterKilled(World, MonsterId, GlobalPosition, Stats.Def.Boss, XpMult, Elite ? 2 : 1);
+            RiftLoot.MonsterKilled(World, MonsterId, GlobalPosition, Stats.Def.Boss, XpMult, LootRolls);
         }
 
         OnDied();
@@ -312,8 +321,43 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
         PeriodMult = (float)def.Period;
         XpMult = (float)def.Xp;
         _tint = new Color(def.Tint);
+        LootRolls = 2;
         Name = $"{MonsterId}_elite";
     }
+
+    /// <summary>Um modificador visível no elite (cor própria): Blindado leva metade do dano, Veloz corre e ataca mais,
+    /// Faminto deixa saque em dobro, Gêmeo vem em dupla (o diretor cria o par).</summary>
+    public void ApplyModifier(string modifier)
+    {
+        Modifier = modifier;
+        switch (modifier)
+        {
+            case "blindado":
+                DamageTakenMult = 0.5;
+                _tint = new Color("a8b0bc");
+                break;
+            case "veloz":
+                SpeedMult *= 1.5f;
+                PeriodMult *= 0.75f;
+                _tint = new Color("8fd3ff");
+                break;
+            case "faminto":
+                LootRolls = 4;
+                XpMult *= 1.5f;
+                _tint = new Color("c98bff");
+                break;
+        }
+    }
+
+    /// <summary>Nome do modificador para os avisos.</summary>
+    public static string ModifierName(string modifier) => modifier switch
+    {
+        "blindado" => "Blindado (leva metade do dano)",
+        "veloz" => "Veloz (corre e ataca mais rápido)",
+        "faminto" => "Faminto (deixa saque em dobro)",
+        "gemeo" => "Gêmeo (vem em dupla)",
+        _ => modifier,
+    };
 
     /// <summary>Pisa no lodo do Eco Viscoso: anda mais devagar por <paramref name="seconds"/>.</summary>
     public void Slow(float seconds) => _slow = Mathf.Max(_slow, seconds);

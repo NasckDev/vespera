@@ -120,6 +120,8 @@ public partial class Level
             RiftRules.MarkClosed(RiftSession.Save);
         }
 
+        var combat = World.Player.Combat;
+        Hunter.HuntService.SetEndHp(combat.MaxHp <= 0 ? 0 : combat.Hp / (double)combat.MaxHp);
         var (end, summary) = RiftSession.EndRunWithSummary(survived: true, completed: true);
         _carriedHp = null;
         GameSession.Autosave();

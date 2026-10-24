@@ -73,7 +73,7 @@ public sealed partial class CombatBot
             }
 
             rooms++;
-            await WaitUntil(() => !host.GetTree().Paused && BlessingScreen.Active is null, 300, "bênção escolhida");
+            await WaitUntil(() => !host.GetTree().Paused && BlessingScreen.Active is null, 1200, "bênção escolhida ou celebração fechada");
             var hpLeaving = World.Player.Combat.Hp;
             await CollectAndLeave(director);
             await WaitUntil(() => level.Switching || !RiftSession.InRift || RiftSession.RoomIndex != index, 600, $"saída da sala {index + 1}");
