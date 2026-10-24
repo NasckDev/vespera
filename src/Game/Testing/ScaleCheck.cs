@@ -21,8 +21,10 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
     private static readonly string[] Monsters = ["lodo", "espectro", "lodo_mae"];
     private static readonly string[] PomarMonsters = ["carrapicho", "rato_lanterna", "macieira_oca"];
     private static readonly string[] PomarLevels = ["pomar_alto", "pomar_corredor", "pomar_cruzamento", "pomar_descanso", "pomar_arena"];
+    private static readonly string[] CaisMonsters = ["afogado", "ancoreiro", "lanterna_afogada", "farol_afogado"];
+    private static readonly string[] CaisLevels = ["mares", "cais_pier", "cais_mercado", "cais_barco", "cais_quebramar", "cais_arena"];
     private static readonly HunterClass[] Hunters = [HunterClass.Lamina, HunterClass.Arco, HunterClass.Martelo];
-    private static readonly string[] People = ["odete", "ravi", "nilza", "benicio", "lis", "celeste"];
+    private static readonly string[] People = ["odete", "ravi", "nilza", "benicio", "lis", "celeste", "severo"];
     private static readonly string[] CityLevels = ["forjas", "forja_interior"];
 
     private readonly List<string> _failures = [];
@@ -35,6 +37,7 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
         rooms.AddRange(CityLevels);
         rooms.AddRange(RiftSession.Brecha.Rooms);
         rooms.AddRange(PomarLevels);
+        rooms.AddRange(CaisLevels);
         foreach (var room in rooms)
         {
             await level.GoToRoom(room, withDirector: false);
@@ -79,9 +82,10 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
 
         var enemies = new List<Enemy>();
         var pomar = room.StartsWith("pomar_", System.StringComparison.Ordinal);
-        foreach (var id in pomar ? PomarMonsters : Monsters)
+        var cais = room is "mares" || room.StartsWith("cais_", System.StringComparison.Ordinal);
+        foreach (var id in cais ? CaisMonsters : pomar ? PomarMonsters : Monsters)
         {
-            var guardian = id is "lodo_mae" or "macieira_oca";
+            var guardian = id is "lodo_mae" or "macieira_oca" or "farol_afogado";
             x += guardian ? gap * 1.6f : 0f;
             var e = guardian ? EnemyFactory.Guardian(id, World) : EnemyFactory.Create(id, World);
             e.Position = World.ClampToFloor(start + new Vector2(dir * x, 0));
