@@ -125,6 +125,7 @@ public partial class Level : Control
         HunterSprites.ClearCache();
         MonsterSprites.ClearCache();
         ContactShadow.ClearCache();
+        EliteAura.ClearCache();
         LightTexture.ClearCache();
         WorldSfx.ClearCache();
         CombatSfx.ClearCache();
