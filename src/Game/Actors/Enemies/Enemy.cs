@@ -46,7 +46,7 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
         MonsterId = monsterId;
         World = world;
         SizeFactor = sizeFactor;
-        Stats = RiftSession.Rules.Stats(monsterId);
+        Stats = RiftSession.RulesFor(monsterId).Stats(monsterId);
         MaxHp = Stats.Hp;
         Hp = MaxHp;
         Name = monsterId;

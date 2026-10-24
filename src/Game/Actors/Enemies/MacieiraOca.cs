@@ -37,6 +37,8 @@ public partial class MacieiraOca(LevelWorld world) : Enemy("macieira_oca", world
 
     public override bool Unstoppable => true;
 
+    private static Vespera.Core.Rift.BossTuning Tuning => RiftSession.Load("pomar_podre").Boss;
+
     public override float BodyLift => Sheet.StandHeight * Sheet.SpriteScale * 0.4f;
 
     protected override void OnSpawned()
@@ -124,7 +126,7 @@ public partial class MacieiraOca(LevelWorld world) : Enemy("macieira_oca", world
 
     private void UpdatePhase()
     {
-        var phases = RiftSession.Brecha.Boss.Phases;
+        var phases = Tuning.Phases;
         var fraction = Hp / MaxHp;
         var next = fraction <= phases[1] ? 3 : fraction <= phases[0] ? 2 : 1;
         if (next <= Phase)
@@ -140,7 +142,7 @@ public partial class MacieiraOca(LevelWorld world) : Enemy("macieira_oca", world
             : "A casca racha e brilha roxo. Ela chama os Ratos-Lanterna!");
         if (Phase == 3)
         {
-            SummonRats(RiftSession.Brecha.Boss.SpawnPerJump);
+            SummonRats(Tuning.SpawnPerJump);
         }
     }
 
@@ -230,7 +232,7 @@ public partial class MacieiraOca(LevelWorld world) : Enemy("macieira_oca", world
             alive += e is RatoLanterna { Dead: false } ? 1 : 0;
         }
 
-        var max = RiftSession.Brecha.Boss.MaxMinions;
+        var max = Tuning.MaxMinions;
         for (var i = 0; i < count && alive < max; i++, alive++)
         {
             var rat = EnemyFactory.Create("rato_lanterna", World);

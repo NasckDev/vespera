@@ -38,6 +38,26 @@ public static class RiftSession
 
     public static RiftRules Rules => _rules ??= new RiftRules(Db, Brecha);
 
+    /// <summary>Regras da Brecha que tem este monstro (a escolhida, se tiver; senão a primeira que tiver — capturas de escala).</summary>
+    public static RiftRules RulesFor(string monsterId)
+    {
+        if (Brecha.Monsters.ContainsKey(monsterId))
+        {
+            return Rules;
+        }
+
+        foreach (var id in BrechaFiles.Keys)
+        {
+            var def = Load(id);
+            if (def.Monsters.ContainsKey(monsterId))
+            {
+                return new RiftRules(Db, def);
+            }
+        }
+
+        return Rules;
+    }
+
     /// <summary>Escolhe a Brecha da próxima caçada (fora da Brecha). Id vazio ou desconhecido = esgotos.</summary>
     public static void Select(string? brechaId)
     {
