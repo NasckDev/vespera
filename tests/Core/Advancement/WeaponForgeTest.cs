@@ -1,5 +1,6 @@
 namespace Vespera.Tests.Core.Advancement;
 
+using System.Linq;
 using GdUnit4;
 using Vespera.Core.Advancement;
 using Vespera.Core.Common;
@@ -50,9 +51,32 @@ public class WeaponForgeTest
     {
         var stats = Forge.Stats("sword", 2);
         AssertThat(stats.Damage).IsBetween(12, 23);
-        AssertThat(stats.DisplayName).IsEqual("Lâmina de Ferro Frio +1");
-        AssertThat(Forge.Stats("sword", 3).DisplayName).IsEqual("Espada das Marés");
+        AssertThat(stats.DisplayName).IsEqual("Lâmina Enferrujada +1");
+        AssertThat(Forge.Stats("sword", 3).DisplayName).IsEqual("Lâmina da Forja");
         AssertThat(Forge.Stats("sword", 3).TierRank).IsEqual(Rank.D);
+    }
+
+    /// <summary>
+    /// Cada degrau tem nome próprio ligado ao lugar do ato que dá aquele selo (issue #35): a primeira arma é enferrujada
+    /// e nenhuma arma do Ato I (E e D) leva nome de bairro de outro ato (o painel achou "Espada das Marés" no esgoto).
+    /// </summary>
+    [TestCase]
+    public void TierNamesFollowTheActThatGrantsTheSeal()
+    {
+        AssertThat(Forge.Stats("sword", 1).Name).IsEqual("Lâmina Enferrujada");
+        AssertThat(Forge.Stats("bow", 3).Name).IsEqual("Arco da Forja");
+        AssertThat(Forge.Stats("hammer", 5).Name).IsEqual("Martelo do Pomar");
+        AssertThat(Forge.Stats("sword", Forge.MaxLevel).Name).IsEqual("Lâmina do Alvor");
+        foreach (var classId in new[] { "sword", "bow", "hammer" })
+        {
+            for (var level = 1; level <= 4; level++)
+            {
+                AssertThat(Forge.Stats(classId, level).Name.Contains("Maré")).IsFalse();
+            }
+
+            var names = Enumerable.Range(0, Catalog.Weapons[classId].Tiers.Count).Select(i => Catalog.Weapons[classId].Tiers[i].Name).ToList();
+            AssertThat(names.Distinct().Count()).IsEqual(names.Count);
+        }
     }
 
     [TestCase]
