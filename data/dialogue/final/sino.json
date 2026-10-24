@@ -1,0 +1,81 @@
+{
+  "id": "final/sino",
+  "entries": [
+    {
+      "node": "a"
+    }
+  ],
+  "nodes": {
+    "a": {
+      "speaker": "narrador",
+      "text": "O sino de baixo está inteiro. Com badalo.",
+      "look": "sino",
+      "choices": [
+        {
+          "text": "Deixar o Benício tocar.",
+          "if": [
+            "benicio_na_decisao"
+          ],
+          "next": "b1"
+        },
+        {
+          "text": "Deixar a Lis tocar.",
+          "if": [
+            "lis_escondida",
+            "lis_entrou"
+          ],
+          "next": "l1"
+        },
+        {
+          "text": "Tocar você.",
+          "next": "j1"
+        }
+      ]
+    },
+    "b1": {
+      "speaker": "benicio",
+      "text": "Eu puxo. Fui eu que soltei.",
+      "expression": 2,
+      "set": [
+        "final_benicio"
+      ],
+      "events": [
+        "RingBell:benicio"
+      ],
+      "next": "fim"
+    },
+    "l1": {
+      "speaker": "lis",
+      "text": "Eu lembro do som. Deixa eu.",
+      "set": [
+        "final_lis"
+      ],
+      "events": [
+        "RingBell:lis"
+      ],
+      "next": "fim"
+    },
+    "j1": {
+      "speaker": "narrador",
+      "text": "Você puxa a corda com a lanterna da Marisa acesa na outra mão.",
+      "set": [
+        "final_jogador"
+      ],
+      "events": [
+        "RingBell:jogador"
+      ],
+      "next": "fim"
+    },
+    "fim": {
+      "speaker": "narrador",
+      "text": "O sol nasce. O selo Alvor queima no seu pulso.",
+      "fx": "glow",
+      "events": [
+        "BurnSeal:Alvor"
+      ],
+      "set": [
+        "alvor"
+      ]
+    }
+  }
+}

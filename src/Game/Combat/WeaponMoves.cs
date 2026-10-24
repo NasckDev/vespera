@@ -171,7 +171,14 @@ public abstract class WeaponMoves
 
     protected Vector2 Chest => P.GlobalPosition - new Vector2(0, ChestHeight * S);
 
-    protected double BaseDamage(double mult) => C.Stats.Atk * mult * (RiftSession.Cheat ? 10 : 1);
+    protected double BaseDamage(double mult) =>
+        C.Stats.Atk * mult * (RiftSession.Cheat ? 10 : 1) * Hunter.HuntService.Bless.DamageMultiplier(C.Hp < C.MaxHp / 2);
+
+    /// <summary>Crítico com as bênçãos da caçada.</summary>
+    protected int Crit => C.Stats.Crit + (int)Hunter.HuntService.Bless.CritPct;
+
+    /// <summary>Multiplicador em partes e núcleos com as bênçãos.</summary>
+    protected double PartMult => Set.PartMult * (1 + (Hunter.HuntService.Bless.PartPct / 100));
 
     /// <summary>Resolve um golpe em setor (arc &gt; 0) ou círculo (arc 0) e aplica o peso. Devolve quantos acertou.</summary>
     protected int Strike(Vector2 origin, Vector2 dir, float range, float arc, double mult, float knockback, double hitStop, bool heavy)
@@ -194,7 +201,7 @@ public abstract class WeaponMoves
         foreach (var target in world.Combat.InSector(origin, dir, range, arc, Team.Hunters))
         {
             var push = (target.HitCenter - origin).Normalized() * knockback * S;
-            var info = new HitInfo(BaseDamage(mult), origin, push, hitStop, Set.PartMult, heavy, C.Stats.Crit);
+            var info = new HitInfo(BaseDamage(mult), origin, push, hitStop, PartMult, heavy, Crit);
             var outcome = target.ReceiveHit(info);
             if (!outcome.Landed)
             {

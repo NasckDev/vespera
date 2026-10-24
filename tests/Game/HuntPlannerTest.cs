@@ -62,6 +62,24 @@ public class HuntPlannerTest
     }
 
     [TestCase]
+    public void NoTwoRoomsInARowShareTheSameGround()
+    {
+        var planner = new RunPlanner(Config);
+        foreach (var guardian in new[] { false, true })
+        {
+            for (var seed = 1; seed <= 200; seed++)
+            {
+                var plan = planner.Plan(seed, seed % 4, guardian);
+                for (var i = 1; i < plan.Rooms.Count; i++)
+                {
+                    AssertThat(plan.Rooms[i].Ground).OverrideFailureMessage($"semente {seed}: salas {i} e {i + 1} iguais ({plan.Rooms[i].Ground})")
+                        .IsNotEqual(plan.Rooms[i - 1].Ground);
+                }
+            }
+        }
+    }
+
+    [TestCase]
     public void GuardianOnlyWhenTheGateIsOpen()
     {
         var planner = new RunPlanner(Config);
@@ -122,25 +140,40 @@ public class HuntPlannerTest
     }
 
     [TestCase]
-    public void ContractsAreThreeDistinctAndEvaluateAgainstTheRun()
+    public void SevenContractsTwoOfferedGuardianOnesOnlyWithTheGuardian()
     {
-        var board = new ContractBoard(Config, id => id == "gel_de_lodo" ? "Gel de Lodo" : "Véu de Espectro");
-        var contracts = board.Roll(new SeededRandom(3));
-        AssertThat(contracts.Count).IsEqual(3);
-        AssertThat(contracts.Select(c => c.Kind).Distinct().Count()).IsEqual(3);
+        var board = new ContractBoard(Config, id => id);
+        AssertThat(Config.Contracts.Kinds.Count).IsEqual(7);
+        for (var seed = 1; seed <= 60; seed++)
+        {
+            var plain = board.Roll(new SeededRandom(seed));
+            AssertThat(plain.Count).IsEqual(2);
+            AssertThat(plain.Select(c => c.Kind).Distinct().Count()).IsEqual(2);
+            AssertThat(plain.Any(c => Config.Contracts.Kinds[c.Kind].Guardian)).IsFalse();
+        }
 
-        var report = new RunReport { Survived = true, Completed = true, WavesSurvived = 9, FlawlessRooms = 1 };
-        report.Materials["gel_de_lodo"] = 6;
-        report.Materials["veu_de_espectro"] = 6;
+        AssertThat(Enumerable.Range(1, 60).Any(seed => board.Roll(new SeededRandom(seed), guardian: true).Any(c => Config.Contracts.Kinds[c.Kind].Guardian))).IsTrue();
+    }
+
+    [TestCase]
+    public void ContractsEvaluateAgainstTheRun()
+    {
+        var board = new ContractBoard(Config, id => id);
+        var report = new RunReport
+        {
+            Survived = true, Completed = true, Breaks = 6, EspectroKills = 3, TreasureFound = true, FirstRoomFlawless = true,
+            EndHpFraction = 0.95, GuardianDefeated = true, GuardianSeconds = 90, GuardianCores = 3, GuardianCoresBroken = 3,
+        };
         foreach (var kind in Config.Contracts.Kinds.Keys)
         {
-            var c = new Contract { Kind = kind, Target = 5, Material = "gel_de_lodo" };
-            AssertThat(board.Evaluate(c, report).Done).IsTrue();
+            var c = new Contract { Kind = kind, Target = Math.Max(1, Config.Contracts.Kinds[kind].Min) };
+            AssertThat(board.Evaluate(c, report).Done).OverrideFailureMessage($"{kind} deveria valer").IsTrue();
             AssertThat(board.Evaluate(c, null).Done).IsFalse();
         }
 
-        var died = new RunReport { Survived = false, Completed = false, WavesSurvived = 2 };
-        AssertThat(board.Evaluate(new Contract { Kind = "cacada" }, died).Done).IsFalse();
-        AssertThat(board.Describe(new Contract { Kind = "coleta", Target = 4, Material = "gel_de_lodo" })).Contains("4 Gel de Lodo");
+        var slow = new RunReport { Survived = true, Completed = true, GuardianDefeated = true, GuardianSeconds = 150, EndHpFraction = 0.5 };
+        AssertThat(board.Evaluate(new Contract { Kind = "guardiao_rapido" }, slow).Done).IsFalse();
+        AssertThat(board.Evaluate(new Contract { Kind = "vida_cheia" }, slow).Done).IsFalse();
+        AssertThat(board.Describe(new Contract { Kind = "quebrar", Target = 5 })).Contains("5 barris");
     }
 }

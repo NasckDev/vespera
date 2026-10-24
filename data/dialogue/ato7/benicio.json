@@ -1,0 +1,87 @@
+{
+  "id": "ato7/benicio",
+  "entries": [
+    {
+      "if": [
+        "avesso_recusado",
+        "!ato7_fecho_benicio"
+      ],
+      "node": "f1"
+    },
+    {
+      "if": [
+        "ato7_benicio"
+      ],
+      "node": "h1"
+    },
+    {
+      "node": "a1"
+    }
+  ],
+  "nodes": {
+    "a1": {
+      "speaker": "benicio",
+      "text": "O Avesso tá crescendo. Cada lanterna perdida lá vira luz de lá.",
+      "look": "benicio",
+      "set": [
+        "ato7_benicio"
+      ],
+      "next": "a2"
+    },
+    "a2": {
+      "speaker": "benicio",
+      "text": "Quantas você perdeu? {lanternas_perdidas}.",
+      "expression": 2
+    },
+    "f1": {
+      "speaker": "benicio",
+      "text": "Eu não fiz isso.",
+      "look": "player",
+      "expression": 2,
+      "set": [
+        "ato7_fecho_benicio"
+      ],
+      "events": [
+        "BurnSeal:SSS"
+      ],
+      "next": "f2"
+    },
+    "f2": {
+      "speaker": "benicio",
+      "text": "Você fez.",
+      "choices": [
+        {
+          "text": "Quer estar lá quando o sino tocar?",
+          "set": [
+            "benicio_na_decisao"
+          ]
+        },
+        {
+          "text": "Descanse, Mestre."
+        }
+      ]
+    },
+    "h1": {
+      "speaker": "benicio",
+      "text": "Pergunte.",
+      "choices": [
+        {
+          "text": "Por que deu o badalo ao Severo?",
+          "next": "pm1_1",
+          "if": [
+            "ato7_badalo"
+          ]
+        },
+        {
+          "text": "Até logo."
+        }
+      ]
+    },
+    "pm1_1": {
+      "speaker": "benicio",
+      "text": "Eu passei o badalo pro Severo porque, se fosse eu de novo, eu não puxava.",
+      "expression": 2,
+      "next": "h1"
+    }
+  }
+}

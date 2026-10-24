@@ -22,7 +22,11 @@ public partial class Level
     private const float PanSeconds = 1.0f;
     private const float ArrivalFadeSeconds = 1.4f;
     private const float ArrivalHold = 1.5f;
-    private const float ArrivalStartHumans = 4.5f;
+    private const float RoadStartHumans = 9f;
+    private const float RoadLodoSeconds = 40f;
+    private const float RoadWalkSeconds = 30f;
+    private const float PlazaReachHumans = 2.5f;
+    private const float MorningHold = 1.2f;
     private const float ApproachHumans = 1.15f;
     private const float WalkTimeout = 7f;
     private const float PlayerWalkFactor = 0.6f;
@@ -34,10 +38,11 @@ public partial class Level
     private Tween? _pan;
     private bool _sceneBusy;
     private bool _skipScene;
+    private bool _freeRoam;
     private PointLight2D? _lanternGlow;
 
     /// <summary>Uma cena de entrada está rodando (o jogador não controla nada).</summary>
-    public bool SceneBusy => _sceneBusy;
+    public bool SceneBusy => _sceneBusy && !_freeRoam;
 
     private Vector2 PlayerChest => Player.GlobalPosition + new Vector2(0, -ChestHeightFactor * World.Data.ActorScale);
 
@@ -59,11 +64,16 @@ public partial class Level
         _skipScene = false;
         Player.Frozen = true;
         var npc = auto.Npc.Length > 0 ? World.Npcs.FirstOrDefault(n => n.NpcId == auto.Npc) : null;
-        if (auto.Dialogue == "chegada")
+        if (auto.Stage == "arrival")
         {
             await StageArrival();
         }
-        else if (npc is not null)
+        else if (auto.Stage == "morning")
+        {
+            await StageMorning();
+        }
+
+        if (npc is not null)
         {
             await StageApproach(npc);
         }
@@ -75,18 +85,107 @@ public partial class Level
         }
     }
 
-    /// <summary>Chegada: tela preta, a grande lanterna, e o caçador sobe a escadaria até o meio da praça.</summary>
+    /// <summary>
+    /// Chegada (ROTEIRO-V2 §3, 0:10–1:20): o caçador entra pela estrada (a borda sul da Praça), já com a Lâmina
+    /// enferrujada, e anda sozinho. Um Lodo pequeno cruza o caminho; perto do meio da praça a Brecha abre com estrondo
+    /// e luz magenta, e a lanterna do caçador acende sozinha. Aí o Benício vem falar.
+    /// </summary>
     private async Task StageArrival()
     {
         var human = World.Data.HumanHeight;
-        var start = World.ClampToFloor(World.SpawnPoint + new Vector2(0, human * ArrivalStartHumans));
+        StoryService.SetFlag(StoryFlags.StarterBlade);
+        var start = World.ClampToFloor(World.SpawnPoint + new Vector2(0, human * RoadStartHumans));
         Player.Teleport(start);
         Player.Face(Vector2.Up);
-        World.Camera.FixedFocus = World.Camera.ClampPoint(FocusPoint("lanterna") ?? PlayerChest);
         await FadeFrom(1f, ArrivalFadeSeconds);
-        await SceneWait(ArrivalHold);
-        World.Camera.FixedFocus = null;
+
+        _freeRoam = true;
+        Player.Frozen = false;
+        var lodo = new Vespera.Game.Actors.Enemies.Lodo(World)
+        {
+            Position = World.ClampToFloor(start.Lerp(World.SpawnPoint, 0.45f) + new Vector2(-human * 2.5f, 0)),
+        };
+        World.AddEnemy(lodo);
+        await WaitUntil(() => !IsInstanceValid(lodo) || lodo.IsQueuedForDeletion() || lodo.Dead, RoadLodoSeconds, () => lodo.Die());
+        await WaitUntil(() => Player.GlobalPosition.DistanceTo(World.SpawnPoint) < human * PlazaReachHumans, RoadWalkSeconds, null);
+        _freeRoam = false;
+        Player.Frozen = true;
         await WalkPlayerTo(World.SpawnPoint);
+        await OpenRift();
+    }
+
+    /// <summary>A Brecha abre: tremor, clarão magenta na fenda e a lanterna do caçador acendendo sem ninguém tocar.</summary>
+    private async Task OpenRift()
+    {
+        World.Camera.AddTrauma(1f);
+        PanTo("brecha");
+        if (FocusPoint("brecha") is { } at)
+        {
+            var flash = new PointLight2D
+            {
+                Name = "RiftFlash",
+                Texture = Vespera.Game.Components.LightTexture.Get(),
+                Color = new Color("e64a8e"),
+                Energy = 2.2f,
+                TextureScale = World.Data.HumanHeight * GlowRadiusHumans / Vespera.Game.Components.LightTexture.Radius,
+                GlobalPosition = at,
+            };
+            World.AddChild(flash);
+            var fadeOut = CreateTween();
+            fadeOut.TweenProperty(flash, "energy", 0.5f, 1.6f / SceneSpeed);
+            World.Feel.Spark(at, new Color("e64a8e"), 40, 420f, Vector2.Up, 180f);
+        }
+
+        await SceneWait(1.0f);
+        LightPlayerLantern();
+        PanTo("player");
+        await SceneWait(1.2f);
+    }
+
+    /// <summary>A lanterna do caçador acende sozinha (primeira pista de "de quem era a lanterna"). Ninguém comenta.</summary>
+    private void LightPlayerLantern()
+    {
+        if (Player.GetNodeOrNull<PointLight2D>("OwnLantern") is not null)
+        {
+            return;
+        }
+
+        var light = new PointLight2D
+        {
+            Name = "OwnLantern",
+            Texture = Vespera.Game.Components.LightTexture.Get(),
+            Color = new Color(1f, 0.78f, 0.42f),
+            Energy = 0f,
+            TextureScale = World.Data.HumanHeight * 3f / Vespera.Game.Components.LightTexture.Radius,
+            Position = new Vector2(0, -ChestHeightFactor * World.Data.ActorScale),
+        };
+        Player.AddChild(light);
+        CreateTween().TweenProperty(light, "energy", 0.9f, 0.8f / SceneSpeed);
+    }
+
+    /// <summary>A noite passa (ROTEIRO-V2 §3, 9:00): tela escura, um respiro, e a praça de manhã com o caçador no meio.</summary>
+    private async Task StageMorning()
+    {
+        _fade.Color = _fade.Color with { A = 1f };
+        Player.Teleport(World.SpawnPoint);
+        await SceneWait(MorningHold);
+        await FadeFrom(1f, ArrivalFadeSeconds);
+    }
+
+    /// <summary>Espera a condição valer, até <paramref name="seconds"/> (dividido por <see cref="SceneSpeed"/>); no fim do prazo roda <paramref name="onTimeout"/>.</summary>
+    private async Task WaitUntil(System.Func<bool> done, float seconds, System.Action? onTimeout)
+    {
+        var left = seconds / SceneSpeed;
+        while (left > 0f && !_skipScene && !done())
+        {
+            await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+            left -= (float)GetProcessDeltaTime();
+        }
+
+        if (!done())
+        {
+            onTimeout?.Invoke();
+        }
     }
 
     /// <summary>O NPC (Ravi, Benício) anda até ficar de frente para o jogador, e os dois se olham.</summary>
@@ -281,7 +380,7 @@ public partial class Level
     /// <summary>Interagir ou Esc/Pausa durante uma cena de entrada pula as esperas e as caminhadas.</summary>
     private bool SkipSceneIfBusy()
     {
-        if (!_sceneBusy)
+        if (!_sceneBusy || _freeRoam)
         {
             return false;
         }

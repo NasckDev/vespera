@@ -1,0 +1,59 @@
+{
+  "id": "ato6/celeste",
+  "entries": [
+    {
+      "if": [
+        "celeste_revelada"
+      ],
+      "node": "h1"
+    },
+    {
+      "node": "a1"
+    }
+  ],
+  "nodes": {
+    "a1": {
+      "speaker": "celeste",
+      "text": "Você já sabe. A Lis me contou que você sabe.",
+      "look": "celeste",
+      "expression": 2,
+      "set": [
+        "celeste_revelada"
+      ],
+      "next": "a2"
+    },
+    "a2": {
+      "speaker": "celeste",
+      "text": "Eu morri no Pomar. O que voltou fui eu também. Não sei explicar melhor.",
+      "next": "a3"
+    },
+    "a3": {
+      "speaker": "celeste",
+      "text": "O Avesso leva. Mas às vezes devolve.",
+      "next": "a4"
+    },
+    "a4": {
+      "speaker": "celeste",
+      "text": "Me devolveu. Devolveu a Lis. Pode devolver mais.",
+      "expression": 2
+    },
+    "h1": {
+      "speaker": "celeste",
+      "text": "As plantas daqui também precisam de água.",
+      "choices": [
+        {
+          "text": "Você é real?",
+          "next": "pm1_1"
+        },
+        {
+          "text": "Até mais."
+        }
+      ]
+    },
+    "pm1_1": {
+      "speaker": "celeste",
+      "text": "Se eu sou real? Eu planto, colho, cuido. Isso basta pra mim.",
+      "next": "h1"
+    }
+  }
+}

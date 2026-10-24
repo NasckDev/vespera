@@ -7,72 +7,27 @@
   ],
   "nodes": {
     "n1": {
-      "speaker": "narrador",
-      "look": "lanterna",
+      "speaker": "benicio",
+      "look": "player",
       "fx": "glow",
-      "text": "A Brecha se fecha com um estalo de luz. Na praça, a grande lanterna brilha mais forte.",
+      "text": "D.",
       "set": [
         "ato1_fim_done"
       ],
       "next": "n2"
     },
     "n2": {
-      "speaker": "benicio",
-      "look": "player",
-      "text": "Você conseguiu, {nome}. A Lodo-Mãe caiu. Olhe o seu pulso: agora o selo é D.",
+      "speaker": "ravi",
+      "look": "ravi",
+      "expression": 2,
+      "text": "Isso! Selo D!",
       "next": "n3"
     },
     "n3": {
-      "speaker": "benicio",
-      "text": "E a Lodo-Mãe deixou um Eco em você. É o poder dela, agora seu. Aperte Q para usar.",
-      "next": "n3b"
-    },
-    "n3b": {
-      "speaker": "benicio",
-      "text": "Com o Eco Viscoso você avança rápido e deixa um rastro de lodo. Os monstros que pisam nele ficam lentos.",
-      "next": "n4"
-    },
-    "n4": {
-      "speaker": "benicio",
-      "look": "benicio",
-      "expression": 2,
-      "text": "Mas tenho uma notícia ruim. Chegou uma carta da Dona Celeste, lá do Pomar Alto.",
-      "next": "n5"
-    },
-    "n5": {
-      "speaker": "benicio",
-      "text": "Ela escreveu: \"As macieiras estão apodrecendo por dentro. À noite, alguma coisa anda entre as árvores.\"",
-      "next": "n6"
-    },
-    "n6": {
-      "speaker": "benicio",
-      "expression": 2,
-      "text": "Uma Brecha nova está para abrir no pomar. Uma Brecha de rank D. Não sei o que mora lá.",
-      "next": "n7"
-    },
-    "n7": {
-      "speaker": "benicio",
-      "text": "Descanse. Melhore a arma com a Odete. Quando o caminho do Pomar abrir, você vai primeiro.",
-      "next": "n7b"
-    },
-    "n8": {
-      "speaker": "narrador",
-      "look": "player",
-      "text": "Fim do Ato I. A Brecha dos esgotos continua aberta: você pode voltar para caçar quando quiser."
-    },
-    "n7b": {
-      "speaker": "narrador",
-      "look": "player",
-      "fx": "glow",
-      "text": "Nesse momento, a sua lanterna pisca três vezes. A chama se inclina para o norte, na direção do Pomar Alto.",
-      "next": "n7c"
-    },
-    "n7c": {
-      "speaker": "benicio",
-      "expression": 2,
-      "look": "player",
-      "text": "Lanternas não fazem isso, {nome}. A não ser que alguém do outro lado esteja chamando.",
-      "next": "n8"
+      "speaker": "ravi",
+      "look": "lanterna",
+      "text": "A Odete mandou te chamar. Vai lá.",
+      "objective": "odete_fim"
     }
   }
 }

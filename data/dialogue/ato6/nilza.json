@@ -1,0 +1,71 @@
+{
+  "id": "ato6/nilza",
+  "entries": [
+    {
+      "if": [
+        "ato6_sopa"
+      ],
+      "node": "h1"
+    },
+    {
+      "node": "a1"
+    }
+  ],
+  "nodes": {
+    "a1": {
+      "speaker": "nilza",
+      "text": "Minha mãe fazia isso. Eu não lembrava a receita.",
+      "look": "nilza",
+      "set": [
+        "ato6_sopa"
+      ],
+      "next": "a2"
+    },
+    "a2": {
+      "speaker": "nilza",
+      "text": "Lembrei quando você trouxe o peixe de olho de vidro.",
+      "next": "a3"
+    },
+    "a3": {
+      "speaker": "nilza",
+      "text": "Toma antes de entrar. Se cair lá dentro, levanta uma vez.",
+      "events": [
+        "UnlockSopaDaVespera"
+      ],
+      "next": "a4"
+    },
+    "a4": {
+      "speaker": "nilza",
+      "text": "Só uma. Não abusa da sopa.",
+      "expression": 2,
+      "objective": "ato6_mae"
+    },
+    "h1": {
+      "speaker": "nilza",
+      "text": "Come. Depois vai.",
+      "choices": [
+        {
+          "text": "E a Celeste?",
+          "next": "pm1_1",
+          "if": [
+            "celeste_revelada"
+          ]
+        },
+        {
+          "text": "Até mais."
+        }
+      ]
+    },
+    "pm1_1": {
+      "speaker": "nilza",
+      "text": "Meu marido não voltou. Mas a Celeste voltou.",
+      "next": "pm1_2"
+    },
+    "pm1_2": {
+      "speaker": "nilza",
+      "text": "Eu vou aceitar o que der.",
+      "expression": 2,
+      "next": "h1"
+    }
+  }
+}

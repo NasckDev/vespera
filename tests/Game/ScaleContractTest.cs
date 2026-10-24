@@ -57,7 +57,7 @@ public class ScaleContractTest
     public void TableMatchesTheContract()
     {
         AssertThat(ScaleRegistry.Get("lamina").Height).IsEqual(1.00f);
-        AssertThat(ScaleRegistry.Get("lodo").Height).IsEqual(0.35f);
+        AssertThat(ScaleRegistry.Get("lodo").Height).IsEqual(0.55f);
         AssertThat(ScaleRegistry.Get("espectro").Height).IsEqual(1.00f);
         AssertThat(ScaleRegistry.Get("espectro").Hover).IsEqual(0.15f);
         AssertThat(ScaleRegistry.Get("lodo_mae").Height).IsEqual(3.00f);

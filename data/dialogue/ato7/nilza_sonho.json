@@ -1,0 +1,15 @@
+{
+  "id": "ato7/nilza_sonho",
+  "entries": [
+    {
+      "node": "a"
+    }
+  ],
+  "nodes": {
+    "a": {
+      "speaker": "nilza",
+      "text": "Acorda. Você dormiu na sopa e sonhou alto. Vai, que a Brecha não fechou.",
+      "look": "nilza"
+    }
+  }
+}

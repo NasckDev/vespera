@@ -51,11 +51,25 @@ public sealed class RunPlanner(HuntConfig config)
         var kinds = Layout(count, random, guardian);
         var rooms = new List<RoomPlan>(count);
         string? previous = null;
+        var grounds = new string[count];
+        for (var attempt = 0; attempt < 30; attempt++)
+        {
+            previous = null;
+            for (var i = 0; i < count; i++)
+            {
+                grounds[i] = i == count - 1 ? config.FinalGround : PickGround(kinds[i], previous, random);
+                previous = grounds[i];
+            }
+
+            AvoidRepeats(grounds, kinds, random);
+            if (!grounds.Where((g, i) => i > 0 && g == grounds[i - 1]).Any())
+            {
+                break;
+            }
+        }
         for (var i = 0; i < count; i++)
         {
-            var ground = i == count - 1 ? config.FinalGround : PickGround(kinds[i], previous, random);
-            previous = ground;
-            rooms.Add(new RoomPlan(i, ground, kinds[i], Waves(ground, kinds[i], i, count, growth, random)));
+            rooms.Add(new RoomPlan(i, grounds[i], kinds[i], Waves(grounds[i], kinds[i], i, count, growth, random)));
         }
 
         return new RunPlan(seed, rooms);
@@ -68,7 +82,7 @@ public sealed class RunPlanner(HuntConfig config)
         kinds[^2] = RoomKind.Rest;
         if (count >= 5 && random.NextDouble() < config.TreasureChance)
         {
-            kinds[random.RangeInt(1, count - 3)] = RoomKind.Treasure;
+            kinds[random.RangeInt(1, Math.Max(1, count - 4))] = RoomKind.Treasure; // nunca colado ao descanso (os dois só existem no chão do tesouro)
         }
 
         // Uma sala de elite no meio, nas caçadas mais longas.
@@ -82,6 +96,45 @@ public sealed class RunPlanner(HuntConfig config)
         }
 
         return kinds;
+    }
+
+    /// <summary>ROTEIRO-V2 §5.4: nunca duas salas iguais em sequência. Troca o chão de uma das duas por outro que aceite o tipo.</summary>
+    private void AvoidRepeats(string[] grounds, List<RoomKind> kinds, IRandom random)
+    {
+        for (var i = 1; i < grounds.Length; i++)
+        {
+            if (grounds[i] != grounds[i - 1])
+            {
+                continue;
+            }
+
+            foreach (var j in new[] { i - 1, i })
+            {
+                if (j == grounds.Length - 1)
+                {
+                    continue;
+                }
+
+                var avoid = new HashSet<string>();
+                if (j > 0)
+                {
+                    avoid.Add(grounds[j - 1]);
+                }
+
+                if (j < grounds.Length - 1)
+                {
+                    avoid.Add(grounds[j + 1]);
+                }
+
+                var options = config.Grounds.Where(g => g.Value.Kinds.Contains(kinds[j]) && !avoid.Contains(g.Key))
+                    .Select(g => g.Key).OrderBy(id => id, StringComparer.Ordinal).ToList();
+                if (options.Count > 0)
+                {
+                    grounds[j] = options[random.RangeInt(0, options.Count - 1)];
+                    break;
+                }
+            }
+        }
     }
 
     private string PickGround(RoomKind kind, string? previous, IRandom random)

@@ -19,13 +19,17 @@ public partial class TitleBackground : Control
     private const int EmberCount = 70;
     private const float EmberLifetime = 11f;
 
+    private const float VideoFadeSeconds = 1.5f;
+
     private double _time;
     private CpuParticles2D _embers = null!;
+    private VideoStreamPlayer? _video;
 
     public override void _Ready()
     {
         SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
         MouseFilter = MouseFilterEnum.Stop;
+        _video = BuildVideoLoop();
         _embers = BuildEmbers();
         _embers.Modulate = Colors.Transparent;
         AddChild(_embers);
@@ -43,12 +47,46 @@ public partial class TitleBackground : Control
         var t = (float)_time;
         var zoom = 1f + (ZoomGain * (0.5f - (0.5f * Mathf.Cos(t * ZoomRate))));
         var shift = new Vector2(Mathf.Sin(t * 0.09f) * DriftX, Mathf.Cos(t * 0.07f) * DriftY);
-        ArtAssets.DrawIntroStill(this, zoom, shift);
+        if (_video is null)
+        {
+            ArtAssets.DrawIntroStill(this, zoom, shift);
+        }
+        else
+        {
+            _video.Modulate = new Color(1f, 1f, 1f, Mathf.Clamp((float)_time / VideoFadeSeconds, 0f, 1f));
+        }
 
         var ramp = Ramp();
         var rect = new Rect2(Vector2.Zero, Size);
         DrawSideShade(ramp);
         DrawTextureRect(ArtAssets.Vignette, rect, false, new Color(1f, 1f, 1f, ramp * 0.8f));
+    }
+
+    /// <summary>
+    /// O vídeo de abertura que tocava em "Nova história" virou o fundo do título (ROTEIRO-V2 §4.1): em loop, mudo,
+    /// entrando por cima do quadro parado; a sombra lateral e a vinheta continuam por cima dele.
+    /// </summary>
+    private VideoStreamPlayer? BuildVideoLoop()
+    {
+        if (DisplayServer.GetName() == "headless" || GD.Load<VideoStream>(ArtAssets.PrologueVideoPath) is not { } stream)
+        {
+            return null;
+        }
+
+        var player = new VideoStreamPlayer
+        {
+            Stream = stream,
+            Expand = true,
+            Autoplay = true,
+            Loop = true,
+            VolumeDb = -80f,
+            MouseFilter = MouseFilterEnum.Ignore,
+            Modulate = Colors.Transparent,
+            ShowBehindParent = true,
+        };
+        player.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
+        AddChild(player);
+        return player;
     }
 
     private float Ramp()

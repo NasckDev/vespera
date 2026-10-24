@@ -1,0 +1,24 @@
+{
+  "id": "ato7/odete",
+  "entries": [
+    {
+      "node": "a1"
+    }
+  ],
+  "nodes": {
+    "a1": {
+      "speaker": "odete",
+      "text": "Amanhã é a da praça. Eu vou junto.",
+      "look": "odete",
+      "set": [
+        "odete_vai_junto"
+      ],
+      "next": "a2"
+    },
+    "a2": {
+      "speaker": "odete",
+      "text": "Não discute.",
+      "expression": 2
+    }
+  }
+}

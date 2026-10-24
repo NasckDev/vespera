@@ -1,0 +1,22 @@
+{
+  "_doc": "Linha de personagem da tela de resultado (ROTEIRO-V2 §5.5) e falas de morte do Ato I (§6.2: uma por morte, em ordem; depois sorteia). Duas frases no máximo.",
+  "death": [
+    { "who": "Nilza", "text": "Sua lanterna ficou lá dentro. O Ravi disse que viu acesa." },
+    { "who": "Ravi", "text": "Eu já morri três vezes. A primeira dói mais." },
+    { "who": "Odete", "text": "Lâmina não quebra. Caçador quebra. Vai buscar." },
+    { "who": "Benício", "text": "Caiu, levantou. A Ordem só anota a segunda parte." },
+    { "who": "Lis", "text": "Sua lanterna ficou chamando a noite toda. Eu ouvi." },
+    { "who": "Nilza", "text": "A Odete perguntou se você voltou. Ela não pergunta de ninguém." }
+  ],
+  "survive": [
+    { "who": "Nilza", "text": "Chegou inteiro. Milagre." },
+    { "who": "Ravi", "text": "Só isso de sala? Eu fiz mais. Acho." },
+    { "who": "Odete", "text": "Trouxe Fragmento? Então trouxe trabalho pra mim." },
+    { "who": "Lis", "text": "A Brecha mudou de lugar enquanto você estava lá. Eu senti." },
+    { "who": "Benício", "text": "Voltou com a lanterna acesa. É o que importa." }
+  ],
+  "closed": [
+    { "who": "Benício", "text": "A Brecha fechou. Lumeira dorme tranquila hoje." },
+    { "who": "Ravi", "text": "Você venceu a Lodo-Mãe? Tá, a sopa é minha conta." }
+  ]
+}

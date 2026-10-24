@@ -2,6 +2,18 @@
 
 Uma linha por tarefa concluída, mais recente primeiro.
 
+- 2026-10-23 — Campanha (branch `campanha`): falas do ROTEIRO-V2 §13 dos Atos III ao Final em JSON (`data/dialogue/ato3…final`, 52 arquivos, rotas A/B do Ravi, 3 variantes do sino, falas de morte), complemento técnico `docs/v2/CAMPANHA.md` (mapas, monstros, Guardiões por fase, mecânica e mudança da cidade por ato) e prompts/issues de arte #29–#34, #36–#38 (ROT-D1–ROT-D10):
+  - ROT-D1: `ROTEIRO-V2.md` é a fonte canônica da história; a bíblia anterior desta branch (causa "Maré Grande", Iara, Tomé, Lacerda, Lis como eco "achada há 11 anos") foi descartada antes do merge.
+  - ROT-D2: falas copiadas literalmente do §13; só foram acrescentadas respostas de escolha e balões de cola de uma linha ("Pergunte.", "Até logo.") e os textos de item.
+  - ROT-D3: id de fala = caminho (`ato3/severo`); subpasta funciona com o `StoryService` atual, sem código novo.
+  - ROT-D4: falas de morte por ato em `<ato>/morte`, escolhidas por flags `<ato>_morte_N` que o jogo liga; depois da 6ª, sorteio.
+  - ROT-D5: Guardiões do Ato III ao VI com 3 fases, uma por frase/palavra do roteiro (Farol: feixe, maré, escuro; Sineiro: FESTA, CORDA, CULPA; Inquilino: as 3 frases da janela; Velória: vigília, cera, uma vela).
+  - ROT-D6: a lanterna "M." do Ato III fica na sala alagada (Mercado Submerso), garantida a partir da 2ª caçada.
+  - ROT-D7: monstros comuns novos com um verbo cada: Lanterna-Afogada e Ancoreiro (III), Carpideira e Cão-de-Vigília (IV), Traça-de-Arquivo (V), Varal e Despejado (VI), Ceifador de Pomar e Sombra de Caçador (VII); Sineiro mudou do rank C para o Ato V.
+  - ROT-D8: perguntas do Vigia distribuídas: p1–p2 no Ato IV, p3 e p4 nas falas de morte dos Atos V e VI, p5 no Ato VII; respostas em flags `vigia_pN_*`.
+  - ROT-D9: escolhas que destravam o Final: `benicio_na_decisao` (Ato VII, Benício) e `lis_escondida` (Ato VII, Lis); o jogador sempre pode tocar.
+  - ROT-D10: Iara (filha do Severo) removida da arte (#31 só com Severo); referências novas de estilo fora do LFS, com link para o branch `campanha` até o merge.
+
 - 2026-10-22 — v2 Camadas 3 e 4 (fatia jogável): Brecha E "Esgotos do Mercado" saindo de um portal na Praça (escolha de arma), 4 salas nos chãos definitivos com saídas seladas até limpar, Lodo/Espectro/Lodo-Mãe (3 fases, aviso âmbar de 0,6 s, 3 núcleos que tiram divisões), combate das 3 classes com hit-stop, flash, tremor, números e sons sintetizados, Fragmentos com ímã, baú, Lanterna na morte, HUD de caçada, contrato de escala (`ScaleRegistry`, `doorHeight`, teste ±8%) e bots de colisão/combate.
 - 2026-10-22 — Polimento da v0.1 (C1, correção da rodada 1): barra e letreiro do chefe fora do painel de vida, loot e lista de Brechas lado a lado, hotbar que não esconde o jogador, inventário e mural na escala certa, texto das telas a partir de 7 px, Opções abrem com a 1ª linha, textos de ajuda que seguem o remapeamento e o controle, dicas que dormem, teclas fixas reservadas, reduzir flashes no jogador, arco alternado solto ao perder o controle, som do acerto no monstro, janela de 1080p com escala inteira cheia e smoke com arquivos por processo (C1-D14–C1-D25).
 - 2026-10-22 — Polimento e acessibilidade da v0.1 (C1): HUD legível e enxuto com escala da interface e tamanho do texto, rótulos do mundo fora do HUD, tutorial da Odete cumpre a 1ª missão, Brechas do novato respeitam o Selo, saída da Brecha só com intenção, letreiro do chefe menor, golpes com mais peso, dicas da primeira vez por dispositivo, remapeamento de teclado e controle, velocidade do texto, tremor 0–100%, reduzir flashes, alto contraste, aviso de perigo com forma, legendas, arco alternado e mira assistida (C1-D1–C1-D13).

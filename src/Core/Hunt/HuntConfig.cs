@@ -186,7 +186,7 @@ public sealed class EliteDef
 
 public sealed class ContractsDef
 {
-    public int Offered { get; set; } = 3;
+    public int Offered { get; set; } = 2;
 
     public Dictionary<string, ContractKindDef> Kinds { get; set; } = [];
 
@@ -210,6 +210,12 @@ public sealed class ContractKindDef
     public int Fragmentos { get; set; }
 
     public int Lumes { get; set; }
+
+    /// <summary>Alvo fixo (segundos do Relâmpago).</summary>
+    public int Target { get; set; }
+
+    /// <summary>Só aparece quando a caçada termina no Guardião.</summary>
+    public bool Guardian { get; set; }
 }
 
 public sealed class PotionDef

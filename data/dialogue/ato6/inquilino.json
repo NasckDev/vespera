@@ -1,0 +1,38 @@
+{
+  "id": "ato6/inquilino",
+  "entries": [
+    {
+      "if": [
+        "inquilino_fase_3"
+      ],
+      "node": "c"
+    },
+    {
+      "if": [
+        "inquilino_fase_2"
+      ],
+      "node": "b"
+    },
+    {
+      "node": "a"
+    }
+  ],
+  "nodes": {
+    "a": {
+      "speaker": "inquilino",
+      "text": "Eu morava aqui."
+    },
+    "b": {
+      "speaker": "inquilino",
+      "text": "Derrubaram pra Torre."
+    },
+    "c": {
+      "speaker": "inquilino",
+      "text": "Entra.",
+      "fx": "shake",
+      "events": [
+        "InquilinoPull"
+      ]
+    }
+  }
+}

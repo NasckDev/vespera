@@ -1,3 +1,4 @@
+using System.Linq;
 using Godot;
 using Vespera.Core.Story;
 using Vespera.Game.Boot;
@@ -99,6 +100,24 @@ public partial class JournalScreen : UiScreen
             }
 
             list.AddChild(UiKit.MakeLabel($"[ ] {objectives[i].Title} (em breve)", UiTheme.DimVariation));
+        }
+
+        FillQuestions(list, engine);
+    }
+
+    /// <summary>Página "Perguntas" (ROTEIRO-V2 §7): uma linha por mistério já plantado, na ordem do roteiro.</summary>
+    private static void FillQuestions(VBoxContainer list, Vespera.Core.Story.StoryEngine engine)
+    {
+        var open = engine.Script.Questions.Where(q => Vespera.Core.Story.StoryConditions.Evaluate(q.Conditions, engine)).ToList();
+        if (open.Count == 0)
+        {
+            return;
+        }
+
+        list.AddChild(UiKit.MakeLabel("Perguntas", UiTheme.HeadingVariation));
+        foreach (var question in open)
+        {
+            list.AddChild(UiKit.MakeWrapped($"? {question.Text}", UiTheme.ReadingVariation));
         }
     }
 }

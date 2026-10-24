@@ -52,6 +52,18 @@ public sealed class AutoplayDef
 
     [JsonPropertyName("if")]
     public List<string> Conditions { get; set; } = [];
+
+    /// <summary>Encenação antes da fala: "arrival" (estrada, Lodo e Brecha abrindo), "morning" (a noite passa) ou vazio.</summary>
+    public string Stage { get; set; } = string.Empty;
+}
+
+/// <summary>Uma linha da página "Perguntas" do Diário (ROTEIRO-V2 §7): aparece quando as condições valem.</summary>
+public sealed class QuestionDef
+{
+    [JsonPropertyName("if")]
+    public List<string> Conditions { get; set; } = [];
+
+    public string Text { get; set; } = string.Empty;
 }
 
 /// <summary>Roteiro geral: objetivos, regras de avanço, falantes e falas automáticas.</summary>
@@ -70,6 +82,9 @@ public sealed class StoryScript
     public Dictionary<string, SpeakerDef> Speakers { get; set; } = [];
 
     public List<AutoplayDef> Autoplay { get; set; } = [];
+
+    /// <summary>Mistérios da página "Perguntas", em ordem; cada pista nova acrescenta uma linha.</summary>
+    public List<QuestionDef> Questions { get; set; } = [];
 
     /// <summary>Objetivo dado ao começar um jogo novo.</summary>
     public string StartObjective { get; set; } = string.Empty;

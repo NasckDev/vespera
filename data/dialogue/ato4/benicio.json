@@ -1,0 +1,73 @@
+{
+  "id": "ato4/benicio",
+  "entries": [
+    {
+      "if": [
+        "GuardianDefeated:velora",
+        "!ato4_fecho_benicio"
+      ],
+      "node": "f1"
+    },
+    {
+      "if": [
+        "exame_b_visto"
+      ],
+      "node": "h1"
+    },
+    {
+      "node": "e1"
+    }
+  ],
+  "nodes": {
+    "e1": {
+      "speaker": "benicio",
+      "text": "Cemitério é diferente. Lá dentro você vai ver nomes que conhece.",
+      "look": "benicio",
+      "set": [
+        "exame_b_visto"
+      ],
+      "next": "e2"
+    },
+    "e2": {
+      "speaker": "benicio",
+      "text": "Não para pra ler.",
+      "expression": 2
+    },
+    "f1": {
+      "speaker": "benicio",
+      "text": "A.",
+      "look": "player",
+      "events": [
+        "BurnSeal:A"
+      ],
+      "set": [
+        "ato4_fecho_benicio"
+      ],
+      "next": "f2"
+    },
+    "f2": {
+      "speaker": "benicio",
+      "text": "Agora só falta a Torre. Eu vou pedir uma coisa antes: não toca em nada lá.",
+      "objective": "ato5"
+    },
+    "h1": {
+      "speaker": "benicio",
+      "text": "Pergunte, se precisar.",
+      "choices": [
+        {
+          "text": "O sino?",
+          "next": "pm1_1"
+        },
+        {
+          "text": "Até logo."
+        }
+      ]
+    },
+    "pm1_1": {
+      "speaker": "benicio",
+      "text": "O sino? Tiramos o badalo. Pergunta outra coisa.",
+      "expression": 2,
+      "next": "h1"
+    }
+  }
+}

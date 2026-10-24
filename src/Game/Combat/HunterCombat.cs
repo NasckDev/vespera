@@ -114,7 +114,7 @@ public sealed partial class HunterCombat : Node, IHittable
     public void RefreshStats(bool fullHeal)
     {
         Stats = HunterStats.Compute(RiftSession.Db, RiftSession.Save, HunterSprites.WeaponId(_player.Hunter));
-        MaxHp = Stats.Hp;
+        MaxHp = Math.Max(1, Stats.Hp + Hunter.HuntService.Bless.MaxHp);
         Hp = fullHeal ? MaxHp : Math.Min(Hp, MaxHp);
     }
 
@@ -195,7 +195,7 @@ public sealed partial class HunterCombat : Node, IHittable
         _player.Flash.Pulse(new Color(1f, 0.35f, 0.35f), 0.05f, 0.16f, 0.7f);
         Moves.Cancel();
         _knock = hit.Push;
-        _invulnerable = (float)_tuning.HurtInvulnerable;
+        _invulnerable = (float)(_tuning.HurtInvulnerable + Hunter.HuntService.Bless.HurtInvulnerable);
         if (Hp <= 0)
         {
             Die();
@@ -243,7 +243,7 @@ public sealed partial class HunterCombat : Node, IHittable
 
         _player.Sprite.Visible = true;
         _knock = push;
-        _invulnerable = (float)_tuning.HurtInvulnerable;
+        _invulnerable = (float)(_tuning.HurtInvulnerable + Hunter.HuntService.Bless.HurtInvulnerable);
         Enter(HunterState.Hurt);
         _player.PlayAnimation("dano", restart: true);
     }
@@ -319,7 +319,7 @@ public sealed partial class HunterCombat : Node, IHittable
 
     private bool TryDodge(Vector2 move)
     {
-        if (!_stamina.TrySpend(_tuning.DodgeCost))
+        if (!_stamina.TrySpend(_tuning.DodgeCost * Math.Max(0.2, 1 + (Hunter.HuntService.Bless.DodgeCostPct / 100))))
         {
             return false;
         }
@@ -327,8 +327,10 @@ public sealed partial class HunterCombat : Node, IHittable
         Moves.Cancel();
         var dir = move.LengthSquared() > 0.01f ? move.Normalized() : _player.AimDirection;
         _player.Face(dir);
-        _dodgeVelocity = dir * (float)(_tuning.DodgeDistance * Scale / _tuning.DodgeSeconds);
-        _invulnerable = Mathf.Max(_invulnerable, (float)_tuning.DodgeInvulnerable);
+        var bless = Hunter.HuntService.Bless;
+        _dodgeVelocity = dir * (float)(_tuning.DodgeDistance * (1 + (bless.DodgeDistancePct / 100)) * Scale / _tuning.DodgeSeconds);
+        _invulnerable = Mathf.Max(_invulnerable, (float)(_tuning.DodgeInvulnerable + bless.DodgeInvulnerable));
+        Hunter.HuntService.Dodged();
         Enter(HunterState.Dodging);
         _player.PlayAnimation("esquiva", restart: true, fitSeconds: (float)_tuning.DodgeSeconds);
         CombatSfx.Play(_player, CombatSound.Dodge, Vector2.Zero);

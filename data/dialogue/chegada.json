@@ -7,37 +7,20 @@
   ],
   "nodes": {
     "a": {
-      "speaker": "narrador",
-      "look": "lanterna",
-      "text": "Esta é Lumeira. Há vinte anos, o sol sumiu por um ano inteiro. A cidade sobreviveu porque nunca deixou as lanternas apagarem.",
+      "speaker": "benicio",
+      "look": "benicio",
+      "text": "Você. Com a lanterna. Isso é uma Brecha e vai cuspir bicho a noite toda.",
       "set": [
-        "arrival_done"
+        "arrival_done",
+        "met_benicio"
       ],
       "next": "b"
     },
     "b": {
-      "speaker": "narrador",
-      "look": "player",
-      "text": "Você chegou hoje. Na mão, uma lanterna velha que a Ordem mandou para você, com uma carta: \"O selo queimou no seu pulso. Venha.\"",
-      "next": "b2"
-    },
-    "c": {
-      "speaker": "narrador",
-      "look": "brecha",
-      "fx": "shake",
-      "text": "De repente, o ar da praça se rasga. Isso é uma Brecha: uma porta para o Avesso, um mundo cheio de monstros.",
-      "next": "d"
-    },
-    "d": {
       "speaker": "benicio",
-      "look": "benicio",
-      "text": "Ei, você, com a lanterna na mão! Venha falar comigo, aqui no mural."
-    },
-    "b2": {
-      "speaker": "narrador",
-      "look": "player",
-      "text": "O selo tem a letra E. É o rank mais baixo de todos. Você não sabe de quem era a lanterna.",
-      "next": "c"
+      "look": "brecha",
+      "text": "Fecha ela. Mata o que tem dentro e ela fecha sozinha.",
+      "objective": "cacada1"
     }
   }
 }

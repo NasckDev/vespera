@@ -1,0 +1,27 @@
+{
+  "id": "ato7/ravi",
+  "entries": [
+    {
+      "if": [
+        "ravi_rota_b"
+      ],
+      "node": "b1"
+    },
+    {
+      "node": "a1"
+    }
+  ],
+  "nodes": {
+    "a1": {
+      "speaker": "ravi",
+      "text": "Amanhã eu vou junto. Eu sei que não devo. Vou.",
+      "look": "ravi",
+      "expression": 2
+    },
+    "b1": {
+      "speaker": "ravi",
+      "text": "Amanhã eu fico na porta. É o mais perto que eu chego.",
+      "look": "ravi"
+    }
+  }
+}

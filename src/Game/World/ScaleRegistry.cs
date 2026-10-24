@@ -35,7 +35,7 @@ public static class ScaleRegistry
         ["nilza"] = new(1.00f, Npcs, Key: "nilza"),
         ["benicio"] = new(0.95f, Npcs, Key: "benicio"),
         ["lis"] = new(0.75f, Npcs, Key: "lis"),
-        ["lodo"] = new(0.35f, Sprites + "monstros/lodo/lodo.json"),
+        ["lodo"] = new(0.55f, Sprites + "monstros/lodo/lodo.json"),
         ["espectro"] = new(1.00f, Sprites + "monstros/espectro/espectro.json", Hover: 0.15f),
         ["lodo_mae"] = new(3.00f, Sprites + "monstros/lodo_mae/lodo_mae.json"),
         ["celeste"] = new(1.00f, Npcs, Key: "celeste"),

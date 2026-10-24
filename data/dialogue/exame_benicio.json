@@ -1,0 +1,39 @@
+{
+  "id": "exame_benicio",
+  "_doc": "Exame (véspera 3, ROTEIRO-V2 §4.5): o Benício fica na entrada de cada sala e diz UMA linha. 'entrada' na sala 1; 'dano' se o caçador perdeu vida na sala anterior; senão 'limpo1', 'limpo2', 'limpo3' em ordem; 'guardiao' na sala do Guardião. Falar com ele dentro da Brecha abre 'olha'.",
+  "entries": [
+    {
+      "node": "olha"
+    }
+  ],
+  "nodes": {
+    "olha": {
+      "speaker": "benicio",
+      "text": "Não fala comigo. Luta."
+    },
+    "entrada": {
+      "speaker": "benicio",
+      "text": "Finge que eu não tô aqui."
+    },
+    "dano": {
+      "speaker": "benicio",
+      "text": "Tomou dano bobo."
+    },
+    "limpo1": {
+      "speaker": "benicio",
+      "text": "Quebrou o núcleo primeiro. Bom."
+    },
+    "limpo2": {
+      "speaker": "benicio",
+      "text": "Limpo. Segue."
+    },
+    "limpo3": {
+      "speaker": "benicio",
+      "text": "Rápido. Bom."
+    },
+    "guardiao": {
+      "speaker": "benicio",
+      "text": "Agora é ela. Eu só olho."
+    }
+  }
+}

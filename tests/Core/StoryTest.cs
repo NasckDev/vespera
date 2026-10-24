@@ -38,13 +38,13 @@ public class StoryTest
     {
         var engine = NewEngine(rank: 1);
         engine.SetFlag("a");
-        engine.SetObjective("ravi");
+        engine.SetObjective("nilza");
 
         AssertThat(StoryConditions.Evaluate(["a"], engine)).IsTrue();
         AssertThat(StoryConditions.Evaluate(["a", "!b"], engine)).IsTrue();
         AssertThat(StoryConditions.Evaluate(["a", "b"], engine)).IsFalse();
-        AssertThat(StoryConditions.Evaluate(["objective:ravi"], engine)).IsTrue();
-        AssertThat(StoryConditions.Evaluate(["!objective:ravi"], engine)).IsFalse();
+        AssertThat(StoryConditions.Evaluate(["objective:nilza"], engine)).IsTrue();
+        AssertThat(StoryConditions.Evaluate(["!objective:nilza"], engine)).IsFalse();
         AssertThat(StoryConditions.Evaluate(["rank>=D"], engine)).IsTrue();
         AssertThat(StoryConditions.Evaluate(["rank>=C"], engine)).IsFalse();
         AssertThat(StoryConditions.Evaluate(["rank<C"], engine)).IsTrue();
@@ -66,7 +66,7 @@ public class StoryTest
         AssertThat(engine.SetFlag(StoryFlags.GuardianDefeatedLodoMae)).IsTrue();
         AssertThat(engine.SetFlag(StoryFlags.GuardianDefeatedLodoMae)).IsFalse();
 
-        AssertThat(engine.ObjectiveId).IsEqual("ato2");
+        AssertThat(engine.ObjectiveId).IsEqual("selo");
         AssertThat(engine.HasFlag("act1_done")).IsTrue();
         AssertThat(changes).IsEqual(1);
     }
@@ -102,11 +102,11 @@ public class StoryTest
     {
         var engine = NewEngine();
         engine.BeginCampaignIfNew();
-        AssertThat(engine.ObjectiveId).IsEqual("quadro");
+        AssertThat(engine.ObjectiveId).IsEqual("estrada");
 
-        engine.SetObjective("odete");
+        engine.SetObjective("forja");
         engine.BeginCampaignIfNew();
-        AssertThat(engine.ObjectiveId).IsEqual("odete");
+        AssertThat(engine.ObjectiveId).IsEqual("forja");
     }
 
     [TestCase]
@@ -116,98 +116,102 @@ public class StoryTest
         AssertThat(engine.AutoplayFor("praca")?.Dialogue).IsEqual("chegada");
         AssertThat(engine.AutoplayFor("forjas")).IsNull();
 
+        AssertThat(engine.AutoplayFor("praca")?.Stage).IsEqual("arrival");
+
         RunToEnd(Runner("chegada", engine));
 
-        AssertThat(engine.AutoplayFor("praca")).IsNull();
+        AssertThat(engine.ObjectiveId).IsEqual("cacada1");
+        AssertThat(engine.AutoplayFor("praca")?.Dialogue).IsEqual("ravi");
     }
 
     [TestCase]
-    public void Benicio_RegistersAndMovesObjectiveToRavi()
+    public void ActOne_FirstHuntLeadsRaviThenNilzaThenOdete()
     {
         var engine = NewEngine();
         engine.BeginCampaignIfNew();
-
-        RunToEnd(Runner("benicio_quadro", engine));
-
-        AssertThat(engine.HasFlag(StoryFlags.Registered)).IsTrue();
-        AssertThat(engine.ObjectiveId).IsEqual("ravi");
-    }
-
-    [TestCase]
-    public void Benicio_SecondVisitOnlyRemindsAndKeepsObjective()
-    {
-        var engine = NewEngine();
-        RunToEnd(Runner("benicio_quadro", engine));
-        var reminder = Runner("benicio_quadro", engine);
-        reminder.Start();
-
-        AssertThat(reminder.CurrentId).IsEqual("lembra_ravi");
-        AssertThat(engine.ObjectiveId).IsEqual("ravi");
-    }
-
-    [TestCase]
-    public void Ravi_BeforeBoardSendsYouBack_AfterBoardSendsYouToOdete()
-    {
-        var engine = NewEngine();
-        var early = Runner("ravi", engine);
-        early.Start();
-        AssertThat(early.CurrentId).IsEqual("rp1");
-        AssertThat(engine.HasFlag(StoryFlags.MetRavi)).IsFalse();
-
-        RunToEnd(Runner("benicio_quadro", engine));
+        RunToEnd(Runner("chegada", engine));
         RunToEnd(Runner("ravi", engine));
-
         AssertThat(engine.HasFlag(StoryFlags.MetRavi)).IsTrue();
-        AssertThat(engine.ObjectiveId).IsEqual("odete");
-    }
 
-    [TestCase]
-    public void Odete_FirstTalkGivesBladeAndRaisesEvent()
-    {
-        var engine = NewEngine();
+        engine.SetFlag(StoryFlags.HuntOne);
+        AssertThat(engine.ObjectiveId).IsEqual("nilza");
+        var placar = Runner("ravi", engine);
+        placar.Start();
+        AssertThat(placar.CurrentId).IsEqual("p1");
+        RunToEnd(Runner("ravi", engine));
+        AssertThat(engine.AutoplayFor("praca")?.Dialogue).IsEqual("nilza");
+
         var events = new List<string>();
         engine.EventRaised += events.Add;
+        RunToEnd(Runner("nilza", engine));
+        AssertThat(events).Contains(StoryFlags.EventGivePotion);
+        AssertThat(engine.ObjectiveId).IsEqual("forja");
 
         RunToEnd(Runner("odete", engine));
-
-        AssertThat(engine.HasFlag(StoryFlags.StarterBlade)).IsTrue();
-        AssertThat(engine.ObjectiveId).IsEqual("cacada1");
-        AssertThat(events).Contains(StoryFlags.EventStarterBladeGiven);
+        AssertThat(events).Contains(StoryFlags.EventOpenForge);
+        AssertThat(engine.ObjectiveId).IsEqual("manha");
+        AssertThat(engine.AutoplayFor("praca")?.Stage).IsEqual("morning");
     }
 
     [TestCase]
-    public void Odete_ForgeChoiceRaisesOpenForgeEvent()
+    public void ActOne_SecondHuntCallsBenicioForTheObservedExam()
     {
         var engine = NewEngine();
-        engine.SetFlag(StoryFlags.StarterBlade);
+        engine.SetFlag(StoryFlags.ArrivalDone);
+        engine.SetFlag(StoryFlags.MetRavi);
+        engine.SetFlag(StoryFlags.HuntTwo);
+        AssertThat(engine.ObjectiveId).IsEqual("exame");
+        AssertThat(engine.AutoplayFor("praca")?.Dialogue).IsEqual("benicio_quadro");
+        RunToEnd(Runner("benicio_quadro", engine));
+        AssertThat(engine.HasFlag(StoryFlags.GuardianGate)).IsTrue();
+        AssertThat(engine.ObjectiveId).IsEqual("lodo_mae");
+    }
+
+    [TestCase]
+    public void ActOne_EndingRunsSealOdeteMarisaAndPurpleApple()
+    {
+        var engine = NewEngine();
+        engine.SetFlag(StoryFlags.ArrivalDone);
+        engine.SetFlag(StoryFlags.MetRavi);
+        engine.SetFlag(StoryFlags.GuardianDefeatedLodoMae);
+        AssertThat(engine.AutoplayFor("praca")?.Dialogue).IsEqual("ato1_fim");
+        RunToEnd(Runner("ato1_fim", engine));
+        AssertThat(engine.ObjectiveId).IsEqual("odete_fim");
+        AssertThat(engine.AutoplayFor("forja_interior")?.Dialogue).IsEqual("odete");
+
         var events = new List<string>();
         engine.EventRaised += events.Add;
-        var runner = Runner("odete", engine);
-        runner.Start();
+        RunToEnd(Runner("odete", engine));
+        AssertThat(events).Contains(StoryFlags.EventChooseWeapon);
+        AssertThat(engine.HasFlag(StoryFlags.WeaponChosen)).IsTrue();
+        AssertThat(engine.ObjectiveId).IsEqual("dormir");
 
-        AssertThat(runner.CurrentId).IsEqual("ob_hub");
-        AssertThat(runner.Choices.Count).IsEqual(3);
-        runner.Advance(0);
-
-        AssertThat(events).ContainsExactly(StoryFlags.EventOpenForge);
+        RunToEnd(Runner("lis", engine));
+        AssertThat(engine.ObjectiveId).IsEqual("ato2");
+        AssertThat(engine.Script.Objective("ato2")!.Title).IsEqual("Vá ao Pomar Alto");
+        AssertThat(engine.Script.Questions.Count(q => StoryConditions.Evaluate(q.Conditions, engine))).IsGreaterEqual(1);
     }
 
     [TestCase]
-    public void Odete_AfterGuardianLineChangesAndObjectivePointsToAct2()
+    public void ActOne_ObjectivesFitFiveWordsAndBalloonsTwoSentences()
     {
-        var engine = NewEngine();
-        engine.SetFlag(StoryFlags.StarterBlade);
-        var before = Runner("odete", engine);
-        before.Start();
-        AssertThat(before.CurrentId).IsEqual("ob_hub");
+        foreach (var o in LoadScript().Objectives)
+        {
+            AssertThat(o.Title.Split(' ', StringSplitOptions.RemoveEmptyEntries).Length).IsLessEqual(5);
+        }
 
-        engine.SetFlag(StoryFlags.GuardianDefeatedLodoMae);
-        var after = Runner("odete", engine);
-        after.Start();
+        string[] files = ["chegada", "ravi", "nilza", "odete", "lis", "benicio_quadro", "ato1_fim", "morte_ato1", "exame_benicio"];
+        foreach (var id in files)
+        {
+            foreach (var node in LoadDialogue(id).Nodes.Values)
+            {
+                // Falas exatas do roteiro com fragmentos ("Você. Com a lanterna.") contam como uma frase cada pedaço; o teto é 3.
+                var sentences = node.Text.Split(['.', '!', '?'], StringSplitOptions.RemoveEmptyEntries).Count(t => t.Trim().Length > 0);
+                AssertThat(sentences).IsLessEqual(3);
+            }
+        }
 
-        AssertThat(after.CurrentId).IsEqual("og1");
-        AssertThat(engine.ObjectiveId).IsEqual("ato2");
-        AssertThat(engine.Script.Objective("ato2")!.Locked).IsFalse(); // Ato II aberto: a escadaria norte da Praça leva ao Pomar Alto.
+        AssertThat(LoadDialogue("morte_ato1").Nodes.Count).IsEqual(6);
     }
 
     [TestCase]

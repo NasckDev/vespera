@@ -157,8 +157,18 @@ public sealed partial class CombatBot(Level level, SmokeTest host)
         {
             World.Player.Teleport(World.ClampToFloor(chest.GlobalPosition + (Vector2.Down * 40f * S)));
             await host.PhysicsFrames(4);
-            await TapInteract();
-            await host.PhysicsFrames(6);
+            for (var attempt = 0; attempt < 5 && !chest.IsOpen; attempt++)
+            {
+                if (attempt > 0)
+                {
+                    Log.Info($"bot: Interagir no baú não pegou (tentativa {attempt + 1}); foco '{World.Player.Focus?.Kind}', painel {level.Hud.PanelOpen}, " +
+                        $"conversa {level.DialogueOpen}, cena {level.SceneBusy}, pausado {host.GetTree().Paused}");
+                }
+
+                await TapInteract();
+                await host.PhysicsFrames(10);
+            }
+
             Check(chest.IsOpen, "interagir com o baú deveria abri-lo");
         }
 
@@ -252,6 +262,14 @@ public sealed partial class CombatBot(Level level, SmokeTest host)
     {
         for (var i = 0; i < frames && !condition(); i++)
         {
+            if (Hunt.BlessingScreen.Active is { } blessing)
+            {
+                // Bênção da Lanterna: o bot fica com a primeira carta (e anota qual foi).
+                Log.Info($"bot: bênção escolhida '{blessing.Offer[0].Name}' entre [{string.Join(", ", blessing.Offer.Select(b => b.Name))}]");
+                await ShotOnce("bencao");
+                blessing.Choose(0);
+            }
+
             if (RankUpScreen.Active is { Revealed: true } celebration)
             {
                 // O Guardião sobe o rank (E -> D): a celebração pausa o jogo; o bot a registra e fecha.

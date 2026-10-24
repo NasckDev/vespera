@@ -1,0 +1,31 @@
+{
+  "id": "ato7/severo",
+  "entries": [
+    {
+      "node": "a1"
+    }
+  ],
+  "nodes": {
+    "a1": {
+      "speaker": "severo",
+      "text": "O Benício me deu isso. Disse que eu ia saber a quem dar.",
+      "look": "severo",
+      "set": [
+        "ato7_badalo"
+      ],
+      "next": "a2"
+    },
+    "a2": {
+      "speaker": "severo",
+      "text": "Eu não sei. Pega.",
+      "expression": 2,
+      "events": [
+        "GiveItem:badalo"
+      ],
+      "set": [
+        "tem_badalo"
+      ],
+      "objective": "final"
+    }
+  }
+}

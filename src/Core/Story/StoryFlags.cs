@@ -73,4 +73,16 @@ public static class StoryFlags
 
     /// <summary>Evento: a Lâmina inicial passou para as mãos do jogador (a economia pode reagir).</summary>
     public const string EventStarterBladeGiven = "StarterBladeGiven";
+
+    /// <summary>Evento: depois do exame a Odete deixa escolher a arma definitiva (de graça, uma vez).</summary>
+    public const string EventChooseWeapon = "ChooseWeapon";
+
+    /// <summary>Evento: comprar o mapa da Lis (10 Lumes).</summary>
+    public const string EventBuyMap = "BuyMap";
+
+    /// <summary>A escolha da arma na Odete já foi feita: trocar de novo custa Fragmentos.</summary>
+    public const string WeaponChosen = "arma_escolhida";
+
+    /// <summary>A cena da chegada abriu a Brecha na praça (a lanterna do caçador acendeu sozinha).</summary>
+    public const string MetBenicio = "met_benicio";
 }

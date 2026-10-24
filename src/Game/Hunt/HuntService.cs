@@ -19,7 +19,11 @@ public sealed record RunSummary(
     RankStatus Before,
     RankStatus After,
     int BonusFragmentos,
-    bool ExamJustReady);
+    bool ExamJustReady,
+    CharacterLine? Line = null,
+    int YourRooms = 0,
+    int RaviRooms = 0,
+    IReadOnlyList<string>? Blessings = null);
 
 /// <summary>
 /// Caçadas da Brecha (playtest 23/10): monta a caçada a cada entrada (<see cref="RunPlanner"/>), anota o que acontece
@@ -29,6 +33,16 @@ public sealed record RunSummary(
 public static class HuntService
 {
     public const string ConfigFile = "res://data/cacada/cacada.json";
+    public const string BlessingsFile = "res://data/cacada/bencaos.json";
+    public const string LinesFile = "res://data/cacada/falas.json";
+
+    private static ReturnLines? _lines;
+
+    public static ReturnLines Lines => _lines ??= ReturnLines.Parse(UserFile.ReadText(LinesFile) ?? "{}");
+
+    private static BlessingCatalog? _blessings;
+    private static readonly List<string> RunBlessings = [];
+    private static BlessingDef _bless = new();
 
     /// <summary>Falas de morte por Brecha (depois da última, ela se repete).</summary>
     private const int DeathLines = 6;
@@ -72,6 +86,40 @@ public static class HuntService
         ? State.RunsCompleted
         : Story.StoryService.Engine.HasFlag(BrechaFlag("hunt_2")) ? 2 : Story.StoryService.Engine.HasFlag(BrechaFlag("hunt_1")) ? 1 : 0;
 
+    public static BlessingCatalog BlessingCatalog => _blessings ??= BlessingCatalog.Parse(UserFile.ReadText(BlessingsFile)
+        ?? throw new InvalidOperationException($"Dado do jogo ausente: {BlessingsFile}"));
+
+    /// <summary>Soma das bênçãos desta caçada (zerada fora da Brecha). O combate lê isto.</summary>
+    public static BlessingDef Bless => RiftSession.InRift ? _bless : Empty;
+
+    private static readonly BlessingDef Empty = new();
+
+    /// <summary>Bênçãos escolhidas nesta caçada (ids, em ordem).</summary>
+    public static IReadOnlyList<string> Blessings => RunBlessings;
+
+    /// <summary>Avisa a HUD/combate que as bênçãos mudaram (vida máxima, por exemplo).</summary>
+    public static event Action? BlessingsChanged;
+
+    /// <summary>As 3 cartas da sala limpa (sem repetir as que já tem).</summary>
+    public static List<BlessingDef> OfferBlessings() =>
+        BlessingCatalog.Offer(RiftSession.Random, RunBlessings);
+
+    /// <summary>Ganha uma bênção até o fim da caçada.</summary>
+    public static void AddBlessing(string id)
+    {
+        if (BlessingCatalog.Find(id) is null || RunBlessings.Contains(id))
+        {
+            return;
+        }
+
+        RunBlessings.Add(id);
+        _bless = BlessingCatalog.Total(RunBlessings);
+        Report?.Blessings.Add(id);
+        var stats = State.Stats;
+        stats.Blessings[id] = stats.Blessings.GetValueOrDefault(id) + 1;
+        BlessingsChanged?.Invoke();
+    }
+
     public static ContractBoard Board => new(Config, MaterialName);
 
     public static HuntState State
@@ -109,7 +157,7 @@ public static class HuntService
             var state = State;
             if (state.Contracts.Count == 0)
             {
-                state.Contracts = Board.Roll(new SeededRandom(state.NextSeed + (state.Returns * 7919)));
+                state.Contracts = Board.Roll(new SeededRandom(state.NextSeed + (state.Returns * 7919)), GuardianUnlocked);
             }
 
             return state.Contracts;
@@ -140,6 +188,10 @@ public static class HuntService
         var seed = state.NextSeed++;
         Plan = Planner.Plan(seed, BrechaRunsCompleted, GuardianUnlocked);
         Report = new RunReport { RoomCount = Plan.Rooms.Count };
+        RunBlessings.Clear();
+        _bless = new BlessingDef();
+        state.Stats.Weapons[Progression.IsActive ? Progression.Engine.ClassId : "sword"] =
+            state.Stats.Weapons.GetValueOrDefault(Progression.IsActive ? Progression.Engine.ClassId : "sword") + 1;
         _luckActive = state.WellLuck;
         state.WellLuck = false;
         _rankAtStart = Progression.IsActive ? Progression.Status : null;
@@ -207,6 +259,7 @@ public static class HuntService
         if (combat && r.HitsTaken == _hitsAtRoomStart)
         {
             r.FlawlessRooms++;
+            r.FirstRoomFlawless |= RiftSession.RoomIndex == 0;
         }
     }
 
@@ -218,12 +271,14 @@ public static class HuntService
         }
     }
 
-    public static void Killed(bool elite, bool boss)
+    public static void Killed(bool elite, bool boss, string monsterId = "")
     {
         if (Report is not { } r || !RiftSession.InRift)
         {
             return;
         }
+
+        r.EspectroKills += monsterId == "espectro" ? 1 : 0;
 
         r.Kills++;
         r.EliteKills += elite ? 1 : 0;
@@ -238,6 +293,46 @@ public static class HuntService
         {
             r.HitsTaken++;
             r.DamageTaken += damage;
+            State.Stats.HitsTaken++;
+        }
+    }
+
+    /// <summary>O caçador esquivou (estatística para o Reflexo).</summary>
+    public static void Dodged()
+    {
+        if (RiftSession.InRift)
+        {
+            State.Stats.Dodges++;
+        }
+    }
+
+    /// <summary>Vida no fim da caçada (contrato "Volta inteira").</summary>
+    public static void SetEndHp(double fraction)
+    {
+        if (Report is { } r)
+        {
+            r.EndHpFraction = fraction;
+        }
+    }
+
+    /// <summary>O baú da sala do tesouro foi aberto.</summary>
+    public static void TreasureOpened()
+    {
+        if (Report is { } r && RiftSession.InRift)
+        {
+            r.TreasureFound = true;
+        }
+    }
+
+    /// <summary>A Lodo-Mãe caiu: tempo de luta e núcleos quebrados (contratos do Guardião; núcleos contam como quebras).</summary>
+    public static void GuardianFight(double seconds, int cores, int broken)
+    {
+        if (Report is { } r)
+        {
+            r.GuardianSeconds = seconds;
+            r.GuardianCores = cores;
+            r.GuardianCoresBroken = broken;
+            r.Breaks += broken;
         }
     }
 
@@ -266,11 +361,14 @@ public static class HuntService
         report.Completed = completed;
         report.Fragmentos = end?.FragmentosBanked ?? 0;
         var bonus = 0;
-        if (survived && _luckActive && report.Fragmentos > 0 && Progression.IsActive)
+        var pct = (_luckActive ? Config.Well.FragmentBonusPct : 0) + _bless.FragmentPct;
+        if (survived && pct > 0 && report.Fragmentos > 0 && Progression.IsActive)
         {
-            bonus = Math.Max(1, report.Fragmentos * Config.Well.FragmentBonusPct / 100);
+            bonus = Math.Max(1, (int)(report.Fragmentos * pct / 100));
             Progression.State.Fragmentos += bonus;
         }
+
+        state.Stats.LanternsLost += survived ? 0 : 1;
 
         var board = Board;
         var results = Contracts.Select(c => board.Evaluate(c, report)).ToList();
@@ -301,7 +399,10 @@ public static class HuntService
         report.Xp = Progression.IsActive ? Progression.State.Xp - _xpAtStart : 0;
         NewDay();
         var after = Progression.IsActive ? Progression.Status : null;
-        var summary = new RunSummary(report, results, _rankAtStart ?? after!, after ?? _rankAtStart!, bonus, !readyBefore && ReadyForExam);
+        state.TotalRooms += report.RoomsCleared;
+        var line = survived ? Lines.ForReturn(report.GuardianDefeated, RiftSession.Random) : Lines.ForDeath(state.Deaths, RiftSession.Random);
+        var summary = new RunSummary(report, results, _rankAtStart ?? after!, after ?? _rankAtStart!, bonus, !readyBefore && ReadyForExam,
+            line, state.TotalRooms, state.RaviRooms, RunBlessings.ToList());
         Plan = null;
         _luckActive = false;
         if (Progression.IsActive)
@@ -365,7 +466,7 @@ public static class HuntService
     {
         var state = State;
         state.Returns++;
-        state.Contracts = Board.Roll(new SeededRandom(state.NextSeed + (state.Returns * 7919)));
+        state.Contracts = Board.Roll(new SeededRandom(state.NextSeed + (state.Returns * 7919)), GuardianUnlocked);
         state.FlowersLeft = Config.Flowers.PerReturn;
         state.Broken.Clear();
     }
@@ -380,7 +481,7 @@ public static class HuntService
         }
 
         state.Potions--;
-        combat.Heal((int)Math.Round(combat.MaxHp * Config.Potions.HealPct));
+        combat.Heal((int)Math.Round(combat.MaxHp * Config.Potions.HealPct * (1 + (Bless.PotionPct / 100))));
         return true;
     }
 
@@ -450,13 +551,18 @@ public static class HuntService
     /// <summary>Quebrável quebrado: alguns Lumes (e às vezes um Fragmento). Devolve (lumes, fragmentos).</summary>
     public static (int Lumes, int Fragmentos) BreakableLoot(string key)
     {
+        if (RiftSession.InRift && Report is { } run)
+        {
+            run.Breaks++;
+        }
+
         if (key.Length > 0 && !State.Broken.Contains(key))
         {
             State.Broken.Add(key);
         }
 
         var b = Config.Breakables;
-        var lumes = RiftSession.Random.RangeInt(b.Lumes[0], b.Lumes[^1]);
+        var lumes = RiftSession.Random.RangeInt(b.Lumes[0], b.Lumes[^1]) + Bless.LumesPerBreakable;
         var fragment = RiftSession.InRift && RiftSession.Random.NextDouble() < b.FragmentChance ? 1 : 0;
         if (Progression.IsActive)
         {
@@ -477,6 +583,8 @@ public static class HuntService
     /// <summary>Esquece a caçada em andamento (troca de save).</summary>
     public static void Reset()
     {
+        RunBlessings.Clear();
+        _bless = new BlessingDef();
         Plan = null;
         Report = null;
         _luckActive = false;
