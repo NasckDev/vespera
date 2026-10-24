@@ -1,0 +1,136 @@
+{
+  "id": "celeste",
+  "_doc": "Dona Celeste, herbalista do Pomar Alto (Ato II, ROTEIRO-V2 §13). Falas principais 1, 5 e 7 exatas; 'Perguntar mais' opcional. Pista (§11): nunca revelar que ela é um eco; só 'do mesmo lado', nunca come, olhos magenta (retrato 2 + brilho na fala da Brecha).",
+  "entries": [
+    {
+      "if": [
+        "act2_done"
+      ],
+      "node": "fim_again"
+    },
+    {
+      "if": [
+        "pomar_podre:hunt_2"
+      ],
+      "node": "guardia"
+    },
+    {
+      "if": [
+        "met_celeste"
+      ],
+      "node": "again"
+    },
+    {
+      "node": "c1"
+    }
+  ],
+  "nodes": {
+    "c1": {
+      "speaker": "celeste",
+      "look": "celeste",
+      "text": "Você é quem fechou a da praça. As árvores me contaram.",
+      "next": "c2"
+    },
+    "c2": {
+      "speaker": "celeste",
+      "text": "Elas estão apodrecendo de dentro. Ajuda.",
+      "set": [
+        "met_celeste"
+      ],
+      "next": "c3"
+    },
+    "c3": {
+      "speaker": "celeste",
+      "expression": 2,
+      "fx": "glow",
+      "text": "Lá dentro é o pomar de antes. Não come nada.",
+      "next": "c4"
+    },
+    "c4": {
+      "speaker": "celeste",
+      "look": "brecha",
+      "text": "A Brecha abriu a oeste, perto da cerca. Entra e volta inteiro.",
+      "choices": [
+        {
+          "text": "Eu vou.",
+          "next": "end"
+        },
+        {
+          "text": "Perguntar mais",
+          "next": "q"
+        }
+      ]
+    },
+    "again": {
+      "speaker": "celeste",
+      "text": "As raízes ainda doem. Entra na Brecha, a oeste.",
+      "choices": [
+        {
+          "text": "Tá bom.",
+          "next": "end"
+        },
+        {
+          "text": "Perguntar mais",
+          "next": "q"
+        }
+      ]
+    },
+    "q": {
+      "speaker": "celeste",
+      "text": "Pergunta.",
+      "choices": [
+        {
+          "text": "Por que a senhora mora sozinha?",
+          "next": "q1"
+        },
+        {
+          "text": "A senhora conhece a Lis?",
+          "next": "q2"
+        },
+        {
+          "text": "Os bichos não vêm pra cá?",
+          "next": "q3"
+        },
+        {
+          "text": "Nada, obrigado.",
+          "next": "end"
+        }
+      ]
+    },
+    "q1": {
+      "speaker": "celeste",
+      "text": "Por que eu moro sozinha? Porque as plantas não perguntam nada.",
+      "next": "q"
+    },
+    "q2": {
+      "speaker": "celeste",
+      "expression": 2,
+      "text": "A Lis? Eu achei ela. Faz tempo.",
+      "next": "q"
+    },
+    "q3": {
+      "speaker": "celeste",
+      "expression": 2,
+      "text": "Não. A gente está do mesmo lado, eles e eu.",
+      "next": "q"
+    },
+    "end": {
+      "speaker": "celeste",
+      "text": "Vai. Antes que escureça de vez."
+    },
+    "guardia": {
+      "speaker": "celeste",
+      "expression": 2,
+      "text": "A árvore grande acordou. Ela está te esperando no fundo da Brecha.",
+      "next": "guardia2"
+    },
+    "guardia2": {
+      "speaker": "celeste",
+      "text": "Fica longe das raízes quando o chão brilhar. Vai."
+    },
+    "fim_again": {
+      "speaker": "celeste",
+      "text": "O Benício quer te ver na praça. Desce a escada, ao sul."
+    }
+  }
+}

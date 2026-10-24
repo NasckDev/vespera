@@ -1,5 +1,5 @@
 {
-  "_doc": "Roteiro do Prólogo + Ato I (playtest 23/10: Ato I de 25-35 min). Objetivos em ordem de campanha (o Diário usa a ordem); título curto = 1 linha na tela. Regras: quando a flag 'when' liga e as condições 'if' valem, aplica o objetivo. Flags que o jogo liga sozinho: hunt_back (voltou da Brecha), hunt_1/hunt_2 (caçadas completas), fell_once (caiu), forged (forjou), potion_bought, contract_done, xp_ready (XP do próximo rank), exame_e (exame aprovado), eco_viscoso (ganhou o Eco). Retratos: {0} vira 1 (neutro) ou 2 (expressão). Flags/eventos em src/Core/Story/StoryFlags.cs.",
+  "_doc": "Roteiro do Prólogo + Ato I (playtest 23/10: Ato I de 25-35 min). Objetivos em ordem de campanha (o Diário usa a ordem); título curto = 1 linha na tela. Regras: quando a flag 'when' liga e as condições 'if' valem, aplica o objetivo. Flags que o jogo liga sozinho: hunt_back (voltou da Brecha), hunt_1/hunt_2 (caçadas completas), fell_once (caiu), forged (forjou), potion_bought, contract_done, xp_ready (XP do próximo rank), exame_e (exame aprovado), eco_viscoso (ganhou o Eco). Retratos: {0} vira 1 (neutro) ou 2 (expressão). Flags/eventos em src/Core/Story/StoryFlags.cs. Ato II (ROTEIRO-V2 §13): met_celeste, pomar_podre:hunt_1/hunt_2 (caçadas completas no Pomar), pomar_podre:fell_1..6 (quedas), GuardianDefeated:macieira_oca -> act2_done.",
   "startObjective": "quadro",
   "objectives": [
     {
@@ -44,32 +44,265 @@
     },
     {
       "id": "ato2",
-      "title": "Pomar Alto: ache a Dona Celeste",
-      "text": "A Dona Celeste mandou uma carta do Pomar Alto: as macieiras estão apodrecendo por dentro. O caminho para lá abre no Ato II. Em breve.",
+      "title": "Suba ao Pomar Alto (norte da praça)",
+      "text": "A Dona Celeste pediu ajuda: as macieiras apodrecem por dentro. Suba a escadaria ao norte da praça e procure a casa com a estufa."
+    },
+    {
+      "id": "pomar1",
+      "title": "Entre na Brecha do Pomar Podre",
+      "text": "A Brecha do Pomar abriu a oeste, perto da cerca. Lá dentro é o pomar de antes do Ano Sem Sol. Volte inteiro de duas caçadas."
+    },
+    {
+      "id": "macieira",
+      "title": "Vença a Macieira Oca",
+      "text": "A árvore grande acordou no fundo da Brecha. Saia dos círculos e das faixas âmbar antes das maçãs e das raízes."
+    },
+    {
+      "id": "ato2_fecho",
+      "title": "Volte à praça e fale com o Benício",
+      "text": "A Macieira Oca caiu. O Benício espera você na praça."
+    },
+    {
+      "id": "ato3",
+      "title": "O Severo procura você (em breve)",
+      "text": "O faroleiro procura gente que não tem medo de água. O caminho do cais abre no Ato III. Em breve.",
       "locked": true
     }
   ],
   "triggers": [
-    { "when": "hunt_1", "if": ["objective:cacada1"], "objective": "forja" },
-    { "when": "forged", "if": ["objective:forja", "hunt_2", "xp_ready"], "objective": "exame" },
-    { "when": "forged", "if": ["objective:forja"], "objective": "cacada2" },
-    { "when": "hunt_2", "if": ["objective:cacada2", "xp_ready"], "objective": "exame" },
-    { "when": "xp_ready", "if": ["objective:cacada2", "hunt_2"], "objective": "exame" },
-    { "when": "GuardianDefeated:lodo_mae", "objective": "ato2", "set": ["act1_done"] }
+    {
+      "when": "hunt_1",
+      "if": [
+        "objective:cacada1"
+      ],
+      "objective": "forja"
+    },
+    {
+      "when": "forged",
+      "if": [
+        "objective:forja",
+        "hunt_2",
+        "xp_ready"
+      ],
+      "objective": "exame"
+    },
+    {
+      "when": "forged",
+      "if": [
+        "objective:forja"
+      ],
+      "objective": "cacada2"
+    },
+    {
+      "when": "hunt_2",
+      "if": [
+        "objective:cacada2",
+        "xp_ready"
+      ],
+      "objective": "exame"
+    },
+    {
+      "when": "xp_ready",
+      "if": [
+        "objective:cacada2",
+        "hunt_2"
+      ],
+      "objective": "exame"
+    },
+    {
+      "when": "GuardianDefeated:lodo_mae",
+      "objective": "ato2",
+      "set": [
+        "act1_done"
+      ]
+    },
+    {
+      "when": "met_celeste",
+      "if": [
+        "objective:ato2"
+      ],
+      "objective": "pomar1"
+    },
+    {
+      "when": "pomar_podre:hunt_2",
+      "objective": "macieira"
+    },
+    {
+      "when": "GuardianDefeated:macieira_oca",
+      "objective": "ato2_fecho",
+      "set": [
+        "act2_done"
+      ]
+    },
+    {
+      "when": "ato2_fim_done",
+      "objective": "ato3"
+    }
   ],
   "autoplay": [
-    { "level": "praca", "dialogue": "chegada", "if": ["!arrival_done"] },
-    { "level": "praca", "dialogue": "ravi", "npc": "ravi", "if": ["registered", "!met_ravi"] },
-    { "level": "praca", "dialogue": "ato1_fim", "npc": "benicio", "if": ["act1_done", "!ato1_fim_done"] },
-    { "level": "praca", "dialogue": "nilza", "npc": "nilza", "if": ["hunt_back", "!met_nilza"] },
-    { "level": "praca", "dialogue": "ravi", "npc": "ravi", "if": ["hunt_2", "!ravi_rival"] }
+    {
+      "level": "praca",
+      "dialogue": "chegada",
+      "if": [
+        "!arrival_done"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ravi",
+      "npc": "ravi",
+      "if": [
+        "registered",
+        "!met_ravi"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato1_fim",
+      "npc": "benicio",
+      "if": [
+        "act1_done",
+        "!ato1_fim_done"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "nilza",
+      "npc": "nilza",
+      "if": [
+        "hunt_back",
+        "!met_nilza"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ravi",
+      "npc": "ravi",
+      "if": [
+        "hunt_2",
+        "!ravi_rival"
+      ]
+    },
+    {
+      "level": "pomar_alto",
+      "dialogue": "celeste",
+      "npc": "celeste",
+      "if": [
+        "!met_celeste"
+      ]
+    },
+    {
+      "level": "pomar_alto",
+      "dialogue": "celeste_fim",
+      "npc": "celeste",
+      "if": [
+        "act2_done",
+        "!celeste_fim_done"
+      ]
+    },
+    {
+      "level": "pomar_alto",
+      "dialogue": "celeste_lis",
+      "npc": "celeste",
+      "if": [
+        "pomar_podre:hunt_1",
+        "!celeste_lis_done"
+      ]
+    },
+    {
+      "level": "pomar_alto",
+      "dialogue": "pomar_morte",
+      "if": [
+        "pomar_podre:fell_1",
+        "!morte_pomar_1"
+      ]
+    },
+    {
+      "level": "pomar_alto",
+      "dialogue": "pomar_morte",
+      "if": [
+        "pomar_podre:fell_2",
+        "!morte_pomar_2"
+      ]
+    },
+    {
+      "level": "pomar_alto",
+      "dialogue": "pomar_morte",
+      "if": [
+        "pomar_podre:fell_3",
+        "!morte_pomar_3"
+      ]
+    },
+    {
+      "level": "pomar_alto",
+      "dialogue": "pomar_morte",
+      "if": [
+        "pomar_podre:fell_4",
+        "!morte_pomar_4"
+      ]
+    },
+    {
+      "level": "pomar_alto",
+      "dialogue": "pomar_morte",
+      "if": [
+        "pomar_podre:fell_5",
+        "!morte_pomar_5"
+      ]
+    },
+    {
+      "level": "pomar_alto",
+      "dialogue": "pomar_morte",
+      "if": [
+        "pomar_podre:fell_6",
+        "!morte_pomar_6"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato2_fim",
+      "npc": "benicio",
+      "if": [
+        "act2_done",
+        "!ato2_fim_done"
+      ]
+    }
   ],
   "speakers": {
-    "narrador": { "name": "" },
-    "benicio": { "name": "Mestre Benício", "portrait": "res://assets/v2/sprites/npcs/retrato_benicio_{0}.png" },
-    "odete": { "name": "Odete", "portrait": "res://assets/v2/sprites/npcs/retrato_odete_{0}.png" },
-    "ravi": { "name": "Ravi", "portrait": "res://assets/v2/sprites/npcs/retrato_ravi_{0}.png" },
-    "lis": { "name": "Lis", "portrait": "res://assets/v2/sprites/npcs/retrato_lis_{0}.png" },
-    "nilza": { "name": "Tia Nilza", "portrait": "res://assets/v2/sprites/npcs/retrato_nilza_{0}.png" }
+    "narrador": {
+      "name": ""
+    },
+    "benicio": {
+      "name": "Mestre Benício",
+      "portrait": "res://assets/v2/sprites/npcs/retrato_benicio_{0}.png"
+    },
+    "odete": {
+      "name": "Odete",
+      "portrait": "res://assets/v2/sprites/npcs/retrato_odete_{0}.png"
+    },
+    "ravi": {
+      "name": "Ravi",
+      "portrait": "res://assets/v2/sprites/npcs/retrato_ravi_{0}.png"
+    },
+    "lis": {
+      "name": "Lis",
+      "portrait": "res://assets/v2/sprites/npcs/retrato_lis_{0}.png"
+    },
+    "nilza": {
+      "name": "Tia Nilza",
+      "portrait": "res://assets/v2/sprites/npcs/retrato_nilza_{0}.png"
+    },
+    "celeste": {
+      "name": "Dona Celeste",
+      "portrait": "res://assets/v2/sprites/npcs/retrato_celeste_{0}.png"
+    },
+    "apicultor": {
+      "name": "Seu Tonho (atrás das colmeias)"
+    },
+    "zica": {
+      "name": "Dona Zica (da janela)"
+    },
+    "menino": {
+      "name": "Menino (atrás da cerca)"
+    }
   }
 }

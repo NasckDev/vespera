@@ -64,7 +64,7 @@
       "speaker": "narrador",
       "look": "player",
       "fx": "glow",
-      "text": "Nesse momento, a sua lanterna pisca três vezes. A chama se inclina para o leste, na direção do Pomar Alto.",
+      "text": "Nesse momento, a sua lanterna pisca três vezes. A chama se inclina para o norte, na direção do Pomar Alto.",
       "next": "n7c"
     },
     "n7c": {

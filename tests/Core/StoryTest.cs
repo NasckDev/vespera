@@ -207,7 +207,7 @@ public class StoryTest
 
         AssertThat(after.CurrentId).IsEqual("og1");
         AssertThat(engine.ObjectiveId).IsEqual("ato2");
-        AssertThat(engine.Script.Objective("ato2")!.Locked).IsTrue();
+        AssertThat(engine.Script.Objective("ato2")!.Locked).IsFalse(); // Ato II aberto: a escadaria norte da Praça leva ao Pomar Alto.
     }
 
     [TestCase]

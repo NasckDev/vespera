@@ -1,0 +1,30 @@
+{
+  "id": "celeste_fim",
+  "_doc": "Volta da Brecha depois da Macieira Oca (fala principal 7 exata).",
+  "entries": [
+    {
+      "node": "f1"
+    }
+  ],
+  "nodes": {
+    "f1": {
+      "speaker": "celeste",
+      "look": "celeste",
+      "text": "Fechou. As raízes vão parar de doer.",
+      "set": [
+        "celeste_fim_done"
+      ],
+      "next": "f2"
+    },
+    "f2": {
+      "speaker": "celeste",
+      "expression": 2,
+      "text": "Você viu a árvore grande? Era minha.",
+      "next": "f3"
+    },
+    "f3": {
+      "speaker": "celeste",
+      "text": "O Benício quer te ver na praça. Desce a escada, ao sul."
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "id": "ato2_fim",
+  "_doc": "Fecho do Ato II na Praça (falas principais 8, 9 e 10 exatas). O selo só queima se a progressão já deu o C.",
+  "entries": [
+    {
+      "if": [
+        "rank>=C"
+      ],
+      "node": "b1"
+    },
+    {
+      "node": "nb1"
+    }
+  ],
+  "nodes": {
+    "b1": {
+      "speaker": "benicio",
+      "look": "benicio",
+      "fx": "glow",
+      "text": "C. Agora você pode entrar onde a maré sobe.",
+      "set": [
+        "ato2_fim_done"
+      ],
+      "next": "r1"
+    },
+    "nb1": {
+      "speaker": "benicio",
+      "look": "benicio",
+      "text": "A Macieira caiu. Falta pouco para o C: volta ao Pomar e caça mais um pouco.",
+      "next": "r1"
+    },
+    "r1": {
+      "speaker": "ravi",
+      "look": "ravi",
+      "text": "C! Eu tô em D ainda.",
+      "next": "r2"
+    },
+    "r2": {
+      "speaker": "ravi",
+      "expression": 2,
+      "text": "Tá, mas a sopa continua por sua conta.",
+      "next": "l1"
+    },
+    "l1": {
+      "speaker": "lis",
+      "look": "lis",
+      "text": "O Severo tá procurando gente que não tem medo de água.",
+      "next": "l2"
+    },
+    "l2": {
+      "speaker": "lis",
+      "expression": 2,
+      "text": "Ele falou 'Marisa' sem querer e fechou a cara."
+    }
+  }
+}

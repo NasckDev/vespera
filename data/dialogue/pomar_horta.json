@@ -1,0 +1,20 @@
+{
+  "id": "pomar_horta",
+  "_doc": "Fala de morador do Pomar Alto (voz atrás da cerca/janela; sem sprite de morador ainda).",
+  "entries": [
+    {
+      "node": "a"
+    }
+  ],
+  "nodes": {
+    "a": {
+      "speaker": "zica",
+      "text": "Plantei abóbora e nasceu roxa por dentro.",
+      "next": "b"
+    },
+    "b": {
+      "speaker": "zica",
+      "text": "A Celeste mandou queimar. Queimei."
+    }
+  }
+}

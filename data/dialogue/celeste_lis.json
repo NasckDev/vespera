@@ -1,0 +1,32 @@
+{
+  "id": "celeste_lis",
+  "_doc": "Fala principal 3: Lis aparece no pomar e Celeste a vê. O jogo não explica.",
+  "entries": [
+    {
+      "node": "l1"
+    }
+  ],
+  "nodes": {
+    "l1": {
+      "speaker": "celeste",
+      "look": "lis",
+      "text": "Lis.",
+      "set": [
+        "celeste_lis_done"
+      ],
+      "next": "l2"
+    },
+    "l2": {
+      "speaker": "lis",
+      "look": "celeste",
+      "text": "Dona Celeste.",
+      "next": "l3"
+    },
+    "l3": {
+      "speaker": "lis",
+      "look": "player",
+      "expression": 2,
+      "text": "Eu vim desenhar o pomar novo. Volta lá dentro, que eu espero aqui."
+    }
+  }
+}

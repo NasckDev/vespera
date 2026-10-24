@@ -91,6 +91,19 @@
       "dialogue": "celeste",
       "prompt": "Falar com Dona Celeste",
       "_note": "Na frente da escadinha da casa-estufa."
+    },
+    {
+      "id": "lis",
+      "at": [740, 300],
+      "facing": "right",
+      "routine": "idle",
+      "dialogue": "celeste_lis",
+      "prompt": "Falar com Lis",
+      "if": [
+        "pomar_podre:hunt_1",
+        "!act2_done"
+      ],
+      "_note": "Fala principal 3 (Lis aparece no pomar depois da primeira caçada)."
     }
   ],
   "authoring": {

@@ -104,7 +104,7 @@ public partial class SmokeTest
         await Tap(Key.Escape);
         await Frames(4);
         await Seconds(0.4);
-        Check(StoryService.Engine.CurrentObjective?.Locked == true, "o objetivo do Ato II deveria estar 'em breve'");
+        Check(StoryService.Engine.CurrentObjective?.Locked != true, "o objetivo do Ato II deveria estar aberto (Pomar Alto)");
 
         StoryService.Engine.EventRaised -= OnEvent;
         Log.Info("história OK: chegada, quadro, Ravi, forja, Odete, Guardião");

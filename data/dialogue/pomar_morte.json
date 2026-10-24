@@ -1,0 +1,101 @@
+{
+  "id": "pomar_morte",
+  "_doc": "Falas de morte do Ato II (ROTEIRO-V2 §13), uma por queda, em ordem (flags pomar_podre:fell_N do HuntService).",
+  "entries": [
+    {
+      "if": [
+        "pomar_podre:fell_1",
+        "!morte_pomar_1"
+      ],
+      "node": "m1"
+    },
+    {
+      "if": [
+        "pomar_podre:fell_2",
+        "!morte_pomar_2"
+      ],
+      "node": "m2"
+    },
+    {
+      "if": [
+        "pomar_podre:fell_3",
+        "!morte_pomar_3"
+      ],
+      "node": "m3"
+    },
+    {
+      "if": [
+        "pomar_podre:fell_4",
+        "!morte_pomar_4"
+      ],
+      "node": "m4"
+    },
+    {
+      "if": [
+        "pomar_podre:fell_5",
+        "!morte_pomar_5"
+      ],
+      "node": "m5"
+    },
+    {
+      "if": [
+        "pomar_podre:fell_6",
+        "!morte_pomar_6"
+      ],
+      "node": "m6"
+    },
+    {
+      "node": "m6"
+    }
+  ],
+  "nodes": {
+    "m1": {
+      "speaker": "celeste",
+      "text": "Você caiu entre as raízes. Elas te seguraram até de manhã.",
+      "set": [
+        "morte_pomar_1"
+      ]
+    },
+    "m2": {
+      "speaker": "nilza",
+      "text": "Trouxeram você dormindo. Quem trouxe não quis dizer o nome.",
+      "set": [
+        "morte_pomar_2"
+      ]
+    },
+    "m3": {
+      "speaker": "ravi",
+      "text": "A Lis ficou na porta da Brecha a noite inteira. Nenhum bicho saiu.",
+      "set": [
+        "morte_pomar_3"
+      ]
+    },
+    "m4": {
+      "speaker": "benicio",
+      "text": "Caiu no Pomar. Todo mundo cai no Pomar.",
+      "set": [
+        "morte_pomar_4"
+      ],
+      "next": "m4b"
+    },
+    "m4b": {
+      "speaker": "benicio",
+      "expression": 2,
+      "text": "Eu caí."
+    },
+    "m5": {
+      "speaker": "odete",
+      "text": "Sua lanterna tava acesa quando te acharam. Lanterna de morto apaga.",
+      "set": [
+        "morte_pomar_5"
+      ]
+    },
+    "m6": {
+      "speaker": "celeste",
+      "text": "Ouvi você chamar lá de baixo. Não foi com a boca.",
+      "set": [
+        "morte_pomar_6"
+      ]
+    }
+  }
+}

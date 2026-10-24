@@ -1,0 +1,20 @@
+{
+  "id": "pomar_cerca",
+  "_doc": "Fala de morador do Pomar Alto (voz atrás da cerca/janela; sem sprite de morador ainda).",
+  "entries": [
+    {
+      "node": "a"
+    }
+  ],
+  "nodes": {
+    "a": {
+      "speaker": "menino",
+      "text": "Minha mãe diz que a Dona Celeste não envelhece.",
+      "next": "b"
+    },
+    "b": {
+      "speaker": "menino",
+      "text": "Eu nunca vi ela comer. Nem maçã."
+    }
+  }
+}

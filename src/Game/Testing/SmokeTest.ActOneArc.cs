@@ -45,8 +45,8 @@ public partial class SmokeTest
         Check(_scenes.Contains("ato1_fim"), $"a cena do fim do Ato I deveria tocar (cenas: {string.Join(",", _scenes)})");
         Check(Flag(StoryFlags.Ato1FimDone), "o fim do Ato I deveria ligar ato1_fim_done");
         Check(HuntService.HasEcoViscoso, "a Lodo-Mãe deveria deixar o Eco Viscoso");
-        Check(StoryService.Engine.ObjectiveId == "ato2" && StoryService.Engine.CurrentObjective?.Locked == true,
-            $"o objetivo final deveria ser o Ato II (em breve), é '{StoryService.Engine.ObjectiveId}'");
+        Check(StoryService.Engine.ObjectiveId == "ato2" && StoryService.Engine.CurrentObjective?.Locked != true,
+            $"o objetivo final deveria ser o Ato II (aberto: Pomar Alto), é '{StoryService.Engine.ObjectiveId}'");
         LogActOneNumbers();
         return level;
     }

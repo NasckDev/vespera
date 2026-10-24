@@ -30,6 +30,9 @@ public static class HuntService
 {
     public const string ConfigFile = "res://data/cacada/cacada.json";
 
+    /// <summary>Falas de morte por Brecha (depois da última, ela se repete).</summary>
+    private const int DeathLines = 6;
+
     private static readonly Dictionary<string, (HuntConfig Config, RunPlanner Planner)> Loaded = [];
     private static bool _luckActive;
     private static RankStatus? _rankAtStart;
@@ -335,7 +338,14 @@ public static class HuntService
 
         if (!survived && OtherBrecha)
         {
-            Story.StoryService.SetFlag(BrechaFlag("fell"));
+            // Quedas contadas (fell_1..fell_6): cada uma toca uma fala de morte diferente na volta (ROTEIRO-V2 §13).
+            var n = 1;
+            while (n < DeathLines && Story.StoryService.Engine.HasFlag(BrechaFlag($"fell_{n}")))
+            {
+                n++;
+            }
+
+            Story.StoryService.SetFlag(BrechaFlag($"fell_{n}"));
         }
 
         if (survived && completed)
