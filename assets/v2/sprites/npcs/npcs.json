@@ -14,6 +14,9 @@
   "celeste": {
     "standing_height": 119
   },
+  "vigia": {
+    "standing_height": 119
+  },
   "benicio": {
     "standing_height": 120
   }
