@@ -15,7 +15,7 @@ namespace Vespera.Game.Hunt;
 public partial class BlessingScreen(IReadOnlyList<BlessingDef> offer, Action<string> onPick) : HunterScreen
 {
     private const int CardWidth = 440;
-    private const int IconSize = 112;
+    private const int IconSize = 96;
     private const string IconFolder = "res://assets/v2/interface/bencaos/";
     private readonly List<Button> _cards = [];
 
@@ -98,7 +98,7 @@ public partial class BlessingScreen(IReadOnlyList<BlessingDef> offer, Action<str
     {
         var color = new Color(family.Color);
         var card = UiKit.MakeButton(string.Empty, () => Choose(index), CardWidth);
-        card.CustomMinimumSize = new Vector2(CardWidth, 440);
+        card.CustomMinimumSize = new Vector2(CardWidth, 500);
         var style = new StyleBoxFlat { BgColor = new Color(Palette.Indigo, 0.96f), BorderColor = color, AntiAliasing = true };
         style.SetBorderWidthAll(5);
         style.SetCornerRadiusAll(14);
