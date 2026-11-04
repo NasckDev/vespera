@@ -258,7 +258,7 @@ public class AvessoHuntTest
         AssertThat(praca.Ground.Variants.Single().Conditions).Contains("act6_done");
         var brechas = praca.Zones.Where(z => z.Kind == "brecha").ToList();
         AssertThat(brechas.Single(z => z.Brecha == "avesso_profundo").Conditions).Contains("act6_done");
-        AssertThat(brechas.Single(z => z.Brecha.Length == 0).Conditions).Contains("!act6_done");
+        AssertThat(brechas.Single(z => z.Brecha.Length == 0).Conditions).Contains("!act6_done|parte1_fim");
         AssertThat(praca.Npcs.Any(n => n.Id == "severo" && n.Dialogue == "ato7/severo")).IsTrue();
     }
 

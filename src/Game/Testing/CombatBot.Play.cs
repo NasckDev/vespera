@@ -85,7 +85,9 @@ public sealed partial class CombatBot
 
         var report = HuntService.Report;
         var hpEnd = World.Player.Combat.Hp;
-        await WaitUntil(() => !level.Switching && World.Data.Id == Level.HubLevelId, 900, "volta à Praça");
+        // A volta é ao bairro da Brecha (Ruas Baixas, Mercado das Marés...); sem bairro, a Praça.
+        var hub = RiftSession.Brecha.Hub.Length > 0 ? RiftSession.Brecha.Hub : Level.HubLevelId;
+        await WaitUntil(() => !level.Switching && World.Data.Id == hub, 900, "volta ao bairro");
         await CloseResults();
         var m = new HuntMetrics(rooms, roomCount, report?.Kills ?? _kills, report?.DamageTaken ?? 0, report?.HitsTaken ?? 0, _dodges,
             _potionsDrunk, died, report?.Completed == true, guardian, report?.Seconds ?? 0, hpStart, died ? 0 : hpEnd, maxHp);

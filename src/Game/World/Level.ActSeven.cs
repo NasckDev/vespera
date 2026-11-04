@@ -63,7 +63,10 @@ public partial class Level
         return false;
     }
 
-    /// <summary>Voltar: o exame SSS é recusar a oferta. Aprova o selo e fecha a caçada como Brecha fechada.</summary>
+    /// <summary>
+    /// Voltar: o exame SSS é recusar a oferta (ROTEIRO-V2 §13: "o selo SSS queima sozinho"). A dupla já caiu (o Guardião
+    /// do degrau SS); falta só a XP, que a recusa completa até o selo SSS. Depois fecha a caçada como Brecha fechada.
+    /// </summary>
     private void CloseAvesso()
     {
         if (!RiftSession.InRift)
@@ -73,7 +76,11 @@ public partial class Level
 
         if (Hunter.Progression.IsActive)
         {
-            Hunter.Progression.TryPassExam(Rank.SSS);
+            var missing = Hunter.Progression.Catalog.Step(Rank.SSS).Xp - Hunter.Progression.State.Xp;
+            if (missing > 0)
+            {
+                Hunter.Progression.AddXp(missing);
+            }
         }
 
         OnRoomExit();

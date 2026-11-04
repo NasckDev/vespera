@@ -30,7 +30,8 @@ public sealed class CameraCheck(Level level, SmokeTest host, bool shots = false)
         var rooms = new List<string>(CityLevels);
         rooms.AddRange(RiftSession.Brecha.Rooms);
         rooms.AddRange(CaisLevels);
-        rooms.AddRange(["ruas_baixas", "ruas_arena", Core.Final.FinalStory.ArenaLevel]);
+        rooms.AddRange(["ruas_baixas", "ruas_viela", "ruas_largo", "ruas_cozinha", "ruas_volta", "ruas_arena", Core.Final.FinalStory.ArenaLevel]);
+        rooms.AddRange(["avesso_cais_pomar", "avesso_torre_cemiterio", "avesso_ruas_esgoto", "avesso_dupla_esgoto_pomar", "avesso_dupla_cais_cemiterio", "avesso_dupla_torre_ruas", "avesso_final"]);
         foreach (var room in rooms)
         {
             await level.GoToRoom(room, withDirector: false);

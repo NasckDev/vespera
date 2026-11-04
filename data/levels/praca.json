@@ -99,8 +99,8 @@
       "radius": 46,
       "prompt": "Entrar na Brecha",
       "text": "Esgotos do Mercado · Rank E",
-      "if": ["!act6_done"],
-      "_note": "Esgotos do Mercado até o fim do Ato VI; no Ato VII a fenda da praça desce ao Avesso profundo."
+      "if": ["!act6_done|parte1_fim"],
+      "_note": "Esgotos do Mercado até o fim do Ato VI e de novo depois da Parte 1; no Ato VII a fenda da praça desce ao Avesso profundo."
     },
     {
       "kind": "brecha",
@@ -109,7 +109,7 @@
       "radius": 46,
       "prompt": "Entrar na Brecha",
       "text": "Avesso profundo · Rank SS",
-      "if": ["act6_done"],
+      "if": ["act6_done", "!act7_done"],
       "_note": "Ato VII (ROTEIRO-V2 §13): a Brecha abre em qualquer bairro e mistura temas; a da praça desce ao Avesso profundo."
     },
     {

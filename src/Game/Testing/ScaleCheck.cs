@@ -29,7 +29,14 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
     private static readonly string[] CityLevels = ["forjas", "forja_interior", "estrada", "taverna", "quarto"];
 
     /// <summary>Ato VI: hub das Ruas Baixas e arena do Inquilino (com a mãe do Ravi na fila de gente).</summary>
-    private static readonly string[] RuasLevels = ["ruas_baixas", "ruas_arena"];
+    private static readonly string[] RuasLevels = ["ruas_baixas", "ruas_viela", "ruas_largo", "ruas_cozinha", "ruas_volta", "ruas_arena"];
+
+    /// <summary>Ato VII: salas misturadas do Avesso profundo, arenas das duplas e a sala do Avesso.</summary>
+    private static readonly string[] AvessoLevels =
+        ["avesso_cais_pomar", "avesso_torre_cemiterio", "avesso_ruas_esgoto", "avesso_dupla_esgoto_pomar", "avesso_dupla_cais_cemiterio", "avesso_dupla_torre_ruas", "avesso_final"];
+
+    private static readonly string[] RuasMonsters = ["varal", "despejado", "rasgo", "inquilino"];
+    private static readonly string[] AvessoMonsters = ["ceifador_pomar", "sombra_cacador_lamina", "sombra_cacador_arco", "sombra_cacador_martelo", "rasgo"];
 
     private readonly List<string> _failures = [];
 
@@ -44,6 +51,7 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
         rooms.AddRange(CaisLevels);
         rooms.AddRange(Ato45Levels);
         rooms.AddRange(RuasLevels);
+        rooms.AddRange(AvessoLevels);
         rooms.Add(Core.Final.FinalStory.ArenaLevel);
         foreach (var room in rooms)
         {
@@ -90,7 +98,7 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
         var enemies = new List<Enemy>();
         var pomar = room.StartsWith("pomar_", System.StringComparison.Ordinal);
         var cais = room is "mares" || room.StartsWith("cais_", System.StringComparison.Ordinal);
-        string[] roster = room == Core.Final.FinalStory.ArenaLevel ? ["reflexo"] : room.StartsWith("ruas_", System.StringComparison.Ordinal) ? ["inquilino"] : cais ? CaisMonsters : pomar ? PomarMonsters : Monsters;
+        string[] roster = room == Core.Final.FinalStory.ArenaLevel ? ["reflexo"] : room.StartsWith("ruas_", System.StringComparison.Ordinal) ? RuasMonsters : room.StartsWith("avesso_", System.StringComparison.Ordinal) ? AvessoMonsters : cais ? CaisMonsters : pomar ? PomarMonsters : Monsters;
         foreach (var id in roster)
         {
             var guardian = id is "lodo_mae" or "macieira_oca" or "farol_afogado" or "inquilino" or "reflexo";

@@ -98,6 +98,11 @@ public partial class SmokeTest
             await RunFinal(level);
         }
 
+        if (Array.IndexOf(_args, Atos67Flag) >= 0)
+        {
+            await RunAtos67(level);
+        }
+
         if (Array.IndexOf(_args, WarningsQaFlag) >= 0 && _shotsDir is not null && DisplayServer.GetName() != "headless")
         {
             await CaptureWarnings(level);
