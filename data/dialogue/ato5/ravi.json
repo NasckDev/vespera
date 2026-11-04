@@ -17,7 +17,10 @@
       "text": "S! A Nilza falou que agora você é quase deus.",
       "look": "ravi",
       "expression": 2,
-      "next": "a2"
+      "next": "a2",
+      "set": [
+        "ato5_ravi"
+      ]
     },
     "a2": {
       "speaker": "ravi",
@@ -27,7 +30,10 @@
       "speaker": "ravi",
       "text": "S.",
       "look": "ravi",
-      "next": "b2"
+      "next": "b2",
+      "set": [
+        "ato5_ravi"
+      ]
     },
     "b2": {
       "speaker": "ravi",

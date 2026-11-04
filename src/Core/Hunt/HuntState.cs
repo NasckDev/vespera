@@ -30,6 +30,12 @@ public sealed class HuntState
     /// <summary>Moeda jogada no poço: a próxima caçada rende mais Fragmentos.</summary>
     public bool WellLuck { get; set; }
 
+    /// <summary>Tomou a sopa da Nilza: a próxima caçada começa com mais vida máxima (<see cref="RunPerks"/>).</summary>
+    public bool SoupReady { get; set; }
+
+    /// <summary>Comprou o mapa da Lis: a próxima caçada mostra o tipo de cada sala e o tesouro.</summary>
+    public bool MapReady { get; set; }
+
     public double BestRunSeconds { get; set; }
 
     public int TotalKills { get; set; }
@@ -79,6 +85,11 @@ public sealed class CombatStats
     public int HitsTaken { get; set; }
 
     public int LanternsLost { get; set; }
+
+    /// <summary>Esquivas para a esquerda e para a direita (o Reflexo diz para que lado o jogador esquiva).</summary>
+    public int DodgesLeft { get; set; }
+
+    public int DodgesRight { get; set; }
 
     public double DodgeRate => Dodges + HitsTaken == 0 ? 0 : Dodges / (double)(Dodges + HitsTaken);
 }

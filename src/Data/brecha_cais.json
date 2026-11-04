@@ -1,0 +1,181 @@
+{
+  "_doc": "Brecha C do Ato III (ROTEIRO-V2 §13: 'O Farol que Não Acendeu'). O porto na noite da Festa das Lanternas, 20 anos atrás, do lado de baixo. Mesmo formato de brecha_pomar.json; velocidades na escala 1 do caçador. Caçadas: data/cacada/cacada_cais.json.",
+  "id": "cais_afogado",
+  "lanternId": 3,
+  "name": "Cais Afogado",
+  "rank": "C",
+  "bairro": "Mercado das Marés",
+  "neighborhoodId": "mares",
+  "guardianId": "farol_afogado",
+  "hub": "mares",
+  "hunt": "res://data/cacada/cacada_cais.json",
+  "_xp": "Caçada típica: ~18 Afogados (8 XP) + ~8 Ancoreiros (6) + ~8 Lanternas (4) ~ 220 XP; o exame C dá 60 e o Farol 120. Duas caçadas + o Covil levam do C (320) ao B (650).",
+  "rooms": [
+    "cais_pier",
+    "cais_mercado",
+    "cais_barco",
+    "cais_quebramar",
+    "cais_arena"
+  ],
+  "monsters": {
+    "afogado": {
+      "name": "Afogado",
+      "hp": 70,
+      "damage": 16,
+      "speed": 80,
+      "xp": 8,
+      "hurtRadius": 36,
+      "contactRadius": 40,
+      "period": 2.4,
+      "telegraph": 0.7
+    },
+    "ancoreiro": {
+      "name": "Ancoreiro",
+      "hp": 40,
+      "damage": 12,
+      "speed": 120,
+      "xp": 6,
+      "hurtRadius": 30,
+      "contactRadius": 34,
+      "period": 2.6,
+      "telegraph": 0.6
+    },
+    "lanterna_afogada": {
+      "name": "Lanterna-Afogada",
+      "hp": 18,
+      "damage": 13,
+      "speed": 170,
+      "xp": 4,
+      "hurtRadius": 26,
+      "contactRadius": 28,
+      "period": 2.4,
+      "telegraph": 0.8
+    },
+    "farol_afogado": {
+      "name": "FAROL AFOGADO",
+      "hp": 1500,
+      "damage": 22,
+      "speed": 45,
+      "xp": 120,
+      "hurtRadius": 120,
+      "contactRadius": 120,
+      "period": 2.6,
+      "telegraph": 0.7,
+      "boss": true
+    }
+  },
+  "boss": {
+    "_doc": "Farol Afogado: 3 fases (66% e 33%). Fase 1 feixe que puxa até a pisada; fase 2 maré: chama Afogados (2 por onda) e o anel externo alaga; fase 3 escuro: a zona seca muda a cada 15 s e a luz apaga.",
+    "phases": [
+      0.66,
+      0.33
+    ],
+    "cores": 0,
+    "coreHp": 1,
+    "splitBase": 0,
+    "spawnPerJump": 2,
+    "maxMinions": 4,
+    "swallowSeconds": 0,
+    "swallowDamagePerSecond": 0
+  },
+  "hunter": {
+    "staminaMax": 100,
+    "dodgeCost": 30,
+    "staminaRegen": 55,
+    "staminaRegenDelay": 0.45,
+    "dodgeSeconds": 0.3,
+    "dodgeInvulnerable": 0.25,
+    "dodgeDistance": 260,
+    "hurtInvulnerable": 0.7,
+    "hurtStun": 0.28,
+    "hurtKnockback": 300,
+    "comboBuffer": 0.28,
+    "comboWindow": 0.42
+  },
+  "moves": {
+    "sword": {
+      "light": [
+        1.0,
+        1.1,
+        1.7
+      ],
+      "lightRange": [
+        120,
+        120,
+        140
+      ],
+      "lightArc": [
+        2.2,
+        2.2,
+        2.6
+      ],
+      "lightKnockback": [
+        160,
+        160,
+        340
+      ],
+      "lightHitStop": [
+        0.05,
+        0.05,
+        0.09
+      ],
+      "heavy": 0.9,
+      "heavyRange": 150,
+      "heavyKnockback": 260,
+      "heavyHitStop": 0.07,
+      "heavyCharge": 0.45,
+      "partMult": 1
+    },
+    "bow": {
+      "light": [
+        1.0
+      ],
+      "lightRange": [
+        900
+      ],
+      "lightArc": [
+        0
+      ],
+      "lightKnockback": [
+        220
+      ],
+      "lightHitStop": [
+        0.04
+      ],
+      "heavy": 2.6,
+      "heavyRange": 1300,
+      "heavyKnockback": 260,
+      "heavyHitStop": 0.08,
+      "heavyCharge": 0.6,
+      "partMult": 0.9
+    },
+    "hammer": {
+      "light": [
+        1.0,
+        1.25
+      ],
+      "lightRange": [
+        130,
+        130
+      ],
+      "lightArc": [
+        2.4,
+        2.8
+      ],
+      "lightKnockback": [
+        320,
+        380
+      ],
+      "lightHitStop": [
+        0.1,
+        0.12
+      ],
+      "heavy": 1.6,
+      "heavyRange": 230,
+      "heavyKnockback": 460,
+      "heavyHitStop": 0.12,
+      "heavyCharge": 0.5,
+      "partMult": 2
+    }
+  }
+}

@@ -28,7 +28,7 @@
     {"id": "luz_quebrada", "name": "Luz Quebrada", "rank": "SSS", "kind": "common", "source": "Avesso profundo", "origin": "proposta", "value": 55, "weight": 1.0, "desc": "Um caco de luz que não reflete nada.", "icon": "d_halo"},
     {"id": "eco_cristalizado", "name": "Eco Cristalizado", "rank": "SSS", "kind": "common", "source": "Avesso profundo", "origin": "proposta", "value": 55, "weight": 1.0, "desc": "Uma voz presa em cristal.", "icon": "d_nucleolp"},
     {"id": "estilhaco_do_reflexo", "name": "Estilhaço do Reflexo", "rank": "SSS", "kind": "guardian", "source": "O Reflexo", "origin": "proposta", "value": 220, "weight": 0.0, "desc": "Um pedaço de você que ficou para trás.", "icon": "d_brasao"},
-    {"id": "luz_de_alvor", "name": "Luz de Alvor", "rank": "Alvor", "kind": "common", "source": "Praça da Lanterna", "origin": "proposta", "value": 90, "weight": 1.0, "desc": "A primeira luz da manhã depois do Ano Sem Alvor.", "icon": "d_fornalha"},
+    {"id": "luz_de_alvor", "name": "Luz de Alvor", "rank": "Alvor", "kind": "common", "source": "Praça da Lanterna", "origin": "proposta", "value": 90, "weight": 1.0, "desc": "A primeira luz da manhã depois do Ano Sem Sol.", "icon": "d_fornalha"},
     {"id": "ouro_de_amanhecer", "name": "Ouro de Amanhecer", "rank": "Alvor", "kind": "common", "source": "Praça da Lanterna", "origin": "proposta", "value": 90, "weight": 1.0, "desc": "Metal aquecido por um sol que ainda vai nascer.", "icon": "d_seiva"}
   ]
 }

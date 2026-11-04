@@ -1,0 +1,15 @@
+{
+  "id": "ato3/mares_muro",
+  "_doc": "Muro do quebra-mar com os nomes (CAMPANHA Ato III: narrativa ambiental; o marido da Nilza está nele). Texto de objeto, sem personagem.",
+  "entries": [
+    {
+      "node": "a"
+    }
+  ],
+  "nodes": {
+    "a": {
+      "speaker": "narrador",
+      "text": "Nomes riscados na pedra, um embaixo do outro. Um deles tem flor fresca."
+    }
+  }
+}

@@ -25,10 +25,14 @@
   ],
   "rankStatGrowth": 1.35,
   "rareTemplates": [
-    { "slot": "cabeca", "name": "Capuz", "stats": { "hp": 8, "defense": 2 } },
-    { "slot": "peito", "name": "Gibão", "stats": { "hp": 14, "defense": 4 } },
-    { "slot": "maos", "name": "Luvas", "stats": { "hp": 5, "defense": 2 } },
-    { "slot": "botas", "name": "Botas", "stats": { "hp": 6, "defense": 1, "speedPct": 2 } }
+    { "slot": "cabeca", "name": "Capuz", "stats": { "hp": 8, "defense": 2 },
+      "rankNames": { "E": "Capuz Remendado", "D": "Elmo da Forja", "C": "Coroa do Pomar", "B": "Capuz da Maré", "A": "Capuz de Vela", "S": "Elmo do Sino", "SS": "Elmo de Panela", "SSS": "Elmo do Avesso", "Alvor": "Elmo do Alvor" } },
+    { "slot": "peito", "name": "Gibão", "stats": { "hp": 14, "defense": 4 },
+      "rankNames": { "E": "Colete Rachado", "D": "Couraça da Forja", "C": "Peitoral do Pomar", "B": "Escamas da Maré", "A": "Casaco de Vela", "S": "Peitoral do Sino", "SS": "Placa de Rua", "SSS": "Peitoral do Avesso", "Alvor": "Peitoral do Alvor" } },
+    { "slot": "maos", "name": "Luvas", "stats": { "hp": 5, "defense": 2 },
+      "rankNames": { "E": "Luvas Gastas", "D": "Manoplas da Forja", "C": "Luvas do Pomar", "B": "Luvas da Maré", "A": "Luvas de Vela", "S": "Manoplas do Sino", "SS": "Manoplas de Rua", "SSS": "Manoplas do Avesso", "Alvor": "Manoplas do Alvor" } },
+    { "slot": "botas", "name": "Botas", "stats": { "hp": 6, "defense": 1, "speedPct": 2 },
+      "rankNames": { "E": "Botas Remendadas", "D": "Botas da Forja", "C": "Botas do Pomar", "B": "Botas da Maré", "A": "Botas de Vela", "S": "Botas do Sino", "SS": "Botas de Rua", "SSS": "Botas do Avesso", "Alvor": "Botas do Alvor" } }
   ],
   "affixes": [
     { "id": "vigor", "name": "do Vigor", "stat": "hp", "base": 10, "perRank": 6 },

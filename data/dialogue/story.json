@@ -1,5 +1,5 @@
 {
-  "_doc": "Ato I do ROTEIRO-V2 (§3, §4, §13). Objetivos em ordem de campanha (o Diário usa a ordem); título = até 5 palavras, sempre na tela. Regras: quando a flag 'when' liga e as condições 'if' valem, aplica o objetivo. Flags que o jogo liga sozinho: hunt_back, hunt_1/hunt_2, fell_once, forged, potion_bought, contract_done, xp_ready, exame_e, eco_viscoso. Autoplay: 'stage' = 'arrival' (estrada + Lodo + Brecha abrindo) ou 'morning' (a noite passa antes da fala). Perguntas = página do Diário (§7). Retratos: {0} vira 1 (neutro) ou 2 (expressão). Ato II (ROTEIRO-V2 §13): met_celeste, pomar_podre:hunt_1/hunt_2 (caçadas completas no Pomar), pomar_podre:fell_1..6 (quedas), GuardianDefeated:macieira_oca -> act2_done.",
+  "_doc": "Ato I do ROTEIRO-V2 (§3, §4, §13). Objetivos em ordem de campanha (o Diário usa a ordem); título = até 5 palavras, sempre na tela. Regras: quando a flag 'when' liga e as condições 'if' valem, aplica o objetivo. Flags que o jogo liga sozinho: hunt_back, hunt_1/hunt_2, fell_once, forged, potion_bought, contract_done, xp_ready, exame_e, eco_viscoso. Autoplay: 'stage' = 'arrival' (estrada + Lodo + Brecha abrindo) ou 'morning' (a noite passa antes da fala). Perguntas = página do Diário (§7). Retratos: {0} vira 1 (neutro) ou 2 (expressão). Ato II (ROTEIRO-V2 §13): met_celeste, pomar_podre:hunt_1/hunt_2 (caçadas completas no Pomar), pomar_podre:fell_1..6 (quedas), GuardianDefeated:macieira_oca -> act2_done. Ato III (ROTEIRO-V2 §13): met_severo, pescou, exame_c_visto, cais_afogado:hunt_1/hunt_2, lanterna_m (sala alagada), severo_viu_lanterna, odete_lanterna_m (abre o Farol), cais_afogado:fell_1..6, GuardianDefeated:farol_afogado -> act3_done. Atos IV e V (ROTEIRO-V2 §13, §8.1): flags calculadas 'noite', 'vigia_perguntou_hoje', 'ravi_no_avesso' (NightState/NightFlags); met_vigia abre a Brecha B das Ruas Baixas (RaviRescue: ruas_brecha_aberta, ruas_aviso_2/3, ruas_rompeu, ruas_fechada_a_tempo); eco_slot_1 (UnlockEchoSlot:1).",
   "startObjective": "estrada",
   "objectives": [
     {
@@ -79,8 +79,105 @@
     },
     {
       "id": "ato3",
-      "title": "Procure o Severo (em breve)",
-      "text": "O faroleiro procura gente que não tem medo de água. O caminho do cais abre no Ato III. Em breve.",
+      "title": "Procure o Severo no cais",
+      "text": "O Severo procura gente que não tem medo de água. Atravesse a ponte a leste da praça até o Mercado das Marés."
+    },
+    {
+      "id": "ato3_pesca",
+      "title": "Pesque no fim do píer",
+      "text": "Na véspera o mar traz peixe do Avesso. Puxe a linha quando o olho de vidro brilhar. A Nilza paga bem."
+    },
+    {
+      "id": "ato3_exame",
+      "title": "Fale com o Benício",
+      "text": "O Benício espera ao lado da Brecha do cais. Hoje é o exame do selo C."
+    },
+    {
+      "id": "ato3_brecha",
+      "title": "Entre na Brecha do cais",
+      "text": "O Benício espera na saída. Volte inteiro de uma caçada no Cais Afogado."
+    },
+    {
+      "id": "ato3_lanterna",
+      "title": "Procure na sala alagada",
+      "text": "No Mercado Submerso, a sala alagada da Brecha, tem uma pedra seca no meio. Tem alguma coisa nela."
+    },
+    {
+      "id": "ato3_severo",
+      "title": "Mostre a lanterna ao Severo",
+      "text": "A lanterna da sala alagada tem um \"M.\" gravado. É igual à sua. O Severo está no cais."
+    },
+    {
+      "id": "ato3_odete",
+      "title": "Leve a lanterna à Odete",
+      "text": "Marisa. A Odete precisa ver isto. Ela está na Forja."
+    },
+    {
+      "id": "ato3_guardiao",
+      "title": "Vença o Farol Afogado",
+      "text": "No fim da Brecha do cais espera o Farol Afogado. Saia das faixas e círculos âmbar; quando a arena alagar, fique na pedra seca."
+    },
+    {
+      "id": "ato3_fecho",
+      "title": "Fale com o Benício",
+      "text": "O Farol Afogado caiu. O Benício espera você no Mercado das Marés."
+    },
+    {
+      "id": "ato4",
+      "title": "Vá ao Cemitério das Lanternas",
+      "text": "O Cemitério fica depois da ponte leste do Pomar Alto. Tem um homem lá que só aparece de noite."
+    },
+    {
+      "id": "ato4_brecha",
+      "title": "Brecha do Cemitério (em breve)",
+      "text": "O Vigia guarda seu Eco. A Brecha do Cemitério das Lanternas ainda está selada. Em breve.",
+      "locked": true
+    },
+    {
+      "id": "ato4_fecho",
+      "title": "Fale com o Benício",
+      "text": "A Velória caiu. O Benício espera você no Cemitério."
+    },
+    {
+      "id": "ato5",
+      "title": "Vá à Torre do Sino",
+      "text": "A Torre do Sino fica depois do Cemitério, pela ponte leste. O Benício pediu: não toca em nada lá."
+    },
+    {
+      "id": "ato5_brecha",
+      "title": "Brecha do Sino (em breve)",
+      "text": "A Brecha abriu dentro da Torre. Lá dentro você não vai ouvir nada. Ainda está selada. Em breve.",
+      "locked": true
+    },
+    {
+      "id": "ato5_fecho",
+      "title": "Fale com o Benício",
+      "text": "O Sineiro Mudo caiu. O Benício espera você na Torre."
+    },
+    {
+      "id": "ato6",
+      "title": "Desça às Ruas Baixas",
+      "text": "A rua a oeste das Forjas desce para as Ruas Baixas. A Tia Nilza está cozinhando faz três dias."
+    },
+    {
+      "id": "ato6_mae",
+      "title": "Visite a mãe do Ravi",
+      "text": "A casa da mãe do Ravi tem tábuas na janela, nas palafitas à esquerda."
+    },
+    {
+      "id": "ato6_brecha",
+      "title": "Vença o Inquilino",
+      "text": "A Brecha abriu no terreno das casas derrubadas. Lá dentro, uma casa anda. Saia dos círculos âmbar e da faixa da porta."
+    },
+    {
+      "id": "ato6_fecho",
+      "title": "Fale com o Benício",
+      "text": "O Inquilino caiu. O Benício espera você na praça. A Odete está na forja."
+    },
+    {
+      "id": "ato7",
+      "title": "A cidade de baixo",
+      "text": "A grande lanterna da praça piscou. O Ato VII abre em breve.",
       "locked": true
     }
   ],
@@ -127,6 +224,109 @@
     {
       "when": "ato2_fim_done",
       "objective": "ato3"
+    },
+    {
+      "when": "met_severo",
+      "if": [
+        "objective:ato3"
+      ],
+      "objective": "ato3_pesca"
+    },
+    {
+      "when": "pescou",
+      "if": [
+        "objective:ato3_pesca"
+      ],
+      "objective": "ato3_exame"
+    },
+    {
+      "when": "cais_afogado:hunt_1",
+      "if": [
+        "!lanterna_m"
+      ],
+      "objective": "ato3_lanterna"
+    },
+    {
+      "when": "lanterna_m",
+      "if": [
+        "!severo_viu_lanterna"
+      ],
+      "objective": "ato3_severo"
+    },
+    {
+      "when": "GuardianDefeated:farol_afogado",
+      "objective": "ato3_fecho",
+      "set": [
+        "act3_done"
+      ]
+    },
+    {
+      "when": "GuardianDefeated:velora",
+      "objective": "ato4_fecho",
+      "set": [
+        "act4_done"
+      ]
+    },
+    {
+      "when": "GuardianDefeated:sineiro_mudo",
+      "objective": "ato5_fecho",
+      "set": [
+        "act5_done"
+      ]
+    },
+    {
+      "when": "GuardianDefeated:sineiro_mudo",
+      "objective": "ato6"
+    },
+    {
+      "when": "met_mae_ravi",
+      "if": [
+        "!GuardianDefeated:inquilino"
+      ],
+      "objective": "ato6_brecha"
+    },
+    {
+      "when": "GuardianDefeated:inquilino",
+      "objective": "ato6_fecho",
+      "set": [
+        "act6_done"
+      ]
+    },
+    {
+      "when": "ruas_invertidas:fell_1",
+      "set": [
+        "ato6_morte_1"
+      ]
+    },
+    {
+      "when": "ruas_invertidas:fell_2",
+      "set": [
+        "ato6_morte_2"
+      ]
+    },
+    {
+      "when": "ruas_invertidas:fell_3",
+      "set": [
+        "ato6_morte_3"
+      ]
+    },
+    {
+      "when": "ruas_invertidas:fell_4",
+      "set": [
+        "ato6_morte_4"
+      ]
+    },
+    {
+      "when": "ruas_invertidas:fell_5",
+      "set": [
+        "ato6_morte_5"
+      ]
+    },
+    {
+      "when": "ruas_invertidas:fell_6",
+      "set": [
+        "ato6_morte_6"
+      ]
     }
   ],
   "autoplay": [
@@ -295,6 +495,325 @@
         "act2_done",
         "!ato2_fim_done"
       ]
+    },
+    {
+      "level": "mares",
+      "dialogue": "ato3/severo",
+      "npc": "severo",
+      "if": [
+        "!met_severo"
+      ]
+    },
+    {
+      "level": "mares",
+      "dialogue": "ato3/severo",
+      "npc": "severo",
+      "if": [
+        "lanterna_m",
+        "!severo_viu_lanterna"
+      ]
+    },
+    {
+      "level": "forja_interior",
+      "dialogue": "ato3/odete",
+      "npc": "odete",
+      "if": [
+        "severo_viu_lanterna",
+        "!odete_lanterna_m"
+      ]
+    },
+    {
+      "level": "mares",
+      "dialogue": "ato3/morte",
+      "if": [
+        "cais_afogado:fell_1",
+        "!morte_cais_1"
+      ]
+    },
+    {
+      "level": "mares",
+      "dialogue": "ato3/morte",
+      "if": [
+        "cais_afogado:fell_2",
+        "!morte_cais_2"
+      ]
+    },
+    {
+      "level": "mares",
+      "dialogue": "ato3/morte",
+      "if": [
+        "cais_afogado:fell_3",
+        "!morte_cais_3"
+      ]
+    },
+    {
+      "level": "mares",
+      "dialogue": "ato3/morte",
+      "if": [
+        "cais_afogado:fell_4",
+        "!morte_cais_4"
+      ]
+    },
+    {
+      "level": "mares",
+      "dialogue": "ato3/morte",
+      "if": [
+        "cais_afogado:fell_5",
+        "!morte_cais_5"
+      ]
+    },
+    {
+      "level": "mares",
+      "dialogue": "ato3/morte",
+      "if": [
+        "cais_afogado:fell_6",
+        "!morte_cais_6"
+      ]
+    },
+    {
+      "level": "mares",
+      "dialogue": "ato3/benicio",
+      "npc": "benicio",
+      "if": [
+        "act3_done",
+        "rank>=B",
+        "!ato3_fecho_benicio"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato3/nilza",
+      "npc": "nilza",
+      "stage": "morning",
+      "if": [
+        "ato3_fecho_benicio",
+        "!ato3_manha_nilza"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato3/lis",
+      "npc": "lis",
+      "if": [
+        "ato3_manha_nilza",
+        "!ato3_manha_lis"
+      ]
+    },
+    {
+      "level": "cemiterio",
+      "dialogue": "ato4/benicio",
+      "npc": "benicio",
+      "if": [
+        "GuardianDefeated:velora",
+        "!ato4_fecho_benicio"
+      ]
+    },
+    {
+      "level": "cemiterio",
+      "dialogue": "ato4/benicio",
+      "npc": "benicio",
+      "if": [
+        "!exame_b_visto"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato4/aviso_ruas",
+      "npc": "lis",
+      "if": [
+        "ruas_brecha_aberta",
+        "!ruas_aviso_1_visto",
+        "!ruas_aviso_2",
+        "!ruas_fechada_a_tempo"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato4/aviso_ruas",
+      "npc": "nilza",
+      "if": [
+        "ruas_aviso_2",
+        "!ruas_aviso_2_visto",
+        "!ruas_aviso_3",
+        "!ruas_fechada_a_tempo"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato4/aviso_ruas",
+      "npc": "ravi",
+      "if": [
+        "ruas_aviso_3",
+        "!ruas_aviso_3_visto",
+        "!ruas_rompeu",
+        "!ruas_fechada_a_tempo"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato4/ravi",
+      "npc": "ravi",
+      "if": [
+        "ruas_fechada_a_tempo",
+        "!ravi_cena_ato4"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato4/ravi",
+      "npc": "ravi",
+      "if": [
+        "ruas_rompeu",
+        "ravi_lanterna_recuperada",
+        "!ravi_cena_ato4"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato4/nilza",
+      "npc": "nilza",
+      "if": [
+        "ravi_rota_b",
+        "!ato4_nilza_b"
+      ]
+    },
+    {
+      "level": "forja_interior",
+      "dialogue": "ato4/odete",
+      "npc": "odete",
+      "if": [
+        "GuardianDefeated:velora",
+        "!ato4_odete"
+      ]
+    },
+    {
+      "level": "torre",
+      "dialogue": "ato5/benicio",
+      "npc": "benicio",
+      "if": [
+        "GuardianDefeated:sineiro_mudo",
+        "!ato5_depois"
+      ]
+    },
+    {
+      "level": "torre",
+      "dialogue": "ato5/benicio",
+      "npc": "benicio",
+      "if": [
+        "!ato5_porta"
+      ]
+    },
+    {
+      "level": "torre",
+      "dialogue": "ato5/benicio",
+      "npc": "benicio",
+      "if": [
+        "ato5_porta",
+        "!ato5_confissao"
+      ]
+    },
+    {
+      "level": "forja_interior",
+      "dialogue": "ato5/odete",
+      "npc": "odete",
+      "if": [
+        "ato5_confissao",
+        "!ato5_odete"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato5/ravi",
+      "npc": "ravi",
+      "if": [
+        "ato5_depois",
+        "!ato5_ravi"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato5/lis",
+      "npc": "lis",
+      "stage": "morning",
+      "if": [
+        "ato5_depois",
+        "ato5_ravi",
+        "!ato5_lis"
+      ]
+    },
+    {
+      "level": "ruas_baixas",
+      "dialogue": "ato6/nilza",
+      "npc": "nilza",
+      "if": [
+        "!ato6_sopa"
+      ]
+    },
+    {
+      "level": "forja_interior",
+      "dialogue": "ato6/odete",
+      "npc": "odete",
+      "if": [
+        "GuardianDefeated:inquilino",
+        "!arma_duas_vesperas"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato6/benicio",
+      "npc": "benicio",
+      "if": [
+        "act6_done",
+        "objective:ato6_fecho"
+      ]
+    },
+    {
+      "level": "ruas_baixas",
+      "dialogue": "ato6/morte",
+      "if": [
+        "ato6_morte_1",
+        "!morte_ruas_1"
+      ]
+    },
+    {
+      "level": "ruas_baixas",
+      "dialogue": "ato6/morte",
+      "if": [
+        "ato6_morte_2",
+        "!morte_ruas_2"
+      ]
+    },
+    {
+      "level": "ruas_baixas",
+      "dialogue": "ato6/morte",
+      "if": [
+        "ato6_morte_3",
+        "!morte_ruas_3"
+      ]
+    },
+    {
+      "level": "ruas_baixas",
+      "dialogue": "ato6/morte",
+      "if": [
+        "ato6_morte_4",
+        "!morte_ruas_4"
+      ]
+    },
+    {
+      "level": "ruas_baixas",
+      "dialogue": "ato6/morte",
+      "if": [
+        "ato6_morte_5",
+        "!morte_ruas_5"
+      ]
+    },
+    {
+      "level": "ruas_baixas",
+      "dialogue": "ato6/morte",
+      "if": [
+        "ato6_morte_6",
+        "!morte_ruas_6"
+      ]
     }
   ],
   "questions": [
@@ -321,6 +840,24 @@
         "odete_marisa"
       ],
       "text": "Quem foi Marisa? A Odete esperou ela voltar."
+    },
+    {
+      "if": [
+        "lanterna_m"
+      ],
+      "text": "Por que a lanterna \"M.\" é igual à minha?"
+    },
+    {
+      "if": [
+        "met_vigia"
+      ],
+      "text": "Quem é o Vigia? Ele reconheceu a sua lanterna."
+    },
+    {
+      "if": [
+        "ato5_confissao"
+      ],
+      "text": "Por que o sino emudeceu? Foi o Benício que tocou."
     }
   ],
   "speakers": {
@@ -363,6 +900,33 @@
     },
     "menino": {
       "name": "Menino (atrás da cerca)"
+    },
+    "severo": {
+      "name": "Capitão Severo",
+      "portrait": "res://assets/v2/sprites/npcs/retrato_severo_{0}.png"
+    },
+    "farol": {
+      "name": "Farol Afogado"
+    },
+    "vigia": {
+      "name": "O Vigia",
+      "portrait": "res://assets/v2/sprites/npcs/retrato_vigia_{0}.png"
+    },
+    "velora": {
+      "name": "Velória"
+    },
+    "sineiro": {
+      "name": "Sineiro Mudo"
+    },
+    "mae_ravi": {
+      "name": "Mãe do Ravi",
+      "portrait": "res://assets/v2/sprites/npcs/retrato_mae_ravi_{0}.png"
+    },
+    "inquilino": {
+      "name": "Inquilino (pela janela)"
+    },
+    "reflexo": {
+      "name": "O Reflexo"
     }
   }
 }

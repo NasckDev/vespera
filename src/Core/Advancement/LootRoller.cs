@@ -138,7 +138,7 @@ public sealed class LootRoller(AdvancementCatalog catalog)
             DefId = $"rara:{template.Slot}",
             Slot = template.Slot,
             Rank = rank,
-            Name = $"{template.Name} {affix.Name}",
+            Name = $"{template.NameFor(rank)} {affix.Name}",
             AffixId = affix.Id,
             Stats = stats,
         };

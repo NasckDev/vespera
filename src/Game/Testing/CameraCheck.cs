@@ -18,7 +18,8 @@ public sealed class CameraCheck(Level level, SmokeTest host, bool shots = false)
 {
     public const float MinOnScreen = 130f;
     public const float MaxOnScreen = 150f;
-    private static readonly string[] CityLevels = ["praca", "forjas", "forja_interior", "estrada", "taverna", "quarto"];
+    private static readonly string[] CityLevels = ["praca", "forjas", "forja_interior", "cemiterio", "torre", "estrada", "taverna", "quarto"];
+    private static readonly string[] CaisLevels = ["mares", "cais_pier", "cais_mercado", "cais_barco", "cais_quebramar", "cais_arena"];
 
     private readonly List<string> _failures = [];
 
@@ -28,6 +29,8 @@ public sealed class CameraCheck(Level level, SmokeTest host, bool shots = false)
     {
         var rooms = new List<string>(CityLevels);
         rooms.AddRange(RiftSession.Brecha.Rooms);
+        rooms.AddRange(CaisLevels);
+        rooms.AddRange(["ruas_baixas", "ruas_arena"]);
         foreach (var room in rooms)
         {
             await level.GoToRoom(room, withDirector: false);
@@ -36,12 +39,14 @@ public sealed class CameraCheck(Level level, SmokeTest host, bool shots = false)
             await host.PhysicsFrames(2);
             Expect(room, MinOnScreen, MaxOnScreen);
             CheckFraming(room);
-            if (shots && System.Array.IndexOf(CityLevels, room) >= 0)
+            if (shots && (System.Array.IndexOf(CityLevels, room) >= 0 || System.Array.IndexOf(CaisLevels, room) >= 0 || room.StartsWith("ruas_", System.StringComparison.Ordinal)))
             {
                 await Shoot(room);
             }
         }
 
+        // O Mercado das Marés escolhe a Brecha do cais; o resto abaixo é da Brecha do Ato I.
+        RiftSession.Select(null);
         if (shots)
         {
             // Sala com monstros de verdade (ondas fixas do JSON), para ver caçador × Lodo × Espectro × arcos da parede.
@@ -53,6 +58,7 @@ public sealed class CameraCheck(Level level, SmokeTest host, bool shots = false)
             RiftSession.Cheat = cheat;
         }
 
+        RiftSession.Select(null); // as Ruas Baixas escolheram a Brecha delas; a intro do chefe é a da Lodo-Mãe
         await CheckBossIntro();
         await level.GoToRoom(Level.HubLevelId);
         await host.PhysicsFrames(4);

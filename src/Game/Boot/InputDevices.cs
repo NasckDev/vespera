@@ -56,6 +56,9 @@ public partial class InputDevices : Node
         Set(device);
     }
 
+    /// <summary>Só o que a interface não usou vira aperto de jogo (o clique que fecha a fala não vira golpe).</summary>
+    public override void _UnhandledInput(InputEvent @event) => ActionPresses.Record(@event);
+
     /// <summary>Força o dispositivo (testes).</summary>
     public static void Set(LastDevice device)
     {

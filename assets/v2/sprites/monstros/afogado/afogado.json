@@ -1,0 +1,110 @@
+{
+  "character": "afogado",
+  "anchor": [
+    128,
+    244
+  ],
+  "stand_height_px": 120,
+  "facing": "olha para a direita; para a esquerda use flip_h",
+  "scale_class": 0.1891,
+  "stand_height_source_px": 634.5,
+  "hit_frame_method": "quadro de maior área opaca (índice base 0), só para ataques",
+  "frame_counts": {
+    "parado": 4,
+    "mover": 6,
+    "aviso": 3,
+    "ataque": 4,
+    "morte": 6
+  },
+  "atlas": "afogado_atlas.png",
+  "cell": [
+    256,
+    256
+  ],
+  "animations": {
+    "parado": {
+      "row": 0,
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "scale": 0.1891,
+      "source": "afogado_parado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        6578,
+        6928,
+        6563,
+        6574
+      ],
+      "note": null
+    },
+    "mover": {
+      "row": 1,
+      "frames": 6,
+      "fps": 10,
+      "loop": true,
+      "scale": 0.1891,
+      "source": "afogado_mover.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        5128,
+        4929,
+        4905,
+        5294,
+        5002,
+        4918
+      ],
+      "note": null
+    },
+    "aviso": {
+      "row": 2,
+      "frames": 3,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.1891,
+      "source": "afogado_aviso.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        8239,
+        9126,
+        9274
+      ],
+      "note": null
+    },
+    "ataque": {
+      "row": 3,
+      "frames": 4,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.2791,
+      "source": "afogado_ataque.png",
+      "hit_frame": 1,
+      "opaque_area_per_frame": [
+        12602,
+        13894,
+        12407,
+        11157
+      ],
+      "note": "reescalada: guarda -32% vs parado"
+    },
+    "morte": {
+      "row": 4,
+      "frames": 6,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.2553,
+      "source": "afogado_morte.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        6611,
+        6202,
+        5615,
+        4807,
+        3523,
+        2920
+      ],
+      "note": "reescalada: guarda -26% vs parado"
+    }
+  },
+  "standing_height": 119
+}

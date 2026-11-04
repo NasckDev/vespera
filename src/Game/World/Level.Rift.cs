@@ -104,6 +104,7 @@ public partial class Level
         }
 
         ShowExamObserver();
+        ShowActThree();
     }
 
     private void OnRoomExit()
@@ -157,6 +158,9 @@ public partial class Level
     private async Task ReturnToHub(string toast, string subtitle, Hunter.RunSummary? summary = null, bool closed = false)
     {
         var (hub, spawn) = DeathReturn(RiftSession.Brecha.Hub.Length > 0 ? RiftSession.Brecha.Hub : HubLevelId, _hubSpawn, summary);
+
+        // A arma do suporte (ROTEIRO-V2 §4.3) vale só na caçada: na volta o caçador está de novo com a arma equipada.
+        RiftSession.Hunter = EquippedHunter;
         await GoToRoom(hub, spawn);
         if (summary is not null && ShowResults)
         {

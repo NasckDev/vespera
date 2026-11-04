@@ -180,6 +180,9 @@ Epílogo: `final/epilogo` (ou `final/epilogo_sem_benicio`). Última fala: Lis, *
 | #36 | Ato IV, o Vigia: retratos + caminhada (8) |
 | #37 | Ato VI, mãe do Ravi: retratos + caminhada (8) |
 | #38 | Ato VI, Inquilino, a casa que anda (6) |
+| #53 / #56 | Atos IV e V, salas das Brechas (4 cada) |
+| #54 / #57 | Atos IV e V, monstros comuns (16 e 15) |
+| #55 / #58 | Atos IV e V, Guardiões Velória e Sineiro Mudo (7 cada) |
 
 Gerador: `tools/art/prompts_ato3.py` → `docs/v2/prompts/ato3_*.md`, `ato4_*`, `ato5_*`, `ato6_*`. Referências novas fora do
 LFS em `docs/v2/referencias/estilo_bairro_forjas.png`, `estilo_arena_esgoto.png`, `estilo_sala_esgoto.png` (links apontam

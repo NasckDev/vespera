@@ -1,0 +1,148 @@
+{
+  "character": "farol_afogado",
+  "anchor": [
+    224,
+    432
+  ],
+  "stand_height_px": 300,
+  "facing": "olha para a direita; para a esquerda use flip_h",
+  "scale_class": 0.4535,
+  "stand_height_source_px": 661.5,
+  "hit_frame_method": "quadro de maior área opaca (índice base 0), só para ataques",
+  "frame_counts": {
+    "parado": 6,
+    "feixe": 8,
+    "pisada": 8,
+    "chamar": 8,
+    "apagar": 8,
+    "morte": 10
+  },
+  "atlas": "farol_afogado_atlas.png",
+  "cell": [
+    448,
+    448
+  ],
+  "animations": {
+    "parado": {
+      "row": 0,
+      "frames": 6,
+      "fps": 6,
+      "loop": true,
+      "scale": 0.4535,
+      "source": "farol_afogado_parado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        28449,
+        28540,
+        28005,
+        28698,
+        28703,
+        28042
+      ],
+      "note": null
+    },
+    "feixe": {
+      "row": 1,
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.6424,
+      "source": "farol_afogado_feixe.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        28061,
+        28338,
+        31808,
+        31217,
+        33466,
+        33428,
+        33266,
+        29875
+      ],
+      "note": "reescalada: guarda -29% vs parado"
+    },
+    "pisada": {
+      "row": 2,
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.6224,
+      "source": "farol_afogado_pisada.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        31119,
+        24502,
+        30958,
+        27697,
+        29195,
+        29429,
+        31536,
+        29572
+      ],
+      "note": "reescalada: guarda -27% vs parado"
+    },
+    "chamar": {
+      "row": 3,
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.6,
+      "source": "farol_afogado_chamar.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        27773,
+        28728,
+        26096,
+        27992,
+        31423,
+        34917,
+        39110,
+        39702
+      ],
+      "note": "reescalada: guarda -24% vs parado"
+    },
+    "apagar": {
+      "row": 4,
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.4535,
+      "source": "farol_afogado_apagar.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        25337,
+        25674,
+        24676,
+        24078,
+        23340,
+        22544,
+        22068,
+        22075
+      ],
+      "note": null
+    },
+    "morte": {
+      "row": 5,
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.6696,
+      "source": "farol_afogado_morte.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        26190,
+        24760,
+        24045,
+        24371,
+        22828,
+        22537,
+        20982,
+        16663,
+        10758,
+        9095
+      ],
+      "note": "reescalada: guarda -32% vs parado"
+    }
+  },
+  "standing_height": 300
+}

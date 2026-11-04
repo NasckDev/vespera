@@ -79,6 +79,20 @@ public static class StoryService
         return isNew;
     }
 
+    /// <summary>
+    /// A véspera acabou (volta da Brecha ou espera no banco do Cemitério): cai uma noite nova. A Brecha B das Ruas
+    /// Baixas só rompe quando já existe para o caçador entrar (<see cref="RaviRescue.BrechaId"/> registrada).
+    /// </summary>
+    public static RuasStage NightFalls()
+    {
+        var stage = Engine.NightFalls(World.Rift.RiftSession.BrechaFiles.ContainsKey(RaviRescue.BrechaId));
+        GameSession.Autosave();
+        return stage;
+    }
+
+    /// <summary>A noite passou (cena da manhã).</summary>
+    public static void Dawn() => Engine.Dawn();
+
     public static DialogueFile LoadDialogue(string id)
     {
         if (!Dialogues.TryGetValue(id, out var file))

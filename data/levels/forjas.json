@@ -58,8 +58,13 @@
       "kind": "exit",
       "at": [24, 542],
       "radius": 50,
-      "prompt": "Seguir pela rua",
-      "text": "Rua dos Ferreiros â€” trancada, em breve."
+      "prompt": "Descer para as Ruas Baixas",
+      "text": "",
+      "target": "ruas_baixas",
+      "spawn": [1560, 452],
+      "requires": ["GuardianDefeated:sineiro_mudo"],
+      "lockedText": "As Ruas Baixas estão fechadas. Feche primeiro a Brecha da Torre do Sino.",
+      "_note": "Ato VI: as Ruas Baixas abrem depois do Sineiro Mudo (Ato V)."
     }
   ],
   "npcs": [],

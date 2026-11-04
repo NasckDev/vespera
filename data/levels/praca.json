@@ -137,7 +137,11 @@
       "at": [1650, 455],
       "radius": 40,
       "prompt": "Atravessar a ponte",
-      "text": "Mercado das Marés — trancado, em breve."
+      "text": "",
+      "target": "mares",
+      "spawn": [90, 482],
+      "requires": ["GuardianDefeated:macieira_oca"],
+      "lockedText": "A ponte do Mercado das Marés está fechada. Feche primeiro a Brecha do Pomar."
     }
   ],
   "npcs": [
@@ -188,7 +192,7 @@
       "routine": "idle",
       "dialogue": "ravi",
       "prompt": "Falar com Ravi",
-      "if": ["starter_blade"],
+      "if": ["starter_blade", "!ravi_no_avesso"],
       "_note": "Depois da lâmina: espera perto da Brecha (ajustar a posição quando o portal do combate estiver fixo)."
     }
   ],

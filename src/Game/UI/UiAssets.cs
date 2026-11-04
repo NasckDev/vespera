@@ -15,7 +15,8 @@ public static class UiAssets
     private const int CornerMargin = 28;
     private const int SlotMargin = 24;
     private const int BarFrameMargin = 16;
-    private static readonly Vector2 CursorHotspot = new(31, 4);
+    // Centro do corpo da lanterna: é para onde o jogador mira (na alça de cima o clique saía ~30 px acima).
+    private static readonly Vector2 CursorHotspot = new(32, 32);
 
     public enum BarKind
     {

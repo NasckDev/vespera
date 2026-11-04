@@ -31,7 +31,25 @@ public sealed class HuntConfig
     /// <summary>Quantos nascem juntos quando sai o segundo monstro (enxame: Rato-Lanterna 3; Espectro 1).</summary>
     public int SecondSwarm { get; set; } = 1;
 
+    /// <summary>Terceiro monstro (Ato III: Lanterna-Afogada), sorteado entre os comuns com <see cref="ThirdShare"/>; vazio = não há.</summary>
+    public string ThirdMonster { get; set; } = string.Empty;
+
+    /// <summary>Fatia do terceiro monstro nas salas depois da primeira.</summary>
+    public double ThirdShare { get; set; }
+
+    /// <summary>Quantos nascem juntos quando sai o terceiro monstro.</summary>
+    public int ThirdSwarm { get; set; } = 1;
+
+    /// <summary>Chão que entra em toda caçada (Ato III: cais_mercado, a sala alagada da lanterna "M."); vazio = sorteio livre.</summary>
+    public string RequiredGround { get; set; } = string.Empty;
+
+    /// <summary>Flag de história que também precisa estar ligada para o Guardião esperar no fim; vazio = só as caçadas.</summary>
+    public string GuardianFlag { get; set; } = string.Empty;
+
     public int RoomsMax { get; set; } = 7;
+
+    /// <summary>A Brecha leva direto à arena do Guardião (Ato VI enquanto as salas das Ruas Invertidas não têm arte, issue #47).</summary>
+    public bool GuardianOnly { get; set; }
 
     /// <summary>Caçadas completas antes de o Benício aceitar o exame (a Lodo-Mãe só aparece com o exame aprovado).</summary>
     public int GuardianAfterRuns { get; set; } = 2;
@@ -104,6 +122,16 @@ public sealed class HuntConfig
         if (RoomsMin < 3 || RoomsMax < RoomsMin)
         {
             problems.Add($"roomsMin/roomsMax inválidos ({RoomsMin}/{RoomsMax})");
+        }
+
+        if (GuardianOnly)
+        {
+            if (!Grounds.TryGetValue(FinalGround, out var arena) || !arena.Kinds.Contains(RoomKind.Guardian))
+            {
+                problems.Add($"guardianOnly sem o chão final '{FinalGround}' aceitando o Guardião");
+            }
+
+            return problems;
         }
 
         foreach (var kind in new[] { RoomKind.Combat, RoomKind.Elite, RoomKind.Treasure, RoomKind.Rest, RoomKind.Guardian })

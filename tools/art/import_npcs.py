@@ -36,12 +36,15 @@ OUT = ROOT / "assets" / "v2" / "sprites" / "npcs"
 
 CELL = 192
 FEET = (96, 176)
-NPC_HEIGHT = {"odete": 118, "ravi": 124, "lis": 118, "nilza": 118, "celeste": 118, "carroceiro": 122}
+NPC_HEIGHT = {"odete": 118, "ravi": 124, "lis": 118, "nilza": 118, "celeste": 118, "severo": 118, "vigia": 118, "carroceiro": 122}
 # NPCs cujas tiras vieram em tamanhos diferentes entre si (Celeste: parado_lado maior): escala por tira, não por animação.
-PER_STRIP_SCALE = {"celeste", "carroceiro"}
+PER_STRIP_SCALE = {"celeste", "severo", "vigia", "carroceiro"}
 FRAMES = {"parado": 4, "andar": 6}
 DIRECTIONS = ("baixo", "cima", "lado")
-PORTRAITS = ("odete", "ravi", "nilza", "lis", "celeste", "carroceiro")
+PORTRAITS = ("odete", "ravi", "nilza", "lis", "celeste", "severo", "vigia", "carroceiro")
+# Ato VI (issue #37): a mãe do Ravi.
+NPC_HEIGHT["mae_ravi"] = 116
+PORTRAITS = (*PORTRAITS, "mae_ravi")
 PORTRAIT_SIZE = 512
 JOIN = 3
 

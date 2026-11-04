@@ -49,6 +49,23 @@ public static class HuntService
 
     private static readonly Dictionary<string, (HuntConfig Config, RunPlanner Planner)> Loaded = [];
     private static bool _luckActive;
+    private static bool _soupActive;
+    private static bool _mapActive;
+
+    /// <summary>A sopa da Nilza vale nesta caçada (+10% de vida máxima; ver <see cref="RunPerks"/>).</summary>
+    public static bool SoupActive => RiftSession.InRift && _soupActive;
+
+    /// <summary>O mapa da Lis vale nesta caçada (o HUD mostra o tipo de cada sala e o tesouro).</summary>
+    public static bool MapActive => RiftSession.InRift && _mapActive && Plan is not null;
+
+    /// <summary>Guarda a sopa para a próxima caçada (presente ou compra na Nilza).</summary>
+    public static void ServeSoup() => State.SoupReady = true;
+
+    /// <summary>Guarda o mapa da Lis para a próxima caçada.</summary>
+    public static void HandMap() => State.MapReady = true;
+
+    /// <summary>Arma do suporte da primeira sala desta caçada (Ato I: Arco na 1ª, Martelo na 2ª; nada no exame).</summary>
+    public static string? StandWeapon => OtherBrecha || Plan is null ? null : RunPerks.StandWeapon(State.RunsCompleted, Plan.HasGuardian);
     private static RankStatus? _rankAtStart;
     private static int _xpAtStart;
     private static int _hitsAtRoomStart;
@@ -141,6 +158,7 @@ public static class HuntService
     /// <summary>A Lodo-Mãe espera no fim das próximas caçadas (o Benício aprovou o exame do rank E).</summary>
     public static bool GuardianUnlocked => OtherBrecha
         ? BrechaRunsCompleted >= Config.GuardianAfterRuns
+            && (Config.GuardianFlag.Length == 0 || Story.StoryService.Engine.HasFlag(Config.GuardianFlag))
         : Story.StoryService.Engine.HasFlag(StoryFlags.GuardianGate);
 
     /// <summary>Caçadas completas suficientes para o Benício aceitar o exame.</summary>
@@ -194,6 +212,10 @@ public static class HuntService
             state.Stats.Weapons.GetValueOrDefault(Progression.IsActive ? Progression.Engine.ClassId : "sword") + 1;
         _luckActive = state.WellLuck;
         state.WellLuck = false;
+        _soupActive = state.SoupReady;
+        state.SoupReady = false;
+        _mapActive = state.MapReady;
+        state.MapReady = false;
         _rankAtStart = Progression.IsActive ? Progression.Status : null;
         _xpAtStart = Progression.IsActive ? Progression.State.Xp : 0;
         Log.Info($"caçada {state.RunsStarted}: semente {seed}, {Plan.Rooms.Count} salas [{string.Join(", ", Plan.Rooms.Select(r => $"{r.Kind}:{r.Ground}:{r.MonsterCount}"))}]" +
@@ -298,11 +320,13 @@ public static class HuntService
     }
 
     /// <summary>O caçador esquivou (estatística para o Reflexo).</summary>
-    public static void Dodged()
+    public static void Dodged(float directionX = 0f)
     {
         if (RiftSession.InRift)
         {
             State.Stats.Dodges++;
+            State.Stats.DodgesLeft += directionX < -0.2f ? 1 : 0;
+            State.Stats.DodgesRight += directionX > 0.2f ? 1 : 0;
         }
     }
 
@@ -469,6 +493,7 @@ public static class HuntService
         state.Contracts = Board.Roll(new SeededRandom(state.NextSeed + (state.Returns * 7919)), GuardianUnlocked);
         state.FlowersLeft = Config.Flowers.PerReturn;
         state.Broken.Clear();
+        Story.StoryService.NightFalls();
     }
 
     /// <summary>Bebe uma poção: cura <see cref="PotionDef.HealPct"/> da vida máxima. Falso sem poção ou com a vida cheia.</summary>
@@ -588,6 +613,8 @@ public static class HuntService
         Plan = null;
         Report = null;
         _luckActive = false;
+        _soupActive = false;
+        _mapActive = false;
     }
 
     private static void Subscribe()

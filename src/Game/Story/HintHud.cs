@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using Vespera.Core.Story;
@@ -22,6 +23,14 @@ public partial class HintHud : Control
     private const float MoveSecondsToLearn = 1.2f;
     private const int AttacksToLearn = 3;
     private const float DodgeWarnHumans = 3f;
+    private const float MaxShownSeconds = 9f;
+    private const float LowY = 820f;
+    private const float HighY = 300f;
+    private const float PlayerLowLine = 600f;
+    private const float SlideSpeed = 2400f;
+
+    /// <summary>Segundos que cada dica já ficou na tela nesta sessão (soma entre fases).</summary>
+    private static readonly Dictionary<string, float> ShownSeconds = [];
 
     private readonly Level _level;
     private PanelContainer _box = null!;
@@ -82,12 +91,15 @@ public partial class HintHud : Control
                 _label.Text = _current.Text(Keys(_current.Action));
                 _box.ResetSize();
                 _box.Size = _box.GetCombinedMinimumSize();
-                _box.Position = new Vector2((1920f - _box.Size.X) / 2f, 790f);
+                _box.Position = new Vector2((1920f - _box.Size.X) / 2f, HintY(LowY));
             }
         }
 
         if (_current is not null && !blocked)
         {
+            // Fora do eixo do caçador: embaixo quando ele está na metade de cima da tela, em cima quando está embaixo.
+            var y = Mathf.MoveToward(_box.Position.Y, HintY(_box.Position.Y), SlideSpeed * dt);
+            _box.Position = new Vector2(_box.Position.X, y);
             Learn(_current, dt);
         }
 
@@ -108,11 +120,26 @@ public partial class HintHud : Control
             _progress += 1f;
         }
 
-        if (_progress >= hint.Need)
+        // Dica vista tempo bastante conta como aprendida (painel 23/10: "J: atacar" seguia na Lodo-Mãe para quem atacava
+        // pelo mouse ou já sabia). O tempo soma entre fases, então ela não volta numa sala nova.
+        ShownSeconds[hint.Id] = ShownSeconds.GetValueOrDefault(hint.Id) + dt;
+        if (_progress >= hint.Need || ShownSeconds[hint.Id] >= MaxShownSeconds)
         {
             StoryService.Engine.SetFlag(StoryFlags.HintPrefix + hint.Id);
             _current = null;
         }
+    }
+
+    /// <summary>Altura da dica: a faixa de baixo, ou a de cima quando o caçador está na parte de baixo da tela.</summary>
+    private float HintY(float fallback)
+    {
+        if (!IsInstanceValid(_level.Player))
+        {
+            return fallback;
+        }
+
+        var screen = _level.WorldToScreen(_level.Player.GlobalPosition);
+        return screen.Y > PlayerLowLine ? HighY : LowY;
     }
 
     private static bool Seen(string id) => StoryService.Engine.HasFlag(StoryFlags.HintPrefix + id);

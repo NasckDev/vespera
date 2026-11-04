@@ -38,8 +38,12 @@
       "kind": "exit",
       "at": [1650, 440],
       "radius": 40,
-      "prompt": "Atravessar a ponte",
-      "text": "Encosta dos Moinhos — trancada, em breve."
+      "prompt": "Atravessar a ponte para o Cemitério",
+      "text": "",
+      "target": "cemiterio",
+      "spawn": [100, 445],
+      "requires": ["GuardianDefeated:farol_afogado"],
+      "lockedText": "A ponte para o Cemitério das Lanternas está fechada. Feche primeiro a Brecha do Cais Afogado."
     },
     {
       "kind": "brecha",

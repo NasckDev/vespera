@@ -4,7 +4,7 @@
     { "id": "eco_viscoso", "name": "Eco Viscoso", "guardian": "lodo_mae", "rank": "E", "description": "Seu dash deixa um rastro que lentifica os inimigos." },
     { "id": "eco_semente", "name": "Eco da Semente", "guardian": "macieira_oca", "rank": "D", "description": "Planta uma muda que atira espinhos por 10 s." },
     { "id": "eco_farol", "name": "Eco do Farol", "guardian": "farol_afogado", "rank": "C", "description": "Feixe que puxa inimigos para um ponto." },
-    { "id": "eco_vela", "name": "Eco da Vela", "guardian": "velorio", "rank": "B", "description": "Cura contínua por 6 s; seu rank fica um nível abaixo durante o efeito." },
+    { "id": "eco_vela", "name": "Eco da Vela", "guardian": "velora", "rank": "B", "description": "Cura contínua por 6 s; seu rank fica um nível abaixo durante o efeito." },
     { "id": "eco_sino", "name": "Eco do Sino", "guardian": "sineiro_mudo", "rank": "A", "description": "Atordoa tudo ao redor por 2 s. Recarga longa." },
     { "id": "eco_lar", "name": "Eco do Lar", "guardian": "inquilino", "rank": "S", "description": "Cria um abrigo de 3 s onde você é invulnerável." },
     { "id": "eco_avesso", "name": "Eco do Avesso", "guardian": "reflexo", "rank": "SSS", "description": "Um clone seu luta ao seu lado por 8 s. Só pode ser absorvido uma vez." }

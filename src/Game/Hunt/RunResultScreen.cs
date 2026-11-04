@@ -17,6 +17,7 @@ namespace Vespera.Game.Hunt;
 public partial class RunResultScreen(RunSummary summary, bool brechaClosed) : HunterScreen
 {
     private const int IconSize = 64;
+    private const int BlessingIconSize = 40;
     private static readonly Color Good = new("8fe39a");
     private static readonly Color Bad = new("ff8a7a");
 
@@ -89,8 +90,35 @@ public partial class RunResultScreen(RunSummary summary, bool brechaClosed) : Hu
         Line(box, $"Salas: Você {summary.YourRooms} — Ravi {summary.RaviRooms}", Palette.Amber);
         if (summary.Blessings is { Count: > 0 } blessings)
         {
-            var names = blessings.Select(id => HuntService.BlessingCatalog.Find(id)?.Name ?? id);
-            Line(box, $"Bênçãos: {string.Join(", ", names)}", Palette.CreamDim);
+            Line(box, "Bênçãos:", Palette.CreamDim);
+            // Flow (quebra linha): uma fila com 4+ bênçãos alargava a coluna e empurrava o painel para fora da tela.
+            var row = new HFlowContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill };
+            row.AddThemeConstantOverride("h_separation", 18);
+            row.AddThemeConstantOverride("v_separation", 6);
+            foreach (var id in blessings)
+            {
+                var def = HuntService.BlessingCatalog.Find(id);
+                var family = def is not null && HuntService.BlessingCatalog.Families.TryGetValue(def.Family, out var f) ? f : null;
+                var cell = UiKit.MakeRow(6);
+                if (def is not null && BlessingScreen.FamilyIcon(def.Family) is { } icon)
+                {
+                    cell.AddChild(new TextureRect
+                    {
+                        Texture = icon,
+                        ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+                        StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered,
+                        CustomMinimumSize = new Vector2(BlessingIconSize, BlessingIconSize),
+                    });
+                }
+
+                var label = UiKit.MakeLabel(def?.Name ?? id, UiTheme.ReadingVariation);
+                label.AddThemeColorOverride("font_color", family is null ? Palette.CreamDim : new Color(family.Color).Lerp(Palette.Cream, 0.3f));
+                label.SizeFlagsVertical = SizeFlags.ShrinkCenter;
+                cell.AddChild(label);
+                row.AddChild(cell);
+            }
+
+            box.AddChild(row);
         }
 
         if (!r.Survived)
@@ -202,9 +230,11 @@ public partial class RunResultScreen(RunSummary summary, bool brechaClosed) : Hu
     {
         var row = UiKit.MakeRow(14);
         row.AddChild(new ItemIconSlot(IconSize, icon, rank) { CustomMinimumSize = new Vector2(IconSize, IconSize) });
-        var label = UiKit.MakeLabel($"{text}{tag}", UiTheme.ReadingVariation);
+        // Quebra linha em vez de alargar a coluna (nomes de peça por rank são longos: "Botas Remendadas do Ferrão").
+        var label = UiKit.MakeWrapped($"{text}{tag}", UiTheme.ReadingVariation);
         label.AddThemeColorOverride("font_color", RankColors.Of(rank).Lerp(Palette.Cream, 0.35f));
         label.SizeFlagsVertical = SizeFlags.ShrinkCenter;
+        label.SizeFlagsHorizontal = SizeFlags.ExpandFill;
         row.AddChild(label);
         return row;
     }

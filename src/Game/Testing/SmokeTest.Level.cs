@@ -25,6 +25,12 @@ public partial class SmokeTest
 
     private async Task RunLevelExtras(Level level)
     {
+        if (Array.IndexOf(_args, ClicksFlag) >= 0)
+        {
+            await RunClickProbe(level);
+            return;
+        }
+
         await CheckInteractions(level);
         if (Array.IndexOf(_args, BotFlag) >= 0)
         {
@@ -80,6 +86,11 @@ public partial class SmokeTest
         if (Array.IndexOf(_args, ActOneFlag) >= 0)
         {
             await RunActOne(level);
+        }
+
+        if (Array.IndexOf(_args, Ato45Flag) >= 0)
+        {
+            await RunAto45(level);
         }
 
         if (Array.IndexOf(_args, WarningsQaFlag) >= 0 && _shotsDir is not null && DisplayServer.GetName() != "headless")

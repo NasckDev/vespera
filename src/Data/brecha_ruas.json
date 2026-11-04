@@ -1,0 +1,144 @@
+{
+  "_doc": "Brecha S do Ato VI (ROTEIRO-V2 §13: 'A Sopa da Véspera'). As Ruas Baixas de antes das demolições, com casas penduradas do teto. Mesmo formato de brecha_pomar.json; velocidades na escala 1 do caçador. Caçadas: data/cacada/cacada_ruas.json (por ora direto à arena do Inquilino).",
+  "id": "ruas_invertidas",
+  "lanternId": 6,
+  "name": "Ruas Invertidas",
+  "rank": "S",
+  "bairro": "Ruas Baixas",
+  "neighborhoodId": "ruas_baixas",
+  "guardianId": "inquilino",
+  "hub": "ruas_baixas",
+  "hunt": "res://data/cacada/cacada_ruas.json",
+  "_xp": "Só o Inquilino por ora (sem monstros comuns, issue #48): 400 XP.",
+  "rooms": [
+    "ruas_arena"
+  ],
+  "monsters": {
+    "inquilino": {
+      "name": "INQUILINO",
+      "hp": 2600,
+      "damage": 34,
+      "speed": 70,
+      "xp": 400,
+      "hurtRadius": 120,
+      "contactRadius": 120,
+      "period": 2.2,
+      "telegraph": 0.8,
+      "boss": true
+    }
+  },
+  "boss": {
+    "_doc": "Inquilino: 3 fases (66% e 33%), uma frase pela janela por fase. Fase 1 esmaga (sombra 0,8 s); fase 2 + atira móveis pela janela; fase 3 abre a porta e puxa, e o fogo fecha a arena de fora para dentro. Partes: 4 pernas (cada uma quebrada deixa a casa mais lenta).",
+    "phases": [
+      0.66,
+      0.33
+    ],
+    "cores": 4,
+    "coreHp": 260,
+    "splitBase": 0,
+    "spawnPerJump": 3,
+    "maxMinions": 0,
+    "swallowSeconds": 0,
+    "swallowDamagePerSecond": 0
+  },
+  "hunter": {
+    "staminaMax": 100,
+    "dodgeCost": 30,
+    "staminaRegen": 55,
+    "staminaRegenDelay": 0.45,
+    "dodgeSeconds": 0.3,
+    "dodgeInvulnerable": 0.25,
+    "dodgeDistance": 260,
+    "hurtInvulnerable": 0.7,
+    "hurtStun": 0.28,
+    "hurtKnockback": 300,
+    "comboBuffer": 0.28,
+    "comboWindow": 0.42
+  },
+  "moves": {
+    "sword": {
+      "light": [
+        1.0,
+        1.1,
+        1.7
+      ],
+      "lightRange": [
+        120,
+        120,
+        140
+      ],
+      "lightArc": [
+        2.2,
+        2.2,
+        2.6
+      ],
+      "lightKnockback": [
+        160,
+        160,
+        340
+      ],
+      "lightHitStop": [
+        0.05,
+        0.05,
+        0.09
+      ],
+      "heavy": 0.9,
+      "heavyRange": 150,
+      "heavyKnockback": 260,
+      "heavyHitStop": 0.07,
+      "heavyCharge": 0.45,
+      "partMult": 1
+    },
+    "bow": {
+      "light": [
+        1.0
+      ],
+      "lightRange": [
+        900
+      ],
+      "lightArc": [
+        0
+      ],
+      "lightKnockback": [
+        220
+      ],
+      "lightHitStop": [
+        0.04
+      ],
+      "heavy": 2.6,
+      "heavyRange": 1300,
+      "heavyKnockback": 260,
+      "heavyHitStop": 0.08,
+      "heavyCharge": 0.6,
+      "partMult": 0.9
+    },
+    "hammer": {
+      "light": [
+        1.0,
+        1.25
+      ],
+      "lightRange": [
+        130,
+        130
+      ],
+      "lightArc": [
+        2.4,
+        2.8
+      ],
+      "lightKnockback": [
+        320,
+        380
+      ],
+      "lightHitStop": [
+        0.1,
+        0.12
+      ],
+      "heavy": 1.6,
+      "heavyRange": 230,
+      "heavyKnockback": 460,
+      "heavyHitStop": 0.12,
+      "heavyCharge": 0.5,
+      "partMult": 2
+    }
+  }
+}

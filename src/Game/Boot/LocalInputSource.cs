@@ -34,13 +34,38 @@ public sealed class LocalInputSource(int deviceId) : IInputSource
 
     public bool IsPressed(string action) => Strength(action) >= AxisPressThreshold;
 
-    /// <summary>Borda de subida desde a última consulta desta ação; chame uma vez por quadro por ação.</summary>
+    /// <summary>
+    /// Aperto novo desta ação. Tecla, mouse e botão do controle vêm dos eventos guardados em <see cref="ActionPresses"/>
+    /// (não perde toque entre tiques nem conta o clique que a interface já usou); gatilho analógico (eixo) continua pela
+    /// borda de subida desde a última consulta. Chame uma vez por tique por ação.
+    /// </summary>
     public bool IsJustPressed(string action)
     {
-        var now = IsPressed(action);
-        var before = _previous.TryGetValue(action, out var was) && was;
-        _previous[action] = now;
-        return now && !before;
+        var pressed = false;
+        foreach (var code in Codes(action))
+        {
+            pressed |= ActionPresses.Consume(DeviceId, code);
+        }
+
+        var axisNow = AxisStrength(action) >= AxisPressThreshold;
+        var axisBefore = _previous.TryGetValue(action, out var was) && was;
+        _previous[action] = axisNow;
+        return pressed || (axisNow && !axisBefore);
+    }
+
+    private string[] Codes(string action) => DeviceId == KeyboardMouse
+        ? [InputSetup.Table.Get(action, BindingSlot.Primary), InputSetup.Table.Get(action, BindingSlot.Alternate)]
+        : [InputSetup.Table.Get(action, BindingSlot.Gamepad)];
+
+    private float AxisStrength(string action)
+    {
+        if (DeviceId == KeyboardMouse)
+        {
+            return 0f;
+        }
+
+        var code = InputSetup.Table.Get(action, BindingSlot.Gamepad);
+        return code.StartsWith("axis:", StringComparison.Ordinal) ? PadStrength(code) : 0f;
     }
 
     private float Strength(string action)

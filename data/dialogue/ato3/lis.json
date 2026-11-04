@@ -10,7 +10,10 @@
       "speaker": "lis",
       "text": "Tem um homem no Cemitério que só aparece de noite.",
       "look": "lis",
-      "next": "a2"
+      "next": "a2",
+      "set": [
+        "ato3_manha_lis"
+      ]
     },
     "a2": {
       "speaker": "lis",

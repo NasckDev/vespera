@@ -29,13 +29,19 @@ public sealed class StoryEngine : IStoryContext
     /// <summary>Evento de uma só vez (não persistido), ex.: <see cref="StoryFlags.EventOpenForge"/>.</summary>
     public event Action<string>? EventRaised;
 
-    public bool HasFlag(string flag) => Progress.Has(flag);
+    /// <summary>Flag gravada ou calculada (<see cref="NightFlags"/>: noite, pergunta do Vigia, Ravi no Avesso).</summary>
+    public bool HasFlag(string flag) => NightFlags.Computed(flag, Progress) ?? Progress.Has(flag);
 
     public ObjectiveDef? CurrentObjective => Script.Objective(Progress.ObjectiveId);
 
     /// <summary>Liga a flag e aplica as regras que dependem dela. Devolve verdadeiro se era nova.</summary>
     public bool SetFlag(string flag)
     {
+        if (NightFlags.IsComputed(flag))
+        {
+            return false;
+        }
+
         var isNew = Progress.Add(flag);
         if (!isNew)
         {
@@ -60,8 +66,44 @@ public sealed class StoryEngine : IStoryContext
             }
         }
 
+        ObserveNight(flag);
         Changed?.Invoke();
         return true;
+    }
+
+    /// <summary>
+    /// A véspera acabou: cai uma noite nova (o Vigia volta ao banco e pode perguntar de novo) e a Brecha B das Ruas
+    /// Baixas avança um passo (<see cref="RaviRescue"/>). <paramref name="ruasCanRupture"/> = a Brecha B já é jogável.
+    /// </summary>
+    public RuasStage NightFalls(bool ruasCanRupture)
+    {
+        Progress.Night.Fall();
+        var stage = RaviRescue.Advance(this, ruasCanRupture);
+        Changed?.Invoke();
+        return stage;
+    }
+
+    /// <summary>A noite passou (cena da manhã).</summary>
+    public void Dawn()
+    {
+        if (Progress.Night.IsNight)
+        {
+            Progress.Night.Dawn();
+            Changed?.Invoke();
+        }
+    }
+
+    /// <summary>Respostas ao Vigia marcam a pergunta da noite; conhecer o Vigia abre a Brecha B das Ruas Baixas.</summary>
+    private void ObserveNight(string flag)
+    {
+        if (NightFlags.IsVigiaAnswer(flag))
+        {
+            Progress.Night.VigiaAskedOn = Progress.Night.Night;
+        }
+        else if (flag == NightFlags.MetVigia)
+        {
+            RaviRescue.Open(this);
+        }
     }
 
     public void SetObjective(string id)

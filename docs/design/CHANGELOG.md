@@ -2,6 +2,7 @@
 
 Uma linha por tarefa concluída, mais recente primeiro.
 
+- 2026-10-24 — Atos IV e V (branch `ato45`): bairros Cemitério das Lanternas e Torre do Sino jogáveis (ponte leste do Pomar Alto após `GuardianDefeated:farol_afogado`; Torre após `GuardianDefeated:velora`), o Vigia (só à noite, uma pergunta por noite, respostas em `vigia_p1..p2_*`, 1º slot de Eco = Eco Viscoso), relógio de noites (`NightState`: a volta da Brecha e o banco do Cemitério fazem a noite cair; a cena da manhã a encerra), Ravi em perigo (`RaviRescue`: 3 avisos, rompe só quando a Brecha B das Ruas Baixas existir), confissão do Benício na Torre, Brechas IV e V visíveis e seladas ("em breve"), id da Guardiã `velorio` → `velora` (igual às falas), smoke `--ato45` e issues de arte #53–#58.
 - 2026-10-23 — Campanha (branch `campanha`): falas do ROTEIRO-V2 §13 dos Atos III ao Final em JSON (`data/dialogue/ato3…final`, 52 arquivos, rotas A/B do Ravi, 3 variantes do sino, falas de morte), complemento técnico `docs/v2/CAMPANHA.md` (mapas, monstros, Guardiões por fase, mecânica e mudança da cidade por ato) e prompts/issues de arte #29–#34, #36–#38 (ROT-D1–ROT-D10):
   - ROT-D1: `ROTEIRO-V2.md` é a fonte canônica da história; a bíblia anterior desta branch (causa "Maré Grande", Iara, Tomé, Lacerda, Lis como eco "achada há 11 anos") foi descartada antes do merge.
   - ROT-D2: falas copiadas literalmente do §13; só foram acrescentadas respostas de escolha e balões de cola de uma linha ("Pergunte.", "Até logo.") e os textos de item.
