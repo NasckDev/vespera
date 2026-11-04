@@ -1,0 +1,169 @@
+{
+  "character": "velora",
+  "anchor": [
+    224,
+    432
+  ],
+  "stand_height_px": 300,
+  "facing": "olha para a direita; para a esquerda use flip_h",
+  "scale_class": 0.5445,
+  "stand_height_source_px": 551.0,
+  "hit_frame_method": "quadro de maior área opaca (índice base 0), só para ataques",
+  "frame_counts": {
+    "parado": 6,
+    "andar": 8,
+    "lancar": 8,
+    "derreter": 8,
+    "ressurgir": 8,
+    "apagar": 8,
+    "morte": 10
+  },
+  "atlas": "velora_atlas.png",
+  "cell": [
+    448,
+    448
+  ],
+  "animations": {
+    "parado": {
+      "row": 0,
+      "frames": 6,
+      "fps": 6,
+      "loop": true,
+      "scale": 0.5445,
+      "source": "velora_parado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        33267,
+        34047,
+        32844,
+        33410,
+        33636,
+        33930
+      ],
+      "note": null
+    },
+    "andar": {
+      "row": 1,
+      "frames": 8,
+      "fps": 10,
+      "loop": true,
+      "scale": 0.7075,
+      "source": "velora_andar.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        35036,
+        34524,
+        34268,
+        34083,
+        33499,
+        33051,
+        32259,
+        32862
+      ],
+      "note": "reescalada: guarda -23% vs parado"
+    },
+    "lancar": {
+      "row": 2,
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.7075,
+      "source": "velora_lancar.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        34167,
+        35447,
+        34771,
+        35435,
+        36471,
+        31602,
+        36150,
+        34998
+      ],
+      "note": "reescalada: guarda -23% vs parado"
+    },
+    "derreter": {
+      "row": 3,
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.5445,
+      "source": "velora_derreter.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        26611,
+        23591,
+        21465,
+        19129,
+        15015,
+        10930,
+        7516,
+        6452
+      ],
+      "note": null
+    },
+    "ressurgir": {
+      "row": 4,
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.5445,
+      "source": "velora_ressurgir.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        12461,
+        15980,
+        18672,
+        20039,
+        24007,
+        24364,
+        27169,
+        28147
+      ],
+      "note": null
+    },
+    "apagar": {
+      "row": 5,
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.5445,
+      "source": "velora_apagar.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        29496,
+        28412,
+        28378,
+        28200,
+        28900,
+        28376,
+        27666,
+        26538
+      ],
+      "note": null
+    },
+    "morte": {
+      "row": 6,
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.6757,
+      "source": "velora_morte.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        30702,
+        30781,
+        30269,
+        28401,
+        26092,
+        21434,
+        15937,
+        11303,
+        7773,
+        5747
+      ],
+      "note": "reescalada: guarda -19% vs parado"
+    }
+  },
+  "standing_height": 300
+}

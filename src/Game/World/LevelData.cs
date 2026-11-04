@@ -92,6 +92,9 @@ public sealed class RiftRoomData
 
     /// <summary>Barris e caixas que quebram [x, y].</summary>
     public List<float[]> Breakables { get; set; } = [];
+
+    /// <summary>Sala do Silêncio (Ato V): sem som nenhum enquanto o caçador estiver nela; só avisos visuais.</summary>
+    public bool Silent { get; set; }
 }
 
 public sealed class RiftExitData

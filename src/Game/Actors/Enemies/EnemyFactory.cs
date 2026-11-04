@@ -14,6 +14,12 @@ public static class EnemyFactory
         "afogado" => new Afogado(world) { StartDelay = (float)GD.RandRange(0.0, 0.8) },
         "ancoreiro" => new Ancoreiro(world) { StartDelay = (float)GD.RandRange(0.0, 0.8) },
         "lanterna_afogada" => new LanternaAfogada(world) { StartDelay = (float)GD.RandRange(0.0, 0.6) },
+        "carpideira" => new Carpideira(world) { StartDelay = (float)GD.RandRange(0.0, 0.8) },
+        "cao_de_vigilia" => new CaoDeVigilia(world) { StartDelay = (float)GD.RandRange(0.0, 0.8) },
+        "velinha" => new Velinha(world) { StartDelay = (float)GD.RandRange(0.0, 0.6) },
+        "sineiro" => new Sineiro(world) { StartDelay = (float)GD.RandRange(0.0, 0.8) },
+        "casca" => new Casca(world) { StartDelay = (float)GD.RandRange(0.0, 0.8) },
+        "traca_de_arquivo" => new TracaDeArquivo(world) { StartDelay = (float)GD.RandRange(0.0, 0.6) },
         _ => new Lodo(world) { StartDelay = (float)GD.RandRange(0.0, 0.6) },
     };
 
@@ -23,6 +29,8 @@ public static class EnemyFactory
         "farol_afogado" => new FarolAfogado(world),
         "inquilino" => new Inquilino(world),
         "reflexo" => new Reflexo(world),
+        "velora" => new Velora(world),
+        "sineiro_mudo" => new SineiroMudo(world),
         _ => new LodoMae(world),
     };
 }

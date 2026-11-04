@@ -28,6 +28,16 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
     private static readonly string[] Ato45Levels = ["cemiterio", "torre"];
     private static readonly string[] CityLevels = ["forjas", "forja_interior", "estrada", "taverna", "quarto"];
 
+    /// <summary>Brechas dos Atos IV e V: salas, arenas e monstros (o bairro mede os monstros da própria Brecha).</summary>
+    private static readonly string[] Brecha45Levels =
+    [
+        "cemiterio_alameda", "cemiterio_ossuario", "cemiterio_capela", "cemiterio_fosso", "cemiterio_arena",
+        "torre_escada", "torre_arquivo", "torre_cordas", "torre_silencio", "torre_arena",
+    ];
+
+    private static readonly string[] CemiterioMonsters = ["carpideira", "cao_de_vigilia", "velinha", "velora"];
+    private static readonly string[] SinoMonsters = ["sineiro", "casca", "traca_de_arquivo", "sineiro_mudo"];
+
     /// <summary>Ato VI: hub das Ruas Baixas e arena do Inquilino (com a mãe do Ravi na fila de gente).</summary>
     private static readonly string[] RuasLevels = ["ruas_baixas", "ruas_arena"];
 
@@ -43,6 +53,7 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
         rooms.AddRange(PomarLevels);
         rooms.AddRange(CaisLevels);
         rooms.AddRange(Ato45Levels);
+        rooms.AddRange(Brecha45Levels);
         rooms.AddRange(RuasLevels);
         rooms.Add(Core.Final.FinalStory.ArenaLevel);
         foreach (var room in rooms)
@@ -90,10 +101,14 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
         var enemies = new List<Enemy>();
         var pomar = room.StartsWith("pomar_", System.StringComparison.Ordinal);
         var cais = room is "mares" || room.StartsWith("cais_", System.StringComparison.Ordinal);
-        string[] roster = room == Core.Final.FinalStory.ArenaLevel ? ["reflexo"] : room.StartsWith("ruas_", System.StringComparison.Ordinal) ? ["inquilino"] : cais ? CaisMonsters : pomar ? PomarMonsters : Monsters;
+        string[] roster = room == Core.Final.FinalStory.ArenaLevel ? ["reflexo"]
+            : room.StartsWith("ruas_", System.StringComparison.Ordinal) ? ["inquilino"]
+            : room.StartsWith("cemiterio", System.StringComparison.Ordinal) ? CemiterioMonsters
+            : room.StartsWith("torre", System.StringComparison.Ordinal) ? SinoMonsters
+            : cais ? CaisMonsters : pomar ? PomarMonsters : Monsters;
         foreach (var id in roster)
         {
-            var guardian = id is "lodo_mae" or "macieira_oca" or "farol_afogado" or "inquilino" or "reflexo";
+            var guardian = id is "lodo_mae" or "macieira_oca" or "farol_afogado" or "inquilino" or "velora" or "sineiro_mudo" or "reflexo";
             x += guardian ? gap * 1.6f : 0f;
             var e = guardian ? EnemyFactory.Guardian(id, World) : EnemyFactory.Create(id, World);
             e.Position = World.ClampToFloor(start + new Vector2(dir * x, 0));

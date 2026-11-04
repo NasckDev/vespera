@@ -1,0 +1,181 @@
+{
+  "_doc": "Brecha A do Ato V (ROTEIRO-V2 §13: 'O Sino Sem Badalo'; CAMPANHA Ato V). A Torre na noite do ritual, do lado de baixo: escada em espiral sem fim, cordas que sobem ao escuro, papéis do arquivo flutuando. A Sala do Silêncio (rift.silent) entra em toda caçada. Caçadas: data/cacada/cacada_sino.json.",
+  "id": "sino_mudo",
+  "lanternId": 5,
+  "name": "Sino Mudo",
+  "rank": "A",
+  "bairro": "Torre do Sino",
+  "neighborhoodId": "torre",
+  "guardianId": "sineiro_mudo",
+  "hub": "torre",
+  "hunt": "res://data/cacada/cacada_sino.json",
+  "_xp": "Caçada típica: ~16 Sineiros (11 XP) + ~7 Cascas (13) + ~8 Traças (5) ~ 310 XP; o Sineiro Mudo dá 250. Uma caçada + a do Campanário levam do A (1100) ao S (1800).",
+  "rooms": [
+    "torre_escada",
+    "torre_arquivo",
+    "torre_cordas",
+    "torre_silencio",
+    "torre_arena"
+  ],
+  "monsters": {
+    "sineiro": {
+      "name": "Sineiro",
+      "hp": 80,
+      "damage": 20,
+      "speed": 90,
+      "xp": 11,
+      "hurtRadius": 32,
+      "contactRadius": 36,
+      "period": 2.6,
+      "telegraph": 0.8
+    },
+    "casca": {
+      "name": "Casca",
+      "hp": 120,
+      "damage": 22,
+      "speed": 75,
+      "xp": 13,
+      "hurtRadius": 40,
+      "contactRadius": 44,
+      "period": 2.8,
+      "telegraph": 0.7
+    },
+    "traca_de_arquivo": {
+      "name": "Traça-de-Arquivo",
+      "hp": 30,
+      "damage": 14,
+      "speed": 150,
+      "xp": 5,
+      "hurtRadius": 30,
+      "contactRadius": 34,
+      "period": 2.4,
+      "telegraph": 0.6
+    },
+    "sineiro_mudo": {
+      "name": "SINEIRO MUDO",
+      "hp": 2200,
+      "damage": 30,
+      "speed": 60,
+      "xp": 250,
+      "hurtRadius": 120,
+      "contactRadius": 120,
+      "period": 2.4,
+      "telegraph": 0.8,
+      "boss": true
+    }
+  },
+  "boss": {
+    "_doc": "Sineiro Mudo: 3 fases (66% e 33%), uma palavra em pedra por fase (FESTA, CORDA, CULPA). Fase 1 badaladas em área (anéis âmbar); 2 asas (cores, coreHp). Fase 2 voa e mergulha (sombra 0,8 s) e cordas descem do teto (círculos âmbar) e prendem; uma asa quebrada encurta o voo. Fase 3 silêncio total: sem música e sem som de golpe, só avisos visuais.",
+    "phases": [
+      0.66,
+      0.33
+    ],
+    "cores": 2,
+    "coreHp": 300,
+    "splitBase": 0,
+    "spawnPerJump": 3,
+    "maxMinions": 0,
+    "swallowSeconds": 0,
+    "swallowDamagePerSecond": 0
+  },
+  "hunter": {
+    "staminaMax": 100,
+    "dodgeCost": 30,
+    "staminaRegen": 55,
+    "staminaRegenDelay": 0.45,
+    "dodgeSeconds": 0.3,
+    "dodgeInvulnerable": 0.25,
+    "dodgeDistance": 260,
+    "hurtInvulnerable": 0.7,
+    "hurtStun": 0.28,
+    "hurtKnockback": 300,
+    "comboBuffer": 0.28,
+    "comboWindow": 0.42
+  },
+  "moves": {
+    "sword": {
+      "light": [
+        1.0,
+        1.1,
+        1.7
+      ],
+      "lightRange": [
+        120,
+        120,
+        140
+      ],
+      "lightArc": [
+        2.2,
+        2.2,
+        2.6
+      ],
+      "lightKnockback": [
+        160,
+        160,
+        340
+      ],
+      "lightHitStop": [
+        0.05,
+        0.05,
+        0.09
+      ],
+      "heavy": 0.9,
+      "heavyRange": 150,
+      "heavyKnockback": 260,
+      "heavyHitStop": 0.07,
+      "heavyCharge": 0.45,
+      "partMult": 1
+    },
+    "bow": {
+      "light": [
+        1.0
+      ],
+      "lightRange": [
+        900
+      ],
+      "lightArc": [
+        0
+      ],
+      "lightKnockback": [
+        220
+      ],
+      "lightHitStop": [
+        0.04
+      ],
+      "heavy": 2.6,
+      "heavyRange": 1300,
+      "heavyKnockback": 260,
+      "heavyHitStop": 0.08,
+      "heavyCharge": 0.6,
+      "partMult": 0.9
+    },
+    "hammer": {
+      "light": [
+        1.0,
+        1.25
+      ],
+      "lightRange": [
+        130,
+        130
+      ],
+      "lightArc": [
+        2.4,
+        2.8
+      ],
+      "lightKnockback": [
+        320,
+        380
+      ],
+      "lightHitStop": [
+        0.1,
+        0.12
+      ],
+      "heavy": 1.6,
+      "heavyRange": 230,
+      "heavyKnockback": 460,
+      "heavyHitStop": 0.12,
+      "heavyCharge": 0.5,
+      "partMult": 2
+    }
+  }
+}

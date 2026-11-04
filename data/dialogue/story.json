@@ -1,5 +1,5 @@
 {
-  "_doc": "Ato I do ROTEIRO-V2 (§3, §4, §13). Objetivos em ordem de campanha (o Diário usa a ordem); título = até 5 palavras, sempre na tela. Regras: quando a flag 'when' liga e as condições 'if' valem, aplica o objetivo. Flags que o jogo liga sozinho: hunt_back, hunt_1/hunt_2, fell_once, forged, potion_bought, contract_done, xp_ready, exame_e, eco_viscoso. Autoplay: 'stage' = 'arrival' (estrada + Lodo + Brecha abrindo) ou 'morning' (a noite passa antes da fala). Perguntas = página do Diário (§7). Retratos: {0} vira 1 (neutro) ou 2 (expressão). Ato II (ROTEIRO-V2 §13): met_celeste, pomar_podre:hunt_1/hunt_2 (caçadas completas no Pomar), pomar_podre:fell_1..6 (quedas), GuardianDefeated:macieira_oca -> act2_done. Ato III (ROTEIRO-V2 §13): met_severo, pescou, exame_c_visto, cais_afogado:hunt_1/hunt_2, lanterna_m (sala alagada), severo_viu_lanterna, odete_lanterna_m (abre o Farol), cais_afogado:fell_1..6, GuardianDefeated:farol_afogado -> act3_done. Atos IV e V (ROTEIRO-V2 §13, §8.1): flags calculadas 'noite', 'vigia_perguntou_hoje', 'ravi_no_avesso' (NightState/NightFlags); met_vigia abre a Brecha B das Ruas Baixas (RaviRescue: ruas_brecha_aberta, ruas_aviso_2/3, ruas_rompeu, ruas_fechada_a_tempo); eco_slot_1 (UnlockEchoSlot:1).",
+  "_doc": "Ato I do ROTEIRO-V2 (§3, §4, §13). Objetivos em ordem de campanha (o Diário usa a ordem); título = até 5 palavras, sempre na tela. Regras: quando a flag 'when' liga e as condições 'if' valem, aplica o objetivo. Flags que o jogo liga sozinho: hunt_back, hunt_1/hunt_2, fell_once, forged, potion_bought, contract_done, xp_ready, exame_e, eco_viscoso. Autoplay: 'stage' = 'arrival' (estrada + Lodo + Brecha abrindo) ou 'morning' (a noite passa antes da fala). Perguntas = página do Diário (§7). Retratos: {0} vira 1 (neutro) ou 2 (expressão). Ato II (ROTEIRO-V2 §13): met_celeste, pomar_podre:hunt_1/hunt_2 (caçadas completas no Pomar), pomar_podre:fell_1..6 (quedas), GuardianDefeated:macieira_oca -> act2_done. Ato III (ROTEIRO-V2 §13): met_severo, pescou, exame_c_visto, cais_afogado:hunt_1/hunt_2, lanterna_m (sala alagada), severo_viu_lanterna, odete_lanterna_m (abre o Farol), cais_afogado:fell_1..6, GuardianDefeated:farol_afogado -> act3_done. Atos IV e V (ROTEIRO-V2 §13, §8.1): flags calculadas 'noite', 'vigia_perguntou_hoje', 'ravi_no_avesso' (NightState/NightFlags); met_vigia abre a Brecha B das Ruas Baixas (RaviRescue: ruas_brecha_aberta, ruas_aviso_2/3, ruas_rompeu, ruas_fechada_a_tempo); eco_slot_1 (UnlockEchoSlot:1). Brechas dos Atos IV e V: cemiterio_das_lanternas:hunt_1 -> ato4_guardiao; sino_mudo:hunt_1 -> ato5_guardiao; quedas cemiterio_das_lanternas:fell_N / sino_mudo:fell_N -> ato4_morte_N / ato5_morte_N (falas na volta ao Cemitério e à Torre).",
   "startObjective": "estrada",
   "objectives": [
     {
@@ -129,9 +129,13 @@
     },
     {
       "id": "ato4_brecha",
-      "title": "Brecha do Cemitério (em breve)",
-      "text": "O Vigia guarda seu Eco. A Brecha do Cemitério das Lanternas ainda está selada. Em breve.",
-      "locked": true
+      "title": "Entre na Brecha do Cemitério",
+      "text": "A Brecha fica à direita da capela, ao lado do Benício. Volte inteiro de uma caçada. Não pare pra ler os nomes."
+    },
+    {
+      "id": "ato4_guardiao",
+      "title": "Vença a Velória",
+      "text": "No fim da Brecha do Cemitério espera a Velória. Saia dos círculos âmbar e da poça de cera. No escuro, apague a vela que não treme."
     },
     {
       "id": "ato4_fecho",
@@ -145,9 +149,13 @@
     },
     {
       "id": "ato5_brecha",
-      "title": "Brecha do Sino (em breve)",
-      "text": "A Brecha abriu dentro da Torre. Lá dentro você não vai ouvir nada. Ainda está selada. Em breve.",
-      "locked": true
+      "title": "Entre na Brecha da Torre",
+      "text": "A Brecha abriu dentro da Torre, ao pé do sino. Volte inteiro de uma caçada. Na Sala do Silêncio, olhe o chão."
+    },
+    {
+      "id": "ato5_guardiao",
+      "title": "Vença o Sineiro Mudo",
+      "text": "No Campanário espera o Sineiro Mudo. Saia dos anéis âmbar, da sombra do mergulho e dos círculos das cordas. No fim, não vai ter som."
     },
     {
       "id": "ato5_fecho",
@@ -282,6 +290,92 @@
       ]
     },
     {
+      "when": "cemiterio_das_lanternas:hunt_1",
+      "if": [
+        "objective:ato4_brecha"
+      ],
+      "objective": "ato4_guardiao"
+    },
+    {
+      "when": "sino_mudo:hunt_1",
+      "if": [
+        "objective:ato5_brecha"
+      ],
+      "objective": "ato5_guardiao"
+    },
+    {
+      "when": "cemiterio_das_lanternas:fell_1",
+      "set": [
+        "ato4_morte_1"
+      ]
+    },
+    {
+      "when": "cemiterio_das_lanternas:fell_2",
+      "set": [
+        "ato4_morte_2"
+      ]
+    },
+    {
+      "when": "cemiterio_das_lanternas:fell_3",
+      "set": [
+        "ato4_morte_3"
+      ]
+    },
+    {
+      "when": "cemiterio_das_lanternas:fell_4",
+      "set": [
+        "ato4_morte_4"
+      ]
+    },
+    {
+      "when": "cemiterio_das_lanternas:fell_5",
+      "set": [
+        "ato4_morte_5"
+      ]
+    },
+    {
+      "when": "cemiterio_das_lanternas:fell_6",
+      "set": [
+        "ato4_morte_6"
+      ]
+    },
+    {
+      "when": "sino_mudo:fell_1",
+      "set": [
+        "ato5_morte_1"
+      ]
+    },
+    {
+      "when": "sino_mudo:fell_2",
+      "set": [
+        "ato5_morte_2"
+      ]
+    },
+    {
+      "when": "sino_mudo:fell_3",
+      "set": [
+        "ato5_morte_3"
+      ]
+    },
+    {
+      "when": "sino_mudo:fell_4",
+      "set": [
+        "ato5_morte_4"
+      ]
+    },
+    {
+      "when": "sino_mudo:fell_5",
+      "set": [
+        "ato5_morte_5"
+      ]
+    },
+    {
+      "when": "sino_mudo:fell_6",
+      "set": [
+        "ato5_morte_6"
+      ]
+    },
+    {
       "when": "GuardianDefeated:velora",
       "objective": "ato4_fecho",
       "set": [
@@ -294,10 +388,6 @@
       "set": [
         "act5_done"
       ]
-    },
-    {
-      "when": "GuardianDefeated:sineiro_mudo",
-      "objective": "ato6"
     },
     {
       "when": "met_mae_ravi",
@@ -746,6 +836,102 @@
       "if": [
         "GuardianDefeated:velora",
         "!ato4_odete"
+      ]
+    },
+    {
+      "level": "cemiterio",
+      "dialogue": "ato4/morte",
+      "if": [
+        "ato4_morte_1",
+        "!morte_cem_1"
+      ]
+    },
+    {
+      "level": "cemiterio",
+      "dialogue": "ato4/morte",
+      "if": [
+        "ato4_morte_2",
+        "!morte_cem_2"
+      ]
+    },
+    {
+      "level": "cemiterio",
+      "dialogue": "ato4/morte",
+      "if": [
+        "ato4_morte_3",
+        "!morte_cem_3"
+      ]
+    },
+    {
+      "level": "cemiterio",
+      "dialogue": "ato4/morte",
+      "if": [
+        "ato4_morte_4",
+        "!morte_cem_4"
+      ]
+    },
+    {
+      "level": "cemiterio",
+      "dialogue": "ato4/morte",
+      "if": [
+        "ato4_morte_5",
+        "!morte_cem_5"
+      ]
+    },
+    {
+      "level": "cemiterio",
+      "dialogue": "ato4/morte",
+      "if": [
+        "ato4_morte_6",
+        "!morte_cem_6"
+      ]
+    },
+    {
+      "level": "torre",
+      "dialogue": "ato5/morte",
+      "if": [
+        "ato5_morte_1",
+        "!morte_torre_1"
+      ]
+    },
+    {
+      "level": "torre",
+      "dialogue": "ato5/morte",
+      "if": [
+        "ato5_morte_2",
+        "!morte_torre_2"
+      ]
+    },
+    {
+      "level": "torre",
+      "dialogue": "ato5/morte",
+      "if": [
+        "ato5_morte_3",
+        "!morte_torre_3"
+      ]
+    },
+    {
+      "level": "torre",
+      "dialogue": "ato5/morte",
+      "if": [
+        "ato5_morte_4",
+        "!morte_torre_4"
+      ]
+    },
+    {
+      "level": "torre",
+      "dialogue": "ato5/morte",
+      "if": [
+        "ato5_morte_5",
+        "!morte_torre_5"
+      ]
+    },
+    {
+      "level": "torre",
+      "dialogue": "ato5/morte",
+      "if": [
+        "ato5_morte_6",
+        "!morte_torre_6"
       ]
     },
     {

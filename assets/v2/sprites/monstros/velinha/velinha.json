@@ -1,0 +1,110 @@
+{
+  "character": "velinha",
+  "anchor": [
+    96,
+    182
+  ],
+  "stand_height_px": 44,
+  "facing": "olha para a direita; para a esquerda use flip_h",
+  "scale_class": 0.0964,
+  "stand_height_source_px": 456.5,
+  "hit_frame_method": "quadro de maior área opaca (índice base 0), só para ataques",
+  "frame_counts": {
+    "parado": 4,
+    "mover": 6,
+    "aviso": 3,
+    "ataque": 4,
+    "morte": 6
+  },
+  "atlas": "velinha_atlas.png",
+  "cell": [
+    192,
+    192
+  ],
+  "animations": {
+    "parado": {
+      "row": 0,
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "scale": 0.0964,
+      "source": "velinha_parado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        660,
+        678,
+        684,
+        668
+      ],
+      "note": null
+    },
+    "mover": {
+      "row": 1,
+      "frames": 6,
+      "fps": 10,
+      "loop": true,
+      "scale": 0.0964,
+      "source": "velinha_mover.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        594,
+        586,
+        612,
+        633,
+        629,
+        651
+      ],
+      "note": null
+    },
+    "aviso": {
+      "row": 2,
+      "frames": 3,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.0964,
+      "source": "velinha_aviso.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        863,
+        1017,
+        1219
+      ],
+      "note": null
+    },
+    "ataque": {
+      "row": 3,
+      "frames": 4,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.0964,
+      "source": "velinha_ataque.png",
+      "hit_frame": 2,
+      "opaque_area_per_frame": [
+        672,
+        860,
+        1150,
+        752
+      ],
+      "note": null
+    },
+    "morte": {
+      "row": 4,
+      "frames": 6,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.0964,
+      "source": "velinha_morte.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        578,
+        566,
+        485,
+        345,
+        245,
+        241
+      ],
+      "note": null
+    }
+  },
+  "standing_height": 46
+}

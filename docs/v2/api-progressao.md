@@ -13,7 +13,7 @@ using Vespera.Core.Advancement; using Vespera.Core.Ranks; using Vespera.Game.Hun
 Progression.AddXp(25);                                        // XpResult (RankChange? se subiu)
 Progression.GrantLoot(Rank.E, LootSource.Monster);            // Monster | Part | Chest | LootSource.Guardian(id)
 Progression.RecordGuardianKill("lodo_mae");                   // conquista + saque garantido + Eco + 30% peça do conjunto
-Progression.TryPassExam(Rank.C);                              // exames só em C, A, S, SSS (ExamStatus)
+Progression.TryPassExam(Rank.C);                              // exames só em C, B, S, SSS (ExamStatus)
 Progression.BeginRun("bairro_das_forjas");                    // devolve Fragmentos recuperados da Lanterna do bairro
 Progression.EndRun(survived: true);                           // vivo: Fragmentos -> carteira; morto: ficam na Lanterna do bairro
 
@@ -36,7 +36,7 @@ Hp, Defense, CritPct, SpeedPct, FragmentosPct), `Engine.MaxHpBonus` (rank + peç
 
 ## Regras
 
-- Rank sobe por XP **e** conquista: para sair do rank R, XP do seguinte + Guardião de R + exame de R (C, A, S, SSS).
+- Rank sobe por XP **e** conquista: para sair do rank R, XP do seguinte + Guardião de R + exame de R (C, B, S, SSS).
 - Loot de Brecha de rank R: 80% material R, 15% R+1, 5% peça rara R com afixo. Guardião: material garantido + 30% de peça do conjunto.
 - Arma: 2 níveis por rank (máx. 18), teto de nível acompanha o rank. Custo: Fragmentos + 2 materiais do rank (+ material de Guardião na troca de degrau).
 - Lanterna: Fragmentos da caçada ficam na Brecha ao morrer; voltam ao entrar de novo numa Brecha do **mesmo bairro**. Peças e materiais nunca se perdem.

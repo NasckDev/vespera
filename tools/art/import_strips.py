@@ -86,6 +86,15 @@ MONSTER_MARGIN["inquilino"] = 16
 # Final (issue #52): o Reflexo, o caçador do lado de baixo (1 humano; a arma só aparece nos golpes).
 MONSTERS["reflexo"] = {"height": 112, "cell": 256, "normalize": True}
 MONSTER_MARGIN["reflexo"] = 12
+# Atos IV e V (issues #54, #55, #57, #58): alturas dos prompts (velinha 0,4; carpideira 1,0; cão 0,6; sineiro 0,7;
+# casca 0,9; traça 0,6; Velória e Sineiro Mudo 3x o caçador), na régua de ~110 px por caçador.
+for _name, _height, _cell, _margin in (
+    ("velinha", 44, 192, 10), ("carpideira", 110, 256, 12), ("cao_de_vigilia", 66, 192, 10),
+    ("velora", 300, 448, 16), ("sineiro", 76, 192, 10), ("casca", 100, 256, 12),
+    ("traca_de_arquivo", 66, 192, 10), ("sineiro_mudo", 300, 448, 16),
+):
+    MONSTERS[_name] = {"height": _height, "cell": _cell, "normalize": True}
+    MONSTER_MARGIN[_name] = _margin
 
 PLANTED_ANIMS = {"parado", "dano"}  # pés no mesmo lugar: realinha o x por quadro (a fonte desloca os quadros dentro da fatia)
 LOOP_ANIMS = {"parado", "andar", "mover"}
@@ -274,7 +283,18 @@ def reference_height(strip: Strip) -> int:
     first, last = strip.frames[0].height, strip.frames[-1].height
     if strip.anim.startswith(("ataque", "tiro")):
         return min(first, last)
+    if strip.anim in REF_LAST_ANIMS:
+        return last
     return first
+
+
+# Tiras que começam fora da guarda e terminam nela (Velória ressurge da poça; o Sineiro Mudo mergulha do alto e pousa
+# agachado): a altura de referência é a do último quadro.
+REF_LAST_ANIMS = {"ressurgir"}
+# Tiras sem quadro de guarda (o Sineiro Mudo mergulha do alto): mesma escala da tira indicada, desenhada no mesmo tamanho.
+SCALE_LIKE = {"mergulhar": "voar"}
+# Pés pelo último quadro (o primeiro está no ar ou é uma poça).
+ANCHOR_LAST = {"ressurgir", "mergulhar"}
 
 
 def resolve_hunter_scales(strips: list[Strip], walks: list[Strip], tolerance: float) -> dict:
@@ -524,6 +544,14 @@ def build_monsters(only: set[str] | None = None) -> dict:
                 if strip.anim != "parado" and abs(deviation) > DEVIATION_LIMIT:
                     strip.scale = config["height"] / ref
                     strip.note = f"reescalada: guarda {deviation:+.0%} vs parado"
+        by_anim = {s.anim: s for s in strips}
+        for strip in strips:
+            if strip.anim in ANCHOR_LAST:
+                last = strip.frames[-1]
+                strip.fixed_anchor = (last.centroid_x, float(last.bottom))
+            if strip.anim in SCALE_LIKE and SCALE_LIKE[strip.anim] in by_anim:
+                strip.scale = by_anim[SCALE_LIKE[strip.anim]].scale
+                strip.note = f"mesma escala de '{SCALE_LIKE[strip.anim]}'"
         cell = fit_cell(strips, config["cell"], MONSTER_MARGIN[monster])
         feet = (cell // 2, cell - MONSTER_MARGIN[monster])
         animations = [make_animation(s.anim, s.anim, s, cell, feet) for s in strips]

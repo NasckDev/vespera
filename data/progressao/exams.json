@@ -12,15 +12,15 @@
       "arenaHint": "mercado_das_mares"
     },
     {
-      "id": "exame_a",
-      "rank": "A",
-      "name": "Exame da Ordem: Selo A",
-      "description": "Quebre os três sinos marcados antes que o silêncio caia sobre a arena.",
-      "objectives": [ { "type": "destroy_marked", "count": 3 } ],
-      "timeLimitSeconds": 180,
+      "id": "exame_b",
+      "rank": "B",
+      "name": "Exame da Ordem: Selo B",
+      "description": "Atravesse o Cemitério das Lanternas e feche a Brecha. Não pare pra ler os nomes.",
+      "objectives": [ { "type": "reach_exit" } ],
+      "timeLimitSeconds": 600,
       "maxHits": null,
-      "rewardXp": 140,
-      "arenaHint": "torre_do_sino"
+      "rewardXp": 100,
+      "arenaHint": "cemiterio_das_lanternas"
     },
     {
       "id": "exame_s",

@@ -46,9 +46,8 @@
       "brecha": "sino_mudo",
       "at": [836, 330],
       "radius": 46,
-      "prompt": "Olhar a Brecha",
-      "text": "Sino Mudo — Rank A",
-      "lockedText": "A Brecha abriu dentro da Torre (Rank A), mas ainda não deixa ninguém entrar. Em breve."
+      "prompt": "Entrar na Brecha",
+      "text": "Sino Mudo — Rank A"
     },
     {
       "kind": "sino",

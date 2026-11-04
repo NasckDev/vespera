@@ -25,7 +25,7 @@ public class AdvancementCatalogTest
     public void ExamsExistExactlyAtCAndSAndASSS()
     {
         var withExam = Catalog.Ranks.Where(r => r.Exam).Select(r => r.Id).ToArray();
-        AssertThat(withExam).ContainsExactly(Rank.C, Rank.A, Rank.S, Rank.SSS);
+        AssertThat(withExam).ContainsExactly(Rank.C, Rank.B, Rank.S, Rank.SSS);
         AssertThat(Catalog.ExamList.Count).IsEqual(4);
         foreach (var exam in Catalog.ExamList)
         {

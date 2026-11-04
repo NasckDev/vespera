@@ -116,8 +116,8 @@ Cada camada: implementação (Sonnet) → testes automáticos → **tester jogad
 | I | E | Bairro das Forjas → Esgotos do Mercado | Lodo-Mãe | Odete desconfia; primeira forja |
 | II | D | Pomar Alto → Pomar Podre | Macieira Oca | Celeste; o pomar como era antes |
 | III | C | Mercado das Marés → Cais Afogado | Farol Afogado | **Exame C**; Severo e o farol; lanterna de Marisa |
-| IV | B | Cemitério das Lanternas → Cemitério | Velória | o Vigia e suas perguntas; Ravi em perigo (Brecha B) |
-| V | A | Torre do Sino → Torre do Sino Mudo | Sineiro Mudo | **Exame A**; o segredo de Benício |
+| IV | B | Cemitério das Lanternas → Cemitério | Velória | **Exame B** (ROTEIRO-V2 §13: "Cemitério é diferente"); o Vigia e suas perguntas; Ravi em perigo (Brecha B) |
+| V | A | Torre do Sino → Torre do Sino Mudo | Sineiro Mudo | o segredo de Benício (sem exame: "Você já passou de mim") |
 | VI | S | Ruas Baixas → Ruas Invertidas | Inquilino | **Exame S**; Nilza e a Sopa da Véspera |
 | VII | SS–SSS | Avesso profundo (Brechas que misturam bairros) | variações dos Guardiões | **Exame SSS**; o Avesso cresce |
 | Final | Alvor | Praça da Lanterna (a primeira Brecha da praça) | **O Reflexo** | o sino toca de novo → rank **Alvor** → fim da Parte 1 e gancho da Parte 2 |
@@ -137,7 +137,7 @@ O Alvor é "impossível para muitos": a Brecha da praça exige SSS, conjunto de 
 
 ## 6. Regras de progressão e dificuldade
 
-- **Ranks:** E, D, C, B, A, S, SS, SSS, Alvor. Sobe por XP **e** por conquista: matar o Guardião do rank e passar no exame quando houver (C, A, S, SSS). Cada rank: +HP e novo selo.
+- **Ranks:** E, D, C, B, A, S, SS, SSS, Alvor. Sobe por XP **e** por conquista: matar o Guardião do rank e passar no exame quando houver (C, B, S, SSS). Cada rank: +HP e novo selo.
 - **Estágios visuais (5):** E–D aprendiz · C–B caçador · A–S veterano · SS–SSS elite · Alvor radiante.
 - **Loot por Brecha de rank R:** 80% material/equipamento R · 15% rank R+1 · 5% raro R (com afixo). Guardião: garante material R + 30% de peça do conjunto dele.
 - **Poder recomendado** visível em cada Brecha; monstros escalam por rank (HP, dano, velocidade e **padrões novos**, não só números).

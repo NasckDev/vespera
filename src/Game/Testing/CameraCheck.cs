@@ -31,6 +31,9 @@ public sealed class CameraCheck(Level level, SmokeTest host, bool shots = false)
         rooms.AddRange(RiftSession.Brecha.Rooms);
         rooms.AddRange(CaisLevels);
         rooms.AddRange(["ruas_baixas", "ruas_arena", Core.Final.FinalStory.ArenaLevel]);
+        rooms.AddRange(["ruas_baixas", "ruas_arena"]);
+        rooms.AddRange(["cemiterio_alameda", "cemiterio_ossuario", "cemiterio_capela", "cemiterio_fosso", "cemiterio_arena"]);
+        rooms.AddRange(["torre_escada", "torre_arquivo", "torre_cordas", "torre_silencio", "torre_arena"]);
         foreach (var room in rooms)
         {
             await level.GoToRoom(room, withDirector: false);

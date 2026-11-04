@@ -1,0 +1,181 @@
+{
+  "_doc": "Brecha B do Ato IV (ROTEIRO-V2 §13: 'As Perguntas do Vigia'; CAMPANHA Ato IV). O Cemitério das Lanternas de antes do Ano Sem Sol, do lado de baixo: túmulos pendurados, velas que pingam para cima. Mesmo formato de brecha_cais.json; velocidades na escala 1 do caçador. Caçadas: data/cacada/cacada_cemiterio.json.",
+  "id": "cemiterio_das_lanternas",
+  "lanternId": 4,
+  "name": "Cemitério das Lanternas",
+  "rank": "B",
+  "bairro": "Cemitério das Lanternas",
+  "neighborhoodId": "cemiterio",
+  "guardianId": "velora",
+  "hub": "cemiterio",
+  "hunt": "res://data/cacada/cacada_cemiterio.json",
+  "_xp": "Caçada típica: ~16 Carpideiras (9 XP) + ~7 Cães (7) + ~8 Velinhas (4) ~ 225 XP; a Velória dá 150 e o exame B 100. Uma caçada + a do Altar levam do B (650) ao A (1100).",
+  "rooms": [
+    "cemiterio_alameda",
+    "cemiterio_ossuario",
+    "cemiterio_capela",
+    "cemiterio_fosso",
+    "cemiterio_arena"
+  ],
+  "monsters": {
+    "carpideira": {
+      "name": "Carpideira",
+      "hp": 85,
+      "damage": 18,
+      "speed": 70,
+      "xp": 9,
+      "hurtRadius": 34,
+      "contactRadius": 38,
+      "period": 2.6,
+      "telegraph": 0.7
+    },
+    "cao_de_vigilia": {
+      "name": "Cão-de-Vigília",
+      "hp": 55,
+      "damage": 18,
+      "speed": 140,
+      "xp": 7,
+      "hurtRadius": 30,
+      "contactRadius": 34,
+      "period": 2.4,
+      "telegraph": 0.6
+    },
+    "velinha": {
+      "name": "Velinha",
+      "hp": 22,
+      "damage": 10,
+      "speed": 120,
+      "xp": 4,
+      "hurtRadius": 22,
+      "contactRadius": 26,
+      "period": 2.8,
+      "telegraph": 0.8
+    },
+    "velora": {
+      "name": "VELÓRIA",
+      "hp": 1900,
+      "damage": 26,
+      "speed": 50,
+      "xp": 150,
+      "hurtRadius": 120,
+      "contactRadius": 120,
+      "period": 2.5,
+      "telegraph": 0.8,
+      "boss": true
+    }
+  },
+  "boss": {
+    "_doc": "Velória: 3 fases (66% e 33%). Fase 1 vigília: atira velas que viram Velinhas (spawnPerJump por arremesso, máx. maxMinions); 3 candelabros (cores, coreHp de dano cada) = uma Velinha a menos por arremesso cada. Fase 2 cera: derrete numa poça que queima e anda; ressurge onde a poça parar (círculo âmbar 0,8 s). Fase 3 uma vela: a arena apaga, restam 5 velas; a certa não treme quando a lanterna do caçador passa; apagar a certa abre a Velória.",
+    "phases": [
+      0.66,
+      0.33
+    ],
+    "cores": 3,
+    "coreHp": 220,
+    "splitBase": 0,
+    "spawnPerJump": 3,
+    "maxMinions": 5,
+    "swallowSeconds": 0,
+    "swallowDamagePerSecond": 0
+  },
+  "hunter": {
+    "staminaMax": 100,
+    "dodgeCost": 30,
+    "staminaRegen": 55,
+    "staminaRegenDelay": 0.45,
+    "dodgeSeconds": 0.3,
+    "dodgeInvulnerable": 0.25,
+    "dodgeDistance": 260,
+    "hurtInvulnerable": 0.7,
+    "hurtStun": 0.28,
+    "hurtKnockback": 300,
+    "comboBuffer": 0.28,
+    "comboWindow": 0.42
+  },
+  "moves": {
+    "sword": {
+      "light": [
+        1.0,
+        1.1,
+        1.7
+      ],
+      "lightRange": [
+        120,
+        120,
+        140
+      ],
+      "lightArc": [
+        2.2,
+        2.2,
+        2.6
+      ],
+      "lightKnockback": [
+        160,
+        160,
+        340
+      ],
+      "lightHitStop": [
+        0.05,
+        0.05,
+        0.09
+      ],
+      "heavy": 0.9,
+      "heavyRange": 150,
+      "heavyKnockback": 260,
+      "heavyHitStop": 0.07,
+      "heavyCharge": 0.45,
+      "partMult": 1
+    },
+    "bow": {
+      "light": [
+        1.0
+      ],
+      "lightRange": [
+        900
+      ],
+      "lightArc": [
+        0
+      ],
+      "lightKnockback": [
+        220
+      ],
+      "lightHitStop": [
+        0.04
+      ],
+      "heavy": 2.6,
+      "heavyRange": 1300,
+      "heavyKnockback": 260,
+      "heavyHitStop": 0.08,
+      "heavyCharge": 0.6,
+      "partMult": 0.9
+    },
+    "hammer": {
+      "light": [
+        1.0,
+        1.25
+      ],
+      "lightRange": [
+        130,
+        130
+      ],
+      "lightArc": [
+        2.4,
+        2.8
+      ],
+      "lightKnockback": [
+        320,
+        380
+      ],
+      "lightHitStop": [
+        0.1,
+        0.12
+      ],
+      "heavy": 1.6,
+      "heavyRange": 230,
+      "heavyKnockback": 460,
+      "heavyHitStop": 0.12,
+      "heavyCharge": 0.5,
+      "partMult": 2
+    }
+  }
+}
