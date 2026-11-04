@@ -44,6 +44,7 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
         rooms.AddRange(CaisLevels);
         rooms.AddRange(Ato45Levels);
         rooms.AddRange(RuasLevels);
+        rooms.Add(Core.Final.FinalStory.ArenaLevel);
         foreach (var room in rooms)
         {
             await level.GoToRoom(room, withDirector: false);
@@ -89,10 +90,10 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
         var enemies = new List<Enemy>();
         var pomar = room.StartsWith("pomar_", System.StringComparison.Ordinal);
         var cais = room is "mares" || room.StartsWith("cais_", System.StringComparison.Ordinal);
-        string[] roster = room.StartsWith("ruas_", System.StringComparison.Ordinal) ? ["inquilino"] : cais ? CaisMonsters : pomar ? PomarMonsters : Monsters;
+        string[] roster = room == Core.Final.FinalStory.ArenaLevel ? ["reflexo"] : room.StartsWith("ruas_", System.StringComparison.Ordinal) ? ["inquilino"] : cais ? CaisMonsters : pomar ? PomarMonsters : Monsters;
         foreach (var id in roster)
         {
-            var guardian = id is "lodo_mae" or "macieira_oca" or "farol_afogado" or "inquilino";
+            var guardian = id is "lodo_mae" or "macieira_oca" or "farol_afogado" or "inquilino" or "reflexo";
             x += guardian ? gap * 1.6f : 0f;
             var e = guardian ? EnemyFactory.Guardian(id, World) : EnemyFactory.Create(id, World);
             e.Position = World.ClampToFloor(start + new Vector2(dir * x, 0));

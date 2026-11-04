@@ -24,3 +24,15 @@ final), `<ato>_morte_N` (N-ésima morte no ato, 1–6; depois disso, sortear um 
 **Rotas do Ravi:** `ravi_rota_a` / `ravi_rota_b` nascem em `ato4/ravi` e escolhem a fala em `ato5..ato7/ravi`.
 **Final:** `final/sino` mostra Benício só com `benicio_na_decisao` (escolha em `ato7/benicio`) e Lis só com
 `lis_escondida` + `lis_entrou`; o jogador sempre pode tocar. Use `final/epilogo_sem_benicio` quando `final_benicio`.
+
+## Final ligado na engine (branch `final`)
+
+- **Portão:** a primeira Brecha aparece na Praça quando existe a flag **`act7_done`** (o Ato VII precisa ligá-la no fecho,
+  no mesmo padrão de `act1_done`..`act6_done`) e some quando liga `alvor`. Regras em `src/Core/Final/FinalStory.cs`.
+- **Brecha:** `primeira_brecha` (`src/Data/brecha_final.json`, seção `reflexo` = ritmo da luta), caçada direto à arena
+  `praca_baixo` (`data/cacada/cacada_final.json`, `data/levels/praca_baixo.json`).
+- **Eventos tratados:** `EnterBreach:<id>` (escolha "Entrar." de `final/antes`), `RingBell:*` (ilustração 16:9 de quem tocou),
+  `BurnSeal:Alvor` (cerimônia do selo), `EndPart1` (encerramento com "Abriu uma no mar." e volta ao título; o save fica com
+  `parte1_fim` e o espaço mostra "Parte 1 concluída").
+- **Flags novas:** `final_praca_visto`, `morte_final_1..5` (cada fala de morte uma vez), `primeira_brecha:fell_N` → `final_morte_N`.
+- **Teste:** `godot --headless -- --smoke-test --final` força as flags até o Ato VII e joga o Final inteiro.

@@ -30,6 +30,7 @@ public partial class Reflexo : Enemy
     private const float BladeWidth = 120f;
     private const float LeapSeconds = 0.28f;
     private const float FirstCooldown = 1.2f;
+    private const float GlowHumans = 1.6f;
 
     private static readonly Color Magenta = new("e64a8e");
     private static readonly Color Cream = new("f4e7c6");
@@ -49,6 +50,7 @@ public partial class Reflexo : Enemy
     private int _lastMinute = -1;
     private bool _playerWasSwinging;
     private Lamps _lamps = null!;
+    private PointLight2D _glow = null!;
 
     public Reflexo(LevelWorld world)
         : base("reflexo", world)
@@ -94,6 +96,18 @@ public partial class Reflexo : Enemy
         Play("parado");
         _lamps = new Lamps(Profile.Buff.Lamps, Human) { Name = "Lanternas" };
         AddChild(_lamps);
+
+        // Brilho magenta da lanterna dele: a silhueta escura lê bem contra o chão da praça de baixo.
+        _glow = new PointLight2D
+        {
+            Name = "Brilho",
+            Texture = Components.LightTexture.Get(),
+            Color = Magenta,
+            Energy = 0.9f,
+            TextureScale = Human * GlowHumans / Components.LightTexture.Radius,
+            Position = new Vector2(0, -Human * 0.45f),
+        };
+        AddChild(_glow);
         if (Profile.Buff.Lamps > 0)
         {
             World.Feel.Toast($"{Profile.Buff.Lamps} lanternas acesas em volta dele. Uma por Lanterna que você perdeu.");
@@ -429,6 +443,7 @@ public partial class Reflexo : Enemy
         Sprite.Position = Vector2.Zero;
         Sprite.Modulate = Sprite.Modulate with { A = 1f };
         _lamps.GoOut();
+        _glow.CreateTween().TweenProperty(_glow, "energy", 0f, 1.2f);
         World.Feel.Shake(0.7f);
     }
 
