@@ -29,7 +29,10 @@
       "speaker": "odete",
       "text": "Eu prometi pra ela que eu não entrava mais. Prometi faz tempo.",
       "expression": 2,
-      "objective": "final_reflexo"
+      "objective": "final_reflexo",
+      "set": [
+        "final_praca_visto"
+      ]
     }
   }
 }

@@ -176,10 +176,11 @@ public partial class Level
             else if (name.StartsWith(StoryFlags.EventBurnSealPrefix, System.StringComparison.Ordinal))
             {
                 BurnSeal(name[StoryFlags.EventBurnSealPrefix.Length..]);
+                OnSealBurned(name[StoryFlags.EventBurnSealPrefix.Length..]);
             }
             else
             {
-                if (!HandleActThreeEvent(name))
+                if (!HandleActThreeEvent(name) && !HandleFinalEvent(name))
                 {
                     HandleNightEvent(name);
                 }

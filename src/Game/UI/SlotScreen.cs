@@ -52,7 +52,7 @@ public partial class SlotScreen(SlotScreen.Mode mode) : UiScreen
     }
 
     private static string Describe(SlotSummary s) => s.Exists
-        ? $"Espaço {s.Slot}: {s.Name}, dia {s.Day}, {s.SavedAt.ToLocalTime():dd/MM/yyyy HH:mm}"
+        ? $"Espaço {s.Slot}: {s.Name}, dia {s.Day}, {s.SavedAt.ToLocalTime():dd/MM/yyyy HH:mm}{(s.PartOneDone ? " · Parte 1 concluída" : string.Empty)}"
         : $"Espaço {s.Slot}: vazio";
 
     private void Choose(int slot, bool exists)

@@ -93,6 +93,11 @@ public partial class SmokeTest
             await RunAto45(level);
         }
 
+        if (Array.IndexOf(_args, FinalFlag) >= 0)
+        {
+            await RunFinal(level);
+        }
+
         if (Array.IndexOf(_args, WarningsQaFlag) >= 0 && _shotsDir is not null && DisplayServer.GetName() != "headless")
         {
             await CaptureWarnings(level);

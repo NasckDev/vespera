@@ -107,9 +107,11 @@ public partial class Ancoreiro(LevelWorld world, float sizeFactor = 1f) : Enemy(
         Play("ataque");
         CombatSfx.Play(this, CombatSound.HitHeavy, Vector2.Zero, -6f);
         var length = ThrowRange * A * SizeFactor;
-        for (var i = 1; i <= 6; i++)
+        // Âncora e corrente pintadas (issue #59) voando pela faixa, com respingos de ferro ao longo dela.
+        World.AddFx(ActThreeFx.Anchor(GlobalPosition - new Vector2(0, BodyLift * 0.6f), _dir, length, ThrowWidth * A * SizeFactor * 1.2f, AttackSeconds));
+        for (var i = 1; i <= 3; i++)
         {
-            World.Feel.Spark(GlobalPosition + (_dir * length * i / 6f), Iron, 3, 120f * A);
+            World.Feel.Spark(GlobalPosition + (_dir * length * i / 3f), Iron, 3, 120f * A);
         }
 
         // Força negativa: o empurrão vira puxão (o caçador é arrastado até a pinça).

@@ -135,6 +135,12 @@ public partial class HuntHud : Control
             return "Derrote a Lodo-Mãe";
         }
 
+        // Final: o Reflexo não abre fenda; depois dele é o sino de baixo.
+        if (director.Guardian is Actors.Enemies.Reflexo reflexo)
+        {
+            return reflexo.Dead ? "Suba a escada e toque o sino de baixo" : "Vença o Reflexo: leia o âmbar antes de cada golpe";
+        }
+
         if (!director.Cleared)
         {
             return director.Kind == "elite" ? "Vença os monstros de elite" : "Vença os monstros para abrir a passagem";

@@ -179,6 +179,27 @@
       "title": "A cidade de baixo",
       "text": "A grande lanterna da praça piscou. O Ato VII abre em breve.",
       "locked": true
+    },
+    {
+      "id": "final",
+      "title": "Entre na primeira Brecha",
+      "text": "A grande lanterna da praça apagou e a primeira Brecha abriu, do tamanho da praça. Fale com quem quiser antes de entrar."
+    },
+    {
+      "id": "final_reflexo",
+      "title": "Vença o Reflexo",
+      "text": "Na praça de baixo espera o que você perdeu. Ele luta como você: leia o âmbar antes de cada golpe."
+    },
+    {
+      "id": "final_sino",
+      "title": "Toque o sino de baixo",
+      "text": "O Reflexo caiu. O sino de baixo está inteiro, com badalo, no alto da escada."
+    },
+    {
+      "id": "final_fim",
+      "title": "Parte 1 concluída",
+      "text": "O sol nasceu. Abriu uma no mar.",
+      "locked": true
     }
   ],
   "triggers": [
@@ -326,6 +347,47 @@
       "when": "ruas_invertidas:fell_6",
       "set": [
         "ato6_morte_6"
+      ]
+    },
+    {
+      "when": "act7_done",
+      "if": [
+        "!alvor"
+      ],
+      "objective": "final"
+    },
+    {
+      "when": "parte1_fim",
+      "objective": "final_fim"
+    },
+    {
+      "when": "primeira_brecha:fell_1",
+      "set": [
+        "final_morte_1"
+      ]
+    },
+    {
+      "when": "primeira_brecha:fell_2",
+      "set": [
+        "final_morte_2"
+      ]
+    },
+    {
+      "when": "primeira_brecha:fell_3",
+      "set": [
+        "final_morte_3"
+      ]
+    },
+    {
+      "when": "primeira_brecha:fell_4",
+      "set": [
+        "final_morte_4"
+      ]
+    },
+    {
+      "when": "primeira_brecha:fell_5",
+      "set": [
+        "final_morte_5"
       ]
     }
   ],
@@ -813,6 +875,78 @@
       "if": [
         "ato6_morte_6",
         "!morte_ruas_6"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "final/praca",
+      "npc": "benicio",
+      "if": [
+        "act7_done",
+        "!final_praca_visto",
+        "!alvor"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "final/epilogo_sem_benicio",
+      "npc": "nilza",
+      "stage": "morning",
+      "if": [
+        "alvor",
+        "final_benicio",
+        "!parte1_fim"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "final/epilogo",
+      "npc": "nilza",
+      "stage": "morning",
+      "if": [
+        "alvor",
+        "!final_benicio",
+        "!parte1_fim"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "final/morte",
+      "if": [
+        "final_morte_1",
+        "!morte_final_1"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "final/morte",
+      "if": [
+        "final_morte_2",
+        "!morte_final_2"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "final/morte",
+      "if": [
+        "final_morte_3",
+        "!morte_final_3"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "final/morte",
+      "if": [
+        "final_morte_4",
+        "!morte_final_4"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "final/morte",
+      "if": [
+        "final_morte_5",
+        "!morte_final_5"
       ]
     }
   ],
