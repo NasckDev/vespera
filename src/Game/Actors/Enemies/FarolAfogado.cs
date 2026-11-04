@@ -223,23 +223,9 @@ public partial class FarolAfogado(LevelWorld world) : Enemy("farol_afogado", wor
         }
     }
 
-    /// <summary>O feixe por código (a tira "feixe" corta a luz na borda da célula): linha âmbar que some.</summary>
-    private void DrawBeam(Vector2 dir)
-    {
-        var beam = new Line2D
-        {
-            Name = "FeixeDoFarol",
-            Width = BeamWidth * A * 0.8f,
-            DefaultColor = Amber with { A = 0.75f },
-            Points = [GlobalPosition - new Vector2(0, BodyLift), GlobalPosition + (dir * BeamLength * A)],
-            BeginCapMode = Line2D.LineCapMode.Round,
-            EndCapMode = Line2D.LineCapMode.Round,
-        };
-        World.AddGroundFx(beam);
-        var tween = beam.CreateTween();
-        tween.TweenProperty(beam, "modulate:a", 0f, 0.35f);
-        tween.TweenCallback(Callable.From(beam.QueueFree));
-    }
+    /// <summary>O feixe pintado (issue #59, a tira "feixe" corta a luz na borda da célula): sai da lente e some.</summary>
+    private void DrawBeam(Vector2 dir) =>
+        World.AddGroundFx(ActThreeFx.Beam(GlobalPosition - new Vector2(0, BodyLift), dir, BeamLength * A, BeamWidth * A * 1.3f, 0.45f));
 
     private void CallDrowned()
     {
