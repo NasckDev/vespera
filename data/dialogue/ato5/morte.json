@@ -1,39 +1,46 @@
 {
   "id": "ato5/morte",
+  "_doc": "Falas de morte do Ato V (ROTEIRO-V2 §13), uma por queda, em ordem (flags sino_mudo:fell_N -> ato5_morte_N), tocadas na volta à Torre. A do Vigia faz a pergunta três (vigia_p3_*). Duas frases por balão (§2.1).",
   "entries": [
     {
       "if": [
-        "ato5_morte_6"
+        "ato5_morte_6",
+        "!morte_torre_6"
       ],
       "node": "m6"
     },
     {
       "if": [
-        "ato5_morte_5"
+        "ato5_morte_5",
+        "!morte_torre_5"
       ],
       "node": "m5"
     },
     {
       "if": [
-        "ato5_morte_4"
+        "ato5_morte_4",
+        "!morte_torre_4"
       ],
       "node": "m4"
     },
     {
       "if": [
-        "ato5_morte_3"
+        "ato5_morte_3",
+        "!morte_torre_3"
       ],
       "node": "m3"
     },
     {
       "if": [
-        "ato5_morte_2"
+        "ato5_morte_2",
+        "!morte_torre_2"
       ],
       "node": "m2"
     },
     {
       "if": [
-        "ato5_morte_1"
+        "ato5_morte_1",
+        "!morte_torre_1"
       ],
       "node": "m1"
     },
@@ -44,15 +51,35 @@
   "nodes": {
     "m1": {
       "speaker": "benicio",
-      "text": "Caiu na minha Torre. Eu mesmo te carreguei. A escada é longa."
+      "text": "Caiu na minha Torre. Eu mesmo te carreguei.",
+      "set": [
+        "morte_torre_1"
+      ],
+      "next": "m1_2"
+    },
+    "m1_2": {
+      "speaker": "benicio",
+      "text": "A escada é longa.",
+      "expression": 2
     },
     "m2": {
       "speaker": "nilza",
-      "text": "O velho da Ordem te trouxe no colo. Parecia pai."
+      "text": "O velho da Ordem te trouxe no colo. Parecia pai.",
+      "set": [
+        "morte_torre_2"
+      ]
     },
     "m3": {
       "speaker": "vigia",
-      "text": "Você caiu onde o sino bate. Eu ouvi daqui. Pergunta três: você toca?",
+      "text": "Você caiu onde o sino bate. Eu ouvi daqui.",
+      "set": [
+        "morte_torre_3"
+      ],
+      "next": "m3_2"
+    },
+    "m3_2": {
+      "speaker": "vigia",
+      "text": "Pergunta três: você toca?",
       "choices": [
         {
           "text": "Toco.",
@@ -70,15 +97,30 @@
     },
     "m4": {
       "speaker": "odete",
-      "text": "Duas vezes no mesmo lugar. Caçador aprende ou morre. Você tá aprendendo?"
+      "text": "Duas vezes no mesmo lugar. Caçador aprende ou morre.",
+      "set": [
+        "morte_torre_4"
+      ],
+      "next": "m4_2"
+    },
+    "m4_2": {
+      "speaker": "odete",
+      "text": "Você tá aprendendo?",
+      "expression": 2
     },
     "m5": {
       "speaker": "ravi",
-      "text": "Eu não entro na Torre. Mas eu fiquei na porta."
+      "text": "Eu não entro na Torre. Mas eu fiquei na porta.",
+      "set": [
+        "morte_torre_5"
+      ]
     },
     "m6": {
       "speaker": "lis",
-      "text": "O sino sem badalo mexeu. Eu vi daqui de baixo."
+      "text": "O sino sem badalo mexeu. Eu vi daqui de baixo.",
+      "set": [
+        "morte_torre_6"
+      ]
     }
   }
 }

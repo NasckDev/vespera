@@ -1,39 +1,46 @@
 {
   "id": "ato4/morte",
+  "_doc": "Falas de morte do Ato IV (ROTEIRO-V2 §13), uma por queda, em ordem (flags cemiterio_das_lanternas:fell_N -> ato4_morte_N), tocadas na volta ao Cemitério. Duas frases por balão (§2.1).",
   "entries": [
     {
       "if": [
-        "ato4_morte_6"
+        "ato4_morte_6",
+        "!morte_cem_6"
       ],
       "node": "m6"
     },
     {
       "if": [
-        "ato4_morte_5"
+        "ato4_morte_5",
+        "!morte_cem_5"
       ],
       "node": "m5"
     },
     {
       "if": [
-        "ato4_morte_4"
+        "ato4_morte_4",
+        "!morte_cem_4"
       ],
       "node": "m4"
     },
     {
       "if": [
-        "ato4_morte_3"
+        "ato4_morte_3",
+        "!morte_cem_3"
       ],
       "node": "m3"
     },
     {
       "if": [
-        "ato4_morte_2"
+        "ato4_morte_2",
+        "!morte_cem_2"
       ],
       "node": "m2"
     },
     {
       "if": [
-        "ato4_morte_1"
+        "ato4_morte_1",
+        "!morte_cem_1"
       ],
       "node": "m1"
     },
@@ -44,27 +51,68 @@
   "nodes": {
     "m1": {
       "speaker": "vigia",
-      "text": "Você caiu do meu lado. Eu te empurrei de volta. Pergunta três fica pra próxima."
+      "text": "Você caiu do meu lado. Eu te empurrei de volta.",
+      "set": [
+        "morte_cem_1"
+      ],
+      "next": "m1_2"
+    },
+    "m1_2": {
+      "speaker": "vigia",
+      "text": "Pergunta três fica pra próxima."
     },
     "m2": {
       "speaker": "nilza",
-      "text": "Um homem de capuz te deixou na porta. Não entrou."
+      "text": "Um homem de capuz te deixou na porta. Não entrou.",
+      "set": [
+        "morte_cem_2"
+      ]
     },
     "m3": {
       "speaker": "odete",
-      "text": "Quem te trouxe deixou um recado: 'ela ainda carrega bem'. Eu não entendi."
+      "text": "Quem te trouxe deixou um recado: 'ela ainda carrega bem'.",
+      "set": [
+        "morte_cem_3"
+      ],
+      "next": "m3_2"
+    },
+    "m3_2": {
+      "speaker": "odete",
+      "text": "Eu não entendi.",
+      "expression": 2
     },
     "m4": {
       "speaker": "benicio",
-      "text": "Caiu no Cemitério. Eu olhei a lista. Seu nome não entrou."
+      "text": "Caiu no Cemitério. Eu olhei a lista.",
+      "set": [
+        "morte_cem_4"
+      ],
+      "next": "m4_2"
+    },
+    "m4_2": {
+      "speaker": "benicio",
+      "text": "Seu nome não entrou.",
+      "expression": 2
     },
     "m5": {
       "speaker": "ravi",
-      "text": "Eu fui buscar sua lanterna. Não consegui. Desculpa."
+      "text": "Eu fui buscar sua lanterna. Não consegui.",
+      "set": [
+        "morte_cem_5"
+      ],
+      "next": "m5_2"
+    },
+    "m5_2": {
+      "speaker": "ravi",
+      "text": "Desculpa.",
+      "expression": 2
     },
     "m6": {
       "speaker": "lis",
-      "text": "O homem do capuz chorou. Eu não sabia que eco chorava."
+      "text": "O homem do capuz chorou. Eu não sabia que eco chorava.",
+      "set": [
+        "morte_cem_6"
+      ]
     }
   }
 }
