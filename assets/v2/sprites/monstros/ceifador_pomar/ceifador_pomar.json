@@ -1,0 +1,110 @@
+{
+  "character": "ceifador_pomar",
+  "anchor": [
+    128,
+    244
+  ],
+  "stand_height_px": 140,
+  "facing": "olha para a direita; para a esquerda use flip_h",
+  "scale_class": 0.2105,
+  "stand_height_source_px": 665.0,
+  "hit_frame_method": "quadro de maior área opaca (índice base 0), só para ataques",
+  "frame_counts": {
+    "parado": 4,
+    "mover": 6,
+    "aviso": 3,
+    "ataque": 4,
+    "morte": 6
+  },
+  "atlas": "ceifador_pomar_atlas.png",
+  "cell": [
+    256,
+    256
+  ],
+  "animations": {
+    "parado": {
+      "row": 0,
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "scale": 0.2105,
+      "source": "ceifador_pomar_parado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        5323,
+        5110,
+        5332,
+        5154
+      ],
+      "note": null
+    },
+    "mover": {
+      "row": 1,
+      "frames": 6,
+      "fps": 10,
+      "loop": true,
+      "scale": 0.2729,
+      "source": "ceifador_pomar_mover.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        5549,
+        5504,
+        5913,
+        5887,
+        5714,
+        5627
+      ],
+      "note": "reescalada: guarda -23% vs parado"
+    },
+    "aviso": {
+      "row": 2,
+      "frames": 3,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.2105,
+      "source": "ceifador_pomar_aviso.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        5960,
+        7006,
+        7508
+      ],
+      "note": null
+    },
+    "ataque": {
+      "row": 3,
+      "frames": 4,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.2105,
+      "source": "ceifador_pomar_ataque.png",
+      "hit_frame": 1,
+      "opaque_area_per_frame": [
+        3957,
+        4062,
+        3214,
+        3432
+      ],
+      "note": null
+    },
+    "morte": {
+      "row": 4,
+      "frames": 6,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.2703,
+      "source": "ceifador_pomar_morte.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        5267,
+        6444,
+        6994,
+        5778,
+        4093,
+        2677
+      ],
+      "note": "reescalada: guarda -22% vs parado"
+    }
+  },
+  "standing_height": 140
+}

@@ -3179,6 +3179,1658 @@
           "h": 724
         }
       ]
+    },
+    {
+      "file": "varal_parado.png",
+      "frames": 4,
+      "frame_width": 443,
+      "frame_height": 887,
+      "columns": 4,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/48",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        },
+        {
+          "index": 1,
+          "x": 444,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        },
+        {
+          "index": 2,
+          "x": 887,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        },
+        {
+          "index": 3,
+          "x": 1330,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        }
+      ]
+    },
+    {
+      "file": "varal_mover.png",
+      "frames": 6,
+      "frame_width": 323,
+      "frame_height": 809,
+      "columns": 6,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/48",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 323,
+          "h": 809
+        },
+        {
+          "index": 1,
+          "x": 324,
+          "y": 0,
+          "w": 323,
+          "h": 809
+        },
+        {
+          "index": 2,
+          "x": 647,
+          "y": 0,
+          "w": 323,
+          "h": 809
+        },
+        {
+          "index": 3,
+          "x": 971,
+          "y": 0,
+          "w": 323,
+          "h": 809
+        },
+        {
+          "index": 4,
+          "x": 1295,
+          "y": 0,
+          "w": 323,
+          "h": 809
+        },
+        {
+          "index": 5,
+          "x": 1618,
+          "y": 0,
+          "w": 323,
+          "h": 809
+        }
+      ]
+    },
+    {
+      "file": "varal_aviso.png",
+      "frames": 3,
+      "frame_width": 591,
+      "frame_height": 887,
+      "columns": 3,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/48",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 591,
+          "h": 887
+        },
+        {
+          "index": 1,
+          "x": 591,
+          "y": 0,
+          "w": 591,
+          "h": 887
+        },
+        {
+          "index": 2,
+          "x": 1183,
+          "y": 0,
+          "w": 591,
+          "h": 887
+        }
+      ]
+    },
+    {
+      "file": "varal_ataque.png",
+      "frames": 4,
+      "frame_width": 443,
+      "frame_height": 887,
+      "columns": 4,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/48",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        },
+        {
+          "index": 1,
+          "x": 444,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        },
+        {
+          "index": 2,
+          "x": 887,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        },
+        {
+          "index": 3,
+          "x": 1330,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        }
+      ]
+    },
+    {
+      "file": "varal_morte.png",
+      "frames": 6,
+      "frame_width": 362,
+      "frame_height": 724,
+      "columns": 6,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/48",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 362,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 724,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 1086,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 4,
+          "x": 1448,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 5,
+          "x": 1810,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "despejado_parado.png",
+      "frames": 4,
+      "frame_width": 443,
+      "frame_height": 887,
+      "columns": 4,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/48",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        },
+        {
+          "index": 1,
+          "x": 444,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        },
+        {
+          "index": 2,
+          "x": 887,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        },
+        {
+          "index": 3,
+          "x": 1330,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        }
+      ]
+    },
+    {
+      "file": "despejado_mover.png",
+      "frames": 6,
+      "frame_width": 362,
+      "frame_height": 724,
+      "columns": 6,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/48",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 362,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 724,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 1086,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 4,
+          "x": 1448,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 5,
+          "x": 1810,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "despejado_aviso.png",
+      "frames": 3,
+      "frame_width": 591,
+      "frame_height": 887,
+      "columns": 3,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/48",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 591,
+          "h": 887
+        },
+        {
+          "index": 1,
+          "x": 591,
+          "y": 0,
+          "w": 591,
+          "h": 887
+        },
+        {
+          "index": 2,
+          "x": 1183,
+          "y": 0,
+          "w": 591,
+          "h": 887
+        }
+      ]
+    },
+    {
+      "file": "despejado_ataque.png",
+      "frames": 4,
+      "frame_width": 443,
+      "frame_height": 887,
+      "columns": 4,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/48",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        },
+        {
+          "index": 1,
+          "x": 444,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        },
+        {
+          "index": 2,
+          "x": 887,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        },
+        {
+          "index": 3,
+          "x": 1330,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        }
+      ]
+    },
+    {
+      "file": "despejado_morte.png",
+      "frames": 6,
+      "frame_width": 362,
+      "frame_height": 724,
+      "columns": 6,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/48",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 362,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 724,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 1086,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 4,
+          "x": 1448,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 5,
+          "x": 1810,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "rasgo_parado.png",
+      "frames": 4,
+      "frame_width": 443,
+      "frame_height": 887,
+      "columns": 4,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/48",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        },
+        {
+          "index": 1,
+          "x": 444,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        },
+        {
+          "index": 2,
+          "x": 887,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        },
+        {
+          "index": 3,
+          "x": 1330,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        }
+      ]
+    },
+    {
+      "file": "rasgo_mover.png",
+      "frames": 6,
+      "frame_width": 334,
+      "frame_height": 783,
+      "columns": 6,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/48",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 334,
+          "h": 783
+        },
+        {
+          "index": 1,
+          "x": 335,
+          "y": 0,
+          "w": 334,
+          "h": 783
+        },
+        {
+          "index": 2,
+          "x": 670,
+          "y": 0,
+          "w": 334,
+          "h": 783
+        },
+        {
+          "index": 3,
+          "x": 1004,
+          "y": 0,
+          "w": 334,
+          "h": 783
+        },
+        {
+          "index": 4,
+          "x": 1339,
+          "y": 0,
+          "w": 334,
+          "h": 783
+        },
+        {
+          "index": 5,
+          "x": 1674,
+          "y": 0,
+          "w": 334,
+          "h": 783
+        }
+      ]
+    },
+    {
+      "file": "rasgo_aviso.png",
+      "frames": 3,
+      "frame_width": 591,
+      "frame_height": 887,
+      "columns": 3,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/48",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 591,
+          "h": 887
+        },
+        {
+          "index": 1,
+          "x": 591,
+          "y": 0,
+          "w": 591,
+          "h": 887
+        },
+        {
+          "index": 2,
+          "x": 1183,
+          "y": 0,
+          "w": 591,
+          "h": 887
+        }
+      ]
+    },
+    {
+      "file": "rasgo_ataque.png",
+      "frames": 4,
+      "frame_width": 443,
+      "frame_height": 887,
+      "columns": 4,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/48",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        },
+        {
+          "index": 1,
+          "x": 444,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        },
+        {
+          "index": 2,
+          "x": 887,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        },
+        {
+          "index": 3,
+          "x": 1330,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        }
+      ]
+    },
+    {
+      "file": "rasgo_morte.png",
+      "frames": 6,
+      "frame_width": 330,
+      "frame_height": 793,
+      "columns": 6,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/48",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 330,
+          "h": 793
+        },
+        {
+          "index": 1,
+          "x": 330,
+          "y": 0,
+          "w": 330,
+          "h": 793
+        },
+        {
+          "index": 2,
+          "x": 661,
+          "y": 0,
+          "w": 330,
+          "h": 793
+        },
+        {
+          "index": 3,
+          "x": 992,
+          "y": 0,
+          "w": 330,
+          "h": 793
+        },
+        {
+          "index": 4,
+          "x": 1322,
+          "y": 0,
+          "w": 330,
+          "h": 793
+        },
+        {
+          "index": 5,
+          "x": 1652,
+          "y": 0,
+          "w": 330,
+          "h": 793
+        }
+      ]
+    },
+    {
+      "file": "ceifador_pomar_parado.png",
+      "frames": 4,
+      "frame_width": 443,
+      "frame_height": 887,
+      "columns": 4,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/50",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        },
+        {
+          "index": 1,
+          "x": 444,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        },
+        {
+          "index": 2,
+          "x": 887,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        },
+        {
+          "index": 3,
+          "x": 1330,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        }
+      ]
+    },
+    {
+      "file": "ceifador_pomar_mover.png",
+      "frames": 6,
+      "frame_width": 362,
+      "frame_height": 724,
+      "columns": 6,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/50",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 362,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 724,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 1086,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 4,
+          "x": 1448,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 5,
+          "x": 1810,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "ceifador_pomar_aviso.png",
+      "frames": 3,
+      "frame_width": 591,
+      "frame_height": 887,
+      "columns": 3,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/50",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 591,
+          "h": 887
+        },
+        {
+          "index": 1,
+          "x": 591,
+          "y": 0,
+          "w": 591,
+          "h": 887
+        },
+        {
+          "index": 2,
+          "x": 1183,
+          "y": 0,
+          "w": 591,
+          "h": 887
+        }
+      ]
+    },
+    {
+      "file": "ceifador_pomar_ataque.png",
+      "frames": 4,
+      "frame_width": 443,
+      "frame_height": 887,
+      "columns": 4,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/50",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        },
+        {
+          "index": 1,
+          "x": 444,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        },
+        {
+          "index": 2,
+          "x": 887,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        },
+        {
+          "index": 3,
+          "x": 1330,
+          "y": 0,
+          "w": 443,
+          "h": 887
+        }
+      ]
+    },
+    {
+      "file": "ceifador_pomar_morte.png",
+      "frames": 6,
+      "frame_width": 362,
+      "frame_height": 724,
+      "columns": 6,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/50",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 362,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 724,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 1086,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 4,
+          "x": 1448,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 5,
+          "x": 1810,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "sombra_cacador_lamina_parado.png",
+      "frames": 4,
+      "frame_width": 543,
+      "frame_height": 724,
+      "columns": 4,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/50",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 543,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 1086,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 1629,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "sombra_cacador_lamina_mover.png",
+      "frames": 6,
+      "frame_width": 362,
+      "frame_height": 724,
+      "columns": 6,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/50",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 362,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 724,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 1086,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 4,
+          "x": 1448,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 5,
+          "x": 1810,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "sombra_cacador_lamina_aviso.png",
+      "frames": 3,
+      "frame_width": 724,
+      "frame_height": 724,
+      "columns": 3,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/50",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 724,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 724,
+          "y": 0,
+          "w": 724,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 1448,
+          "y": 0,
+          "w": 724,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "sombra_cacador_lamina_ataque.png",
+      "frames": 4,
+      "frame_width": 543,
+      "frame_height": 724,
+      "columns": 4,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/50",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 543,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 1086,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 1629,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "sombra_cacador_lamina_morte.png",
+      "frames": 6,
+      "frame_width": 362,
+      "frame_height": 724,
+      "columns": 6,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/50",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 362,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 724,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 1086,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 4,
+          "x": 1448,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 5,
+          "x": 1810,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "sombra_cacador_arco_parado.png",
+      "frames": 4,
+      "frame_width": 543,
+      "frame_height": 724,
+      "columns": 4,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/50",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 543,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 1086,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 1629,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "sombra_cacador_arco_mover.png",
+      "frames": 6,
+      "frame_width": 362,
+      "frame_height": 724,
+      "columns": 6,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/50",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 362,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 724,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 1086,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 4,
+          "x": 1448,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 5,
+          "x": 1810,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "sombra_cacador_arco_aviso.png",
+      "frames": 3,
+      "frame_width": 724,
+      "frame_height": 724,
+      "columns": 3,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/50",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 724,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 724,
+          "y": 0,
+          "w": 724,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 1448,
+          "y": 0,
+          "w": 724,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "sombra_cacador_arco_ataque.png",
+      "frames": 4,
+      "frame_width": 543,
+      "frame_height": 724,
+      "columns": 4,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/50",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 543,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 1086,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 1629,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "sombra_cacador_arco_morte.png",
+      "frames": 6,
+      "frame_width": 362,
+      "frame_height": 724,
+      "columns": 6,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/50",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 362,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 724,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 1086,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 4,
+          "x": 1448,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 5,
+          "x": 1810,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "sombra_cacador_martelo_parado.png",
+      "frames": 4,
+      "frame_width": 543,
+      "frame_height": 724,
+      "columns": 4,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/50",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 543,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 1086,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 1629,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "sombra_cacador_martelo_mover.png",
+      "frames": 6,
+      "frame_width": 362,
+      "frame_height": 724,
+      "columns": 6,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": true,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/50",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 362,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 724,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 1086,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 4,
+          "x": 1448,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 5,
+          "x": 1810,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "sombra_cacador_martelo_aviso.png",
+      "frames": 3,
+      "frame_width": 724,
+      "frame_height": 724,
+      "columns": 3,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/50",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 724,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 724,
+          "y": 0,
+          "w": 724,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 1448,
+          "y": 0,
+          "w": 724,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "sombra_cacador_martelo_ataque.png",
+      "frames": 4,
+      "frame_width": 543,
+      "frame_height": 724,
+      "columns": 4,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/50",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 543,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 1086,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 1629,
+          "y": 0,
+          "w": 543,
+          "h": 724
+        }
+      ]
+    },
+    {
+      "file": "sombra_cacador_martelo_morte.png",
+      "frames": 6,
+      "frame_width": 362,
+      "frame_height": 724,
+      "columns": 6,
+      "rows": 1,
+      "background": "#00FF00",
+      "direction": "right",
+      "fps_suggested": 8,
+      "loop": false,
+      "source_issue": "https://github.com/NasckDev/vespera/issues/50",
+      "rects": [
+        {
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 1,
+          "x": 362,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 2,
+          "x": 724,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 3,
+          "x": 1086,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 4,
+          "x": 1448,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        },
+        {
+          "index": 5,
+          "x": 1810,
+          "y": 0,
+          "w": 362,
+          "h": 724
+        }
+      ]
     }
   ]
 }

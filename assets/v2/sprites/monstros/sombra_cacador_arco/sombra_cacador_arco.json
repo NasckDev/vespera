@@ -1,0 +1,110 @@
+{
+  "character": "sombra_cacador_arco",
+  "anchor": [
+    128,
+    244
+  ],
+  "stand_height_px": 112,
+  "facing": "olha para a direita; para a esquerda use flip_h",
+  "scale_class": 0.3027,
+  "stand_height_source_px": 370.0,
+  "hit_frame_method": "quadro de maior área opaca (índice base 0), só para ataques",
+  "frame_counts": {
+    "parado": 4,
+    "mover": 6,
+    "aviso": 3,
+    "ataque": 4,
+    "morte": 6
+  },
+  "atlas": "sombra_cacador_arco_atlas.png",
+  "cell": [
+    256,
+    256
+  ],
+  "animations": {
+    "parado": {
+      "row": 0,
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "scale": 0.3027,
+      "source": "sombra_cacador_arco_parado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        7145,
+        7446,
+        7489,
+        7324
+      ],
+      "note": null
+    },
+    "mover": {
+      "row": 1,
+      "frames": 6,
+      "fps": 10,
+      "loop": true,
+      "scale": 0.3823,
+      "source": "sombra_cacador_arco_mover.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        7841,
+        7884,
+        7852,
+        7819,
+        7771,
+        8357
+      ],
+      "note": "reescalada: guarda -21% vs parado"
+    },
+    "aviso": {
+      "row": 2,
+      "frames": 3,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.3027,
+      "source": "sombra_cacador_arco_aviso.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        11149,
+        13320,
+        13386
+      ],
+      "note": null
+    },
+    "ataque": {
+      "row": 3,
+      "frames": 4,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.3027,
+      "source": "sombra_cacador_arco_ataque.png",
+      "hit_frame": 2,
+      "opaque_area_per_frame": [
+        7338,
+        8553,
+        8919,
+        7256
+      ],
+      "note": null
+    },
+    "morte": {
+      "row": 4,
+      "frames": 6,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.3027,
+      "source": "sombra_cacador_arco_morte.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        5008,
+        4659,
+        4420,
+        3974,
+        4147,
+        2852
+      ],
+      "note": null
+    }
+  },
+  "standing_height": 119
+}

@@ -1,0 +1,110 @@
+{
+  "character": "sombra_cacador_martelo",
+  "anchor": [
+    128,
+    244
+  ],
+  "stand_height_px": 112,
+  "facing": "olha para a direita; para a esquerda use flip_h",
+  "scale_class": 0.2732,
+  "stand_height_source_px": 410.0,
+  "hit_frame_method": "quadro de maior área opaca (índice base 0), só para ataques",
+  "frame_counts": {
+    "parado": 4,
+    "mover": 6,
+    "aviso": 3,
+    "ataque": 4,
+    "morte": 6
+  },
+  "atlas": "sombra_cacador_martelo_atlas.png",
+  "cell": [
+    256,
+    256
+  ],
+  "animations": {
+    "parado": {
+      "row": 0,
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "scale": 0.2732,
+      "source": "sombra_cacador_martelo_parado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        7353,
+        7438,
+        7331,
+        7392
+      ],
+      "note": null
+    },
+    "mover": {
+      "row": 1,
+      "frames": 6,
+      "fps": 10,
+      "loop": true,
+      "scale": 0.3363,
+      "source": "sombra_cacador_martelo_mover.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        7868,
+        7218,
+        7544,
+        7507,
+        7480,
+        7540
+      ],
+      "note": "reescalada: guarda -19% vs parado"
+    },
+    "aviso": {
+      "row": 2,
+      "frames": 3,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.2732,
+      "source": "sombra_cacador_martelo_aviso.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        10567,
+        11407,
+        12402
+      ],
+      "note": null
+    },
+    "ataque": {
+      "row": 3,
+      "frames": 4,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.2732,
+      "source": "sombra_cacador_martelo_ataque.png",
+      "hit_frame": 1,
+      "opaque_area_per_frame": [
+        7559,
+        8582,
+        8436,
+        7407
+      ],
+      "note": null
+    },
+    "morte": {
+      "row": 4,
+      "frames": 6,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.2732,
+      "source": "sombra_cacador_martelo_morte.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        5677,
+        4665,
+        4709,
+        4120,
+        3761,
+        2760
+      ],
+      "note": null
+    }
+  },
+  "standing_height": 114
+}

@@ -1,0 +1,110 @@
+{
+  "character": "varal",
+  "anchor": [
+    128,
+    244
+  ],
+  "stand_height_px": 130,
+  "facing": "olha para a direita; para a esquerda use flip_h",
+  "scale_class": 0.2054,
+  "stand_height_source_px": 633.0,
+  "hit_frame_method": "quadro de maior área opaca (índice base 0), só para ataques",
+  "frame_counts": {
+    "parado": 4,
+    "mover": 6,
+    "aviso": 3,
+    "ataque": 4,
+    "morte": 6
+  },
+  "atlas": "varal_atlas.png",
+  "cell": [
+    256,
+    256
+  ],
+  "animations": {
+    "parado": {
+      "row": 0,
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "scale": 0.2054,
+      "source": "varal_parado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        5685,
+        5598,
+        5632,
+        5407
+      ],
+      "note": null
+    },
+    "mover": {
+      "row": 1,
+      "frames": 6,
+      "fps": 10,
+      "loop": true,
+      "scale": 0.2054,
+      "source": "varal_mover.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        4459,
+        4010,
+        3738,
+        3617,
+        3741,
+        3665
+      ],
+      "note": null
+    },
+    "aviso": {
+      "row": 2,
+      "frames": 3,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.2054,
+      "source": "varal_aviso.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        6764,
+        7607,
+        8678
+      ],
+      "note": null
+    },
+    "ataque": {
+      "row": 3,
+      "frames": 4,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.2054,
+      "source": "varal_ataque.png",
+      "hit_frame": 2,
+      "opaque_area_per_frame": [
+        5028,
+        5221,
+        5319,
+        4451
+      ],
+      "note": null
+    },
+    "morte": {
+      "row": 4,
+      "frames": 6,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.282,
+      "source": "varal_morte.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        5853,
+        5806,
+        6013,
+        6662,
+        4343,
+        2738
+      ],
+      "note": "reescalada: guarda -27% vs parado"
+    }
+  },
+  "standing_height": 130
+}

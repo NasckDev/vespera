@@ -83,6 +83,17 @@ MONSTER_MARGIN = {"lodo": 8, "espectro": 12, "lodo_mae": 16, "carrapicho": 10, "
 MONSTERS["inquilino"] = {"height": 300, "cell": 448, "normalize": True}
 MONSTER_MARGIN["inquilino"] = 16
 
+# Ato VI (issue #48): Varal, Despejado e Rasgo, comuns rank S das Ruas Invertidas.
+MONSTERS["varal"] = {"height": 130, "cell": 256, "normalize": True}
+MONSTERS["despejado"] = {"height": 130, "cell": 256, "normalize": True, "keep": ("ataque",)}
+MONSTERS["rasgo"] = {"height": 120, "cell": 256, "normalize": True}
+# Ato VII (issue #50): Ceifador de Pomar e a Sombra de Caçador nas 3 classes (mesmo corpo, arma de cada classe).
+MONSTERS["ceifador_pomar"] = {"height": 140, "cell": 256, "normalize": True, "keep": ("ataque",)}
+for _cls in ("lamina", "arco", "martelo"):
+    MONSTERS[f"sombra_cacador_{_cls}"] = {"height": 112, "cell": 256, "normalize": True, "keep": ("aviso",)}
+for _id in ("varal", "despejado", "rasgo", "ceifador_pomar", "sombra_cacador_lamina", "sombra_cacador_arco", "sombra_cacador_martelo"):
+    MONSTER_MARGIN[_id] = 12
+
 PLANTED_ANIMS = {"parado", "dano"}  # pés no mesmo lugar: realinha o x por quadro (a fonte desloca os quadros dentro da fatia)
 LOOP_ANIMS = {"parado", "andar", "mover"}
 HIT_ANIMS = re.compile(r"^(ataque\d*|pesado|tiro|tiro_carregado|engolir|dividir)$")
@@ -517,7 +528,8 @@ def build_monsters(only: set[str] | None = None) -> dict:
             if config.get("normalize"):
                 ref = reference_height(strip)
                 deviation = ref / stand - 1.0
-                if strip.anim != "parado" and abs(deviation) > DEVIATION_LIMIT:
+                # "keep": tiras desenhadas na mesma escala do parado cuja altura diferente é da pose (golpe agachado).
+                if strip.anim != "parado" and strip.anim not in config.get("keep", ()) and abs(deviation) > DEVIATION_LIMIT:
                     strip.scale = config["height"] / ref
                     strip.note = f"reescalada: guarda {deviation:+.0%} vs parado"
         cell = fit_cell(strips, config["cell"], MONSTER_MARGIN[monster])

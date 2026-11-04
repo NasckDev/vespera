@@ -1,0 +1,110 @@
+{
+  "character": "rasgo",
+  "anchor": [
+    128,
+    244
+  ],
+  "stand_height_px": 120,
+  "facing": "olha para a direita; para a esquerda use flip_h",
+  "scale_class": 0.1845,
+  "stand_height_source_px": 650.5,
+  "hit_frame_method": "quadro de maior área opaca (índice base 0), só para ataques",
+  "frame_counts": {
+    "parado": 4,
+    "mover": 6,
+    "aviso": 3,
+    "ataque": 4,
+    "morte": 6
+  },
+  "atlas": "rasgo_atlas.png",
+  "cell": [
+    256,
+    256
+  ],
+  "animations": {
+    "parado": {
+      "row": 0,
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "scale": 0.1845,
+      "source": "rasgo_parado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        4029,
+        4266,
+        4320,
+        4037
+      ],
+      "note": null
+    },
+    "mover": {
+      "row": 1,
+      "frames": 6,
+      "fps": 10,
+      "loop": true,
+      "scale": 0.1845,
+      "source": "rasgo_mover.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        2984,
+        3114,
+        3273,
+        3244,
+        3122,
+        3119
+      ],
+      "note": null
+    },
+    "aviso": {
+      "row": 2,
+      "frames": 3,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.1845,
+      "source": "rasgo_aviso.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        5820,
+        3301,
+        1940
+      ],
+      "note": null
+    },
+    "ataque": {
+      "row": 3,
+      "frames": 4,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.1845,
+      "source": "rasgo_ataque.png",
+      "hit_frame": 2,
+      "opaque_area_per_frame": [
+        2272,
+        4137,
+        4924,
+        4162
+      ],
+      "note": null
+    },
+    "morte": {
+      "row": 4,
+      "frames": 6,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.1845,
+      "source": "rasgo_morte.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        3101,
+        3448,
+        3529,
+        3005,
+        2370,
+        1142
+      ],
+      "note": null
+    }
+  },
+  "standing_height": 120
+}
