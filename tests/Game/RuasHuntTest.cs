@@ -8,8 +8,9 @@ using Vespera.Game.World;
 namespace Vespera.Tests.Game;
 
 /// <summary>
-/// Ato VI (ROTEIRO-V2 §13, "A Sopa da Véspera"): Brecha das Ruas Invertidas direto à arena do Inquilino (as salas
-/// esperam a issue #47), hub das Ruas Baixas ligado às Forjas depois do Sineiro Mudo e as falas do ato.
+/// Ato VI (ROTEIRO-V2 §13, "A Sopa da Véspera"): Brecha das Ruas Invertidas com as 4 salas da issue #47 e os monstros
+/// da #48 (Varal, Despejado, Rasgo) até a arena do Inquilino, hub das Ruas Baixas ligado às Forjas depois do Sineiro
+/// Mudo e as falas do ato.
 /// </summary>
 [TestSuite]
 public class RuasHuntTest
@@ -22,25 +23,51 @@ public class RuasHuntTest
 
     private static LevelGrid Grid(LevelData level) => LevelGrid.Parse(level.Cell, level.Cols, level.Rows, level.Grid);
 
+    private static readonly string[] RuasMonsters = ["varal", "despejado", "rasgo"];
+
     [TestCase]
-    public void EveryRuasRunGoesStraightToTheInquilino()
+    public void RuasRunsUseOnlyStreetRoomsAndMonsters()
     {
         var planner = new RunPlanner(Config);
-        for (var seed = 1; seed <= 50; seed++)
+        var seen = new HashSet<string>();
+        for (var seed = 1; seed <= 100; seed++)
         {
-            var plan = planner.Plan(seed, seed % 3, seed % 2 == 0);
-            AssertThat(plan.Rooms.Count).IsEqual(1);
-            AssertThat(plan.Rooms[0].Ground).IsEqual("ruas_arena");
-            AssertThat(plan.Rooms[0].Kind).IsEqual(RoomKind.Guardian);
-            AssertThat(plan.HasGuardian).IsTrue();
-            AssertThat(plan.MonsterCount).IsEqual(0);
+            var plan = planner.Plan(seed, 1, false);
+            AssertThat(plan.Rooms.Count).IsGreaterEqual(Config.RoomsMin);
+            AssertThat(plan.Rooms[^1].Ground).IsEqual("ruas_arena");
+            AssertThat(plan.Rooms[0].Waves.SelectMany(w => w).All(s => s.Monster == "varal")).IsTrue();
+            foreach (var room in plan.Rooms)
+            {
+                AssertThat(room.Ground.StartsWith("ruas_", StringComparison.Ordinal)).IsTrue();
+                foreach (var spawn in room.Waves.SelectMany(w => w))
+                {
+                    AssertThat(RuasMonsters).Contains(spawn.Monster);
+                    seen.Add(spawn.Monster);
+                }
+            }
         }
+
+        AssertThat(seen).ContainsExactlyInAnyOrder(RuasMonsters);
+    }
+
+    [TestCase]
+    public void InquilinoWaitsAfterOneRunAndTheVisitToRavisMother()
+    {
+        AssertThat(Config.GuardianOnly).IsFalse();
+        AssertThat(Config.GuardianAfterRuns).IsEqual(1);
+        AssertThat(Config.GuardianFlag).IsEqual("met_mae_ravi");
+        var plan = new RunPlanner(Config).Plan(11, 1, true);
+        AssertThat(plan.HasGuardian).IsTrue();
+        AssertThat(plan.Rooms[^1].Ground).IsEqual("ruas_arena");
+        AssertThat(plan.Rooms[^2].Ground).IsEqual("ruas_cozinha");
+        AssertThat(plan.Rooms[^2].Kind).IsEqual(RoomKind.Rest);
     }
 
     [TestCase]
     public void GuardianOnlyNeedsTheArenaToAcceptTheGuardian()
     {
         var config = Config;
+        config.GuardianOnly = true;
         config.Grounds["ruas_arena"].Kinds = [RoomKind.Combat];
         AssertThat(config.Validate()).IsNotEmpty();
     }
@@ -54,18 +81,91 @@ public class RuasHuntTest
     }
 
     [TestCase]
-    public void BrechaRuasIsRankSWithTheInquilinoInThreePhases()
+    public void BrechaRuasIsRankSWithItsRoomsMonstersAndTheInquilino()
     {
         var def = BrechaDef.Parse(File.ReadAllText(Path.Combine(Dir("Data"), "brecha_ruas.json")));
         AssertThat(def.Id).IsEqual("ruas_invertidas");
         AssertThat(def.Rank).IsEqual("S");
         AssertThat(def.GuardianId).IsEqual("inquilino");
         AssertThat(def.Hub).IsEqual("ruas_baixas");
-        AssertThat(def.Rooms).ContainsExactly("ruas_arena");
+        AssertThat(def.Rooms).ContainsExactly("ruas_viela", "ruas_largo", "ruas_cozinha", "ruas_volta", "ruas_arena");
+        foreach (var id in RuasMonsters.Append("inquilino"))
+        {
+            // Todo golpe forte tem aviso âmbar de 0,4 a 0,8 s (PLANO §2).
+            AssertThat(def.Monsters[id].Telegraph).OverrideFailureMessage(id).IsBetween(0.4, 0.8);
+        }
+
         AssertThat(def.Monsters["inquilino"].Boss).IsTrue();
-        AssertThat(def.Monsters["inquilino"].Telegraph).IsBetween(0.4, 0.8);
         AssertThat(def.Boss.Phases).ContainsExactly(0.66, 0.33);
         AssertThat(def.Boss.Cores).IsEqual(4);
+    }
+
+    [TestCase]
+    public void EveryRuasRoomIsWalkableFromTheEntrance()
+    {
+        foreach (var (id, ground) in Config.Grounds)
+        {
+            var level = Level(id);
+            var grid = Grid(level);
+            var reach = Reachable(grid, level.Spawn);
+            var rift = level.Rift!;
+            var points = ground.Spawns.Concat(ground.Breakables).ToList();
+            if (ground.Rest.Length == 2)
+            {
+                points.Add(ground.Rest);
+            }
+
+            foreach (var p in new[] { rift.Chest, rift.ExitPortal, rift.Boss?.At, rift.Exit is { } e ? new[] { e.Barrier[0] - 8, e.Barrier[1] + (e.Barrier[3] / 2) } : null })
+            {
+                if (p is not null)
+                {
+                    points.Add(p);
+                }
+            }
+
+            foreach (var p in points)
+            {
+                AssertThat(reach.Contains(Cell(grid, p))).OverrideFailureMessage($"{id}: ponto {p[0]},{p[1]} fora do chão andável a partir da entrada").IsTrue();
+            }
+        }
+    }
+
+    [TestCase]
+    public void CozinhaIsTheRestRoomWithTheLanternOnTheFloor()
+    {
+        var cozinha = Config.Grounds["ruas_cozinha"];
+        AssertThat(cozinha.Kinds).Contains(RoomKind.Rest);
+        AssertThat(cozinha.Rest).HasSize(2);
+    }
+
+    private static (int C, int R) Cell(LevelGrid grid, float[] p) => ((int)(p[0] / grid.Cell), (int)(p[1] / grid.Cell));
+
+    /// <summary>Células andáveis ligadas à entrada (4 vizinhos).</summary>
+    internal static HashSet<(int C, int R)> Reachable(LevelGrid grid, float[] from)
+    {
+        var start = Cell(grid, from);
+        var seen = new HashSet<(int C, int R)>();
+        var queue = new Queue<(int C, int R)>();
+        if (!grid.IsBlocked(start.C, start.R))
+        {
+            queue.Enqueue(start);
+            seen.Add(start);
+        }
+
+        while (queue.Count > 0)
+        {
+            var (c, r) = queue.Dequeue();
+            foreach (var (dc, dr) in new[] { (1, 0), (-1, 0), (0, 1), (0, -1) })
+            {
+                var next = (c + dc, r + dr);
+                if (!grid.IsBlocked(next.Item1, next.Item2) && seen.Add(next))
+                {
+                    queue.Enqueue(next);
+                }
+            }
+        }
+
+        return seen;
     }
 
     [TestCase]
@@ -78,11 +178,6 @@ public class RuasHuntTest
         foreach (var p in new[] { arena.Spawn, arena.Rift.Boss.At, arena.Rift.ExitPortal! })
         {
             AssertThat(grid.IsBlockedAt(p[0], p[1])).OverrideFailureMessage($"ponto {p[0]},{p[1]} em parede").IsFalse();
-        }
-
-        foreach (var p in Config.Grounds["ruas_arena"].Spawns)
-        {
-            AssertThat(grid.IsBlockedAt(p[0], p[1])).IsFalse();
         }
     }
 

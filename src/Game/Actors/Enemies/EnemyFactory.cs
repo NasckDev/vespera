@@ -14,6 +14,12 @@ public static class EnemyFactory
         "afogado" => new Afogado(world) { StartDelay = (float)GD.RandRange(0.0, 0.8) },
         "ancoreiro" => new Ancoreiro(world) { StartDelay = (float)GD.RandRange(0.0, 0.8) },
         "lanterna_afogada" => new LanternaAfogada(world) { StartDelay = (float)GD.RandRange(0.0, 0.6) },
+        "varal" => new Varal(world) { StartDelay = (float)GD.RandRange(0.0, 0.8) },
+        "despejado" => new Despejado(world) { StartDelay = (float)GD.RandRange(0.0, 0.8) },
+        "rasgo" => new Rasgo(world) { StartDelay = (float)GD.RandRange(0.0, 0.8) },
+        "ceifador_pomar" => new CeifadorPomar(world) { StartDelay = (float)GD.RandRange(0.0, 0.6) },
+        "sombra_cacador" => new SombraCacador(world, Vespera.Core.Rift.AvessoMoves.ShadowFor(World.Rift.RiftSession.Save.CurrentWeapon)) { StartDelay = (float)GD.RandRange(0.0, 0.6) },
+        _ when type.StartsWith("sombra_cacador_", System.StringComparison.Ordinal) => new SombraCacador(world, type),
         _ => new Lodo(world) { StartDelay = (float)GD.RandRange(0.0, 0.6) },
     };
 

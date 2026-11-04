@@ -1,5 +1,5 @@
 {
-  "_doc": "Brecha S do Ato VI (ROTEIRO-V2 §13: 'A Sopa da Véspera'). As Ruas Baixas de antes das demolições, com casas penduradas do teto. Mesmo formato de brecha_pomar.json; velocidades na escala 1 do caçador. Caçadas: data/cacada/cacada_ruas.json (por ora direto à arena do Inquilino).",
+  "_doc": "Brecha S do Ato VI (ROTEIRO-V2 §13: 'A Sopa da Véspera'). As Ruas Baixas de antes das demolições, com casas penduradas do teto. Mesmo formato de brecha_cais.json; velocidades na escala 1 do caçador. Caçadas: data/cacada/cacada_ruas.json (4 salas da issue #47 + arena do Inquilino).",
   "id": "ruas_invertidas",
   "lanternId": 6,
   "name": "Ruas Invertidas",
@@ -9,11 +9,48 @@
   "guardianId": "inquilino",
   "hub": "ruas_baixas",
   "hunt": "res://data/cacada/cacada_ruas.json",
-  "_xp": "Só o Inquilino por ora (sem monstros comuns, issue #48): 400 XP.",
+  "_xp": "Caçada típica: ~16 Varais (14 XP) + ~7 Despejados (16) + ~6 Rasgos (12) ~ 410 XP; o Inquilino 400.",
   "rooms": [
+    "ruas_viela",
+    "ruas_largo",
+    "ruas_cozinha",
+    "ruas_volta",
     "ruas_arena"
   ],
   "monsters": {
+    "varal": {
+      "name": "Varal",
+      "hp": 120,
+      "damage": 22,
+      "speed": 95,
+      "xp": 14,
+      "hurtRadius": 40,
+      "contactRadius": 44,
+      "period": 2.4,
+      "telegraph": 0.6
+    },
+    "despejado": {
+      "name": "Despejado",
+      "hp": 150,
+      "damage": 26,
+      "speed": 75,
+      "xp": 16,
+      "hurtRadius": 40,
+      "contactRadius": 44,
+      "period": 2.8,
+      "telegraph": 0.8
+    },
+    "rasgo": {
+      "name": "Rasgo",
+      "hp": 80,
+      "damage": 24,
+      "speed": 130,
+      "xp": 12,
+      "hurtRadius": 32,
+      "contactRadius": 34,
+      "period": 3.0,
+      "telegraph": 0.5
+    },
     "inquilino": {
       "name": "INQUILINO",
       "hp": 2600,

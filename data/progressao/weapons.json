@@ -25,7 +25,7 @@
         { "rank": "B", "name": "Lâmina da Maré", "damage": 55 },
         { "rank": "A", "name": "Lâmina de Vela", "damage": 86 },
         { "rank": "S", "name": "Lâmina do Sino", "damage": 132 },
-        { "rank": "SS", "name": "Lâmina de Rua", "damage": 168 },
+        { "rank": "SS", "name": "Lâmina de Duas Vésperas", "damage": 168 },
         { "rank": "SSS", "name": "Lâmina do Avesso", "damage": 239 },
         { "rank": "Alvor", "name": "Lâmina do Alvor", "damage": 415 }
       ]
@@ -43,7 +43,7 @@
         { "rank": "B", "name": "Arco da Maré", "damage": 52 },
         { "rank": "A", "name": "Arco de Vela", "damage": 81 },
         { "rank": "S", "name": "Arco do Sino", "damage": 108 },
-        { "rank": "SS", "name": "Arco de Rua", "damage": 159 },
+        { "rank": "SS", "name": "Arco de Duas Vésperas", "damage": 159 },
         { "rank": "SSS", "name": "Arco do Avesso", "damage": 226 },
         { "rank": "Alvor", "name": "Arco do Alvor", "damage": 392 }
       ]
@@ -61,7 +61,7 @@
         { "rank": "B", "name": "Martelo de Âncora", "damage": 76 },
         { "rank": "A", "name": "Martelo da Lápide", "damage": 119 },
         { "rank": "S", "name": "Martelo do Sino", "damage": 182 },
-        { "rank": "SS", "name": "Marreta de Rua", "damage": 232 },
+        { "rank": "SS", "name": "Martelo de Duas Vésperas", "damage": 232 },
         { "rank": "SSS", "name": "Martelo do Avesso", "damage": 330 },
         { "rank": "Alvor", "name": "Martelo do Alvor", "damage": 573 }
       ]
