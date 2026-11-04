@@ -26,6 +26,7 @@ public static class RiftSession
         ["pomar_podre"] = "res://src/Data/brecha_pomar.json",
         ["cais_afogado"] = "res://src/Data/brecha_cais.json",
         ["ruas_invertidas"] = "res://src/Data/brecha_ruas.json",
+        [Core.Final.FinalStory.BrechaId] = "res://src/Data/brecha_final.json",
     };
 
     private static readonly System.Collections.Generic.Dictionary<string, BrechaDef> Loaded = [];
