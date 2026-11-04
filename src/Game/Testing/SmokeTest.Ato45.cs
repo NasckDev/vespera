@@ -10,10 +10,11 @@ namespace Vespera.Game.Testing;
 
 /// <summary>
 /// Roteiro dos Atos IV e V (<c>--ato45</c>): ponte do Pomar Alto trancada até o Farol Afogado e aberta depois; Cemitério
-/// de dia (sem Vigia, Benício do exame B, Brecha selada "em breve", banco para esperar a noite); à noite o Vigia faz a
+/// de dia (sem Vigia, Benício do exame B, Brecha aberta, banco para esperar a noite); à noite o Vigia faz a
 /// pergunta um (Sim/Não/Não entendi), guarda o Eco no primeiro slot e não pergunta de novo na mesma noite; noite seguinte,
-/// pergunta dois; avisos da Lis, da Nilza e do Ravi na Praça (§8.1, sem romper enquanto a Brecha B não existe); Torre do
-/// Sino com o Benício na porta e a confissão olhando o sino.
+/// pergunta dois; avisos da Lis, da Nilza e do Ravi na Praça (§8.1, sem romper enquanto a Brecha B não existe); a Brecha
+/// do Cemitério com a Velória (bot de combate) e o selo A; Torre do Sino com o Benício na porta, a confissão, a Brecha do
+/// Sino Mudo com o Guardião e o selo S; a descida das Forjas para as Ruas Baixas aberta.
 /// </summary>
 public partial class SmokeTest
 {
@@ -60,13 +61,10 @@ public partial class SmokeTest
         await SkipDialogue(level);
         Check(engine.HasFlag("exame_b_visto"), "a fala do exame B deveria ligar exame_b_visto");
 
-        // Brecha selada: aparece, mas só mostra o aviso.
-        var rift = level.World.Zones.First(z => z.Kind == LevelWorld.SealedBrechaKind);
-        await StandAt(level, rift.GlobalPosition + new Vector2(0, 60 * level.World.Data.ActorScale));
-        await PressInWorld(Key.E);
-        Check(level.Hud.PanelText.Contains("Em breve", System.StringComparison.Ordinal), $"a Brecha do Cemitério deveria dizer 'Em breve', disse '{level.Hud.PanelText}'");
-        await Shot("ato45_02_brecha_selada", 0.3);
-        await StandAt(level, level.World.SpawnPoint);
+        // Brecha aberta: leva para o Cemitério das Lanternas do lado de baixo (não está mais selada).
+        Check(level.World.Zones.All(z => z.Kind != LevelWorld.SealedBrechaKind), "a Brecha do Cemitério não deveria estar selada");
+        var rift = level.World.Zones.First(z => z.Kind == "brecha");
+        Check(rift.Target == "cemiterio_das_lanternas", $"a Brecha do Cemitério deveria levar a cemiterio_das_lanternas, leva a '{rift.Target}'");
 
         // Banco: esperar a noite recarrega o Cemitério com o Vigia.
         var bench = level.World.Zones.First(z => z.Dialogue == "ato4/banco");
@@ -122,9 +120,20 @@ public partial class SmokeTest
         await SkipDialogue(level);
         Check(engine.HasFlag("vigia_p2_sim") && engine.HasFlag("vigia_p1_naoentendi"), "o Vigia deveria lembrar as duas respostas");
 
-        // Torre do Sino (depois da Velória): porta, confissão olhando o sino, Brecha selada.
-        engine.SetFlag("GuardianDefeated:velora");
-        engine.SetFlag("ato4_fecho_benicio");
+        // Brecha do Cemitério com a Velória no fim (uma caçada completa já feita): o bot de combate fecha a Brecha.
+        Check(engine.ObjectiveId == "ato4_brecha", $"antes da caçada o objetivo deveria ser ato4_brecha, é '{engine.ObjectiveId}'");
+        engine.SetFlag("cemiterio_das_lanternas:hunt_1");
+        Check(engine.ObjectiveId == "ato4_guardiao", $"depois da primeira caçada o objetivo deveria ser ato4_guardiao, é '{engine.ObjectiveId}'");
+        await level.GoToRoom("cemiterio", withDirector: false);
+        await PhysicsFrames(3);
+        await HuntGuardian(level, "velora");
+        Check(engine.ObjectiveId == "ato4_fecho" && engine.HasFlag("act4_done"), $"depois da Velória o objetivo deveria ser ato4_fecho, é '{engine.ObjectiveId}'");
+        await PlayStoryScene(level, "Benício: selo A");
+        Check(engine.HasFlag("ato4_fecho_benicio"), "o Benício deveria fechar o Ato IV");
+        Check(engine.ObjectiveId == "ato5", $"depois do fecho do Ato IV o objetivo deveria ser ato5, é '{engine.ObjectiveId}'");
+        await Shot("ato45_09_fecho_ato4", 0.3);
+
+        // Torre do Sino (depois da Velória): porta, confissão olhando o sino e a Brecha aberta.
         await level.GoToRoom("cemiterio", withDirector: false);
         await PhysicsFrames(3);
         level = await Travel(level, z => z.Target == "torre", new Vector2(-30, 0), "Level_torre");
@@ -138,12 +147,47 @@ public partial class SmokeTest
         await SkipDialogue(level);
         Check(engine.HasFlag("ato5_confissao"), "a confissão deveria ligar ato5_confissao");
         Check(engine.ObjectiveId == "ato5_brecha", $"depois da confissão o objetivo deveria ser ato5_brecha, é '{engine.ObjectiveId}'");
-        var bell = level.World.Zones.First(z => z.Kind == LevelWorld.SealedBrechaKind);
-        await StandAt(level, bell.GlobalPosition + new Vector2(0, 60 * level.World.Data.ActorScale));
-        await PressInWorld(Key.E);
-        Check(level.Hud.PanelText.Contains("Em breve", System.StringComparison.Ordinal), $"a Brecha da Torre deveria dizer 'Em breve', disse '{level.Hud.PanelText}'");
-        await StandAt(level, level.World.SpawnPoint);
-        Log.Info("atos IV e V OK: ponte, Cemitério de dia e de noite, Vigia (2 perguntas, Eco), avisos do Ravi, Torre e confissão");
+        Check(level.World.Zones.All(z => z.Kind != LevelWorld.SealedBrechaKind), "a Brecha da Torre não deveria estar selada");
+        Check(level.World.Zones.Any(z => z.Kind == "brecha" && z.Target == "sino_mudo"), "a Brecha da Torre deveria levar ao Sino Mudo");
+
+        // Brecha do Sino Mudo com o Guardião no fim: o bot fecha; o Benício queima o selo S e manda para as Ruas Baixas.
+        engine.SetFlag("sino_mudo:hunt_1");
+        Check(engine.ObjectiveId == "ato5_guardiao", $"depois da primeira caçada o objetivo deveria ser ato5_guardiao, é '{engine.ObjectiveId}'");
+        await HuntGuardian(level, "sineiro_mudo");
+        Check(!Audio.Silence.Active, "depois do Sineiro Mudo o som deveria voltar");
+        Check(engine.ObjectiveId == "ato5_fecho" && engine.HasFlag("act5_done"), $"depois do Sineiro Mudo o objetivo deveria ser ato5_fecho, é '{engine.ObjectiveId}'");
+        await PlayStoryScene(level, "Benício: selo S");
+        Check(engine.ObjectiveId == "ato6", $"depois do fecho do Ato V o objetivo deveria ser ato6, é '{engine.ObjectiveId}'");
+        await Shot("ato45_10_fecho_ato5", 0.3);
+        await level.GoToRoom("forjas", withDirector: false);
+        await PhysicsFrames(3);
+        Check(level.World.Zones.Any(z => z.Target == "ruas_baixas"), "depois do Sineiro Mudo a descida das Forjas deveria levar às Ruas Baixas");
+        Log.Info("atos IV e V OK: ponte, Cemitério de dia e de noite, Vigia (2 perguntas, Eco), avisos do Ravi, Velória, selo A, Torre, confissão, Sineiro Mudo, selo S e Ruas Baixas abertas");
+    }
+
+    /// <summary>Entra na Brecha do bairro atual com o bot de combate (caçador invulnerável) e volta com o Guardião vencido.</summary>
+    private async Task HuntGuardian(Level level, string guardian)
+    {
+        var failures = await new CombatBot(level, this) { ShotPrefix = $"ato45_{guardian}" }.Run(null, lanternTest: false);
+        foreach (var failure in failures)
+        {
+            Check(false, $"caçada da {guardian}: {failure}");
+        }
+
+        Check(StoryService.Engine.HasFlag($"GuardianDefeated:{guardian}"), $"a caçada deveria terminar com {guardian} vencido");
+        await PhysicsFrames(6);
+    }
+
+    /// <summary>A cena de autoplay do bairro (toca sozinha na volta; se ainda não tocou, chama) até o fim.</summary>
+    private async Task PlayStoryScene(Level level, string what)
+    {
+        if (!level.DialogueOpen)
+        {
+            level.PlayAutoplay();
+        }
+
+        await WaitForDialogue(level, what);
+        await SkipDialogue(level);
     }
 
     private async Task PlayWarning(Level level, string npc, string shot)

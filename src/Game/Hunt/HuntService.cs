@@ -173,7 +173,8 @@ public static class HuntService
         get
         {
             var state = State;
-            if (state.Contracts.Count == 0)
+            // O mural é de uma Brecha só: contratos sorteados por outra (outros tipos) não valem aqui e são sorteados de novo.
+            if (state.Contracts.Count == 0 || !state.Contracts.All(c => Config.Contracts.Kinds.ContainsKey(c.Kind)))
             {
                 state.Contracts = Board.Roll(new SeededRandom(state.NextSeed + (state.Returns * 7919)), GuardianUnlocked);
             }
@@ -219,7 +220,7 @@ public static class HuntService
         _rankAtStart = Progression.IsActive ? Progression.Status : null;
         _xpAtStart = Progression.IsActive ? Progression.State.Xp : 0;
         Log.Info($"caçada {state.RunsStarted}: semente {seed}, {Plan.Rooms.Count} salas [{string.Join(", ", Plan.Rooms.Select(r => $"{r.Kind}:{r.Ground}:{r.MonsterCount}"))}]" +
-            $"{(Plan.HasGuardian ? " com a Lodo-Mãe" : string.Empty)}");
+            $"{(Plan.HasGuardian ? $" com o Guardião ({RiftSession.Brecha.GuardianId})" : string.Empty)}");
         return Plan;
     }
 
