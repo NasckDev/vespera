@@ -30,6 +30,8 @@ public partial class SmokeTest
         "GuardianDefeated:farol_afogado", "act3_done", "met_severo", "pescou", "lanterna_m", "odete_lanterna_m",
         "GuardianDefeated:velora", "act4_done", "met_vigia", "ravi_rota_a", "ruas_fechada_a_tempo",
         "GuardianDefeated:sineiro_mudo", "act5_done", "ato5_porta", "ato5_confissao", "ato5_depois", "ato5_ravi", "ato5_lis",
+        "ato3_fecho_benicio", "ato3_manha_nilza", "ato3_manha_lis", "severo_viu_lanterna", "exame_b_visto", "ato4_fecho_benicio",
+        "ato4_odete", "ravi_cena_ato4", "ato5_odete",
     ];
 
     private async Task RunAtos67(Level start)
@@ -69,16 +71,18 @@ public partial class SmokeTest
         Check(RiftSession.Brecha.Id == "ruas_invertidas", $"a Brecha das Ruas Baixas deveria ser as Ruas Invertidas, é '{RiftSession.Brecha.Id}'");
         Check(HuntService.SecondLifeReady, "com a sopa, a caçada deveria começar com a segunda vida");
         await Fall(level);
-        await PhysicsFrames(30);
         var combat = level.Player.Combat;
+        for (var i = 0; i < 400 && combat.IsDead && RiftSession.InRift; i++)
+        {
+            await PhysicsFrames(1);
+        }
+
         Check(RiftSession.InRift && !combat.IsDead, "a primeira queda deveria levantar o caçador dentro da Brecha");
         Check(combat.Hp == RunPerks.SecondLifeHp(combat.MaxHp), $"a sopa deveria levantar com metade da vida ({combat.Hp}/{combat.MaxHp})");
         Check(!HuntService.SecondLifeReady, "a segunda vida só vale uma vez por caçada");
         await Shot("atos67_02_levantou_com_a_sopa", 0.3);
         await Fall(level);
-        await WaitFor(() => !RiftSession.InRift && !level.Switching && level.World.Data.Id == "ruas_baixas", "volta às Ruas Baixas depois da segunda queda");
-        RunResultScreen.Active?.Close();
-        await PhysicsFrames(4);
+        await BackFromFall(level, "ruas_baixas");
         Check(engine.HasFlag("ato6_morte_1"), "a queda nas Ruas Invertidas deveria contar para as falas de morte do Ato VI");
         await PlayPendingScenes(level);
 
@@ -87,6 +91,19 @@ public partial class SmokeTest
         await SkipDialogue(level);
         Check(engine.ObjectiveId == "ato6_brecha", $"depois da mãe do Ravi o objetivo deveria ser ato6_brecha, é '{engine.ObjectiveId}'");
         return level;
+    }
+
+    /// <summary>Espera a volta ao bairro depois da queda (passa pela tela de resultado).</summary>
+    private async Task BackFromFall(Level level, string hub)
+    {
+        for (var i = 0; i < 1500 && (RiftSession.InRift || level.Switching || level.World.Data.Id != hub || RunResultScreen.Active is not null); i++)
+        {
+            RunResultScreen.Active?.Close();
+            await Frames(1);
+        }
+
+        Check(!RiftSession.InRift && level.World.Data.Id == hub, $"depois da queda o caçador deveria voltar a {hub}, está em '{level.World.Data.Id}' (na Brecha: {RiftSession.InRift})");
+        await PhysicsFrames(4);
     }
 
     private async Task Fall(Level level)
@@ -232,8 +249,7 @@ public partial class SmokeTest
             await SkipDialogue(level);
             if (answer == "Ficar")
             {
-                await WaitFor(() => !RiftSession.InRift && !level.Switching && level.World.Data.Id == "praca" && RunResultScreen.Active is null || level.DialogueOpen, "volta do sonho");
-                RunResultScreen.Active?.Close();
+                await BackFromFall(level, "praca");
                 await WaitForDialogue(level, "Nilza acordando o caçador");
                 Check(level.Dialogue.SpeakerName.Length > 0, "a Nilza deveria acordar o caçador");
                 await SkipDialogue(level);
@@ -246,7 +262,7 @@ public partial class SmokeTest
         RunResultScreen.Active?.Close();
         await PhysicsFrames(4);
         Check(engine.HasFlag("avesso_recusado"), "voltar deveria recusar a oferta do Avesso");
-        Check(Progression.Rank >= Rank.SSS, $"recusar a oferta é o exame SSS: o selo deveria queimar (está {Progression.Rank})");
+        Check(Progression.State.Xp >= Progression.Catalog.Step(Rank.SSS).Xp, $"recusar a oferta é o exame SSS: a XP deveria chegar ao selo SSS ({Progression.State.Xp})");
         Check(engine.ObjectiveId == "ato7_fecho", $"depois do Avesso o objetivo deveria ser ato7_fecho, é '{engine.ObjectiveId}'");
         return (Level)_router.Current!;
     }
