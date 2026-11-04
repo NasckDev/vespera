@@ -60,6 +60,15 @@ public static class ScaleRegistry
         ["sombra_cacador_arco"] = new(1.00f, Sprites + "monstros/sombra_cacador_arco/sombra_cacador_arco.json"),
         ["sombra_cacador_martelo"] = new(1.00f, Sprites + "monstros/sombra_cacador_martelo/sombra_cacador_martelo.json"),
         ["reflexo"] = new(1.00f, Sprites + "monstros/reflexo/reflexo.json"),
+        // Atos IV e V (issues #54/#55/#57/#58): alturas pedidas nos prompts da arte.
+        ["velinha"] = new(0.40f, Sprites + "monstros/velinha/velinha.json"),
+        ["carpideira"] = new(1.00f, Sprites + "monstros/carpideira/carpideira.json"),
+        ["cao_de_vigilia"] = new(0.60f, Sprites + "monstros/cao_de_vigilia/cao_de_vigilia.json"),
+        ["velora"] = new(3.00f, Sprites + "monstros/velora/velora.json"),
+        ["sineiro"] = new(0.70f, Sprites + "monstros/sineiro/sineiro.json"),
+        ["casca"] = new(0.90f, Sprites + "monstros/casca/casca.json"),
+        ["traca_de_arquivo"] = new(0.60f, Sprites + "monstros/traca_de_arquivo/traca_de_arquivo.json", Hover: 0.30f),
+        ["sineiro_mudo"] = new(3.00f, Sprites + "monstros/sineiro_mudo/sineiro_mudo.json"),
     };
 
     private static readonly Dictionary<string, float> Standing = [];

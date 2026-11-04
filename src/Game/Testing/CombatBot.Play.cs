@@ -85,9 +85,7 @@ public sealed partial class CombatBot
 
         var report = HuntService.Report;
         var hpEnd = World.Player.Combat.Hp;
-        // A volta é ao bairro da Brecha (Ruas Baixas, Mercado das Marés...); sem bairro, a Praça.
-        var hub = RiftSession.Brecha.Hub.Length > 0 ? RiftSession.Brecha.Hub : Level.HubLevelId;
-        await WaitUntil(() => !level.Switching && World.Data.Id == hub, 900, "volta ao bairro");
+        await WaitUntil(() => !level.Switching && World.Data.Id == RiftSession.Brecha.Hub, 900, "volta ao bairro da Brecha");
         await CloseResults();
         var m = new HuntMetrics(rooms, roomCount, report?.Kills ?? _kills, report?.DamageTaken ?? 0, report?.HitsTaken ?? 0, _dodges,
             _potionsDrunk, died, report?.Completed == true, guardian, report?.Seconds ?? 0, hpStart, died ? 0 : hpEnd, maxHp);
@@ -138,18 +136,28 @@ public sealed partial class CombatBot
                 continue;
             }
 
-            var to = target.GlobalPosition - World.Player.GlobalPosition;
+            var aim = target.GlobalPosition;
+            var aimRadius = target.HitRadius;
+            // Velória escondida (fase 3): apaga as velas acesas, a mais perto primeiro, até sobrar a que não treme.
+            if (target is Velora { Hidden: true } velora
+                && velora.Candles.Where(c => GodotObject.IsInstanceValid(c) && c.Lit).OrderBy(c => c.GlobalPosition.DistanceTo(World.Player.GlobalPosition)).FirstOrDefault() is { } candle)
+            {
+                aim = candle.GlobalPosition;
+                aimRadius = candle.HitRadius;
+            }
+
+            var to = aim - World.Player.GlobalPosition;
             var distance = to.Length();
             var keep = bow ? BowKeepHumans * human : AttackReach * S * 0.8f;
             stuck = distance < lastDistance - 0.5f || distance < keep * 1.2f ? 0 : stuck + 1;
             lastDistance = distance;
             if (stuck > StuckFrames * 2)
             {
-                World.Player.Teleport(World.ClampToFloor(target.GlobalPosition + (Vector2.Down * 30f * S)));
+                World.Player.Teleport(World.ClampToFloor(aim + (Vector2.Down * 30f * S)));
                 stuck = 0;
             }
 
-            var inReach = bow ? distance < 6f * human : distance < (AttackReach + target.HitRadius) * S * 1.6f;
+            var inReach = bow ? distance < 6f * human : distance < (AttackReach + aimRadius) * S * 1.6f;
             _input.Move = distance > keep ? to.Normalized() : bow && distance < keep * 0.7f ? -to.Normalized() : Vector2.Zero;
             if (inReach && frames % 8 == 0)
             {

@@ -1,0 +1,169 @@
+{
+  "character": "sineiro_mudo",
+  "anchor": [
+    288,
+    560
+  ],
+  "stand_height_px": 300,
+  "facing": "olha para a direita; para a esquerda use flip_h",
+  "scale_class": 0.7101,
+  "stand_height_source_px": 422.5,
+  "hit_frame_method": "quadro de maior área opaca (índice base 0), só para ataques",
+  "frame_counts": {
+    "parado": 6,
+    "andar": 8,
+    "badalar": 8,
+    "voar": 8,
+    "mergulhar": 8,
+    "cordas": 8,
+    "morte": 10
+  },
+  "atlas": "sineiro_mudo_atlas.png",
+  "cell": [
+    576,
+    576
+  ],
+  "animations": {
+    "parado": {
+      "row": 0,
+      "frames": 6,
+      "fps": 6,
+      "loop": true,
+      "scale": 0.7101,
+      "source": "sineiro_mudo_parado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        46635,
+        46792,
+        54387,
+        58446,
+        50117,
+        45190
+      ],
+      "note": null
+    },
+    "andar": {
+      "row": 1,
+      "frames": 8,
+      "fps": 10,
+      "loop": true,
+      "scale": 0.9202,
+      "source": "sineiro_mudo_andar.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        53938,
+        52256,
+        48395,
+        46223,
+        50545,
+        48917,
+        53550,
+        46508
+      ],
+      "note": "reescalada: guarda -23% vs parado"
+    },
+    "badalar": {
+      "row": 2,
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "scale": 1.0,
+      "source": "sineiro_mudo_badalar.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        48237,
+        54192,
+        57818,
+        57268,
+        50625,
+        48339,
+        48043,
+        50045
+      ],
+      "note": "reescalada: guarda -29% vs parado"
+    },
+    "voar": {
+      "row": 3,
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.9934,
+      "source": "sineiro_mudo_voar.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        56273,
+        67494,
+        67439,
+        66805,
+        69643,
+        26573,
+        71230,
+        74385
+      ],
+      "note": "reescalada: guarda -29% vs parado"
+    },
+    "mergulhar": {
+      "row": 4,
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.9934,
+      "source": "sineiro_mudo_mergulhar.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        70774,
+        62351,
+        38720,
+        42303,
+        52973,
+        46720,
+        46796,
+        46017
+      ],
+      "note": "mesma escala de 'voar'"
+    },
+    "cordas": {
+      "row": 5,
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.8929,
+      "source": "sineiro_mudo_cordas.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        51138,
+        48956,
+        52915,
+        56611,
+        55176,
+        51285,
+        48827,
+        52866
+      ],
+      "note": "reescalada: guarda -20% vs parado"
+    },
+    "morte": {
+      "row": 6,
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.7101,
+      "source": "sineiro_mudo_morte.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        31530,
+        29816,
+        15016,
+        29976,
+        23550,
+        24154,
+        21782,
+        13643,
+        11293,
+        8745
+      ],
+      "note": null
+    }
+  },
+  "standing_height": 298
+}

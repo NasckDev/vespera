@@ -15,6 +15,8 @@
     "avesso_torre_cemiterio",
     "avesso_ruas_esgoto",
     "avesso_dupla_esgoto_pomar",
+    "avesso_dupla_cais_cemiterio",
+    "avesso_dupla_torre_ruas",
     "avesso_final"
   ],
   "monsters": {
@@ -153,6 +155,41 @@
       "contactRadius": 40,
       "period": 2.4,
       "telegraph": 0.5
+    },
+    "velora": {
+      "name": "VELÓRIA",
+      "hp": 1700,
+      "damage": 28,
+      "speed": 50,
+      "xp": 200,
+      "hurtRadius": 120,
+      "contactRadius": 120,
+      "period": 2.3,
+      "telegraph": 0.4,
+      "boss": true
+    },
+    "sineiro_mudo": {
+      "name": "SINEIRO MUDO",
+      "hp": 1800,
+      "damage": 30,
+      "speed": 60,
+      "xp": 220,
+      "hurtRadius": 120,
+      "contactRadius": 120,
+      "period": 2.2,
+      "telegraph": 0.4,
+      "boss": true
+    },
+    "velinha": {
+      "name": "Velinha",
+      "hp": 50,
+      "damage": 18,
+      "speed": 120,
+      "xp": 4,
+      "hurtRadius": 22,
+      "contactRadius": 26,
+      "period": 2.8,
+      "telegraph": 0.4
     }
   },
   "boss": {

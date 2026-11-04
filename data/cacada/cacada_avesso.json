@@ -1,5 +1,5 @@
 {
-  "_doc": "Caçadas do Avesso profundo (Ato VII, rank SS, ROTEIRO-V2 §13; CAMPANHA Ato VII). A Brecha mistura bairros: as 3 salas novas da issue #49 (Cais no Pomar, Torre no Cemitério, Cozinha no Esgoto), salas dos baralhos anteriores (esgoto, pomar, cais, ruas) e as arenas das duplas como salas de elite. Ceifador de Pomar é o comum (vigia: só anda fora da luz), a Sombra de Caçador o segundo (usa o verbo da classe de quem caça), o Rasgo o terceiro. A dupla de Guardiões espera no fim depois de 1 caçada e da conversa com a Celeste (guardianFlag lis_revelada); depois dela, a sala do Avesso (epilogueGround) é o exame SSS. finalGrounds: só as duplas com os dois Guardiões já no jogo (Velória e Sineiro Mudo chegam com os Atos IV e V).",
+  "_doc": "Caçadas do Avesso profundo (Ato VII, rank SS, ROTEIRO-V2 §13; CAMPANHA Ato VII). A Brecha mistura bairros: as 3 salas novas da issue #49 (Cais no Pomar, Torre no Cemitério, Cozinha no Esgoto), salas dos baralhos anteriores (esgoto, pomar, cais, ruas) e as arenas das duplas como salas de elite. Ceifador de Pomar é o comum (vigia: só anda fora da luz), a Sombra de Caçador o segundo (usa o verbo da classe de quem caça), o Rasgo o terceiro. A dupla de Guardiões espera no fim depois de 1 caçada e da conversa com a Celeste (guardianFlag lis_revelada); depois dela, a sala do Avesso (epilogueGround) é o exame SSS. finalGrounds: as três duplas (Lodo-Mãe + Macieira; Farol + Velória; Sineiro Mudo + Inquilino), sorteadas pela semente.",
   "roomsMin": 5,
   "roomsMax": 7,
   "guardianAfterRuns": 1,
@@ -752,8 +752,8 @@
     },
     "avesso_dupla_cais_cemiterio": {
       "kinds": [
-        "combat",
-        "elite"
+        "elite",
+        "guardian"
       ],
       "spawns": [
         [
@@ -809,8 +809,8 @@
     },
     "avesso_dupla_torre_ruas": {
       "kinds": [
-        "combat",
-        "elite"
+        "elite",
+        "guardian"
       ],
       "spawns": [
         [
@@ -947,7 +947,9 @@
   "thirdSwarm": 1,
   "guardianFlag": "lis_revelada",
   "finalGrounds": [
-    "avesso_dupla_esgoto_pomar"
+    "avesso_dupla_esgoto_pomar",
+    "avesso_dupla_cais_cemiterio",
+    "avesso_dupla_torre_ruas"
   ],
   "epilogueGround": "avesso_final"
 }

@@ -29,6 +29,8 @@ public static class RiftSession
         ["ruas_baixas_b"] = "res://src/Data/brecha_ruas_b.json",
         ["avesso_profundo"] = "res://src/Data/brecha_avesso.json",
         [Core.Final.FinalStory.BrechaId] = "res://src/Data/brecha_final.json",
+        ["cemiterio_das_lanternas"] = "res://src/Data/brecha_cemiterio.json",
+        ["sino_mudo"] = "res://src/Data/brecha_sino.json",
     };
 
     private static readonly System.Collections.Generic.Dictionary<string, BrechaDef> Loaded = [];

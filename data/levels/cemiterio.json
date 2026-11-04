@@ -52,9 +52,8 @@
       "brecha": "cemiterio_das_lanternas",
       "at": [1240, 452],
       "radius": 46,
-      "prompt": "Olhar a Brecha",
-      "text": "Cemitério das Lanternas — Rank B",
-      "lockedText": "A Brecha do Cemitério das Lanternas (Rank B) pulsa, mas ainda não deixa ninguém entrar. Em breve."
+      "prompt": "Entrar na Brecha",
+      "text": "Cemitério das Lanternas — Rank B"
     },
     {
       "kind": "talk",

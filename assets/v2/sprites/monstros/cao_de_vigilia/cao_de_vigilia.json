@@ -1,0 +1,127 @@
+{
+  "character": "cao_de_vigilia",
+  "anchor": [
+    96,
+    182
+  ],
+  "stand_height_px": 66,
+  "facing": "olha para a direita; para a esquerda use flip_h",
+  "scale_class": 0.1686,
+  "stand_height_source_px": 391.5,
+  "hit_frame_method": "quadro de maior área opaca (índice base 0), só para ataques",
+  "frame_counts": {
+    "parado": 4,
+    "mover": 6,
+    "aviso": 3,
+    "ataque": 4,
+    "tonto": 4,
+    "morte": 6
+  },
+  "atlas": "cao_de_vigilia_atlas.png",
+  "cell": [
+    192,
+    192
+  ],
+  "animations": {
+    "parado": {
+      "row": 0,
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "scale": 0.1686,
+      "source": "cao_de_vigilia_parado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        2001,
+        2016,
+        1972,
+        1943
+      ],
+      "note": null
+    },
+    "mover": {
+      "row": 1,
+      "frames": 6,
+      "fps": 10,
+      "loop": true,
+      "scale": 0.2332,
+      "source": "cao_de_vigilia_mover.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        2453,
+        2345,
+        2286,
+        2114,
+        2282,
+        2297
+      ],
+      "note": "reescalada: guarda -28% vs parado"
+    },
+    "aviso": {
+      "row": 2,
+      "frames": 3,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.1422,
+      "source": "cao_de_vigilia_aviso.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        2142,
+        2390,
+        2455
+      ],
+      "note": "reescalada: guarda +19% vs parado"
+    },
+    "ataque": {
+      "row": 3,
+      "frames": 4,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.223,
+      "source": "cao_de_vigilia_ataque.png",
+      "hit_frame": 1,
+      "opaque_area_per_frame": [
+        2945,
+        3081,
+        2902,
+        2952
+      ],
+      "note": "reescalada: guarda -24% vs parado"
+    },
+    "tonto": {
+      "row": 4,
+      "frames": 4,
+      "fps": 10,
+      "loop": false,
+      "scale": 0.1686,
+      "source": "cao_de_vigilia_tonto.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        1969,
+        2051,
+        1985,
+        1992
+      ],
+      "note": null
+    },
+    "morte": {
+      "row": 5,
+      "frames": 6,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.1686,
+      "source": "cao_de_vigilia_morte.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        1622,
+        1337,
+        1074,
+        1030,
+        872,
+        586
+      ],
+      "note": null
+    }
+  },
+  "standing_height": 66
+}

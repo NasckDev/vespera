@@ -18,7 +18,7 @@ public class AvessoHuntTest
     private static readonly string[] AvessoMonsters = ["ceifador_pomar", "sombra_cacador", "rasgo"];
 
     /// <summary>Guardiões que já existem no jogo (mesma lista de EnemyFactory.HasGuardian).</summary>
-    private static readonly string[] ImplementedGuardians = ["lodo_mae", "macieira_oca", "farol_afogado", "inquilino"];
+    private static readonly string[] ImplementedGuardians = ["lodo_mae", "macieira_oca", "farol_afogado", "velora", "sineiro_mudo", "inquilino"];
 
     private static string Dir(string name) => Path.Combine(AppContext.BaseDirectory, name);
 

@@ -71,13 +71,15 @@ public class Ato45LevelsTest
     }
 
     [TestCase]
-    public void Hubs_BrechaIsVisibleButSealedWithComingSoonText()
+    public void Hubs_BrechaIsOpenAndLeadsIntoItsBreach()
     {
+        var expected = new Dictionary<string, string> { ["cemiterio"] = "cemiterio_das_lanternas", ["torre"] = "sino_mudo" };
         foreach (var id in Ids)
         {
             var brecha = Load(id).Zones.Single(z => z.Kind == "brecha");
-            AssertThat(brecha.Brecha.Length).IsGreater(0);
-            AssertThat(brecha.LockedText).Contains("Em breve");
+            AssertThat(brecha.Brecha).IsEqual(expected[id]);
+            AssertThat(brecha.LockedText).IsEqual(string.Empty);
+            AssertThat(brecha.Prompt).IsEqual("Entrar na Brecha");
         }
     }
 

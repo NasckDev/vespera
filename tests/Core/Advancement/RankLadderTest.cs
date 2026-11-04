@@ -108,7 +108,7 @@ public class RankLadderTest
     {
         var engine = AdvTestData.NewEngine();
         AssertThat(engine.TryPassExam(Rank.E).Status).IsEqual(ExamStatus.NoExamForRank);
-        AssertThat(engine.TryPassExam(Rank.B).Status).IsEqual(ExamStatus.NoExamForRank);
+        AssertThat(engine.TryPassExam(Rank.A).Status).IsEqual(ExamStatus.NoExamForRank);
     }
 
     [TestCase]

@@ -43,6 +43,7 @@ public partial class RoomDirector : Node
     private static readonly string[] EliteModifiers = ["blindado", "veloz", "faminto", "gemeo"];
     private Interactable? _rest;
     private Prop? _restLamp;
+    private bool _silent;
 
     public RoomDirector(LevelWorld world, RiftRoomData data)
     {
@@ -126,6 +127,13 @@ public partial class RoomDirector : Node
             }
         }
 
+        if (_data.Silent)
+        {
+            Audio.Silence.Begin();
+            _silent = true;
+            _world.Feel.Toast("Sala do Silêncio: aqui nada faz som. Olhe os avisos âmbar no chão.");
+        }
+
         PlaceBreakables();
         PlaceRest();
         PlaceWeaponStand();
@@ -133,6 +141,15 @@ public partial class RoomDirector : Node
         if (_data.Waves.Count == 0 && Guardian is null)
         {
             Clear(quiet: true);
+        }
+    }
+
+    public override void _ExitTree()
+    {
+        if (_silent)
+        {
+            _silent = false;
+            Audio.Silence.End();
         }
     }
 

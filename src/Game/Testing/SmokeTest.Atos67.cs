@@ -215,8 +215,9 @@ public partial class SmokeTest
             level = (Level)_router.Current!;
             await EnterAvessoDuo(level);
             var director = level.World.Director!;
-            Check(director.Guardian?.MonsterId == "lodo_mae" && director.Partner?.MonsterId == "macieira_oca",
-                $"a dupla deveria ser Lodo-Mãe + Macieira Oca ({director.Guardian?.MonsterId} + {director.Partner?.MonsterId})");
+            var pair = $"{director.Guardian?.MonsterId}+{director.Partner?.MonsterId}";
+            Check(pair is "lodo_mae+macieira_oca" or "farol_afogado+velora" or "sineiro_mudo+inquilino", $"a sala deveria ter uma das três duplas, tem '{pair}'");
+            Log.Info($"atos67: dupla {pair} em {level.World.Data.Id}");
             Check(director.Guardian?.Def.Telegraph == 0.4 && director.Partner?.Def.Telegraph == 0.4, "na dupla os avisos ficam em 0,4 s");
             await Shot($"atos67_07_dupla_{answer}", 0.6);
             director.Guardian?.Die();

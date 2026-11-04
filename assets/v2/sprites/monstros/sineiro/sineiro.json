@@ -1,0 +1,110 @@
+{
+  "character": "sineiro",
+  "anchor": [
+    96,
+    182
+  ],
+  "stand_height_px": 76,
+  "facing": "olha para a direita; para a esquerda use flip_h",
+  "scale_class": 0.1731,
+  "stand_height_source_px": 439.0,
+  "hit_frame_method": "quadro de maior área opaca (índice base 0), só para ataques",
+  "frame_counts": {
+    "parado": 4,
+    "mover": 6,
+    "aviso": 3,
+    "ataque": 4,
+    "morte": 6
+  },
+  "atlas": "sineiro_atlas.png",
+  "cell": [
+    192,
+    192
+  ],
+  "animations": {
+    "parado": {
+      "row": 0,
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "scale": 0.1731,
+      "source": "sineiro_parado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        3239,
+        3232,
+        3166,
+        3210
+      ],
+      "note": null
+    },
+    "mover": {
+      "row": 1,
+      "frames": 6,
+      "fps": 10,
+      "loop": true,
+      "scale": 0.2255,
+      "source": "sineiro_mover.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        3539,
+        3640,
+        4039,
+        4059,
+        4138,
+        3646
+      ],
+      "note": "reescalada: guarda -23% vs parado"
+    },
+    "aviso": {
+      "row": 2,
+      "frames": 3,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.1731,
+      "source": "sineiro_aviso.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        4177,
+        5427,
+        5641
+      ],
+      "note": null
+    },
+    "ataque": {
+      "row": 3,
+      "frames": 4,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.1731,
+      "source": "sineiro_ataque.png",
+      "hit_frame": 2,
+      "opaque_area_per_frame": [
+        3230,
+        3443,
+        3984,
+        3504
+      ],
+      "note": null
+    },
+    "morte": {
+      "row": 4,
+      "frames": 6,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.1731,
+      "source": "sineiro_morte.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        2505,
+        2613,
+        2607,
+        2527,
+        2230,
+        1196
+      ],
+      "note": null
+    }
+  },
+  "standing_height": 75
+}
