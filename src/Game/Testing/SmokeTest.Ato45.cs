@@ -12,7 +12,7 @@ namespace Vespera.Game.Testing;
 /// Roteiro dos Atos IV e V (<c>--ato45</c>): ponte do Pomar Alto trancada até o Farol Afogado e aberta depois; Cemitério
 /// de dia (sem Vigia, Benício do exame B, Brecha aberta, banco para esperar a noite); à noite o Vigia faz a
 /// pergunta um (Sim/Não/Não entendi), guarda o Eco no primeiro slot e não pergunta de novo na mesma noite; noite seguinte,
-/// pergunta dois; avisos da Lis, da Nilza e do Ravi na Praça (§8.1, sem romper enquanto a Brecha B não existe); a Brecha
+/// pergunta dois; avisos da Lis, da Nilza e do Ravi na Praça (§8.1: sem fechar a Brecha B em três vésperas, ela rompe); a Brecha
 /// do Cemitério com a Velória (bot de combate) e o selo A; Torre do Sino com o Benício na porta, a confissão, a Brecha do
 /// Sino Mudo com o Guardião e o selo S; a descida das Forjas para as Ruas Baixas aberta.
 /// </summary>
@@ -108,7 +108,8 @@ public partial class SmokeTest
         await PhysicsFrames(3);
         await PlayWarning(level, "ravi", "ato45_07_aviso_ravi");
         StoryService.NightFalls();
-        Check(!engine.HasFlag(RaviRescue.Ruptured), "sem a Brecha B jogável as Ruas Baixas não deveriam romper");
+        // A Brecha B das Ruas Baixas é jogável (ruas_baixas_b): três vésperas sem fechar e ela rompe (rota B do §8.1).
+        Check(engine.HasFlag(RaviRescue.Ruptured), "com a Brecha B jogável, três vésperas sem fechar deveriam romper as Ruas Baixas");
 
         // Noite nova: pergunta dois.
         await level.GoToRoom("cemiterio", withDirector: false);
