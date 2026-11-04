@@ -241,6 +241,7 @@ public partial class SmokeTest : Node
         Check(level.Player.CurrentAnimation.StartsWith("andar", StringComparison.Ordinal) || level.Player.CurrentAnimation.StartsWith("parado", StringComparison.Ordinal),
             $"animação inesperada: {level.Player.CurrentAnimation}");
         await Shot("08_jogo");
+        level = await LeaveRoad(level);
         await VisitMouseDialogue(level);
         await RunLevelExtras(level);
 

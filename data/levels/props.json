@@ -309,5 +309,101 @@
     "footprint": [-25, -18, 50, 18],
     "occludes": false,
     "_medida": "28 px de mundo / 55 px nativos (carrinho de mão ~0,39 porta)"
+  },
+  "banca_lis_mapas": {
+    "texture": "res://assets/v2/objetos/ato1/banca_lis_mapas.png",
+    "scale": 0.0885,
+    "anchor": [422, 972],
+    "footprint": [-355, -136, 710, 136],
+    "occludes": true,
+    "_medida": "86 px de mundo / 972 px nativos (escada de mapas da Lis ~1,2x o caçador, dia 2 até o selo D); arte da issue #42"
+  },
+  "banca_lis_verdade": {
+    "texture": "res://assets/v2/objetos/ato1/banca_lis_verdade.png",
+    "scale": 0.1145,
+    "anchor": [591, 917],
+    "footprint": [-497, -128, 994, 128],
+    "occludes": true,
+    "light": {
+      "offset": [-330, -560],
+      "color": "#ffb45a",
+      "energy": 0.7,
+      "radius": 80
+    },
+    "_medida": "105 px de mundo / 917 px nativos (banca de verdade da Lis ~1,45x o caçador, depois do selo D); arte da issue #42"
+  },
+  "carroca_macas_roxas": {
+    "texture": "res://assets/v2/objetos/ato1/carroca_macas_roxas.png",
+    "scale": 0.0946,
+    "anchor": [644, 846],
+    "footprint": [-541, -254, 1083, 254],
+    "occludes": true,
+    "_medida": "80 px de mundo / 846 px nativos (carroça do carroceiro ~1,1x o caçador de altura); arte da issue #42"
+  },
+  "lampiao_praca": {
+    "texture": "res://assets/v2/objetos/ato1/lampiao_praca.png",
+    "scale": 0.1218,
+    "anchor": [104, 821],
+    "footprint": [-87, -66, 175, 66],
+    "occludes": true,
+    "light": {
+      "offset": [0, -690],
+      "color": "#ffb45a",
+      "energy": 1.0,
+      "radius": 120
+    },
+    "interact": {
+      "kind": "lamp",
+      "prompt": "Apagar o lampião",
+      "promptOff": "Acender o lampião",
+      "text": ""
+    },
+    "_medida": "100 px de mundo / 821 px nativos (lampião novo da Praça, peça de 1x2 tiles; aceso); arte da issue #42"
+  },
+  "lampiao_praca_apagado": {
+    "texture": "res://assets/v2/objetos/ato1/lampiao_praca_apagado.png",
+    "scale": 0.1218,
+    "anchor": [104, 821],
+    "footprint": [-87, -66, 175, 66],
+    "occludes": true,
+    "_medida": "100 px de mundo / 821 px nativos (lampião novo da Praça apagado); arte da issue #42"
+  },
+  "lanterna_descanso": {
+    "texture": "res://assets/v2/objetos/ato1/lanterna_descanso.png",
+    "scale": 0.072,
+    "anchor": [227, 750],
+    "footprint": [-191, -188, 381, 188],
+    "occludes": false,
+    "light": {
+      "offset": [0, -420],
+      "color": "#ffa24a",
+      "energy": 0.9,
+      "radius": 80
+    },
+    "_medida": "54 px de mundo / 750 px nativos (lanterna de descanso acesa ~0,75x o caçador (sala de descanso/santuário do esgoto)); arte da issue #42"
+  },
+  "lanterna_descanso_apagada": {
+    "texture": "res://assets/v2/objetos/ato1/lanterna_descanso_apagada.png",
+    "scale": 0.072,
+    "anchor": [226, 750],
+    "footprint": [-190, -188, 381, 188],
+    "occludes": false,
+    "_medida": "54 px de mundo / 750 px nativos (lanterna de descanso apagada (já usada)); arte da issue #42"
+  },
+  "suporte_arco": {
+    "texture": "res://assets/v2/objetos/ato1/suporte_arco.png",
+    "scale": 0.0903,
+    "anchor": [352, 797],
+    "footprint": [-296, -159, 592, 159],
+    "occludes": true,
+    "_medida": "72 px de mundo / 797 px nativos (Arco largado nas pedras ~1x o caçador (§4.3)); arte da issue #42"
+  },
+  "suporte_martelo": {
+    "texture": "res://assets/v2/objetos/ato1/suporte_martelo.png",
+    "scale": 0.0888,
+    "anchor": [342, 811],
+    "footprint": [-288, -162, 575, 162],
+    "occludes": true,
+    "_medida": "72 px de mundo / 811 px nativos (Martelo largado nas pedras ~1x o caçador (§4.3)); arte da issue #42"
   }
 }

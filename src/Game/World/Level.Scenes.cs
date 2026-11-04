@@ -118,6 +118,10 @@ public partial class Level
         Player.Teleport(start);
         Player.Face(Vector2.Up);
         await FadeFrom(1f, ArrivalFadeSeconds);
+        if (await ArriveFromRoad())
+        {
+            return;
+        }
 
         _freeRoam = true;
         Player.Frozen = false;
@@ -159,6 +163,8 @@ public partial class Level
                 GlobalPosition = at,
             };
             World.AddChild(flash);
+            PlayRiftOpening(at);
+            ShowIllustration("cena_brecha_abre_praca");
             var fadeOut = CreateTween();
             fadeOut.TweenProperty(flash, "energy", 0.5f, 1.6f / SceneSpeed);
             World.Feel.Spark(at, new Color("e64a8e"), 40, 420f, Vector2.Up, 180f);
@@ -194,6 +200,11 @@ public partial class Level
     /// <summary>A noite passa (ROTEIRO-V2 §3, 9:00): tela escura, um respiro, e a praça de manhã com o caçador no meio.</summary>
     private async Task StageMorning()
     {
+        if (await WokeInRoom())
+        {
+            return;
+        }
+
         _fade.Color = _fade.Color with { A = 1f };
         Player.Teleport(World.SpawnPoint);
         await SceneWait(MorningHold);
@@ -307,6 +318,9 @@ public partial class Level
                 break;
             case "glow":
                 BrightenLantern(animated: true);
+                break;
+            case { } fx when fx.StartsWith("cena:", System.StringComparison.Ordinal):
+                ShowIllustration(fx["cena:".Length..]);
                 break;
         }
     }

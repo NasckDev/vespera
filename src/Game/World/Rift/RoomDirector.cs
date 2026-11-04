@@ -25,7 +25,8 @@ public partial class RoomDirector : Node
 
     /// <summary>Altura humana da Praça, onde o catálogo de objetos foi medido.</summary>
     private const float PracaHuman = 72f;
-    private const string RestProp = "lanterna_chao";
+    private const string RestProp = "lanterna_descanso_apagada";
+    private const string RestPropLit = "lanterna_descanso";
 
     private readonly LevelWorld _world;
     private readonly RiftRoomData _data;
@@ -40,6 +41,7 @@ public partial class RoomDirector : Node
     private string _eliteModifier = string.Empty;
     private static readonly string[] EliteModifiers = ["blindado", "veloz", "faminto", "gemeo"];
     private Interactable? _rest;
+    private Prop? _restLamp;
 
     public RoomDirector(LevelWorld world, RiftRoomData data)
     {
@@ -149,6 +151,7 @@ public partial class RoomDirector : Node
         var feet = _world.ClampToFloor(new Vector2(at[0], at[1]));
         var lamp = _world.AddProp(RestProp, feet);
         lamp.Scale = Vector2.One * (_world.Data.HumanHeight / PracaHuman);
+        _restLamp = lamp;
         var human = _world.Data.HumanHeight;
         _rest = new Interactable("rest", "Descansar na lanterna", 0.9f * human)
         {
@@ -159,6 +162,20 @@ public partial class RoomDirector : Node
         };
         _world.Entities.AddChild(_rest);
         _world.Feel.Toast("Sala de descanso: chegue perto da lanterna e interaja para recuperar vida.");
+    }
+
+    /// <summary>A lanterna de descanso acende depois de usada (arte apagada/acesa da issue #42).</summary>
+    private void LightRestLamp()
+    {
+        if (_restLamp is not { } old || !IsInstanceValid(old) || !_world.Catalog.ContainsKey(RestPropLit))
+        {
+            return;
+        }
+
+        var lit = _world.AddProp(RestPropLit, old.GlobalPosition);
+        lit.Scale = old.Scale;
+        old.QueueFree();
+        _restLamp = lit;
     }
 
     /// <summary>Usa a lanterna de descanso: cura parte da vida máxima (uma vez por sala).</summary>
@@ -173,6 +190,7 @@ public partial class RoomDirector : Node
         combat.Heal((int)System.Math.Round(combat.MaxHp * HuntService.Config.RestHealPct));
         _rest.QueueFree();
         _rest = null;
+        LightRestLamp();
         _world.Feel.Toast("A lanterna aqueceu você. Siga em frente.");
         return true;
     }

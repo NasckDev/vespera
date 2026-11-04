@@ -15,6 +15,9 @@ namespace Vespera.Game.World;
 public partial class Level
 {
     private const string ExamDialogue = "exame_benicio";
+
+    /// <summary>Tiras do Benício observando com a lanterna acesa (issue #41); sem elas, o Benício parado de sempre.</summary>
+    private static string ExamObserver => NpcSprites.Exists("benicio_observa") ? "benicio_observa" : "benicio";
     private const float ExamBenicioSideHumans = 1.3f;
     private const int ExamCleanLines = 3;
 
@@ -70,8 +73,8 @@ public partial class Level
     {
         var human = World.Data.HumanHeight;
         var at = World.ClampToFloor(Player.GlobalPosition + new Vector2(-human * ExamBenicioSideHumans, 0));
-        var placement = new NpcPlacement { Id = "benicio", At = [at.X, at.Y], Routine = "idle", Dialogue = ExamDialogue };
-        var npc = new Npc("benicio", placement, human) { Name = "ExamBenicio", Position = at };
+        var placement = new NpcPlacement { Id = ExamObserver, At = [at.X, at.Y], Routine = "idle", Dialogue = ExamDialogue };
+        var npc = new Npc(ExamObserver, placement, human) { Name = "ExamBenicio", Position = at };
         World.Entities.AddChild(npc);
         npc.Interaction.Enabled = false;
         npc.FaceTowards(Player.GlobalPosition + new Vector2(human * 3f, -human));

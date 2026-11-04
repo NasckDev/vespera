@@ -129,6 +129,10 @@ public sealed class PropPlacement
 
     public bool Flip { get; set; }
 
+    /// <summary>Condições da história para o objeto aparecer (ex.: banca da Lis só depois do selo D); vazio = sempre.</summary>
+    [JsonPropertyName("if")]
+    public List<string> Conditions { get; set; } = [];
+
     /// <summary>Quebra com um golpe (barril, caixote, vaso): solta alguns Lumes e some até a próxima volta da Brecha.</summary>
     public bool Breakable { get; set; }
 }

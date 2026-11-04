@@ -39,6 +39,8 @@ public static class ScaleRegistry
         ["espectro"] = new(1.00f, Sprites + "monstros/espectro/espectro.json", Hover: 0.15f),
         ["lodo_mae"] = new(3.00f, Sprites + "monstros/lodo_mae/lodo_mae.json"),
         ["celeste"] = new(1.00f, Npcs, Key: "celeste"),
+        ["carroceiro"] = new(1.00f, Npcs, Key: "carroceiro"),
+        ["benicio_observa"] = new(0.95f, Npcs, Key: "benicio_observa"),
         ["carrapicho"] = new(0.50f, Sprites + "monstros/carrapicho/carrapicho.json"),
         ["rato_lanterna"] = new(0.30f, Sprites + "monstros/rato_lanterna/rato_lanterna.json"),
         ["macieira_oca"] = new(3.00f, Sprites + "monstros/macieira_oca/macieira_oca.json"),

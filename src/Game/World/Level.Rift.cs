@@ -156,11 +156,12 @@ public partial class Level
 
     private async Task ReturnToHub(string toast, string subtitle, Hunter.RunSummary? summary = null, bool closed = false)
     {
-        var hub = RiftSession.Brecha.Hub.Length > 0 ? RiftSession.Brecha.Hub : HubLevelId;
-        await GoToRoom(hub, _hubSpawn);
+        var (hub, spawn) = DeathReturn(RiftSession.Brecha.Hub.Length > 0 ? RiftSession.Brecha.Hub : HubLevelId, _hubSpawn, summary);
+        await GoToRoom(hub, spawn);
         if (summary is not null && ShowResults)
         {
-            Hunt.RunResultScreen.Show(summary, closed);
+            // Acordando no quarto, a fala de morte é dita ali (PlayDeathLine), não na tela de resultado.
+            Hunt.RunResultScreen.Show(hub == RoomLevelId ? summary with { Line = null } : summary, closed);
             while (Hunt.RunResultScreen.Active is not null && IsInstanceValid(this))
             {
                 await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
@@ -175,6 +176,7 @@ public partial class Level
             CombatHud.Toast($"{RiftSession.LanternFragments} Fragmentos esperam na Lanterna. Entre de novo na Brecha para recuperá-los.");
         }
 
+        await PlayDeathLine();
         ScheduleAutoplay();
     }
 

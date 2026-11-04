@@ -14,7 +14,13 @@
   "celeste": {
     "standing_height": 119
   },
+  "carroceiro": {
+    "standing_height": 123
+  },
   "benicio": {
+    "standing_height": 120
+  },
+  "benicio_observa": {
     "standing_height": 120
   }
 }

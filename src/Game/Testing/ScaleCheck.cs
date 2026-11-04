@@ -23,7 +23,7 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
     private static readonly string[] PomarLevels = ["pomar_alto", "pomar_corredor", "pomar_cruzamento", "pomar_descanso", "pomar_arena"];
     private static readonly HunterClass[] Hunters = [HunterClass.Lamina, HunterClass.Arco, HunterClass.Martelo];
     private static readonly string[] People = ["odete", "ravi", "nilza", "benicio", "lis", "celeste"];
-    private static readonly string[] CityLevels = ["forjas", "forja_interior"];
+    private static readonly string[] CityLevels = ["forjas", "forja_interior", "estrada", "taverna", "quarto"];
 
     private readonly List<string> _failures = [];
 
