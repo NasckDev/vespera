@@ -14,6 +14,9 @@
   "celeste": {
     "standing_height": 119
   },
+  "carroceiro": {
+    "standing_height": 123
+  },
   "severo": {
     "standing_height": 119
   },
@@ -21,6 +24,9 @@
     "standing_height": 119
   },
   "benicio": {
+    "standing_height": 120
+  },
+  "benicio_observa": {
     "standing_height": 120
   },
   "mae_ravi": {

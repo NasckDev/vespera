@@ -25,7 +25,8 @@ public partial class RoomDirector : Node
 
     /// <summary>Altura humana da Praça, onde o catálogo de objetos foi medido.</summary>
     private const float PracaHuman = 72f;
-    private const string RestProp = "lanterna_chao";
+    private const string RestProp = "lanterna_descanso_apagada";
+    private const string RestPropLit = "lanterna_descanso";
     private const string StandProp = "suporte_armas";
 
     private readonly LevelWorld _world;
@@ -41,6 +42,7 @@ public partial class RoomDirector : Node
     private string _eliteModifier = string.Empty;
     private static readonly string[] EliteModifiers = ["blindado", "veloz", "faminto", "gemeo"];
     private Interactable? _rest;
+    private Prop? _restLamp;
 
     public RoomDirector(LevelWorld world, RiftRoomData data)
     {
@@ -161,6 +163,7 @@ public partial class RoomDirector : Node
         var feet = _world.ClampToFloor(new Vector2(at[0], at[1]));
         var lamp = _world.AddProp(RestProp, feet);
         lamp.Scale = Vector2.One * (_world.Data.HumanHeight / PracaHuman);
+        _restLamp = lamp;
         var human = _world.Data.HumanHeight;
         _rest = new Interactable("rest", "Descansar na lanterna", 0.9f * human)
         {
@@ -173,16 +176,30 @@ public partial class RoomDirector : Node
         _world.Feel.Toast("Sala de descanso: chegue perto da lanterna e interaja para recuperar vida.");
     }
 
+    /// <summary>A lanterna de descanso acende depois de usada (arte apagada/acesa da issue #42).</summary>
+    private void LightRestLamp()
+    {
+        if (_restLamp is not { } old || !IsInstanceValid(old) || !_world.Catalog.ContainsKey(RestPropLit))
+        {
+            return;
+        }
+
+        var lit = _world.AddProp(RestPropLit, old.GlobalPosition);
+        lit.Scale = old.Scale;
+        old.QueueFree();
+        _restLamp = lit;
+    }
+
     /// <summary>Suporte de arma na primeira sala (ROTEIRO-V2 §4.3): pegar troca a arma só nesta caçada.</summary>
     public Interactable? WeaponStand { get; private set; }
 
     /// <summary>
-    /// Primeira sala das caçadas 1 e 2 do Ato I: um Arco (1ª) ou um Martelo (2ª) largado num suporte perto da entrada.
-    /// Apoio visual: o <c>suporte_armas</c> do catálogo das Forjas, até a arte da issue #42.
+    /// Primeira sala das caçadas 1 e 2 do Ato I: um Arco (1ª) ou um Martelo (2ª) largado nas pedras perto da entrada
+    /// (arte da issue #42: <c>suporte_arco</c>/<c>suporte_martelo</c>; sem ela, o <c>suporte_armas</c> das Forjas).
     /// </summary>
     private void PlaceWeaponStand()
     {
-        if (RiftSession.RoomIndex != 0 || HuntService.StandWeapon is not { } weapon || !_world.Catalog.ContainsKey(StandProp))
+        if (RiftSession.RoomIndex != 0 || HuntService.StandWeapon is not { } weapon || StandPropFor(weapon) is not { } prop)
         {
             return;
         }
@@ -195,7 +212,7 @@ public partial class RoomDirector : Node
 
         var human = _world.Data.HumanHeight;
         var feet = _world.ClampToFloor(_world.SpawnPoint + new Vector2(1.6f * human, -0.4f * human));
-        var stand = _world.AddProp(StandProp, feet);
+        var stand = _world.AddProp(prop, feet);
         stand.Scale = Vector2.One * (human / PracaHuman);
         var name = Actors.HunterSprites.DisplayName(hunter);
         WeaponStand = new Interactable("weapon_stand", $"Pegar o {name}", 0.9f * human)
@@ -207,6 +224,18 @@ public partial class RoomDirector : Node
         };
         _world.Entities.AddChild(WeaponStand);
         _world.Feel.Toast($"Um {name} largado no suporte. Pegue para testar nesta caçada.");
+    }
+
+    /// <summary>Objeto do suporte desta arma: o Arco ou o Martelo largado (issue #42); o suporte das Forjas se faltar a arte.</summary>
+    private string? StandPropFor(string weapon)
+    {
+        var own = weapon switch
+        {
+            "bow" => "suporte_arco",
+            "hammer" => "suporte_martelo",
+            _ => StandProp,
+        };
+        return _world.Catalog.ContainsKey(own) ? own : _world.Catalog.ContainsKey(StandProp) ? StandProp : null;
     }
 
     /// <summary>Pega a arma do suporte: troca a folha e os golpes do caçador até o fim da caçada.</summary>
@@ -238,6 +267,7 @@ public partial class RoomDirector : Node
         combat.Heal((int)System.Math.Round(combat.MaxHp * HuntService.Config.RestHealPct));
         _rest.QueueFree();
         _rest = null;
+        LightRestLamp();
         _world.Feel.Toast("A lanterna aqueceu você. Siga em frente.");
         return true;
     }

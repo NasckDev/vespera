@@ -3,31 +3,36 @@
   "entries": [
     {
       "if": [
-        "final_morte_5"
+        "final_morte_5",
+        "!morte_final_5"
       ],
       "node": "m5"
     },
     {
       "if": [
-        "final_morte_4"
+        "final_morte_4",
+        "!morte_final_4"
       ],
       "node": "m4"
     },
     {
       "if": [
-        "final_morte_3"
+        "final_morte_3",
+        "!morte_final_3"
       ],
       "node": "m3"
     },
     {
       "if": [
-        "final_morte_2"
+        "final_morte_2",
+        "!morte_final_2"
       ],
       "node": "m2"
     },
     {
       "if": [
-        "final_morte_1"
+        "final_morte_1",
+        "!morte_final_1"
       ],
       "node": "m1"
     },
@@ -38,23 +43,38 @@
   "nodes": {
     "m1": {
       "speaker": "vigia",
-      "text": "Cada vez que cai, ele acende uma a mais. Para de cair."
+      "text": "Cada vez que cai, ele acende uma a mais. Para de cair.",
+      "set": [
+        "morte_final_1"
+      ]
     },
     "m2": {
       "speaker": "odete",
-      "text": "Eu te tirei de lá. Na próxima, eu entro junto até o fim. Não discute."
+      "text": "Eu te tirei de lá. Na próxima, eu entro junto até o fim. Não discute.",
+      "set": [
+        "morte_final_2"
+      ]
     },
     "m3": {
       "speaker": "nilza",
-      "text": "Ele tá te vendo cair da mesma forma. Muda a forma."
+      "text": "Ele tá te vendo cair da mesma forma. Muda a forma.",
+      "set": [
+        "morte_final_3"
+      ]
     },
     "m4": {
       "speaker": "lis",
-      "text": "Eu fiquei do lado dele. Ele não me viu. Ele só vê você."
+      "text": "Eu fiquei do lado dele. Ele não me viu. Ele só vê você.",
+      "set": [
+        "morte_final_4"
+      ]
     },
     "m5": {
       "speaker": "benicio",
-      "text": "Caiu na primeira. Levanta na primeira. A Ordem anota: Alvor em andamento."
+      "text": "Caiu na primeira. Levanta na primeira. A Ordem anota: Alvor em andamento.",
+      "set": [
+        "morte_final_5"
+      ]
     }
   }
 }

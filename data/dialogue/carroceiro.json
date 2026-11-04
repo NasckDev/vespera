@@ -1,0 +1,16 @@
+{
+  "id": "carroceiro",
+  "_doc": "Carroceiro da manhã das maçãs roxas (ROTEIRO-V2 §4.6, cena 3). O roteiro não dá fala a ele: uma linha curta e neutra, a revisar pelo roteirista.",
+  "entries": [
+    {
+      "node": "a"
+    }
+  ],
+  "nodes": {
+    "a": {
+      "speaker": "carroceiro",
+      "look": "carroceiro",
+      "text": "Desço do Pomar Alto toda semana. Essas vieram assim."
+    }
+  }
+}

@@ -58,6 +58,9 @@
             "lis_escondida"
           ]
         }
+      ],
+      "set": [
+        "act7_done"
       ]
     },
     "c": {

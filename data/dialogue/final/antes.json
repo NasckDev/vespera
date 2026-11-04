@@ -30,7 +30,8 @@
           "next": "m"
         },
         {
-          "text": "Entrar."
+          "text": "Entrar.",
+          "next": "e"
         }
       ]
     },
@@ -53,6 +54,13 @@
       "speaker": "mae_ravi",
       "text": "Eu dei a lanterna dele pra ele de novo. Ele é homem, decide.",
       "next": "a"
+    },
+    "e": {
+      "speaker": "narrador",
+      "text": "A grande lanterna apaga. Você entra.",
+      "events": [
+        "EnterBreach:primeira_brecha"
+      ]
     }
   }
 }

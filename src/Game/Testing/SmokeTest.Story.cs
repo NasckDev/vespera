@@ -79,11 +79,9 @@ public partial class SmokeTest
         Check(level.PlayAutoplay(), "na volta o Ravi deveria perguntar o placar");
         await WaitForDialogue(level, "placar do Ravi");
         await SkipDialogue(level);
-        Check(level.PlayAutoplay(), "depois do placar a Nilza deveria vir com a sopa");
-        await WaitForDialogue(level, "sopa da Nilza");
-        await SkipDialogue(level);
+        Check(StoryService.Engine.AutoplayFor(Level.HubLevelId) is null, "depois do placar a sopa não deveria tocar na Praça (é na taverna)");
+        level = await TavernSoup(level);
         Check(events.Contains(StoryFlags.EventGivePotion), "a Nilza deveria dar a sopa (GivePotion)");
-        Check(StoryService.Engine.ObjectiveId == "forja", $"depois da Nilza o objetivo deveria ser a forja, é '{StoryService.Engine.ObjectiveId}'");
 
         level = await Travel(level, z => z.Target == "forjas", new Vector2(24, 0), "Level_forjas");
         level = await Travel(level, z => z.Target == "forja_interior", new Vector2(0, 40 * level.World.Data.ActorScale), "Level_forja_interior");
@@ -109,9 +107,10 @@ public partial class SmokeTest
         await Seconds(0.4);
         Check(!GetTree().Paused, "cancelar a escolha deveria despausar");
         Check(StoryService.Engine.ObjectiveId == "dormir", $"depois da Odete o objetivo deveria ser dormir, é '{StoryService.Engine.ObjectiveId}'");
+        level = await SleepAndMorning(level);
 
         StoryService.Engine.EventRaised -= OnEvent;
-        Log.Info("história OK: chegada, Ravi, placar, Nilza, Odete, fecho com a Marisa");
+        Log.Info("história OK: chegada, Ravi, placar, sopa na taverna, Odete, fecho com a Marisa, quarto e manhã das maçãs");
     }
 
     private const float ScaleTolerance = 0.08f;

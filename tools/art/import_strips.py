@@ -93,6 +93,9 @@ for _cls in ("lamina", "arco", "martelo"):
     MONSTERS[f"sombra_cacador_{_cls}"] = {"height": 112, "cell": 256, "normalize": True, "keep": ("aviso",)}
 for _id in ("varal", "despejado", "rasgo", "ceifador_pomar", "sombra_cacador_lamina", "sombra_cacador_arco", "sombra_cacador_martelo"):
     MONSTER_MARGIN[_id] = 12
+# Final (issue #52): o Reflexo, o caçador do lado de baixo (1 humano; a arma só aparece nos golpes).
+MONSTERS["reflexo"] = {"height": 112, "cell": 256, "normalize": True}
+MONSTER_MARGIN["reflexo"] = 12
 
 PLANTED_ANIMS = {"parado", "dano"}  # pés no mesmo lugar: realinha o x por quadro (a fonte desloca os quadros dentro da fatia)
 LOOP_ANIMS = {"parado", "andar", "mover"}

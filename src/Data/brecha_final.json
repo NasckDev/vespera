@@ -1,0 +1,182 @@
+{
+  "_doc": "Brecha do Final (ROTEIRO-V2 §13 FINAL, 'A Primeira Brecha'): a praça de baixo, arena do Reflexo (issue #51 A37). Só abre na Praça depois do Ato VII (flag act7_done, FinalStory.UnlockFlag). Sem salas comuns: direto à arena (data/cacada/cacada_final.json). Ao cair, o Reflexo não abre fenda de saída: toca final/reflexo_queda e o sino de baixo (final/sino).",
+  "id": "primeira_brecha",
+  "lanternId": 8,
+  "name": "A Primeira Brecha",
+  "rank": "SSS",
+  "bairro": "Praça da Lanterna",
+  "neighborhoodId": "praca_da_lanterna",
+  "guardianId": "reflexo",
+  "hub": "praca",
+  "hunt": "res://data/cacada/cacada_final.json",
+  "_xp": "Só o Reflexo: 600 XP.",
+  "rooms": [
+    "praca_baixo"
+  ],
+  "monsters": {
+    "reflexo": {
+      "name": "O REFLEXO",
+      "hp": 2000,
+      "damage": 22,
+      "speed": 150,
+      "xp": 600,
+      "hurtRadius": 30,
+      "contactRadius": 26,
+      "period": 1.6,
+      "telegraph": 0.85,
+      "boss": true
+    }
+  },
+  "boss": {
+    "_doc": "Reflexo: 3 fases de intensidade (66% e 33% de vida). Sem núcleos nem crias. O ritmo de cada fase fica na seção 'reflexo'.",
+    "phases": [
+      0.66,
+      0.33
+    ],
+    "cores": 0,
+    "coreHp": 0,
+    "splitBase": 0,
+    "spawnPerJump": 0,
+    "maxMinions": 0,
+    "swallowSeconds": 0,
+    "swallowDamagePerSecond": 0
+  },
+  "reflexo": {
+    "_doc": "ReflexoTuning (src/Core/Final/ReflexoPattern.cs). Listas por fase = fases 1, 2 e 3. Distâncias na escala 1 do caçador.",
+    "telegraph": [
+      0.85,
+      0.7,
+      0.55
+    ],
+    "cooldown": [
+      1.8,
+      1.4,
+      1.05
+    ],
+    "dodgeScale": [
+      0.6,
+      0.85,
+      1.0
+    ],
+    "dodgeCooldown": 1.4,
+    "dodgeDistance": 220,
+    "dodgeSeconds": 0.25,
+    "lineSeconds": 60,
+    "bladeReach": 175,
+    "bladeLunge": 150,
+    "bladeDamage": 1.0,
+    "bowArrows": [
+      1,
+      2,
+      3
+    ],
+    "bowSpread": 0.28,
+    "bowRange": 900,
+    "bowWidth": 48,
+    "bowKeep": 380,
+    "bowDamage": 0.75,
+    "hammerRadius": 190,
+    "hammerLeap": 320,
+    "hammerDamage": 1.35
+  },
+  "hunter": {
+    "staminaMax": 100,
+    "dodgeCost": 30,
+    "staminaRegen": 55,
+    "staminaRegenDelay": 0.45,
+    "dodgeSeconds": 0.3,
+    "dodgeInvulnerable": 0.25,
+    "dodgeDistance": 260,
+    "hurtInvulnerable": 0.7,
+    "hurtStun": 0.28,
+    "hurtKnockback": 300,
+    "comboBuffer": 0.28,
+    "comboWindow": 0.42
+  },
+  "moves": {
+    "sword": {
+      "light": [
+        1.0,
+        1.1,
+        1.7
+      ],
+      "lightRange": [
+        120,
+        120,
+        140
+      ],
+      "lightArc": [
+        2.2,
+        2.2,
+        2.6
+      ],
+      "lightKnockback": [
+        160,
+        160,
+        340
+      ],
+      "lightHitStop": [
+        0.05,
+        0.05,
+        0.09
+      ],
+      "heavy": 0.9,
+      "heavyRange": 150,
+      "heavyKnockback": 260,
+      "heavyHitStop": 0.07,
+      "heavyCharge": 0.45,
+      "partMult": 1
+    },
+    "bow": {
+      "light": [
+        1.0
+      ],
+      "lightRange": [
+        900
+      ],
+      "lightArc": [
+        0
+      ],
+      "lightKnockback": [
+        220
+      ],
+      "lightHitStop": [
+        0.04
+      ],
+      "heavy": 2.6,
+      "heavyRange": 1300,
+      "heavyKnockback": 260,
+      "heavyHitStop": 0.08,
+      "heavyCharge": 0.6,
+      "partMult": 0.9
+    },
+    "hammer": {
+      "light": [
+        1.0,
+        1.25
+      ],
+      "lightRange": [
+        130,
+        130
+      ],
+      "lightArc": [
+        2.4,
+        2.8
+      ],
+      "lightKnockback": [
+        320,
+        380
+      ],
+      "lightHitStop": [
+        0.1,
+        0.12
+      ],
+      "heavy": 1.6,
+      "heavyRange": 230,
+      "heavyKnockback": 460,
+      "heavyHitStop": 0.12,
+      "heavyCharge": 0.5,
+      "partMult": 2
+    }
+  }
+}

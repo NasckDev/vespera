@@ -49,6 +49,9 @@ public sealed partial class CombatBot
         return metrics;
     }
 
+    /// <summary>Só entra pelo portal da Praça até a primeira sala (o smoke da queda derruba o caçador ali).</summary>
+    internal Task EnterHunt() => OpenPortalAndEnter(null);
+
     /// <summary>Joga as salas até voltar à Praça (fim da caçada ou queda) e fecha a tela de resultado.</summary>
     private async Task<HuntMetrics> PlayRooms()
     {

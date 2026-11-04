@@ -11,7 +11,7 @@ namespace Vespera.Game.World;
 /// </summary>
 public static class GameEntry
 {
-    public const string StartLevelId = "praca";
+    public const string StartLevelId = "estrada";
 
     private static string? _nextLevel;
     private static float[]? _nextSpawn;

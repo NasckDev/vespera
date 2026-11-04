@@ -1,5 +1,5 @@
 {
-  "_doc": "Ato I do ROTEIRO-V2 (§3, §4, §13). Objetivos em ordem de campanha (o Diário usa a ordem); título = até 5 palavras, sempre na tela. Regras: quando a flag 'when' liga e as condições 'if' valem, aplica o objetivo. Flags que o jogo liga sozinho: hunt_back, hunt_1/hunt_2, fell_once, forged, potion_bought, contract_done, xp_ready, exame_e, eco_viscoso. Autoplay: 'stage' = 'arrival' (estrada + Lodo + Brecha abrindo) ou 'morning' (a noite passa antes da fala). Perguntas = página do Diário (§7). Retratos: {0} vira 1 (neutro) ou 2 (expressão). Ato II (ROTEIRO-V2 §13): met_celeste, pomar_podre:hunt_1/hunt_2 (caçadas completas no Pomar), pomar_podre:fell_1..6 (quedas), GuardianDefeated:macieira_oca -> act2_done. Ato III (ROTEIRO-V2 §13): met_severo, pescou, exame_c_visto, cais_afogado:hunt_1/hunt_2, lanterna_m (sala alagada), severo_viu_lanterna, odete_lanterna_m (abre o Farol), cais_afogado:fell_1..6, GuardianDefeated:farol_afogado -> act3_done. Atos IV e V (ROTEIRO-V2 §13, §8.1): flags calculadas 'noite', 'vigia_perguntou_hoje', 'ravi_no_avesso' (NightState/NightFlags); met_vigia abre a Brecha B das Ruas Baixas (RaviRescue: ruas_brecha_aberta, ruas_aviso_2/3, ruas_rompeu, ruas_fechada_a_tempo); eco_slot_1 (UnlockEchoSlot:1). Atos VI e VII (ROTEIRO-V2 §13): sopa_da_vespera (UnlockSopaDaVespera), ruas_invertidas:hunt_1 abre o Inquilino (com met_mae_ravi), ruas_baixas_b:hunt_1 sem ruas_rompeu = ruas_fechada_a_tempo (rota A), ato6_fecho_benicio/ato6_ravi/ato6_lis fecham o Ato VI; Ato VII: ato7_lis_dia, ato7_benicio, avesso_profundo:hunt_1, vigia_p5_feita, lis_revelada (abre a dupla), GuardianDefeated:guardiao_revertido, avesso_recusado -> act7_done, ato7_fecho_benicio, odete_vai_junto, ato7_ravi, ato7_badalo/tem_badalo, ato7_vespera_final.",
+  "_doc": "Ato I do ROTEIRO-V2 (§3, §4, §13). Objetivos em ordem de campanha (o Diário usa a ordem); título = até 5 palavras, sempre na tela. Regras: quando a flag 'when' liga e as condições 'if' valem, aplica o objetivo. Flags que o jogo liga sozinho: hunt_back, hunt_1/hunt_2, fell_once, forged, potion_bought, contract_done, xp_ready, exame_e, eco_viscoso. Autoplay: 'stage' = 'arrival' (estrada + Lodo + Brecha abrindo) ou 'morning' (a noite passa antes da fala). Perguntas = página do Diário (§7). Retratos: {0} vira 1 (neutro) ou 2 (expressão). Ato II (ROTEIRO-V2 §13): met_celeste, pomar_podre:hunt_1/hunt_2 (caçadas completas no Pomar), pomar_podre:fell_1..6 (quedas), GuardianDefeated:macieira_oca -> act2_done. Ato III (ROTEIRO-V2 §13): met_severo, pescou, exame_c_visto, cais_afogado:hunt_1/hunt_2, lanterna_m (sala alagada), severo_viu_lanterna, odete_lanterna_m (abre o Farol), cais_afogado:fell_1..6, GuardianDefeated:farol_afogado -> act3_done. Atos IV e V (ROTEIRO-V2 §13, §8.1): flags calculadas 'noite', 'vigia_perguntou_hoje', 'ravi_no_avesso' (NightState/NightFlags); met_vigia abre a Brecha B das Ruas Baixas (RaviRescue: ruas_brecha_aberta, ruas_aviso_2/3, ruas_rompeu, ruas_fechada_a_tempo); eco_slot_1 (UnlockEchoSlot:1). Atos VI e VII (ROTEIRO-V2 §13): sopa_da_vespera (UnlockSopaDaVespera), ruas_invertidas:hunt_1 abre o Inquilino (com met_mae_ravi), ruas_baixas_b:hunt_1 sem ruas_rompeu = ruas_fechada_a_tempo (rota A), ato6_fecho_benicio/ato6_ravi/ato6_lis fecham o Ato VI; Ato VII: ato7_lis_dia, ato7_benicio, avesso_profundo:hunt_1, vigia_p5_feita, lis_revelada (abre a dupla), GuardianDefeated:guardiao_revertido, avesso_recusado -> ato7_fecho, ato7_fecho_benicio, odete_vai_junto, ato7_ravi, ato7_badalo/tem_badalo, ato7_vespera_final; a fala da Lis à noite (ato7/lis b2) liga act7_done, que abre o Final.",
   "startObjective": "estrada",
   "objectives": [
     {
@@ -15,7 +15,7 @@
     {
       "id": "nilza",
       "title": "Coma com a Nilza",
-      "text": "O Ravi perdeu a aposta: a sopa é por conta dele. A Nilza está na frente da taverna."
+      "text": "O Ravi perdeu a aposta: a sopa é por conta dele. A taverna da Nilza fica no canto sudoeste da praça."
     },
     {
       "id": "forja",
@@ -221,8 +221,23 @@
     },
     {
       "id": "final",
-      "title": "A primeira Brecha (em breve)",
-      "text": "Amanhã a Brecha da praça abre do tamanho da praça. A Odete vai junto. Em breve.",
+      "title": "Entre na primeira Brecha",
+      "text": "A grande lanterna da praça apagou e a primeira Brecha abriu, do tamanho da praça. Fale com quem quiser antes de entrar."
+    },
+    {
+      "id": "final_reflexo",
+      "title": "Vença o Reflexo",
+      "text": "Na praça de baixo espera o que você perdeu. Ele luta como você: leia o âmbar antes de cada golpe."
+    },
+    {
+      "id": "final_sino",
+      "title": "Toque o sino de baixo",
+      "text": "O Reflexo caiu. O sino de baixo está inteiro, com badalo, no alto da escada."
+    },
+    {
+      "id": "final_fim",
+      "title": "Parte 1 concluída",
+      "text": "O sol nasceu. Abriu uma no mar.",
       "locked": true
     }
   ],
@@ -374,6 +389,47 @@
       ]
     },
     {
+      "when": "act7_done",
+      "if": [
+        "!alvor"
+      ],
+      "objective": "final"
+    },
+    {
+      "when": "parte1_fim",
+      "objective": "final_fim"
+    },
+    {
+      "when": "primeira_brecha:fell_1",
+      "set": [
+        "final_morte_1"
+      ]
+    },
+    {
+      "when": "primeira_brecha:fell_2",
+      "set": [
+        "final_morte_2"
+      ]
+    },
+    {
+      "when": "primeira_brecha:fell_3",
+      "set": [
+        "final_morte_3"
+      ]
+    },
+    {
+      "when": "primeira_brecha:fell_4",
+      "set": [
+        "final_morte_4"
+      ]
+    },
+    {
+      "when": "primeira_brecha:fell_5",
+      "set": [
+        "final_morte_5"
+      ]
+    },
+    {
       "when": "ruas_invertidas:hunt_1",
       "if": [
         "met_mae_ravi",
@@ -432,10 +488,7 @@
     },
     {
       "when": "avesso_recusado",
-      "objective": "ato7_fecho",
-      "set": [
-        "act7_done"
-      ]
+      "objective": "ato7_fecho"
     },
     {
       "when": "ato7_fecho_benicio",
@@ -517,7 +570,7 @@
       ]
     },
     {
-      "level": "praca",
+      "level": "taverna",
       "dialogue": "nilza",
       "npc": "nilza",
       "if": [
@@ -976,6 +1029,78 @@
     },
     {
       "level": "praca",
+      "dialogue": "final/praca",
+      "npc": "benicio",
+      "if": [
+        "act7_done",
+        "!final_praca_visto",
+        "!alvor"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "final/epilogo_sem_benicio",
+      "npc": "nilza",
+      "stage": "morning",
+      "if": [
+        "alvor",
+        "final_benicio",
+        "!parte1_fim"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "final/epilogo",
+      "npc": "nilza",
+      "stage": "morning",
+      "if": [
+        "alvor",
+        "!final_benicio",
+        "!parte1_fim"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "final/morte",
+      "if": [
+        "final_morte_1",
+        "!morte_final_1"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "final/morte",
+      "if": [
+        "final_morte_2",
+        "!morte_final_2"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "final/morte",
+      "if": [
+        "final_morte_3",
+        "!morte_final_3"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "final/morte",
+      "if": [
+        "final_morte_4",
+        "!morte_final_4"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "final/morte",
+      "if": [
+        "final_morte_5",
+        "!morte_final_5"
+      ]
+    },
+    {
+      "level": "praca",
       "dialogue": "ato6/ravi",
       "npc": "ravi",
       "if": [
@@ -1203,6 +1328,10 @@
     "nilza": {
       "name": "Tia Nilza",
       "portrait": "res://assets/v2/sprites/npcs/retrato_nilza_{0}.png"
+    },
+    "carroceiro": {
+      "name": "Carroceiro",
+      "portrait": "res://assets/v2/sprites/npcs/retrato_carroceiro_{0}.png"
     },
     "celeste": {
       "name": "Dona Celeste",

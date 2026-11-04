@@ -41,7 +41,18 @@
     },
     {
       "type": "barraca_lona",
-      "at": [1200, 350]
+      "at": [1200, 350],
+      "if": ["!met_lis"]
+    },
+    {
+      "type": "banca_lis_mapas",
+      "at": [1200, 352],
+      "if": ["met_lis", "!ato1_fim_done"]
+    },
+    {
+      "type": "banca_lis_verdade",
+      "at": [1200, 352],
+      "if": ["ato1_fim_done"]
     },
     {
       "type": "barril",
@@ -54,6 +65,31 @@
     {
       "type": "lanterna_chao",
       "at": [972, 620]
+    },
+    {
+      "type": "lampiao_praca",
+      "at": [752, 620],
+      "if": ["ato1_fim_done"]
+    },
+    {
+      "type": "lampiao_praca",
+      "at": [920, 620],
+      "if": ["ato1_fim_done"]
+    },
+    {
+      "type": "lampiao_praca",
+      "at": [752, 790],
+      "if": ["ato1_fim_done"]
+    },
+    {
+      "type": "lampiao_praca",
+      "at": [920, 790],
+      "if": ["ato1_fim_done"]
+    },
+    {
+      "type": "carroca_macas_roxas",
+      "at": [1030, 655],
+      "if": ["odete_marisa", "!act2_done"]
     }
   ],
   "zones": [
@@ -91,8 +127,20 @@
       "kind": "exit",
       "at": [836, 920],
       "radius": 40,
-      "prompt": "Descer a escadaria",
-      "text": "Cais Baixo — trancado, em breve."
+      "prompt": "Descer para a estrada",
+      "text": "",
+      "target": "estrada",
+      "spawn": [842, 150]
+    },
+    {
+      "kind": "exit",
+      "at": [262, 585],
+      "radius": 44,
+      "prompt": "Entrar na taverna da Nilza",
+      "text": "",
+      "target": "taverna",
+      "spawn": [830, 770],
+      "_note": "A taverna é a casa do canto sudoeste (telhado em 0-300 x 600-941); sem porta pintada ao alcance, a entrada fica no canto da praça ao lado dela."
     },
     {
       "kind": "exit",
@@ -117,7 +165,17 @@
   ],
   "npcs": [
     {"id": "severo", "at": [980, 620], "facing": "down", "routine": "idle", "dialogue": "ato7/severo", "prompt": "Falar com o Severo", "if": ["ato7_ravi", "!ato7_badalo"], "_note": "Ato VII, fala 9: o Severo na praça com o badalo de bronze nas mãos."},
-    {"id": "nilza", "at": [560, 600], "facing": "down", "routine": "idle", "dialogue": "nilza", "prompt": "Falar com Tia Nilza", "_note": "Poções e sopa (Ato I). Vem até o jogador na primeira volta da Brecha e dá uma poção."},
+    {
+      "id": "carroceiro",
+      "at": [1105, 612],
+      "facing": "side",
+      "routine": "idle",
+      "dialogue": "carroceiro",
+      "prompt": "Falar com o carroceiro",
+      "if": ["odete_marisa", "!act2_done"],
+      "_note": "Manhã das maçãs roxas (ROTEIRO-V2 §4.6, cena 3): descarrega a carroça ao lado dele."
+    },
+    {"id": "nilza", "at": [560, 600], "facing": "down", "routine": "idle", "dialogue": "nilza", "prompt": "Falar com Tia Nilza", "_note": "Poções e sopa (Ato I). A sopa da primeira volta da Brecha é servida dentro da taverna (taverna.json)."},
     {
       "id": "lis",
       "at": [1200, 400],

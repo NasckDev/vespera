@@ -89,6 +89,7 @@ public static class RiftLoot
             "farol_afogado" => "O Farol Afogado acende uma última vez e afunda",
             "inquilino" => "O Inquilino desaba sobre as quatro pernas",
             "guardiao_revertido" => "A dupla de Guardiões cai junta",
+            "reflexo" => "O Reflexo se parte como vidro",
             _ => "A Macieira Oca racha e cai",
         };
         world.Feel.Toast(Summary(fall, result.Loot.Loot) + echo);

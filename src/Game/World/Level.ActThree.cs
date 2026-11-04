@@ -9,7 +9,7 @@ using Vespera.Game.World.Rift;
 namespace Vespera.Game.World;
 
 /// <summary>
-/// Ato III (ROTEIRO-V2 §13, "O Farol que Não Acendeu"): a lanterna "M." na pedra seca do Mercado Submerso (sala alagada,
+/// Ato III (ROTEIRO-V2 §13, "O Farol que Não Acendeu"): a lanterna "M." (arte da issue #59) na pedra seca do Mercado Submerso (sala alagada,
 /// da 2ª caçada no cais em diante) e a pesca na véspera (evento <c>OpenFishing</c>: barra com agulha, puxe quando o olho
 /// de vidro brilhar; usa <see cref="FishingGame"/>). Ganchos: <c>OnWorldMounted</c> e o fim de cada conversa.
 /// </summary>
@@ -18,7 +18,7 @@ public partial class Level
     public const string LanternRoom = "cais_mercado";
     public const string LanternDialogue = "ato3/lanterna_m";
     public const string FishedFlag = "pescou";
-    private const string LanternTexture = "res://assets/v2/cenarios/praca/objetos/lanterna_chao.png";
+    private const string LanternTexture = "res://assets/v2/objetos/ato3/lanterna_m.png";
     private const string EventOpenFishing = "OpenFishing";
     private const int FishLumes = 6;
     private static readonly Vector2 LanternStone = new(837, 437);

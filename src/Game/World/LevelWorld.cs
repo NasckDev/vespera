@@ -107,6 +107,11 @@ public partial class LevelWorld : Node2D
         for (var i = 0; i < _data.Props.Count; i++)
         {
             var placement = _data.Props[i];
+            if (placement.Conditions.Count > 0 && !Vespera.Core.Story.StoryConditions.Evaluate(placement.Conditions, Story.StoryService.Engine))
+            {
+                continue;
+            }
+
             var at = new Vector2(placement.At[0], placement.At[1]);
             if (placement.Breakable)
             {

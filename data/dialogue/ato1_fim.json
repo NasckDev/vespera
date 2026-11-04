@@ -19,6 +19,7 @@
     "n2": {
       "speaker": "ravi",
       "look": "ravi",
+      "fx": "cena:cena_selo_d",
       "expression": 2,
       "text": "Isso! Selo D!",
       "next": "n3"

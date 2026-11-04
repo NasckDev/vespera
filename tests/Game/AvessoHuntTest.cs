@@ -229,10 +229,21 @@ public class AvessoHuntTest
             AssertThat(engine.ObjectiveId).OverrideFailureMessage(flag).IsEqual(objective);
         }
 
-        // O fecho do Ato VII abre o Final (FinalStory lê act7_done).
-        AssertThat(engine.HasFlag("act7_done")).IsTrue();
+        AssertThat(engine.HasFlag("act7_done")).IsFalse();
         engine.SetFlag("tem_badalo");
         AssertThat(engine.HasFlag("ato7_vespera_final")).IsTrue();
+
+        // Fecho do Ato VII: a Lis à noite, na escada. A fala liga act7_done, que abre o Final (FinalStory.UnlockFlag).
+        var lis = new DialogueRunner(Dialogue("ato7/lis"), engine, "Rui");
+        AssertThat(lis.Start()).IsTrue();
+        AssertThat(lis.CurrentId).IsEqual("b1");
+        while (lis.Advance(1))
+        {
+        }
+
+        AssertThat(engine.HasFlag("act7_done")).IsTrue();
+        AssertThat(engine.HasFlag("lis_escondida")).IsTrue();
+        AssertThat(engine.ObjectiveId).IsEqual("final");
         foreach (var id in new[] { "ato7", "ato7_brecha", "ato7_vigia", "ato7_celeste", "ato7_dupla", "ato7_fecho", "ato7_odete", "ato7_severo" })
         {
             var title = engine.Script.Objective(id)!.Title;

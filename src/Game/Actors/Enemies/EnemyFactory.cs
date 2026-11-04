@@ -31,6 +31,7 @@ public static class EnemyFactory
         "macieira_oca" => new MacieiraOca(world),
         "farol_afogado" => new FarolAfogado(world),
         "inquilino" => new Inquilino(world),
+        "reflexo" => new Reflexo(world),
         _ => new LodoMae(world),
     };
 }

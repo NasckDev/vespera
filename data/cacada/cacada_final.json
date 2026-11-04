@@ -1,0 +1,142 @@
+{
+  "_doc": "Caçada da Brecha do Final (ROTEIRO-V2 §13 FINAL). guardianOnly: a primeira Brecha leva direto à praça de baixo (data/levels/praca_baixo.json), onde espera o Reflexo. Demais regras iguais às das Ruas (rank S/SSS). Contratos: os mesmos tipos do mural da Praça (cacada.json), porque o contrato pego no mural vale para esta Brecha.",
+  "guardianOnly": true,
+  "roomsMin": 5,
+  "roomsMax": 7,
+  "guardianAfterRuns": 0,
+  "treasureChance": 0.65,
+  "restHealPct": 0.5,
+  "runGrowth": 0.3,
+  "runGrowthCap": 2,
+  "guardianRunRooms": 5,
+  "firstWaveSize": 3,
+  "waveSizePerRoom": 0.6,
+  "maxWaveSize": 5,
+  "extraWaveFromRoom": 2,
+  "espectroShareStart": 0.2,
+  "espectroSharePerRoom": 0.06,
+  "espectroShareMax": 0.4,
+  "eliteChanceFromRoom": 2,
+  "eliteChance": 0.3,
+  "elite": {
+    "scale": 1.15,
+    "hp": 2.4,
+    "damage": 1.25,
+    "speed": 1.2,
+    "period": 0.7,
+    "xp": 2,
+    "tint": "#ff9d6e"
+  },
+  "contracts": {
+    "offered": 2,
+    "kinds": {
+      "quebrar": {
+        "title": "Quebradeira",
+        "text": "Quebre {n} barris, caixotes ou núcleos.",
+        "min": 5,
+        "max": 5,
+        "xp": 8,
+        "fragmentos": 4,
+        "lumes": 16
+      },
+      "sala1_sem_dano": {
+        "title": "Entrada limpa",
+        "text": "Não tome dano na sala 1.",
+        "xp": 8,
+        "fragmentos": 4,
+        "lumes": 14
+      },
+      "espectros": {
+        "title": "Caça aos Espectros",
+        "text": "Vença {n} Espectros.",
+        "min": 3,
+        "max": 3,
+        "xp": 8,
+        "fragmentos": 5,
+        "lumes": 12
+      },
+      "tesouro": {
+        "title": "Faro de tesouro",
+        "text": "Encontre a sala do tesouro e abra o baú.",
+        "xp": 6,
+        "fragmentos": 6,
+        "lumes": 12
+      },
+      "vida_cheia": {
+        "title": "Volta inteira",
+        "text": "Volte com a vida cheia (90% ou mais).",
+        "xp": 10,
+        "fragmentos": 5,
+        "lumes": 18
+      },
+      "guardiao_rapido": {
+        "title": "Relâmpago",
+        "text": "Vença o Guardião em menos de 2 minutos.",
+        "guardian": true,
+        "target": 120,
+        "xp": 15,
+        "fragmentos": 8,
+        "lumes": 25
+      },
+      "guardiao_partes": {
+        "title": "Desmonte",
+        "text": "Quebre todos os núcleos do Guardião.",
+        "guardian": true,
+        "xp": 12,
+        "fragmentos": 8,
+        "lumes": 20
+      }
+    },
+    "materials": [
+      "gel_de_lodo",
+      "veu_de_espectro"
+    ]
+  },
+  "potions": {
+    "price": 14,
+    "flowerPrice": 5,
+    "max": 3,
+    "healPct": 0.4,
+    "drinkSeconds": 0.6
+  },
+  "flowers": {
+    "perReturn": 3
+  },
+  "well": {
+    "price": 1,
+    "fragmentBonusPct": 25
+  },
+  "breakables": {
+    "lumes": [
+      1,
+      3
+    ],
+    "fragmentChance": 0.15
+  },
+  "finalGround": "praca_baixo",
+  "commonMonster": "lodo",
+  "secondMonster": "espectro",
+  "secondSwarm": 1,
+  "grounds": {
+    "praca_baixo": {
+      "kinds": [
+        "guardian"
+      ],
+      "spawns": [
+        [
+          640,
+          470
+        ],
+        [
+          1040,
+          470
+        ],
+        [
+          838,
+          380
+        ]
+      ],
+      "breakables": []
+    }
+  }
+}

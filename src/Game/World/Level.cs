@@ -108,6 +108,7 @@ public partial class Level : Control
         MountWorld(new LevelWorld(_data, _catalog) { Name = "World" });
         GameSession.Autosave();
         ScheduleAutoplay();
+        ScheduleRoad();
     }
 
     /// <summary>Aviso curto na parte de baixo (some sozinho); usado por ganchos sem tela própria ainda.</summary>
@@ -125,6 +126,7 @@ public partial class Level : Control
         HunterSprites.ClearCache();
         MonsterSprites.ClearCache();
         ContactShadow.ClearCache();
+        EliteAura.ClearCache();
         LightTexture.ClearCache();
         WorldSfx.ClearCache();
         CombatSfx.ClearCache();
@@ -266,6 +268,9 @@ public partial class Level : Control
                 return;
             case "descer" or "saida":
                 World.Director?.RequestExit();
+                return;
+            case "bed":
+                Sleep(item);
                 return;
             case "rest":
                 if (World.Director?.UseRest() == true)

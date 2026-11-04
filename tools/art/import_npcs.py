@@ -36,12 +36,12 @@ OUT = ROOT / "assets" / "v2" / "sprites" / "npcs"
 
 CELL = 192
 FEET = (96, 176)
-NPC_HEIGHT = {"odete": 118, "ravi": 124, "lis": 118, "nilza": 118, "celeste": 118, "severo": 118, "vigia": 118}
+NPC_HEIGHT = {"odete": 118, "ravi": 124, "lis": 118, "nilza": 118, "celeste": 118, "severo": 118, "vigia": 118, "carroceiro": 122}
 # NPCs cujas tiras vieram em tamanhos diferentes entre si (Celeste: parado_lado maior): escala por tira, não por animação.
-PER_STRIP_SCALE = {"celeste", "severo", "vigia"}
+PER_STRIP_SCALE = {"celeste", "severo", "vigia", "carroceiro"}
 FRAMES = {"parado": 4, "andar": 6}
 DIRECTIONS = ("baixo", "cima", "lado")
-PORTRAITS = ("odete", "ravi", "nilza", "lis", "celeste", "severo", "vigia")
+PORTRAITS = ("odete", "ravi", "nilza", "lis", "celeste", "severo", "vigia", "carroceiro")
 # Ato VI (issue #37): a mãe do Ravi.
 NPC_HEIGHT["mae_ravi"] = 116
 PORTRAITS = (*PORTRAITS, "mae_ravi")
@@ -149,11 +149,39 @@ def build_benicio() -> None:
         print(f"  npc_benicio_parado_{direction}.png: {len(cells)} quadros")
 
 
+def build_benicio_observa() -> None:
+    """Benício observando (exame do Ato I, issue #41): 3 tiras de 4 quadros (parado com a lanterna acesa), fonte em
+    benicio/npc_benicio_observa_{baixo,cima,lado}.png. Mesma altura do Benício (escala da vista de frente nas 3 tiras).
+    Sai como npc_benicio_observa_parado_<dir>.png: o jogo usa o id "benicio_observa" como um NPC só de 'parado'.
+    Obs.: a tira 'cima' da entrega veio de frente (não de costas); fica como está até a arte ser refeita."""
+    scale = None
+    for direction in ("baixo", "cima", "lado"):
+        strip = strips.load_strip(BENICIO_SRC / f"npc_benicio_observa_{direction}.png", 4, "parado", direction)
+        for frame in strip.frames:
+            frame.image = keep_body_only(frame.image)
+            data = np.array(frame.image)
+            rows = np.flatnonzero((data[..., 3] >= strips.ALPHA_MIN).any(axis=1))
+            frame.top, frame.bottom = int(rows[0]), int(rows[-1])
+        if scale is None:
+            scale = BENICIO_HEIGHT / float(np.median([f.height for f in strip.frames]))
+        strip.scale = scale
+        strip.fixed_anchor = (
+            float(np.median([f.feet_x for f in strip.frames])),
+            float(np.median([f.bottom for f in strip.frames])),
+        )
+        cells, _clipped = strips.render_strip(strip, CELL, FEET)
+        sheet = Image.new("RGBA", (CELL * len(cells), CELL), (0, 0, 0, 0))
+        for i, cell in enumerate(cells):
+            sheet.paste(cell, (i * CELL, 0))
+        sheet.save(OUT / f"npc_benicio_observa_parado_{direction}.png", optimize=True)
+        print(f"  npc_benicio_observa_parado_{direction}.png: {len(cells)} quadros (escala {scale:.3f})")
+
+
 def write_registry() -> None:
     """npcs.json: altura opaca em pé (px da célula 192, mediana dos quadros 'parado' de frente) de cada NPC.
     O jogo calcula a escala do sprite = altura-alvo (ScaleRegistry) ÷ este valor."""
     registry = {}
-    for npc in (*NPC_HEIGHT, "benicio"):
+    for npc in (*NPC_HEIGHT, "benicio", "benicio_observa"):
         data = np.array(Image.open(OUT / f"npc_{npc}_parado_baixo.png"))
         heights = []
         for i in range(data.shape[1] // CELL):
@@ -190,6 +218,8 @@ def main() -> int:
             build_npc(npc)
     if not only:
         build_benicio()
+    if not only or "benicio_observa" in only:
+        build_benicio_observa()
     write_registry()
     build_portraits(only)
     return 0

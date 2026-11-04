@@ -103,6 +103,7 @@
       "speaker": "lis",
       "look": "lis",
       "expression": 2,
+      "fx": "cena:cena_maca_roxa_praca",
       "text": "Isso veio do Pomar Alto. Maçã não nasce dessa cor.",
       "set": [
         "maca_done"

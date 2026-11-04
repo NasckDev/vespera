@@ -28,6 +28,7 @@ public static class RiftSession
         ["ruas_invertidas"] = "res://src/Data/brecha_ruas.json",
         ["ruas_baixas_b"] = "res://src/Data/brecha_ruas_b.json",
         ["avesso_profundo"] = "res://src/Data/brecha_avesso.json",
+        [Core.Final.FinalStory.BrechaId] = "res://src/Data/brecha_final.json",
     };
 
     private static readonly System.Collections.Generic.Dictionary<string, BrechaDef> Loaded = [];

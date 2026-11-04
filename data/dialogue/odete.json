@@ -109,6 +109,7 @@
     "f2": {
       "speaker": "odete",
       "look": "odete",
+      "fx": "cena:cena_odete_forja",
       "text": "A última pessoa que eu esperei voltar se chamava Marisa.",
       "next": "f3"
     },

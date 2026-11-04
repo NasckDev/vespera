@@ -192,6 +192,7 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
             Position = new Vector2(0, -(Sheet.StandHeight * Sheet.SpriteScale) - (14f * A)),
         };
         AddChild(Bar);
+        AddEliteAura();
         World.Combat.Register(this);
         Play("parado");
         OnSpawned();
@@ -347,6 +348,25 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
                 _tint = new Color("c98bff");
                 break;
         }
+    }
+
+    /// <summary>Anel animado do modificador em volta do corpo (só elite com modificador).</summary>
+    private void AddEliteAura()
+    {
+        if (!Elite || Modifier.Length == 0)
+        {
+            return;
+        }
+
+        var bodyHeight = Sheet.StandHeight * Sheet.SpriteScale;
+        var aura = EliteAura.Make(Modifier, Mathf.Max(bodyHeight, HitRadius * 2f));
+        if (aura is null)
+        {
+            return;
+        }
+
+        aura.Position = new Vector2(0, -BodyLift);
+        AddChild(aura);
     }
 
     /// <summary>Nome do modificador para os avisos.</summary>

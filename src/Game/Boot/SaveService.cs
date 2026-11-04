@@ -6,7 +6,8 @@ using Vespera.Core.Save;
 namespace Vespera.Game.Boot;
 
 /// <summary>Resumo de um espaço de save para a lista da tela de espaços (sem carregar o jogo inteiro).</summary>
-public sealed record SlotSummary(int Slot, bool Exists, string Name, int Day, DateTimeOffset SavedAt);
+/// <param name="PartOneDone">O save já viu o fim da Parte 1 (flag <c>parte1_fim</c>, ver <c>FinalStory</c>).</param>
+public sealed record SlotSummary(int Slot, bool Exists, string Name, int Day, DateTimeOffset SavedAt, bool PartOneDone = false);
 
 /// <summary>
 /// Saves em <c>user://saves/slot_N.json</c> usando o <see cref="SaveData"/> versionado do Core
@@ -41,7 +42,7 @@ public static class SaveService
         var data = Load(slot);
         return data is null
             ? new SlotSummary(slot, false, string.Empty, 0, default)
-            : new SlotSummary(slot, true, data.Name, data.Day, data.SavedAt);
+            : new SlotSummary(slot, true, data.Name, data.Day, data.SavedAt, data.Story?.Has(Core.Final.FinalStory.PartOneDoneFlag) == true);
     }
 
     public static SaveData? Load(int slot)
