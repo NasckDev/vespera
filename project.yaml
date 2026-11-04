@@ -1,0 +1,43 @@
+# Configuração do Claude Code Game Studios para o Véspera (https://github.com/Donchitos/Claude-Code-Game-Studios, MIT).
+# Os agentes, skills, regras e modelos ficam em .claude/; os hooks do estúdio NÃO foram instalados
+# (são scripts bash que conflitam com os hooks do ECC já em uso nesta máquina).
+schema_version: 1
+
+framework:
+  version: 1.2.0
+  last_upgraded: 2026-11-04
+
+project:
+  name: "Véspera"
+  genre: "Action RPG 2D com história (pixel art pintado)"
+  version: "0.2.0"
+  stage: Production
+  kind: game
+
+modes:
+  rigor: standard
+  automation: autonomous
+
+platform:
+  multiplayer: false
+  online: false
+  targets: [PC]
+  primary_input: "Keyboard/Mouse"
+  gamepad_support: "Full"
+  touch_support: "None"
+  cert_tier: itch
+
+engine:
+  name: "Godot"
+  version: "4.7"
+  language: "C#"
+  rendering: "Compatibility"
+
+specialists:
+  code: "godot-csharp-specialist"
+  shader: "godot-shader-specialist"
+  ui: "godot-specialist"
+  additional: []
+
+testing:
+  framework: xunit
