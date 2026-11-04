@@ -128,6 +128,16 @@ public static class RaviRescue
         }
     }
 
+    /// <summary>Sala 3 da Brecha B (o descanso da caçada curta): onde fica a Lanterna do Ravi quando a Brecha rompe.</summary>
+    public const string LanternRoom = "ruas_cozinha";
+
+    /// <summary>A Lanterna do Ravi espera nesta sala agora (Brecha B rompida e a lanterna ainda lá dentro).</summary>
+    public static bool LanternWaiting(string brechaId, string roomId, IStoryContext story)
+    {
+        ArgumentNullException.ThrowIfNull(story);
+        return brechaId == BrechaId && roomId == LanternRoom && story.HasFlag(Ruptured) && !story.HasFlag(LanternRecovered);
+    }
+
     /// <summary>Rota já decidida: 'A' (chegou a tempo), 'B' (rompeu e a Lanterna voltou) ou null (ainda em aberto).</summary>
     public static char? Route(IStoryContext story)
     {

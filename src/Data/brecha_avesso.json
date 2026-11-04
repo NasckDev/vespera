@@ -1,0 +1,271 @@
+{
+  "_doc": "Brecha SS do Ato VII (ROTEIRO-V2 §13: 'A Cidade de Baixo'; CAMPANHA Ato VII). A Brecha abre em qualquer bairro e mistura temas. Guardiões em dupla com avisos encurtados (0,4 s): cada Guardião aqui é mais fraco que no ato dele, porque vem acompanhado. As classes dos Guardiões leem a própria afinação (pomar_podre, cais_afogado, ruas_invertidas); a Lodo-Mãe lê o bloco 'boss' daqui (cópia do dos esgotos). Os minions (lodo, rato_lanterna, afogado) estão aqui para nascerem com a régua do rank SS. Caçadas: data/cacada/cacada_avesso.json; o fim é a sala do Avesso (exame SSS).",
+  "id": "avesso_profundo",
+  "lanternId": 7,
+  "name": "Avesso profundo",
+  "rank": "SS",
+  "bairro": "Praça da Lanterna",
+  "neighborhoodId": "avesso_profundo",
+  "guardianId": "guardiao_revertido",
+  "hub": "praca",
+  "hunt": "res://data/cacada/cacada_avesso.json",
+  "_xp": "Caçada típica: ~16 Ceifadores (18 XP) + ~8 Sombras (18) + ~5 Rasgos (14) ~ 500 XP; a dupla ~380.",
+  "rooms": [
+    "avesso_cais_pomar",
+    "avesso_torre_cemiterio",
+    "avesso_ruas_esgoto",
+    "avesso_dupla_esgoto_pomar",
+    "avesso_final"
+  ],
+  "monsters": {
+    "ceifador_pomar": {
+      "name": "Ceifador de Pomar",
+      "hp": 170,
+      "damage": 30,
+      "speed": 165,
+      "xp": 18,
+      "hurtRadius": 38,
+      "contactRadius": 42,
+      "period": 2.4,
+      "telegraph": 0.6
+    },
+    "sombra_cacador_lamina": {
+      "name": "Sombra de Caçador",
+      "hp": 140,
+      "damage": 30,
+      "speed": 120,
+      "xp": 18,
+      "hurtRadius": 34,
+      "contactRadius": 38,
+      "period": 2.6,
+      "telegraph": 0.6
+    },
+    "sombra_cacador_arco": {
+      "name": "Sombra de Caçador",
+      "hp": 120,
+      "damage": 28,
+      "speed": 110,
+      "xp": 18,
+      "hurtRadius": 34,
+      "contactRadius": 38,
+      "period": 2.8,
+      "telegraph": 0.6
+    },
+    "sombra_cacador_martelo": {
+      "name": "Sombra de Caçador",
+      "hp": 170,
+      "damage": 34,
+      "speed": 95,
+      "xp": 18,
+      "hurtRadius": 36,
+      "contactRadius": 40,
+      "period": 3.0,
+      "telegraph": 0.7
+    },
+    "rasgo": {
+      "name": "Rasgo",
+      "hp": 100,
+      "damage": 30,
+      "speed": 130,
+      "xp": 14,
+      "hurtRadius": 32,
+      "contactRadius": 34,
+      "period": 3.0,
+      "telegraph": 0.5
+    },
+    "lodo_mae": {
+      "name": "LODO-MÃE",
+      "hp": 1500,
+      "damage": 30,
+      "speed": 110,
+      "xp": 180,
+      "hurtRadius": 120,
+      "contactRadius": 120,
+      "period": 2.0,
+      "telegraph": 0.4,
+      "boss": true
+    },
+    "macieira_oca": {
+      "name": "MACIEIRA OCA",
+      "hp": 1700,
+      "damage": 30,
+      "speed": 55,
+      "xp": 200,
+      "hurtRadius": 120,
+      "contactRadius": 120,
+      "period": 2.2,
+      "telegraph": 0.4,
+      "boss": true
+    },
+    "farol_afogado": {
+      "name": "FAROL AFOGADO",
+      "hp": 1700,
+      "damage": 30,
+      "speed": 45,
+      "xp": 200,
+      "hurtRadius": 120,
+      "contactRadius": 120,
+      "period": 2.4,
+      "telegraph": 0.4,
+      "boss": true
+    },
+    "inquilino": {
+      "name": "INQUILINO",
+      "hp": 1800,
+      "damage": 32,
+      "speed": 70,
+      "xp": 220,
+      "hurtRadius": 120,
+      "contactRadius": 120,
+      "period": 2.2,
+      "telegraph": 0.4,
+      "boss": true
+    },
+    "lodo": {
+      "name": "Lodo",
+      "hp": 90,
+      "damage": 22,
+      "speed": 260,
+      "xp": 4,
+      "hurtRadius": 30,
+      "contactRadius": 32,
+      "period": 2.0,
+      "telegraph": 0.4
+    },
+    "rato_lanterna": {
+      "name": "Rato-Lanterna",
+      "hp": 50,
+      "damage": 20,
+      "speed": 330,
+      "xp": 3,
+      "hurtRadius": 22,
+      "contactRadius": 24,
+      "period": 2.4,
+      "telegraph": 0.4
+    },
+    "afogado": {
+      "name": "Afogado",
+      "hp": 160,
+      "damage": 28,
+      "speed": 80,
+      "xp": 10,
+      "hurtRadius": 36,
+      "contactRadius": 40,
+      "period": 2.4,
+      "telegraph": 0.5
+    }
+  },
+  "boss": {
+    "phases": [
+      0.66,
+      0.33
+    ],
+    "cores": 3,
+    "coreHp": 40,
+    "splitBase": 3,
+    "spawnPerJump": 2,
+    "maxMinions": 5,
+    "swallowSeconds": 2.0,
+    "swallowDamagePerSecond": 6
+  },
+  "hunter": {
+    "staminaMax": 100,
+    "dodgeCost": 30,
+    "staminaRegen": 55,
+    "staminaRegenDelay": 0.45,
+    "dodgeSeconds": 0.3,
+    "dodgeInvulnerable": 0.25,
+    "dodgeDistance": 260,
+    "hurtInvulnerable": 0.7,
+    "hurtStun": 0.28,
+    "hurtKnockback": 300,
+    "comboBuffer": 0.28,
+    "comboWindow": 0.42
+  },
+  "moves": {
+    "sword": {
+      "light": [
+        1.0,
+        1.1,
+        1.7
+      ],
+      "lightRange": [
+        120,
+        120,
+        140
+      ],
+      "lightArc": [
+        2.2,
+        2.2,
+        2.6
+      ],
+      "lightKnockback": [
+        160,
+        160,
+        340
+      ],
+      "lightHitStop": [
+        0.05,
+        0.05,
+        0.09
+      ],
+      "heavy": 0.9,
+      "heavyRange": 150,
+      "heavyKnockback": 260,
+      "heavyHitStop": 0.07,
+      "heavyCharge": 0.45,
+      "partMult": 1
+    },
+    "bow": {
+      "light": [
+        1.0
+      ],
+      "lightRange": [
+        900
+      ],
+      "lightArc": [
+        0
+      ],
+      "lightKnockback": [
+        220
+      ],
+      "lightHitStop": [
+        0.04
+      ],
+      "heavy": 2.6,
+      "heavyRange": 1300,
+      "heavyKnockback": 260,
+      "heavyHitStop": 0.08,
+      "heavyCharge": 0.6,
+      "partMult": 0.9
+    },
+    "hammer": {
+      "light": [
+        1.0,
+        1.25
+      ],
+      "lightRange": [
+        130,
+        130
+      ],
+      "lightArc": [
+        2.4,
+        2.8
+      ],
+      "lightKnockback": [
+        320,
+        380
+      ],
+      "lightHitStop": [
+        0.1,
+        0.12
+      ],
+      "heavy": 1.6,
+      "heavyRange": 230,
+      "heavyKnockback": 460,
+      "heavyHitStop": 0.12,
+      "heavyCharge": 0.5,
+      "partMult": 2
+    }
+  }
+}

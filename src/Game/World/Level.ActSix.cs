@@ -20,21 +20,12 @@ public partial class Level
     public const string EventUnlockSopa = "UnlockSopaDaVespera";
     public const string EventGiveLegendaryWeapon = "GiveLegendaryWeapon";
 
-    /// <summary>Sala 3 da Brecha B (o descanso da caçada curta): onde fica a Lanterna do Ravi quando a Brecha rompe.</summary>
-    public const string RaviLanternRoom = "ruas_cozinha";
     public const string RaviLanternDialogue = "ato4/lanterna_ravi";
     private static readonly Vector2 RaviLanternAt = new(600, 330);
 
-    /// <summary>A Lanterna do Ravi espera nesta sala agora (Brecha B rompida e a lanterna ainda lá dentro).</summary>
-    public static bool RaviLanternWaiting(string brechaId, string roomId, IStoryContext story) =>
-        brechaId == RaviRescue.BrechaId
-        && roomId == RaviLanternRoom
-        && story.HasFlag(RaviRescue.Ruptured)
-        && !story.HasFlag(RaviRescue.LanternRecovered);
-
     private void ShowActSix()
     {
-        if (!RiftSession.InRift || !RaviLanternWaiting(RiftSession.Brecha.Id, World.Data.Id, StoryService.Engine))
+        if (!RiftSession.InRift || !RaviRescue.LanternWaiting(RiftSession.Brecha.Id, World.Data.Id, StoryService.Engine))
         {
             return;
         }

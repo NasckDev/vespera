@@ -60,6 +60,62 @@
         "xp": 6,
         "fragmentos": 3,
         "lumes": 16
+      },
+      "quebrar": {
+        "title": "Quebradeira",
+        "text": "Quebre {n} barris, caixotes ou núcleos.",
+        "min": 5,
+        "max": 5,
+        "xp": 8,
+        "fragmentos": 4,
+        "lumes": 16
+      },
+      "sala1_sem_dano": {
+        "title": "Entrada limpa",
+        "text": "Não tome dano na sala 1.",
+        "xp": 8,
+        "fragmentos": 4,
+        "lumes": 14
+      },
+      "espectros": {
+        "title": "Caça aos Espectros",
+        "text": "Vença {n} Espectros.",
+        "min": 3,
+        "max": 3,
+        "xp": 8,
+        "fragmentos": 5,
+        "lumes": 12
+      },
+      "tesouro": {
+        "title": "Faro de tesouro",
+        "text": "Encontre a sala do tesouro e abra o baú.",
+        "xp": 6,
+        "fragmentos": 6,
+        "lumes": 12
+      },
+      "vida_cheia": {
+        "title": "Volta inteira",
+        "text": "Volte com a vida cheia (90% ou mais).",
+        "xp": 10,
+        "fragmentos": 5,
+        "lumes": 18
+      },
+      "guardiao_rapido": {
+        "title": "Relâmpago",
+        "text": "Vença o Guardião em menos de 2 minutos.",
+        "guardian": true,
+        "target": 120,
+        "xp": 15,
+        "fragmentos": 8,
+        "lumes": 25
+      },
+      "guardiao_partes": {
+        "title": "Desmonte",
+        "text": "Quebre todos os núcleos do Guardião.",
+        "guardian": true,
+        "xp": 12,
+        "fragmentos": 8,
+        "lumes": 20
       }
     },
     "materials": [

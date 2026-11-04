@@ -1,0 +1,953 @@
+{
+  "_doc": "Caçadas do Avesso profundo (Ato VII, rank SS, ROTEIRO-V2 §13; CAMPANHA Ato VII). A Brecha mistura bairros: as 3 salas novas da issue #49 (Cais no Pomar, Torre no Cemitério, Cozinha no Esgoto), salas dos baralhos anteriores (esgoto, pomar, cais, ruas) e as arenas das duplas como salas de elite. Ceifador de Pomar é o comum (vigia: só anda fora da luz), a Sombra de Caçador o segundo (usa o verbo da classe de quem caça), o Rasgo o terceiro. A dupla de Guardiões espera no fim depois de 1 caçada e da conversa com a Celeste (guardianFlag lis_revelada); depois dela, a sala do Avesso (epilogueGround) é o exame SSS. finalGrounds: só as duplas com os dois Guardiões já no jogo (Velória e Sineiro Mudo chegam com os Atos IV e V).",
+  "roomsMin": 5,
+  "roomsMax": 7,
+  "guardianAfterRuns": 1,
+  "treasureChance": 0.65,
+  "restHealPct": 0.5,
+  "runGrowth": 0.3,
+  "runGrowthCap": 2,
+  "guardianRunRooms": 5,
+  "firstWaveSize": 3,
+  "waveSizePerRoom": 0.6,
+  "maxWaveSize": 5,
+  "extraWaveFromRoom": 2,
+  "espectroShareStart": 0.2,
+  "espectroSharePerRoom": 0.06,
+  "espectroShareMax": 0.4,
+  "eliteChanceFromRoom": 2,
+  "eliteChance": 0.3,
+  "elite": {
+    "scale": 1.15,
+    "hp": 2.4,
+    "damage": 1.25,
+    "speed": 1.2,
+    "period": 0.7,
+    "xp": 2,
+    "tint": "#ff9d6e"
+  },
+  "contracts": {
+    "offered": 3,
+    "kinds": {
+      "cacada": {
+        "title": "Caçada",
+        "text": "Feche uma caçada inteira (sem cair).",
+        "xp": 10,
+        "fragmentos": 6,
+        "lumes": 18
+      },
+      "coleta": {
+        "title": "Coleta",
+        "text": "Traga {n} {item} de uma caçada.",
+        "min": 3,
+        "max": 5,
+        "xp": 8,
+        "fragmentos": 4,
+        "lumes": 14
+      },
+      "protecao": {
+        "title": "Proteção",
+        "text": "Sobreviva a {n} ondas numa caçada.",
+        "min": 5,
+        "max": 8,
+        "xp": 8,
+        "fragmentos": 5,
+        "lumes": 12
+      },
+      "sem_dano": {
+        "title": "Sem dano",
+        "text": "Termine uma sala de combate sem levar golpe.",
+        "xp": 6,
+        "fragmentos": 3,
+        "lumes": 16
+      },
+      "quebrar": {
+        "title": "Quebradeira",
+        "text": "Quebre {n} barris, caixotes ou núcleos.",
+        "min": 5,
+        "max": 5,
+        "xp": 8,
+        "fragmentos": 4,
+        "lumes": 16
+      },
+      "sala1_sem_dano": {
+        "title": "Entrada limpa",
+        "text": "Não tome dano na sala 1.",
+        "xp": 8,
+        "fragmentos": 4,
+        "lumes": 14
+      },
+      "espectros": {
+        "title": "Caça aos Espectros",
+        "text": "Vença {n} Espectros.",
+        "min": 3,
+        "max": 3,
+        "xp": 8,
+        "fragmentos": 5,
+        "lumes": 12
+      },
+      "tesouro": {
+        "title": "Faro de tesouro",
+        "text": "Encontre a sala do tesouro e abra o baú.",
+        "xp": 6,
+        "fragmentos": 6,
+        "lumes": 12
+      },
+      "vida_cheia": {
+        "title": "Volta inteira",
+        "text": "Volte com a vida cheia (90% ou mais).",
+        "xp": 10,
+        "fragmentos": 5,
+        "lumes": 18
+      },
+      "guardiao_rapido": {
+        "title": "Relâmpago",
+        "text": "Vença o Guardião em menos de 2 minutos.",
+        "guardian": true,
+        "target": 120,
+        "xp": 15,
+        "fragmentos": 8,
+        "lumes": 25
+      },
+      "guardiao_partes": {
+        "title": "Desmonte",
+        "text": "Quebre todos os núcleos do Guardião.",
+        "guardian": true,
+        "xp": 12,
+        "fragmentos": 8,
+        "lumes": 20
+      }
+    },
+    "materials": [
+      "cinza_do_avesso",
+      "casca_de_brecha"
+    ]
+  },
+  "potions": {
+    "price": 14,
+    "flowerPrice": 5,
+    "max": 3,
+    "healPct": 0.4,
+    "drinkSeconds": 0.6
+  },
+  "flowers": {
+    "perReturn": 3
+  },
+  "well": {
+    "price": 1,
+    "fragmentBonusPct": 25
+  },
+  "breakables": {
+    "lumes": [
+      1,
+      3
+    ],
+    "fragmentChance": 0.15
+  },
+  "finalGround": "avesso_dupla_esgoto_pomar",
+  "commonMonster": "ceifador_pomar",
+  "secondMonster": "sombra_cacador",
+  "secondSwarm": 1,
+  "grounds": {
+    "esgoto_cruzamento": {
+      "kinds": [
+        "combat",
+        "elite"
+      ],
+      "spawns": [
+        [
+          840,
+          360
+        ],
+        [
+          456,
+          440
+        ],
+        [
+          1224,
+          440
+        ],
+        [
+          664,
+          440
+        ],
+        [
+          1016,
+          440
+        ],
+        [
+          264,
+          440
+        ],
+        [
+          1416,
+          440
+        ],
+        [
+          856,
+          200
+        ],
+        [
+          776,
+          456
+        ]
+      ],
+      "breakables": [
+        [
+          370,
+          476
+        ],
+        [
+          1320,
+          480
+        ]
+      ]
+    },
+    "pomar_corredor": {
+      "kinds": [
+        "combat",
+        "elite"
+      ],
+      "spawns": [
+        [
+          552,
+          376
+        ],
+        [
+          1496,
+          440
+        ],
+        [
+          1032,
+          360
+        ],
+        [
+          792,
+          440
+        ],
+        [
+          1272,
+          360
+        ],
+        [
+          1144,
+          440
+        ],
+        [
+          680,
+          360
+        ],
+        [
+          904,
+          376
+        ],
+        [
+          1400,
+          360
+        ],
+        [
+          472,
+          440
+        ],
+        [
+          1336,
+          440
+        ],
+        [
+          632,
+          440
+        ],
+        [
+          984,
+          440
+        ],
+        [
+          1176,
+          360
+        ]
+      ],
+      "breakables": [
+        [
+          376,
+          344
+        ],
+        [
+          1496,
+          456
+        ],
+        [
+          936,
+          360
+        ]
+      ]
+    },
+    "cais_pier": {
+      "kinds": [
+        "combat",
+        "elite"
+      ],
+      "spawns": [
+        [
+          1640,
+          408
+        ],
+        [
+          856,
+          488
+        ],
+        [
+          472,
+          408
+        ],
+        [
+          1240,
+          408
+        ],
+        [
+          1432,
+          488
+        ],
+        [
+          664,
+          456
+        ],
+        [
+          1048,
+          440
+        ],
+        [
+          1160,
+          488
+        ],
+        [
+          552,
+          488
+        ],
+        [
+          1544,
+          472
+        ],
+        [
+          936,
+          408
+        ],
+        [
+          776,
+          408
+        ],
+        [
+          1352,
+          408
+        ],
+        [
+          1304,
+          488
+        ]
+      ],
+      "breakables": [
+        [
+          280,
+          488
+        ],
+        [
+          360,
+          408
+        ],
+        [
+          408,
+          488
+        ]
+      ]
+    },
+    "ruas_largo": {
+      "kinds": [
+        "combat",
+        "elite"
+      ],
+      "spawns": [
+        [
+          1256,
+          520
+        ],
+        [
+          760,
+          872
+        ],
+        [
+          1400,
+          424
+        ],
+        [
+          1144,
+          456
+        ],
+        [
+          840,
+          632
+        ],
+        [
+          632,
+          360
+        ],
+        [
+          568,
+          488
+        ],
+        [
+          1144,
+          328
+        ],
+        [
+          696,
+          568
+        ],
+        [
+          472,
+          584
+        ],
+        [
+          1096,
+          552
+        ],
+        [
+          1496,
+          504
+        ],
+        [
+          1304,
+          344
+        ],
+        [
+          1352,
+          584
+        ]
+      ],
+      "breakables": [
+        [
+          952,
+          584
+        ],
+        [
+          504,
+          392
+        ],
+        [
+          664,
+          456
+        ]
+      ]
+    },
+    "avesso_cais_pomar": {
+      "kinds": [
+        "combat",
+        "elite"
+      ],
+      "spawns": [
+        [
+          632,
+          408
+        ],
+        [
+          1128,
+          472
+        ],
+        [
+          1640,
+          424
+        ],
+        [
+          728,
+          440
+        ],
+        [
+          984,
+          472
+        ],
+        [
+          1368,
+          392
+        ],
+        [
+          456,
+          392
+        ],
+        [
+          1496,
+          376
+        ],
+        [
+          808,
+          376
+        ],
+        [
+          920,
+          392
+        ],
+        [
+          1240,
+          424
+        ],
+        [
+          1544,
+          472
+        ],
+        [
+          1048,
+          376
+        ],
+        [
+          536,
+          456
+        ]
+      ],
+      "breakables": [
+        [
+          1432,
+          472
+        ],
+        [
+          840,
+          472
+        ]
+      ]
+    },
+    "avesso_torre_cemiterio": {
+      "kinds": [
+        "combat",
+        "elite",
+        "treasure"
+      ],
+      "spawns": [
+        [
+          744,
+          440
+        ],
+        [
+          840,
+          904
+        ],
+        [
+          776,
+          584
+        ],
+        [
+          456,
+          424
+        ],
+        [
+          1544,
+          408
+        ],
+        [
+          808,
+          680
+        ],
+        [
+          920,
+          328
+        ],
+        [
+          760,
+          312
+        ],
+        [
+          1400,
+          376
+        ],
+        [
+          1144,
+          408
+        ],
+        [
+          584,
+          408
+        ],
+        [
+          856,
+          504
+        ],
+        [
+          776,
+          824
+        ],
+        [
+          1240,
+          440
+        ]
+      ],
+      "breakables": [
+        [
+          1032,
+          392
+        ],
+        [
+          968,
+          488
+        ],
+        [
+          1432,
+          472
+        ]
+      ]
+    },
+    "avesso_ruas_esgoto": {
+      "kinds": [
+        "rest",
+        "treasure"
+      ],
+      "spawns": [
+        [
+          392,
+          312
+        ],
+        [
+          536,
+          360
+        ],
+        [
+          1064,
+          488
+        ],
+        [
+          424,
+          552
+        ],
+        [
+          232,
+          344
+        ],
+        [
+          696,
+          296
+        ],
+        [
+          504,
+          472
+        ],
+        [
+          600,
+          184
+        ],
+        [
+          1096,
+          216
+        ],
+        [
+          984,
+          216
+        ],
+        [
+          664,
+          408
+        ],
+        [
+          936,
+          312
+        ],
+        [
+          616,
+          504
+        ],
+        [
+          1384,
+          280
+        ]
+      ],
+      "breakables": [
+        [
+          200,
+          232
+        ],
+        [
+          1224,
+          200
+        ],
+        [
+          824,
+          296
+        ]
+      ],
+      "rest": [
+        836,
+        455
+      ]
+    },
+    "avesso_dupla_esgoto_pomar": {
+      "kinds": [
+        "elite",
+        "guardian"
+      ],
+      "spawns": [
+        [
+          792,
+          328
+        ],
+        [
+          664,
+          312
+        ],
+        [
+          1144,
+          520
+        ],
+        [
+          904,
+          328
+        ],
+        [
+          904,
+          216
+        ],
+        [
+          984,
+          456
+        ],
+        [
+          1032,
+          296
+        ],
+        [
+          600,
+          392
+        ],
+        [
+          632,
+          552
+        ],
+        [
+          552,
+          488
+        ],
+        [
+          1176,
+          376
+        ],
+        [
+          696,
+          456
+        ],
+        [
+          744,
+          232
+        ],
+        [
+          488,
+          392
+        ]
+      ],
+      "breakables": [
+        [
+          1048,
+          568
+        ],
+        [
+          1080,
+          424
+        ],
+        [
+          568,
+          280
+        ]
+      ]
+    },
+    "avesso_dupla_cais_cemiterio": {
+      "kinds": [
+        "combat",
+        "elite"
+      ],
+      "spawns": [
+        [
+          552,
+          456
+        ],
+        [
+          696,
+          440
+        ],
+        [
+          1096,
+          408
+        ],
+        [
+          776,
+          296
+        ],
+        [
+          648,
+          248
+        ],
+        [
+          968,
+          328
+        ],
+        [
+          1032,
+          488
+        ],
+        [
+          600,
+          344
+        ],
+        [
+          904,
+          200
+        ],
+        [
+          1080,
+          296
+        ],
+        [
+          632,
+          520
+        ],
+        [
+          1000,
+          232
+        ]
+      ],
+      "breakables": []
+    },
+    "avesso_dupla_torre_ruas": {
+      "kinds": [
+        "combat",
+        "elite"
+      ],
+      "spawns": [
+        [
+          968,
+          296
+        ],
+        [
+          1128,
+          584
+        ],
+        [
+          1256,
+          392
+        ],
+        [
+          584,
+          408
+        ],
+        [
+          744,
+          392
+        ],
+        [
+          1144,
+          408
+        ],
+        [
+          472,
+          440
+        ],
+        [
+          680,
+          472
+        ],
+        [
+          856,
+          328
+        ],
+        [
+          568,
+          552
+        ],
+        [
+          936,
+          392
+        ],
+        [
+          1032,
+          504
+        ],
+        [
+          360,
+          440
+        ],
+        [
+          632,
+          264
+        ]
+      ],
+      "breakables": [
+        [
+          1208,
+          504
+        ],
+        [
+          888,
+          232
+        ],
+        [
+          1096,
+          312
+        ]
+      ]
+    },
+    "avesso_final": {
+      "kinds": [
+        "guardian"
+      ],
+      "spawns": [
+        [
+          616,
+          536
+        ],
+        [
+          824,
+          392
+        ],
+        [
+          968,
+          408
+        ],
+        [
+          776,
+          504
+        ],
+        [
+          1032,
+          504
+        ],
+        [
+          696,
+          392
+        ],
+        [
+          920,
+          504
+        ],
+        [
+          584,
+          440
+        ],
+        [
+          1144,
+          488
+        ],
+        [
+          904,
+          328
+        ],
+        [
+          1112,
+          600
+        ],
+        [
+          1080,
+          408
+        ]
+      ],
+      "breakables": []
+    }
+  },
+  "thirdMonster": "rasgo",
+  "thirdShare": 0.2,
+  "thirdSwarm": 1,
+  "guardianFlag": "lis_revelada",
+  "finalGrounds": [
+    "avesso_dupla_esgoto_pomar"
+  ],
+  "epilogueGround": "avesso_final"
+}
