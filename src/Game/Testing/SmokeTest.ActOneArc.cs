@@ -32,14 +32,16 @@ public partial class SmokeTest
     private async Task<Level> ActOneArc(Level level)
     {
         level = await HuntUntil(level, StoryFlags.HuntOne, "caca1");
+        level = await TavernSoup(level);
         Check(StoryService.Engine.ObjectiveId == "forja", $"depois da 1ª caçada o objetivo deveria ser a forja, é '{StoryService.Engine.ObjectiveId}'");
-        Check(Flag(StoryFlags.MetNilza), "na volta da Brecha a Tia Nilza deveria vir dar a sopa");
+        Check(Flag(StoryFlags.MetNilza), "na volta da Brecha a Tia Nilza deveria servir a sopa na taverna");
         Check(Flag("ravi_placar"), "na volta da Brecha o Ravi deveria perguntar o placar");
 
         level = await ActOneForgeUpgrade(level);
         await PlayPendingScenes(level);
         Check(Flag(StoryFlags.MetLis) && StoryService.Engine.ObjectiveId == "cacada2", $"de manhã a Lis deveria vender o mapa (objetivo '{StoryService.Engine.ObjectiveId}')");
         level = await ActOneTown(level);
+        level = await FallAndWakeInRoom(level);
         level = await HuntUntil(level, StoryFlags.HuntTwo, "caca2");
         level = await ActOneExam(level);
         Check(HuntService.GuardianUnlocked, "com o exame aprovado a Lodo-Mãe deveria esperar no fim da Brecha");

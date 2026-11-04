@@ -15,7 +15,7 @@
     {
       "id": "nilza",
       "title": "Coma com a Nilza",
-      "text": "O Ravi perdeu a aposta: a sopa é por conta dele. A Nilza está na frente da taverna."
+      "text": "O Ravi perdeu a aposta: a sopa é por conta dele. A taverna da Nilza fica no canto sudoeste da praça."
     },
     {
       "id": "forja",
@@ -358,7 +358,7 @@
       ]
     },
     {
-      "level": "praca",
+      "level": "taverna",
       "dialogue": "nilza",
       "npc": "nilza",
       "if": [

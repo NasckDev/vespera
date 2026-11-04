@@ -13,7 +13,7 @@
   "spawn": [560, 650],
   "doorHeight": 220,
   "propScale": 1.0,
-  "lineup": [560, 650],
+  "lineup": [300, 650],
   "props": [],
   "zones": [
     {

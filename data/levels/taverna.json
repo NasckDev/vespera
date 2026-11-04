@@ -13,7 +13,7 @@
   "spawn": [830, 770],
   "doorHeight": 160,
   "propScale": 1.0,
-  "lineup": [830, 770],
+  "lineup": [450, 560],
   "props": [],
   "zones": [
     {
@@ -23,7 +23,7 @@
       "prompt": "Sair para a praça",
       "text": "",
       "target": "praca",
-      "spawn": [300, 640]
+      "spawn": [300, 570]
     },
     {
       "kind": "exit",
@@ -35,7 +35,27 @@
       "spawn": [1300, 520]
     }
   ],
-  "npcs": [],
+  "npcs": [
+    {
+      "id": "nilza",
+      "at": [1000, 360],
+      "facing": "down",
+      "routine": "idle",
+      "dialogue": "nilza",
+      "prompt": "Falar com Tia Nilza",
+      "_note": "Na frente do caldeirão. Cena da sopa (ROTEIRO-V2 §3, 7:00): na primeira volta da Brecha ela vem até o jogador e serve."
+    },
+    {
+      "id": "ravi",
+      "at": [1180, 560],
+      "facing": "side",
+      "routine": "idle",
+      "dialogue": "ravi",
+      "prompt": "Falar com o Ravi",
+      "if": ["ravi_placar", "!met_odete"],
+      "_note": "O Ravi perdeu a aposta e paga a sopa (§3, 6:30–7:00); some depois que o jogador vai à Odete."
+    }
+  ],
   "authoring": {
     "_note": "Polígonos em px do mundo (chão 1x). 'python data/levels/_fonte/grade.py poligonos taverna' regrava 'grid'.",
     "walkable": [

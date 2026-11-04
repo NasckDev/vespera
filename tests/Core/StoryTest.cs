@@ -139,7 +139,9 @@ public class StoryTest
         placar.Start();
         AssertThat(placar.CurrentId).IsEqual("p1");
         RunToEnd(Runner("ravi", engine));
-        AssertThat(engine.AutoplayFor("praca")?.Dialogue).IsEqual("nilza");
+        // A sopa é servida dentro da taverna (issue #40), não na Praça.
+        AssertThat(engine.AutoplayFor("praca")).IsNull();
+        AssertThat(engine.AutoplayFor("taverna")?.Dialogue).IsEqual("nilza");
 
         var events = new List<string>();
         engine.EventRaised += events.Add;

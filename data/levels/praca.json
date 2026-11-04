@@ -61,12 +61,12 @@
     },
     {
       "type": "lampiao_praca",
-      "at": [752, 700],
+      "at": [752, 620],
       "if": ["ato1_fim_done"]
     },
     {
       "type": "lampiao_praca",
-      "at": [920, 700],
+      "at": [920, 620],
       "if": ["ato1_fim_done"]
     },
     {
@@ -155,7 +155,7 @@
       "if": ["odete_marisa", "!act2_done"],
       "_note": "Manhã das maçãs roxas (ROTEIRO-V2 §4.6, cena 3): descarrega a carroça ao lado dele."
     },
-    {"id": "nilza", "at": [560, 600], "facing": "down", "routine": "idle", "dialogue": "nilza", "prompt": "Falar com Tia Nilza", "_note": "Poções e sopa (Ato I). Vem até o jogador na primeira volta da Brecha e dá uma poção."},
+    {"id": "nilza", "at": [560, 600], "facing": "down", "routine": "idle", "dialogue": "nilza", "prompt": "Falar com Tia Nilza", "_note": "Poções e sopa (Ato I). A sopa da primeira volta da Brecha é servida dentro da taverna (taverna.json)."},
     {
       "id": "lis",
       "at": [1200, 400],

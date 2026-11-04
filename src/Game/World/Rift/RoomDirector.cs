@@ -184,12 +184,12 @@ public partial class RoomDirector : Node
     public Interactable? WeaponStand { get; private set; }
 
     /// <summary>
-    /// Primeira sala das caçadas 1 e 2 do Ato I: um Arco (1ª) ou um Martelo (2ª) largado num suporte perto da entrada.
-    /// Apoio visual: o <c>suporte_armas</c> do catálogo das Forjas, até a arte da issue #42.
+    /// Primeira sala das caçadas 1 e 2 do Ato I: um Arco (1ª) ou um Martelo (2ª) largado nas pedras perto da entrada
+    /// (arte da issue #42: <c>suporte_arco</c>/<c>suporte_martelo</c>; sem ela, o <c>suporte_armas</c> das Forjas).
     /// </summary>
     private void PlaceWeaponStand()
     {
-        if (RiftSession.RoomIndex != 0 || HuntService.StandWeapon is not { } weapon || !_world.Catalog.ContainsKey(StandProp))
+        if (RiftSession.RoomIndex != 0 || HuntService.StandWeapon is not { } weapon || StandPropFor(weapon) is not { } prop)
         {
             return;
         }
@@ -202,7 +202,7 @@ public partial class RoomDirector : Node
 
         var human = _world.Data.HumanHeight;
         var feet = _world.ClampToFloor(_world.SpawnPoint + new Vector2(1.6f * human, -0.4f * human));
-        var stand = _world.AddProp(StandProp, feet);
+        var stand = _world.AddProp(prop, feet);
         stand.Scale = Vector2.One * (human / PracaHuman);
         var name = Actors.HunterSprites.DisplayName(hunter);
         WeaponStand = new Interactable("weapon_stand", $"Pegar o {name}", 0.9f * human)
@@ -214,6 +214,18 @@ public partial class RoomDirector : Node
         };
         _world.Entities.AddChild(WeaponStand);
         _world.Feel.Toast($"Um {name} largado no suporte. Pegue para testar nesta caçada.");
+    }
+
+    /// <summary>Objeto do suporte desta arma: o Arco ou o Martelo largado (issue #42); o suporte das Forjas se faltar a arte.</summary>
+    private string? StandPropFor(string weapon)
+    {
+        var own = weapon switch
+        {
+            "bow" => "suporte_arco",
+            "hammer" => "suporte_martelo",
+            _ => StandProp,
+        };
+        return _world.Catalog.ContainsKey(own) ? own : _world.Catalog.ContainsKey(StandProp) ? StandProp : null;
     }
 
     /// <summary>Pega a arma do suporte: troca a folha e os golpes do caçador até o fim da caçada.</summary>

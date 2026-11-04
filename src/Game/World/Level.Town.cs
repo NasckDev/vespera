@@ -39,6 +39,9 @@ public partial class Level
     public static bool WakeInRoom { get; set; } = true;
 
     private static bool _sleptInRoom;
+
+    /// <summary>O caçador dormiu no quarto e a manhã da Praça ainda não tocou (o smoke confere a cama).</summary>
+    public static bool SleptInRoom => _sleptInRoom;
     private static CharacterLine? _pendingDeathLine;
 
     /// <summary>Na estrada, antes da chegada: tela preta, o caçador aparece andando e um Lodo pequeno cruza o caminho.</summary>
