@@ -83,6 +83,10 @@ MONSTER_MARGIN = {"lodo": 8, "espectro": 12, "lodo_mae": 16, "carrapicho": 10, "
 MONSTERS["inquilino"] = {"height": 300, "cell": 448, "normalize": True}
 MONSTER_MARGIN["inquilino"] = 16
 
+# Final (issue #52): o Reflexo, o caçador do lado de baixo (1 humano; a arma só aparece nos golpes).
+MONSTERS["reflexo"] = {"height": 112, "cell": 256, "normalize": True}
+MONSTER_MARGIN["reflexo"] = 12
+
 PLANTED_ANIMS = {"parado", "dano"}  # pés no mesmo lugar: realinha o x por quadro (a fonte desloca os quadros dentro da fatia)
 LOOP_ANIMS = {"parado", "andar", "mover"}
 HIT_ANIMS = re.compile(r"^(ataque\d*|pesado|tiro|tiro_carregado|engolir|dividir)$")

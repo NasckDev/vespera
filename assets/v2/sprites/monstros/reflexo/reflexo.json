@@ -1,0 +1,148 @@
+{
+  "character": "reflexo",
+  "anchor": [
+    128,
+    244
+  ],
+  "stand_height_px": 112,
+  "facing": "olha para a direita; para a esquerda use flip_h",
+  "scale_class": 0.266,
+  "stand_height_source_px": 421.0,
+  "hit_frame_method": "quadro de maior área opaca (índice base 0), só para ataques",
+  "frame_counts": {
+    "parado": 6,
+    "andar": 8,
+    "ataque_lamina": 8,
+    "ataque_arco": 8,
+    "ataque_martelo": 8,
+    "morte": 10
+  },
+  "atlas": "reflexo_atlas.png",
+  "cell": [
+    256,
+    256
+  ],
+  "animations": {
+    "parado": {
+      "row": 0,
+      "frames": 6,
+      "fps": 6,
+      "loop": true,
+      "scale": 0.266,
+      "source": "reflexo_parado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        5469,
+        5644,
+        5651,
+        5633,
+        5692,
+        5626
+      ],
+      "note": null
+    },
+    "andar": {
+      "row": 1,
+      "frames": 8,
+      "fps": 10,
+      "loop": true,
+      "scale": 0.266,
+      "source": "reflexo_andar.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        4973,
+        4840,
+        4916,
+        4747,
+        4611,
+        4797,
+        4731,
+        4945
+      ],
+      "note": null
+    },
+    "ataque_lamina": {
+      "row": 2,
+      "frames": 8,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.4058,
+      "source": "reflexo_ataque_lamina.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        5627,
+        6388,
+        6131,
+        6376,
+        8301,
+        5643,
+        6359,
+        5790
+      ],
+      "note": "reescalada: guarda -34% vs parado"
+    },
+    "ataque_arco": {
+      "row": 3,
+      "frames": 8,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.3425,
+      "source": "reflexo_ataque_arco.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        5272,
+        5685,
+        5758,
+        5819,
+        5904,
+        5745,
+        5451,
+        5294
+      ],
+      "note": "reescalada: guarda -22% vs parado"
+    },
+    "ataque_martelo": {
+      "row": 4,
+      "frames": 8,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.3836,
+      "source": "reflexo_ataque_martelo.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        6952,
+        7053,
+        8552,
+        7646,
+        8902,
+        8289,
+        6937,
+        6773
+      ],
+      "note": "reescalada: guarda -31% vs parado"
+    },
+    "morte": {
+      "row": 5,
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.3467,
+      "source": "reflexo_morte.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        4976,
+        4659,
+        4010,
+        3649,
+        3559,
+        3702,
+        4241,
+        1961,
+        3122,
+        568
+      ],
+      "note": "reescalada: guarda -23% vs parado"
+    }
+  },
+  "standing_height": 112
+}
