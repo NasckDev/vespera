@@ -233,7 +233,7 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
         var face = Sprite.FlipH ? -1 : 1;
         var side = DamageCalculator.HitSide(hit.From.X, GlobalPosition.X, face);
         var ctx = new MonsterHitContext(side, 0, hit.CritChance, null, [], []);
-        var result = _damage.ToMonster(hit.Damage * DamageTakenMult, ctx, RiftSession.Random);
+        var result = _damage.ToMonster(hit.Damage * DamageTakenMult * IncomingDamageMult(hit), ctx, RiftSession.Random);
         Hp = Math.Max(0, Hp - result.Damage);
         Flash.Pulse(Colors.White, 0.05f, 0.12f);
         Bar.Set((float)(Hp / MaxHp));
@@ -266,6 +266,21 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
             Die();
         }
     }
+
+    /// <summary>Cura sem passar da vida máxima (a Velinha cura os outros monstros).</summary>
+    public void Restore(double amount)
+    {
+        if (Dead || amount <= 0)
+        {
+            return;
+        }
+
+        Hp = Math.Min(MaxHp, Hp + amount);
+        Bar.Set((float)(Hp / MaxHp));
+    }
+
+    /// <summary>Multiplicador do dano deste golpe (a Casca quase não sente golpe de frente). 1 = normal.</summary>
+    protected virtual double IncomingDamageMult(in HitInfo hit) => 1;
 
     /// <summary>Vida cheia nova (divisões da Lodo-Mãe herdam a vida dela).</summary>
     public void SetHealth(double hp)

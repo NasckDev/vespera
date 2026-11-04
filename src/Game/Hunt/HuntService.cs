@@ -249,6 +249,7 @@ public static class HuntService
             Boss = room.Kind == RoomKind.Guardian ? baseRift.Boss : null,
             Waves = room.Waves.Select(w => w.Select(s => new SpawnData { Type = s.Monster, At = [s.X, s.Y], Elite = s.Elite }).ToList()).ToList(),
             Kind = room.Kind.ToString().ToLowerInvariant(),
+            Silent = baseRift.Silent,
         };
 
         if (room.Kind == RoomKind.Rest && Config.Grounds.TryGetValue(room.Ground, out var g) && g.Rest.Length == 2)

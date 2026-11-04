@@ -80,6 +80,12 @@ public static class RiftLoot
             Progression.TryPassExam(Vespera.Core.Ranks.Rank.C);
         }
 
+        // Ato IV: o exame B é a Brecha do Cemitério ("Não para pra ler", ROTEIRO-V2 §13 Ato IV, fala 3).
+        if (guardianId == "velora")
+        {
+            Progression.TryPassExam(Vespera.Core.Ranks.Rank.B);
+        }
+
         var result = Progression.RecordGuardianKill(RiftSession.Brecha.GuardianId);
         Show(world, at, result.Loot, spread: 120f);
         var echo = result.EchoGained is { } e ? $" Eco absorvido: {e.Name}." : string.Empty;
@@ -87,6 +93,9 @@ public static class RiftLoot
         {
             "lodo_mae" => "A Lodo-Mãe se desfaz",
             "farol_afogado" => "O Farol Afogado acende uma última vez e afunda",
+            "velora" => "A Velória derrete de vez no altar",
+            "sineiro_mudo" => "O Sineiro Mudo desmorona sem um som",
+            "inquilino" => "A casa deita no terreno",
             _ => "A Macieira Oca racha e cai",
         };
         world.Feel.Toast(Summary(fall, result.Loot.Loot) + echo);
