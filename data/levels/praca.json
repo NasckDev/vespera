@@ -5,6 +5,13 @@
     "texture": "res://assets/v2/cenarios/praca/chao_praca.png",
     "scale": 1.0,
     "filter": "nearest",
+    "variants": [
+      {
+        "texture": "res://assets/v2/cenarios/avesso/chao_praca_escura.png",
+        "if": ["act6_done", "!parte1_fim"],
+        "_note": "Ato VII (issue #49, A29): a mesma praça escurecendo às duas da tarde, a grande lanterna piscando."
+      }
+    ],
     "_note": "Chão definitivo do GPT (1672x941, vista de cima alinhada aos eixos). Régua: porta pintada ~72 px; caçador = 0,75 x porta = 54 px (actorScale) e a câmera aproxima 1,85x (ver _regua)."
   },
   "cell": 16,
@@ -55,7 +62,19 @@
       "at": [1118, 478],
       "radius": 46,
       "prompt": "Entrar na Brecha",
-      "text": "Esgotos do Mercado · Rank E"
+      "text": "Esgotos do Mercado · Rank E",
+      "if": ["!act6_done"],
+      "_note": "Esgotos do Mercado até o fim do Ato VI; no Ato VII a fenda da praça desce ao Avesso profundo."
+    },
+    {
+      "kind": "brecha",
+      "brecha": "avesso_profundo",
+      "at": [1118, 478],
+      "radius": 46,
+      "prompt": "Entrar na Brecha",
+      "text": "Avesso profundo · Rank SS",
+      "if": ["act6_done"],
+      "_note": "Ato VII (ROTEIRO-V2 §13): a Brecha abre em qualquer bairro e mistura temas; a da praça desce ao Avesso profundo."
     },
     {
       "kind": "exit",
@@ -97,6 +116,7 @@
     }
   ],
   "npcs": [
+    {"id": "severo", "at": [980, 620], "facing": "down", "routine": "idle", "dialogue": "ato7/severo", "prompt": "Falar com o Severo", "if": ["ato7_ravi", "!ato7_badalo"], "_note": "Ato VII, fala 9: o Severo na praça com o badalo de bronze nas mãos."},
     {"id": "nilza", "at": [560, 600], "facing": "down", "routine": "idle", "dialogue": "nilza", "prompt": "Falar com Tia Nilza", "_note": "Poções e sopa (Ato I). Vem até o jogador na primeira volta da Brecha e dá uma poção."},
     {
       "id": "lis",

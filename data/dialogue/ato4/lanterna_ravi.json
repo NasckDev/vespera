@@ -1,0 +1,28 @@
+{
+  "id": "ato4/lanterna_ravi",
+  "entries": [
+    {
+      "if": [
+        "ravi_lanterna_recuperada"
+      ],
+      "node": "b"
+    },
+    {
+      "node": "a"
+    }
+  ],
+  "nodes": {
+    "a": {
+      "speaker": "narrador",
+      "text": "A lanterna do Ravi, caída entre as panelas. Ainda acesa.",
+      "look": "player",
+      "set": [
+        "ravi_lanterna_recuperada"
+      ]
+    },
+    "b": {
+      "speaker": "narrador",
+      "text": "Só a marca da lanterna ficou no chão da cozinha."
+    }
+  }
+}

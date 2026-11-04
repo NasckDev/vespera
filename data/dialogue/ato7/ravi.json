@@ -16,12 +16,18 @@
       "speaker": "ravi",
       "text": "Amanhã eu vou junto. Eu sei que não devo. Vou.",
       "look": "ravi",
-      "expression": 2
+      "expression": 2,
+      "set": [
+        "ato7_ravi"
+      ]
     },
     "b1": {
       "speaker": "ravi",
       "text": "Amanhã eu fico na porta. É o mais perto que eu chego.",
-      "look": "ravi"
+      "look": "ravi",
+      "set": [
+        "ato7_ravi"
+      ]
     }
   }
 }

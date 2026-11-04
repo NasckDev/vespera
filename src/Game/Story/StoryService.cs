@@ -106,7 +106,10 @@ public static class StoryService
 
     public static DialogueRunner? StartDialogue(string id)
     {
-        var runner = new DialogueRunner(LoadDialogue(id), Engine, PlayerName, WeaponTokens());
+        var tokens = WeaponTokens();
+        // Ato VII (Benício: "Quantas você perdeu?"): o número real de Lanternas perdidas no jogo.
+        tokens["lanternas_perdidas"] = (GameSession.Data?.Hunt?.Stats.LanternsLost ?? 0).ToString(System.Globalization.CultureInfo.InvariantCulture);
+        var runner = new DialogueRunner(LoadDialogue(id), Engine, PlayerName, tokens);
         return runner.Start() ? runner : null;
     }
 

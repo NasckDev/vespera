@@ -78,6 +78,9 @@ public sealed class RiftRoomData
 
     public SpawnData? Boss { get; set; }
 
+    /// <summary>Segundo Guardião da sala (Ato VII: Guardiões em dupla); a sala só acaba com os dois no chão.</summary>
+    public SpawnData? Partner { get; set; }
+
     /// <summary>Fenda de saída [x, y] que abre quando a sala acaba (sem passagem pintada).</summary>
     public float[]? ExitPortal { get; set; }
 
@@ -119,6 +122,18 @@ public sealed class GroundData
 
     /// <summary>"linear" ou "nearest": filtro do chão ampliado pela câmera.</summary>
     public string Filter { get; set; } = "linear";
+
+    /// <summary>Chãos alternativos pela história (a primeira que valer troca a textura; ex.: a Praça escura do Ato VII).</summary>
+    public List<GroundVariant> Variants { get; set; } = [];
+}
+
+/// <summary>Textura do chão que vale quando as condições de história valem (mesmo desenho, outra luz).</summary>
+public sealed class GroundVariant
+{
+    public string Texture { get; set; } = string.Empty;
+
+    [JsonPropertyName("if")]
+    public List<string> Conditions { get; set; } = [];
 }
 
 public sealed class PropPlacement
@@ -162,6 +177,10 @@ public sealed class ZoneData
     public List<string> Requires { get; set; } = [];
 
     public string LockedText { get; set; } = string.Empty;
+
+    /// <summary>Condições de história para a zona existir (mesma sintaxe das falas); vazio = sempre.</summary>
+    [JsonPropertyName("if")]
+    public List<string> Conditions { get; set; } = [];
 }
 
 /// <summary>NPC posicionado numa fase. <see cref="Routine"/>: "idle" fica parado; "patrol" anda entre os pontos de <see cref="Path"/>.</summary>

@@ -105,6 +105,8 @@ public partial class Level
 
         ShowExamObserver();
         ShowActThree();
+        ShowActSix();
+        ShowActSeven();
     }
 
     private void OnRoomExit()
@@ -139,6 +141,16 @@ public partial class Level
         if (!RiftSession.InRift)
         {
             combat.Revive();
+            return;
+        }
+
+        // Sopa da Véspera (Ato VI): a primeira queda da caçada levanta o caçador ali mesmo, com metade da vida.
+        var rise = Hunter.HuntService.UseSecondLife(combat.MaxHp);
+        if (rise > 0)
+        {
+            combat.Revive();
+            combat.SetHp(rise);
+            CombatHud.Toast("A sopa da Nilza te levanta. Só uma vez.");
             return;
         }
 

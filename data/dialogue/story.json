@@ -1,5 +1,5 @@
 {
-  "_doc": "Ato I do ROTEIRO-V2 (§3, §4, §13). Objetivos em ordem de campanha (o Diário usa a ordem); título = até 5 palavras, sempre na tela. Regras: quando a flag 'when' liga e as condições 'if' valem, aplica o objetivo. Flags que o jogo liga sozinho: hunt_back, hunt_1/hunt_2, fell_once, forged, potion_bought, contract_done, xp_ready, exame_e, eco_viscoso. Autoplay: 'stage' = 'arrival' (estrada + Lodo + Brecha abrindo) ou 'morning' (a noite passa antes da fala). Perguntas = página do Diário (§7). Retratos: {0} vira 1 (neutro) ou 2 (expressão). Ato II (ROTEIRO-V2 §13): met_celeste, pomar_podre:hunt_1/hunt_2 (caçadas completas no Pomar), pomar_podre:fell_1..6 (quedas), GuardianDefeated:macieira_oca -> act2_done. Ato III (ROTEIRO-V2 §13): met_severo, pescou, exame_c_visto, cais_afogado:hunt_1/hunt_2, lanterna_m (sala alagada), severo_viu_lanterna, odete_lanterna_m (abre o Farol), cais_afogado:fell_1..6, GuardianDefeated:farol_afogado -> act3_done. Atos IV e V (ROTEIRO-V2 §13, §8.1): flags calculadas 'noite', 'vigia_perguntou_hoje', 'ravi_no_avesso' (NightState/NightFlags); met_vigia abre a Brecha B das Ruas Baixas (RaviRescue: ruas_brecha_aberta, ruas_aviso_2/3, ruas_rompeu, ruas_fechada_a_tempo); eco_slot_1 (UnlockEchoSlot:1).",
+  "_doc": "Ato I do ROTEIRO-V2 (§3, §4, §13). Objetivos em ordem de campanha (o Diário usa a ordem); título = até 5 palavras, sempre na tela. Regras: quando a flag 'when' liga e as condições 'if' valem, aplica o objetivo. Flags que o jogo liga sozinho: hunt_back, hunt_1/hunt_2, fell_once, forged, potion_bought, contract_done, xp_ready, exame_e, eco_viscoso. Autoplay: 'stage' = 'arrival' (estrada + Lodo + Brecha abrindo) ou 'morning' (a noite passa antes da fala). Perguntas = página do Diário (§7). Retratos: {0} vira 1 (neutro) ou 2 (expressão). Ato II (ROTEIRO-V2 §13): met_celeste, pomar_podre:hunt_1/hunt_2 (caçadas completas no Pomar), pomar_podre:fell_1..6 (quedas), GuardianDefeated:macieira_oca -> act2_done. Ato III (ROTEIRO-V2 §13): met_severo, pescou, exame_c_visto, cais_afogado:hunt_1/hunt_2, lanterna_m (sala alagada), severo_viu_lanterna, odete_lanterna_m (abre o Farol), cais_afogado:fell_1..6, GuardianDefeated:farol_afogado -> act3_done. Atos IV e V (ROTEIRO-V2 §13, §8.1): flags calculadas 'noite', 'vigia_perguntou_hoje', 'ravi_no_avesso' (NightState/NightFlags); met_vigia abre a Brecha B das Ruas Baixas (RaviRescue: ruas_brecha_aberta, ruas_aviso_2/3, ruas_rompeu, ruas_fechada_a_tempo); eco_slot_1 (UnlockEchoSlot:1). Atos VI e VII (ROTEIRO-V2 §13): sopa_da_vespera (UnlockSopaDaVespera), ruas_invertidas:hunt_1 abre o Inquilino (com met_mae_ravi), ruas_baixas_b:hunt_1 sem ruas_rompeu = ruas_fechada_a_tempo (rota A), ato6_fecho_benicio/ato6_ravi/ato6_lis fecham o Ato VI; Ato VII: ato7_lis_dia, ato7_benicio, avesso_profundo:hunt_1, vigia_p5_feita, lis_revelada (abre a dupla), GuardianDefeated:guardiao_revertido, avesso_recusado -> act7_done, ato7_fecho_benicio, odete_vai_junto, ato7_ravi, ato7_badalo/tem_badalo, ato7_vespera_final.",
   "startObjective": "estrada",
   "objectives": [
     {
@@ -166,8 +166,13 @@
     },
     {
       "id": "ato6_brecha",
+      "title": "Entre na Brecha das Ruas",
+      "text": "A Brecha abriu no terreno das casas derrubadas. Lá dentro os varais andam e as casas pendem do teto. Volte inteiro de uma caçada."
+    },
+    {
+      "id": "ato6_inquilino",
       "title": "Vença o Inquilino",
-      "text": "A Brecha abriu no terreno das casas derrubadas. Lá dentro, uma casa anda. Saia dos círculos âmbar e da faixa da porta."
+      "text": "No fim da Brecha das Ruas, uma casa anda. Saia dos círculos âmbar e da faixa da porta."
     },
     {
       "id": "ato6_fecho",
@@ -176,8 +181,48 @@
     },
     {
       "id": "ato7",
-      "title": "A cidade de baixo",
-      "text": "A grande lanterna da praça piscou. O Ato VII abre em breve.",
+      "title": "Veja a praça escura",
+      "text": "A grande lanterna da praça piscou. Anoitece às duas da tarde. Volte para a praça."
+    },
+    {
+      "id": "ato7_brecha",
+      "title": "Entre na Brecha do Avesso",
+      "text": "A Brecha da praça agora desce ao Avesso profundo: bairros misturados. Volte inteiro de uma caçada."
+    },
+    {
+      "id": "ato7_vigia",
+      "title": "Visite o Vigia à noite",
+      "text": "O Vigia tem a última pergunta. Espere a noite no banco do Cemitério."
+    },
+    {
+      "id": "ato7_celeste",
+      "title": "Fale com a Celeste",
+      "text": "A Celeste está no Pomar Alto com a Lis. Ela sabe por que o Avesso não vê a Lis."
+    },
+    {
+      "id": "ato7_dupla",
+      "title": "Feche o Avesso profundo",
+      "text": "No fundo da Brecha esperam dois Guardiões juntos. Os avisos âmbar ficam curtos. Depois deles, a última sala."
+    },
+    {
+      "id": "ato7_fecho",
+      "title": "Fale com o Benício",
+      "text": "O Avesso fechou atrás de você. O Benício espera na praça."
+    },
+    {
+      "id": "ato7_odete",
+      "title": "Fale com a Odete",
+      "text": "A Odete quer ver você na Forja."
+    },
+    {
+      "id": "ato7_severo",
+      "title": "Procure o Severo na praça",
+      "text": "O Severo subiu do cais até a praça. Ele carrega alguma coisa de bronze."
+    },
+    {
+      "id": "final",
+      "title": "A primeira Brecha (em breve)",
+      "text": "Amanhã a Brecha da praça abre do tamanho da praça. A Odete vai junto. Em breve.",
       "locked": true
     }
   ],
@@ -326,6 +371,120 @@
       "when": "ruas_invertidas:fell_6",
       "set": [
         "ato6_morte_6"
+      ]
+    },
+    {
+      "when": "ruas_invertidas:hunt_1",
+      "if": [
+        "met_mae_ravi",
+        "!GuardianDefeated:inquilino"
+      ],
+      "objective": "ato6_inquilino"
+    },
+    {
+      "when": "met_mae_ravi",
+      "if": [
+        "ruas_invertidas:hunt_1",
+        "!GuardianDefeated:inquilino"
+      ],
+      "objective": "ato6_inquilino"
+    },
+    {
+      "when": "ruas_baixas_b:hunt_1",
+      "if": [
+        "!ruas_rompeu"
+      ],
+      "set": [
+        "ruas_fechada_a_tempo"
+      ]
+    },
+    {
+      "when": "ato6_lis",
+      "objective": "ato7"
+    },
+    {
+      "when": "ato7_benicio",
+      "if": [
+        "!lis_revelada"
+      ],
+      "objective": "ato7_brecha"
+    },
+    {
+      "when": "avesso_profundo:hunt_1",
+      "if": [
+        "!vigia_p5_feita"
+      ],
+      "objective": "ato7_vigia"
+    },
+    {
+      "when": "vigia_p5_feita",
+      "if": [
+        "!lis_revelada"
+      ],
+      "objective": "ato7_celeste"
+    },
+    {
+      "when": "lis_revelada",
+      "if": [
+        "!avesso_recusado"
+      ],
+      "objective": "ato7_dupla"
+    },
+    {
+      "when": "avesso_recusado",
+      "objective": "ato7_fecho",
+      "set": [
+        "act7_done"
+      ]
+    },
+    {
+      "when": "ato7_fecho_benicio",
+      "objective": "ato7_odete"
+    },
+    {
+      "when": "odete_vai_junto",
+      "objective": "ato7_severo"
+    },
+    {
+      "when": "tem_badalo",
+      "set": [
+        "ato7_vespera_final"
+      ]
+    },
+    {
+      "when": "avesso_profundo:fell_1",
+      "set": [
+        "ato7_morte_1"
+      ]
+    },
+    {
+      "when": "avesso_profundo:fell_2",
+      "set": [
+        "ato7_morte_2"
+      ]
+    },
+    {
+      "when": "avesso_profundo:fell_3",
+      "set": [
+        "ato7_morte_3"
+      ]
+    },
+    {
+      "when": "avesso_profundo:fell_4",
+      "set": [
+        "ato7_morte_4"
+      ]
+    },
+    {
+      "when": "avesso_profundo:fell_5",
+      "set": [
+        "ato7_morte_5"
+      ]
+    },
+    {
+      "when": "avesso_profundo:fell_6",
+      "set": [
+        "ato7_morte_6"
       ]
     }
   ],
@@ -814,6 +973,155 @@
         "ato6_morte_6",
         "!morte_ruas_6"
       ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato6/ravi",
+      "npc": "ravi",
+      "if": [
+        "ato6_fecho_benicio",
+        "!ato6_ravi"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato6/lis",
+      "npc": "lis",
+      "stage": "morning",
+      "if": [
+        "ato6_ravi",
+        "!ato6_lis"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato7/lis",
+      "npc": "lis",
+      "if": [
+        "ato6_lis",
+        "!ato7_lis_dia"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato7/benicio",
+      "npc": "benicio",
+      "if": [
+        "ato7_lis_dia",
+        "!ato7_benicio"
+      ]
+    },
+    {
+      "level": "cemiterio",
+      "dialogue": "ato7/vigia",
+      "npc": "vigia",
+      "if": [
+        "noite",
+        "ato7_benicio",
+        "!vigia_p5_feita"
+      ]
+    },
+    {
+      "level": "pomar_alto",
+      "dialogue": "ato7/celeste",
+      "npc": "celeste",
+      "if": [
+        "vigia_p5_feita",
+        "!lis_revelada"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato7/benicio",
+      "npc": "benicio",
+      "if": [
+        "avesso_recusado",
+        "!ato7_fecho_benicio"
+      ]
+    },
+    {
+      "level": "forja_interior",
+      "dialogue": "ato7/odete",
+      "npc": "odete",
+      "if": [
+        "ato7_fecho_benicio",
+        "!odete_vai_junto"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato7/ravi",
+      "npc": "ravi",
+      "if": [
+        "odete_vai_junto",
+        "!ato7_ravi"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato7/severo",
+      "npc": "severo",
+      "if": [
+        "ato7_ravi",
+        "!ato7_badalo"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato7/lis",
+      "npc": "lis",
+      "if": [
+        "ato7_vespera_final",
+        "!ato7_lis_noite"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato7/morte",
+      "if": [
+        "ato7_morte_1",
+        "!morte_avesso_1"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato7/morte",
+      "if": [
+        "ato7_morte_2",
+        "!morte_avesso_2"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato7/morte",
+      "if": [
+        "ato7_morte_3",
+        "!morte_avesso_3"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato7/morte",
+      "if": [
+        "ato7_morte_4",
+        "!morte_avesso_4"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato7/morte",
+      "if": [
+        "ato7_morte_5",
+        "!morte_avesso_5"
+      ]
+    },
+    {
+      "level": "praca",
+      "dialogue": "ato7/morte",
+      "if": [
+        "ato7_morte_6",
+        "!morte_avesso_6"
+      ]
     }
   ],
   "questions": [
@@ -858,6 +1166,18 @@
         "ato5_confissao"
       ],
       "text": "Por que o sino emudeceu? Foi o Benício que tocou."
+    },
+    {
+      "if": [
+        "lis_revelada"
+      ],
+      "text": "Por que o Avesso ignora a Lis? Ele não ataca o que devolveu."
+    },
+    {
+      "if": [
+        "ato7_badalo"
+      ],
+      "text": "Quem vai tocar o sino? O Severo me deu o badalo."
     }
   ],
   "speakers": {
@@ -923,6 +1243,9 @@
     },
     "reflexo": {
       "name": "O Reflexo"
+    },
+    "avesso": {
+      "name": "O Avesso"
     }
   }
 }

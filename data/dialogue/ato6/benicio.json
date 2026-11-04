@@ -13,7 +13,10 @@
       "events": [
         "BurnSeal:SS"
       ],
-      "objective": "ato7"
+      "objective": "ato7",
+      "set": [
+        "ato6_fecho_benicio"
+      ]
     }
   }
 }

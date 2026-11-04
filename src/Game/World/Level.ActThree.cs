@@ -39,9 +39,16 @@ public partial class Level
             return;
         }
 
+        PlaceFloorLantern("LanternaM", "zone_lanterna_m", LanternStone, LanternDialogue, "Pegar a lanterna");
+        Log.Info("ato3: lanterna 'M.' na pedra seca do Mercado Submerso");
+    }
+
+    /// <summary>Lanterna de caçador acesa no chão com a fala de pegar (lanterna "M." do Ato III, Lanterna do Ravi do Ato IV).</summary>
+    private void PlaceFloorLantern(string name, string zoneName, Vector2 at, string dialogue, string prompt)
+    {
         var human = World.Data.HumanHeight;
         var texture = GD.Load<Texture2D>(LanternTexture);
-        var lantern = new Node2D { Name = "LanternaM", Position = LanternStone };
+        var lantern = new Node2D { Name = name, Position = at };
         var sprite = new Sprite2D
         {
             Texture = texture,
@@ -58,15 +65,14 @@ public partial class Level
             TextureScale = human / 64f,
         });
         World.Entities.AddChild(lantern);
-        var zone = new Interactable("talk", "Pegar a lanterna", 60f)
+        var zone = new Interactable("talk", prompt, 60f)
         {
-            Name = "zone_lanterna_m",
-            Dialogue = LanternDialogue,
-            Position = LanternStone,
-            PromptAnchor = LanternStone - new Vector2(0, human * 0.8f),
+            Name = zoneName,
+            Dialogue = dialogue,
+            Position = at,
+            PromptAnchor = at - new Vector2(0, human * 0.8f),
         };
         World.Entities.AddChild(zone);
-        Log.Info("ato3: lanterna 'M.' na pedra seca do Mercado Submerso");
     }
 
     /// <summary>Some com a lanterna da pedra depois de pegar (a fala liga <c>lanterna_m</c>).</summary>

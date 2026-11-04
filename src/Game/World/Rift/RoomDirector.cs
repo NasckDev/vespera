@@ -57,6 +57,9 @@ public partial class RoomDirector : Node
     /// <summary>O Guardião desta sala (qualquer um: Lodo-Mãe, Macieira Oca).</summary>
     public Enemy? Guardian { get; private set; }
 
+    /// <summary>O segundo Guardião da dupla (Ato VII), se houver.</summary>
+    public Enemy? Partner { get; private set; }
+
     public Chest? Chest { get; private set; }
 
     public BreachPortal? ExitPortal { get; private set; }
@@ -110,8 +113,15 @@ public partial class RoomDirector : Node
         {
             Guardian = EnemyFactory.Guardian(boss.Type, _world);
             Guardian.Position = new Vector2(boss.At[0], boss.At[1]);
-            Guardian.Died += _ => OnBossDefeated();
+            Guardian.Died += _ => OnGuardianDown();
             _world.AddEnemy(Guardian);
+            if (_data.Partner is { } partner && EnemyFactory.HasGuardian(partner.Type))
+            {
+                Partner = EnemyFactory.Guardian(partner.Type, _world);
+                Partner.Position = new Vector2(partner.At[0], partner.At[1]);
+                Partner.Died += _ => OnGuardianDown();
+                _world.AddEnemy(Partner);
+            }
         }
 
         PlaceBreakables();
@@ -435,6 +445,17 @@ public partial class RoomDirector : Node
             var name = HuntService.BlessingCatalog.Find(id)?.Name ?? id;
             _world.Feel.Toast($"Bênção: {name}");
         });
+    }
+
+    /// <summary>Um Guardião caiu: a sala só acaba quando a dupla inteira (se houver) está no chão.</summary>
+    private void OnGuardianDown()
+    {
+        if (Guardian is { Dead: false } || Partner is { Dead: false })
+        {
+            return;
+        }
+
+        OnBossDefeated();
     }
 
     private void OnBossDefeated()

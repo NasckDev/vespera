@@ -3,37 +3,43 @@
   "entries": [
     {
       "if": [
-        "ato7_morte_6"
+        "ato7_morte_6",
+        "!morte_avesso_6"
       ],
       "node": "m6"
     },
     {
       "if": [
-        "ato7_morte_5"
+        "ato7_morte_5",
+        "!morte_avesso_5"
       ],
       "node": "m5"
     },
     {
       "if": [
-        "ato7_morte_4"
+        "ato7_morte_4",
+        "!morte_avesso_4"
       ],
       "node": "m4"
     },
     {
       "if": [
-        "ato7_morte_3"
+        "ato7_morte_3",
+        "!morte_avesso_3"
       ],
       "node": "m3"
     },
     {
       "if": [
-        "ato7_morte_2"
+        "ato7_morte_2",
+        "!morte_avesso_2"
       ],
       "node": "m2"
     },
     {
       "if": [
-        "ato7_morte_1"
+        "ato7_morte_1",
+        "!morte_avesso_1"
       ],
       "node": "m1"
     },
@@ -44,27 +50,65 @@
   "nodes": {
     "m1": {
       "speaker": "vigia",
-      "text": "Você caiu fundo. Eu te carreguei por três bairros. Não me agradece. Fecha."
+      "text": "Você caiu fundo. Eu te carreguei por três bairros.",
+      "set": [
+        "morte_avesso_1"
+      ],
+      "next": "m1b"
+    },
+    "m1b": {
+      "speaker": "vigia",
+      "text": "Não me agradece. Fecha."
     },
     "m2": {
       "speaker": "celeste",
-      "text": "Você morreu de verdade dessa vez. O Avesso te devolveu. Ele faz isso com quem quer."
+      "text": "Você morreu de verdade dessa vez. O Avesso te devolveu.",
+      "set": [
+        "morte_avesso_2"
+      ],
+      "next": "m2b"
+    },
+    "m2b": {
+      "speaker": "celeste",
+      "text": "Ele faz isso com quem quer."
     },
     "m3": {
       "speaker": "nilza",
-      "text": "A cidade inteira te esperou acordada. Até a Odete."
+      "text": "A cidade inteira te esperou acordada. Até a Odete.",
+      "set": [
+        "morte_avesso_3"
+      ]
     },
     "m4": {
       "speaker": "benicio",
-      "text": "Caiu. Levantou. Eu parei de anotar. Eu tô só olhando."
+      "text": "Caiu. Levantou.",
+      "set": [
+        "morte_avesso_4"
+      ],
+      "next": "m4b"
+    },
+    "m4b": {
+      "speaker": "benicio",
+      "text": "Eu parei de anotar. Eu tô só olhando."
     },
     "m5": {
       "speaker": "lis",
-      "text": "Dessa vez eu entrei pra te buscar. Nenhum bicho me viu."
+      "text": "Dessa vez eu entrei pra te buscar. Nenhum bicho me viu.",
+      "set": [
+        "morte_avesso_5"
+      ]
     },
     "m6": {
       "speaker": "odete",
-      "text": "Perdeu a lanterna de novo. Lá embaixo tá cheio de luz sua. Vai ser difícil amanhã."
+      "text": "Perdeu a lanterna de novo. Lá embaixo tá cheio de luz sua.",
+      "set": [
+        "morte_avesso_6"
+      ],
+      "next": "m6b"
+    },
+    "m6b": {
+      "speaker": "odete",
+      "text": "Vai ser difícil amanhã."
     }
   }
 }

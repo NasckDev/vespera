@@ -10,7 +10,10 @@
       "speaker": "lis",
       "text": "A grande lanterna da praça piscou hoje de madrugada.",
       "look": "lanterna",
-      "next": "a2"
+      "next": "a2",
+      "set": [
+        "ato6_lis"
+      ]
     },
     "a2": {
       "speaker": "lis",

@@ -58,6 +58,24 @@ public static class HuntService
     /// <summary>O mapa da Lis vale nesta caçada (o HUD mostra o tipo de cada sala e o tesouro).</summary>
     public static bool MapActive => RiftSession.InRift && _mapActive && Plan is not null;
 
+    private static bool _secondLifeUsed;
+
+    /// <summary>A Sopa da Véspera ainda pode levantar o caçador nesta caçada (Ato VI: uma segunda vida por caçada).</summary>
+    public static bool SecondLifeReady => RiftSession.InRift
+        && RunPerks.CanRise(Story.StoryService.Engine.HasFlag(RunPerks.SecondLifeFlag), _secondLifeUsed);
+
+    /// <summary>Gasta a segunda vida da caçada: devolve a vida com que o caçador levanta, ou 0 se não havia sopa.</summary>
+    public static int UseSecondLife(int maxHp)
+    {
+        if (!SecondLifeReady)
+        {
+            return 0;
+        }
+
+        _secondLifeUsed = true;
+        return RunPerks.SecondLifeHp(maxHp);
+    }
+
     /// <summary>Guarda a sopa para a próxima caçada (presente ou compra na Nilza).</summary>
     public static void ServeSoup() => State.SoupReady = true;
 
@@ -213,6 +231,7 @@ public static class HuntService
         _luckActive = state.WellLuck;
         state.WellLuck = false;
         _soupActive = state.SoupReady;
+        _secondLifeUsed = false;
         state.SoupReady = false;
         _mapActive = state.MapReady;
         state.MapReady = false;
@@ -234,6 +253,7 @@ public static class HuntService
         {
             RoomKind.Rest => "Descanso",
             RoomKind.Treasure => "Tesouro",
+            RoomKind.Guardian when room.Ground == Config.EpilogueGround => ground.Rift?.Title.Split('—')[^1].Trim() ?? "Fim",
             RoomKind.Guardian => OtherBrecha ? $"Covil da {GuardianName}" : "Covil da Lodo-Mãe",
             RoomKind.Elite when last => "Covil",
             RoomKind.Elite => "Ninho de elite",
@@ -247,6 +267,7 @@ public static class HuntService
             ExitPortal = baseRift.ExitPortal,
             Chest = room.Kind == RoomKind.Treasure ? baseRift.Chest : null,
             Boss = room.Kind == RoomKind.Guardian ? baseRift.Boss : null,
+            Partner = room.Kind == RoomKind.Guardian ? baseRift.Partner : null,
             Waves = room.Waves.Select(w => w.Select(s => new SpawnData { Type = s.Monster, At = [s.X, s.Y], Elite = s.Elite }).ToList()).ToList(),
             Kind = room.Kind.ToString().ToLowerInvariant(),
         };

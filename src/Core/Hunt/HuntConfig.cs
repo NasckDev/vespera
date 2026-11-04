@@ -22,6 +22,18 @@ public sealed class HuntConfig
     /// <summary>Chão da última sala (Covil do Guardião). Ato I: esgoto_arena; Ato II: pomar_arena.</summary>
     public string FinalGround { get; set; } = "esgoto_arena";
 
+    /// <summary>
+    /// Chãos sorteados para a última sala (Ato VII: as arenas das duplas de Guardiões); vazio = sempre
+    /// <see cref="FinalGround"/>. A mesma semente escolhe sempre a mesma arena.
+    /// </summary>
+    public List<string> FinalGrounds { get; set; } = [];
+
+    /// <summary>
+    /// Sala depois do Guardião, nas caçadas com Guardião (Ato VII: a sala final onde fala o Avesso); vazio = não há.
+    /// Entra como sala de Guardião sem ondas: a caçada só fecha quando a história manda (oferta recusada).
+    /// </summary>
+    public string EpilogueGround { get; set; } = string.Empty;
+
     /// <summary>Monstro comum da Brecha (a primeira sala só tem dele).</summary>
     public string CommonMonster { get; set; } = "lodo";
 
@@ -142,8 +154,21 @@ public sealed class HuntConfig
             }
         }
 
+        foreach (var id in FinalGrounds.Append(EpilogueGround).Where(id => id.Length > 0))
+        {
+            if (!Grounds.ContainsKey(id))
+            {
+                problems.Add($"chão final/epílogo '{id}' fora de grounds");
+            }
+        }
+
         foreach (var (id, ground) in Grounds)
         {
+            if (id == EpilogueGround)
+            {
+                continue;
+            }
+
             if (ground.Spawns.Count < MaxWaveSize)
             {
                 problems.Add($"{id}: precisa de pelo menos {MaxWaveSize} pontos de nascimento");

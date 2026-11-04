@@ -175,6 +175,22 @@ public sealed class WeaponForge(AdvancementCatalog catalog, RankLadder ladder)
         return check;
     }
 
+    /// <summary>Primeiro nível do degrau de <paramref name="rank"/> (ex.: SS = o primeiro nível da arma de Duas Vésperas).</summary>
+    public int FirstLevelOf(Rank rank) => (Tuning.LevelsPerTier * catalog.RankIndex(rank)) + 1;
+
+    /// <summary>
+    /// Arma lendária dada de presente (ROTEIRO-V2 §8.2, Ato VI: a Odete forja a arma de Duas Vésperas da classe): sobe a
+    /// arma da classe para o primeiro nível do degrau <paramref name="rank"/>, sem custo e sem trava de rank. Nunca
+    /// rebaixa: quem já passou do degrau fica onde está. Devolve a arma resultante.
+    /// </summary>
+    public WeaponStats Grant(HunterProgress progress, string classId, Rank rank)
+    {
+        ArgumentNullException.ThrowIfNull(progress);
+        var level = Math.Max(progress.WeaponLevels.GetValueOrDefault(classId, 1), Math.Min(FirstLevelOf(rank), MaxLevel));
+        progress.WeaponLevels[classId] = level;
+        return Stats(classId, level);
+    }
+
     private List<MissingResource> MissingFor(HunterProgress progress, ForgeCost cost)
     {
         var missing = new List<MissingResource>();

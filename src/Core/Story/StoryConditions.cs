@@ -16,7 +16,8 @@ public interface IStoryContext
 
 /// <summary>
 /// Condições em lista de termos, todos obrigatórios (E). Termos: <c>flag</c>, <c>!flag</c>, <c>objective:id</c>,
-/// <c>!objective:id</c>, <c>rank&gt;=D</c>, <c>rank&lt;D</c> (e &gt;, &lt;=, ==). Termo desconhecido é erro, não "falso".
+/// <c>!objective:id</c>, <c>rank&gt;=D</c>, <c>rank&lt;D</c> (e &gt;, &lt;=, ==) e alternativas <c>a|b</c> (basta uma valer).
+/// Termo desconhecido é erro, não "falso".
 /// </summary>
 public static class StoryConditions
 {
@@ -43,6 +44,11 @@ public static class StoryConditions
         if (term.Length == 0)
         {
             throw new FormatException("condição vazia");
+        }
+
+        if (term.Contains('|', StringComparison.Ordinal))
+        {
+            return term.Split('|').Any(part => EvaluateTerm(part.Trim(), context));
         }
 
         if (term[0] == '!')

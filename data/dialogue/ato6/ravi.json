@@ -16,12 +16,18 @@
       "speaker": "ravi",
       "text": "As Ruas Baixas tão com lampião novo. Minha mãe chorou.",
       "look": "ravi",
-      "expression": 2
+      "expression": 2,
+      "set": [
+        "ato6_ravi"
+      ]
     },
     "b": {
       "speaker": "ravi",
       "text": "Minha mãe parou de fechar a janela. Obrigado.",
-      "look": "ravi"
+      "look": "ravi",
+      "set": [
+        "ato6_ravi"
+      ]
     }
   }
 }

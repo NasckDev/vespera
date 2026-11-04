@@ -62,9 +62,9 @@
       "text": "",
       "target": "ruas_baixas",
       "spawn": [1560, 452],
-      "requires": ["GuardianDefeated:sineiro_mudo"],
+      "requires": ["GuardianDefeated:sineiro_mudo|ruas_brecha_aberta"],
       "lockedText": "As Ruas Baixas estão fechadas. Feche primeiro a Brecha da Torre do Sino.",
-      "_note": "Ato VI: as Ruas Baixas abrem depois do Sineiro Mudo (Ato V)."
+      "_note": "Ato VI: as Ruas Baixas abrem depois do Sineiro Mudo (Ato V); no Ato IV, enquanto a Brecha B está aberta (Ravi em perigo)."
     }
   ],
   "npcs": [],

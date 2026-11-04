@@ -48,7 +48,24 @@
       "radius": 50,
       "prompt": "Entrar na Brecha",
       "text": "Ruas Invertidas — Rank S",
-      "_note": "No terreno das casas derrubadas para a Torre (ROTEIRO-V2 §13 Ato VI). Leva direto à arena do Inquilino enquanto as salas não têm arte (issue #47)."
+      "_note": "No terreno das casas derrubadas para a Torre (ROTEIRO-V2 §13 Ato VI). Só depois do Sineiro Mudo (a Brecha B do Ato IV fica na escadaria).",
+      "if": [
+        "GuardianDefeated:sineiro_mudo"
+      ]
+    },
+    {
+      "kind": "brecha",
+      "brecha": "ruas_baixas_b",
+      "at": [805, 790],
+      "radius": 50,
+      "prompt": "Entrar na Brecha",
+      "text": "Brecha B das Ruas Baixas — Rank B",
+      "if": [
+        "ruas_brecha_aberta",
+        "!ruas_fechada_a_tempo",
+        "!ravi_lanterna_recuperada"
+      ],
+      "_note": "Ato IV, Ravi em perigo (ROTEIRO-V2 §8.1): abre quando o Vigia aparece e some quando fecha a tempo (rota A) ou quando a Lanterna do Ravi volta (rota B)."
     }
   ],
   "npcs": [
@@ -59,7 +76,10 @@
       "routine": "idle",
       "dialogue": "ato6/nilza",
       "prompt": "Falar com Tia Nilza",
-      "_note": "Na porta da taverna, com a tigela da Sopa da Véspera."
+      "_note": "Na porta da taverna, com a tigela da Sopa da Véspera.",
+      "if": [
+        "GuardianDefeated:sineiro_mudo"
+      ]
     },
     {
       "id": "mae_ravi",
@@ -68,7 +88,10 @@
       "routine": "idle",
       "dialogue": "ato6/mae_ravi",
       "prompt": "Falar com a mãe do Ravi",
-      "_note": "Na frente da casa de janela com tábuas (issue #37)."
+      "_note": "Na frente da casa de janela com tábuas (issue #37).",
+      "if": [
+        "GuardianDefeated:sineiro_mudo"
+      ]
     },
     {
       "id": "celeste",

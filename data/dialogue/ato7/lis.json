@@ -22,7 +22,10 @@
       "speaker": "lis",
       "text": "Tá anoitecendo às duas da tarde. Eu não tô com medo.",
       "look": "lis",
-      "next": "a2"
+      "next": "a2",
+      "set": [
+        "ato7_lis_dia"
+      ]
     },
     "a2": {
       "speaker": "lis",

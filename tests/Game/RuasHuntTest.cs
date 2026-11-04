@@ -186,7 +186,8 @@ public class RuasHuntTest
     {
         var forjas = Level("forjas");
         var exit = forjas.Zones.Single(z => z.Target == "ruas_baixas");
-        AssertThat(exit.Requires).Contains("GuardianDefeated:sineiro_mudo");
+        // Ato VI depois do Sineiro Mudo; no Ato IV, enquanto a Brecha B (Ravi em perigo) está aberta.
+        AssertThat(exit.Requires).Contains("GuardianDefeated:sineiro_mudo|ruas_brecha_aberta");
 
         var hub = Level("ruas_baixas");
         var grid = Grid(hub);
@@ -201,9 +202,13 @@ public class RuasHuntTest
     {
         var hub = Level("ruas_baixas");
         var grid = Grid(hub);
-        var brecha = hub.Zones.Single(z => z.Kind == "brecha");
-        AssertThat(brecha.Brecha).IsEqual("ruas_invertidas");
-        AssertThat(grid.IsBlockedAt(brecha.At[0], brecha.At[1])).IsFalse();
+        var brechas = hub.Zones.Where(z => z.Kind == "brecha").ToList();
+        AssertThat(brechas.Select(z => z.Brecha)).ContainsExactlyInAnyOrder("ruas_invertidas", "ruas_baixas_b");
+        foreach (var brecha in brechas)
+        {
+            AssertThat(grid.IsBlockedAt(brecha.At[0], brecha.At[1])).OverrideFailureMessage(brecha.Brecha).IsFalse();
+            AssertThat(brecha.Conditions).OverrideFailureMessage(brecha.Brecha).IsNotEmpty();
+        }
         AssertThat(hub.Npcs.Select(n => n.Id)).Contains("nilza", "mae_ravi", "celeste", "ravi");
         foreach (var npc in hub.Npcs)
         {

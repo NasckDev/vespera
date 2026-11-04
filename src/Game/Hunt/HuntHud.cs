@@ -95,7 +95,8 @@ public partial class HuntHud : Control
         _lumes.Text = $"{xp}  ·  {Progression.State.Lumes} Lumes";
         var inRift = RiftSession.InRift && HuntService.Plan is not null;
         _room.Visible = _goal.Visible = _contracts.Visible = inRift;
-        _soup.Visible = inRift && HuntService.SoupActive;
+        _soup.Visible = inRift && (HuntService.SoupActive || HuntService.SecondLifeReady);
+        _soup.Text = string.Join("  ·  ", new[] { HuntService.SoupActive ? Core.Hunt.RunPerks.SoupLabel : null, HuntService.SecondLifeReady ? Core.Hunt.RunPerks.SecondLifeLabel : null }.Where(s => s is not null));
         _map.Visible = inRift && HuntService.MapActive;
         if (inRift)
         {

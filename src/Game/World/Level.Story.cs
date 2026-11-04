@@ -179,7 +179,7 @@ public partial class Level
             }
             else
             {
-                if (!HandleActThreeEvent(name))
+                if (!HandleActThreeEvent(name) && !HandleActSixSevenEvent(name))
                 {
                     HandleNightEvent(name);
                 }

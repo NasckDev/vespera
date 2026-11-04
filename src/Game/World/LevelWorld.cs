@@ -83,7 +83,7 @@ public partial class LevelWorld : Node2D
         var ground = new Sprite2D
         {
             Name = "Ground",
-            Texture = GD.Load<Texture2D>(_data.Ground.Texture),
+            Texture = GD.Load<Texture2D>(GroundTexture()),
             Centered = false,
             Scale = new Vector2(_data.Ground.Scale, _data.Ground.Scale),
             ZIndex = -10,
@@ -124,7 +124,10 @@ public partial class LevelWorld : Node2D
 
         foreach (var zone in _data.Zones)
         {
-            AddZone(zone);
+            if (Vespera.Core.Story.StoryConditions.Evaluate(zone.Conditions, Story.StoryService.Engine))
+            {
+                AddZone(zone);
+            }
         }
 
         Vespera.Game.Audio.MusicDirector.Play(_data.Id);
@@ -350,6 +353,20 @@ public partial class LevelWorld : Node2D
         };
         Entities.AddChild(area);
         _zones.Add(area);
+    }
+
+    /// <summary>Textura do chão: a primeira variante cujas condições de história valem, senão a do JSON.</summary>
+    private string GroundTexture()
+    {
+        foreach (var variant in _data.Ground.Variants)
+        {
+            if (variant.Texture.Length > 0 && Vespera.Core.Story.StoryConditions.Evaluate(variant.Conditions, Story.StoryService.Engine))
+            {
+                return variant.Texture;
+            }
+        }
+
+        return _data.Ground.Texture;
     }
 
     private Rect2 WalkableBounds()

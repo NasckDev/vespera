@@ -23,6 +23,9 @@ public static class EnemyFactory
         _ => new Lodo(world) { StartDelay = (float)GD.RandRange(0.0, 0.6) },
     };
 
+    /// <summary>Guardiões que já existem no jogo (as duplas do Ato VII só chamam quem existe).</summary>
+    public static bool HasGuardian(string type) => type is "lodo_mae" or "macieira_oca" or "farol_afogado" or "inquilino";
+
     public static Enemy Guardian(string type, LevelWorld world) => type switch
     {
         "macieira_oca" => new MacieiraOca(world),

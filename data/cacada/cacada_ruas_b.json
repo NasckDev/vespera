@@ -1,0 +1,435 @@
+{
+  "_doc": "Caçadas da Brecha B das Ruas Baixas (Ato IV, rank B, ROTEIRO-V2 §8.1). Mesmas salas e monstros das Ruas Invertidas, caçada curta de 4 salas (a 3ª é o descanso na Cozinha Velha, onde fica a Lanterna do Ravi se a Brecha romper) e fim numa sala de elite: o Inquilino não aparece aqui (guardianAfterRuns alto). A arena só está na lista para a validação dos tipos de sala.",
+  "roomsMin": 4,
+  "roomsMax": 4,
+  "guardianAfterRuns": 99,
+  "treasureChance": 0.0,
+  "restHealPct": 0.5,
+  "runGrowth": 0.3,
+  "runGrowthCap": 2,
+  "guardianRunRooms": 4,
+  "firstWaveSize": 3,
+  "waveSizePerRoom": 0.6,
+  "maxWaveSize": 4,
+  "extraWaveFromRoom": 2,
+  "espectroShareStart": 0.2,
+  "espectroSharePerRoom": 0.06,
+  "espectroShareMax": 0.4,
+  "eliteChanceFromRoom": 2,
+  "eliteChance": 0.3,
+  "elite": {
+    "scale": 1.15,
+    "hp": 2.4,
+    "damage": 1.25,
+    "speed": 1.2,
+    "period": 0.7,
+    "xp": 2,
+    "tint": "#ff9d6e"
+  },
+  "contracts": {
+    "offered": 3,
+    "kinds": {
+      "cacada": {
+        "title": "Caçada",
+        "text": "Feche uma caçada inteira (sem cair).",
+        "xp": 10,
+        "fragmentos": 6,
+        "lumes": 18
+      },
+      "coleta": {
+        "title": "Coleta",
+        "text": "Traga {n} {item} de uma caçada.",
+        "min": 3,
+        "max": 5,
+        "xp": 8,
+        "fragmentos": 4,
+        "lumes": 14
+      },
+      "protecao": {
+        "title": "Proteção",
+        "text": "Sobreviva a {n} ondas numa caçada.",
+        "min": 5,
+        "max": 8,
+        "xp": 8,
+        "fragmentos": 5,
+        "lumes": 12
+      },
+      "sem_dano": {
+        "title": "Sem dano",
+        "text": "Termine uma sala de combate sem levar golpe.",
+        "xp": 6,
+        "fragmentos": 3,
+        "lumes": 16
+      }
+    },
+    "materials": [
+      "fio_do_avesso",
+      "tijolo_invertido"
+    ]
+  },
+  "potions": {
+    "price": 14,
+    "flowerPrice": 5,
+    "max": 3,
+    "healPct": 0.4,
+    "drinkSeconds": 0.6
+  },
+  "flowers": {
+    "perReturn": 3
+  },
+  "well": {
+    "price": 1,
+    "fragmentBonusPct": 25
+  },
+  "breakables": {
+    "lumes": [
+      1,
+      3
+    ],
+    "fragmentChance": 0.15
+  },
+  "finalGround": "ruas_volta",
+  "commonMonster": "varal",
+  "secondMonster": "despejado",
+  "secondSwarm": 1,
+  "grounds": {
+    "ruas_viela": {
+      "kinds": [
+        "combat",
+        "elite"
+      ],
+      "spawns": [
+        [
+          1144,
+          488
+        ],
+        [
+          488,
+          488
+        ],
+        [
+          792,
+          408
+        ],
+        [
+          632,
+          488
+        ],
+        [
+          1576,
+          488
+        ],
+        [
+          968,
+          424
+        ],
+        [
+          1288,
+          488
+        ],
+        [
+          1400,
+          440
+        ],
+        [
+          1528,
+          392
+        ],
+        [
+          552,
+          408
+        ],
+        [
+          872,
+          488
+        ],
+        [
+          1640,
+          392
+        ],
+        [
+          1176,
+          392
+        ],
+        [
+          1064,
+          392
+        ]
+      ],
+      "breakables": [
+        [
+          664,
+          392
+        ]
+      ]
+    },
+    "ruas_largo": {
+      "kinds": [
+        "combat",
+        "elite",
+        "treasure"
+      ],
+      "spawns": [
+        [
+          1256,
+          520
+        ],
+        [
+          760,
+          872
+        ],
+        [
+          1400,
+          424
+        ],
+        [
+          1144,
+          456
+        ],
+        [
+          840,
+          632
+        ],
+        [
+          632,
+          360
+        ],
+        [
+          568,
+          488
+        ],
+        [
+          1144,
+          328
+        ],
+        [
+          696,
+          568
+        ],
+        [
+          472,
+          584
+        ],
+        [
+          1096,
+          552
+        ],
+        [
+          1496,
+          504
+        ],
+        [
+          1304,
+          344
+        ],
+        [
+          1352,
+          584
+        ]
+      ],
+      "breakables": [
+        [
+          952,
+          584
+        ],
+        [
+          504,
+          392
+        ],
+        [
+          664,
+          456
+        ]
+      ]
+    },
+    "ruas_cozinha": {
+      "kinds": [
+        "rest",
+        "treasure"
+      ],
+      "spawns": [
+        [
+          648,
+          472
+        ],
+        [
+          1336,
+          536
+        ],
+        [
+          1208,
+          280
+        ],
+        [
+          648,
+          296
+        ],
+        [
+          952,
+          360
+        ],
+        [
+          1080,
+          424
+        ],
+        [
+          1032,
+          552
+        ],
+        [
+          744,
+          392
+        ],
+        [
+          472,
+          312
+        ],
+        [
+          1048,
+          312
+        ],
+        [
+          1336,
+          328
+        ],
+        [
+          584,
+          552
+        ],
+        [
+          584,
+          392
+        ],
+        [
+          840,
+          344
+        ]
+      ],
+      "breakables": [
+        [
+          1336,
+          664
+        ],
+        [
+          984,
+          456
+        ]
+      ],
+      "rest": [
+        836,
+        505
+      ]
+    },
+    "ruas_volta": {
+      "kinds": [
+        "combat",
+        "elite"
+      ],
+      "spawns": [
+        [
+          232,
+          360
+        ],
+        [
+          1416,
+          456
+        ],
+        [
+          600,
+          184
+        ],
+        [
+          1400,
+          344
+        ],
+        [
+          360,
+          664
+        ],
+        [
+          232,
+          200
+        ],
+        [
+          232,
+          632
+        ],
+        [
+          280,
+          536
+        ],
+        [
+          1288,
+          632
+        ],
+        [
+          504,
+          664
+        ],
+        [
+          1336,
+          184
+        ],
+        [
+          456,
+          200
+        ],
+        [
+          1400,
+          616
+        ],
+        [
+          344,
+          184
+        ]
+      ],
+      "breakables": [
+        [
+          1192,
+          200
+        ],
+        [
+          1160,
+          632
+        ],
+        [
+          1080,
+          184
+        ]
+      ]
+    },
+    "ruas_arena": {
+      "kinds": [
+        "guardian"
+      ],
+      "spawns": [
+        [
+          600,
+          420
+        ],
+        [
+          1080,
+          420
+        ],
+        [
+          840,
+          360
+        ],
+        [
+          600,
+          600
+        ],
+        [
+          1080,
+          600
+        ]
+      ],
+      "breakables": []
+    }
+  },
+  "thirdMonster": "rasgo",
+  "thirdShare": 0.25,
+  "thirdSwarm": 1,
+  "guardianFlag": "GuardianDefeated:inquilino",
+  "firstRunRooms": 4
+}

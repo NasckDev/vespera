@@ -54,7 +54,8 @@ public sealed class RunPlanner(HuntConfig config)
         var count = guardian ? config.GuardianRunRooms : completedRuns == 0 ? config.FirstRunRooms : rolled;
         var growth = config.RunGrowth * Math.Min(completedRuns, config.RunGrowthCap);
         var kinds = Layout(count, random, guardian);
-        var rooms = new List<RoomPlan>(count);
+        var final = config.FinalGrounds.Count > 0 ? config.FinalGrounds[random.RangeInt(0, config.FinalGrounds.Count - 1)] : config.FinalGround;
+        var rooms = new List<RoomPlan>(count + 1);
         string? previous = null;
         var grounds = new string[count];
         for (var attempt = 0; attempt < 30; attempt++)
@@ -62,7 +63,7 @@ public sealed class RunPlanner(HuntConfig config)
             previous = null;
             for (var i = 0; i < count; i++)
             {
-                grounds[i] = i == count - 1 ? config.FinalGround : PickGround(kinds[i], previous, random);
+                grounds[i] = i == count - 1 ? final : PickGround(kinds[i], previous, random);
                 previous = grounds[i];
             }
 
@@ -77,6 +78,11 @@ public sealed class RunPlanner(HuntConfig config)
         for (var i = 0; i < count; i++)
         {
             rooms.Add(new RoomPlan(i, grounds[i], kinds[i], Waves(grounds[i], kinds[i], i, count, growth, random)));
+        }
+
+        if (guardian && config.EpilogueGround.Length > 0)
+        {
+            rooms.Add(new RoomPlan(count, config.EpilogueGround, RoomKind.Guardian, []));
         }
 
         return new RunPlan(seed, rooms);
@@ -168,7 +174,7 @@ public sealed class RunPlanner(HuntConfig config)
 
     private string PickGround(RoomKind kind, string? previous, IRandom random)
     {
-        var options = config.Grounds.Where(g => g.Value.Kinds.Contains(kind)).Select(g => g.Key).OrderBy(id => id, StringComparer.Ordinal).ToList();
+        var options = config.Grounds.Where(g => g.Value.Kinds.Contains(kind) && g.Key != config.EpilogueGround).Select(g => g.Key).OrderBy(id => id, StringComparer.Ordinal).ToList();
         var fresh = options.Where(id => id != previous).ToList();
         var pool = fresh.Count > 0 ? fresh : options;
         return pool[random.RangeInt(0, pool.Count - 1)];
