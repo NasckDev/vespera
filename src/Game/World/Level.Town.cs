@@ -115,7 +115,7 @@ public partial class Level
         var texture = GD.Load<Texture2D>(RiftOpeningSheet);
         var cell = new Vector2(texture.GetWidth() / (float)RiftOpeningFrames, texture.GetHeight());
         var frames = new SpriteFrames();
-        frames.SetAnimationLoop("default", false);
+        frames.SetAnimationLoopMode("default", SpriteFrames.LoopMode.None);
         frames.SetAnimationSpeed("default", RiftOpeningFps * SceneSpeed);
         for (var i = 0; i < RiftOpeningFrames; i++)
         {

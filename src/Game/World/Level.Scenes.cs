@@ -200,13 +200,13 @@ public partial class Level
     /// <summary>A noite passa (ROTEIRO-V2 §3, 9:00): tela escura, um respiro, e a praça de manhã com o caçador no meio.</summary>
     private async Task StageMorning()
     {
+        StoryService.Dawn();
         if (await WokeInRoom())
         {
             return;
         }
 
         _fade.Color = _fade.Color with { A = 1f };
-        StoryService.Dawn();
         Player.Teleport(World.SpawnPoint);
         await SceneWait(MorningHold);
         await FadeFrom(1f, ArrivalFadeSeconds);
