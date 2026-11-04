@@ -72,10 +72,9 @@ public partial class SmokeTest
         Check(HuntService.SecondLifeReady, "com a sopa, a caçada deveria começar com a segunda vida");
         await Fall(level);
         var combat = level.Player.Combat;
-        for (var i = 0; i < 400 && combat.IsDead && RiftSession.InRift; i++)
-        {
-            await PhysicsFrames(1);
-        }
+        // A queda só é tratada depois da animação de morte (HunterCombat.DeathDelay, timer de jogo): espera por tempo,
+        // não por quadros (com a máquina carregada ou quadros rápidos, uma contagem fixa de quadros acaba antes).
+        await WaitWhile(() => combat.IsDead && RiftSession.InRift, RiseWaitSeconds);
 
         Check(RiftSession.InRift && !combat.IsDead, "a primeira queda deveria levantar o caçador dentro da Brecha");
         Check(combat.Hp == RunPerks.SecondLifeHp(combat.MaxHp), $"a sopa deveria levantar com metade da vida ({combat.Hp}/{combat.MaxHp})");
@@ -93,14 +92,27 @@ public partial class SmokeTest
         return level;
     }
 
+    private const double RiseWaitSeconds = 20;
+    private const double BackHomeWaitSeconds = 40;
+
+    /// <summary>Espera enquanto <paramref name="busy"/> vale, até <paramref name="seconds"/> segundos de relógio (a câmera lenta da queda estica o tempo de jogo).</summary>
+    private async Task WaitWhile(System.Func<bool> busy, double seconds)
+    {
+        var start = Time.GetTicksMsec();
+        while (busy() && (Time.GetTicksMsec() - start) / 1000.0 < seconds)
+        {
+            await PhysicsFrames(1);
+        }
+    }
+
     /// <summary>Espera a volta ao bairro depois da queda (passa pela tela de resultado).</summary>
     private async Task BackFromFall(Level level, string hub)
     {
-        for (var i = 0; i < 1500 && (RiftSession.InRift || level.Switching || level.World.Data.Id != hub || RunResultScreen.Active is not null); i++)
+        await WaitWhile(() =>
         {
             RunResultScreen.Active?.Close();
-            await Frames(1);
-        }
+            return RiftSession.InRift || level.Switching || level.World.Data.Id != hub || RunResultScreen.Active is not null;
+        }, BackHomeWaitSeconds);
 
         Check(!RiftSession.InRift && level.World.Data.Id == hub, $"depois da queda o caçador deveria voltar a {hub}, está em '{level.World.Data.Id}' (na Brecha: {RiftSession.InRift})");
         await PhysicsFrames(4);
