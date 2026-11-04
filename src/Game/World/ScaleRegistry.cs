@@ -50,6 +50,15 @@ public static class ScaleRegistry
         ["vigia"] = new(1.00f, Npcs, Key: "vigia"),
         ["mae_ravi"] = new(0.98f, Npcs, Key: "mae_ravi"),
         ["inquilino"] = new(3.00f, Sprites + "monstros/inquilino/inquilino.json"),
+        // Atos IV e V (issues #54/#55/#57/#58): alturas pedidas nos prompts da arte.
+        ["velinha"] = new(0.40f, Sprites + "monstros/velinha/velinha.json"),
+        ["carpideira"] = new(1.00f, Sprites + "monstros/carpideira/carpideira.json"),
+        ["cao_de_vigilia"] = new(0.60f, Sprites + "monstros/cao_de_vigilia/cao_de_vigilia.json"),
+        ["velora"] = new(3.00f, Sprites + "monstros/velora/velora.json"),
+        ["sineiro"] = new(0.70f, Sprites + "monstros/sineiro/sineiro.json"),
+        ["casca"] = new(0.90f, Sprites + "monstros/casca/casca.json"),
+        ["traca_de_arquivo"] = new(0.60f, Sprites + "monstros/traca_de_arquivo/traca_de_arquivo.json", Hover: 0.30f),
+        ["sineiro_mudo"] = new(3.00f, Sprites + "monstros/sineiro_mudo/sineiro_mudo.json"),
     };
 
     private static readonly Dictionary<string, float> Standing = [];

@@ -1,0 +1,110 @@
+{
+  "character": "casca",
+  "anchor": [
+    128,
+    244
+  ],
+  "stand_height_px": 100,
+  "facing": "olha para a direita; para a esquerda use flip_h",
+  "scale_class": 0.2941,
+  "stand_height_source_px": 340.0,
+  "hit_frame_method": "quadro de maior área opaca (índice base 0), só para ataques",
+  "frame_counts": {
+    "parado": 4,
+    "mover": 6,
+    "aviso": 3,
+    "ataque": 4,
+    "morte": 6
+  },
+  "atlas": "casca_atlas.png",
+  "cell": [
+    256,
+    256
+  ],
+  "animations": {
+    "parado": {
+      "row": 0,
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "scale": 0.2941,
+      "source": "casca_parado.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        8252,
+        8168,
+        7769,
+        8179
+      ],
+      "note": null
+    },
+    "mover": {
+      "row": 1,
+      "frames": 6,
+      "fps": 10,
+      "loop": true,
+      "scale": 0.3484,
+      "source": "casca_mover.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        8459,
+        8347,
+        8153,
+        8295,
+        8398,
+        8286
+      ],
+      "note": "reescalada: guarda -16% vs parado"
+    },
+    "aviso": {
+      "row": 2,
+      "frames": 3,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.2941,
+      "source": "casca_aviso.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        11519,
+        14117,
+        15796
+      ],
+      "note": null
+    },
+    "ataque": {
+      "row": 3,
+      "frames": 4,
+      "fps": 14,
+      "loop": false,
+      "scale": 0.2941,
+      "source": "casca_ataque.png",
+      "hit_frame": 2,
+      "opaque_area_per_frame": [
+        7952,
+        8060,
+        8196,
+        8108
+      ],
+      "note": null
+    },
+    "morte": {
+      "row": 4,
+      "frames": 6,
+      "fps": 8,
+      "loop": false,
+      "scale": 0.3597,
+      "source": "casca_morte.png",
+      "hit_frame": null,
+      "opaque_area_per_frame": [
+        8243,
+        9015,
+        7927,
+        7570,
+        6655,
+        4819
+      ],
+      "note": "reescalada: guarda -18% vs parado"
+    }
+  },
+  "standing_height": 100
+}
