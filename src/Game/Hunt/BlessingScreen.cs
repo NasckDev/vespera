@@ -17,7 +17,7 @@ public partial class BlessingScreen(IReadOnlyList<BlessingDef> offer, Action<str
 {
     private const int CardWidth = 440;
     private const int IconSize = 96;
-    private const int MaxPendingLines = 3;
+    private const int MaxPendingLines = 2;
     private const int PanelWidth = 1300;
     private static readonly Color ComboColor = new("ffd36a");
     private const string IconFolder = "res://assets/v2/interface/bencaos/";
@@ -107,7 +107,7 @@ public partial class BlessingScreen(IReadOnlyList<BlessingDef> offer, Action<str
         var lines = new List<string>();
         foreach (var combo in catalog.ActiveCombos(owned))
         {
-            lines.Add($"Combinação ativa: {combo.Name} ({FamilyNames(catalog, combo.Families)}). {combo.Text}");
+            lines.Add($"Combinação ativa: {combo.Name} ({FamilyNames(catalog, combo.Families)})");
         }
 
         foreach (var combo in catalog.PendingCombos(owned).Take(MaxPendingLines))
