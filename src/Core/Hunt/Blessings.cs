@@ -58,6 +58,27 @@ public sealed class BlessingDef
 
     public double LowHpDamagePct { get; set; }
 
+    /// <summary>Soma dos efeitos de duas bênçãos (o prato da Horta entra na soma da caçada). Não muda nenhuma das duas.</summary>
+    public BlessingDef Plus(BlessingDef o) => new()
+    {
+        Id = Id,
+        DamagePct = DamagePct + o.DamagePct,
+        CritPct = CritPct + o.CritPct,
+        PartPct = PartPct + o.PartPct,
+        DodgeDistancePct = DodgeDistancePct + o.DodgeDistancePct,
+        DodgeInvulnerable = DodgeInvulnerable + o.DodgeInvulnerable,
+        DodgeCostPct = DodgeCostPct + o.DodgeCostPct,
+        HurtInvulnerable = HurtInvulnerable + o.HurtInvulnerable,
+        MaxHp = MaxHp + o.MaxHp,
+        HealOnClearPct = HealOnClearPct + o.HealOnClearPct,
+        HealOnKill = HealOnKill + o.HealOnKill,
+        PotionPct = PotionPct + o.PotionPct,
+        FragmentPct = FragmentPct + o.FragmentPct,
+        LumesPerBreakable = LumesPerBreakable + o.LumesPerBreakable,
+        SpeedPct = SpeedPct + o.SpeedPct,
+        LowHpDamagePct = LowHpDamagePct + o.LowHpDamagePct,
+    };
+
     /// <summary>Multiplicador de dano (com <paramref name="lowHp"/> = menos de metade da vida).</summary>
     public double DamageMultiplier(bool lowHp) =>
         Math.Max(0.1, 1 + (DamagePct / 100.0) + (lowHp ? LowHpDamagePct / 100.0 : 0));

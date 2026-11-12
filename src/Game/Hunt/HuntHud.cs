@@ -87,7 +87,7 @@ public partial class HuntHud : Control
 
     private (int, int, string) _potionKey = (-1, -1, "");
     private (Vespera.Core.Ranks.Rank?, int, int, int) _xpKey = (null, -1, -1, -1);
-    private (bool SoupActive, bool SecondLifeReady) _soupKey = (false, false);
+    private (bool SoupActive, bool SecondLifeReady, string? Label) _soupKey = (false, false, null);
     private float _roomTimer;
 
     public void Bind(LevelWorld world) => _world = world;
@@ -123,12 +123,12 @@ public partial class HuntHud : Control
 
         var inRift = RiftSession.InRift && HuntService.Plan is not null;
         _room.Visible = _goal.Visible = _contracts.Visible = inRift;
-        var soupKey = (HuntService.SoupActive, HuntService.SecondLifeReady);
-        _soup.Visible = inRift && (soupKey.SoupActive || soupKey.SecondLifeReady);
+        var soupKey = (HuntService.SoupActive, HuntService.SecondLifeReady, HuntService.Dish?.Label);
+        _soup.Visible = inRift && (soupKey.SoupActive || soupKey.SecondLifeReady || soupKey.Label is not null);
         if (soupKey != _soupKey)
         {
             _soupKey = soupKey;
-            _soup.Text = string.Join("  ·  ", new[] { soupKey.SoupActive ? Core.Hunt.RunPerks.SoupLabel : null, soupKey.SecondLifeReady ? Core.Hunt.RunPerks.SecondLifeLabel : null }.Where(s => s is not null));
+            _soup.Text = string.Join("  ·  ", new[] { soupKey.SoupActive ? Core.Hunt.RunPerks.SoupLabel : null, soupKey.Label, soupKey.SecondLifeReady ? Core.Hunt.RunPerks.SecondLifeLabel : null }.Where(s => s is not null));
         }
 
         _map.Visible = inRift && HuntService.MapActive;

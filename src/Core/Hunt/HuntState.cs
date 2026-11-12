@@ -36,6 +36,9 @@ public sealed class HuntState
     /// <summary>Comprou o mapa da Lis: a próxima caçada mostra o tipo de cada sala e o tesouro.</summary>
     public bool MapReady { get; set; }
 
+    /// <summary>Horta do Ato II: canteiros, despensa, receitas da Nilza e o prato pronto (ROTEIRO-V2 §8).</summary>
+    public Vespera.Core.Horta.HortaState Horta { get; set; } = new();
+
     public double BestRunSeconds { get; set; }
 
     public int TotalKills { get; set; }
@@ -67,6 +70,7 @@ public sealed class HuntState
         Stats.Weapons ??= [];
         Stats.Blessings ??= [];
         Broken ??= [];
+        Horta ??= new Vespera.Core.Horta.HortaState();
     }
 }
 
