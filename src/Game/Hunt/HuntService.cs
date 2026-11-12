@@ -50,6 +50,7 @@ public static class HuntService
     private static readonly Dictionary<string, (HuntConfig Config, RunPlanner Planner)> Loaded = [];
     private static bool _luckActive;
     private static bool _soupActive;
+    private static Vespera.Core.Horta.DishDef? _dish;
     private static bool _mapActive;
 
     /// <summary>A sopa da Nilza vale nesta caçada (+10% de vida máxima; ver <see cref="RunPerks"/>).</summary>
@@ -75,6 +76,33 @@ public static class HuntService
         _secondLifeUsed = true;
         return RunPerks.SecondLifeHp(maxHp);
     }
+
+    public const string HortaFile = "res://data/horta/horta.json";
+    private static Vespera.Core.Horta.HortaRules? _horta;
+
+    /// <summary>Regras e dados da Horta (data/horta/horta.json).</summary>
+    public static Vespera.Core.Horta.HortaRules Horta => _horta ??= new Vespera.Core.Horta.HortaRules(Vespera.Core.Horta.HortaDef.Parse(
+        UserFile.ReadText(HortaFile) ?? throw new InvalidOperationException($"Dado do jogo ausente: {HortaFile}")));
+
+    /// <summary>Estado da Horta no save, já normalizado (canteiros certos, ids que sumiram descartados).</summary>
+    public static Vespera.Core.Horta.HortaState HortaState
+    {
+        get
+        {
+            var state = State.Horta ??= new Vespera.Core.Horta.HortaState();
+            if (state.Plots.Count != Horta.Def.Plots)
+            {
+                state.Sanitize(Horta.Def);
+            }
+
+            return state;
+        }
+    }
+
+    /// <summary>O prato da Horta vale nesta caçada (linha do HUD); nulo = nenhum.</summary>
+    public static Vespera.Core.Horta.DishDef? Dish => RiftSession.InRift ? _dish : null;
+
+    private static BlessingDef DishBonus => _dish?.Bonus ?? new BlessingDef();
 
     /// <summary>Guarda a sopa para a próxima caçada (presente ou compra na Nilza).</summary>
     public static void ServeSoup() => State.SoupReady = true;
@@ -148,7 +176,7 @@ public static class HuntService
         }
 
         RunBlessings.Add(id);
-        _bless = BlessingCatalog.Total(RunBlessings);
+        _bless = BlessingCatalog.Total(RunBlessings).Plus(DishBonus);
         Report?.Blessings.Add(id);
         var stats = State.Stats;
         stats.Blessings[id] = stats.Blessings.GetValueOrDefault(id) + 1;
@@ -226,7 +254,8 @@ public static class HuntService
         Plan = Planner.Plan(seed, BrechaRunsCompleted, GuardianUnlocked);
         Report = new RunReport { RoomCount = Plan.Rooms.Count };
         RunBlessings.Clear();
-        _bless = new BlessingDef();
+        _dish = Horta.ConsumeMeal(HortaState);
+        _bless = new BlessingDef().Plus(DishBonus);
         state.Stats.Weapons[Progression.IsActive ? Progression.Engine.ClassId : "sword"] =
             state.Stats.Weapons.GetValueOrDefault(Progression.IsActive ? Progression.Engine.ClassId : "sword") + 1;
         _luckActive = state.WellLuck;
@@ -515,6 +544,7 @@ public static class HuntService
         state.Returns++;
         state.Contracts = Board.Roll(new SeededRandom(state.NextSeed + (state.Returns * 7919)), GuardianUnlocked);
         state.FlowersLeft = Config.Flowers.PerReturn;
+        Horta.NewDay(HortaState);
         state.Broken.Clear();
         Story.StoryService.NightFalls();
     }
@@ -633,6 +663,7 @@ public static class HuntService
     {
         RunBlessings.Clear();
         _bless = new BlessingDef();
+        _dish = null;
         Plan = null;
         Report = null;
         _luckActive = false;

@@ -1,0 +1,14 @@
+{
+  "_doc": "Horta do Ato II (ROTEIRO-V2 §8): 6 canteiros, 3 sementes. Planta antes da caçada; cada volta da Brecha conta um dia de crescimento. A colheita vira ingrediente; a Nilza vende receitas na feira e cozinha o prato que vale na próxima caçada.",
+  "plots": 6,
+  "seeds": [
+    {"id": "abobora_roxa", "name": "Abóbora-roxa", "days": 1, "yield": 2, "desc": "Nasce roxa por dentro. A Celeste manda queimar; a Nilza manda trazer."},
+    {"id": "erva_de_lanterna", "name": "Erva-de-lanterna", "days": 1, "yield": 2, "desc": "Folha que brilha fraco no escuro, como uma lanterna longe."},
+    {"id": "raiz_doce", "name": "Raiz-doce", "days": 2, "yield": 3, "desc": "Demora um pouco mais, mas dá bastante."}
+  ],
+  "dishes": [
+    {"id": "sopa_de_abobora", "name": "Sopa de Abóbora-roxa", "price": 20, "ingredients": {"abobora_roxa": 2}, "label": "Sopa de Abóbora-roxa: +8% de dano", "desc": "Quente, doce e estranhamente forte.", "bonus": {"damagePct": 8}},
+    {"id": "cha_de_lanterna", "name": "Chá de Erva-de-lanterna", "price": 20, "ingredients": {"erva_de_lanterna": 2}, "label": "Chá de Erva-de-lanterna: +6% de velocidade, cura 10% ao limpar sala", "desc": "Acorda as pernas e fecha os cortes.", "bonus": {"speedPct": 6, "healOnClearPct": 10}},
+    {"id": "ensopado_de_raiz", "name": "Ensopado de Raiz-doce", "price": 40, "ingredients": {"raiz_doce": 3, "abobora_roxa": 1}, "label": "Ensopado de Raiz-doce: +25% de Fragmentos, poções curam +20%", "desc": "O prato da casa. Segura caçador em pé.", "bonus": {"fragmentPct": 25, "potionPct": 20}}
+  ]
+}
