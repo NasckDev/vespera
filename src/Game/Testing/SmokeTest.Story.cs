@@ -164,8 +164,15 @@ public partial class SmokeTest
         Image image;
         if (texture is AtlasTexture atlas)
         {
-            // Atlas grandes são importados com compressão de VRAM: lê os pixels do PNG original.
-            image = Image.LoadFromFile(ProjectSettings.GlobalizePath(atlas.Atlas.ResourcePath)).GetRegion((Rect2I)atlas.Region);
+            // Atlas grandes são importados com compressão de VRAM: descomprime antes de ler pixels
+            // (no jogo exportado o PNG original não existe, então a imagem importada vem primeiro).
+            var whole = atlas.Atlas.GetImage() ?? Image.LoadFromFile(ProjectSettings.GlobalizePath(atlas.Atlas.ResourcePath));
+            if (whole.IsCompressed())
+            {
+                whole.Decompress();
+            }
+
+            image = whole.GetRegion((Rect2I)atlas.Region);
         }
         else
         {
