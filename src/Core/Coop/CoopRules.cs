@@ -30,6 +30,20 @@ public sealed class CoopCameraTuning
     public double TetherPull { get; set; } = 2.5;
 }
 
+/// <summary>Co-op online (ENet, host autoritativo): porta padrão, frequência dos snapshots e folga da interpolação.</summary>
+public sealed class OnlineTuning
+{
+    public int Port { get; set; } = 24680;
+
+    public int SnapshotHz { get; set; } = 20;
+
+    /// <summary>Atraso de desenho no convidado (ms): ele interpola entre os dois snapshots em volta de agora - atraso.</summary>
+    public int InterpolationMs { get; set; } = 100;
+
+    /// <summary>Segundos sem notícia do outro lado até tratar como desconectado.</summary>
+    public double TimeoutSeconds { get; set; } = 5;
+}
+
 /// <summary>
 /// Regras do co-op (GDD §5.8; <c>data/coop.json</c>): vida dos monstros e tamanho das ondas por número de jogadores, dano do
 /// Guardião (não linear), XP compartilhado (cada um recebe o valor cheio), saque individual, reanimação e câmera.
@@ -54,6 +68,8 @@ public sealed class CoopRules
     public ReviveTuning Revive { get; set; } = new();
 
     public CoopCameraTuning Camera { get; set; } = new();
+
+    public OnlineTuning Online { get; set; } = new();
 
     /// <summary>Valores padrão (iguais aos de <c>data/coop.json</c>), para testes e fallback.</summary>
     public static CoopRules Defaults => new();
@@ -93,6 +109,11 @@ public sealed class CoopRules
         if (Camera.MinHunterPx <= 0 || Camera.EdgeMargin < 0 || Camera.TetherPull < 0)
         {
             problems.Add("camera inválida");
+        }
+
+        if (Online.Port is < 1024 or > 65535 || Online.SnapshotHz is < 5 or > 60 || Online.InterpolationMs is < 0 or > 1000 || Online.TimeoutSeconds <= 0)
+        {
+            problems.Add("online inválido (port 1024..65535, snapshotHz 5..60, interpolationMs 0..1000, timeoutSeconds > 0)");
         }
 
         return problems;

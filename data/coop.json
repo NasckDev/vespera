@@ -17,5 +17,12 @@
     "minHunterPx": 85,
     "edgeMargin": 1.3,
     "tetherPull": 2.5
+  },
+  "online": {
+    "_doc": "Co-op online (ENet, host autoritativo): porta padrão de Hospedar/Entrar, snapshots por segundo, atraso da interpolação do convidado e tempo sem notícia até desconectar.",
+    "port": 24680,
+    "snapshotHz": 20,
+    "interpolationMs": 100,
+    "timeoutSeconds": 5
   }
 }
