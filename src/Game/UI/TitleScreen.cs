@@ -4,7 +4,7 @@ using Vespera.Game.Boot;
 
 namespace Vespera.Game.UI;
 
-/// <summary>Tela de título: Nova história, Co-op local (em breve), Continuar, Opções, Controles, Ajuda, Créditos e Sair.</summary>
+/// <summary>Tela de título: Nova história, Co-op local, Continuar, Opções, Controles, Ajuda, Créditos e Sair.</summary>
 public partial class TitleScreen : UiScreen
 {
     private const string Version = "v0.2.0-dev";
@@ -34,8 +34,7 @@ public partial class TitleScreen : UiScreen
 
         var buttons = new List<Control>();
         _newGame = AddMenuButton(menu, buttons, "Nova história", () => SceneRouter.Instance.Push(ScreenKeys.SlotsNew));
-        var coop = AddMenuButton(menu, buttons, "Co-op local (em breve)", () => { });
-        coop.Disabled = true;
+        AddMenuButton(menu, buttons, "Co-op local", () => SceneRouter.Instance.Push(new CoopJoinScreen()));
         _continue = AddMenuButton(menu, buttons, "Continuar", () => SceneRouter.Instance.Push(ScreenKeys.SlotsContinue));
         _continue.Disabled = !SaveService.HasAnySave();
         AddMenuButton(menu, buttons, "Opções", () => SceneRouter.Instance.Push(ScreenKeys.Options));

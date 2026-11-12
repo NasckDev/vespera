@@ -6,6 +6,7 @@ using Vespera.Game.Boot;
 using Vespera.Game.Combat;
 using Vespera.Game.Components;
 using Vespera.Game.Hunter;
+using Vespera.Game.Coop;
 using Vespera.Game.World.Rift;
 
 namespace Vespera.Game.World;
@@ -22,6 +23,9 @@ public partial class LevelWorld : Node2D
     private const float PracaPortalHeight = 250f;
     private const float VignetteEdge = 70f;
 
+    /// <summary>Velocidade máxima do puxão da coleira, em múltiplos da velocidade do caçador (suave, nunca um tranco).</summary>
+    private const float TetherMaxPull = 1.1f;
+
     private readonly LevelData _data;
     private readonly IReadOnlyDictionary<string, PropDef> _catalog;
     private readonly bool _withDirector;
@@ -31,6 +35,7 @@ public partial class LevelWorld : Node2D
     private readonly List<Enemy> _enemies = [];
     private readonly List<Npc> _npcs = [];
     private readonly List<Breakable> _breakables = [];
+    private readonly List<Player> _players = [];
     private Node2D _groundFx = null!;
     private Node2D _fx = null!;
 
@@ -48,7 +53,14 @@ public partial class LevelWorld : Node2D
 
     public Node2D Entities { get; private set; } = null!;
 
+    /// <summary>J1 (dono do save). No co-op, os outros estão em <see cref="Players"/>.</summary>
     public Player Player { get; private set; } = null!;
+
+    /// <summary>Todos os caçadores da sala, na ordem dos jogadores (J1, J2...).</summary>
+    public IReadOnlyList<Player> Players => _players;
+
+    /// <summary>Um caçador entrou (co-op: J2 chegou no meio do jogo).</summary>
+    public event System.Action<Player>? PlayerAdded;
 
     public CameraRig Camera { get; private set; } = null!;
 
@@ -57,6 +69,9 @@ public partial class LevelWorld : Node2D
     public CombatFeel Feel { get; private set; } = null!;
 
     public RoomDirector? Director { get; private set; }
+
+    /// <summary>Reanimar e queda do grupo no co-op (sem efeito com um jogador só).</summary>
+    public PartyDirector Party { get; private set; } = null!;
 
     public IReadOnlyList<Prop> Props => _props;
 
@@ -137,12 +152,14 @@ public partial class LevelWorld : Node2D
 
         Vespera.Game.Audio.MusicDirector.Play(_data.Id);
         SpawnNpcs();
-        Player = SpawnPlayer(MergedInput.LocalSolo(), SpawnPoint, RiftSession.Hunter);
+        SpawnParty();
         AddChild(new LevelVignette(Bounds, VignetteEdge * _data.ActorScale) { ZIndex = -9 });
-        Camera = new CameraRig(Player, Bounds, _data.ActorScale, _data.HumanHeight) { Name = "Camera" };
+        Camera = new CameraRig(_players, Bounds, _data.ActorScale, _data.HumanHeight) { Name = "Camera" };
         AddChild(Camera);
         Camera.MakeCurrent();
         Feel.Camera = Camera;
+        Party = new PartyDirector(this) { Name = "Party" };
+        AddChild(Party);
 
         if (RoomRift() is { } rift && _withDirector)
         {
@@ -161,9 +178,9 @@ public partial class LevelWorld : Node2D
             : _data.Rift;
 
     /// <summary>Cria um caçador no ponto (pé) dado; usado pelo jogador e pelos bots de teste.</summary>
-    public Player SpawnPlayer(IInputSource input, Vector2 feet, HunterClass hunter = HunterClass.Lamina)
+    public Player SpawnPlayer(IInputSource input, Vector2 feet, HunterClass hunter = HunterClass.Lamina, int slot = 0)
     {
-        var player = new Player(input, hunter, _data.ActorScale) { Name = $"Player_{Entities.GetChildCount()}", Position = feet, World = this };
+        var player = new Player(input, hunter, _data.ActorScale, slot) { Name = $"Player_{Entities.GetChildCount()}", Position = feet, World = this };
         Entities.AddChild(player);
         return player;
     }
@@ -186,14 +203,14 @@ public partial class LevelWorld : Node2D
         _fx.AddChild(arrow);
     }
 
-    /// <summary>Espalha <paramref name="count"/> Fragmentos em volta do ponto (cada um vale 1).</summary>
-    public void DropFragments(Vector2 at, int count, float spread = 60f)
+    /// <summary>Espalha <paramref name="count"/> Fragmentos em volta do ponto (cada um vale 1); no co-op só o dono os recolhe.</summary>
+    public void DropFragments(Vector2 at, int count, float spread = 60f, int owner = 0)
     {
         for (var i = 0; i < count; i++)
         {
             var angle = (Mathf.Tau * i / Mathf.Max(1, count)) + (GD.Randf() * 0.6f);
             var land = ClampToFloor(at + (Vector2.FromAngle(angle) * spread * _data.ActorScale * (0.5f + (0.5f * GD.Randf()))));
-            Entities.AddChild(new FragmentPickup(this, at, land) { Name = $"Fragment_{GetInstanceId()}_{i}" });
+            Entities.AddChild(new FragmentPickup(this, at, land, owner) { Name = $"Fragment_{GetInstanceId()}_{owner}_{i}" });
         }
     }
 

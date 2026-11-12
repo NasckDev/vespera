@@ -22,6 +22,9 @@ public enum HunterState
     Hurt,
     Swallowed,
     Dead,
+
+    /// <summary>Caído no co-op: espera um aliado reanimar (segurar interagir perto) ou a queda do grupo inteiro.</summary>
+    Downed,
 }
 
 /// <summary>
@@ -84,7 +87,13 @@ public sealed partial class HunterCombat : Node, IHittable
     /// <summary>Sem combate (bots de colisão, cutscene, painel aberto).</summary>
     public bool Disabled { get; set; }
 
-    public bool IsDead => State == HunterState.Dead;
+    /// <summary>Fora da luta: morto ou caído esperando reanimação (os monstros e o saque o ignoram).</summary>
+    public bool IsDead => State is HunterState.Dead or HunterState.Downed;
+
+    public bool IsDowned => State == HunterState.Downed;
+
+    /// <summary>Co-op dentro da Brecha: cair vira <see cref="HunterState.Downed"/> em vez de morrer (a fase liga isto).</summary>
+    public Func<bool>? CanGoDown { get; set; }
 
     /// <summary>Relógio do combate (segundos de jogo), usado pela fila do combo.</summary>
     public double Clock { get; private set; }
@@ -98,6 +107,9 @@ public sealed partial class HunterCombat : Node, IHittable
 
     /// <summary>Caiu: chamado depois da animação de morte (a fase decide a Lanterna e a volta).</summary>
     public event Action<HunterCombat>? Died;
+
+    /// <summary>Caiu no co-op (a fase confere se o grupo inteiro caiu).</summary>
+    public event Action<HunterCombat>? Downed;
 
     public override void _Ready()
     {
@@ -113,7 +125,7 @@ public sealed partial class HunterCombat : Node, IHittable
     /// <summary>Recalcula HP máximo, ataque, defesa e crítico pela progressão (rank, arma forjada, equipamento).</summary>
     public void RefreshStats(bool fullHeal)
     {
-        Stats = HunterStats.Compute(RiftSession.Db, RiftSession.Save, HunterSprites.WeaponId(_player.Hunter));
+        Stats = HunterStats.Compute(RiftSession.Db, RiftSession.Save, HunterSprites.WeaponId(_player.Hunter), _player.Slot);
         var soup = Hunter.HuntService.SoupActive ? Core.Hunt.RunPerks.SoupBonus(Stats.Hp) : 0;
         MaxHp = Math.Max(1, Stats.Hp + Hunter.HuntService.Bless.MaxHp + soup);
         Hp = fullHeal ? MaxHp : Math.Min(Hp, MaxHp);
@@ -144,6 +156,7 @@ public sealed partial class HunterCombat : Node, IHittable
         switch (State)
         {
             case HunterState.Dead:
+            case HunterState.Downed:
             case HunterState.Swallowed:
                 return new MotionOrder(0f, Vector2.Zero, true);
             case HunterState.Dodging:
@@ -260,6 +273,25 @@ public sealed partial class HunterCombat : Node, IHittable
         Enter(HunterState.Free);
     }
 
+    /// <summary>Reanimado por um aliado no co-op: levanta com <paramref name="hp"/> de vida e um instante invencível.</summary>
+    public void ReviveFromDown(int hp)
+    {
+        if (State != HunterState.Downed)
+        {
+            return;
+        }
+
+        Hp = Math.Clamp(hp, 1, MaxHp);
+        _stamina.Refill();
+        _player.Sprite.Visible = true;
+        _player.Sprite.Modulate = Colors.White;
+        _invulnerable = 1.5f;
+        Enter(HunterState.Free);
+        _player.PlayAnimation("parado", restart: true);
+        _player.Flash.Pulse(new Color(1f, 0.85f, 0.5f), 0.08f, 0.35f, 0.8f);
+        CombatSfx.Play(_player, CombatSound.Pickup, Vector2.Zero, 2f);
+    }
+
     /// <summary>Vida trazida da sala anterior.</summary>
     public void SetHp(int hp) => Hp = Math.Clamp(hp, 1, MaxHp);
 
@@ -368,6 +400,12 @@ public sealed partial class HunterCombat : Node, IHittable
 
     private void Die()
     {
+        if (CanGoDown?.Invoke() == true)
+        {
+            GoDown();
+            return;
+        }
+
         Moves.Cancel();
         Enter(HunterState.Dead);
         _player.Sprite.Modulate = Colors.White;
@@ -383,6 +421,18 @@ public sealed partial class HunterCombat : Node, IHittable
                 Died?.Invoke(this);
             }
         };
+    }
+
+    private void GoDown()
+    {
+        Moves.Cancel();
+        Enter(HunterState.Downed);
+        _player.Sprite.Visible = true;
+        _player.Sprite.Modulate = Colors.White;
+        _player.PlayAnimation("morte", restart: true);
+        _player.Feel?.Shake(0.5f);
+        CombatSfx.Play(_player, CombatSound.Fall, Vector2.Zero);
+        Downed?.Invoke(this);
     }
 
     private void Enter(HunterState state)

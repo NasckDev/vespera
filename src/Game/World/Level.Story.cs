@@ -22,6 +22,9 @@ public partial class Level
     private const string MapFlag = "mapa_lis";
     private const int SoupLumes = 6;
 
+    /// <summary>Altura do painel do J2 na HUD (o quadro do objetivo desce para baixo dele no co-op).</summary>
+    private const float GuestPanelHeight = 170f;
+
     private readonly List<string> _pendingEvents = [];
     private DialogueBox _box = null!;
     private StoryHud _storyHud = null!;
@@ -34,8 +37,12 @@ public partial class Level
 
     private bool DialogueBlocksInteraction => _box.IsOpen || _sceneBusy || _box.SecondsSinceClosed < DialogueCooldown;
 
-    /// <summary>Abre a fala <paramref name="id"/>; <paramref name="npc"/> (se houver) para e vira o rosto para o jogador.</summary>
-    public bool StartDialogue(string id, Npc? npc = null)
+    /// <summary>
+    /// Abre a fala <paramref name="id"/>; <paramref name="npc"/> (se houver) para e vira o rosto para quem puxou conversa. No
+    /// co-op qualquer jogador pode abrir (<paramref name="who"/>), todos ficam parados e a caixa mostra quem conversa; a
+    /// história só avança pelo save do J1 (dono).
+    /// </summary>
+    public bool StartDialogue(string id, Npc? npc = null, Player? who = null)
     {
         var runner = StoryService.StartDialogue(id);
         if (runner is null || _box.IsOpen)
@@ -44,11 +51,12 @@ public partial class Level
         }
 
         CloseReading();
-        Player.Frozen = true;
+        var speaker = who is not null && IsInstanceValid(who) ? who : Player;
+        SetPartyFrozen(true);
         _speaking = npc;
-        npc?.Hold(true, Player.GlobalPosition);
-        var deviceId = (Player.Input as MergedInput)?.DeviceId ?? Player.Input.DeviceId;
-        _box.Open(runner, StoryService.Script, InteractionHud.InteractKeyName(deviceId));
+        npc?.Hold(true, speaker.GlobalPosition);
+        _box.Open(runner, StoryService.Script, PartyInteractKeys());
+        _box.SetInitiator(IsCoop ? $"{Coop.CoopSession.TagOf(speaker.Slot)} · conversando" : null, Coop.CoopSession.ColorOf(speaker.Slot));
         return true;
     }
 
@@ -105,9 +113,10 @@ public partial class Level
     private void UpdateStory()
     {
         _storyHud.Visible = !_box.IsOpen && (!_sceneBusy || _freeRoam) && !RiftSession.InRift;
+        _storyHud.TopOffset = IsCoop ? GuestPanelHeight : 0f;
         if (_box.IsOpen)
         {
-            Player.Frozen = true;
+            SetPartyFrozen(true);
         }
     }
 
@@ -126,7 +135,7 @@ public partial class Level
 
     private void OnDialogueClosed()
     {
-        Player.Frozen = false;
+        SetPartyFrozen(false);
         ReleaseCamera();
         if (_speaking is { } speaker && IsInstanceValid(speaker))
         {

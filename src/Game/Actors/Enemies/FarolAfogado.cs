@@ -258,8 +258,7 @@ public partial class FarolAfogado(LevelWorld world) : Enemy("farol_afogado", wor
     /// <summary>Água: anda devagar onde está alagado; na fase 3 a ilha muda (aviso antes) e a maré machuca fora dela.</summary>
     private void TickTide(float dt)
     {
-        var player = World.Player;
-        if (player is null)
+        if (World.Players.Count == 0)
         {
             return;
         }
@@ -284,18 +283,39 @@ public partial class FarolAfogado(LevelWorld world) : Enemy("farol_afogado", wor
             }
         }
 
-        var at = player.GlobalPosition;
-        var wet = _flood.Flooded(at.X, at.Y, Phase, _dark);
-        player.Wade = wet ? WadeSlow : 1f;
-        if (Phase < 3 || !wet)
+        // No co-op a água vale para cada caçador; a maré da fase 3 machuca quem estiver fora da ilha.
+        var wetPlayers = new System.Collections.Generic.List<Player>();
+        foreach (var player in World.Players)
+        {
+            if (!IsInstanceValid(player))
+            {
+                continue;
+            }
+
+            var at = player.GlobalPosition;
+            var wet = _flood.Flooded(at.X, at.Y, Phase, _dark);
+            player.Wade = wet ? WadeSlow : 1f;
+            if (wet && !player.Combat.IsDead)
+            {
+                wetPlayers.Add(player);
+            }
+        }
+
+        if (Phase < 3 || wetPlayers.Count == 0)
         {
             return;
         }
 
         _tide -= dt;
-        if (_tide <= 0f)
+        if (_tide > 0f)
         {
-            _tide = TideTick;
+            return;
+        }
+
+        _tide = TideTick;
+        foreach (var player in wetPlayers)
+        {
+            var at = player.GlobalPosition;
             World.Feel.Spark(at, Sea, 8, 160f * A, Vector2.Up, 80f);
             StrikeCircle(at, 10f, 0.35, 0f);
         }
@@ -313,22 +333,25 @@ public partial class FarolAfogado(LevelWorld world) : Enemy("farol_afogado", wor
         _night = null;
         _water?.QueueFree();
         _water = null;
-        if (World.Player is { } player)
-        {
-            player.Wade = 1f;
-        }
-
+        DryAll();
         World.Feel.Shake(0.8f);
     }
 
     public override void _ExitTree()
     {
-        if (World.Player is { } player && IsInstanceValid(player))
-        {
-            player.Wade = 1f;
-        }
-
+        DryAll();
         base._ExitTree();
+    }
+
+    private void DryAll()
+    {
+        foreach (var player in World.Players)
+        {
+            if (IsInstanceValid(player))
+            {
+                player.Wade = 1f;
+            }
+        }
     }
 
     /// <summary>Água por cima do chão da arena: fase 2 o anel; fase 3 tudo menos a ilha seca.</summary>

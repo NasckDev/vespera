@@ -13,14 +13,17 @@ namespace Vespera.Game.Combat;
 /// </summary>
 public static class HunterStats
 {
-    public static PlayerStats Compute(GameDatabase db, SaveData save, string weaponId)
+    public static PlayerStats Compute(GameDatabase db, SaveData save, string weaponId) => Compute(db, save, weaponId, 0);
+
+    /// <summary>Atributos do jogador <paramref name="slot"/> (0 = J1 pela progressão do save; 1 = convidado do co-op).</summary>
+    public static PlayerStats Compute(GameDatabase db, SaveData save, string weaponId, int slot)
     {
         if (!Hunter.Progression.IsActive)
         {
             return new PlayerStatsCalculator(db).Compute(save);
         }
 
-        var engine = Hunter.Progression.Engine;
+        var engine = Coop.PartyProgression.EngineFor(slot) ?? Hunter.Progression.Engine;
         var rules = db.Rules.Stats;
         var gear = engine.Equipment().Total;
         var level = engine.Progress.WeaponLevels.GetValueOrDefault(weaponId, 1);

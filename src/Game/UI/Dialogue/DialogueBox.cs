@@ -51,6 +51,9 @@ public partial class DialogueBox : Control
     private float _typed;
     private int _total;
     private float _alpha;
+    private PanelContainer _who = null!;
+    private Label _whoLabel = null!;
+    private ulong _pressFrame = ulong.MaxValue;
 
     public event Action? Closed;
 
@@ -82,6 +85,7 @@ public partial class DialogueBox : Control
         Visible = false;
         BuildPanel();
         BuildPlate();
+        BuildWho();
         BuildChoices();
     }
 
@@ -144,6 +148,12 @@ public partial class DialogueBox : Control
         }
 
         GetViewport().SetInputAsHandled();
+        if (Engine.GetProcessFrames() == _pressFrame)
+        {
+            return;
+        }
+
+        _pressFrame = Engine.GetProcessFrames();
         if (Typing)
         {
             Complete();

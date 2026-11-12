@@ -5,6 +5,7 @@ using Vespera.Game.Actors;
 using Vespera.Game.Boot;
 using Vespera.Core.Story;
 using Vespera.Game.Combat;
+using Vespera.Game.Coop;
 using Vespera.Game.Story;
 using Vespera.Game.UI;
 using Vespera.Game.World.Rift;
@@ -63,7 +64,7 @@ public partial class Level
         }
 
         _switching = true;
-        World.Player.Frozen = true;
+        SetPartyFrozen(true);
         await FadeTo(1f);
         CloseReading();
 
@@ -96,6 +97,7 @@ public partial class Level
         if (_carriedHp is { } hp)
         {
             World.Player.Combat.SetHp(hp);
+            RestorePartyHp();
         }
 
         if (World.Director is { } director)
@@ -112,7 +114,8 @@ public partial class Level
 
     private void OnRoomExit()
     {
-        _carriedHp = World.Player.Combat.Hp;
+        _carriedHp = World.Player.Combat.IsDowned ? CoopSession.Rules.RevivedHp(World.Player.Combat.MaxHp) : World.Player.Combat.Hp;
+        CarryPartyHp();
         if (!RiftSession.IsLastRoom)
         {
             RiftSession.AdvanceRoom();
@@ -130,10 +133,13 @@ public partial class Level
         Hunter.HuntService.SetEndHp(combat.MaxHp <= 0 ? 0 : combat.Hp / (double)combat.MaxHp);
         var (end, summary) = RiftSession.EndRunWithSummary(survived: true, completed: true);
         _carriedHp = null;
+        _carriedHps.Clear();
         GameSession.Autosave();
+        var guest = RiftSession.GuestEnd is { } g ? $" {CoopSession.TagOf(1)}: +{g.FragmentosBanked}." : string.Empty;
+        var lead = IsCoop ? $"{CoopSession.TagOf(0)}: +" : "+";
         var toast = guardian
-            ? $"Brecha fechada! +{end?.FragmentosBanked ?? 0} Fragmentos levados para casa."
-            : $"Caçada completa! +{end?.FragmentosBanked ?? 0} Fragmentos levados para casa.";
+            ? $"Brecha fechada! {lead}{end?.FragmentosBanked ?? 0} Fragmentos levados para casa.{guest}"
+            : $"Caçada completa! {lead}{end?.FragmentosBanked ?? 0} Fragmentos levados para casa.{guest}";
         _ = ReturnToHub(toast, guardian ? $"{RiftSession.Brecha.Name} — fechada" : "De volta, inteiro", summary, guardian);
     }
 
@@ -174,6 +180,7 @@ public partial class Level
 
         // A arma do suporte (ROTEIRO-V2 §4.3) vale só na caçada: na volta o caçador está de novo com a arma equipada.
         RiftSession.Hunter = EquippedHunter;
+        CoopSession.ClearRunHunters();
         await GoToRoom(hub, spawn);
         if (summary is not null && ShowResults)
         {
@@ -185,7 +192,11 @@ public partial class Level
             }
         }
 
-        World.Player.Combat.Revive();
+        foreach (var p in World.Players)
+        {
+            p.Combat.Revive();
+        }
+
         CombatHud.ShowTitle(World.Data.Name, subtitle);
         CombatHud.Toast(toast);
         if (RiftSession.LanternFragments > 0)

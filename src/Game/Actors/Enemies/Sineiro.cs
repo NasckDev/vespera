@@ -23,6 +23,7 @@ public partial class Sineiro(LevelWorld world, float sizeFactor = 1f) : Enemy("s
 
     private float _cooldown;
     private float _stun;
+    private Player? _stunned;
     private TelegraphMarker? _marker;
 
     public float StartDelay { get; set; }
@@ -109,6 +110,7 @@ public partial class Sineiro(LevelWorld world, float sizeFactor = 1f) : Enemy("s
         {
             // Atordoado: preso no lugar um instante (anda a 20%).
             _stun = StunSeconds;
+            _stunned = target;
             target.Wade = StunSlow;
             World.Feel.Number(target.Combat.HitCenter - new Vector2(0, 30f * A), "atordoado", Bronze, 0.7f);
         }
@@ -122,9 +124,9 @@ public partial class Sineiro(LevelWorld world, float sizeFactor = 1f) : Enemy("s
         }
 
         _stun -= dt;
-        if (_stun <= 0f && World.Player is { } player)
+        if (_stun <= 0f)
         {
-            player.Wade = 1f;
+            ReleaseStunned();
         }
     }
 
@@ -142,9 +144,20 @@ public partial class Sineiro(LevelWorld world, float sizeFactor = 1f) : Enemy("s
     {
         _marker?.Release();
         _marker = null;
-        if (_stun > 0f && World.Player is { } player)
+        if (_stun > 0f)
+        {
+            ReleaseStunned();
+        }
+    }
+
+    /// <summary>Solta quem o sino atordoou (no co-op, o caçador que levou o golpe, não sempre o J1).</summary>
+    private void ReleaseStunned()
+    {
+        if (_stunned is { } player && IsInstanceValid(player))
         {
             player.Wade = 1f;
         }
+
+        _stunned = null;
     }
 }

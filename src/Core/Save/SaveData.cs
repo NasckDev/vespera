@@ -93,6 +93,12 @@ public sealed class SaveData
     /// <summary>Caçadas da Brecha (contratos, poções, flores, poço, caçadas completas). Saves sem o bloco carregam zerados.</summary>
     public Vespera.Core.Hunt.HuntState Hunt { get; set; } = new();
 
+    /// <summary>
+    /// Caçador convidado do co-op local (J2): progressão leve própria no mesmo espaço (o J1 é o dono da história e da
+    /// progressão principal). Campo opcional da versão 3: saves sem co-op não o têm e carregam com null.
+    /// </summary>
+    public Vespera.Core.Coop.GuestHunter? Guest { get; set; }
+
     public DateTimeOffset SavedAt { get; set; }
 
     /// <summary>Jogo novo (<c>newSave(name, cls)</c>, <c>core.js:208-212</c>): só a arma da classe, nível 1.</summary>

@@ -117,7 +117,7 @@ public partial class RankUpScreen : HunterScreen
         var color = RankColors.Of(_change.To);
         var step = engine.Catalog.Step(_change.To);
 
-        box.AddChild(UiKit.MakeLabel("Novo rank", UiTheme.DimVariation, HorizontalAlignment.Center));
+        box.AddChild(UiKit.MakeLabel(Game.Coop.CoopSession.Active ? "Novo rank do J1" : "Novo rank", UiTheme.DimVariation, HorizontalAlignment.Center));
         HeadlineText = $"Rank {_change.To}";
         var headline = UiKit.MakeLabel(HeadlineText, UiTheme.TitleVariation, HorizontalAlignment.Center);
         headline.AddThemeColorOverride("font_color", color.Lerp(Palette.Cream, 0.35f));

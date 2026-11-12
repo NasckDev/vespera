@@ -177,11 +177,11 @@ public partial class Level
     }
 
     /// <summary>Dormir na cama do quarto: só quando a manhã é o próximo passo da história (senão "ainda não é hora").</summary>
-    private void Sleep(Components.Interactable bed)
+    private void Sleep(Components.Interactable bed, Player? who = null)
     {
         if (StoryService.Engine.AutoplayFor(HubLevelId)?.Stage != "morning")
         {
-            OpenReading(bed, string.Empty, freeze: false);
+            OpenReading(bed, string.Empty, freeze: false, who);
             return;
         }
 

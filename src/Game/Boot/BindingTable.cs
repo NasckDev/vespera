@@ -25,6 +25,10 @@ public sealed class BindingTable
     private const int KeyEscape = 4194305, KeyTab = 4194306, KeyShift = 4194325;
     private const int KeyLeft = 4194319, KeyUp = 4194320, KeyRight = 4194321, KeyDown = 4194322;
 
+    // Teclado numérico (Godot.Key: KpEnter, KpMultiply, KpSubtract, KpPeriod, KpAdd, Kp0..Kp3) e Enter.
+    public const int KeyEnter = 4194309, KeyKpEnter = 4194310, KeyKpMultiply = 4194433, KeyKpSubtract = 4194435;
+    public const int KeyKpPeriod = 4194436, KeyKpAdd = 4194437, KeyKp0 = 4194438, KeyKp1 = 4194439, KeyKp2 = 4194440, KeyKp3 = 4194441;
+
     private readonly Dictionary<string, string[]> _slots = [];
 
     public static BindingTable Defaults()
@@ -47,7 +51,44 @@ public sealed class BindingTable
         return t;
     }
 
+    /// <summary>
+    /// Padrões do jogador 2 no co-op local: metade direita do teclado (setas + teclado numérico, Enter também interage) ou o
+    /// controle dele. As ações são as mesmas do jogador 1; só as teclas mudam.
+    /// </summary>
+    public static BindingTable DefaultsPlayer2()
+    {
+        var t = new BindingTable();
+        t.Set("move_up", $"key:{KeyUp}", Empty, "axis:1-");
+        t.Set("move_down", $"key:{KeyDown}", Empty, "axis:1+");
+        t.Set("move_left", $"key:{KeyLeft}", Empty, "axis:0-");
+        t.Set("move_right", $"key:{KeyRight}", Empty, "axis:0+");
+        t.Set("attack", $"key:{KeyKp1}", Empty, "pad:2");
+        t.Set("heavy", $"key:{KeyKp2}", Empty, "pad:3");
+        t.Set("dodge", $"key:{KeyKp0}", Empty, "pad:1");
+        t.Set("skill", $"key:{KeyKp3}", Empty, "axis:5+");
+        t.Set("interact", $"key:{KeyKpEnter}", $"key:{KeyEnter}", "pad:0");
+        t.Set("lantern", $"key:{KeyKpAdd}", Empty, "pad:10");
+        t.Set("inventory", $"key:{KeyKpPeriod}", Empty, "pad:4");
+        t.Set("journal", $"key:{KeyKpSubtract}", Empty, "pad:9");
+        t.Set("pause", $"key:{KeyKpMultiply}", Empty, "pad:6");
+        return t;
+    }
+
     public IEnumerable<string> Actions => _slots.Keys;
+
+    /// <summary>Verdadeiro se algum slot de teclado/mouse da tabela usa <paramref name="code"/>.</summary>
+    public bool UsesKeyboardCode(string code)
+    {
+        foreach (var slots in _slots.Values)
+        {
+            if (slots[(int)BindingSlot.Primary] == code || slots[(int)BindingSlot.Alternate] == code)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     public string Get(string action, BindingSlot slot) =>
         _slots.TryGetValue(action, out var s) ? s[(int)slot] : Empty;
@@ -111,9 +152,12 @@ public sealed class BindingTable
     }
 
     /// <summary>Aplica por cima dos padrões o que veio salvo; ações desconhecidas e tamanhos errados são ignorados.</summary>
-    public static BindingTable FromDictionary(IReadOnlyDictionary<string, string[]>? saved)
+    public static BindingTable FromDictionary(IReadOnlyDictionary<string, string[]>? saved) => FromDictionary(saved, Defaults());
+
+    /// <summary>Como <see cref="FromDictionary(IReadOnlyDictionary{string, string[]}?)"/>, por cima de outros padrões (jogador 2).</summary>
+    public static BindingTable FromDictionary(IReadOnlyDictionary<string, string[]>? saved, BindingTable defaults)
     {
-        var table = Defaults();
+        var table = defaults;
         if (saved is null)
         {
             return table;

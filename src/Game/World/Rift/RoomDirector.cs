@@ -80,6 +80,12 @@ public partial class RoomDirector : Node
     /// <summary>A lanterna de descanso ainda não foi usada.</summary>
     public bool RestAvailable => _rest is not null;
 
+    /// <summary>Monstros da última onda solta (com os extras do co-op), para os bots conferirem a escala.</summary>
+    public int LastWaveSize { get; private set; }
+
+    /// <summary>Tamanho da onda no dado da sala (sem co-op).</summary>
+    public int BaseWaveSize(int index) => index >= 0 && index < _data.Waves.Count ? _data.Waves[index].Count : 0;
+
     /// <summary>O caçador saiu da sala (passagem ou fenda).</summary>
     public event Action? ExitRequested;
 
@@ -255,33 +261,50 @@ public partial class RoomDirector : Node
         return _world.Catalog.ContainsKey(own) ? own : _world.Catalog.ContainsKey(StandProp) ? StandProp : null;
     }
 
-    /// <summary>Pega a arma do suporte: troca a folha e os golpes do caçador até o fim da caçada.</summary>
-    public bool TakeStandWeapon()
+    /// <summary>
+    /// Pega a arma do suporte: troca a folha e os golpes de quem pegou (<paramref name="taker"/>; o J1 sem ninguém) até o
+    /// fim da caçada. No co-op a troca do J2 fica na sessão, não no save do J1.
+    /// </summary>
+    public bool TakeStandWeapon(Actors.Player? taker = null)
     {
-        if (WeaponStand is not { } stand || _world.Player is not { } player)
+        var player = taker ?? _world.Player;
+        if (WeaponStand is not { } stand || player is null)
         {
             return false;
         }
 
         var hunter = RiftSession.HunterFor(stand.Target);
-        RiftSession.Hunter = hunter;
+        if (player.Slot == 0)
+        {
+            RiftSession.Hunter = hunter;
+        }
+        else
+        {
+            Coop.CoopSession.SetRunHunter(player.Slot, hunter);
+        }
+
         player.SetHunter(hunter);
         stand.QueueFree();
         WeaponStand = null;
-        _world.Feel.Toast($"Você pegou o {Actors.HunterSprites.DisplayName(hunter)}. Só nesta caçada.");
+        var who = _world.Players.Count > 1 ? $"{Coop.CoopSession.TagOf(player.Slot)} pegou" : "Você pegou";
+        _world.Feel.Toast($"{who} o {Actors.HunterSprites.DisplayName(hunter)}. Só nesta caçada.");
         return true;
     }
 
     /// <summary>Usa a lanterna de descanso: cura parte da vida máxima (uma vez por sala).</summary>
     public bool UseRest()
     {
-        if (_rest is null || _world.Player is not { } player)
+        if (_rest is null || _world.Player is null)
         {
             return false;
         }
 
-        var combat = player.Combat;
-        combat.Heal((int)System.Math.Round(combat.MaxHp * HuntService.Config.RestHealPct));
+        // No co-op a lanterna aquece o grupo inteiro (quem está de pé).
+        foreach (var player in StandingPlayers())
+        {
+            player.Combat.Heal((int)System.Math.Round(player.Combat.MaxHp * HuntService.Config.RestHealPct));
+        }
+
         _rest.QueueFree();
         _rest = null;
         LightRestLamp();
@@ -302,10 +325,12 @@ public partial class RoomDirector : Node
             _bossSeconds += dt;
         }
 
-        if (Cleared && !_exitSent && _data.Exit is { } exit && _world.Player is { } player)
+        if (Cleared && !_exitSent && _data.Exit is { } exit)
         {
+            // Qualquer caçador de pé na passagem leva o grupo inteiro para a próxima sala.
             var t = exit.Trigger;
-            if (new Rect2(t[0], t[1], t[2], t[3]).HasPoint(player.GlobalPosition))
+            var area = new Rect2(t[0], t[1], t[2], t[3]);
+            if (_world.Players.Any(p => IsInstanceValid(p) && !p.Combat.IsDead && area.HasPoint(p.GlobalPosition)))
             {
                 RequestExit();
             }
@@ -354,10 +379,22 @@ public partial class RoomDirector : Node
 
         var wave = _data.Waves[_nextWave++];
         _waveOut = true;
-        for (var i = 0; i < wave.Count; i++)
+
+        // Co-op: +1 monstro por jogador além do primeiro (data/coop.json); os extras repetem os da onda, um pouco ao lado.
+        var size = Coop.CoopSession.Rules.WaveSize(wave.Count, Coop.CoopSession.PlayerCount);
+        for (var i = 0; i < size; i++)
         {
-            SpawnWithWarning(wave[i], i * 0.18f);
+            var spawn = wave[i % wave.Count];
+            if (i >= wave.Count)
+            {
+                var offset = Vector2.FromAngle(i * 2.4f) * 0.8f * _world.Data.HumanHeight;
+                spawn = new SpawnData { Type = spawn.Type, At = [spawn.At[0] + offset.X, spawn.At[1] + offset.Y] };
+            }
+
+            SpawnWithWarning(spawn, i * 0.18f);
         }
+
+        LastWaveSize = size;
 
         _timer = WaveGap;
         if (wave.Any(w => w.Elite))
@@ -458,11 +495,20 @@ public partial class RoomDirector : Node
         }
     }
 
+    /// <summary>Caçadores de pé na sala (no solo, só o J1).</summary>
+    private System.Collections.Generic.IEnumerable<Actors.Player> StandingPlayers() =>
+        _world.Players.Where(p => IsInstanceValid(p) && !p.Combat.IsDead);
+
     /// <summary>Bênção da Sopa "Prato Cheio": cura ao limpar a sala.</summary>
     private void HealOnClear()
     {
         var pct = HuntService.Bless.HealOnClearPct;
-        if (pct > 0 && _world.Player is { } player)
+        if (pct <= 0)
+        {
+            return;
+        }
+
+        foreach (var player in StandingPlayers())
         {
             player.Combat.Heal((int)System.Math.Round(player.Combat.MaxHp * pct / 100));
         }
@@ -479,14 +525,17 @@ public partial class RoomDirector : Node
         var offer = HuntService.OfferBlessings();
         Hunt.BlessingScreen.Show(offer, id =>
         {
-            var player = _world.Player;
-            var before = player.Combat.MaxHp;
+            // A bênção é da caçada do grupo: vale para todos os caçadores da sala.
+            var before = _world.Players.Where(IsInstanceValid).ToDictionary(p => p, p => p.Combat.MaxHp);
             HuntService.AddBlessing(id);
-            player.Combat.RefreshStats(fullHeal: false);
-            var gained = player.Combat.MaxHp - before;
-            if (gained > 0)
+            foreach (var (player, maxBefore) in before)
             {
-                player.Combat.Heal(gained);
+                player.Combat.RefreshStats(fullHeal: false);
+                var gained = player.Combat.MaxHp - maxBefore;
+                if (gained > 0 && !player.Combat.IsDead)
+                {
+                    player.Combat.Heal(gained);
+                }
             }
 
             var name = HuntService.BlessingCatalog.Find(id)?.Name ?? id;

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 using Vespera.Game.World;
 
@@ -18,7 +19,7 @@ public partial class LanternGloom : Node2D
 
     private readonly LevelWorld _world;
     private CanvasModulate? _modulate;
-    private PointLight2D? _light;
+    private readonly Dictionary<Player, PointLight2D> _lights = [];
     private float _wanted;
     private float _wantedRadius = 3f;
     private float _darkness;
@@ -68,8 +69,7 @@ public partial class LanternGloom : Node2D
         {
             _modulate?.QueueFree();
             _modulate = null;
-            _light?.QueueFree();
-            _light = null;
+            ClearLights();
             return;
         }
 
@@ -80,27 +80,45 @@ public partial class LanternGloom : Node2D
         }
 
         _modulate.Color = Colors.White.Lerp(Dark, _darkness);
-        if (_world.Player is not { } player || !IsInstanceValid(player))
-        {
-            return;
-        }
-
-        if (_light is null || !IsInstanceValid(_light) || _light.GetParent() != player)
-        {
-            _light = new PointLight2D { Name = "LuzDaLanterna", Texture = Glow(), Color = new Color("f2a541") };
-            player.AddChild(_light);
-        }
-
+        // Cada caçador leva a própria lanterna (no co-op, o J2 também enxerga em volta de si).
         var human = _world.Data.HumanHeight;
-        _light.Position = new Vector2(0, -human * 0.5f);
-        _light.Energy = 0.9f * _darkness;
-        _light.TextureScale = _radius * human / 128f;
+        foreach (var player in _world.Players)
+        {
+            if (!IsInstanceValid(player))
+            {
+                continue;
+            }
+
+            if (!_lights.TryGetValue(player, out var light) || !IsInstanceValid(light))
+            {
+                light = new PointLight2D { Name = "LuzDaLanterna", Texture = Glow(), Color = new Color("f2a541") };
+                player.AddChild(light);
+                _lights[player] = light;
+            }
+
+            light.Position = new Vector2(0, -human * 0.5f);
+            light.Energy = 0.9f * _darkness;
+            light.TextureScale = _radius * human / 128f;
+        }
+    }
+
+    private void ClearLights()
+    {
+        foreach (var light in _lights.Values)
+        {
+            if (IsInstanceValid(light))
+            {
+                light.QueueFree();
+            }
+        }
+
+        _lights.Clear();
     }
 
     public override void _ExitTree()
     {
         _modulate?.QueueFree();
-        _light?.QueueFree();
+        ClearLights();
     }
 
     /// <summary>Brilho redondo (centro claro, borda some) de 256 px.</summary>

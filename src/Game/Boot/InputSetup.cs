@@ -7,7 +7,8 @@ namespace Vespera.Game.Boot;
 
 /// <summary>
 /// Cria as ações nomeadas na <c>InputMap</c> (teclado, mouse e controle), aplica o remapeamento do jogador
-/// e o persiste em <c>user://bindings.json</c>. As ações <c>ui_*</c> são as da engine.
+/// e o persiste em <c>user://bindings.json</c>. As ações <c>ui_*</c> são as da engine. O jogador 2 do co-op local tem a
+/// tabela dele (<see cref="Player2Table"/>, mesmo arquivo); ela não entra na <c>InputMap</c>: a fonte de input dele lê direto.
 /// </summary>
 public static class InputSetup
 {
@@ -26,30 +27,50 @@ public static class InputSetup
 
     public static BindingTable Table { get; private set; } = BindingTable.Defaults();
 
+    /// <summary>Teclas do jogador 2 (metade direita do teclado ou o controle dele).</summary>
+    public static BindingTable Player2Table { get; private set; } = BindingTable.DefaultsPlayer2();
+
+    /// <summary>Tabela do jogador <paramref name="player"/> (0 = J1, 1+ = J2).</summary>
+    public static BindingTable TableFor(int player) => player <= 0 ? Table : Player2Table;
+
     public static event Action? Changed;
 
     public static void Initialize()
     {
-        Table = Load();
+        (Table, Player2Table) = Load();
         Apply();
     }
 
-    public static string? Assign(string action, BindingSlot slot, string code)
+    public static string? Assign(string action, BindingSlot slot, string code) => Assign(0, action, slot, code);
+
+    public static string? Assign(int player, string action, BindingSlot slot, string code)
     {
-        var conflict = Table.Assign(action, slot, code);
+        var conflict = TableFor(player).Assign(action, slot, code);
         CommitChange();
         return conflict;
     }
 
-    public static void Clear(string action, BindingSlot slot)
+    public static void Clear(string action, BindingSlot slot) => Clear(0, action, slot);
+
+    public static void Clear(int player, string action, BindingSlot slot)
     {
-        Table.Clear(action, slot);
+        TableFor(player).Clear(action, slot);
         CommitChange();
     }
 
-    public static void ResetToDefaults()
+    public static void ResetToDefaults() => ResetToDefaults(0);
+
+    public static void ResetToDefaults(int player)
     {
-        Table = BindingTable.Defaults();
+        if (player <= 0)
+        {
+            Table = BindingTable.Defaults();
+        }
+        else
+        {
+            Player2Table = BindingTable.DefaultsPlayer2();
+        }
+
         CommitChange();
     }
 
@@ -134,29 +155,29 @@ public static class InputSetup
         Changed?.Invoke();
     }
 
-    private static BindingTable Load()
+    private static (BindingTable, BindingTable) Load()
     {
         var json = UserFile.ReadText(UserPaths.BindingsFile);
         if (json is null)
         {
-            return BindingTable.Defaults();
+            return (BindingTable.Defaults(), BindingTable.DefaultsPlayer2());
         }
 
         try
         {
             var file = JsonSerializer.Deserialize<BindingsFile>(json);
-            return BindingTable.FromDictionary(file?.Actions);
+            return (BindingTable.FromDictionary(file?.Actions), BindingTable.FromDictionary(file?.Player2, BindingTable.DefaultsPlayer2()));
         }
         catch (JsonException ex)
         {
             Log.Warn($"bindings.json inválido, usando padrões: {ex.Message}");
-            return BindingTable.Defaults();
+            return (BindingTable.Defaults(), BindingTable.DefaultsPlayer2());
         }
     }
 
     private static void Save()
     {
-        var file = new BindingsFile { Version = FileVersion, Actions = Table.ToDictionary() };
+        var file = new BindingsFile { Version = FileVersion, Actions = Table.ToDictionary(), Player2 = Player2Table.ToDictionary() };
         UserFile.WriteText(UserPaths.BindingsFile, JsonSerializer.Serialize(file, new JsonSerializerOptions { WriteIndented = true }));
     }
 
@@ -165,5 +186,8 @@ public static class InputSetup
         public int Version { get; set; }
 
         public Dictionary<string, string[]> Actions { get; set; } = [];
+
+        /// <summary>Teclas do jogador 2 do co-op local (ausente em arquivos antigos: padrões).</summary>
+        public Dictionary<string, string[]>? Player2 { get; set; }
     }
 }

@@ -48,6 +48,7 @@ public partial class SineiroMudo(LevelWorld world) : Enemy("sineiro_mudo", world
     private float _air = -1f;
     private double _wingDamage;
     private float _held;
+    private Player? _heldPlayer;
     private bool _silenced;
     private StoneWord? _word;
 
@@ -340,10 +341,12 @@ public partial class SineiroMudo(LevelWorld world) : Enemy("sineiro_mudo", world
             marker.Release();
             _ropes.RemoveAt(i);
             DrawRope(at);
-            if (StrikeCircle(at, RopeRadius * A, 0.7, 0f) && Target is { } target)
+            if (StrikeCircle(at, RopeRadius * A, 0.7, 0f) && World.NearestHunter(at) is { } target)
             {
-                // Preso pela corda: quase não anda por um instante.
+                // Preso pela corda: quase não anda por um instante (no co-op, quem estava sob a corda).
+                ReleaseHeld();
                 _held = RopeHold;
+                _heldPlayer = target;
                 target.Wade = RopeSlow;
                 World.Feel.Number(target.Combat.HitCenter - new Vector2(0, 30f * A), "preso", Amber, 0.7f);
             }
@@ -374,10 +377,20 @@ public partial class SineiroMudo(LevelWorld world) : Enemy("sineiro_mudo", world
         }
 
         _held -= dt;
-        if (_held <= 0f && World.Player is { } player)
+        if (_held <= 0f)
+        {
+            ReleaseHeld();
+        }
+    }
+
+    private void ReleaseHeld()
+    {
+        if (_heldPlayer is { } player && IsInstanceValid(player))
         {
             player.Wade = 1f;
         }
+
+        _heldPlayer = null;
     }
 
     protected override void OnHurt(in HitInfo hit)
@@ -415,10 +428,7 @@ public partial class SineiroMudo(LevelWorld world) : Enemy("sineiro_mudo", world
     {
         base._ExitTree();
         EndSilence();
-        if (_held > 0f && World.Player is { } player && IsInstanceValid(player))
-        {
-            player.Wade = 1f;
-        }
+        ReleaseHeld();
     }
 
     private void EndSilence()
@@ -442,11 +452,7 @@ public partial class SineiroMudo(LevelWorld world) : Enemy("sineiro_mudo", world
         _diveMarker?.Release();
         _air = -1f;
         Sprite.Position = Vector2.Zero;
-        if (_held > 0f && World.Player is { } player)
-        {
-            player.Wade = 1f;
-        }
-
+        ReleaseHeld();
         _held = 0f;
         EndSilence();
         World.Feel.Shake(0.8f);
