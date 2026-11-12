@@ -286,6 +286,9 @@ public partial class Level : Control
             case "bed":
                 Sleep(item, player);
                 return;
+            case "canteiro":
+                OpenCanteiro(item);
+                return;
             case "rest":
                 if (World.Director?.UseRest() == true)
                 {

@@ -68,6 +68,9 @@ public static class StoryFlags
     /// <summary>Evento: abrir a tela de contratos do mural.</summary>
     public const string EventOpenContracts = "OpenContracts";
 
+    /// <summary>Evento: abrir a feira da Nilza (receitas e pratos da Horta, Ato II).</summary>
+    public const string EventOpenFeira = "OpenFeira";
+
     /// <summary>Prefixo das flags de dicas já mostradas ("hint_move", "hint_attack"...). Ficam no save junto das flags da história.</summary>
     public const string HintPrefix = "hint_";
 

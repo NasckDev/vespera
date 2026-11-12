@@ -24,6 +24,9 @@ public enum FeiraResult
 /// </summary>
 public sealed class HortaRules(HortaDef def)
 {
+    /// <summary>Flag da história que abre a Horta e a feira: a Dona Celeste pede ajuda no Pomar Alto (Ato II).</summary>
+    public const string UnlockFlag = "met_celeste";
+
     public HortaDef Def { get; } = def;
 
     public PlotStatus StatusOf(PlotState plot)
@@ -144,5 +147,50 @@ public sealed class HortaRules(HortaDef def)
         var dish = Def.Dish(state.Meal);
         state.Meal = null;
         return dish;
+    }
+
+    /// <summary>Texto do aviso de interação do canteiro <paramref name="index"/> (0 a 5): plantar, esperar ou colher.</summary>
+    public string PlotPrompt(PlotState plot, int index)
+    {
+        if (plot.Seed is null || Def.Seed(plot.Seed) is not { } seed)
+        {
+            return $"Plantar no canteiro {index + 1}";
+        }
+
+        if (StatusOf(plot) == PlotStatus.Ready)
+        {
+            return $"Colher {seed.Name} ({seed.Yield})";
+        }
+
+        var left = DaysLeft(plot);
+        return $"{seed.Name}: falta {left} {(left == 1 ? "volta" : "voltas")} da Brecha";
+    }
+
+    /// <summary>Ingredientes colhidos numa linha ("Abóbora-roxa x2, Raiz-doce x1") ou "vazia".</summary>
+    public string PantryText(HortaState state)
+    {
+        var items = Def.Seeds.Where(s => state.Count(s.Id) > 0).Select(s => $"{s.Name} x{state.Count(s.Id)}").ToList();
+        return items.Count == 0 ? "vazia" : string.Join(", ", items);
+    }
+
+    /// <summary>Ingredientes do prato com o que já há na despensa ("Abóbora-roxa 1/2").</summary>
+    public string IngredientsText(HortaState state, DishDef dish) =>
+        string.Join(", ", dish.Ingredients.Select(kv => $"{Def.Seed(kv.Key)?.Name ?? kv.Key} {Math.Min(state.Count(kv.Key), kv.Value)}/{kv.Value}"));
+
+    /// <summary>Frase para o jogador depois de comprar ou cozinhar na feira.</summary>
+    public static string FeiraMessage(FeiraResult result, DishDef? dish, bool cooking)
+    {
+        var name = dish?.Name ?? "prato";
+        return result switch
+        {
+            FeiraResult.Ok when cooking => $"Prato pronto: {name}. Vale na próxima caçada.",
+            FeiraResult.Ok => $"Receita aprendida: {name}. -{dish?.Price ?? 0} Lumes",
+            FeiraResult.AlreadyLearned => "Essa receita você já tem.",
+            FeiraResult.NotLearned => "Compre a receita da Nilza primeiro.",
+            FeiraResult.NoMoney => $"A receita custa {dish?.Price ?? 0} Lumes.",
+            FeiraResult.MissingIngredients => "Faltam ingredientes da Horta.",
+            FeiraResult.MealAlreadyReady => "Já tem um prato pronto para a próxima caçada.",
+            _ => "A Nilza não conhece esse prato.",
+        };
     }
 }

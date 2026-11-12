@@ -46,6 +46,12 @@ public partial class Level
     private async Task EnterFirstRoom(int recovered)
     {
         await GoToRoom(RiftSession.CurrentRoom);
+        if (Hunter.HuntService.Dish is { } dish)
+        {
+            // O prato da Horta é comido ao entrar (BeginRun) e vale até a Brecha fechar.
+            CombatHud.Toast($"Você comeu: {dish.Name}.");
+        }
+
         if (recovered > 0)
         {
             // ROTEIRO-V2 §6.1: pegar a Lanterna de volta dá a bênção Teimosia (+10% de dano até fechar a Brecha).

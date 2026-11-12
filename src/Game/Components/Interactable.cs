@@ -31,6 +31,9 @@ public partial class Interactable : Area2D
     /// <summary>Fala (data/dialogue) aberta ao interagir; vazio = comportamento do <see cref="Kind"/>.</summary>
     public string Dialogue { get; set; } = string.Empty;
 
+    /// <summary>Número do canteiro da Horta (zona "canteiro"); -1 nas demais interações.</summary>
+    public int Index { get; set; } = -1;
+
     /// <summary>Fase de destino de uma saída com transição; vazio = trancada.</summary>
     public string Target { get; set; } = string.Empty;
 

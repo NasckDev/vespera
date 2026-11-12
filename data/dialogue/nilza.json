@@ -63,6 +63,13 @@
           "next": "compra"
         },
         {
+          "text": "Ver a feira (receitas e pratos).",
+          "if": [
+            "met_celeste"
+          ],
+          "next": "feira"
+        },
+        {
           "text": "Perguntar mais",
           "next": "nm1"
         },
@@ -85,6 +92,14 @@
       "text": "Deixa eu ver o que tem no caldeirão.",
       "events": [
         "BuyPotion"
+      ]
+    },
+    "feira": {
+      "speaker": "nilza",
+      "expression": 2,
+      "text": "Trouxe a colheita da Celeste? Compra a receita, eu cozinho. Prato pronto vale na próxima Brecha.",
+      "events": [
+        "OpenFeira"
       ]
     },
     "tchau": {

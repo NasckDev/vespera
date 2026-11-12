@@ -181,6 +181,10 @@ public partial class Level
             {
                 Hunt.ContractsScreen.Show();
             }
+            else if (name == StoryFlags.EventOpenFeira)
+            {
+                OpenFeira();
+            }
             else if (name == StoryFlags.EventGivePotion)
             {
                 GiftPotion();
