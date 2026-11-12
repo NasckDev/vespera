@@ -81,8 +81,15 @@ flowchart LR
 | Modo | O que é | Quando |
 |---|---|---|
 | 📖 **História** | Campanha solo da chegada a Lumeira até o Alvor | beta v2 |
-| 👥 **Co-op local** | 2 jogadores no mesmo PC (teclado + gamepad ou 2 gamepads), câmera compartilhada | beta v2 |
-| 🌐 **Co-op online** | 2 a 4 caçadores, um jogador hospeda; loot individual, Lanterna recuperável pelos amigos | depois da beta |
+| 👥 **Co-op local** | 2 jogadores no mesmo PC (teclado + gamepad ou 2 gamepads), câmera compartilhada. Título → **Co-op local**; no meio do jogo, pausa → **Chamar J2** | ✅ na v2 |
+| 🌐 **Co-op online** | Um jogador hospeda (**Online → Hospedar**, porta padrão 24680) e o outro entra com IP e porta (**Online → Entrar**). Hoje só o protocolo existe (mensagens, estado do mundo, suavização, com testes); a conexão e os botões ainda não | 🚧 em construção |
+
+### Novidades da v2
+
+- **Conjuntos de Guardião:** 8 conjuntos de 4 peças, um por Guardião, com bônus em 2 peças e efeito de combate em 4.
+- **Ecos:** os 7 Ecos funcionam em combate, cada um com efeito próprio, e o **2º slot de Eco** abre no Ato V com tecla própria (Eco 2).
+- **Horta (em construção):** regras de canteiros, sementes e pratos da Nilza prontas; os canteiros no mundo ainda não.
+- **Correções:** save gravado com cópia de segurança, exames S e SSS, Elite Gêmeo do tipo certo, ajuda, Diário com rolagem, tecla de poção real no HUD, poção do J2, confirmação ao pular conversa e atlas grandes comprimidos (menos memória de vídeo).
 
 Menu completo desde a primeira tela: nova história, continuar, opções (som, vídeo, tremor de tela, reduzir flashes,
 tamanho do texto), **controles remapeáveis** (teclado, mouse e gamepad) e **ajuda / como jogar**.
@@ -152,7 +159,7 @@ Vencer o Reflexo encerra a **Parte 1**. A história continua na **Parte 2**.
 | 5 | NPCs da cidade e suas funções | ⏳ |
 | 6 | Falas e campanha completa | ⏳ |
 | 7 | Lâmina, Arco e Martelo com os 5 estágios de evolução | ⏳ |
-| 8 | Co-op local, depois online | ⏳ |
+| 8 | Co-op local (pronto), depois online (protocolo pronto, rede em construção) | 🚧 |
 | 9 | **Beta pública**: balanceamento, acessibilidade, instalador | ⏳ |
 
 Cada camada só é dada como pronta depois de testes automáticos **e** de uma rodada de testes jogando de verdade.

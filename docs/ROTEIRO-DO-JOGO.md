@@ -440,9 +440,28 @@ Aparecem só as opções que o jogador **mereceu**; tocar com o jogador está se
 
 **Salas da Brecha.** Cada caçada sorteia 5 a 7 salas: combate, elite, tesouro (baú), descanso (lanterna que cura metade da vida) e, no fim, o Guardião. Nunca o Guardião antes do número de caçadas exigido pela Brecha.
 
-**Forja e armas (Odete).** Três armas, cada uma com nome próprio por rank (exemplo da Lâmina: Enferrujada, da Forja, do Pomar, da Maré, de Vela, do Sino, de Duas Vésperas, do Avesso, do Alvor). Cada rank tem 2 níveis de melhoria, pagos com Fragmentos mais materiais do rank (e de Guardião na troca de degrau). Trocar de arma custa Fragmento. Os Guardiões deixam material garantido e 30% de chance de peça de conjunto (hoje só existe o **Conjunto da Lodo-Mãe**: Capuz de Louça Trincada, Peitoral de Talheres, Luvas de Gel Seco, Botas de Lodo Curtido). O saque de uma Brecha de rank R é 80% do rank R, 15% do seguinte e 5% de peça rara.
+**Forja e armas (Odete).** Três armas, cada uma com nome próprio por rank (exemplo da Lâmina: Enferrujada, da Forja, do Pomar, da Maré, de Vela, do Sino, de Duas Vésperas, do Avesso, do Alvor). Cada rank tem 2 níveis de melhoria, pagos com Fragmentos mais materiais do rank (e de Guardião na troca de degrau). Trocar de arma custa Fragmento. Os Guardiões deixam material garantido e 30% de chance de peça de conjunto (veja **Conjuntos de Guardião** logo abaixo). O saque de uma Brecha de rank R é 80% do rank R, 15% do seguinte e 5% de peça rara.
 
-**Ecos.** Um por Guardião: Viscoso (Lodo-Mãe), da Semente (Macieira), do Farol, da Vela, do Sino, do Lar (Inquilino) e do Avesso (Reflexo). O Vigia libera o primeiro slot (Ato IV).
+**Conjuntos de Guardião.** Cada um dos 8 Guardiões (Lodo-Mãe, Macieira Oca, Farol Afogado, Velória, Sineiro Mudo, Inquilino, Guardião Revertido e Reflexo) tem um conjunto de 4 peças (cabeça, peito, mãos, botas). Com 2 peças vestidas vem um bônus pequeno (ex.: Lodo-Mãe deixa o caçador imune a lentidão; Macieira cura um pouco a cada monstro derrotado; Farol dá mais tempo de invencibilidade na esquiva). Com as 4 vem um efeito de combate: o rastro da esquiva vira gel que prende (Lodo-Mãe), espinhos quando você é ferido (Macieira), clarão que prende (Farol), uma vez por sala o golpe fatal deixa 1 de vida (Velória), badalada a cada 6 golpes (Sineiro), menos 20% de dano recebido (Inquilino), golpe que às vezes se repete (Revertido) e dano devolvido (Reflexo). Os números ainda são de teste e precisam de partida de verdade.
+
+**Ecos.** Um por Guardião, e agora todos funcionam em combate (antes só o Viscoso fazia algo):
+- **Viscoso** (Lodo-Mãe): avanço que deixa um rastro de lodo que deixa os monstros lentos.
+- **da Semente** (Macieira): planta uma muda que atira espinhos por 10 s.
+- **do Farol**: feixe que puxa os monstros para um ponto e os deixa lentos.
+- **da Vela** (Velória): cura metade da vida em 6 s, mas o rank fica um nível abaixo enquanto dura.
+- **do Sino** (Sineiro Mudo): anel que atordoa tudo em volta por 2 s (Guardiões ficam menos tempo).
+- **do Lar** (Inquilino): abrigo de 3 s onde ninguém leva dano (vale para os dois jogadores no co-op).
+- **do Avesso** (Reflexo): um clone seu luta ao seu lado por 8 s.
+
+O Vigia libera o primeiro slot (Ato IV). O **segundo slot** abre no Ato V, na conversa com o Benício: ele recebe o Eco mais recente e tem tecla própria (**Eco 2**, `Z` no teclado). Os dois ícones aparecem embaixo da tela com a recarga girando.
+
+**Horta (em construção).** As regras já existem: 6 canteiros, 3 sementes (Abóbora-roxa, Erva-de-lanterna, Raiz-doce) que crescem a cada volta da Brecha, e 3 pratos da Nilza (Sopa de Abóbora-roxa, Chá de Erva-de-lanterna, Ensopado de Raiz-doce) que dão um bônus na caçada seguinte e aparecem no HUD. Ainda **não dá para usar jogando**: faltam os canteiros no Pomar Alto, a tela de sementes e a feira da Nilza.
+
+**Co-op local.** Dois jogadores no mesmo PC (teclado + controle, metade do teclado cada, ou dois controles). No título: **Co-op local**, cada um aperta um botão no próprio aparelho, escolhe a classe e confirma. No meio do jogo: pausa → **Chamar J2** (só fora da Brecha). Cada jogador tem a própria progressão, conjuntos e Ecos. O J2 também tem tecla de poção (Num 4).
+
+**Co-op online (em construção).** Só a parte invisível ficou pronta: as mensagens entre os dois PCs, o estado que o anfitrião manda e a suavização no convidado, com testes. **Ainda não dá para hospedar nem entrar numa partida**: faltam a conexão de rede, os botões **Online → Hospedar / Entrar** no título e a tela do convidado. Quando ficar pronto, o anfitrião escolhe Hospedar (o jogo mostra o IP e a porta, padrão 24680) e o amigo escolhe Entrar e digita esse IP e porta.
+
+**Correções desta rodada.** O save agora é gravado de forma segura (arquivo temporário + cópia `.bak`; se o principal estragar, o jogo usa a cópia). Os exames S e SSS passaram a valer (antes o rank travava em S). O Elite Gêmeo nasce do mesmo tipo do monstro original. A ajuda mostra Beber poção e Diário; o Diário rola com setas e PageUp/PageDown; a tecla de poção no HUD mostra a tecla real do aparelho; pular conversa pede um segundo Esc; o fim da Parte 1 aceita clique; as opções dão a volta do máximo ao mínimo. Os desenhos grandes dos chefes e armas passaram a ser comprimidos na placa de vídeo (bem menos memória), e alguns cálculos por quadro foram reduzidos.
 
 **Ranks (selos).** Nomes: E Aprendiz, D Vigia, C Lanterneiro, B Sentinela, A Caçador, S Arauto, SS Crepuscular, SSS Véspero, Alvor. Para subir: XP do rank seguinte **e** vencer o Guardião do rank atual **e**, nos selos C, B, S e SSS, passar o exame da Ordem. Cada rank soma vida máxima. O visual do personagem muda em 5 estágios (E-D, C-B, A-S, SS-SSS, Alvor).
 
@@ -455,11 +474,10 @@ Aparecem só as opções que o jogador **mereceu**; tocar com o jogador está se
 Lista honesta. "Não achei" significa que procurei nos dados e no código e não encontrei; vale confirmar jogando.
 
 **Mecânicas e sistemas do roteiro**
-- **Horta** do Ato II (6 canteiros, sementes que a Celeste entrega) e **feira da manhã / Nilza vendendo receitas**: não achei. A Celeste não entrega sementes no jogo.
+- **Horta** do Ato II: as regras e o save existem, mas os canteiros no Pomar Alto, a feira da Nilza e as sementes da Celeste ainda não estão no mundo.
 - **Modificadores de véspera** (Chuva, Lua cheia, Névoa, Silêncio) e a fala da Lis de manhã avisando: não achei.
 - **Bênçãos:** o roteiro pede 6 por família no Ato I e **3 novas por ato**, mais **uma combinação entre famílias por ato**. O jogo tem 4 por família (20 no total), sem novas por ato e sem combinações. O Ato VII pede ainda "bênçãos combinadas de 3 famílias": não achei.
-- **Conjuntos de Guardião:** o roteiro pede 4 peças por Guardião, com efeito em 2 e em 4 peças. Só a Lodo-Mãe tem conjunto.
-- **2º slot de Eco** (Ato V): a configuração prevê 2 slots, mas só achei o evento que libera o 1º (Vigia, Ato IV).
+- **Conjuntos na tela do personagem e na forja:** os bônus aparecem no inventário, mas a tela do personagem e a forja ainda não mostram os bônus ativos.
 - **Sino no HUD como relógio da véspera** (Ato V): não achei.
 - **Barco do Severo levando a uma ilhota com Brecha opcional** (Ato III): não achei.
 - **Memorial com os nomes** no Cemitério (Ato IV) e a **lanterna do Ravi no memorial**: não achei (a lanterna dele existe, mas na Brecha B).
@@ -470,7 +488,7 @@ Lista honesta. "Não achei" significa que procurei nos dados e no código e não
 - **Cena silenciosa Odete × Vigia** (final do jogador): não achei uma cena própria.
 - **Epílogo diferente para Lis e para o jogador**: o texto é o mesmo (muda só a ilustração do sino).
 - **Odete entrando até a praça de baixo**: só há a fala; não achei acompanhante em combate.
-- **Ravi "controlado pela IA" como tutorial do online** e todo o **modo online / Vigília de 4 / Casas** (Parte 3 do roteiro): nada disso existe.
+- **Ravi "controlado pela IA" como tutorial do online** e o **modo online / Vigília de 4 / Casas** (Parte 3 do roteiro): só o núcleo do protocolo online existe; ainda não dá para jogar online.
 - **A palavra "Deus"** aparece só em poucas falas (Nilza e Ravi); o resto do povo e das Ruas Baixas não a usa.
 
 **Falas e arquivos**
@@ -481,4 +499,4 @@ Lista honesta. "Não achei" significa que procurei nos dados e no código e não
 - **Selo D e outros:** o Benício "queima o selo" por evento nos Atos III a VII; no Ato I e II o selo depende só da progressão (XP). Se o jogador chegar ao fecho sem XP suficiente, o Benício pede para caçar mais.
 
 **Estado das branches**
-- O **Ato VII** está pronto na branch `atos67` e **precisa ser fundido na `v2`**; sem a fusão, o Final (que depende da flag que o Ato VII liga) não é alcançável pela história na `v2`.
+- Os Atos VI e VII, o Final, o co-op local e todas as correções desta rodada já estão juntos na branch `v2`.
