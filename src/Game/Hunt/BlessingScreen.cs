@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using Vespera.Core.Hunt;
 using Vespera.Game.Hunter;
@@ -16,6 +17,9 @@ public partial class BlessingScreen(IReadOnlyList<BlessingDef> offer, Action<str
 {
     private const int CardWidth = 440;
     private const int IconSize = 96;
+    private const int MaxPendingLines = 3;
+    private const int PanelWidth = 1300;
+    private static readonly Color ComboColor = new("ffd36a");
     private const string IconFolder = "res://assets/v2/interface/bencaos/";
     private readonly List<Button> _cards = [];
 
@@ -91,14 +95,51 @@ public partial class BlessingScreen(IReadOnlyList<BlessingDef> offer, Action<str
             row.AddChild(Card(b, family, i));
         }
 
+        AddComboPanel(column);
         UiKit.WrapFocus(_cards);
     }
+
+    /// <summary>Combinações em vigor e as que ainda faltam uma família (ROTEIRO-V2 §5.1), em português, sob as cartas.</summary>
+    private static void AddComboPanel(Control column)
+    {
+        var catalog = HuntService.BlessingCatalog;
+        var owned = HuntService.Blessings.ToList();
+        var lines = new List<string>();
+        foreach (var combo in catalog.ActiveCombos(owned))
+        {
+            lines.Add($"Combinação ativa: {combo.Name} ({FamilyNames(catalog, combo.Families)}). {combo.Text}");
+        }
+
+        foreach (var combo in catalog.PendingCombos(owned).Take(MaxPendingLines))
+        {
+            var missing = FamilyNames(catalog, catalog.MissingFamilies(combo, owned));
+            lines.Add($"Falta {missing} para {combo.Name} ({FamilyNames(catalog, combo.Families)}).");
+        }
+
+        if (lines.Count == 0)
+        {
+            column.AddChild(UiKit.MakeLabel("Bênçãos de famílias diferentes se combinam e dão um bônus extra.", UiTheme.DimVariation, HorizontalAlignment.Center));
+            return;
+        }
+
+        foreach (var text in lines)
+        {
+            var label = UiKit.MakeWrapped(text, UiTheme.DimVariation);
+            label.HorizontalAlignment = HorizontalAlignment.Center;
+            label.CustomMinimumSize = new Vector2(PanelWidth, 0);
+            label.AddThemeColorOverride("font_color", text.StartsWith("Combinação ativa", StringComparison.Ordinal) ? ComboColor : Palette.Cream);
+            column.AddChild(label);
+        }
+    }
+
+    private static string FamilyNames(BlessingCatalog catalog, IEnumerable<string> families) =>
+        string.Join(" + ", families.Select(f => catalog.Families.TryGetValue(f, out var family) ? family.Name : f));
 
     private Button Card(BlessingDef b, BlessingFamily family, int index)
     {
         var color = new Color(family.Color);
         var card = UiKit.MakeButton(string.Empty, () => Choose(index), CardWidth);
-        card.CustomMinimumSize = new Vector2(CardWidth, 500);
+        card.CustomMinimumSize = new Vector2(CardWidth, 540);
         var style = new StyleBoxFlat { BgColor = new Color(Palette.Indigo, 0.96f), BorderColor = color, AntiAliasing = true };
         style.SetBorderWidthAll(5);
         style.SetCornerRadiusAll(14);
@@ -136,6 +177,15 @@ public partial class BlessingScreen(IReadOnlyList<BlessingDef> offer, Action<str
         {
             label.MouseFilter = MouseFilterEnum.Ignore;
             box.AddChild(label);
+        }
+
+        foreach (var combo in HuntService.BlessingCatalog.CompletedBy(HuntService.Blessings.ToList(), b.Id))
+        {
+            var line = UiKit.MakeWrapped($"Combina! {combo.Name}: {combo.Text}", UiTheme.ReadingVariation);
+            line.HorizontalAlignment = HorizontalAlignment.Center;
+            line.AddThemeColorOverride("font_color", ComboColor);
+            line.MouseFilter = MouseFilterEnum.Ignore;
+            box.AddChild(line);
         }
 
         _cards.Add(card);
