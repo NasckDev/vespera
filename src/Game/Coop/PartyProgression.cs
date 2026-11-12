@@ -37,6 +37,12 @@ public static class PartyProgression
                 _boundGuest = guest;
                 _boundClass = guest.ClassId;
                 _guest = new ProgressionEngine(Hunter.Progression.Catalog, guest.Progress, guest.ClassId, new SeededRandom(Environment.TickCount ^ 0x5eed));
+
+                // O 2º slot de Eco (Ato V) vale para o convidado que entra depois da liberação.
+                if (Story.StoryService.Engine.HasFlag(World.Level.EchoSlotFlag(2)))
+                {
+                    _guest.UnlockEchoSlot(1);
+                }
             }
 
             return _guest;

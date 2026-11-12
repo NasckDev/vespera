@@ -229,6 +229,8 @@ public sealed partial class ProgressionEngine
         }
 
         Progress.EchoSlots = echoSlots;
+        var lastFilled = echoSlots.FindLastIndex(id => id is not null) + 1;
+        Progress.EchoSlotsUnlocked = Math.Clamp(Math.Max(Progress.EchoSlotsUnlocked, lastFilled), 1, Math.Max(1, count));
         AbandonRunIfAny();
     }
 

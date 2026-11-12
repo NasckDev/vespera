@@ -31,7 +31,7 @@ public partial class HuntHud : Control
 
     /// <summary>Linhas da sopa da Nilza e do mapa da Lis (testes e capturas; vazias quando inativas).</summary>
     public string PerksText => (_soup.Visible ? _soup.Text : string.Empty) + (_map.Visible ? "\n" + _map.Text : string.Empty);
-    private EcoIcon _eco = null!;
+    private readonly EcoIcon[,] _ecos = new EcoIcon[2, 2];
     private PotionIcon _potionIcon = null!;
 
     /// <summary>Linha do objetivo da sala (testes e capturas).</summary>
@@ -46,8 +46,16 @@ public partial class HuntHud : Control
         _potions = MakeLabel(40, Palette.Cream);
         _potions.Position = new Vector2(100, 966);
         AddChild(_potions);
-        _eco = new EcoIcon { Position = new Vector2(300, 948), Size = new Vector2(92, 92), Visible = false };
-        AddChild(_eco);
+        for (var player = 0; player < 2; player++)
+        {
+            for (var slot = 0; slot < 2; slot++)
+            {
+                // J1 embaixo à esquerda ao lado das poções; J2 embaixo à direita (espelhado).
+                var x = player == 0 ? 300 + (slot * 104) : 1920 - 300 - 92 - (slot * 104);
+                _ecos[player, slot] = new EcoIcon { Position = new Vector2(x, 948), Size = new Vector2(92, 92), Visible = false };
+                AddChild(_ecos[player, slot]);
+            }
+        }
         _room = RightLabel(40, Palette.Amber, 28);
         _goal = RightLabel(34, Palette.Cream, 76);
         _contracts = RightLabel(28, Palette.CreamDim, 124);
@@ -88,8 +96,7 @@ public partial class HuntHud : Control
         var state = HuntService.State;
         _potions.Text = $"{state.Potions}/{HuntService.Config.Potions.Max}  [R]";
         _potionIcon.Filled = state.Potions > 0;
-        _eco.Visible = HuntService.HasEcoViscoso;
-        _eco.Fraction = _world.Player.Combat.EcoCooldownFraction;
+        UpdateEcos();
         var status = Progression.Status;
         var xp = status.Next is { } next ? $"XP {status.XpIntoRank}/{status.XpSpan} até o rank {next}" : "XP no topo";
         _lumes.Text = $"{xp}  ·  {Progression.State.Lumes} Lumes";
@@ -108,6 +115,34 @@ public partial class HuntHud : Control
             _map.Text = Core.Hunt.RunPerks.MapLine(HuntService.Plan!.Rooms.Select(r => r.Kind).ToList(), RiftSession.RoomIndex);
         }
     }
+
+    /// <summary>Os dois slots de Eco de cada caçador: só aparece o que tem Eco equipado; o segundo só depois do Ato V.</summary>
+    private void UpdateEcos()
+    {
+        for (var player = 0; player < 2; player++)
+        {
+            var hunter = player == 0 ? _world!.Player : _world!.PlayerAt(player);
+            var present = hunter is not null && IsInstanceValid(hunter);
+            for (var slot = 0; slot < 2; slot++)
+            {
+                var icon = _ecos[player, slot];
+                var id = present ? hunter!.Combat.EcoInSlot(slot) : null;
+                icon.Visible = id is not null;
+                if (id is null)
+                {
+                    continue;
+                }
+
+                icon.Fraction = hunter!.Combat.EcoCooldownFraction(slot);
+                icon.EcoId = id;
+                icon.KeyText = KeyLabel(player, slot == 0 ? Boot.InputActions.Skill : Boot.InputActions.Skill2);
+            }
+        }
+    }
+
+    private static string KeyLabel(int player, string action) => player == 0
+        ? Boot.InputDevices.KeyName(action)
+        : Boot.GlyphNames.Describe(Boot.InputSetup.TableFor(player).Get(action, Boot.BindingSlot.Primary), Boot.GlyphNames.DetectFamily());
 
     private void UpdateRoom()
     {
@@ -204,13 +239,30 @@ public partial class HuntHud : Control
         /// <summary>0 = pronto; 1 = recém-usado.</summary>
         public float Fraction { get; set; }
 
+        /// <summary>Eco no slot (muda a cor do ícone).</summary>
+        public string EcoId { get; set; } = string.Empty;
+
+        /// <summary>Tecla ou botão que aciona este slot, como o jogador remapeou.</summary>
+        public string KeyText
+        {
+            set
+            {
+                if (_key is not null && _key.Text != value)
+                {
+                    _key.Text = value;
+                }
+            }
+        }
+
         public override void _Ready()
         {
             _key = MakeLabel(30, Palette.Cream);
-            _key.Text = "Q";
+            _key.Text = string.Empty;
             _key.Position = new Vector2(Size.X - 26, Size.Y - 34);
             AddChild(_key);
         }
+
+        private Color BaseColor => EcoId == "eco_viscoso" || EcoId.Length == 0 ? Slime : Palette.Amber;
 
         public override void _Process(double delta) => QueueRedraw();
 
@@ -219,7 +271,7 @@ public partial class HuntHud : Control
             var c = Size / 2f;
             var r = Size.X * 0.46f;
             DrawCircle(c, r + 4f, new Color(0.05f, 0.04f, 0.1f));
-            DrawCircle(c, r, Fraction <= 0f ? Slime : Slime.Darkened(0.55f));
+            DrawCircle(c, r, Fraction <= 0f ? BaseColor : BaseColor.Darkened(0.55f));
             DrawCircle(c + new Vector2(-r * 0.25f, -r * 0.2f), r * 0.32f, new Color(0.85f, 1f, 0.8f, 0.85f));
             if (Fraction > 0f)
             {

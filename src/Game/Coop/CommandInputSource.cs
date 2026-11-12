@@ -26,6 +26,7 @@ public static class CommandMap
         (InputActions.Heavy, CommandButtons.Heavy),
         (InputActions.Dodge, CommandButtons.Dodge),
         (InputActions.Skill, CommandButtons.Skill),
+        (InputActions.Skill2, CommandButtons.Skill2),
         (InputActions.Interact, CommandButtons.Interact),
         (InputActions.Lantern, CommandButtons.Lantern),
         (InputActions.Inventory, CommandButtons.Inventory),

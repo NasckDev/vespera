@@ -1,4 +1,3 @@
-using System.Linq;
 using Vespera.Game.Boot;
 using Vespera.Game.Story;
 using Vespera.Game.UI;
@@ -59,14 +58,15 @@ public partial class Level
             return;
         }
 
-        var echoes = Hunter.Progression.State.Echoes;
-        var pick = engine.EchoIn(index)
-            ?? (echoes.Contains("eco_viscoso") ? "eco_viscoso" : echoes.FirstOrDefault(id => engine.EchoIn(1 - index) != id));
-        if (pick is not null && engine.EchoIn(index) is null)
+        // O 1º slot já é do caçador desde a Lodo-Mãe (o Vigia só o explica); o 2º abre no Ato V. O convidado do co-op abre junto.
+        var (_, equipped) = engine.UnlockEchoSlot(index);
+
+        if (Coop.PartyProgression.GuestActive)
         {
-            engine.EquipEcho(index, pick);
+            Coop.PartyProgression.Guest.UnlockEchoSlot(index);
         }
 
+        var pick = equipped ?? engine.EchoIn(index);
         if (isNew)
         {
             var name = pick is not null && engine.Catalog.Echoes.TryGetValue(pick, out var echo) ? echo.Name : null;

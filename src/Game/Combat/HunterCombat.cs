@@ -54,7 +54,7 @@ public sealed partial class HunterCombat : Node, IHittable
     private float _afterImageTimer;
     private Vector2 _dodgeVelocity;
     private Vector2 _knock;
-    private float _ecoCooldown;
+    private readonly EcoSlotCooldowns _ecoCooldowns = new();
     private bool _ecoDash;
     private float _slimeTimer;
 
@@ -100,8 +100,15 @@ public sealed partial class HunterCombat : Node, IHittable
 
     public Player Player => _player;
 
-    /// <summary>Recarga do Eco Viscoso: 0 = pronto, 1 = recém-usado (ícone da HUD).</summary>
-    public float EcoCooldownFraction => _ecoCooldown / EcoCooldownSeconds;
+    /// <summary>Recarga do Eco do slot (0 ou 1): 0 = pronto, 1 = recém-usado (ícone da HUD).</summary>
+    public float EcoCooldownFraction(int slot) => _ecoCooldowns.Fraction(slot);
+
+    /// <summary>Eco equipado no slot (0 = tecla Eco 1, 1 = Eco 2) deste caçador; null se vazio ou ainda bloqueado.</summary>
+    public string? EcoInSlot(int slot)
+    {
+        var engine = Coop.PartyProgression.EngineFor(_player.Slot);
+        return engine is not null && engine.IsEchoSlotUnlocked(slot) ? engine.EchoIn(slot) : null;
+    }
 
     public float Scale => _player.ActorScale;
 
@@ -145,7 +152,7 @@ public sealed partial class HunterCombat : Node, IHittable
         _stateTime += dt;
         _invulnerable = Mathf.Max(0f, _invulnerable - dt);
         _stamina.Tick(dt);
-        _ecoCooldown = Mathf.Max(0f, _ecoCooldown - dt);
+        _ecoCooldowns.Tick(dt);
         _knock = _knock.MoveToward(Vector2.Zero, 1800f * Scale * dt);
         UpdateBlink();
         if (Disabled || _player.Frozen)
@@ -176,7 +183,7 @@ public sealed partial class HunterCombat : Node, IHittable
             return StepDodge(dt);
         }
 
-        if (input.IsJustPressed(InputActions.Skill) && TryEcoDash(move))
+        if ((input.IsJustPressed(InputActions.Skill) && TryUseEco(0, move)) || (input.IsJustPressed(InputActions.Skill2) && TryUseEco(1, move)))
         {
             return StepDodge(dt);
         }
@@ -323,25 +330,31 @@ public sealed partial class HunterCombat : Node, IHittable
         _player.Feel?.Toast(none ? "Sem poções. A Tia Nilza vende na Praça." : "A vida já está cheia.");
     }
 
-    /// <summary>Eco Viscoso (Q): avanço longo sem custo de fôlego que deixa um rastro de lodo que lentifica os monstros.</summary>
-    private bool TryEcoDash(Vector2 move)
+    /// <summary>Aciona o Eco do slot (0 = Eco 1, 1 = Eco 2). Devolve true se o caçador entrou em movimento (avanço).</summary>
+    private bool TryUseEco(int slot, Vector2 move)
     {
-        if (!Hunter.HuntService.HasEcoViscoso)
+        if (EcoInSlot(slot) is not { } id || !_ecoCooldowns.Ready(slot))
         {
             return false;
         }
 
-        if (_ecoCooldown > 0f)
+        return id switch
         {
-            return false;
-        }
+            "eco_viscoso" => TryEcoDash(slot, move),
+            _ => false,
+        };
+    }
+
+    /// <summary>Eco Viscoso: avanço longo sem custo de fôlego que deixa um rastro de lodo que lentifica os monstros.</summary>
+    private bool TryEcoDash(int slot, Vector2 move)
+    {
 
         Moves.Cancel();
         var dir = move.LengthSquared() > 0.01f ? move.Normalized() : _player.AimDirection;
         _player.Face(dir);
         _dodgeVelocity = dir * (float)(_tuning.DodgeDistance * EcoDashDistance * Scale / _tuning.DodgeSeconds);
         _invulnerable = Mathf.Max(_invulnerable, (float)_tuning.DodgeInvulnerable);
-        _ecoCooldown = EcoCooldownSeconds;
+        _ecoCooldowns.Start(slot, EcoCooldownSeconds);
         _ecoDash = true;
         _slimeTimer = 0f;
         Enter(HunterState.Dodging);
