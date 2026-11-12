@@ -3,20 +3,22 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bd7ulafny6ob5"
-path="res://.godot/imported/velora_atlas.png-ee4d88a65c6a9301564dcb1c10ef56f8.ctex"
+path.bptc="res://.godot/imported/velora_atlas.png-ee4d88a65c6a9301564dcb1c10ef56f8.bptc.ctex"
+path.astc="res://.godot/imported/velora_atlas.png-ee4d88a65c6a9301564dcb1c10ef56f8.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/v2/sprites/monstros/velora/velora_atlas.png"
-dest_files=["res://.godot/imported/velora_atlas.png-ee4d88a65c6a9301564dcb1c10ef56f8.ctex"]
+dest_files=["res://.godot/imported/velora_atlas.png-ee4d88a65c6a9301564dcb1c10ef56f8.bptc.ctex", "res://.godot/imported/velora_atlas.png-ee4d88a65c6a9301564dcb1c10ef56f8.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

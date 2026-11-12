@@ -288,7 +288,11 @@ public partial class Inquilino(LevelWorld world) : Enemy("inquilino", world)
         }
 
         target.GlobalPosition = World.ClampToFloor(target.GlobalPosition + (to.Normalized() * PullSpeed * A * dt));
-        World.Feel.Spark(target.GlobalPosition, new Color("e64a8e"), 1, 80f * A);
+        if (TrailSparkReady(dt))
+        {
+            World.Feel.Spark(target.GlobalPosition, new Color("e64a8e"), 1, 80f * A);
+        }
+
         return Vector2.Zero;
     }
 
@@ -307,6 +311,23 @@ public partial class Inquilino(LevelWorld world) : Enemy("inquilino", world)
         }
     }
 
+    private const float TrailSparkInterval = 0.08f;
+
+    private float _trailSparkClock;
+
+    /// <summary>Limita as faíscas de rastro (1 partícula, 1 nó CpuParticles2D cada) a ~12 por segundo em vez de uma por tick.</summary>
+    private bool TrailSparkReady(float dt)
+    {
+        _trailSparkClock -= dt;
+        if (_trailSparkClock > 0f)
+        {
+            return false;
+        }
+
+        _trailSparkClock = TrailSparkInterval;
+        return true;
+    }
+
     private void TickFurniture(float dt)
     {
         for (var i = _furniture.Count - 1; i >= 0; i--)
@@ -318,7 +339,10 @@ public partial class Inquilino(LevelWorld world) : Enemy("inquilino", world)
                 if (time < FurnitureFlight * 0.5f)
                 {
                     var fall = time / (FurnitureFlight * 0.5f);
-                    World.Feel.Spark(at - new Vector2(0, fall * 380f * A), RootColor, 1, 30f * A);
+                    if (TrailSparkReady(dt))
+                    {
+                        World.Feel.Spark(at - new Vector2(0, fall * 380f * A), RootColor, 1, 30f * A);
+                    }
                 }
 
                 _furniture[i] = (marker, at, time);

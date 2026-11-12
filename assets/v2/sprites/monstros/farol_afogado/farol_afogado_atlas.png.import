@@ -3,20 +3,22 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b1bd8ewwgyjbw"
-path="res://.godot/imported/farol_afogado_atlas.png-ae7d8405e5b4cab1db1d4d20c87c6181.ctex"
+path.bptc="res://.godot/imported/farol_afogado_atlas.png-ae7d8405e5b4cab1db1d4d20c87c6181.bptc.ctex"
+path.astc="res://.godot/imported/farol_afogado_atlas.png-ae7d8405e5b4cab1db1d4d20c87c6181.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/v2/sprites/monstros/farol_afogado/farol_afogado_atlas.png"
-dest_files=["res://.godot/imported/farol_afogado_atlas.png-ae7d8405e5b4cab1db1d4d20c87c6181.ctex"]
+dest_files=["res://.godot/imported/farol_afogado_atlas.png-ae7d8405e5b4cab1db1d4d20c87c6181.bptc.ctex", "res://.godot/imported/farol_afogado_atlas.png-ae7d8405e5b4cab1db1d4d20c87c6181.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
