@@ -10,6 +10,9 @@ public enum DeviceKind
     KeyboardRight,
 
     Gamepad,
+
+    /// <summary>Jogador do co-op online: o comando chega pela rede (no host). <see cref="InputDevice.Pad"/> guarda o slot.</summary>
+    Network,
 }
 
 /// <summary>Um dispositivo de entrada: tipo e, para controle, o índice do motor (0, 1...).</summary>
@@ -21,12 +24,15 @@ public readonly record struct InputDevice(DeviceKind Kind, int Pad = 0)
 
     public static InputDevice Gamepad(int pad) => new(DeviceKind.Gamepad, pad);
 
+    public static InputDevice Network(int slot) => new(DeviceKind.Network, slot);
+
     public bool IsKeyboard => Kind is DeviceKind.Keyboard or DeviceKind.KeyboardRight;
 
     public override string ToString() => Kind switch
     {
         DeviceKind.Keyboard => "keyboard",
         DeviceKind.KeyboardRight => "keyboard_right",
+        DeviceKind.Network => $"net{Pad}",
         _ => $"pad{Pad}",
     };
 }

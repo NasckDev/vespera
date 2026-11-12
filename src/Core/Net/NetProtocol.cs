@@ -42,7 +42,7 @@ public readonly record struct HelloMessage(ushort Version, string ClassId);
 public static class NetProtocol
 {
     /// <summary>Muda quando o formato muda: host e convidado precisam da mesma.</summary>
-    public const ushort Version = 1;
+    public const ushort Version = 2;
 
     /// <summary>Teto de um id de texto (classe, sala) em bytes UTF-8.</summary>
     public const int MaxIdBytes = 64;
@@ -213,6 +213,18 @@ internal sealed class NetWriter
         _bytes.AddRange(bytes);
     }
 
+    /// <summary>Id que pode ser vazio (tamanho 0): tipo de monstro desconhecido.</summary>
+    public void OptionalId(string id)
+    {
+        if (id.Length == 0)
+        {
+            Byte(0);
+            return;
+        }
+
+        Id(id);
+    }
+
     public byte[] ToArray() => [.. _bytes];
 }
 
@@ -308,6 +320,24 @@ internal ref struct NetReader(ReadOnlySpan<byte> data)
         }
 
         return true;
+    }
+
+    /// <summary>Id ou vazio (tamanho 0).</summary>
+    public bool TryOptionalId(out string id)
+    {
+        id = string.Empty;
+        if (!Has(1))
+        {
+            return false;
+        }
+
+        if (_data[_pos] == 0)
+        {
+            _pos++;
+            return true;
+        }
+
+        return TryId(out id);
     }
 
     private bool Has(int count)
