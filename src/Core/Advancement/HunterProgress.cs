@@ -58,6 +58,12 @@ public sealed class HunterProgress
     /// <summary>Ecos equipados por posição (null = vazio). O tamanho vem de <c>echoes.json</c>.</summary>
     public List<string?> EchoSlots { get; set; } = [];
 
+    /// <summary>
+    /// Quantos slots de Eco estão liberados (o 1º vem desde o começo; o 2º abre no Ato V). Saves antigos sem o campo
+    /// valem 1, e o motor sobe o valor se já havia Eco num slot além dele.
+    /// </summary>
+    public int EchoSlotsUnlocked { get; set; } = 1;
+
     public List<string> GuardiansDefeated { get; set; } = [];
 
     public List<string> ExamsPassed { get; set; } = [];

@@ -68,6 +68,9 @@
     "b4": {
       "speaker": "benicio",
       "text": "Você não vai ouvir nada. Olha.",
+      "events": [
+        "UnlockEchoSlot:2"
+      ],
       "objective": "ato5_brecha"
     },
     "c1": {

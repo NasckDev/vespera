@@ -20,7 +20,7 @@ public sealed class BindingTable
     public const string Empty = "";
 
     // Códigos de tecla (Godot.Key como inteiro) usados nos padrões.
-    private const int KeyW = 87, KeyA = 65, KeyS = 83, KeyD = 68, KeyJ = 74, KeyK = 75, KeyQ = 81, KeyE = 69;
+    private const int KeyW = 87, KeyA = 65, KeyS = 83, KeyD = 68, KeyJ = 74, KeyK = 75, KeyQ = 81, KeyE = 69, KeyZ = 90;
     private const int KeyF = 70, KeyI = 73, KeyP = 80, KeySpace = 32, KeyL = 76, KeyR = 82;
     private const int KeyEscape = 4194305, KeyTab = 4194306, KeyShift = 4194325;
     private const int KeyLeft = 4194319, KeyUp = 4194320, KeyRight = 4194321, KeyDown = 4194322;
@@ -42,6 +42,7 @@ public sealed class BindingTable
         t.Set("heavy", $"key:{KeyK}", "mouse:2", "pad:3");
         t.Set("dodge", $"key:{KeySpace}", $"key:{KeyShift}", "pad:1");
         t.Set("skill", $"key:{KeyQ}", Empty, "axis:5+");
+        t.Set("skill2", $"key:{KeyZ}", Empty, "pad:5");
         t.Set("interact", $"key:{KeyE}", Empty, "pad:0");
         t.Set("lantern", $"key:{KeyF}", Empty, "pad:10");
         t.Set("potion", $"key:{KeyR}", Empty, "axis:4+");
@@ -66,6 +67,7 @@ public sealed class BindingTable
         t.Set("heavy", $"key:{KeyKp2}", Empty, "pad:3");
         t.Set("dodge", $"key:{KeyKp0}", Empty, "pad:1");
         t.Set("skill", $"key:{KeyKp3}", Empty, "axis:5+");
+        t.Set("skill2", $"key:{KeyKp4}", Empty, "pad:5");
         t.Set("interact", $"key:{KeyKpEnter}", $"key:{KeyEnter}", "pad:0");
         t.Set("lantern", $"key:{KeyKpAdd}", Empty, "pad:10");
         t.Set("potion", $"key:{KeyKp4}", Empty, "axis:4+");

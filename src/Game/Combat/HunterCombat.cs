@@ -111,6 +111,9 @@ public sealed partial class HunterCombat : Node, IHittable
     /// <summary>Recarga do Eco do <paramref name="slot"/>: 0 = pronto, 1 = recém-usado.</summary>
     public float EchoCooldownFraction(int slot) => slot >= 0 && slot < EchoSlots ? _echoCooldowns[slot].Fraction : 0f;
 
+    /// <summary>Id do Eco do slot (0 = tecla Eco 1, 1 = Eco 2) deste caçador; null se vazio ou ainda bloqueado.</summary>
+    public string? EcoInSlot(int slot) => EquippedEcho(slot)?.Id;
+
     public float Scale => _player.ActorScale;
 
     /// <summary>Caiu: chamado depois da animação de morte (a fase decide a Lanterna e a volta).</summary>
@@ -192,7 +195,7 @@ public sealed partial class HunterCombat : Node, IHittable
             return StepDodge(dt);
         }
 
-        if (input.IsJustPressed(InputActions.Skill) && TryEcho(0, move) && State == HunterState.Dodging)
+        if (((input.IsJustPressed(InputActions.Skill) && TryEcho(0, move)) || (input.IsJustPressed(InputActions.Skill2) && TryEcho(1, move))) && State == HunterState.Dodging)
         {
             return StepDodge(dt);
         }
@@ -354,7 +357,7 @@ public sealed partial class HunterCombat : Node, IHittable
             return null;
         }
 
-        var id = engine.EchoIn(slot);
+        var id = engine.IsEchoSlotUnlocked(slot) ? engine.EchoIn(slot) : null;
         if (id is null && slot == 0 && _player.Slot == 0 && Hunter.HuntService.HasEcoViscoso)
         {
             id = EchoCaster.Viscoso;

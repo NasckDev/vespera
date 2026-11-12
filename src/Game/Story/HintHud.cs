@@ -59,6 +59,7 @@ public partial class HintHud : Control
         new("dodge", InputActions.Dodge, k => $"{k}: esquivar. Quando o monstro brilhar laranja, saia do lugar!", () => RiftSession.InRift && Telegraphing(), 1),
         new("heavy", InputActions.Heavy, k => $"Segure {k}: golpe forte (mais lento, bate mais)", () => RiftSession.InRift && RiftSession.RoomIndex >= 1 && AnyEnemy(), 1),
         new("potion", InputActions.Potion, k => $"{k}: beber poção (cura vida)", LowHpWithPotion, 1),
+        new("eco2", InputActions.Skill2, k => $"{k}: segundo Eco ({SecondEcoName()}). Cada Eco recarrega sozinho", () => SecondEcoName().Length > 0 && RiftSession.InRift, 1),
         new("eco", InputActions.Skill, k => $"{k}: Eco Viscoso (avanço com rastro de lodo)", () => HuntService.HasEcoViscoso, 1),
     ];
 
@@ -140,6 +141,17 @@ public partial class HintHud : Control
 
         var screen = _level.WorldToScreen(_level.Player.GlobalPosition);
         return screen.Y > PlayerLowLine ? HighY : LowY;
+    }
+
+    /// <summary>Nome do Eco no 2º slot do J1 (vazio se o slot ainda não abriu ou está vazio).</summary>
+    private static string SecondEcoName()
+    {
+        if (!Progression.IsActive || Progression.Engine.EchoIn(1) is not { } id || !Progression.Engine.IsEchoSlotUnlocked(1))
+        {
+            return string.Empty;
+        }
+
+        return Progression.Engine.Catalog.Echoes[id].Name;
     }
 
     private static bool Seen(string id) => StoryService.Engine.HasFlag(StoryFlags.HintPrefix + id);

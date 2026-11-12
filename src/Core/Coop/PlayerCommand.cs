@@ -17,6 +17,7 @@ public enum CommandButtons : ushort
     Journal = 1 << 7,
     Pause = 1 << 8,
     Potion = 1 << 9,
+    Skill2 = 1 << 10,
 }
 
 /// <summary>

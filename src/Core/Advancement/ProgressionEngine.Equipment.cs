@@ -104,6 +104,38 @@ public sealed partial class ProgressionEngine
 
     public int EchoSlotCount => Progress.EchoSlots.Count;
 
+    /// <summary>Slots de Eco liberados (1 no começo; o 2º abre no Ato V).</summary>
+    public int UnlockedEchoSlots => Progress.EchoSlotsUnlocked;
+
+    public bool IsEchoSlotUnlocked(int slot) => slot >= 0 && slot < Progress.EchoSlotsUnlocked && slot < Progress.EchoSlots.Count;
+
+    /// <summary>
+    /// Libera o slot de Eco <paramref name="slot"/> (0 = 1º). Se ele fica vazio, recebe o Eco absorvido mais recente que não está
+    /// no outro slot. Devolve o Eco posto (ou null) e se o slot era novo.
+    /// </summary>
+    public (bool Newly, string? Equipped) UnlockEchoSlot(int slot)
+    {
+        if (slot < 0 || slot >= Progress.EchoSlots.Count)
+        {
+            return (false, null);
+        }
+
+        var newly = slot >= Progress.EchoSlotsUnlocked;
+        Progress.EchoSlotsUnlocked = Math.Max(Progress.EchoSlotsUnlocked, slot + 1);
+        if (Progress.EchoSlots[slot] is not null)
+        {
+            return (newly, null);
+        }
+
+        var pick = Progress.Echoes.LastOrDefault(id => !Progress.EchoSlots.Contains(id));
+        if (pick is not null)
+        {
+            Progress.EchoSlots[slot] = pick;
+        }
+
+        return (newly, pick);
+    }
+
     public string? EchoIn(int slot) => slot >= 0 && slot < Progress.EchoSlots.Count ? Progress.EchoSlots[slot] : null;
 
     /// <summary>Põe um Eco já absorvido no slot (0 ou 1). Se ele estava no outro slot, troca de lugar.</summary>
@@ -112,6 +144,11 @@ public sealed partial class ProgressionEngine
         if (slot < 0 || slot >= Progress.EchoSlots.Count)
         {
             return EquipResult.Fail("Slot de Eco inexistente.");
+        }
+
+        if (!IsEchoSlotUnlocked(slot))
+        {
+            return EquipResult.Fail("Este slot de Eco ainda não foi liberado.");
         }
 
         if (!Progress.Echoes.Contains(echoId))
@@ -144,7 +181,7 @@ public sealed partial class ProgressionEngine
     private void AutoEquipEcho(string echoId)
     {
         var free = Progress.EchoSlots.IndexOf(null);
-        if (free >= 0)
+        if (free >= 0 && IsEchoSlotUnlocked(free))
         {
             Progress.EchoSlots[free] = echoId;
         }

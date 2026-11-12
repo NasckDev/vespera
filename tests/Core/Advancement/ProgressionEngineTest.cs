@@ -197,6 +197,8 @@ public class ProgressionEngineTest
         var engine = AdvTestData.NewEngine();
         engine.Progress.Echoes.AddRange(["eco_viscoso", "eco_semente", "eco_farol"]);
         AssertThat(engine.EchoSlotCount).IsEqual(2);
+        AssertThat(engine.EquipEcho(1, "eco_semente").Ok).IsFalse();
+        engine.UnlockEchoSlot(1);
         AssertThat(engine.EquipEcho(0, "eco_viscoso").Ok).IsTrue();
         AssertThat(engine.EquipEcho(1, "eco_semente").Ok).IsTrue();
         AssertThat(engine.EquipEcho(0, "eco_semente").Ok).IsTrue();
