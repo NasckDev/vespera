@@ -54,6 +54,8 @@ public partial class DialogueBox : Control
     private PanelContainer _who = null!;
     private Label _whoLabel = null!;
     private ulong _pressFrame = ulong.MaxValue;
+    private ulong _skipArmedUntil;
+    private const ulong SkipConfirmMilliseconds = 2500;
 
     public event Action? Closed;
 
@@ -119,7 +121,14 @@ public partial class DialogueBox : Control
         }
         else
         {
-            _hint.Visible = !HasChoices;
+            var armed = SkipArmed;
+            if (!armed && _skipArmedUntil != 0)
+            {
+                _skipArmedUntil = 0;
+                _hint.Text = HintText();
+            }
+
+            _hint.Visible = !HasChoices || armed;
             _hint.Modulate = new Color(1, 1, 1, 0.55f + (0.45f * Mathf.Sin(Time.GetTicksMsec() / 260f)));
         }
     }
@@ -138,6 +147,15 @@ public partial class DialogueBox : Control
         if (@event.IsActionPressed("ui_cancel"))
         {
             GetViewport().SetInputAsHandled();
+            if (!SkipArmed)
+            {
+                _skipArmedUntil = Time.GetTicksMsec() + SkipConfirmMilliseconds;
+                _hint.Text = $"{CancelKeyName()} de novo: pular a conversa";
+                _hint.Visible = true;
+                return;
+            }
+
+            _skipArmedUntil = 0;
             SkipAll();
             return;
         }
@@ -173,6 +191,13 @@ public partial class DialogueBox : Control
 
         Advance(0);
     }
+
+    private bool SkipArmed => _skipArmedUntil != 0 && Time.GetTicksMsec() < _skipArmedUntil;
+
+    private static string CancelKeyName() => InputDevices.Current == LastDevice.Pad ? "B" : "Esc";
+
+    private static string HintText() =>
+        $"{InputDevices.KeyName(InputActions.Interact)}  continuar    {CancelKeyName()}  pular";
 
     /// <summary>Pula a conversa: aplica os efeitos do que falta e fecha (ou para na próxima escolha).</summary>
     public void SkipAll()
@@ -235,7 +260,8 @@ public partial class DialogueBox : Control
         _typed = 0f;
         _text.VisibleCharacters = 0;
         ClearChoices();
-        _hint.Text = $"{InputDevices.KeyName(InputActions.Interact)}  continuar    {(InputDevices.Current == LastDevice.Pad ? "B" : "Esc")}  pular";
+        _skipArmedUntil = 0;
+        _hint.Text = HintText();
         NodeShown?.Invoke(node);
         if (runner.Choices.Count > 0)
         {

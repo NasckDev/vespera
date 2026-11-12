@@ -83,7 +83,7 @@ public partial class HelpScreen : UiScreen
         column.AddChild(grid);
 
         AddEntry(grid, "Mover", "WASD", "analógico");
-        foreach (var id in new[] { InputActions.Attack, InputActions.Heavy, InputActions.Dodge, InputActions.Skill, InputActions.Interact, InputActions.Lantern, InputActions.Inventory, InputActions.Pause })
+        foreach (var id in new[] { InputActions.Attack, InputActions.Heavy, InputActions.Dodge, InputActions.Skill, InputActions.Interact, InputActions.Potion, InputActions.Journal, InputActions.Pause })
         {
             var keyboard = GlyphNames.Describe(InputSetup.Table.Get(id, BindingSlot.Primary), family);
             var pad = GlyphNames.Describe(InputSetup.Table.Get(id, BindingSlot.Gamepad), family);

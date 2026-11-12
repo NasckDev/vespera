@@ -1,4 +1,5 @@
 using Godot;
+using Vespera.Game.Boot;
 using Vespera.Game.Combat;
 using Vespera.Game.Hunter;
 using Vespera.Game.UI;
@@ -86,7 +87,7 @@ public partial class HuntHud : Control
 
         Visible = true;
         var state = HuntService.State;
-        _potions.Text = $"{state.Potions}/{HuntService.Config.Potions.Max}  [R]";
+        _potions.Text = $"{state.Potions}/{HuntService.Config.Potions.Max}  [{InputDevices.KeyName(InputActions.Potion)}]";
         _potionIcon.Filled = state.Potions > 0;
         _eco.Visible = HuntService.HasEcoViscoso;
         _eco.Fraction = _world.Player.Combat.EcoCooldownFraction;

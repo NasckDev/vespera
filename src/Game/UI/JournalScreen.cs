@@ -12,7 +12,11 @@ namespace Vespera.Game.UI;
 /// </summary>
 public partial class JournalScreen : UiScreen
 {
+    private const int ScrollStep = 90;
+    private const int PageStep = 360;
+
     private Button _back = null!;
+    private ScrollContainer _scroll = null!;
 
     protected override Control? DefaultFocus() => _back;
 
@@ -20,6 +24,18 @@ public partial class JournalScreen : UiScreen
     {
         GetTree().Paused = false;
         SceneRouter.Instance.Pop();
+    }
+
+    public override void _Input(InputEvent @event)
+    {
+        if (ScrollDelta(@event) is { } delta && IsVisibleInTree() && SceneRouter.Instance.IsActive(this))
+        {
+            GetViewport().SetInputAsHandled();
+            _scroll.ScrollVertical += delta;
+            return;
+        }
+
+        base._Input(@event);
     }
 
     public override void _UnhandledInput(InputEvent @event)
@@ -35,10 +51,32 @@ public partial class JournalScreen : UiScreen
         base._UnhandledInput(@event);
     }
 
+    /// <summary>Teclado e controle rolam a lista (setas/direcional, PageUp/PageDown); o mouse usa a roda.</summary>
+    private static int? ScrollDelta(InputEvent @event)
+    {
+        if (@event.IsActionPressed("ui_up"))
+        {
+            return -ScrollStep;
+        }
+
+        if (@event.IsActionPressed("ui_down"))
+        {
+            return ScrollStep;
+        }
+
+        if (@event.IsActionPressed("ui_page_up"))
+        {
+            return -PageStep;
+        }
+
+        return @event.IsActionPressed("ui_page_down") ? PageStep : null;
+    }
+
     protected override void Build()
     {
         var panel = BuildPage("Diário", out var column, sideMargin: 260);
         var scroll = UiKit.MakeScroll();
+        _scroll = scroll;
         panel.AddChild(scroll);
         var list = UiKit.MakeColumn(14);
         list.SizeFlagsHorizontal = SizeFlags.ExpandFill;

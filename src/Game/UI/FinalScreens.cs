@@ -67,6 +67,15 @@ public partial class BellScene(string texturePath) : Control
         }
     }
 
+    public override void _GuiInput(InputEvent @event)
+    {
+        if (_time >= SkipAfter && @event is InputEventMouseButton { Pressed: true, ButtonIndex: MouseButton.Left })
+        {
+            AcceptEvent();
+            Leave();
+        }
+    }
+
     public override void _UnhandledInput(InputEvent @event)
     {
         if (_time >= SkipAfter && (@event.IsActionPressed(InputActions.Interact) || @event.IsActionPressed("ui_accept")))
@@ -133,7 +142,7 @@ public partial class PartOneEnd : Control
         end.AddThemeColorOverride("font_color", Palette.Cream);
         column.AddChild(end);
         column.AddChild(UiKit.MakeLabel("Véspera · um projeto NasckDev · obrigado por jogar", UiTheme.ReadingVariation, HorizontalAlignment.Center));
-        _prompt = UiKit.MakeLabel("Interagir: voltar ao título", UiTheme.DimVariation, HorizontalAlignment.Center);
+        _prompt = UiKit.MakeLabel(PromptText(), UiTheme.DimVariation, HorizontalAlignment.Center);
         _prompt.Modulate = Colors.White with { A = 0f };
         column.AddChild(_prompt);
 
@@ -155,10 +164,22 @@ public partial class PartOneEnd : Control
         if (_time >= ContinueAfter)
         {
             _prompt.Modulate = Colors.White with { A = Mathf.Min(1f, (_time - ContinueAfter) * 2f) };
+            _prompt.Text = PromptText();
         }
 
         if (_time >= AutoSeconds)
         {
+            Finish();
+        }
+    }
+
+    private static string PromptText() => $"{InputDevices.KeyName(InputActions.Interact)} ou clique: voltar ao título";
+
+    public override void _GuiInput(InputEvent @event)
+    {
+        if (_time >= ContinueAfter && @event is InputEventMouseButton { Pressed: true, ButtonIndex: MouseButton.Left })
+        {
+            AcceptEvent();
             Finish();
         }
     }

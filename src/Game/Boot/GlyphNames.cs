@@ -31,6 +31,7 @@ public static class GlyphNames
         [Key.Kp1] = "Num 1",
         [Key.Kp2] = "Num 2",
         [Key.Kp3] = "Num 3",
+        [Key.Kp4] = "Num 4",
         [Key.KpAdd] = "Num +",
         [Key.KpSubtract] = "Num -",
         [Key.KpMultiply] = "Num *",

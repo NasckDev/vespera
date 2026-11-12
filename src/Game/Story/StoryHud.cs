@@ -53,6 +53,17 @@ public partial class StoryHud : Control
         MouseFilter = MouseFilterEnum.Ignore;
         BuildTracker();
         BuildToast();
+        InputDevices.Changed += OnDeviceChanged;
+    }
+
+    public override void _ExitTree() => InputDevices.Changed -= OnDeviceChanged;
+
+    private void OnDeviceChanged()
+    {
+        if (_tracker.Visible)
+        {
+            RefreshTracker(_trackerTitle.Text);
+        }
     }
 
     public override void _Process(double delta)
@@ -86,7 +97,7 @@ public partial class StoryHud : Control
     {
         _tracker.Visible = title.Length > 0;
         _trackerTitle.Text = title;
-        var key = GlyphNames.Describe(InputSetup.Table.Get(InputActions.Journal, BindingSlot.Primary), GlyphNames.DetectFamily());
+        var key = InputDevices.KeyName(InputActions.Journal);
         _trackerHint.Text = $"{key}  Diário";
         _tracker.ResetSize();
         var size = _tracker.GetCombinedMinimumSize();
