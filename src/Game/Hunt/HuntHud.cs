@@ -88,7 +88,7 @@ public partial class HuntHud : Control
         var state = HuntService.State;
         _potions.Text = $"{state.Potions}/{HuntService.Config.Potions.Max}  [R]";
         _potionIcon.Filled = state.Potions > 0;
-        _eco.Visible = HuntService.HasEcoViscoso;
+        _eco.Visible = _world.Player.Combat.EquippedEcho(0) is not null;
         _eco.Fraction = _world.Player.Combat.EcoCooldownFraction;
         var status = Progression.Status;
         var xp = status.Next is { } next ? $"XP {status.XpIntoRank}/{status.XpSpan} até o rank {next}" : "XP no topo";

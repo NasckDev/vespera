@@ -36,6 +36,7 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
     private readonly DamageCalculator _damage = new(RiftSession.Db.Rules.Combat);
     private float _fade = -1f;
     private float _slow;
+    private float _stun;
     private Color? _tint;
 
     /// <summary>Fator da velocidade enquanto pisa no lodo do Eco Viscoso.</summary>
@@ -214,7 +215,19 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
             return;
         }
 
-        var desired = Think(dt);
+        Vector2 desired;
+        if (_stun > 0f)
+        {
+            // Atordoado (Eco do Sino): não pensa nem ataca, e o relógio do estado para junto.
+            _stun -= dt;
+            StateTime -= dt;
+            desired = Vector2.Zero;
+        }
+        else
+        {
+            desired = Think(dt);
+        }
+
         _slow = Mathf.Max(0f, _slow - dt);
         if (_slow > 0f)
         {
@@ -399,6 +412,24 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
 
     /// <summary>Pisa no lodo do Eco Viscoso: anda mais devagar por <paramref name="seconds"/>.</summary>
     public void Slow(float seconds) => _slow = Mathf.Max(_slow, seconds);
+
+    /// <summary>Atordoado (Eco do Sino): fica parado e sem atacar.</summary>
+    public bool Stunned => _stun > 0f;
+
+    public void Stun(float seconds)
+    {
+        _stun = Mathf.Max(_stun, seconds);
+        Flash.Pulse(new Color(1f, 0.9f, 0.5f), 0.05f, Mathf.Min(0.4f, seconds));
+    }
+
+    /// <summary>Puxão do Eco do Farol: empurra o monstro nesta velocidade (quem não recua de golpe também não é puxado).</summary>
+    public void Pull(Vector2 velocity)
+    {
+        if (!Unstoppable)
+        {
+            Knock = velocity;
+        }
+    }
 
     /// <summary>Velocidade desejada neste quadro (px/s do mundo).</summary>
     protected abstract Vector2 Think(float dt);
