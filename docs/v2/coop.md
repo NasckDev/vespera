@@ -86,6 +86,30 @@ Replicado por snapshot (não confiável, ~20/s, com interpolação de 100 ms no 
 5. Testes: o `--coop-bot` vira o modelo do bot online — host e cliente no mesmo processo trocando `PlayerCommand`
    serializados por um transporte em memória antes de usar o ENet de verdade.
 
+### 2.5 Estado em 12/11/2026 (branch `f/online`)
+
+**Pronto (núcleo puro, testado):** `src/Core/Net/` + `tests/Core/Net/NetProtocolTest.cs`.
+
+| Peça | O que faz |
+|---|---|
+| `NetProtocol` | Mensagens `Hello` (versão + classe), `Welcome` (slot), `Reject` (versão, cheio, classe), `Command` (byte de tipo + `PlayerCommand` de 13 bytes, com o slot **forçado** ao do par que mandou). `Validate` decide a entrada no host. Leitura nunca lança: pacote curto, longo, com NaN, id inválido → `false`. Valida porta (1024..65535) e endereço digitado. |
+| `WorldSnapshot` | Host → convidado: tick, id da sala (troca de nível = mudança do id), caçadores (slot, posição, direção, caído, vida/máx), monstros vivos (id, posição, vida/máx) e a fala aberta. Limites: 8 caçadores, 512 monstros, 600 bytes de fala; vida fora de 0..máx e slot repetido derrubam o pacote. |
+| `CommandQueue` | O `NetworkCommandProvider` do host sem Godot: junta rajadas com `Merge`, repete a direção sem os apertos quando nada chega, descarta tick repetido/atrasado e fica limitada (30) sem perder aperto. |
+| `SnapshotInterpolator` | Convidado: desenha em agora − `interpolationMs`, interpolando caçadores e monstros por id; ignora snapshot velho; troca de sala zera o histórico. |
+| `data/coop.json` → `online` | `port` 24680, `snapshotHz` 20, `interpolationMs` 100, `timeoutSeconds` 5 (`CoopRules.Online`, validado). |
+
+**Falta (não coube no prazo):**
+
+1. `src/Game/Net/NetSession` (nó fixo em `/root/NetLink` com `ENetMultiplayerPeer`; RPC confiável para Hello/Welcome/Reject,
+   não confiável para Command e Snapshot), `NetworkCommandProvider : ICommandProvider` embrulhando `CommandQueue`, e
+   `CoopSession.CreateInput` escolhendo o provedor remoto para o slot do convidado (novo `DeviceKind.Network`).
+2. Host: montar o `WorldSnapshot` a partir de `LevelWorld.Players`/`Enemies` a cada 1/`snapshotHz` s; saque e reanimação
+   já correm no host (`PartyProgression`, `PartyDirector`), só falta mandar o saque do dono como evento.
+3. Convidado: a cena que desenha a sala pelo id e os caçadores/monstros pelo interpolador (hoje nada no jogo desenha
+   um `Level` sem simulá-lo); desconexão → título com aviso; host segue sozinho (`Level.LeaveParty`).
+4. UI pt-BR: título e pausa → "Online" → "Hospedar" (IP local + porta) / "Entrar" (IP, porta, classe como no co-op local).
+5. Bots `--online-bot-host` / `--online-bot-join` com as duas instâncias headless em 127.0.0.1 numa única chamada da trava.
+
 ## 3. Lacunas conhecidas
 
 - 3 e 4 jogadores locais: as regras e a câmera já suportam, mas a tela de entrada, a HUD e as cores foram feitas para 2.
