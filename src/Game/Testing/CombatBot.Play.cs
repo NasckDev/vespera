@@ -115,6 +115,7 @@ public sealed partial class CombatBot
         var human = World.Data.HumanHeight;
         var bow = World.Player.Hunter == HunterClass.Arco;
         var room = World.Data.Id;
+        var idle = 0;
         while (!director.Cleared && frames++ < RoomFrameLimit && !World.Player.Combat.IsDead)
         {
             if (RankUpScreen.Active is not null || host.GetTree().Paused)
@@ -125,10 +126,18 @@ public sealed partial class CombatBot
             var target = director.Alive.OrderBy(e => e.GlobalPosition.DistanceTo(World.Player.GlobalPosition)).FirstOrDefault();
             if (target is null)
             {
+                // Sem alvo e a sala não limpa: registra o que a sala ainda espera (a cada 5 s).
+                if (++idle % 300 == 0)
+                {
+                    Log.Info($"bot: sala {index + 1} ({room}) sem alvo há {idle / 60} s; {director.Describe()}");
+                }
+
                 _input.Move = Vector2.Zero;
                 await host.PhysicsFrames(1);
                 continue;
             }
+
+            idle = 0;
 
             if (TryDodge() || TryPotion())
             {
@@ -173,6 +182,11 @@ public sealed partial class CombatBot
         _input.Move = Vector2.Zero;
         if (!World.Player.Combat.IsDead)
         {
+            if (!director.Cleared)
+            {
+                Log.Info($"bot: sala {index + 1} ({room}) presa; {director.Describe()}");
+            }
+
             Check(director.Cleared, $"sala {index + 1} ({room}) não ficou limpa em {RoomFrameLimit / 60} s");
         }
     }

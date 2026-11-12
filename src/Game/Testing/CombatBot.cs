@@ -182,7 +182,8 @@ public sealed partial class CombatBot(Level level, SmokeTest host)
                 waited += 60;
             }
 
-            Log.Info($"bot: fenda de saída {(director.ExitPortal is null ? "NÃO abriu" : "abriu")} depois de ~{waited + 90} quadros (pausado {host.GetTree().Paused})");
+            Log.Info($"bot: fenda de saída {(director.ExitPortal is null ? "NÃO abriu" : "abriu")} depois de ~{waited + 90} quadros (pausado {host.GetTree().Paused}; " +
+                $"sala do diretor {(GodotObject.IsInstanceValid(director) ? director.Title : "liberada")}, sala atual {World.Data.Id}, trocando {level.Switching})");
             Check(director.ExitPortal is not null, "bot de combate: a fenda de saída não abriu");
         }
 
