@@ -103,6 +103,11 @@ public partial class PauseScreen : UiScreen
 
     private void ReturnToTitle()
     {
+        if (SceneRouter.Instance.IsBusy)
+        {
+            return;
+        }
+
         GameSession.Autosave();
         Game.Coop.CoopSession.End();
         GameSession.End();

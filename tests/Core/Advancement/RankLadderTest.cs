@@ -194,4 +194,20 @@ public class RankLadderTest
             AssertThat(AdvTestData.HunterAt(step.Id).Rank).IsEqual(step.Id);
         }
     }
+
+    [TestCase]
+    public void RankSAndSssStayBlockedUntilTheirExamIsPassed()
+    {
+        foreach (var rank in new[] { Rank.S, Rank.SSS })
+        {
+            var step = AdvTestData.Catalog.Step(rank);
+            var next = AdvTestData.Catalog.Ranks[AdvTestData.Catalog.RankIndex(rank) + 1];
+            var engine = AdvTestData.HunterAt(rank);
+            engine.RecordGuardianKill(step.Guardian!);
+            engine.AddXp(next.Xp - engine.Progress.Xp);
+            AssertThat(engine.Rank).IsEqual(rank);
+            AssertThat(engine.TryPassExam(rank).Passed).IsTrue();
+            AssertThat(engine.Rank).IsEqual(next.Id);
+        }
+    }
 }

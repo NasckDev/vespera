@@ -54,7 +54,13 @@ public partial class Level
         }
 
         _fade.Color = _fade.Color with { A = 1f };
-        GetTree().CreateTimer(AutoplayDelay).Timeout += () => _ = RunRoad();
+        GetTree().CreateTimer(AutoplayDelay, processAlways: false).Timeout += () =>
+        {
+            if (IsInstanceValid(this))
+            {
+                _ = RunRoad();
+            }
+        };
     }
 
     private async Task RunRoad()

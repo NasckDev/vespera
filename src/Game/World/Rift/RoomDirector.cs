@@ -459,7 +459,7 @@ public partial class RoomDirector : Node
     /// <summary>Elite Gêmeo: um segundo elite igual nasce ao lado.</summary>
     private void SpawnTwin(SpawnData spawn, Vector2 at)
     {
-        Enemy twin = spawn.Type == "espectro" ? new Espectro(_world) : new Lodo(_world);
+        var twin = EnemyFactory.Create(spawn.Type, _world);
         twin.MakeElite(HuntService.Config.Elite);
         twin.ApplyModifier("gemeo");
         twin.Position = _world.ClampToFloor(at + new Vector2(0.8f * _world.Data.HumanHeight, 0));

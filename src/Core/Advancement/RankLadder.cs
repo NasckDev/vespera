@@ -31,7 +31,7 @@ public sealed record RankStatus(
 
 /// <summary>
 /// A escada de ranks (PLANO-V2 §6): sobe-se por XP <b>e</b> por conquista. Para sair do rank R é preciso o XP do rank seguinte,
-/// ter derrubado o Guardião de R e, onde há exame (C, A, S, SSS), ter passado nele. O rank é sempre calculado do estado:
+/// ter derrubado o Guardião de R e, onde há exame (C, B, S, SSS), ter passado nele. O rank é sempre calculado do estado:
 /// nunca fica salvo, então nunca desencontra do XP e das conquistas.
 /// </summary>
 public sealed class RankLadder(AdvancementCatalog catalog)

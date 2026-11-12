@@ -77,16 +77,14 @@ public static class RiftLoot
             return;
         }
 
-        // Ato III: o exame C é a própria Brecha do cais, com o Benício esperando na saída (ROTEIRO-V2 §13, fala 3).
-        if (guardianId == "farol_afogado")
+        // O exame da Ordem de um rank é a própria Brecha do Guardião daquele rank (C: cais, B: cemitério, S e SSS idem);
+        // o catálogo diz quais ranks têm exame (ROTEIRO-V2 §13).
+        foreach (var step in Progression.Catalog.Ranks)
         {
-            Progression.TryPassExam(Vespera.Core.Ranks.Rank.C);
-        }
-
-        // Ato IV: o exame B é a Brecha do Cemitério ("Não para pra ler", ROTEIRO-V2 §13 Ato IV, fala 3).
-        if (guardianId == "velora")
-        {
-            Progression.TryPassExam(Vespera.Core.Ranks.Rank.B);
+            if (step.Exam && step.Guardian == guardianId)
+            {
+                Progression.TryPassExam(step.Id);
+            }
         }
 
         var result = Progression.RecordGuardianKill(RiftSession.Brecha.GuardianId);

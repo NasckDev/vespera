@@ -47,7 +47,13 @@ public static class SaveService
 
     public static SaveData? Load(int slot)
     {
-        var json = UserFile.ReadText(UserPaths.SlotFile(slot));
+        var path = UserPaths.SlotFile(slot);
+        return TryLoad(slot, path) ?? TryLoad(slot, path + UserFile.BackupSuffix);
+    }
+
+    private static SaveData? TryLoad(int slot, string path)
+    {
+        var json = UserFile.ReadText(path);
         if (json is null)
         {
             return null;
@@ -57,9 +63,9 @@ public static class SaveService
         {
             return SaveSerializer.FromJson(json, Database);
         }
-        catch (Exception ex) when (ex is SaveFormatException or System.Text.Json.JsonException)
+        catch (Exception ex)
         {
-            Log.Error($"Save do espaço {slot} ilegível: {ex.Message}");
+            Log.Error($"Save do espaço {slot} ilegível ({path}): {ex.Message}");
             return null;
         }
     }
@@ -70,7 +76,12 @@ public static class SaveService
         return UserFile.WriteText(UserPaths.SlotFile(slot), SaveSerializer.ToJson(data));
     }
 
-    public static void Delete(int slot) => UserFile.Delete(UserPaths.SlotFile(slot));
+    public static void Delete(int slot)
+    {
+        var path = UserPaths.SlotFile(slot);
+        UserFile.Delete(path);
+        UserFile.Delete(path + UserFile.BackupSuffix);
+    }
 
     /// <summary>Cria e grava um jogo novo no espaço (a classe é escolhida só na camada de classes).</summary>
     public static SaveData? StartNew(int slot) => StartNew(slot, DefaultClassId);

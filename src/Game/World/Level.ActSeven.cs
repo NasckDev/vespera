@@ -31,9 +31,9 @@ public partial class Level
         }
 
         // O Avesso fala sozinho quando o caçador entra: não há saída até ele responder.
-        GetTree().CreateTimer(AvessoSpeaksAfter).Timeout += () =>
+        GetTree().CreateTimer(AvessoSpeaksAfter, processAlways: false).Timeout += () =>
         {
-            if (IsInsideTree() && RiftSession.InRift && World.Data.Id == AvessoRoom)
+            if (IsInstanceValid(this) && IsInsideTree() && RiftSession.InRift && World.Data.Id == AvessoRoom)
             {
                 StartDialogue(AvessoDialogue);
             }

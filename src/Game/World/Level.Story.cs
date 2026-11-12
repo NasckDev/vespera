@@ -44,8 +44,13 @@ public partial class Level
     /// </summary>
     public bool StartDialogue(string id, Npc? npc = null, Player? who = null)
     {
+        if (_box.IsOpen)
+        {
+            return false;
+        }
+
         var runner = StoryService.StartDialogue(id);
-        if (runner is null || _box.IsOpen)
+        if (runner is null)
         {
             return false;
         }
@@ -107,7 +112,13 @@ public partial class Level
             _fade.Color = _fade.Color with { A = 1f };
         }
 
-        GetTree().CreateTimer(AutoplayDelay).Timeout += () => PlayAutoplay();
+        GetTree().CreateTimer(AutoplayDelay, processAlways: false).Timeout += () =>
+        {
+            if (IsInstanceValid(this))
+            {
+                PlayAutoplay();
+            }
+        };
     }
 
     private void UpdateStory()

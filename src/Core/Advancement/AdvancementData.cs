@@ -105,7 +105,7 @@ public sealed record RankStepDef
     /// <summary>Guardião que precisa cair para sair deste rank; null no último.</summary>
     public string? Guardian { get; init; }
 
-    /// <summary>Há exame da Ordem para sair deste rank (C, A, S, SSS).</summary>
+    /// <summary>Há exame da Ordem para sair deste rank (C, B, S, SSS).</summary>
     public required bool Exam { get; init; }
 }
 
