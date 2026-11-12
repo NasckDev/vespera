@@ -35,7 +35,7 @@ simuladas, cai e é reanimado, vence a Lodo-Mãe, confere saque e save, cai em g
 - Portal da Praça em grupo: entra na Brecha escolhida pela zona (Esgotos ou Avesso profundo); a Primeira Brecha do Final
   entra pela fala `final/antes`, com o grupo.
 
-## 2. Online (host autoritativo com ENet) — como encaixa, sem implementar agora
+## 2. Online (host autoritativo com ENet)
 
 **Modelo:** um jogador é o **host** e roda a simulação inteira (é o mesmo jogo de hoje). Os clientes só mandam
 comandos e desenham o que o host manda. Nada de lógica de jogo no cliente além de previsão do próprio movimento.
@@ -86,7 +86,7 @@ Replicado por snapshot (não confiável, ~20/s, com interpolação de 100 ms no 
 5. Testes: o `--coop-bot` vira o modelo do bot online — host e cliente no mesmo processo trocando `PlayerCommand`
    serializados por um transporte em memória antes de usar o ENet de verdade.
 
-### 2.5 Estado em 12/11/2026 (branch `f/online`)
+### 2.5 Núcleo do protocolo (12/11/2026, branch `f/online`)
 
 **Pronto (núcleo puro, testado):** `src/Core/Net/` + `tests/Core/Net/NetProtocolTest.cs`.
 
@@ -98,17 +98,34 @@ Replicado por snapshot (não confiável, ~20/s, com interpolação de 100 ms no 
 | `SnapshotInterpolator` | Convidado: desenha em agora − `interpolationMs`, interpolando caçadores e monstros por id; ignora snapshot velho; troca de sala zera o histórico. |
 | `data/coop.json` → `online` | `port` 24680, `snapshotHz` 20, `interpolationMs` 100, `timeoutSeconds` 5 (`CoopRules.Online`, validado). |
 
-**Falta (não coube no prazo):**
+### 2.6 Rede ligada (12/11/2026, branch `f/online-rede`)
 
-1. `src/Game/Net/NetSession` (nó fixo em `/root/NetLink` com `ENetMultiplayerPeer`; RPC confiável para Hello/Welcome/Reject,
-   não confiável para Command e Snapshot), `NetworkCommandProvider : ICommandProvider` embrulhando `CommandQueue`, e
-   `CoopSession.CreateInput` escolhendo o provedor remoto para o slot do convidado (novo `DeviceKind.Network`).
-2. Host: montar o `WorldSnapshot` a partir de `LevelWorld.Players`/`Enemies` a cada 1/`snapshotHz` s; saque e reanimação
-   já correm no host (`PartyProgression`, `PartyDirector`), só falta mandar o saque do dono como evento.
-3. Convidado: a cena que desenha a sala pelo id e os caçadores/monstros pelo interpolador (hoje nada no jogo desenha
-   um `Level` sem simulá-lo); desconexão → título com aviso; host segue sozinho (`Level.LeaveParty`).
-4. UI pt-BR: título e pausa → "Online" → "Hospedar" (IP local + porta) / "Entrar" (IP, porta, classe como no co-op local).
-5. Bots `--online-bot-host` / `--online-bot-join` com as duas instâncias headless em 127.0.0.1 numa única chamada da trava.
+Online para **2 jogadores** (host + 1 convidado; a HUD, as cores e a entrada são de dois). Protocolo na versão 2: o
+snapshot passou a levar a classe de cada caçador (`NetHunter.Kind`) e o tipo de cada monstro (`NetEnemy.Type`).
+
+| Peça | O que faz | Onde |
+|---|---|---|
+| Sessão | Nó fixo `/root/NetLink` com `ENetMultiplayerPeer`; bytes do `NetProtocol` por `SceneMultiplayer.SendBytes`. Canal 0 confiável (Hello/Welcome/Reject), canal 1 não confiável e ordenado (comandos e snapshots). Timeout do ENet = `timeoutSeconds`, mais o `LinkWatch` (silêncio no relógio de parede). | `Game/Net/NetSession*.cs`, `Core/Net/NetLink.cs` |
+| Entrada | Hello → `NetProtocol.Validate` (versão, grupo cheio — inclui co-op local já em curso —, classe). Aceito: Welcome com o slot; o convidado nasce ao lado do J1 assim que a sala deixar (`Level.CanChangeParty`, fora da Brecha) via `Level.ApplyOnlineGuest` → `ApplyParty` com `DeviceKind.Network`. | `NetSession.Host.cs`, `Level.Coop.cs` |
+| Comandos | O convidado amostra teclado/controle (`LocalCommandProvider` sobre `MergedInput.LocalSolo`) e manda um `PlayerCommand` por passo de física (parado com menu aberto). No host, `NetworkCommandProvider` (embrulha `CommandQueue`) alimenta a `CommandInputSource` do J2; `RemoteCommands.Sanitize` tira Pausa/Inventário/Diário (o convidado não pausa o host). O J1 do host lê todos os dispositivos locais. | `NetworkCommandProvider.cs`, `CoopSession.CreateInput` |
+| Snapshot | `SnapshotBuilder` monta da sala atual (caçadores, monstros vivos com id estável do `NetIdMap`, fala aberta) a `snapshotHz` (`SnapshotPacer`, no relógio do jogo). Fora do jogo (título/saves) manda a sala `espera`. | `SnapshotBuilder.cs` |
+| Convidado | `OnlineGuestView`: carrega o chão pintado pelo id da sala, desenha caçadores (sprite da classe, andar/parado pela direção e pelo deslocamento, etiqueta J1/J2) e monstros (folha do monstro + barra de vida) pelo `SnapshotInterpolator` (100 ms), câmera no próprio caçador, fala e vida. Esc → "Sair da partida online?". | `OnlineGuestView.cs` |
+| Queda | Host: par saiu/silêncio/"Parar de hospedar" → `Level.LeaveOnline` (host segue sozinho, inclusive na Brecha, com aviso na HUD). Convidado: host caiu/silêncio/recusa → título com aviso em pt-BR no rodapé. | `NetSession*.cs`, `TitleScreen.cs` |
+| UI | Título → **Online** (Hospedar: IP local + porta; Escolher o espaço de save; Entrar: IP, porta, classe). Pausa → **Online** (só Hospedar / Parar de hospedar). Com o online ativo, os botões do co-op local somem da pausa. | `UI/OnlineScreen.cs`, `PauseScreen.cs` |
+| Prova | `tools/online-bot.sh` sobe host (`--online-bot-host`) e convidado (`--online-bot-join`) headless em 127.0.0.1 numa única chamada da trava: hospedar pela pausa, entrar pelo título com o Martelo, convidado anda (visto no host), grupo entra na Brecha (troca de sala no convidado), o convidado mata um monstro (morre no host e some do snapshot), host para de hospedar (segue sozinho na Brecha) e o convidado volta ao título com o aviso. | `Testing/SmokeTest.Online.cs` |
+
+Relógio: com `--fixed-fps` os dois processos rodam sem sincronia com o tempo real; por isso o ritmo dos snapshots e a
+interpolação usam o relógio do jogo (`NetSession.GameNow`) e só a queda por silêncio usa o relógio de parede.
+
+**Ainda falta (próximas fatias):**
+
+1. Efeitos no convidado: golpes, flechas, números de dano, tremor, animação de ataque/esquiva e o anel de reanimação
+   (hoje ele vê posições, vida, queda, monstros e falas). Vêm como eventos confiáveis (§2.2).
+2. Saque e progresso do convidado: hoje o J2 online usa o `SaveData.Guest` do save do host (como no co-op local); o
+   resumo do caçador do convidado (§2.3) e o saque por dono mandado como evento ainda não existem.
+3. Convidado entrando no meio de uma Brecha: espera o grupo voltar à cidade (vê a sala, mas o caçador só nasce fora dela).
+4. 3–4 jogadores online, previsão do próprio movimento no convidado, chat/lista de pares, descoberta na LAN.
+5. Sem QA visual com janela (só headless): conferir escala dos sprites, etiquetas e barras na tela do convidado.
 
 ## 3. Lacunas conhecidas
 
