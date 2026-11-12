@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Godot;
@@ -25,6 +26,9 @@ public partial class SmokeTest
 {
     public const string Atos67Flag = "--atos67";
 
+    /// <summary>Com <c>--atos67</c>: só a dupla de Guardiões do Ato VII (atalho de QA).</summary>
+    public const string OnlyDuoFlag = "--so-dupla";
+
     private static readonly string[] DoneBeforeAto6 =
     [
         "GuardianDefeated:farol_afogado", "act3_done", "met_severo", "pescou", "lanterna_m", "odete_lanterna_m",
@@ -43,6 +47,19 @@ public partial class SmokeTest
         }
 
         engine.Dawn();
+        if (Array.IndexOf(_args, OnlyDuoFlag) >= 0)
+        {
+            // Atalho de QA: pula o Ato VI e a caçada do Avesso e vai direto à dupla (golpe combinado e sala do Avesso).
+            foreach (var flag in new[] { "sopa_da_vespera", "ato6_fecho_benicio", "ato6_ravi", "ato6_lis", "ato7_lis_dia", "ato7_benicio", "avesso_profundo:hunt_1", "vigia_p5_feita", "vigia_p5_volto", "lis_revelada" })
+            {
+                engine.SetFlag(flag);
+            }
+
+            await ActSevenAvesso(start);
+            Log.Info("atos67 (so dupla): golpe combinado e sala do Avesso conferidos");
+            return;
+        }
+
         var level = await ActSixStreets(start);
         level = await ActSixHunts(level);
         level = await ActSixClose(level);
@@ -252,6 +269,11 @@ public partial class SmokeTest
             Log.Info($"atos67: dupla {pair} em {level.World.Data.Id}");
             Check(director.Guardian?.Def.Telegraph == 0.4 && director.Partner?.Def.Telegraph == 0.4, "na dupla os avisos ficam em 0,4 s");
             await Shot($"atos67_07_dupla_{answer}", 0.6);
+            if (answer == "Ficar")
+            {
+                await CheckDuoStrike(level, director);
+            }
+
             director.Guardian?.Die();
             await PhysicsFrames(10);
             Check(!director.Cleared, "com um Guardião de pé a sala da dupla não acaba");
@@ -280,6 +302,54 @@ public partial class SmokeTest
         Check(Progression.State.Xp >= Progression.Catalog.Step(Rank.SSS).Xp, $"recusar a oferta é o exame SSS: a XP deveria chegar ao selo SSS ({Progression.State.Xp})");
         Check(engine.ObjectiveId == "ato7_fecho", $"depois do Avesso o objetivo deveria ser ato7_fecho, é '{engine.ObjectiveId}'");
         return (Level)_router.Current!;
+    }
+
+    /// <summary>
+    /// Golpe combinado da dupla: com o caçador fora da zona o aviso corre e o golpe não acerta; com ele no elo, acerta.
+    /// O caçador é curado a cada quadro para os golpes individuais dos Guardiões não derrubarem o teste.
+    /// </summary>
+    private async Task CheckDuoStrike(Level level, RoomDirector director)
+    {
+        var duo = director.DuoStrike;
+        Check(duo is not null, "a sala da dupla deveria ter o golpe combinado");
+        if (duo is null || director.Guardian is null || director.Partner is null)
+        {
+            return;
+        }
+
+        var player = level.Player;
+        var scale = level.World.Data.ActorScale;
+        // Fora da zona: o golpe cai e não pega ninguém. No elo: pega (se um golpe individual dos Guardiões não o empurrou
+        // para fora ou não o deixou no tempo intocável naquele quadro; nesse caso tenta de novo).
+        var hitInside = false;
+        for (var attempt = 0; attempt < 5 && (attempt == 0 || !hitInside); attempt++)
+        {
+            var inside = attempt > 0;
+            duo.SkipDelay();
+            var strikesBefore = duo.Strikes;
+            var sawWarning = false;
+            for (var i = 0; i < 1200 && duo.Strikes == strikesBefore; i++)
+            {
+                player.Combat.Heal(100000);
+                if (duo.Warning)
+                {
+                    sawWarning = true;
+                    var (from, to) = duo.Lane;
+                    var mid = (from + to) / 2f;
+                    player.GlobalPosition = inside ? mid : mid + new Vector2(0, 260f * scale);
+                }
+
+                await Frames(1);
+            }
+
+            Check(sawWarning, "o golpe combinado deveria avisar no chão antes de cair");
+            Check(duo.Strikes == strikesBefore + 1, "o golpe combinado deveria cair depois do aviso");
+            Check(inside || duo.LastInZone == 0, $"a zona do golpe combinado não deveria pegar quem saiu (pegou {duo.LastInZone})");
+            Check(duo.LastHits == 0 || inside, "quem saiu da zona não deveria levar o golpe combinado");
+            hitInside = inside && duo.LastHits == 1;
+        }
+
+        Check(hitInside, "o golpe combinado deveria machucar quem ficou no elo");
     }
 
     private async Task EnterAvessoDuo(Level level)

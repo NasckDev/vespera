@@ -45,6 +45,12 @@ public partial class GuardianDuoStrike : Node2D
     /// <summary>Quantos golpes combinados já caíram.</summary>
     public int Strikes => _rule.Strikes;
 
+    /// <summary>Quantos caçadores estavam na zona do último golpe, mesmo protegidos pelo tempo intocável (QA e bots).</summary>
+    public int LastInZone { get; private set; }
+
+    /// <summary>Quantos caçadores o último golpe acertou (QA e bots).</summary>
+    public int LastHits { get; private set; }
+
     /// <summary>Último ponto A e B do aviso (QA e bots).</summary>
     public (Vector2 From, Vector2 To) Lane => (_from, _to);
 
@@ -157,7 +163,9 @@ public partial class GuardianDuoStrike : Node2D
         _world.Feel.Spark(mid, Amber, 18, 320f * s, Vector2.Up, 60f);
         _world.Feel.Shake(0.5f);
         CombatSfx.Play(this, CombatSound.BossLand, mid, 0f);
-        foreach (var target in _world.Players.Where(p => IsInstanceValid(p) && p.Combat.CanBeHit).ToList())
+        LastHits = 0;
+        LastInZone = 0;
+        foreach (var target in _world.Players.Where(p => IsInstanceValid(p) && !p.Combat.IsDead).ToList())
         {
             var c = target.Combat;
             var feet = target.GlobalPosition;
@@ -165,9 +173,17 @@ public partial class GuardianDuoStrike : Node2D
             {
                 continue;
             }
+            LastInZone++;
+            if (!c.CanBeHit)
+            {
+                continue;
+            }
 
             var away = (feet - mid).Normalized();
-            c.ReceiveHit(new HitInfo(damage, mid, away * 380f * s, 0.08, 1, false, 0));
+            if (c.ReceiveHit(new HitInfo(damage, mid, away * 380f * s, 0.08, 1, false, 0)).Landed)
+            {
+                LastHits++;
+            }
         }
     }
 }
