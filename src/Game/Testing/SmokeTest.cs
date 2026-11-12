@@ -47,7 +47,7 @@ public partial class SmokeTest : Node
     public override void _Ready()
     {
         _router = SceneRouter.Instance;
-        var watchdog = GetTree().CreateTimer(Array.IndexOf(_args, BotFlag) >= 0 || Array.IndexOf(_args, QaFlag) >= 0 || Array.IndexOf(_args, CombatBotFlag) >= 0 || Array.IndexOf(_args, CombatQaFlag) >= 0 || Array.IndexOf(_args, ScaleFlag) >= 0 || Array.IndexOf(_args, StoryFlag) >= 0 || Array.IndexOf(_args, CameraFlag) >= 0 || Array.IndexOf(_args, ClicksFlag) >= 0 || Array.IndexOf(_args, Ato45Flag) >= 0 || Array.IndexOf(_args, FinalFlag) >= 0 || Array.IndexOf(_args, Atos67Flag) >= 0 || Array.IndexOf(_args, CoopBotFlag) >= 0 ? BotWatchdogSeconds
+        var watchdog = GetTree().CreateTimer(Array.IndexOf(_args, BotFlag) >= 0 || Array.IndexOf(_args, QaFlag) >= 0 || Array.IndexOf(_args, CombatBotFlag) >= 0 || Array.IndexOf(_args, CombatQaFlag) >= 0 || Array.IndexOf(_args, ScaleFlag) >= 0 || Array.IndexOf(_args, StoryFlag) >= 0 || Array.IndexOf(_args, CameraFlag) >= 0 || Array.IndexOf(_args, ClicksFlag) >= 0 || Array.IndexOf(_args, Ato45Flag) >= 0 || Array.IndexOf(_args, FinalFlag) >= 0 || Array.IndexOf(_args, Atos67Flag) >= 0 || Array.IndexOf(_args, CoopBotFlag) >= 0 || IsOnlineBot ? BotWatchdogSeconds
             : Array.IndexOf(_args, ActOneFlag) >= 0 ? ActOneWatchdogSeconds : WatchdogSeconds);
         watchdog.Timeout += () =>
         {
@@ -102,6 +102,12 @@ public partial class SmokeTest : Node
         if (Array.IndexOf(_args, ProgressionFlag) >= 0)
         {
             await RunProgressionSmoke();
+            return;
+        }
+
+        if (IsOnlineBot)
+        {
+            await RunOnlineBot();
             return;
         }
 

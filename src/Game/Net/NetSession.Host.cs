@@ -166,7 +166,7 @@ public partial class NetSession
             }
         }
 
-        if (_guests.Values.Any(g => g.Accepted) && _pacer.Due(now))
+        if (_guests.Values.Any(g => g.Accepted) && _pacer.Due(GameNow))
         {
             var snapshot = level is not null && IsInstanceValid(level) && level.World is not null && IsInstanceValid(level.World)
                 ? SnapshotBuilder.Build(level, _enemyIds)

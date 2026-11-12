@@ -52,7 +52,14 @@ public partial class NetSession : Node
     /// <summary>Aviso a mostrar no título depois de cair (convidado) — lido e limpo pelo título.</summary>
     public static string? PendingNotice { get; set; }
 
+    /// <summary>Relógio de parede (segundos): queda por silêncio.</summary>
     public static double Now => Time.GetTicksMsec() / 1000.0;
+
+    /// <summary>
+    /// Relógio do jogo (passos de física em segundos): ritmo dos snapshots e interpolação. Igual ao de parede no jogo normal;
+    /// nos bots com <c>--fixed-fps</c> (sem sincronia com o tempo real) mantém host e convidado no mesmo compasso.
+    /// </summary>
+    public static double GameNow => Engine.GetPhysicsFrames() / (double)Engine.PhysicsTicksPerSecond;
 
     private static OnlineTuning Tuning => CoopSession.Rules.Online;
 

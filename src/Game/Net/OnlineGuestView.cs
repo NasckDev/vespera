@@ -40,6 +40,9 @@ public partial class OnlineGuestView : Control
     /// <summary>Trocas de sala vistas (para os bots).</summary>
     public int LevelChanges { get; private set; }
 
+    /// <summary>Altura humana da sala desenhada (0 sem sala).</summary>
+    public float HumanHeight => _data?.HumanHeight ?? 0f;
+
     /// <summary>Monstros desenhados agora.</summary>
     public int EnemiesDrawn => _enemies.Count;
 
@@ -103,7 +106,7 @@ public partial class OnlineGuestView : Control
             LoadRoom(latest.LevelId);
         }
 
-        var now = NetSession.Now;
+        var now = NetSession.GameNow;
         DrawHunters(latest, interp, now);
         DrawEnemies(latest, interp, now);
         _dialogue.Text = latest.Dialogue;

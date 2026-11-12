@@ -139,7 +139,7 @@ public partial class NetSession
                 FailGuest(NetProtocol.Describe(reason));
                 break;
             case NetMessageKind.Snapshot when GuestState == GuestState.Joined && WorldSnapshot.TryRead(packet, out var snapshot):
-                if (Interpolator?.Add(Now, snapshot) == true)
+                if (Interpolator?.Add(GameNow, snapshot) == true)
                 {
                     SnapshotsReceived++;
                 }
