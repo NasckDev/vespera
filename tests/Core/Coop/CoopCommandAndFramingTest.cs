@@ -15,6 +15,15 @@ public class CoopCommandAndFramingTest
     private static readonly Vector2 Screen = new(1920, 1080);
 
     [TestCase]
+    public void PotionButtonRoundTripsThroughTheWire()
+    {
+        var cmd = new PlayerCommand(7, 1, 0f, 0f, CommandButtons.None, CommandButtons.Potion);
+        var buffer = new byte[PlayerCommand.WireSize];
+        cmd.Write(buffer);
+        AssertThat(PlayerCommand.Read(buffer).WasPressed(CommandButtons.Potion)).IsTrue();
+    }
+
+    [TestCase]
     public void CommandRoundTripsThroughTheWire()
     {
         var cmd = new PlayerCommand(4242, 1, 0.6f, -0.8f, CommandButtons.Attack | CommandButtons.Interact, CommandButtons.Dodge);

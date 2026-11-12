@@ -47,7 +47,7 @@ public partial class OptionsScreen : UiScreen
         yield return new StepRow("Efeitos sonoros", () => $"{s.SfxVolume}%", d => Change(() => s.SfxVolume = Step(s.SfxVolume, d, VolumeStep)));
         yield return new StepRow("Tela cheia", () => YesNo(s.Fullscreen), _ => Change(() => s.Fullscreen = !s.Fullscreen));
         yield return new StepRow("Tamanho da janela", () => WindowText(s.WindowSize),
-            d => Change(() => s.WindowSize = Math.Clamp(s.WindowSize + d, 0, GameSettings.WindowHeights.Length - 1)));
+            d => Change(() => s.WindowSize = Wrap(s.WindowSize + d, GameSettings.WindowHeights.Length - 1)));
         yield return new StepRow("Tremor de tela", () => $"{s.ScreenShake}%", d => Change(() => s.ScreenShake = Step(s.ScreenShake, d, ShakeStep)));
         yield return new StepRow("Reduzir flashes", () => YesNo(s.ReduceFlashes), _ => Change(() => s.ReduceFlashes = !s.ReduceFlashes));
         yield return new StepRow("Tamanho do texto", () => s.TextSize == GameSettings.TextLarge ? "Grande" : "Normal",
@@ -60,7 +60,10 @@ public partial class OptionsScreen : UiScreen
         GameSettings.Commit(GetTree());
     }
 
-    private static int Step(int value, int direction, int step) => Math.Clamp(value + (direction * step), 0, 100);
+    /// <summary>Passa do máximo para o mínimo e do mínimo para o máximo (Enter e clique na linha avançam e dão a volta).</summary>
+    private static int Step(int value, int direction, int step) => Wrap(value + (direction * step), 100);
+
+    private static int Wrap(int value, int max) => value > max ? 0 : value < 0 ? max : value;
 
     private static string WindowText(int index)
     {

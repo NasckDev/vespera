@@ -8,6 +8,13 @@ namespace Vespera.Tests.Game;
 public class BindingTableTest
 {
     [TestCase]
+    public void Player2HasDefaultKeyForPotion()
+    {
+        var table = BindingTable.DefaultsPlayer2();
+        AssertThat(table.Get("potion", BindingSlot.Primary)).IsNotEmpty();
+    }
+
+    [TestCase]
     public void Assign_SwapsWithConflictingAction()
     {
         var table = BindingTable.Defaults();

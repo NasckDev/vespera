@@ -31,6 +31,7 @@ public static class CommandMap
         (InputActions.Inventory, CommandButtons.Inventory),
         (InputActions.Journal, CommandButtons.Journal),
         (InputActions.Pause, CommandButtons.Pause),
+        (InputActions.Potion, CommandButtons.Potion),
     ];
 
     public static CommandButtons ButtonOf(string action)

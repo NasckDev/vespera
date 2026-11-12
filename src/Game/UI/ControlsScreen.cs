@@ -71,6 +71,7 @@ public partial class ControlsScreen : UiScreen
     {
         if (_capturing is not { } target)
         {
+            base._Input(@event);
             return;
         }
 

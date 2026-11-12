@@ -1,4 +1,5 @@
 using Godot;
+using Vespera.Game.Boot;
 using Vespera.Game.Combat;
 using Vespera.Game.Hunter;
 using Vespera.Game.UI;
@@ -76,7 +77,7 @@ public partial class HuntHud : Control
 
     private const float RoomRefreshSeconds = 0.25f;
 
-    private (int, int) _potionKey = (-1, -1);
+    private (int, int, string) _potionKey = (-1, -1, "");
     private (Vespera.Core.Ranks.Rank?, int, int, int) _xpKey = (null, -1, -1, -1);
     private (bool SoupActive, bool SecondLifeReady) _soupKey = (false, false);
     private float _roomTimer;
@@ -93,11 +94,11 @@ public partial class HuntHud : Control
 
         Visible = true;
         var state = HuntService.State;
-        var potionKey = (state.Potions, HuntService.Config.Potions.Max);
+        var potionKey = (state.Potions, HuntService.Config.Potions.Max, InputDevices.KeyName(InputActions.Potion));
         if (potionKey != _potionKey)
         {
             _potionKey = potionKey;
-            _potions.Text = $"{state.Potions}/{HuntService.Config.Potions.Max}  [R]";
+            _potions.Text = $"{state.Potions}/{HuntService.Config.Potions.Max}  [{potionKey.Item3}]";
         }
 
         _potionIcon.Filled = state.Potions > 0;
