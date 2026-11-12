@@ -1,10 +1,12 @@
 using System;
 using Godot;
+using Vespera.Core.Advancement;
 using Vespera.Core.Combat;
 using Vespera.Core.Rift;
 using Vespera.Core.Rules;
 using Vespera.Game.Actors;
 using Vespera.Game.Boot;
+using Vespera.Game.Combat.Echo;
 using Vespera.Game.World.Rift;
 
 namespace Vespera.Game.Combat;
@@ -40,9 +42,7 @@ public sealed partial class HunterCombat : Node, IHittable
     private const float AfterImageEvery = 0.05f;
     private const float DeathDelay = 2.4f;
 
-    /// <summary>Recarga do Eco Viscoso (Q), em segundos.</summary>
-    public const float EcoCooldownSeconds = 8f;
-    private const float EcoDashDistance = 1.5f;
+    private const int EchoSlots = 2;
     private const float SlimeEvery = 0.035f;
 
     private readonly Player _player;
@@ -54,8 +54,13 @@ public sealed partial class HunterCombat : Node, IHittable
     private float _afterImageTimer;
     private Vector2 _dodgeVelocity;
     private Vector2 _knock;
-    private float _ecoCooldown;
+    private readonly EchoCooldown[] _echoCooldowns = [new(), new()];
     private bool _ecoDash;
+    private float _sheltered;
+    private float _velaLeft;
+    private double _velaHealPerSecond;
+    private double _velaHealCarry;
+    private int _velaCut;
     private float _slimeTimer;
 
     public HunterCombat(Player player)
@@ -70,7 +75,7 @@ public sealed partial class HunterCombat : Node, IHittable
 
     public float HitRadius => BodyRadius * _player.ActorScale;
 
-    public bool CanBeHit => State is HunterState.Free or HunterState.Hurt && _invulnerable <= 0f && !Disabled;
+    public bool CanBeHit => State is HunterState.Free or HunterState.Hurt && _invulnerable <= 0f && _sheltered <= 0f && !Disabled;
 
     public HunterState State { get; private set; } = HunterState.Free;
 
@@ -100,8 +105,11 @@ public sealed partial class HunterCombat : Node, IHittable
 
     public Player Player => _player;
 
-    /// <summary>Recarga do Eco Viscoso: 0 = pronto, 1 = recém-usado (ícone da HUD).</summary>
-    public float EcoCooldownFraction => _ecoCooldown / EcoCooldownSeconds;
+    /// <summary>Recarga do Eco do slot 0: 0 = pronto, 1 = recém-usado (ícone da HUD).</summary>
+    public float EcoCooldownFraction => EchoCooldownFraction(0);
+
+    /// <summary>Recarga do Eco do <paramref name="slot"/>: 0 = pronto, 1 = recém-usado.</summary>
+    public float EchoCooldownFraction(int slot) => slot >= 0 && slot < EchoSlots ? _echoCooldowns[slot].Fraction : 0f;
 
     public float Scale => _player.ActorScale;
 
@@ -127,7 +135,7 @@ public sealed partial class HunterCombat : Node, IHittable
     {
         Stats = HunterStats.Compute(RiftSession.Db, RiftSession.Save, HunterSprites.WeaponId(_player.Hunter), _player.Slot);
         var soup = Hunter.HuntService.SoupActive ? Core.Hunt.RunPerks.SoupBonus(Stats.Hp) : 0;
-        MaxHp = Math.Max(1, Stats.Hp + Hunter.HuntService.Bless.MaxHp + soup);
+        MaxHp = Math.Max(1, Stats.Hp + Hunter.HuntService.Bless.MaxHp + soup - _velaCut);
         Hp = fullHeal ? MaxHp : Math.Min(Hp, MaxHp);
     }
 
@@ -145,7 +153,13 @@ public sealed partial class HunterCombat : Node, IHittable
         _stateTime += dt;
         _invulnerable = Mathf.Max(0f, _invulnerable - dt);
         _stamina.Tick(dt);
-        _ecoCooldown = Mathf.Max(0f, _ecoCooldown - dt);
+        foreach (var cooldown in _echoCooldowns)
+        {
+            cooldown.Tick(dt);
+        }
+
+        _sheltered = Mathf.Max(0f, _sheltered - dt);
+        TickVela(dt);
         _knock = _knock.MoveToward(Vector2.Zero, 1800f * Scale * dt);
         UpdateBlink();
         if (Disabled || _player.Frozen)
@@ -176,7 +190,7 @@ public sealed partial class HunterCombat : Node, IHittable
             return StepDodge(dt);
         }
 
-        if (input.IsJustPressed(InputActions.Skill) && TryEcoDash(move))
+        if (input.IsJustPressed(InputActions.Skill) && TryEcho(0, move) && State == HunterState.Dodging)
         {
             return StepDodge(dt);
         }
@@ -323,31 +337,103 @@ public sealed partial class HunterCombat : Node, IHittable
         _player.Feel?.Toast(none ? "Sem poções. A Tia Nilza vende na Praça." : "A vida já está cheia.");
     }
 
-    /// <summary>Eco Viscoso (Q): avanço longo sem custo de fôlego que deixa um rastro de lodo que lentifica os monstros.</summary>
-    private bool TryEcoDash(Vector2 move)
+    /// <summary>Eco equipado no <paramref name="slot"/> do jogador deste caçador (null = vazio ou sem progressão).</summary>
+    public EchoDef? EquippedEcho(int slot)
     {
-        if (!Hunter.HuntService.HasEcoViscoso)
+        var engine = Coop.PartyProgression.EngineFor(_player.Slot);
+        if (engine is null)
+        {
+            return null;
+        }
+
+        var id = engine.EchoIn(slot);
+        if (id is null && slot == 0 && _player.Slot == 0 && Hunter.HuntService.HasEcoViscoso)
+        {
+            id = EchoCaster.Viscoso;
+        }
+
+        return id is not null && engine.Catalog.Echoes.TryGetValue(id, out var def) ? def : null;
+    }
+
+    /// <summary>
+    /// Usa o Eco do <paramref name="slot"/>. Sem recarga e com Eco equipado, solta o efeito (cada Eco tem o seu) e inicia a
+    /// recarga. O Viscoso é o avanço: nesse caso o estado vira <see cref="HunterState.Dodging"/>.
+    /// </summary>
+    public bool TryEcho(int slot, Vector2 move)
+    {
+        if (slot < 0 || slot >= EchoSlots || EquippedEcho(slot) is not { } def || !_echoCooldowns[slot].Ready)
         {
             return false;
         }
 
-        if (_ecoCooldown > 0f)
-        {
-            return false;
-        }
-
-        Moves.Cancel();
         var dir = move.LengthSquared() > 0.01f ? move.Normalized() : _player.AimDirection;
+        if (def.Id == EchoCaster.Viscoso)
+        {
+            StartEcoDash(def, dir);
+        }
+        else if (!EchoCaster.Cast(this, def, dir))
+        {
+            return false;
+        }
+
+        _echoCooldowns[slot].Start(def.Cooldown);
+        return true;
+    }
+
+    /// <summary>Eco Viscoso: avanço longo sem custo de fôlego que deixa um rastro de lodo que lentifica os monstros.</summary>
+    private void StartEcoDash(EchoDef def, Vector2 dir)
+    {
+        Moves.Cancel();
         _player.Face(dir);
-        _dodgeVelocity = dir * (float)(_tuning.DodgeDistance * EcoDashDistance * Scale / _tuning.DodgeSeconds);
+        _dodgeVelocity = dir * (float)(_tuning.DodgeDistance * def.Radius * Scale / _tuning.DodgeSeconds);
         _invulnerable = Mathf.Max(_invulnerable, (float)_tuning.DodgeInvulnerable);
-        _ecoCooldown = EcoCooldownSeconds;
         _ecoDash = true;
         _slimeTimer = 0f;
         Enter(HunterState.Dodging);
         _player.PlayAnimation("esquiva", restart: true, fitSeconds: (float)_tuning.DodgeSeconds);
         CombatSfx.Play(_player, CombatSound.Slam, Vector2.Zero, -6f);
-        return true;
+    }
+
+    /// <summary>Abrigo do Eco do Lar: invulnerável (sem piscar) pelos próximos <paramref name="seconds"/>.</summary>
+    public void Shelter(float seconds) => _sheltered = Mathf.Max(_sheltered, seconds);
+
+    /// <summary>Eco da Vela: cura contínua e, enquanto dura, o rank fica um nível abaixo (menos vida máxima).</summary>
+    public void StartVela(EchoDef def)
+    {
+        var engine = Coop.PartyProgression.EngineFor(_player.Slot);
+        _velaCut = engine is null ? 0 : EchoRules.VelaHpPenalty(engine.Catalog, engine.Rank);
+        _velaLeft = (float)def.Duration;
+        _velaHealPerSecond = EchoRules.HealPerSecond(def, MaxHp - _velaCut);
+        RefreshStats(fullHeal: false);
+        _player.Flash.Pulse(new Color(1f, 0.85f, 0.45f), 0.08f, (float)def.Duration, 0.45f);
+    }
+
+    private void TickVela(float dt)
+    {
+        if (_velaLeft <= 0f)
+        {
+            return;
+        }
+
+        _velaLeft -= dt;
+        if (!IsDead)
+        {
+            _velaHealCarry += _velaHealPerSecond * dt;
+            var whole = (int)_velaHealCarry;
+            if (whole > 0)
+            {
+                _velaHealCarry -= whole;
+                Hp = Math.Min(MaxHp, Hp + whole);
+            }
+        }
+
+        if (_velaLeft <= 0f)
+        {
+            _velaCut = 0;
+            _velaHealCarry = 0;
+            RefreshStats(fullHeal: false);
+            _player.Feel?.Toast("A vela apagou: o rank volta.");
+        }
     }
 
     private bool TryDodge(Vector2 move)

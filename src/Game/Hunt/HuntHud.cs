@@ -102,7 +102,7 @@ public partial class HuntHud : Control
         }
 
         _potionIcon.Filled = state.Potions > 0;
-        _eco.Visible = HuntService.HasEcoViscoso;
+        _eco.Visible = _world.Player.Combat.EquippedEcho(0) is not null;
         _eco.Fraction = _world.Player.Combat.EcoCooldownFraction;
         var status = Progression.Status;
         var lumes = Progression.State.Lumes;
