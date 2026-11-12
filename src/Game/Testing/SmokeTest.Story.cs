@@ -161,7 +161,21 @@ public partial class SmokeTest
 
     private static float OpaqueHeight(Texture2D texture)
     {
-        var image = texture.GetImage();
+        Image image;
+        if (texture is AtlasTexture atlas)
+        {
+            // Atlas grandes são importados com compressão de VRAM: lê os pixels do PNG original.
+            image = Image.LoadFromFile(ProjectSettings.GlobalizePath(atlas.Atlas.ResourcePath)).GetRegion((Rect2I)atlas.Region);
+        }
+        else
+        {
+            image = texture.GetImage();
+            if (image.IsCompressed())
+            {
+                image.Decompress();
+            }
+        }
+
         int top = -1, bottom = -1;
         for (var y = 0; y < image.GetHeight(); y++)
         {

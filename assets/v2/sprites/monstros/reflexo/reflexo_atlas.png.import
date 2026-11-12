@@ -3,20 +3,22 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://chnsl6m34bqli"
-path="res://.godot/imported/reflexo_atlas.png-9ff0ebde3d52fb5c357f3e82beebb862.ctex"
+path.bptc="res://.godot/imported/reflexo_atlas.png-9ff0ebde3d52fb5c357f3e82beebb862.bptc.ctex"
+path.astc="res://.godot/imported/reflexo_atlas.png-9ff0ebde3d52fb5c357f3e82beebb862.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/v2/sprites/monstros/reflexo/reflexo_atlas.png"
-dest_files=["res://.godot/imported/reflexo_atlas.png-9ff0ebde3d52fb5c357f3e82beebb862.ctex"]
+dest_files=["res://.godot/imported/reflexo_atlas.png-9ff0ebde3d52fb5c357f3e82beebb862.bptc.ctex", "res://.godot/imported/reflexo_atlas.png-9ff0ebde3d52fb5c357f3e82beebb862.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

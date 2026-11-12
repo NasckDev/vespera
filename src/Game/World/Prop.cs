@@ -95,6 +95,11 @@ public partial class Prop : Node2D
         AddInteraction(footprint);
     }
 
+    private const float BehindCheckSeconds = 0.1f;
+
+    private float _behindTimer;
+    private bool _playerBehind;
+
     public override void _Process(double delta)
     {
         if (!_def.Occludes)
@@ -102,7 +107,14 @@ public partial class Prop : Node2D
             return;
         }
 
-        var target = IsAnyPlayerBehind() ? HiddenAlpha : 1f;
+        _behindTimer -= (float)delta;
+        if (_behindTimer <= 0f)
+        {
+            _behindTimer = BehindCheckSeconds;
+            _playerBehind = IsAnyPlayerBehind();
+        }
+
+        var target = _playerBehind ? HiddenAlpha : 1f;
         _alpha = Mathf.MoveToward(_alpha, target, FadeSpeed * (float)delta);
         _sprite.Modulate = new Color(_sprite.Modulate, _alpha);
     }

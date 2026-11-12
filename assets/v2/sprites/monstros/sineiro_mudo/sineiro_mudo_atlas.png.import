@@ -3,20 +3,22 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dfcgsf3rmtqpu"
-path="res://.godot/imported/sineiro_mudo_atlas.png-17af6b3b6569a9ba733a0e3510c7adff.ctex"
+path.bptc="res://.godot/imported/sineiro_mudo_atlas.png-17af6b3b6569a9ba733a0e3510c7adff.bptc.ctex"
+path.astc="res://.godot/imported/sineiro_mudo_atlas.png-17af6b3b6569a9ba733a0e3510c7adff.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/v2/sprites/monstros/sineiro_mudo/sineiro_mudo_atlas.png"
-dest_files=["res://.godot/imported/sineiro_mudo_atlas.png-17af6b3b6569a9ba733a0e3510c7adff.ctex"]
+dest_files=["res://.godot/imported/sineiro_mudo_atlas.png-17af6b3b6569a9ba733a0e3510c7adff.bptc.ctex", "res://.godot/imported/sineiro_mudo_atlas.png-17af6b3b6569a9ba733a0e3510c7adff.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

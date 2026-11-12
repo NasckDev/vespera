@@ -74,6 +74,13 @@ public partial class HuntHud : Control
         return label;
     }
 
+    private const float RoomRefreshSeconds = 0.25f;
+
+    private (int, int) _potionKey = (-1, -1);
+    private (Vespera.Core.Ranks.Rank?, int, int, int) _xpKey = (null, -1, -1, -1);
+    private (bool SoupActive, bool SecondLifeReady) _soupKey = (false, false);
+    private float _roomTimer;
+
     public void Bind(LevelWorld world) => _world = world;
 
     public override void _Process(double delta)
@@ -86,23 +93,52 @@ public partial class HuntHud : Control
 
         Visible = true;
         var state = HuntService.State;
-        _potions.Text = $"{state.Potions}/{HuntService.Config.Potions.Max}  [R]";
+        var potionKey = (state.Potions, HuntService.Config.Potions.Max);
+        if (potionKey != _potionKey)
+        {
+            _potionKey = potionKey;
+            _potions.Text = $"{state.Potions}/{HuntService.Config.Potions.Max}  [R]";
+        }
+
         _potionIcon.Filled = state.Potions > 0;
         _eco.Visible = HuntService.HasEcoViscoso;
         _eco.Fraction = _world.Player.Combat.EcoCooldownFraction;
         var status = Progression.Status;
-        var xp = status.Next is { } next ? $"XP {status.XpIntoRank}/{status.XpSpan} até o rank {next}" : "XP no topo";
-        _lumes.Text = $"{xp}  ·  {Progression.State.Lumes} Lumes";
-        var inRift = RiftSession.InRift && HuntService.Plan is not null;
-        _room.Visible = _goal.Visible = _contracts.Visible = inRift;
-        _soup.Visible = inRift && (HuntService.SoupActive || HuntService.SecondLifeReady);
-        _soup.Text = string.Join("  ·  ", new[] { HuntService.SoupActive ? Core.Hunt.RunPerks.SoupLabel : null, HuntService.SecondLifeReady ? Core.Hunt.RunPerks.SecondLifeLabel : null }.Where(s => s is not null));
-        _map.Visible = inRift && HuntService.MapActive;
-        if (inRift)
+        var lumes = Progression.State.Lumes;
+        var xpKey = (status.Next, status.XpIntoRank, status.XpSpan, lumes);
+        if (xpKey != _xpKey)
         {
-            UpdateRoom();
+            _xpKey = xpKey;
+            var xp = status.Next is { } next ? $"XP {status.XpIntoRank}/{status.XpSpan} até o rank {next}" : "XP no topo";
+            _lumes.Text = $"{xp}  ·  {lumes} Lumes";
         }
 
+        var inRift = RiftSession.InRift && HuntService.Plan is not null;
+        _room.Visible = _goal.Visible = _contracts.Visible = inRift;
+        var soupKey = (HuntService.SoupActive, HuntService.SecondLifeReady);
+        _soup.Visible = inRift && (soupKey.SoupActive || soupKey.SecondLifeReady);
+        if (soupKey != _soupKey)
+        {
+            _soupKey = soupKey;
+            _soup.Text = string.Join("  ·  ", new[] { soupKey.SoupActive ? Core.Hunt.RunPerks.SoupLabel : null, soupKey.SecondLifeReady ? Core.Hunt.RunPerks.SecondLifeLabel : null }.Where(s => s is not null));
+        }
+
+        _map.Visible = inRift && HuntService.MapActive;
+        _roomTimer -= (float)delta;
+        if (!inRift)
+        {
+            _roomTimer = 0f;
+            return;
+        }
+
+        if (_roomTimer > 0f)
+        {
+            return;
+        }
+
+        // Sala, objetivo, contratos e mapa mudam devagar: refrescar 4x por segundo basta e poupa strings/LINQ por quadro.
+        _roomTimer = RoomRefreshSeconds;
+        UpdateRoom();
         if (_map.Visible)
         {
             _map.Text = Core.Hunt.RunPerks.MapLine(HuntService.Plan!.Rooms.Select(r => r.Kind).ToList(), RiftSession.RoomIndex);

@@ -78,6 +78,7 @@ public sealed class HitFlash
     private float _hold;
     private float _decay;
     private Color _color = Colors.White;
+    private Params? _sent;
 
     public HitFlash(CanvasItem target)
     {
@@ -130,15 +131,28 @@ public sealed class HitFlash
             _amount = Mathf.Max(0f, _amount - (_decay * dt));
         }
 
-        _material.SetShaderParameter("flash", _amount);
-        _material.SetShaderParameter("flash_color", _color);
-        _material.SetShaderParameter("glow", Mathf.Clamp(Tint * 3f, 0f, 1f));
-        _material.SetShaderParameter("glow_color", TintColor);
-        _material.SetShaderParameter("glow_width", GlowWidth);
-        _material.SetShaderParameter("outline", Outline);
-        _material.SetShaderParameter("outline_color", OutlineColor);
-        _material.SetShaderParameter("outline_width", OutlineWidth);
-        _material.SetShaderParameter("cape", Cape);
-        _material.SetShaderParameter("cape_hue", CapeHue);
+        // Só manda ao shader o que mudou: 10 SetShaderParameter por entidade por tick era o custo fixo de todo monstro em cena.
+        var glow = Mathf.Clamp(Tint * 3f, 0f, 1f);
+        var current = new Params(_amount, _color, glow, TintColor, GlowWidth, Outline, OutlineColor, OutlineWidth, Cape, CapeHue);
+        if (_sent is { } sent && sent.Equals(current))
+        {
+            return;
+        }
+
+        _sent = current;
+        _material.SetShaderParameter("flash", current.Flash);
+        _material.SetShaderParameter("flash_color", current.FlashColor);
+        _material.SetShaderParameter("glow", current.Glow);
+        _material.SetShaderParameter("glow_color", current.GlowColor);
+        _material.SetShaderParameter("glow_width", current.GlowWidth);
+        _material.SetShaderParameter("outline", current.Outline);
+        _material.SetShaderParameter("outline_color", current.OutlineColor);
+        _material.SetShaderParameter("outline_width", current.OutlineWidth);
+        _material.SetShaderParameter("cape", current.Cape);
+        _material.SetShaderParameter("cape_hue", current.CapeHue);
     }
+
+    private readonly record struct Params(
+        float Flash, Color FlashColor, float Glow, Color GlowColor, float GlowWidth,
+        float Outline, Color OutlineColor, float OutlineWidth, float Cape, float CapeHue);
 }

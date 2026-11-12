@@ -208,12 +208,17 @@ public sealed class ScaleCheck(Level level, SmokeTest host, bool capture)
         Image image;
         if (texture is AtlasTexture atlas)
         {
-            var whole = atlas.Atlas.GetImage() ?? Image.LoadFromFile(ProjectSettings.GlobalizePath(atlas.Atlas.ResourcePath));
+            // Os atlas grandes são importados com compressão de VRAM (BPTC): a leitura de pixel precisa do PNG original.
+            var whole = Image.LoadFromFile(ProjectSettings.GlobalizePath(atlas.Atlas.ResourcePath));
             image = whole.GetRegion((Rect2I)atlas.Region);
         }
         else
         {
             image = texture.GetImage();
+            if (image.IsCompressed())
+            {
+                image.Decompress();
+            }
         }
 
         var top = image.GetHeight();
