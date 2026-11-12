@@ -121,7 +121,10 @@ public partial class SmokeTest
     private async Task Fall(Level level)
     {
         var combat = level.Player.Combat;
-        for (var i = 0; i < 60 && !combat.IsDead; i++)
+        // Por tempo de relógio, não por quadros: depois de levantar com a sopa o caçador fica 1,2 s de jogo invulnerável
+        // (Revive) e a câmera lenta da queda anterior estica esse tempo; uma contagem fixa de quadros acaba antes.
+        var start = Time.GetTicksMsec();
+        while (!combat.IsDead && (Time.GetTicksMsec() - start) / 1000.0 < RiseWaitSeconds)
         {
             combat.ReceiveHit(new HitInfo(combat.MaxHp * 10.0, level.Player.GlobalPosition + new Vector2(8, 0), Vector2.Zero, 0, 1, false, 0));
             await PhysicsFrames(2);
