@@ -219,6 +219,16 @@ public sealed partial class AdvancementCatalog
                 errors.Add($"conjunto '{set.Id}': precisa de bônus de 2 e de 4 peças");
             }
 
+            foreach (var bonus in set.Bonuses.Where(b => b.Effect is not null && !SetEffects.IsKnown(b.Effect)))
+            {
+                errors.Add($"conjunto '{set.Id}': efeito '{bonus.Effect}' do bônus de {bonus.Pieces} peças não existe");
+            }
+
+            if (set.Bonuses.FirstOrDefault(b => b.Pieces == 4)?.Effect is null)
+            {
+                errors.Add($"conjunto '{set.Id}': o bônus de 4 peças precisa de um efeito de combate");
+            }
+
             if (!Guardians.TryGetValue(set.Guardian, out var guardian) || guardian.ArmorSet != set.Id)
             {
                 errors.Add($"conjunto '{set.Id}': o Guardião '{set.Guardian}' não aponta de volta para ele");

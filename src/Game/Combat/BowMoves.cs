@@ -79,7 +79,7 @@ public sealed class BowMoves(HunterCombat combat) : WeaponMoves(combat, "bow")
         var info = new HitInfo(BaseDamage(mult), Chest, Aim * (float)(pierce ? Set.HeavyKnockback : Set.LightKnockback[0]) * S,
             pierce ? Set.HeavyHitStop : Set.LightHitStop[0], PartMult, pierce, Crit);
         var start = Chest + (Aim * 26f * S);
-        P.World?.AddProjectile(new Arrow(info, Aim, speed, range, pierce, S) { Position = start });
+        P.World?.AddProjectile(new Arrow(info, Aim, speed, range, pierce, S) { Position = start, OnLanded = (t, o, h) => C.OnHitLanded(t, o, h) });
         CombatSfx.Play(P, pierce ? CombatSound.BowCharged : CombatSound.BowShot, Vector2.Zero);
         _full = false;
     }

@@ -137,6 +137,7 @@ public sealed partial class HunterCombat : Node, IHittable
         var soup = Hunter.HuntService.SoupActive ? Core.Hunt.RunPerks.SoupBonus(Stats.Hp) : 0;
         MaxHp = Math.Max(1, Stats.Hp + Hunter.HuntService.Bless.MaxHp + soup - _velaCut);
         Hp = fullHeal ? MaxHp : Math.Min(Hp, MaxHp);
+        RefreshSetEffects();
     }
 
     /// <summary>Troca de classe (seletor): refaz o conjunto de golpes.</summary>
@@ -160,6 +161,7 @@ public sealed partial class HunterCombat : Node, IHittable
 
         _sheltered = Mathf.Max(0f, _sheltered - dt);
         TickVela(dt);
+        TickSetEffects(dt);
         _knock = _knock.MoveToward(Vector2.Zero, 1800f * Scale * dt);
         UpdateBlink();
         if (Disabled || _player.Frozen)
@@ -211,7 +213,7 @@ public sealed partial class HunterCombat : Node, IHittable
             return HitOutcome.Miss;
         }
 
-        var damage = RiftSession.Cheat ? 0 : _damage.ToPlayer(hit.Damage, Stats.Def, RiftSession.Random);
+        var damage = RiftSession.Cheat ? 0 : _damage.ToPlayer(IncomingDamage(hit.Damage), Stats.Def, RiftSession.Random);
         Hp = Math.Max(0, Hp - damage);
         Hunter.HuntService.HunterHit(damage);
         var feel = _player.Feel;
@@ -226,10 +228,16 @@ public sealed partial class HunterCombat : Node, IHittable
         _invulnerable = (float)(_tuning.HurtInvulnerable + Hunter.HuntService.Bless.HurtInvulnerable);
         if (Hp <= 0)
         {
+            TryLastStand();
+        }
+
+        if (Hp <= 0)
+        {
             Die();
             return new HitOutcome(damage, true, false, true);
         }
 
+        HurtBurst(damage);
         Enter(HunterState.Hurt);
         _player.PlayAnimation("dano", restart: true);
         return new HitOutcome(damage, false, false, true);
@@ -388,6 +396,7 @@ public sealed partial class HunterCombat : Node, IHittable
         _dodgeVelocity = dir * (float)(_tuning.DodgeDistance * def.Radius * Scale / _tuning.DodgeSeconds);
         _invulnerable = Mathf.Max(_invulnerable, (float)_tuning.DodgeInvulnerable);
         _ecoDash = true;
+        _gelDash = false;
         _slimeTimer = 0f;
         Enter(HunterState.Dodging);
         _player.PlayAnimation("esquiva", restart: true, fitSeconds: (float)_tuning.DodgeSeconds);
@@ -448,7 +457,9 @@ public sealed partial class HunterCombat : Node, IHittable
         _player.Face(dir);
         var bless = Hunter.HuntService.Bless;
         _dodgeVelocity = dir * (float)(_tuning.DodgeDistance * (1 + (bless.DodgeDistancePct / 100)) * Scale / _tuning.DodgeSeconds);
-        _invulnerable = Mathf.Max(_invulnerable, (float)(_tuning.DodgeInvulnerable + bless.DodgeInvulnerable));
+        _invulnerable = Mathf.Max(_invulnerable, (float)(_tuning.DodgeInvulnerable + bless.DodgeInvulnerable + (_setFx.Has(SetEffects.DodgeIframes) ? SetEffects.DodgeIframesBonusSeconds : 0)));
+        _ecoDash = false;
+        _gelDash = _setFx.Has(SetEffects.DodgeGel);
         Hunter.HuntService.Dodged(dir.X);
         Enter(HunterState.Dodging);
         _player.PlayAnimation("esquiva", restart: true, fitSeconds: (float)_tuning.DodgeSeconds);
@@ -459,10 +470,10 @@ public sealed partial class HunterCombat : Node, IHittable
 
     private MotionOrder StepDodge(float dt)
     {
-        if (_ecoDash && (_slimeTimer -= dt) <= 0f && _player.World is { } world)
+        if ((_ecoDash || _gelDash) && (_slimeTimer -= dt) <= 0f && _player.World is { } world)
         {
             _slimeTimer = SlimeEvery;
-            world.AddGroundFx(new SlimeTrail(world, _player.GlobalPosition));
+            world.AddGroundFx(new SlimeTrail(world, _player.GlobalPosition, _setFx.Has(SetEffects.DodgeGel)));
         }
 
         _afterImageTimer -= dt;
@@ -476,6 +487,7 @@ public sealed partial class HunterCombat : Node, IHittable
         if (t >= 1f)
         {
             _ecoDash = false;
+            _gelDash = false;
             Enter(HunterState.Free);
             return new MotionOrder(1f, _dodgeVelocity * 0.25f, false);
         }

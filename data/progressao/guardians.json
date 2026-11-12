@@ -1,12 +1,12 @@
 {
   "guardians": [
     { "id": "lodo_mae", "name": "Lodo-Mãe", "rank": "E", "brecha": "Esgotos do Mercado", "material": "nucleo_lodo_mae", "armorSet": "conjunto_lodo_mae", "echo": "eco_viscoso", "spoils": { "gel_de_lodo": 4 } },
-    { "id": "macieira_oca", "name": "A Macieira Oca", "rank": "D", "brecha": "Pomar Podre", "material": "galho_oco", "armorSet": null, "echo": "eco_semente" },
-    { "id": "farol_afogado", "name": "O Farol Afogado", "rank": "C", "brecha": "Cais Afogado", "material": "lente_do_farol", "armorSet": null, "echo": "eco_farol" },
-    { "id": "velora", "name": "A Velória", "rank": "B", "brecha": "Cemitério das Lanternas", "material": "candelabro_derretido", "armorSet": null, "echo": "eco_vela" },
-    { "id": "sineiro_mudo", "name": "O Sineiro Mudo", "rank": "A", "brecha": "Torre do Sino Mudo", "material": "sino_mudo", "armorSet": null, "echo": "eco_sino" },
-    { "id": "inquilino", "name": "O Inquilino", "rank": "S", "brecha": "Ruas Invertidas", "material": "perna_de_madeira", "armorSet": null, "echo": "eco_lar" },
-    { "id": "guardiao_revertido", "name": "Guardião Revertido", "rank": "SS", "brecha": "Avesso profundo", "material": "essencia_do_avesso", "armorSet": null, "echo": null },
-    { "id": "reflexo", "name": "O Reflexo", "rank": "SSS", "brecha": "Praça da Lanterna", "material": "estilhaco_do_reflexo", "armorSet": null, "echo": "eco_avesso" }
+    { "id": "macieira_oca", "name": "A Macieira Oca", "rank": "D", "brecha": "Pomar Podre", "material": "galho_oco", "armorSet": "conjunto_macieira_oca", "echo": "eco_semente" },
+    { "id": "farol_afogado", "name": "O Farol Afogado", "rank": "C", "brecha": "Cais Afogado", "material": "lente_do_farol", "armorSet": "conjunto_farol_afogado", "echo": "eco_farol" },
+    { "id": "velora", "name": "A Velória", "rank": "B", "brecha": "Cemitério das Lanternas", "material": "candelabro_derretido", "armorSet": "conjunto_velora", "echo": "eco_vela" },
+    { "id": "sineiro_mudo", "name": "O Sineiro Mudo", "rank": "A", "brecha": "Torre do Sino Mudo", "material": "sino_mudo", "armorSet": "conjunto_sineiro_mudo", "echo": "eco_sino" },
+    { "id": "inquilino", "name": "O Inquilino", "rank": "S", "brecha": "Ruas Invertidas", "material": "perna_de_madeira", "armorSet": "conjunto_inquilino", "echo": "eco_lar" },
+    { "id": "guardiao_revertido", "name": "Guardião Revertido", "rank": "SS", "brecha": "Avesso profundo", "material": "essencia_do_avesso", "armorSet": "conjunto_guardiao_revertido", "echo": null },
+    { "id": "reflexo", "name": "O Reflexo", "rank": "SSS", "brecha": "Praça da Lanterna", "material": "estilhaco_do_reflexo", "armorSet": "conjunto_reflexo", "echo": "eco_avesso" }
   ]
 }

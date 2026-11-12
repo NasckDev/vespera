@@ -9,7 +9,7 @@ public sealed record SetBonusStatus(SetBonusDef Bonus, bool Active);
 public sealed record SetStatus(ArmorSetDef Set, int Pieces, IReadOnlyList<SetBonusStatus> Bonuses);
 
 /// <summary>Atributos que o equipamento soma ao caçador (sem a arma, que vem do <see cref="WeaponForge"/>).</summary>
-public sealed record EquipmentSummary(StatBlock Items, StatBlock SetBonuses, StatBlock Total, IReadOnlyList<SetStatus> Sets);
+public sealed record EquipmentSummary(StatBlock Items, StatBlock SetBonuses, StatBlock Total, IReadOnlyList<SetStatus> Sets, ActiveSetEffects Effects);
 
 public sealed record EquipResult(bool Ok, string Reason)
 {
@@ -63,6 +63,7 @@ public sealed partial class ProgressionEngine
         var items = StatBlock.Zero;
         var sets = new List<SetStatus>();
         var bonuses = StatBlock.Zero;
+        var effects = new HashSet<string>();
         var worn = EquippedItems.ToList();
         foreach (var item in worn)
         {
@@ -81,12 +82,16 @@ public sealed partial class ProgressionEngine
             foreach (var status in statuses.Where(s => s.Active))
             {
                 bonuses += status.Bonus.Stats;
+                if (status.Bonus.Effect is { } effect)
+                {
+                    effects.Add(effect);
+                }
             }
 
             sets.Add(new SetStatus(set, count, statuses));
         }
 
-        return new EquipmentSummary(items, bonuses, items + bonuses, sets);
+        return new EquipmentSummary(items, bonuses, items + bonuses, sets, new ActiveSetEffects(effects));
     }
 
     /// <summary>Estado de um conjunto mesmo sem peças vestidas (para a tela de personagem listar os conjuntos conhecidos).</summary>
