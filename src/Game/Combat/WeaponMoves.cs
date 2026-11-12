@@ -210,6 +210,7 @@ public abstract class WeaponMoves
 
             landed++;
             killed |= outcome.Killed;
+            C.OnHitLanded(target, outcome, info);
             var sparkDir = (target.HitCenter - origin).Normalized();
             world.Feel.Spark(target.HitCenter - (sparkDir * target.HitRadius * 0.5f), heavy ? look.Spark.Lightened(0.1f) : look.Spark,
                 (heavy ? 16 : 9) + look.SparkBonus, (heavy ? 420f : 300f) * look.TrailScale, sparkDir, 70f + (look.SparkBonus * 4f));

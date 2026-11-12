@@ -18,8 +18,120 @@
         { "id": "botas_lodo_curtido", "slot": "botas", "name": "Botas de Lodo Curtido", "stats": { "hp": 8, "defense": 2, "speedPct": 2 } }
       ],
       "bonuses": [
-        { "pieces": 2, "name": "Pele Gelatinosa", "description": "+20 de vida máxima.", "stats": { "hp": 20 } },
-        { "pieces": 4, "name": "Resíduo Aproveitado", "description": "+10% de Fragmentos encontrados e +3 de defesa.", "stats": { "fragmentosPct": 10, "defense": 3 } }
+        { "pieces": 2, "name": "Pele Gelatinosa", "description": "+20 de vida máxima e imunidade a lentidão.", "stats": { "hp": 20 }, "effect": "slow_immune" },
+        { "pieces": 4, "name": "Resíduo Aproveitado", "description": "+10% de Fragmentos encontrados, +3 de defesa e o rastro da esquiva vira gel que prende os inimigos por 1,5 s.", "stats": { "fragmentosPct": 10, "defense": 3 }, "effect": "dodge_gel" }
+      ]
+    },
+    {
+      "id": "conjunto_macieira_oca",
+      "name": "Conjunto da Macieira Oca",
+      "rank": "D",
+      "guardian": "macieira_oca",
+      "pieces": [
+        {"id": "capuz_casca_seca", "slot": "cabeca", "name": "Capuz de Casca Seca", "stats": {"hp": 14, "defense": 3}},
+        {"id": "peitoral_galhos", "slot": "peito", "name": "Peitoral de Galhos", "stats": {"hp": 22, "defense": 5}},
+        {"id": "luvas_espinheiro", "slot": "maos", "name": "Luvas de Espinheiro", "stats": {"hp": 8, "defense": 3}},
+        {"id": "botas_raiz", "slot": "botas", "name": "Botas de Raiz", "stats": {"hp": 11, "defense": 3, "speedPct": 2}}
+      ],
+      "bonuses": [
+        {"pieces": 2, "name": "Seiva Doce", "description": "Cada inimigo derrotado cura 4% da vida máxima.", "stats": {"hp": 19}, "effect": "kill_heal"},
+        {"pieces": 4, "name": "Espinhos da Macieira", "description": "Ao ser ferido, espinhos ferem os inimigos em volta (80% do seu ataque; recarga de 6 s).", "stats": {"defense": 4}, "effect": "hurt_thorns"}
+      ]
+    },
+    {
+      "id": "conjunto_farol_afogado",
+      "name": "Conjunto do Farol Afogado",
+      "rank": "C",
+      "guardian": "farol_afogado",
+      "pieces": [
+        {"id": "elmo_lente_turva", "slot": "cabeca", "name": "Elmo de Lente Turva", "stats": {"hp": 18, "defense": 4}},
+        {"id": "peitoral_casco_afogado", "slot": "peito", "name": "Peitoral de Casco Afogado", "stats": {"hp": 29, "defense": 7}},
+        {"id": "luvas_corda_encharcada", "slot": "maos", "name": "Luvas de Corda Encharcada", "stats": {"hp": 11, "defense": 4}},
+        {"id": "botas_mare_baixa", "slot": "botas", "name": "Botas de Maré Baixa", "stats": {"hp": 15, "defense": 4, "speedPct": 2}}
+      ],
+      "bonuses": [
+        {"pieces": 2, "name": "Luz Guia", "description": "A esquiva dura 0,12 s a mais invencível.", "stats": {"hp": 18}, "effect": "dodge_iframes"},
+        {"pieces": 4, "name": "Clarão do Farol", "description": "Ao ser ferido, um clarão prende os inimigos em volta por 1,5 s (recarga de 6 s).", "stats": {"defense": 5}, "effect": "hurt_flash"}
+      ]
+    },
+    {
+      "id": "conjunto_velora",
+      "name": "Conjunto da Velória",
+      "rank": "B",
+      "guardian": "velora",
+      "pieces": [
+        {"id": "coroa_de_cera", "slot": "cabeca", "name": "Coroa de Cera", "stats": {"hp": 25, "defense": 5}},
+        {"id": "manto_de_pavio", "slot": "peito", "name": "Manto de Pavio", "stats": {"hp": 39, "defense": 10}},
+        {"id": "luvas_vela_derretida", "slot": "maos", "name": "Luvas de Vela Derretida", "stats": {"hp": 15, "defense": 5}},
+        {"id": "botas_candelabro", "slot": "botas", "name": "Botas de Candelabro", "stats": {"hp": 20, "defense": 5, "speedPct": 2}}
+      ],
+      "bonuses": [
+        {"pieces": 2, "name": "Cera Quente", "description": "+6% de chance de crítico.", "stats": {"critPct": 14.8}},
+        {"pieces": 4, "name": "Última Chama", "description": "Uma vez por sala, o golpe que mataria deixa você com 1 de vida e invencível por 2 s.", "stats": {"hp": 49}, "effect": "last_stand"}
+      ]
+    },
+    {
+      "id": "conjunto_sineiro_mudo",
+      "name": "Conjunto do Sineiro Mudo",
+      "rank": "A",
+      "guardian": "sineiro_mudo",
+      "pieces": [
+        {"id": "capuz_bronze_mudo", "slot": "cabeca", "name": "Capuz de Bronze Mudo", "stats": {"hp": 33, "defense": 7}},
+        {"id": "peitoral_do_sino", "slot": "peito", "name": "Peitoral do Sino", "stats": {"hp": 53, "defense": 13}},
+        {"id": "manoplas_de_badalo", "slot": "maos", "name": "Manoplas de Badalo", "stats": {"hp": 20, "defense": 7}},
+        {"id": "botas_de_torre", "slot": "botas", "name": "Botas de Torre", "stats": {"hp": 27, "defense": 7, "speedPct": 2}}
+      ],
+      "bonuses": [
+        {"pieces": 2, "name": "Voz Abafada", "description": "+6 de defesa.", "stats": {"defense": 7}},
+        {"pieces": 4, "name": "Badalada Muda", "description": "A cada 6 golpes que acertam, uma badalada muda prende os inimigos em volta por 2 s.", "stats": {"hp": 66}, "effect": "hit_bell"}
+      ]
+    },
+    {
+      "id": "conjunto_inquilino",
+      "name": "Conjunto do Inquilino",
+      "rank": "S",
+      "guardian": "inquilino",
+      "pieces": [
+        {"id": "telhado_de_soalho", "slot": "cabeca", "name": "Telhado de Soalho", "stats": {"hp": 45, "defense": 9}},
+        {"id": "peitoral_tijolo_invertido", "slot": "peito", "name": "Peitoral de Tijolo Invertido", "stats": {"hp": 72, "defense": 18}},
+        {"id": "luvas_macaneta", "slot": "maos", "name": "Luvas de Maçaneta", "stats": {"hp": 27, "defense": 9}},
+        {"id": "botas_perna_de_madeira", "slot": "botas", "name": "Botas de Perna de Madeira", "stats": {"hp": 36, "defense": 9, "speedPct": 2}}
+      ],
+      "bonuses": [
+        {"pieces": 2, "name": "Alicerce", "description": "+20 de vida máxima e +3 de defesa.", "stats": {"hp": 27, "defense": 4}},
+        {"pieces": 4, "name": "Teto Firme", "description": "Todo dano recebido cai 20%.", "stats": {"defense": 9}, "effect": "damage_reduction"}
+      ]
+    },
+    {
+      "id": "conjunto_guardiao_revertido",
+      "name": "Conjunto do Guardião Revertido",
+      "rank": "SS",
+      "guardian": "guardiao_revertido",
+      "pieces": [
+        {"id": "elmo_avesso_virado", "slot": "cabeca", "name": "Elmo do Avesso Virado", "stats": {"hp": 61, "defense": 12}},
+        {"id": "casaco_do_avesso", "slot": "peito", "name": "Casaco do Avesso", "stats": {"hp": 97, "defense": 24}},
+        {"id": "luvas_costura_solta", "slot": "maos", "name": "Luvas de Costura Solta", "stats": {"hp": 36, "defense": 12}},
+        {"id": "botas_de_cinza", "slot": "botas", "name": "Botas de Cinza", "stats": {"hp": 48, "defense": 12, "speedPct": 2}}
+      ],
+      "bonuses": [
+        {"pieces": 2, "name": "Costura Solta", "description": "+5% de velocidade e +3% de crítico.", "stats": {"speedPct": 12.1, "critPct": 6.1}},
+        {"pieces": 4, "name": "Dobra do Avesso", "description": "Cada golpe tem 20% de chance de se repetir no mesmo alvo com 60% do dano.", "stats": {"hp": 61}, "effect": "hit_echo"}
+      ]
+    },
+    {
+      "id": "conjunto_reflexo",
+      "name": "Conjunto do Reflexo",
+      "rank": "SSS",
+      "guardian": "reflexo",
+      "pieces": [
+        {"id": "mascara_de_estilhaco", "slot": "cabeca", "name": "Máscara de Estilhaço", "stats": {"hp": 82, "defense": 16}},
+        {"id": "peitoral_espelhado", "slot": "peito", "name": "Peitoral Espelhado", "stats": {"hp": 131, "defense": 33}},
+        {"id": "luvas_de_vidro", "slot": "maos", "name": "Luvas de Vidro", "stats": {"hp": 49, "defense": 16}},
+        {"id": "botas_luz_quebrada", "slot": "botas", "name": "Botas de Luz Quebrada", "stats": {"hp": 65, "defense": 16, "speedPct": 2}}
+      ],
+      "bonuses": [
+        {"pieces": 2, "name": "Brilho Frio", "description": "+5% de chance de crítico.", "stats": {"critPct": 8.2}},
+        {"pieces": 4, "name": "Dano Devolvido", "description": "Ao ser ferido, 60% do dano volta para os inimigos em volta (recarga de 6 s).", "stats": {"hp": 82}, "effect": "hurt_reflect"}
       ]
     }
   ],

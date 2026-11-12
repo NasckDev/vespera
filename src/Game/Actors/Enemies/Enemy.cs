@@ -36,6 +36,7 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
     private readonly DamageCalculator _damage = new(RiftSession.Db.Rules.Combat);
     private float _fade = -1f;
     private float _slow;
+    private float _root;
     private Color? _tint;
 
     /// <summary>Fator da velocidade enquanto pisa no lodo do Eco Viscoso.</summary>
@@ -221,6 +222,12 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
             desired *= SlowFactor;
         }
 
+        _root = Mathf.Max(0f, _root - dt);
+        if (_root > 0f)
+        {
+            desired = Vector2.Zero;
+        }
+
         Knock = Knock.MoveToward(Vector2.Zero, 1500f * A * dt);
         Velocity = desired + Knock + Separation();
         MoveAndSlide();
@@ -399,6 +406,17 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
 
     /// <summary>Pisa no lodo do Eco Viscoso: anda mais devagar por <paramref name="seconds"/>.</summary>
     public void Slow(float seconds) => _slow = Mathf.Max(_slow, seconds);
+
+    /// <summary>Preso no gel (conjuntos de Guardião): não anda por <paramref name="seconds"/>. Guardiões (imparáveis) não prendem.</summary>
+    public void Root(float seconds)
+    {
+        if (!Unstoppable)
+        {
+            _root = Mathf.Max(_root, seconds);
+        }
+    }
+
+    public bool Rooted => _root > 0f;
 
     /// <summary>Velocidade desejada neste quadro (px/s do mundo).</summary>
     protected abstract Vector2 Think(float dt);

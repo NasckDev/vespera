@@ -307,6 +307,9 @@ public sealed record SetBonusDef
     public required string Description { get; init; }
 
     public required StatBlock Stats { get; init; }
+
+    /// <summary>Id do efeito de combate (<see cref="SetEffects"/>); null = só atributos.</summary>
+    public string? Effect { get; init; }
 }
 
 public sealed record ArmorSetDef

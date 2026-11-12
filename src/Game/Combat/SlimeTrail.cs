@@ -1,4 +1,5 @@
 using Godot;
+using Vespera.Core.Advancement;
 using Vespera.Game.World;
 
 namespace Vespera.Game.Combat;
@@ -13,16 +14,20 @@ public partial class SlimeTrail : Node2D
     public const float SlowSeconds = 0.35f;
     private const float Radius = 40f;
     private static readonly Color Body = new(0.42f, 0.78f, 0.36f, 0.62f);
+    private static readonly Color GelBody = new(0.36f, 0.86f, 0.7f, 0.7f);
     private static readonly Color Shine = new(0.78f, 1f, 0.7f, 0.55f);
 
     private readonly LevelWorld _world;
     private readonly float _radius;
     private readonly float _wobble;
+    private readonly bool _gel;
     private float _age;
 
-    public SlimeTrail(LevelWorld world, Vector2 at)
+    /// <param name="gel">Conjunto da Lodo-Mãe (4 peças): o rastro prende os inimigos em vez de só lentificar.</param>
+    public SlimeTrail(LevelWorld world, Vector2 at, bool gel = false)
     {
         _world = world;
+        _gel = gel;
         _radius = Radius * world.Data.ActorScale;
         _wobble = GD.Randf() * Mathf.Tau;
         Position = at;
@@ -43,6 +48,10 @@ public partial class SlimeTrail : Node2D
             if (IsInstanceValid(enemy) && !enemy.Dead && enemy.GlobalPosition.DistanceTo(GlobalPosition) < _radius + (enemy.HitRadius * 0.5f))
             {
                 enemy.Slow(SlowSeconds);
+                if (_gel)
+                {
+                    enemy.Root(SetEffects.GelRootSeconds);
+                }
             }
         }
 
@@ -55,7 +64,8 @@ public partial class SlimeTrail : Node2D
         var grow = Mathf.Min(1f, _age / 0.15f);
         var r = _radius * grow;
         DrawSetTransform(Vector2.Zero, 0f, new Vector2(1f, 0.55f));
-        DrawCircle(Vector2.Zero, r, Body with { A = Body.A * fade });
+        var body = _gel ? GelBody : Body;
+        DrawCircle(Vector2.Zero, r, body with { A = body.A * fade });
         DrawCircle(new Vector2(r * 0.25f * Mathf.Cos(_wobble), -r * 0.2f), r * 0.35f, Shine with { A = Shine.A * fade });
     }
 }

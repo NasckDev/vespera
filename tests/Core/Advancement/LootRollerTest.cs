@@ -175,12 +175,15 @@ public class LootRollerTest
     }
 
     [TestCase]
-    public void GuardianWithoutASetDropsNoPiece()
+    public void EveryGuardianDropsOnlyPiecesOfItsOwnSet()
     {
         var random = new SeededRandom(8);
         for (var i = 0; i < 1000; i++)
         {
-            AssertThat(Roller.Roll(Rank.D, LootSource.Guardian("macieira_oca"), random).Entries.Any(e => e.SetPiece)).IsFalse();
+            foreach (var piece in Roller.Roll(Rank.D, LootSource.Guardian("macieira_oca"), random).Entries.Where(e => e.SetPiece))
+            {
+                AssertThat(Catalog.Sets["conjunto_macieira_oca"].Pieces.Any(p => p.Id == piece.Id)).IsTrue();
+            }
         }
     }
 

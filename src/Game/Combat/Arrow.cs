@@ -22,6 +22,9 @@ public partial class Arrow : Node2D
     private float _left;
     private float _fade = -1f;
 
+    /// <summary>Quem atirou quer saber dos acertos (efeitos de conjunto).</summary>
+    public System.Action<IHittable, HitOutcome, HitInfo>? OnLanded { get; set; }
+
     public Arrow(HitInfo hit, Vector2 dir, float speed, float range, bool pierce, float scale)
     {
         _hit = hit;
@@ -102,6 +105,8 @@ public partial class Arrow : Node2D
             {
                 continue;
             }
+
+            OnLanded?.Invoke(target, outcome, _hit);
 
             World.Feel.Spark(GlobalPosition, _pierce ? new Color("ffd27a") : new Color("ffe9c2"), _pierce ? 12 : 7, 280f, -_dir, 60f);
             World.Feel.HitStop(_hit.HitStop + (outcome.Killed ? 0.02 : 0));
