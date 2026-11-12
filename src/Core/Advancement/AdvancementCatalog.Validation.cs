@@ -254,6 +254,11 @@ public sealed partial class AdvancementCatalog
             {
                 errors.Add($"Eco '{echo.Id}': o Guardião '{echo.Guardian}' não aponta de volta para ele");
             }
+
+            if (echo.Cooldown <= 0 || echo.Duration <= 0 || echo.Radius <= 0)
+            {
+                errors.Add($"Eco '{echo.Id}': recarga, duração e alcance precisam ser positivos");
+            }
         }
 
         if (EchoData.Slots < 1)

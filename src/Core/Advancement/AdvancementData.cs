@@ -378,6 +378,18 @@ public sealed record EchoDef
     public required Rank Rank { get; init; }
 
     public required string Description { get; init; }
+
+    /// <summary>Recarga em segundos (0 = sem número: o Eco não dispara).</summary>
+    public double Cooldown { get; init; }
+
+    /// <summary>Quanto o efeito dura, em segundos (muda, cura, abrigo, clone, atordoamento).</summary>
+    public double Duration { get; init; }
+
+    /// <summary>Força do efeito: múltiplo do ataque (Semente, Avesso), fração da vida máxima curada (Vela).</summary>
+    public double Power { get; init; }
+
+    /// <summary>Alcance em px de jogo na escala 1 (raio da área, comprimento do feixe, distância do avanço em múltiplos da esquiva).</summary>
+    public double Radius { get; init; }
 }
 
 public sealed record EchoesFile
