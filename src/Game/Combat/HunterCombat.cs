@@ -111,6 +111,15 @@ public sealed partial class HunterCombat : Node, IHittable
     /// <summary>Recarga do Eco do <paramref name="slot"/>: 0 = pronto, 1 = recém-usado.</summary>
     public float EchoCooldownFraction(int slot) => slot >= 0 && slot < EchoSlots ? _echoCooldowns[slot].Fraction : 0f;
 
+    /// <summary>Zera a recarga dos dois Ecos (capturas de QA e bots).</summary>
+    public void ResetEchoCooldowns()
+    {
+        foreach (var cooldown in _echoCooldowns)
+        {
+            cooldown.Reset();
+        }
+    }
+
     /// <summary>Id do Eco do slot (0 = tecla Eco 1, 1 = Eco 2) deste caçador; null se vazio ou ainda bloqueado.</summary>
     public string? EcoInSlot(int slot) => EquippedEcho(slot)?.Id;
 

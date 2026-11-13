@@ -49,6 +49,7 @@ public partial class SlotRow : PanelContainer
         _name = UiKit.MakeLabel(name);
         _name.AddThemeColorOverride("font_color", nameColor);
         _name.ClipText = true;
+        _name.TextOverrunBehavior = TextServer.OverrunBehavior.TrimEllipsis;
         _name.SizeFlagsHorizontal = SizeFlags.ExpandFill;
         text.AddChild(_caption);
         text.AddChild(_name);

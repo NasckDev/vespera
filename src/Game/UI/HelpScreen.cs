@@ -30,6 +30,11 @@ public partial class HelpScreen : UiScreen
         "Se você cair numa Brecha, os Fragmentos daquela caçada ficam lá, na sua Lanterna caída. Volte e recupere-a. " +
         "Seu equipamento nunca é perdido. No co-op, um aliado pode recuperar a Lanterna por você.";
 
+    private const string EchoCoopText =
+        "Ecos são habilidades deixadas pelos Guardiões. Cada caçador leva dois: o Eco 1 e o Eco 2, cada um com a sua recarga. " +
+        "Para jogar em dupla, abra a pausa e escolha Chamar J2 (co-op). O J2 joga com setas e teclado numérico, ou num segundo controle, " +
+        "e a câmera acompanha os dois.";
+
     private const string MenuTip = "Menus: setas e Enter, ou direcional e A. Esc ou B volta.";
 
     private Label _heading = null!;
@@ -40,12 +45,13 @@ public partial class HelpScreen : UiScreen
 
     private IReadOnlyList<(string Title, Func<Control> Body)> Pages =>
     [
-        ("Objetivo", () => UiKit.MakeWrapped(ObjectiveOne, UiTheme.ReadingVariation)),
-        ("Objetivo", () => UiKit.MakeWrapped(ObjectiveTwo, UiTheme.ReadingVariation)),
+        ("Objetivo", () => TopText(ObjectiveOne)),
+        ("Objetivo", () => TopText(ObjectiveTwo)),
         ("Controles", BuildControlsPage),
-        ("Ranks, E até Alvor", () => UiKit.MakeWrapped(RanksText, UiTheme.ReadingVariation)),
-        ("Brechas e loot", () => UiKit.MakeWrapped(LootText, UiTheme.ReadingVariation)),
-        ("A Lanterna", () => UiKit.MakeWrapped(LanternText, UiTheme.ReadingVariation)),
+        ("Ranks, E até Alvor", () => TopText(RanksText)),
+        ("Brechas e loot", () => TopText(LootText)),
+        ("A Lanterna", () => TopText(LanternText)),
+        ("Ecos e co-op", () => TopText(EchoCoopText)),
     ];
 
     protected override Control? DefaultFocus() => _next;
@@ -71,6 +77,13 @@ public partial class HelpScreen : UiScreen
         footer.AddChild(back);
         UiKit.WrapFocus([previous, _next, back]);
         ShowPage(0);
+    }
+
+    private static Label TopText(string text)
+    {
+        var label = UiKit.MakeWrapped(text, UiTheme.ReadingVariation);
+        label.VerticalAlignment = VerticalAlignment.Top;
+        return label;
     }
 
     private static Control BuildControlsPage()
