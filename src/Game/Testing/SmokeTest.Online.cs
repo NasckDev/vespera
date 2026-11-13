@@ -30,6 +30,9 @@ public partial class SmokeTest
 
     private const string OnlineGuestClass = "hammer";
 
+    /// <summary>Tempo real (ms) que o host espera depois da morte antes de fechar a porta, para o convidado ver o snapshot.</summary>
+    private const ulong KillGraceMs = 3000;
+
     private bool IsOnlineBot => Array.IndexOf(_args, OnlineHostFlag) >= 0 || Array.IndexOf(_args, OnlineJoinFlag) >= 0;
 
     private async Task RunOnlineBot()
@@ -146,7 +149,14 @@ public partial class SmokeTest
 
         await WaitFrames(AnyDied, 60 * 180, "o convidado matar um monstro");
         Log.Info($"online-host: monstro morto pelo J2 ({NetSession.Instance?.SnapshotsSent} snapshots mandados)");
+        // Com --fixed-fps os dois processos não andam no mesmo ritmo; com o PC ocupado o convidado pode ficar atrás.
+        // Dá tempo real para os snapshots sem o monstro chegarem antes de fechar a porta.
         await PhysicsFrames(60);
+        var until = Time.GetTicksMsec() + KillGraceMs;
+        while (Time.GetTicksMsec() < until)
+        {
+            await PhysicsFrames(1);
+        }
     }
 
     private async Task HostStops(Level level)
