@@ -1,5 +1,5 @@
 {
-  "_doc": "Bênçãos da Lanterna (ROTEIRO-V2 §5.1): ao limpar uma sala de combate a lanterna oferece 3 cartas e o caçador escolhe 1. Valem só até o fim da caçada. Cinco famílias com a cor de um personagem. Efeitos somam: damagePct, critPct, partPct, dodgeDistancePct, dodgeInvulnerable (s), dodgeCostPct, hurtInvulnerable (s), maxHp, healOnClearPct, healOnKill, potionPct, fragmentPct, lumesPerBreakable, speedPct, lowHpDamagePct (com menos de metade da vida).",
+  "_doc": "Bênçãos da Lanterna (ROTEIRO-V2 §5.1): ao limpar uma sala de combate a lanterna oferece 3 cartas e o caçador escolhe 1. Valem só até o fim da caçada. Cinco famílias com a cor de um personagem, 6 bênçãos cada (30). Efeitos somam: damagePct, critPct, partPct, dodgeDistancePct, dodgeInvulnerable (s), dodgeCostPct, hurtInvulnerable (s), maxHp, healOnClearPct, healOnKill, potionPct, fragmentPct, lumesPerBreakable, speedPct, lowHpDamagePct (com menos de metade da vida).",
   "families": {
     "chama": { "name": "Chama", "who": "Odete", "color": "#f2a541" },
     "vigilia": { "name": "Vigília", "who": "Benício", "color": "#f4e7c6" },
@@ -27,7 +27,27 @@
     { "id": "tudo_ou_nada", "family": "aposta", "name": "Tudo ou Nada", "text": "Dano em dobro com menos de metade da vida.", "lowHpDamagePct": 100 },
     { "id": "mao_pesada", "family": "aposta", "name": "Mão Pesada", "text": "+35% de dano, mas -20 de vida máxima.", "damagePct": 35, "maxHp": -20 },
     { "id": "sorte_do_ravi", "family": "aposta", "name": "Sorte do Ravi", "text": "+18% de crítico, -10% de dano.", "critPct": 18, "damagePct": -10 },
-    { "id": "aposta_alta", "family": "aposta", "name": "Aposta Alta", "text": "+60% de Fragmentos se voltar inteiro, mas -15 de vida máxima.", "fragmentPct": 60, "maxHp": -15 }
+    { "id": "aposta_alta", "family": "aposta", "name": "Aposta Alta", "text": "+60% de Fragmentos se voltar inteiro, mas -15 de vida máxima.", "fragmentPct": 60, "maxHp": -15 },
+    { "id": "ferro_em_brasa", "family": "chama", "name": "Ferro em Brasa", "text": "+22% de dano, mas anda 6% mais devagar.", "damagePct": 22, "speedPct": -6 },
+    { "id": "lamina_quente", "family": "chama", "name": "Lâmina Quente", "text": "+10% de dano e partes quebram 25% mais rápido.", "damagePct": 10, "partPct": 25 },
+    { "id": "guarda_alta", "family": "vigilia", "name": "Guarda Alta", "text": "Depois de levar um golpe, fica intocável 0,25 s a mais; a esquiva também ganha um fio de tempo.", "hurtInvulnerable": 0.25, "dodgeInvulnerable": 0.05 },
+    { "id": "passo_calmo", "family": "vigilia", "name": "Passo Calmo", "text": "A esquiva vai 15% mais longe e gasta 15% menos fôlego.", "dodgeDistancePct": 15, "dodgeCostPct": -15 },
+    { "id": "caldo_de_osso", "family": "sopa", "name": "Caldo de Osso", "text": "+15 de vida máxima (e cura 15). Cada monstro vencido cura 1 de vida.", "maxHp": 15, "healOnKill": 1 },
+    { "id": "sobremesa", "family": "sopa", "name": "Sobremesa", "text": "Cura 10% da vida ao limpar cada sala. As poções curam 25% a mais.", "healOnClearPct": 10, "potionPct": 25 },
+    { "id": "atalho", "family": "mapa", "name": "Atalho", "text": "Anda 8% mais rápido. Barris e caixotes dão +2 Lumes.", "speedPct": 8, "lumesPerBreakable": 2 },
+    { "id": "bussola", "family": "mapa", "name": "Bússola", "text": "+20% de Fragmentos se voltar inteiro. Anda 5% mais rápido.", "fragmentPct": 20, "speedPct": 5 },
+    { "id": "dobro_ou_nada", "family": "aposta", "name": "Dobro ou Nada", "text": "+8% de crítico e, com menos de metade da vida, +60% de dano.", "critPct": 8, "lowHpDamagePct": 60 },
+    { "id": "cartada", "family": "aposta", "name": "Cartada", "text": "+20% de crítico, mas -12 de vida máxima.", "critPct": 20, "maxHp": -12 }
+  ],
+  "_combos": "Combinações (ROTEIRO-V2 §5.1): quando a caçada reúne pelo menos 'perFamily' bênçãos (padrão 1) de cada família da lista, o bônus abaixo soma aos efeitos. A Teimosia não conta. Valem em qualquer caçada (o roteiro põe as de três famílias no Ato VII; o jogo ainda não as prende a um ato).",
+  "combos": [
+    { "id": "brasa_viva", "name": "Brasa Viva", "families": ["chama", "aposta"], "text": "Chama + Aposta: +12% de dano e +8% de crítico.", "damagePct": 12, "critPct": 8 },
+    { "id": "ferro_e_compasso", "name": "Ferro e Compasso", "families": ["chama", "vigilia"], "text": "Chama + Vigília: partes quebram 25% mais rápido e a esquiva deixa intocável 0,06 s a mais.", "partPct": 25, "dodgeInvulnerable": 0.06 },
+    { "id": "panela_de_pressao", "name": "Panela de Pressão", "families": ["vigilia", "sopa"], "text": "Vigília + Sopa: depois de um golpe, fica intocável 0,2 s a mais e cada monstro vencido cura 1.", "hurtInvulnerable": 0.2, "healOnKill": 1 },
+    { "id": "marmita", "name": "Marmita", "families": ["sopa", "mapa"], "text": "Sopa + Mapa: cura mais 8% da vida a cada sala limpa e +10% de Fragmentos.", "healOnClearPct": 8, "fragmentPct": 10 },
+    { "id": "jogo_marcado", "name": "Jogo Marcado", "families": ["mapa", "aposta"], "text": "Mapa + Aposta: +25% de Fragmentos se voltar inteiro e +2 Lumes por barril.", "fragmentPct": 25, "lumesPerBreakable": 2 },
+    { "id": "fogo_de_casa", "name": "Fogo de Casa", "families": ["chama", "vigilia", "sopa"], "text": "Chama + Vigília + Sopa: +10% de dano, +15 de vida máxima e intocável 0,15 s a mais depois de um golpe.", "damagePct": 10, "maxHp": 15, "hurtInvulnerable": 0.15 },
+    { "id": "dados_viciados", "name": "Dados Viciados", "families": ["vigilia", "mapa", "aposta"], "text": "Vigília + Mapa + Aposta: +12% de crítico, +10% de velocidade e esquivar gasta 15% menos fôlego.", "critPct": 12, "speedPct": 10, "dodgeCostPct": -15 }
   ],
   "teimosia": { "id": "teimosia", "family": "chama", "name": "Teimosia", "text": "Você pegou sua Lanterna de volta: +10% de dano até o fim da caçada.", "damagePct": 10 }
 }

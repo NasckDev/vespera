@@ -63,6 +63,9 @@ public partial class RoomDirector : Node
     /// <summary>O segundo Guardião da dupla (Ato VII), se houver.</summary>
     public Enemy? Partner { get; private set; }
 
+    /// <summary>Golpe combinado da dupla de Guardiões (só existe com o segundo Guardião).</summary>
+    public GuardianDuoStrike? DuoStrike { get; private set; }
+
     public Chest? Chest { get; private set; }
 
     public BreachPortal? ExitPortal { get; private set; }
@@ -132,6 +135,8 @@ public partial class RoomDirector : Node
                 Partner.Position = new Vector2(partner.At[0], partner.At[1]);
                 Partner.Died += _ => OnGuardianDown();
                 _world.AddEnemy(Partner);
+                DuoStrike = new GuardianDuoStrike(_world, Guardian, Partner);
+                AddChild(DuoStrike);
             }
         }
 
@@ -541,6 +546,7 @@ public partial class RoomDirector : Node
         {
             // A bênção é da caçada do grupo: vale para todos os caçadores da sala.
             var before = _world.Players.Where(IsInstanceValid).ToDictionary(p => p, p => p.Combat.MaxHp);
+            var completed = HuntService.BlessingCatalog.CompletedBy(HuntService.Blessings.ToList(), id);
             HuntService.AddBlessing(id);
             foreach (var (player, maxBefore) in before)
             {
@@ -554,6 +560,10 @@ public partial class RoomDirector : Node
 
             var name = HuntService.BlessingCatalog.Find(id)?.Name ?? id;
             _world.Feel.Toast($"Bênção: {name}");
+            foreach (var combo in completed)
+            {
+                _world.Feel.Toast($"Combinação: {combo.Name}! {combo.Text}");
+            }
         });
     }
 
