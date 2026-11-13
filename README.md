@@ -88,8 +88,17 @@ flowchart LR
 
 - **Conjuntos de Guardião:** 8 conjuntos de 4 peças, um por Guardião, com bônus em 2 peças e efeito de combate em 4.
 - **Ecos:** os 7 Ecos funcionam em combate, cada um com efeito próprio, e o **2º slot de Eco** abre no Ato V com tecla própria (Eco 2).
-- **Horta (em construção):** regras de canteiros, sementes e pratos da Nilza prontas; os canteiros no mundo ainda não.
-- **Correções:** save gravado com cópia de segurança, exames S e SSS, Elite Gêmeo do tipo certo, ajuda, Diário com rolagem, tecla de poção real no HUD, poção do J2, confirmação ao pular conversa e atlas grandes comprimidos (menos memória de vídeo).
+- **Horta (jogável):** 6 canteiros no Pomar Alto (depois de conhecer a Dona Celeste), 3 sementes que crescem a cada volta
+  da Brecha, colheita e a feira da Nilza na Praça (**Ver a feira**): compra a receita com Lumes, cozinha com a colheita e o
+  prato é comido ao entrar na Brecha, com bônus até ela fechar. A arte dos canteiros ainda é provisória.
+- **Bênçãos:** 30 bênçãos (6 por família) e 7 **combinações** entre famílias (5 de duas, 2 de três); a tela de escolha
+  avisa quando uma carta completa uma combinação.
+- **Duplas de Guardiões (Ato VII):** golpe combinado com aviso de 1,3 s, o "elo" âmbar entre os dois; quem sai do elo
+  não leva dano.
+- **Co-op online para 2:** host autoritativo por ENet, tela do convidado e menus **Online** (veja abaixo).
+- **Correções:** save gravado com cópia de segurança, exames S e SSS, Elite Gêmeo do tipo certo, ajuda, Diário com rolagem, tecla de poção real no HUD, poção do J2, confirmação ao pular conversa e atlas grandes comprimidos (menos memória de vídeo). Monstros das caçadas sempre nascem
+  em chão alcançável (antes uma sala podia nunca ficar limpa), HUD do co-op sem sobrepor o painel do J2, nomes longos no
+  inventário com reticências e página **Ecos e co-op** na ajuda.
 
 ### 🌐 Como jogar online (2 jogadores)
 

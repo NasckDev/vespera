@@ -7,7 +7,7 @@ Como ler:
 - Texto entre aspas e em itálico é **fala real do jogo**, copiada dos arquivos. Quando eu resumo, escrevo "(resumo)".
 - "(só no roteiro)" marca o que o seu roteiro pede e que **não achei** no jogo. Tudo isso volta, listado, na última seção.
 - Há spoilers de tudo, inclusive do final.
-- Fontes lidas: a branch `v2` e, para o Ato VII, a branch `atos67` (worktree `C:\ale\vespera-wt\atos67`). O Ato VII está jogável lá, com teste automático, mas **ainda não foi fundido na `v2`** (marcado onde aparece).
+- Fonte lida: a branch `v2` (todos os atos, o Final, o co-op local e online, a Horta e as bênçãos combinadas já estão nela).
 
 ---
 
@@ -353,6 +353,7 @@ A grande lanterna piscou. *"Ela nunca pisca."*
   - Farol Afogado + Velória
   - Sineiro Mudo + Inquilino
 - Cada um luta como no ato dele (fases iguais às das seções anteriores), só que mais fraco por vir acompanhado.
+- **Golpe combinado da dupla:** com os dois vivos e perto um do outro, a dupla se alinha (a primeira vez depois de 7 s, depois a cada 11 s). Aparece no chão uma faixa âmbar entre os dois (o "elo") e um pulso em volta de cada um, ligados por um fio magenta; o aviso dura 1,3 s. Na primeira vez sai o aviso *"Os dois se alinham. Saia do elo entre eles!"*. Quem continua no elo leva um golpe forte; quem saiu ou está esquivando não leva nada. Se um dos dois cai durante o aviso, o golpe é cancelado. Vale para os dois jogadores no co-op.
 
 ### O que muda na cidade
 - A praça escurece e a grande lanterna pisca (o chão da praça troca de imagem durante o ato).
@@ -422,12 +423,13 @@ Aparecem só as opções que o jogador **mereceu**; tocar com o jogador está se
 
 ## 12. Sistemas em uma página
 
-**Bênçãos da Lanterna.** Ao limpar uma sala de combate, a lanterna oferece 3 cartas e o jogador escolhe 1; duram só até o fim da caçada. São 20 bênçãos em 5 famílias, cada uma com a cor e o nome de um personagem:
-- **Chama** (âmbar, Odete): dano, crítico, partes quebram mais rápido. Brasa, Têmpera, Forja Viva, Faísca.
-- **Vigília** (creme, Benício): esquiva e invencibilidade. Passo Longo, Olho Aberto, Fôlego, Couro Grosso.
-- **Sopa** (verde, Nilza): vida e cura. Caldo Forte, Prato Cheio, Pão Quente, Colherada.
-- **Mapa** (azul, Lis): Fragmentos, Lumes, velocidade. Bolso Fundo, Faro, Rota Curta, Mapa da Lis.
-- **Aposta** (magenta, Ravi): risco e recompensa. Tudo ou Nada, Mão Pesada, Sorte do Ravi, Aposta Alta.
+**Bênçãos da Lanterna.** Ao limpar uma sala de combate, a lanterna oferece 3 cartas e o jogador escolhe 1; duram só até o fim da caçada. São 30 bênçãos em 5 famílias (6 por família), cada uma com a cor e o nome de um personagem:
+- **Chama** (âmbar, Odete): dano, crítico, partes quebram mais rápido. Brasa, Têmpera, Forja Viva, Faísca, Ferro em Brasa, Lâmina Quente.
+- **Vigília** (creme, Benício): esquiva e invencibilidade. Passo Longo, Olho Aberto, Fôlego, Couro Grosso, Guarda Alta, Passo Calmo.
+- **Sopa** (verde, Nilza): vida e cura. Caldo Forte, Prato Cheio, Pão Quente, Colherada, Caldo de Osso, Sobremesa.
+- **Mapa** (azul, Lis): Fragmentos, Lumes, velocidade. Bolso Fundo, Faro, Rota Curta, Mapa da Lis, Atalho, Bússola.
+- **Aposta** (magenta, Ravi): risco e recompensa. Tudo ou Nada, Mão Pesada, Sorte do Ravi, Aposta Alta, Dobro ou Nada, Cartada.
+- **Combinações:** juntar na mesma caçada pelo menos uma bênção de cada família pedida liga um bônus extra. De duas famílias: **Brasa Viva** (Chama + Aposta: +12% de dano e +8% de crítico), **Ferro e Compasso** (Chama + Vigília: partes quebram 25% mais rápido e a esquiva protege um pouco mais), **Panela de Pressão** (Vigília + Sopa: mais tempo intocável depois de um golpe e cura 1 por monstro vencido), **Marmita** (Sopa + Mapa: cura 8% por sala limpa e +10% de Fragmentos), **Jogo Marcado** (Mapa + Aposta: +25% de Fragmentos se voltar inteiro e +2 Lumes por barril). De três famílias: **Fogo de Casa** (Chama + Vigília + Sopa: +10% de dano, +15 de vida máxima e mais tempo intocável depois de um golpe) e **Dados Viciados** (Vigília + Mapa + Aposta: +12% de crítico, +10% de velocidade e esquiva mais barata). Na tela de escolha, a carta que completa uma combinação mostra "Combina!" em dourado, e embaixo das cartas aparecem as combinações ligadas e as que estão perto. A Teimosia não conta para combinação.
 - Existe ainda a bênção **Teimosia** (+10% de dano até fechar a Brecha), dada quando o jogador recupera a própria Lanterna.
 
 **Morte e Lanterna.** O jogador cai, a Lanterna fica no chão da Brecha com os Fragmentos da caçada, e ele acorda no quarto. Os Fragmentos voltam quando entra de novo numa Brecha **do mesmo bairro**. Peças e materiais nunca se perdem; rank, arma e Lumes ficam. A cada queda, na volta, **uma fala de morte nova** (seis por ato, em ordem; depois sorteia). Cada Lanterna perdida é contada, e o número aparece no Benício (Ato VII) e no Reflexo (Final). A morte também carrega perguntas do Vigia (ver Ato V e VI).
@@ -459,9 +461,11 @@ O Vigia libera o primeiro slot (Ato IV). O **segundo slot** abre no Ato V, na co
 
 **Co-op local.** Dois jogadores no mesmo PC (teclado + controle, metade do teclado cada, ou dois controles). No título: **Co-op local**, cada um aperta um botão no próprio aparelho, escolhe a classe e confirma. No meio do jogo: pausa → **Chamar J2** (só fora da Brecha). Cada jogador tem a própria progressão, conjuntos e Ecos. O J2 também tem tecla de poção (Num 4).
 
-**Co-op online (em construção).** Só a parte invisível ficou pronta: as mensagens entre os dois PCs, o estado que o anfitrião manda e a suavização no convidado, com testes. **Ainda não dá para hospedar nem entrar numa partida**: faltam a conexão de rede, os botões **Online → Hospedar / Entrar** no título e a tela do convidado. Quando ficar pronto, o anfitrião escolhe Hospedar (o jogo mostra o IP e a porta, padrão 24680) e o amigo escolhe Entrar e digita esse IP e porta.
+**Co-op online (primeira versão).** Dois jogadores em PCs diferentes. Quem hospeda vai em Título → **Online → Hospedar** (ou pausa → **Online → Hospedar**); o jogo mostra o IP local e a porta (24680). O amigo vai em Título → **Online → Entrar**, digita IP e porta e escolhe a classe. O jogo roda no PC do anfitrião; o convidado vê a sala, os caçadores, os monstros com a vida e as falas, e controla o caçador dele (não pausa nem abre menus no jogo do anfitrião). Se a conexão cai, o anfitrião segue sozinho e o convidado volta ao título com um aviso. Ainda falta: o convidado não vê golpes, flechas, números de dano nem efeitos; o progresso dele fica no save do anfitrião; quem entra com o grupo dentro da Brecha só nasce quando o grupo volta à cidade; só 2 jogadores. Para jogar pela internet, o anfitrião precisa abrir a porta 24680 UDP no roteador (o README explica).
 
 **Correções desta rodada.** O save agora é gravado de forma segura (arquivo temporário + cópia `.bak`; se o principal estragar, o jogo usa a cópia). Os exames S e SSS passaram a valer (antes o rank travava em S). O Elite Gêmeo nasce do mesmo tipo do monstro original. A ajuda mostra Beber poção e Diário; o Diário rola com setas e PageUp/PageDown; a tecla de poção no HUD mostra a tecla real do aparelho; pular conversa pede um segundo Esc; o fim da Parte 1 aceita clique; as opções dão a volta do máximo ao mínimo. Os desenhos grandes dos chefes e armas passaram a ser comprimidos na placa de vídeo (bem menos memória), e alguns cálculos por quadro foram reduzidos.
+
+**Correções da rodada seguinte.** Alguns monstros das caçadas nasciam atrás da barreira da saída ou em cima da torre, onde ninguém alcança, e a sala nunca ficava limpa (a fenda de saída não abria). Esses pontos saíram dos dados, os monstros agora nascem sempre em chão que se alcança a pé e, se um monstro passar mais de 2 s fora desse chão, volta para o ponto alcançável mais perto. No HUD, o nome da tecla do Eco fica embaixo do ícone e cada Eco tem cor própria; no co-op, sala, objetivo, contratos e mapa descem para não cobrir o painel do J2. No inventário, nomes longos terminam em reticências e o detalhe da peça diminui a letra para caber. A ajuda ganhou a página **Ecos e co-op** (agora são 7 páginas).
 
 **Ranks (selos).** Nomes: E Aprendiz, D Vigia, C Lanterneiro, B Sentinela, A Caçador, S Arauto, SS Crepuscular, SSS Véspero, Alvor. Para subir: XP do rank seguinte **e** vencer o Guardião do rank atual **e**, nos selos C, B, S e SSS, passar o exame da Ordem. Cada rank soma vida máxima. O visual do personagem muda em 5 estágios (E-D, C-B, A-S, SS-SSS, Alvor).
 
@@ -476,19 +480,19 @@ Lista honesta. "Não achei" significa que procurei nos dados e no código e não
 **Mecânicas e sistemas do roteiro**
 - **Horta** do Ato II: jogável (canteiros, sementes, colheita, feira da Nilza, prato antes da caçada). Faltam arte própria dos canteiros e da banca da feira, e as sementes vindas da Celeste por fala (hoje as 3 sementes são livres).
 - **Modificadores de véspera** (Chuva, Lua cheia, Névoa, Silêncio) e a fala da Lis de manhã avisando: não achei.
-- **Bênçãos:** o roteiro pede 6 por família no Ato I e **3 novas por ato**, mais **uma combinação entre famílias por ato**. O jogo tem 4 por família (20 no total), sem novas por ato e sem combinações. O Ato VII pede ainda "bênçãos combinadas de 3 famílias": não achei.
+- **Bênçãos:** agora são 6 por família (30 no total) e 7 combinações (5 de duas famílias, 2 de três). Diferenças do roteiro: não chegam "3 novas por ato" (as 30 valem desde o início), as combinações de três famílias valem em qualquer caçada (o roteiro as põe no Ato VII) e as combinações só mexem em números (dano, crítico, vida, Fragmentos...). O exemplo "inimigos incendiados explodem" não existe, porque o jogo não tem queimadura em monstros.
 - **Conjuntos na tela do personagem e na forja:** os bônus aparecem no inventário, mas a tela do personagem e a forja ainda não mostram os bônus ativos.
 - **Sino no HUD como relógio da véspera** (Ato V): não achei.
 - **Barco do Severo levando a uma ilhota com Brecha opcional** (Ato III): não achei.
 - **Memorial com os nomes** no Cemitério (Ato IV) e a **lanterna do Ravi no memorial**: não achei (a lanterna dele existe, mas na Brecha B).
 - **Ruas Baixas reformadas, tábuas tiradas da janela e lampiões novos** (Ato VI): as falas dizem, o cenário não parece mudar. A mudança visível que existe é: lampiões e banca da Lis (Ato I), carroça de maçãs (Ato I-II) e praça escura (Ato VII).
-- **Ataque combinado das duplas de Guardiões** (ex.: o feixe do Farol puxando para a poça da Velória): não achei; a dupla só luta junta, com avisos mais curtos.
+- **Ataque combinado das duplas de Guardiões:** existe um golpe combinado, o mesmo para as três duplas (o "elo" entre os dois, veja o Ato VII). Os combos próprios de cada dupla (ex.: o feixe do Farol puxando para a poça da Velória) não existem.
 - **Perguntas do Vigia citadas no Final**: as respostas ficam salvas, mas as falas do Reflexo não as usam.
 - **Rosto do Vigia no Ato VII** (a mulher jovem com os olhos da Odete): o diálogo não descreve, e não confirmei a arte.
 - **Cena silenciosa Odete × Vigia** (final do jogador): não achei uma cena própria.
 - **Epílogo diferente para Lis e para o jogador**: o texto é o mesmo (muda só a ilustração do sino).
 - **Odete entrando até a praça de baixo**: só há a fala; não achei acompanhante em combate.
-- **Ravi "controlado pela IA" como tutorial do online** e o **modo online / Vigília de 4 / Casas** (Parte 3 do roteiro): só o núcleo do protocolo online existe; ainda não dá para jogar online.
+- **Ravi "controlado pela IA" como tutorial do online** e o **modo online / Vigília de 4 / Casas** (Parte 3 do roteiro): o online para 2 jogadores já funciona (primeira versão, veja Co-op online na seção 12); o Ravi como tutorial, a Vigília de 4 e as Casas não existem.
 - **A palavra "Deus"** aparece só em poucas falas (Nilza e Ravi); o resto do povo e das Ruas Baixas não a usa.
 
 **Falas e arquivos**
@@ -499,4 +503,4 @@ Lista honesta. "Não achei" significa que procurei nos dados e no código e não
 - **Selo D e outros:** o Benício "queima o selo" por evento nos Atos III a VII; no Ato I e II o selo depende só da progressão (XP). Se o jogador chegar ao fecho sem XP suficiente, o Benício pede para caçar mais.
 
 **Estado das branches**
-- Os Atos VI e VII, o Final, o co-op local e todas as correções desta rodada já estão juntos na branch `v2`.
+- Os Atos VI e VII, o Final, o co-op local e online, a Horta jogável, as 30 bênçãos com combinações, o golpe combinado das duplas e todas as correções desta rodada já estão juntos na branch `v2`.
