@@ -185,6 +185,9 @@ public sealed class ZoneData
 
     public string LockedText { get; set; } = string.Empty;
 
+    /// <summary>Zona "canteiro": número do canteiro da Horta (0 a 5, ver data/horta/horta.json); -1 nas demais.</summary>
+    public int Index { get; set; } = -1;
+
     /// <summary>Condições de história para a zona existir (mesma sintaxe das falas); vazio = sempre.</summary>
     [JsonPropertyName("if")]
     public List<string> Conditions { get; set; } = [];

@@ -93,6 +93,11 @@ public partial class SmokeTest
             await RunAto45(level);
         }
 
+        if (Array.IndexOf(_args, HortaFlag) >= 0)
+        {
+            await RunHorta(level);
+        }
+
         if (Array.IndexOf(_args, FinalFlag) >= 0)
         {
             await RunFinal(level);

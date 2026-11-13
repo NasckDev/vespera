@@ -370,9 +370,15 @@ public partial class LevelWorld : Node2D
             Dialogue = zone.Dialogue,
             Target = locked ? string.Empty : zone.Target,
             TargetSpawn = zone.Spawn,
+            Index = zone.Index,
             Position = at,
             PromptAnchor = at - new Vector2(0, DoorPromptHeight * _data.ActorScale),
         };
+        if (zone.Kind == CanteiroMark.ZoneKind)
+        {
+            area.AddChild(new CanteiroMark(area, _data.ActorScale));
+        }
+
         Entities.AddChild(area);
         _zones.Add(area);
     }

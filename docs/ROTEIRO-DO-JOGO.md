@@ -455,7 +455,7 @@ Aparecem só as opções que o jogador **mereceu**; tocar com o jogador está se
 
 O Vigia libera o primeiro slot (Ato IV). O **segundo slot** abre no Ato V, na conversa com o Benício: ele recebe o Eco mais recente e tem tecla própria (**Eco 2**, `Z` no teclado). Os dois ícones aparecem embaixo da tela com a recarga girando.
 
-**Horta (em construção).** As regras já existem: 6 canteiros, 3 sementes (Abóbora-roxa, Erva-de-lanterna, Raiz-doce) que crescem a cada volta da Brecha, e 3 pratos da Nilza (Sopa de Abóbora-roxa, Chá de Erva-de-lanterna, Ensopado de Raiz-doce) que dão um bônus na caçada seguinte e aparecem no HUD. Ainda **não dá para usar jogando**: faltam os canteiros no Pomar Alto, a tela de sementes e a feira da Nilza.
+**Horta (Ato II).** Abre quando você conhece a Dona Celeste, no Pomar Alto. Os 6 canteiros ficam sobre os canteiros pintados (3 no jardim da direita, 3 no da esquerda; entre pela abertura da cerca perto da moradora da horta). Chegue perto e aperte interagir: canteiro vazio abre a escolha entre 3 sementes (Abóbora-roxa e Erva-de-lanterna em 1 volta, Raiz-doce em 2), canteiro crescendo diz quanto falta, canteiro pronto colhe na hora. Cada volta da Brecha conta um dia. Na Praça, fale com a Tia Nilza e escolha **Ver a feira**: compre a receita com Lumes (Sopa de Abóbora-roxa 20, Chá de Erva-de-lanterna 20, Ensopado de Raiz-doce 40) e mande cozinhar com a colheita. Só cabe um prato pronto por vez; ele é comido ao entrar na Brecha, aparece como lembrete na cidade e no HUD da caçada e dá o bônus até a Brecha fechar (Sopa: +8% de dano; Chá: +6% de velocidade e cura 10% ao limpar sala; Ensopado: +25% de Fragmentos e poções curam +20%). A arte dos canteiros é um placeholder de código (terra, placa e planta desenhadas por formas simples); falta arte própria da Horta e da feira.
 
 **Co-op local.** Dois jogadores no mesmo PC (teclado + controle, metade do teclado cada, ou dois controles). No título: **Co-op local**, cada um aperta um botão no próprio aparelho, escolhe a classe e confirma. No meio do jogo: pausa → **Chamar J2** (só fora da Brecha). Cada jogador tem a própria progressão, conjuntos e Ecos. O J2 também tem tecla de poção (Num 4).
 
@@ -474,7 +474,7 @@ O Vigia libera o primeiro slot (Ato IV). O **segundo slot** abre no Ato V, na co
 Lista honesta. "Não achei" significa que procurei nos dados e no código e não encontrei; vale confirmar jogando.
 
 **Mecânicas e sistemas do roteiro**
-- **Horta** do Ato II: as regras e o save existem, mas os canteiros no Pomar Alto, a feira da Nilza e as sementes da Celeste ainda não estão no mundo.
+- **Horta** do Ato II: jogável (canteiros, sementes, colheita, feira da Nilza, prato antes da caçada). Faltam arte própria dos canteiros e da banca da feira, e as sementes vindas da Celeste por fala (hoje as 3 sementes são livres).
 - **Modificadores de véspera** (Chuva, Lua cheia, Névoa, Silêncio) e a fala da Lis de manhã avisando: não achei.
 - **Bênçãos:** o roteiro pede 6 por família no Ato I e **3 novas por ato**, mais **uma combinação entre famílias por ato**. O jogo tem 4 por família (20 no total), sem novas por ato e sem combinações. O Ato VII pede ainda "bênçãos combinadas de 3 famílias": não achei.
 - **Conjuntos na tela do personagem e na forja:** os bônus aparecem no inventário, mas a tela do personagem e a forja ainda não mostram os bônus ativos.
