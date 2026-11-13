@@ -10,6 +10,7 @@ public partial class DetailPane : PanelContainer
 {
     private const int Padding = 30;
     private const int IconSize = 176;
+    private const int MinFontSize = 20;
     private readonly RichTextLabel _text;
     private readonly VBoxContainer _column;
     private readonly CenterContainer _iconHolder;
@@ -26,7 +27,7 @@ public partial class DetailPane : PanelContainer
         {
             BbcodeEnabled = true,
             FitContent = false,
-            ScrollActive = false,
+            ScrollActive = true,
             SizeFlagsVertical = SizeFlags.ExpandFill,
             SizeFlagsHorizontal = SizeFlags.ExpandFill,
             MouseFilter = MouseFilterEnum.Ignore,
@@ -67,5 +68,26 @@ public partial class DetailPane : PanelContainer
         }
     }
 
-    public void ShowText(string bbcode) => _text.Text = bbcode;
+    public void ShowText(string bbcode)
+    {
+        _text.RemoveThemeFontSizeOverride("normal_font_size");
+        _text.Text = bbcode;
+        CallDeferred(nameof(FitText));
+    }
+
+    /// <summary>Texto longo (conjuntos de Guardião) encolhe a fonte até caber no painel, em vez de sair cortado.</summary>
+    private void FitText()
+    {
+        if (_text.Size.Y <= 0)
+        {
+            return;
+        }
+
+        var size = _text.GetThemeFontSize("normal_font_size");
+        while (size > MinFontSize && _text.GetContentHeight() > _text.Size.Y)
+        {
+            size -= 2;
+            _text.AddThemeFontSizeOverride("normal_font_size", size);
+        }
+    }
 }

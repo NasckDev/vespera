@@ -108,6 +108,12 @@ public partial class SmokeTest
             await CaptureWarnings(level);
         }
 
+        if (Array.IndexOf(_args, VisualQaFlag) >= 0 && canShoot)
+        {
+            await RunVisualQa(level);
+            return;
+        }
+
         if (Array.IndexOf(_args, CoopBotFlag) >= 0)
         {
             await RunCoop((Level)_router.Current!);

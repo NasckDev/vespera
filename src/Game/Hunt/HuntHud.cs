@@ -57,9 +57,9 @@ public partial class HuntHud : Control
                 AddChild(_ecos[player, slot]);
             }
         }
-        _room = RightLabel(40, Palette.Amber, 28);
-        _goal = RightLabel(34, Palette.Cream, 76);
-        _contracts = RightLabel(28, Palette.CreamDim, 124);
+        _room = RightLabel(40, Palette.Amber, RoomY);
+        _goal = RightLabel(34, Palette.Cream, GoalY);
+        _contracts = RightLabel(28, Palette.CreamDim, ContractsY);
         _contracts.AutowrapMode = TextServer.AutowrapMode.Off;
         _lumes = MakeLabel(30, Palette.Amber);
         _lumes.Position = new Vector2(160, 180);
@@ -68,7 +68,7 @@ public partial class HuntHud : Control
         _soup.Position = new Vector2(160, 222);
         _soup.Text = Core.Hunt.RunPerks.SoupLabel;
         AddChild(_soup);
-        _map = RightLabel(28, MapBlue, 254);
+        _map = RightLabel(28, MapBlue, MapY);
         _map.AutowrapMode = TextServer.AutowrapMode.WordSmart;
         _map.Size = new Vector2(870, 80);
     }
@@ -84,6 +84,13 @@ public partial class HuntHud : Control
     }
 
     private const float RoomRefreshSeconds = 0.25f;
+    private const float RoomY = 28f;
+    private const float GoalY = 76f;
+    private const float ContractsY = 124f;
+    private const float MapY = 254f;
+
+    /// <summary>No co-op o painel do J2 ocupa o topo à direita: sala, objetivo e contratos descem para baixo dele.</summary>
+    private const float GuestPanelShift = 150f;
 
     private (int, int, string) _potionKey = (-1, -1, "");
     private (Vespera.Core.Ranks.Rank?, int, int, int) _xpKey = (null, -1, -1, -1);
@@ -101,6 +108,11 @@ public partial class HuntHud : Control
         }
 
         Visible = true;
+        var shift = Coop.CoopSession.Active ? GuestPanelShift : 0f;
+        _room.Position = new Vector2(1020, RoomY + shift);
+        _goal.Position = new Vector2(1020, GoalY + shift);
+        _contracts.Position = new Vector2(1020, ContractsY + shift);
+        _map.Position = new Vector2(1020, MapY + shift);
         var state = HuntService.State;
         var potionKey = (state.Potions, HuntService.Config.Potions.Max, InputDevices.KeyName(InputActions.Potion));
         if (potionKey != _potionKey)
@@ -271,6 +283,22 @@ public partial class HuntHud : Control
     /// <summary>Ícone do Eco Viscoso: gota verde com a recarga em setor escuro girando e a tecla Q.</summary>
     private partial class EcoIcon : Control
     {
+        private const int KeyFontSize = 26;
+        private const float KeyOverhang = 24f;
+        private const float KeyLift = 6f;
+
+        /// <summary>Cor de cada Eco no ícone (o ícone não tem arte própria: a cor diz qual é).</summary>
+        private static readonly System.Collections.Generic.Dictionary<string, Color> EcoColors = new()
+        {
+            ["eco_viscoso"] = Slime,
+            ["eco_semente"] = new Color("a8d84a"),
+            ["eco_farol"] = new Color("ffe9a0"),
+            ["eco_vela"] = new Color("ff9a5a"),
+            ["eco_sino"] = new Color("ffd24a"),
+            ["eco_lar"] = new Color("6fb7ff"),
+            ["eco_avesso"] = new Color("b88cff"),
+        };
+
         private Label? _key;
 
         /// <summary>0 = pronto; 1 = recém-usado.</summary>
@@ -293,13 +321,16 @@ public partial class HuntHud : Control
 
         public override void _Ready()
         {
-            _key = MakeLabel(30, Palette.Cream);
+            // Embaixo do ícone e centrada: "Num 4" e "Num Enter" são mais largos que o ícone e não podem sair de lado.
+            _key = MakeLabel(KeyFontSize, Palette.Cream);
             _key.Text = string.Empty;
-            _key.Position = new Vector2(Size.X - 26, Size.Y - 34);
+            _key.HorizontalAlignment = HorizontalAlignment.Center;
+            _key.Position = new Vector2(-KeyOverhang, Size.Y - KeyLift);
+            _key.Size = new Vector2(Size.X + (2 * KeyOverhang), KeyFontSize + 8);
             AddChild(_key);
         }
 
-        private Color BaseColor => EcoId == "eco_viscoso" || EcoId.Length == 0 ? Slime : Palette.Amber;
+        private Color BaseColor => EcoColors.TryGetValue(EcoId, out var tint) ? tint : Palette.Amber;
 
         public override void _Process(double delta) => QueueRedraw();
 
