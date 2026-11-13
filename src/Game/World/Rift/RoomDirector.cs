@@ -107,6 +107,8 @@ public partial class RoomDirector : Node
             _world.AddSolid(seal.Rect);
         }
 
+        BuildReach();
+
         if (_data.Chest is { } chest)
         {
             Chest = new Chest(_world, new Vector2(chest[0], chest[1])) { Name = "Chest" };
@@ -318,6 +320,7 @@ public partial class RoomDirector : Node
         if (!Cleared && Guardian is null)
         {
             TickWaves(dt);
+            KeepWaveReachable(dt);
         }
 
         if (Boss is { Engaged: true, Dead: false })
@@ -350,6 +353,17 @@ public partial class RoomDirector : Node
 
     /// <summary>Monstros vivos desta sala (para o bot de combate).</summary>
     public IEnumerable<Enemy> Alive => _world.Enemies.Where(e => IsInstanceValid(e) && !e.Dead);
+
+    /// <summary>Estado das ondas para diagnóstico (bots): o que a sala ainda espera para ficar limpa.</summary>
+    public string Describe()
+    {
+        var wave = string.Join("; ", _wave.Select(e => !IsInstanceValid(e)
+            ? "(liberado)"
+            : $"{e.MonsterId}{(e.Elite ? " (elite)" : string.Empty)} em ({e.GlobalPosition.X:0},{e.GlobalPosition.Y:0}) vida {e.Hp:0}/{e.MaxHp:0} estado {e.State} visível {e.Visible} " +
+              $"golpeável {e.CanBeHit} na árvore {e.IsInsideTree()} na lista {_world.Enemies.Contains(e)} alcançável {IsReachable(e.GlobalPosition)}"));
+        return $"limpa {Cleared}, onda {_nextWave}/{_data.Waves.Count}, pendentes {_pending}, fora {_waveOut}, timer {_timer:0.00}, " +
+               $"vivos no mundo {Alive.Count()}, onda [{wave}]";
+    }
 
     private void TickWaves(float dt)
     {
@@ -412,7 +426,7 @@ public partial class RoomDirector : Node
     private void SpawnWithWarning(SpawnData spawn, float delay)
     {
         _pending++;
-        var at = _world.ClampToFloor(new Vector2(spawn.At[0], spawn.At[1]));
+        var at = ReachPoint(new Vector2(spawn.At[0], spawn.At[1]));
         var a = _world.Data.ActorScale;
         var timer = GetTree().CreateTimer(delay);
         timer.Timeout += () =>
@@ -462,7 +476,7 @@ public partial class RoomDirector : Node
         var twin = EnemyFactory.Create(spawn.Type, _world);
         twin.MakeElite(HuntService.Config.Elite);
         twin.ApplyModifier("gemeo");
-        twin.Position = _world.ClampToFloor(at + new Vector2(0.8f * _world.Data.HumanHeight, 0));
+        twin.Position = ReachPoint(at + new Vector2(0.8f * _world.Data.HumanHeight, 0));
         _world.AddEnemy(twin);
         _wave.Add(twin);
     }

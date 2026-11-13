@@ -130,6 +130,26 @@ public sealed class LevelGrid
         }
     }
 
+    /// <summary>
+    /// Chão alcançável a pé a partir do ponto (<paramref name="x"/>, <paramref name="y"/>), com os retângulos
+    /// <paramref name="closed"/> (barreira da saída, selos) contando como parede em toda célula que tocam.
+    /// </summary>
+    public Vespera.Core.World.ReachableFloor Reach(float x, float y, IReadOnlyList<RectF> closed) =>
+        new(Cols, Rows, (c, r) => IsBlocked(c, r) || Touches(closed, CellRect(c, r)), (int)MathF.Floor(x / Cell), (int)MathF.Floor(y / Cell));
+
+    private static bool Touches(IReadOnlyList<RectF> rects, RectF cell)
+    {
+        foreach (var rect in rects)
+        {
+            if (rect.Intersects(cell))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /// <summary>Verdadeiro se o retângulo cruza alguma célula bloqueada (ou sai da grade).</summary>
     public bool OverlapsBlocked(RectF rect)
     {
