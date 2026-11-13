@@ -1,10 +1,16 @@
 namespace Vespera.Core.Net;
 
-/// <summary>Estado de um caçador no snapshot. <see cref="Facing"/>: 0 baixo, 1 cima, 2 lado direito, 3 lado esquerdo.</summary>
-public readonly record struct NetHunter(byte Slot, float X, float Y, byte Facing, bool Downed, float Hp, float MaxHp);
+/// <summary>
+/// Estado de um caçador no snapshot. <see cref="Facing"/>: 0 baixo, 1 cima, 2 lado direito, 3 lado esquerdo.
+/// <see cref="Kind"/>: classe (0 Lâmina, 1 Arco, 2 Martelo), para o convidado desenhar o sprite certo.
+/// </summary>
+public readonly record struct NetHunter(byte Slot, float X, float Y, byte Facing, bool Downed, float Hp, float MaxHp, byte Kind = 0)
+{
+    public const byte MaxKind = 7;
+}
 
-/// <summary>Estado de um monstro no snapshot (id estável enquanto ele existir na sala).</summary>
-public readonly record struct NetEnemy(int Id, float X, float Y, float Hp, float MaxHp);
+/// <summary>Estado de um monstro no snapshot (id estável enquanto ele existir na sala; <see cref="Type"/> = id do monstro, vazio se desconhecido).</summary>
+public readonly record struct NetEnemy(int Id, float X, float Y, float Hp, float MaxHp, string Type = "");
 
 /// <summary>
 /// Foto do mundo que o host manda ~20 vezes por segundo: passo da simulação, sala atual (a troca de sala é a mudança deste
@@ -50,6 +56,7 @@ public sealed record WorldSnapshot(uint Tick, string LevelId, IReadOnlyList<NetH
             w.Byte(h.Downed ? (byte)1 : (byte)0);
             w.Float(h.Hp);
             w.Float(h.MaxHp);
+            w.Byte(h.Kind);
         }
 
         w.UShort((ushort)Enemies.Count);
@@ -60,6 +67,7 @@ public sealed record WorldSnapshot(uint Tick, string LevelId, IReadOnlyList<NetH
             w.Float(e.Y);
             w.Float(e.Hp);
             w.Float(e.MaxHp);
+            w.OptionalId(e.Type ?? string.Empty);
         }
 
         var dialogue = TrimUtf8(Dialogue, MaxDialogueBytes);
@@ -105,7 +113,13 @@ public sealed record WorldSnapshot(uint Tick, string LevelId, IReadOnlyList<NetH
                 return false;
             }
 
-            hunters.Add(new NetHunter(slot, x, y, facing, downed == 1, hp, maxHp));
+            var kind = r.Byte();
+            if (r.Failed || kind > NetHunter.MaxKind)
+            {
+                return false;
+            }
+
+            hunters.Add(new NetHunter(slot, x, y, facing, downed == 1, hp, maxHp, kind));
         }
 
         if (!r.TryUShort(out var enemyCount) || enemyCount > MaxEnemies)
@@ -116,12 +130,13 @@ public sealed record WorldSnapshot(uint Tick, string LevelId, IReadOnlyList<NetH
         var enemies = new List<NetEnemy>(enemyCount);
         for (var i = 0; i < enemyCount; i++)
         {
-            if (!r.TryInt(out var id) || !r.TryFloat(out var x) || !r.TryFloat(out var y) || !r.TryFloat(out var hp) || !r.TryFloat(out var maxHp) || !ValidHp(hp, maxHp))
+            if (!r.TryInt(out var id) || !r.TryFloat(out var x) || !r.TryFloat(out var y) || !r.TryFloat(out var hp) || !r.TryFloat(out var maxHp) || !ValidHp(hp, maxHp)
+                || !r.TryOptionalId(out var type))
             {
                 return false;
             }
 
-            enemies.Add(new NetEnemy(id, x, y, hp, maxHp));
+            enemies.Add(new NetEnemy(id, x, y, hp, maxHp, type));
         }
 
         if (!r.TryUShort(out var dialogueLength) || dialogueLength > MaxDialogueBytes)

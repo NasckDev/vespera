@@ -82,7 +82,7 @@ flowchart LR
 |---|---|---|
 | 📖 **História** | Campanha solo da chegada a Lumeira até o Alvor | beta v2 |
 | 👥 **Co-op local** | 2 jogadores no mesmo PC (teclado + gamepad ou 2 gamepads), câmera compartilhada. Título → **Co-op local**; no meio do jogo, pausa → **Chamar J2** | ✅ na v2 |
-| 🌐 **Co-op online** | Um jogador hospeda (**Online → Hospedar**, porta padrão 24680) e o outro entra com IP e porta (**Online → Entrar**). Hoje só o protocolo existe (mensagens, estado do mundo, suavização, com testes); a conexão e os botões ainda não | 🚧 em construção |
+| 🌐 **Co-op online** | 2 jogadores em PCs diferentes: um hospeda (**Online → Hospedar**, porta padrão 24680) e o outro entra com IP, porta e classe (**Online → Entrar**). O host roda o jogo; o convidado vê o mundo do host e controla o caçador dele | ✅ primeira versão |
 
 ### Novidades da v2
 
@@ -90,6 +90,23 @@ flowchart LR
 - **Ecos:** os 7 Ecos funcionam em combate, cada um com efeito próprio, e o **2º slot de Eco** abre no Ato V com tecla própria (Eco 2).
 - **Horta (em construção):** regras de canteiros, sementes e pratos da Nilza prontas; os canteiros no mundo ainda não.
 - **Correções:** save gravado com cópia de segurança, exames S e SSS, Elite Gêmeo do tipo certo, ajuda, Diário com rolagem, tecla de poção real no HUD, poção do J2, confirmação ao pular conversa e atlas grandes comprimidos (menos memória de vídeo).
+
+### 🌐 Como jogar online (2 jogadores)
+
+1. **Quem hospeda:** Título → **Online** → **Hospedar** (ou, já em jogo, pausa → **Online** → **Hospedar**). A tela mostra o
+   **IP local** e a **porta** (24680). Depois escolha o espaço de save e entre no jogo. O amigo nasce ao seu lado quando
+   vocês estiverem fora da Brecha.
+2. **Quem entra:** Título → **Online** → **Entrar**: digite o IP e a porta do host, escolha a classe (Lâmina, Arco ou
+   Martelo) e confirme.
+3. **Mesma rede (casa, LAN):** use o IP local que aparece na tela do host.
+4. **Pela internet:** o host precisa **abrir a porta 24680 UDP** no roteador (redirecionamento de porta para o IP local do
+   PC dele) e liberar o jogo no **firewall** do Windows (na primeira vez o Windows pergunta: marque "Redes privadas" e, se
+   for o caso, "Redes públicas"). O convidado digita o **IP público** do host (o site do roteador ou "qual é meu ip"
+   mostram). Programas de rede virtual (Tailscale, ZeroTier, Radmin VPN) dispensam abrir a porta: use o IP que eles dão.
+5. **Se cair:** o host segue sozinho; o convidado volta ao título com um aviso. Esc no convidado → "Sair da partida online?".
+
+Hoje o convidado vê o chão da sala, os caçadores, os monstros com a vida e as falas; golpes, números de dano e efeitos
+ainda não aparecem do lado dele, e o progresso do convidado fica no save do host (ver `docs/v2/coop.md` §2.5).
 
 Menu completo desde a primeira tela: nova história, continuar, opções (som, vídeo, tremor de tela, reduzir flashes,
 tamanho do texto), **controles remapeáveis** (teclado, mouse e gamepad) e **ajuda / como jogar**.
@@ -159,7 +176,7 @@ Vencer o Reflexo encerra a **Parte 1**. A história continua na **Parte 2**.
 | 5 | NPCs da cidade e suas funções | ⏳ |
 | 6 | Falas e campanha completa | ⏳ |
 | 7 | Lâmina, Arco e Martelo com os 5 estágios de evolução | ⏳ |
-| 8 | Co-op local (pronto), depois online (protocolo pronto, rede em construção) | 🚧 |
+| 8 | Co-op local (pronto) e online para 2 (primeira versão: host autoritativo com ENet) | 🚧 |
 | 9 | **Beta pública**: balanceamento, acessibilidade, instalador | ⏳ |
 
 Cada camada só é dada como pronta depois de testes automáticos **e** de uma rodada de testes jogando de verdade.

@@ -34,6 +34,7 @@ public partial class Boot : Node
         UiAssets.InstallCursor();
         GameSettings.Changed += ApplyTheme;
 
+        Net.NetSession.Ensure(this);
         var router = GetNode<SceneRouter>("/root/SceneRouter");
         RegisterScreens(router);
         var skipIntro = Array.IndexOf(args, SkipIntroFlag) >= 0 || (smoke && Array.IndexOf(args, WithIntroFlag) < 0);
@@ -63,5 +64,6 @@ public partial class Boot : Node
         router.Register(ScreenKeys.Game, World.GameEntry.CreateStartScene);
         router.Register(ScreenKeys.Intro, () => new IntroScreen());
         router.Register(ScreenKeys.Prologue, () => new PrologueScreen());
+        router.Register(Net.NetSession.GuestScreenKey, () => new Net.OnlineGuestView());
     }
 }

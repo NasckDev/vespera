@@ -50,6 +50,11 @@ public partial class PauseScreen : UiScreen
         }
 
         AddCoopButton(column, buttons);
+        if (SceneRouter.Instance.Current is World.Level { CanChangeParty: true } || Net.NetSession.Instance?.Role == Net.NetRole.Host)
+        {
+            Add(column, buttons, "Online", () => SceneRouter.Instance.Push(new OnlineScreen(inGame: true)));
+        }
+
         Add(column, buttons, "Opções", () => SceneRouter.Instance.Push(ScreenKeys.Options));
         Add(column, buttons, "Controles", () => SceneRouter.Instance.Push(ScreenKeys.Controls));
         Add(column, buttons, "Ajuda", () => SceneRouter.Instance.Push(ScreenKeys.Help));
@@ -77,7 +82,7 @@ public partial class PauseScreen : UiScreen
     /// </summary>
     private void AddCoopButton(Container column, List<Control> buttons)
     {
-        if (SceneRouter.Instance.Current is not World.Level level || !level.CanChangeParty)
+        if (SceneRouter.Instance.Current is not World.Level level || !level.CanChangeParty || Coop.CoopSession.Online)
         {
             return;
         }
@@ -110,6 +115,7 @@ public partial class PauseScreen : UiScreen
 
         GameSession.Autosave();
         Game.Coop.CoopSession.End();
+        Net.NetSession.Instance?.Stop();
         GameSession.End();
         SceneRouter.Instance.GoTo(ScreenKeys.Title);
     }

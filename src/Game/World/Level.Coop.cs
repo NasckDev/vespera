@@ -57,6 +57,30 @@ public partial class Level
         GameSession.Autosave();
     }
 
+    /// <summary>
+    /// Co-op online (este PC hospeda): o convidado aceito pela rede nasce ao lado do J1 com a classe que escolheu; o J1
+    /// segue lendo todos os dispositivos locais e o J2 lê os comandos que chegam pela rede.
+    /// </summary>
+    public void ApplyOnlineGuest(int slot, string classId)
+    {
+        var roster = CoopSession.NewRoster();
+        var lead = roster.Join(InputDevice.Keyboard, locked: true)!;
+        lead.ClassId = HunterSprites.WeaponId(Player.Hunter);
+        lead.Ready = true;
+        var guest = roster.Join(InputDevice.Network(slot))!;
+        guest.ClassId = classId;
+        guest.Ready = true;
+        ApplyParty(roster);
+        Log.Info($"online: {CoopSession.TagOf(slot)} nasceu na sala '{World.Data.Id}' ({classId})");
+    }
+
+    /// <summary>O convidado online saiu ou caiu: o host segue sozinho, com aviso na HUD.</summary>
+    public void LeaveOnline(string toast)
+    {
+        LeaveParty();
+        CombatHud.Toast(toast);
+    }
+
     /// <summary>J2 sai (menu de pausa): volta ao jogo solo, com o J1 em todos os dispositivos de novo.</summary>
     public void LeaveParty()
     {

@@ -107,10 +107,21 @@ public static class CoopSession
         return data.Guest;
     }
 
-    /// <summary>Fonte de input do jogador: dispositivo dele → comando por passo (<see cref="CommandInputSource"/>).</summary>
+    /// <summary>Alguém do grupo joga pela rede (co-op online, este PC é o host).</summary>
+    public static bool Online => MembersList.Any(m => m.Device.Kind == DeviceKind.Network);
+
+    /// <summary>
+    /// Fonte de input do jogador: dispositivo dele → comando por passo (<see cref="CommandInputSource"/>). No online, o
+    /// convidado vem da rede (<see cref="Vespera.Game.Net.NetworkCommandProvider"/>) e o J1 do host lê todos os dispositivos locais.
+    /// </summary>
     public static IInputSource CreateInput(CoopMember member)
     {
-        var device = SourceOverride?.Invoke(member) ?? DeviceSource(member);
+        if (member.Device.Kind == DeviceKind.Network)
+        {
+            return new CommandInputSource(Vespera.Game.Net.NetSession.CommandsFor(member.Slot));
+        }
+
+        var device = SourceOverride?.Invoke(member) ?? (Online && member.Slot == 0 ? MergedInput.LocalSolo() : DeviceSource(member));
         return new CommandInputSource(new LocalCommandProvider(device, (byte)member.Slot));
     }
 
@@ -138,6 +149,7 @@ public static class CoopSession
     {
         DeviceKind.Keyboard => split ? "Teclado (esquerda)" : "Teclado",
         DeviceKind.KeyboardRight => "Teclado (direita)",
+        DeviceKind.Network => "online",
         _ => $"Controle {device.Pad + 1}",
     };
 

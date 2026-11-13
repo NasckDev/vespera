@@ -4,7 +4,7 @@ using Vespera.Game.Boot;
 
 namespace Vespera.Game.UI;
 
-/// <summary>Tela de título: Nova história, Co-op local, Continuar, Opções, Controles, Ajuda, Créditos e Sair.</summary>
+/// <summary>Tela de título: Nova história, Co-op local, Online, Continuar, Opções, Controles, Ajuda, Créditos e Sair.</summary>
 public partial class TitleScreen : UiScreen
 {
     private const string Version = "v0.2.0-dev";
@@ -35,6 +35,7 @@ public partial class TitleScreen : UiScreen
         var buttons = new List<Control>();
         _newGame = AddMenuButton(menu, buttons, "Nova história", () => SceneRouter.Instance.Push(ScreenKeys.SlotsNew));
         AddMenuButton(menu, buttons, "Co-op local", () => SceneRouter.Instance.Push(new CoopJoinScreen()));
+        AddMenuButton(menu, buttons, "Online", () => SceneRouter.Instance.Push(new OnlineScreen(inGame: false)));
         _continue = AddMenuButton(menu, buttons, "Continuar", () => SceneRouter.Instance.Push(ScreenKeys.SlotsContinue));
         _continue.Disabled = !SaveService.HasAnySave();
         AddMenuButton(menu, buttons, "Opções", () => SceneRouter.Instance.Push(ScreenKeys.Options));
@@ -47,7 +48,22 @@ public partial class TitleScreen : UiScreen
         var version = UiKit.MakeLabel(Version, UiTheme.DimVariation);
         version.Position = new Vector2(36, 1010);
         AddChild(version);
+
+        // Volta de uma partida online que caiu: o aviso fica no rodapé até a próxima tela.
+        if (Net.NetSession.PendingNotice is { Length: > 0 } notice)
+        {
+            Net.NetSession.PendingNotice = null;
+            LastNotice = notice;
+            var label = UiKit.MakeWrapped(notice);
+            label.Position = new Vector2(36, 940);
+            label.Size = new Vector2(1060, 60);
+            label.Modulate = new Color("f2a541");
+            AddChild(label);
+        }
     }
+
+    /// <summary>Último aviso mostrado no título (queda do online), para os bots.</summary>
+    public static string LastNotice { get; private set; } = string.Empty;
 
     private static Button AddMenuButton(Container parent, List<Control> all, string text, System.Action onPressed)
     {
