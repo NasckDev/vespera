@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" shape-rendering="crispEdges">
+  <title>Selo de rank Alvor</title>
+  <line x1="53.0" y1="32.0" x2="62.0" y2="32.0" stroke="#F2A541" stroke-width="4"/><line x1="46.8" y1="46.8" x2="53.2" y2="53.2" stroke="#F2A541" stroke-width="4"/><line x1="32.0" y1="53.0" x2="32.0" y2="62.0" stroke="#F2A541" stroke-width="4"/><line x1="17.2" y1="46.8" x2="10.8" y2="53.2" stroke="#F2A541" stroke-width="4"/><line x1="11.0" y1="32.0" x2="2.0" y2="32.0" stroke="#F2A541" stroke-width="4"/><line x1="17.2" y1="17.2" x2="10.8" y2="10.8" stroke="#F2A541" stroke-width="4"/><line x1="32.0" y1="11.0" x2="32.0" y2="2.0" stroke="#F2A541" stroke-width="4"/><line x1="46.8" y1="17.2" x2="53.2" y2="10.8" stroke="#F2A541" stroke-width="4"/><polygon points="50.0,32.0 48.6,38.9 44.7,44.7 38.9,48.6 32.0,50.0 25.1,48.6 19.3,44.7 15.4,38.9 14.0,32.0 15.4,25.1 19.3,19.3 25.1,15.4 32.0,14.0 38.9,15.4 44.7,19.3 48.6,25.1" fill="#F2A541" stroke="#F4E7C6" stroke-width="2"/>
+  <text x="32" y="38.5" text-anchor="middle" font-family="'Pixelify Sans', monospace" font-weight="700" font-size="18" fill="#1B1F3B">☀</text>
+</svg>

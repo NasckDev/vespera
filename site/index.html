@@ -1,0 +1,665 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Véspera · RPG de ação em pixel art · Beta grátis</title>
+  <meta name="description" content="Toda véspera, Brechas se abrem em Lumeira. Alguém precisa fechá-las. RPG de ação 2D em pixel art com co-op local para 2. Beta grátis para Windows.">
+  <meta name="theme-color" content="#0d0b1a">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="Véspera">
+  <meta property="og:title" content="Véspera · Toda véspera, uma Brecha se abre">
+  <meta property="og:description" content="RPG de ação 2D em pixel art. Cace monstros, junte Fragmentos, forje armas e suba de rank até o Alvor. Co-op local para 2. Beta grátis para Windows.">
+  <meta property="og:image" content="img/og-vespera.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Arte principal de Véspera: dois caçadores olham Lumeira ao entardecer enquanto uma Brecha magenta rasga o céu">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/icone-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="img/icone-192.png">
+  <link rel="apple-touch-icon" href="img/icone-180.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/secoes.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+  <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+  <!-- Preloader -->
+  <div class="preloader" aria-hidden="true">
+    <div class="preloader__selo">
+      <svg viewBox="0 0 64 64" width="96" height="96" shape-rendering="crispEdges">
+        <g class="preloader__raios" stroke="#F2A541" stroke-width="4"><line x1="53" y1="32" x2="62" y2="32"/><line x1="46.8" y1="46.8" x2="53.2" y2="53.2"/><line x1="32" y1="53" x2="32" y2="62"/><line x1="17.2" y1="46.8" x2="10.8" y2="53.2"/><line x1="11" y1="32" x2="2" y2="32"/><line x1="17.2" y1="17.2" x2="10.8" y2="10.8"/><line x1="32" y1="11" x2="32" y2="2"/><line x1="46.8" y1="17.2" x2="53.2" y2="10.8"/></g>
+        <polygon points="50,32 48.6,38.9 44.7,44.7 38.9,48.6 32,50 25.1,48.6 19.3,44.7 15.4,38.9 14,32 15.4,25.1 19.3,19.3 25.1,15.4 32,14 38.9,15.4 44.7,19.3 48.6,25.1" fill="#F2A541" stroke="#F4E7C6" stroke-width="2"/>
+      </svg>
+    </div>
+    <p class="preloader__texto">Acendendo as lanternas<span class="preloader__pct">0%</span></p>
+    <div class="preloader__barra"><span></span></div>
+  </div>
+
+  <div class="progresso" aria-hidden="true"><span></span></div>
+  <div class="grao" aria-hidden="true"></div>
+  <div class="halo" aria-hidden="true"></div>
+
+  <!-- Cabeçalho -->
+  <header class="topo" id="topo-barra">
+    <a class="topo__marca" href="#inicio" aria-label="Véspera, voltar ao início">
+      <img src="img/icone-32.png" width="28" height="28" alt="">
+      <span>Véspera</span>
+    </a>
+    <nav class="topo__nav" aria-label="Seções">
+      <a href="#historia">História</a>
+      <a href="#avesso">Lanterna</a>
+      <a href="#como-se-joga">Como se joga</a>
+      <a href="#bairros">Bairros</a>
+      <a href="#guardioes">Guardiões</a>
+      <a href="#ranks">Ranks</a>
+      <a href="#coop">Co-op</a>
+      <a href="#trailer">Trailer</a>
+    </nav>
+    <a class="botao botao--primario botao--pequeno topo__cta" href="https://github.com/NasckDev/vespera/releases" target="_blank" rel="noopener">Baixar beta</a>
+    <button class="topo__menu" type="button" aria-expanded="false" aria-controls="menu-movel" aria-label="Abrir menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <div class="menu-movel" id="menu-movel" hidden>
+    <nav aria-label="Menu">
+      <a href="#historia"><small>01</small>História</a>
+      <a href="#avesso"><small>02</small>Lanterna</a>
+      <a href="#como-se-joga"><small>03</small>Como se joga</a>
+      <a href="#bairros"><small>04</small>Bairros</a>
+      <a href="#guardioes"><small>05</small>Guardiões</a>
+      <a href="#ranks"><small>06</small>Ranks</a>
+      <a href="#coop"><small>07</small>Co-op</a>
+      <a href="#trailer"><small>08</small>Trailer</a>
+    </nav>
+    <a class="botao botao--primario" href="https://github.com/NasckDev/vespera/releases" target="_blank" rel="noopener">Baixar beta grátis</a>
+  </div>
+
+  <main id="conteudo">
+
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="inicio" aria-labelledby="hero-titulo">
+      <div class="hero__midia">
+        <img class="hero__poster" src="video/hero-poster.webp" alt="" fetchpriority="high">
+        <video class="hero__video" muted playsinline loop preload="none" poster="video/hero-poster.webp" aria-hidden="true" tabindex="-1"></video>
+      </div>
+      <div class="hero__sombra" aria-hidden="true"></div>
+      <canvas class="brasas" data-brasas="46" aria-hidden="true"></canvas>
+
+      <div class="hero__conteudo">
+        <p class="hero__selo"><span class="ponto"></span>Beta grátis · Windows<span class="so-largo"> · Parte 1 completa</span></p>
+        <h1 class="hero__titulo" id="hero-titulo" aria-label="Véspera">
+          <span class="logo-letras" aria-hidden="true">VÉSPERA</span>
+        </h1>
+        <p class="hero__genero">RPG de ação 2D em pixel art</p>
+        <p class="hero__frase">Toda véspera, Brechas se abrem em Lumeira.<br><strong>Alguém precisa fechá-las.</strong></p>
+        <div class="hero__acoes">
+          <a class="botao botao--primario botao--grande magnetico" href="https://github.com/NasckDev/vespera/releases" target="_blank" rel="noopener">
+            <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11 3h2v10.2l3.6-3.6 1.4 1.4-6 6-6-6 1.4-1.4 3.6 3.6zM4 19h16v2H4z"/></svg>
+            Baixar beta grátis
+          </a>
+          <button class="botao botao--vidro botao--grande magnetico" type="button" data-abrir-modal="trailer">
+            <span class="icone-play" aria-hidden="true"></span>
+            Assistir
+          </button>
+        </div>
+        <ul class="hero__fatos">
+          <li>Co-op local para 2</li>
+          <li>Atos I–VII + Final</li>
+          <li>Feito com Godot 4 + C#</li>
+        </ul>
+      </div>
+
+      <a class="hero__rolar" href="#historia" aria-label="Rolar para a história">
+        <span class="hero__rolar-linha"></span>
+        <span>Role</span>
+      </a>
+    </section>
+
+    <!-- ============ MARQUEE ============ -->
+    <div class="faixa" aria-hidden="true">
+      <div class="faixa__linha" data-dir="1">
+        <span>Caçar</span><i>✦</i><span class="vazado">Forjar</span><i>✦</i><span>Subir</span><i>✦</i><span class="vazado">Fechar a Brecha</span><i>✦</i><span>Acender a Lanterna</span><i>✦</i>
+        <span>Caçar</span><i>✦</i><span class="vazado">Forjar</span><i>✦</i><span>Subir</span><i>✦</i><span class="vazado">Fechar a Brecha</span><i>✦</i><span>Acender a Lanterna</span><i>✦</i>
+      </div>
+      <div class="faixa__linha faixa__linha--b" data-dir="-1">
+        <span class="vazado">Lumeira</span><i>◆</i><span>O Avesso</span><i>◆</i><span class="vazado">Fragmentos</span><i>◆</i><span>Ecos</span><i>◆</i><span class="vazado">Guardiões</span><i>◆</i><span>Alvor</span><i>◆</i>
+        <span class="vazado">Lumeira</span><i>◆</i><span>O Avesso</span><i>◆</i><span class="vazado">Fragmentos</span><i>◆</i><span>Ecos</span><i>◆</i><span class="vazado">Guardiões</span><i>◆</i><span>Alvor</span><i>◆</i>
+      </div>
+    </div>
+
+    <!-- ============ HISTÓRIA (scrollytelling fixado) ============ -->
+    <section class="historia" id="historia" aria-label="A história: o dia, a véspera e a Brecha">
+      <div class="historia__palco">
+        <div class="cena" data-cena="0">
+          <img class="cena__img" src="img/cena/dia-800.webp" srcset="img/cena/dia-800.webp 800w, img/cena/dia-1600.webp 1600w" sizes="100vw" alt="Manhã na feira da praça de Lumeira: um vendedor oferece maçãs a um jovem caçador de capa" loading="lazy" decoding="async">
+        </div>
+        <div class="cena" data-cena="1">
+          <img class="cena__img" src="img/cena/vespera-800.webp" srcset="img/cena/vespera-800.webp 800w, img/cena/vespera-1600.webp 1600w" sizes="100vw" alt="Lumeira ao entardecer, vista de uma escadaria: milhares de lanternas acesas sobre o porto" loading="lazy" decoding="async">
+        </div>
+        <div class="cena" data-cena="2">
+          <img class="cena__img" src="img/cena/brecha-800.webp" srcset="img/cena/brecha-800.webp 800w, img/cena/brecha-1600.webp 1600w" sizes="100vw" alt="Uma Brecha magenta rasga o chão da praça diante de um caçador com lanterna e do Mestre Benício" loading="lazy" decoding="async">
+          <svg class="cena__rasgo" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M52 0 L49 14 L55 22 L47 35 L54 47 L46 58 L53 70 L48 83 L52 100" /></svg>
+        </div>
+        <div class="historia__tinta" aria-hidden="true"></div>
+
+        <div class="historia__textos">
+          <article class="cap" data-cap="0">
+            <p class="sobretitulo"><b>01</b> O dia</p>
+            <h2 class="cap__titulo">Lumeira acende as luzes antes de escurecer. Todo dia.</h2>
+            <p class="cap__texto">Uma cidade costeira viva: a feira da praça, a Forja da Odete, a taverna da Tia Nilza. A grande lanterna de bronze mantém a cidade deste lado.</p>
+          </article>
+          <article class="cap" data-cap="1">
+            <p class="sobretitulo"><b>02</b> A véspera</p>
+            <h2 class="cap__titulo">Há vinte anos, o sol não nasceu por um ano inteiro.</h2>
+            <p class="cap__texto">Foi o Ano Sem Sol. Desde então, todo fim de tarde, a véspera, Brechas se abrem nos bairros e cospem monstros.</p>
+          </article>
+          <article class="cap" data-cap="2">
+            <p class="sobretitulo"><b>03</b> A Brecha abre</p>
+            <h2 class="cap__titulo">Alguém precisa fechá-las.</h2>
+            <p class="cap__texto">Do outro lado fica o Avesso, “Lumeira de cabeça pra baixo”, onde cai tudo que a cidade perde. Você chega com uma lanterna velha e um selo E queimado no pulso.</p>
+          </article>
+        </div>
+
+        <ol class="historia__indice" aria-hidden="true">
+          <li data-ind="0"><span>O dia</span></li>
+          <li data-ind="1"><span>A véspera</span></li>
+          <li data-ind="2"><span>A Brecha abre</span></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ LANTERNA (cursor revela) ============ -->
+    <section class="lanterna" id="avesso" aria-labelledby="lanterna-titulo">
+      <canvas class="lanterna__tela" aria-hidden="true"></canvas>
+      <img class="lanterna__fallback" src="img/mapa/praca-escura-800.webp" srcset="img/mapa/praca-escura-800.webp 800w, img/mapa/praca-escura-1600.webp 1600w" sizes="100vw" alt="A Praça da Lanterna à noite, com rachaduras magenta no chão" loading="lazy" decoding="async">
+      <div class="lanterna__conteudo">
+        <p class="sobretitulo"><b>✦</b> A Lanterna</p>
+        <h2 class="titulo-secao" id="lanterna-titulo">No escuro, a luz é a sua arma.</h2>
+        <p class="lanterna__texto">Morrer não apaga o seu progresso: os Fragmentos da caçada ficam na sua <strong>Lanterna</strong>, no chão da Brecha, até você voltar para buscar. O seu equipamento nunca se perde.</p>
+        <p class="lanterna__dica"><span class="dica-mouse">Mova o mouse para iluminar a praça</span><span class="dica-toque">Arraste o dedo para iluminar a praça</span></p>
+      </div>
+    </section>
+
+    <!-- ============ COMO SE JOGA ============ -->
+    <section class="como" id="como-se-joga" aria-labelledby="como-titulo">
+      <header class="cabeca revelar">
+        <p class="sobretitulo"><b>✦</b> Como se joga</p>
+        <h2 class="titulo-secao" id="como-titulo">Uma caçada a cada fim de tarde.</h2>
+        <p class="cabeca__texto">De dia, Lumeira vive. Quando a véspera chega, uma Brecha abre em algum bairro. O ciclo tem quatro passos.</p>
+      </header>
+
+      <div class="como__grade">
+        <div class="como__monitor" aria-hidden="true">
+          <div class="monitor">
+            <div class="monitor__tela">
+              <img data-passo="0" src="img/jogo/luta-lodo-mae-800.webp" srcset="img/jogo/luta-lodo-mae-800.webp 800w, img/jogo/luta-lodo-mae-1600.webp 1600w" sizes="(min-width: 1000px) 55vw, 100vw" alt="" loading="lazy" decoding="async">
+              <img data-passo="0" src="img/jogo/investida-800.webp" srcset="img/jogo/investida-800.webp 800w, img/jogo/investida-1600.webp 1600w" sizes="(min-width: 1000px) 55vw, 100vw" alt="" loading="lazy" decoding="async">
+              <img data-passo="1" src="img/jogo/bau-800.webp" srcset="img/jogo/bau-800.webp 800w, img/jogo/bau-1600.webp 1600w" sizes="(min-width: 1000px) 55vw, 100vw" alt="" loading="lazy" decoding="async">
+              <img data-passo="1" src="img/jogo/inventario-800.webp" srcset="img/jogo/inventario-800.webp 800w, img/jogo/inventario-1600.webp 1600w" sizes="(min-width: 1000px) 55vw, 100vw" alt="" loading="lazy" decoding="async">
+              <img data-passo="2" src="img/cena/odete-800.webp" srcset="img/cena/odete-800.webp 800w, img/cena/odete-1600.webp 1600w" sizes="(min-width: 1000px) 55vw, 100vw" alt="" loading="lazy" decoding="async">
+              <img data-passo="2" src="img/jogo/forja-800.webp" srcset="img/jogo/forja-800.webp 800w, img/jogo/forja-1600.webp 1600w" sizes="(min-width: 1000px) 55vw, 100vw" alt="" loading="lazy" decoding="async">
+              <img data-passo="3" src="img/jogo/rank-c-800.webp" srcset="img/jogo/rank-c-800.webp 800w, img/jogo/rank-c-1600.webp 1600w" sizes="(min-width: 1000px) 55vw, 100vw" alt="" loading="lazy" decoding="async">
+              <img data-passo="3" src="img/cena/selo-800.webp" srcset="img/cena/selo-800.webp 800w, img/cena/selo-1600.webp 1600w" sizes="(min-width: 1000px) 55vw, 100vw" alt="" loading="lazy" decoding="async">
+              <span class="monitor__rec"><i></i>Capturas reais do jogo</span>
+            </div>
+            <div class="monitor__trilho"><span></span></div>
+          </div>
+        </div>
+
+        <ol class="como__passos">
+          <li class="passo" data-passo="0">
+            <span class="passo__num">01</span>
+            <h3 class="passo__titulo">Caçar</h3>
+            <p>Entre na Brecha, limpe as salas e derrube o Guardião. Leia o aviso âmbar no chão e saia da frente.</p>
+            <ul class="pilulas"><li>5 a 7 salas por caçada</li><li>Lâmina, Arco ou Martelo</li></ul>
+            <img class="passo__img" src="img/jogo/luta-lodo-mae-800.webp" alt="Captura do jogo: o caçador enfrenta a Lodo-Mãe na arena circular dos Esgotos do Mercado" loading="lazy" decoding="async">
+          </li>
+          <li class="passo" data-passo="1">
+            <span class="passo__num">02</span>
+            <h3 class="passo__titulo">Juntar Fragmentos</h3>
+            <p>O cristal que cai dos monstros é a moeda da forja. Guardiões deixam material e, às vezes, peças do seu conjunto.</p>
+            <ul class="pilulas"><li>Morreu? Eles ficam na Lanterna</li><li>Conjuntos de 4 peças</li></ul>
+            <img class="passo__img" src="img/jogo/bau-800.webp" alt="Captura do jogo: baú aberto no esgoto com a mensagem de Fragmentos e materiais ganhos" loading="lazy" decoding="async">
+          </li>
+          <li class="passo" data-passo="2">
+            <span class="passo__num">03</span>
+            <h3 class="passo__titulo">Forjar</h3>
+            <p>Leve tudo à Forja da Odete. A arma sobe de nível e, a cada patamar, ganha nome novo: a Lâmina de Ferro Frio vira a Espada das Marés.</p>
+            <ul class="pilulas"><li>Odete nunca elogia</li><li>Armas mudam de visual</li></ul>
+            <img class="passo__img" src="img/jogo/forja-800.webp" alt="Captura do jogo: tela da Forja mostrando a Lâmina de Ferro Frio e o custo em Fragmentos" loading="lazy" decoding="async">
+          </li>
+          <li class="passo" data-passo="3">
+            <span class="passo__num">04</span>
+            <h3 class="passo__titulo">Subir de rank</h3>
+            <p>Experiência e conquista: vença o Guardião do seu rank e passe nos exames da Ordem para queimar o próximo selo. O caçador muda de visual em 5 estágios.</p>
+            <ul class="pilulas"><li>Do selo E ao Alvor</li><li>Exames da Ordem</li></ul>
+            <img class="passo__img" src="img/jogo/rank-c-800.webp" alt="Captura do jogo: o selo C acende na tela de novo rank, Lanterneiro" loading="lazy" decoding="async">
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ NÚMEROS ============ -->
+    <section class="numeros" aria-labelledby="numeros-titulo">
+      <h2 class="visualmente-oculto" id="numeros-titulo">Véspera em números</h2>
+      <ul class="numeros__lista" id="numeros-lista">
+        <!-- preenchido por js/secoes.js a partir de VESPERA.numeros -->
+      </ul>
+      <div class="bencaos revelar">
+        <p>As Bênçãos da Lanterna vêm em 5 famílias, cada uma com a cor de alguém da cidade:</p>
+        <ul>
+          <li><img src="img/bencaos/chama.webp" width="48" height="48" alt="" loading="lazy">Chama <small>Odete</small></li>
+          <li><img src="img/bencaos/vigilia.webp" width="48" height="48" alt="" loading="lazy">Vigília <small>Benício</small></li>
+          <li><img src="img/bencaos/sopa.webp" width="48" height="48" alt="" loading="lazy">Sopa <small>Nilza</small></li>
+          <li><img src="img/bencaos/mapa.webp" width="48" height="48" alt="" loading="lazy">Mapa <small>Lis</small></li>
+          <li><img src="img/bencaos/aposta.webp" width="48" height="48" alt="" loading="lazy">Aposta <small>Ravi</small></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ BAIRROS (galeria horizontal) ============ -->
+    <section class="bairros" id="bairros" aria-labelledby="bairros-titulo">
+      <div class="bairros__palco">
+        <div class="bairros__trilho">
+          <div class="painel painel--intro">
+            <p class="sobretitulo"><b>✦</b> Os bairros</p>
+            <h2 class="titulo-secao" id="bairros-titulo">As Brechas de Lumeira</h2>
+            <p>Cada bairro tem a sua Brecha, e cada Brecha herda o tema do bairro onde abre. Use <strong>Ver a Brecha</strong> para atravessar.</p>
+            <p class="painel__dica" aria-hidden="true"><b>Role para atravessar a cidade</b> <span>→</span></p>
+          </div>
+
+          <article class="painel" data-bairro>
+            <div class="painel__nome" aria-hidden="true">Praça</div>
+            <figure class="painel__quadro">
+              <img class="painel__img" src="img/mapa/praca-800.webp" srcset="img/mapa/praca-800.webp 800w, img/mapa/praca-1600.webp 1600w" sizes="(min-width: 900px) 70vw, 92vw" alt="Mapa pintado da Praça da Lanterna ao entardecer, com a grande lanterna de bronze no centro" loading="lazy" decoding="async">
+              <img class="painel__img painel__img--avesso" src="img/mapa/praca-escura-800.webp" srcset="img/mapa/praca-escura-800.webp 800w, img/mapa/praca-escura-1600.webp 1600w" sizes="(min-width: 900px) 70vw, 92vw" alt="A mesma praça do lado do Avesso, escura e rachada de magenta" loading="lazy" decoding="async">
+            </figure>
+            <div class="painel__info">
+              <p class="painel__ato"><span class="selo-mini" data-selo="E"></span>Prólogo</p>
+              <h3>Praça da Lanterna</h3>
+              <p>O coração da cidade. É aqui que a Brecha abre no dia em que você chega.</p>
+              <button class="botao botao--linha botao--pequeno" type="button" aria-pressed="false" data-virar>Ver a Brecha</button>
+            </div>
+          </article>
+
+          <article class="painel" data-bairro>
+            <div class="painel__nome" aria-hidden="true">Forjas</div>
+            <figure class="painel__quadro">
+              <img class="painel__img" src="img/mapa/forjas-800.webp" srcset="img/mapa/forjas-800.webp 800w, img/mapa/forjas-1600.webp 1600w" sizes="(min-width: 900px) 70vw, 92vw" alt="Mapa pintado do Bairro das Forjas, com oficinas e fornalhas acesas" loading="lazy" decoding="async">
+              <img class="painel__img painel__img--avesso" src="img/mapa/esgoto-arena-800.webp" srcset="img/mapa/esgoto-arena-800.webp 800w, img/mapa/esgoto-arena-1600.webp 1600w" sizes="(min-width: 900px) 70vw, 92vw" alt="A arena dos Esgotos do Mercado, cercada de lodo verde e cristais magenta" loading="lazy" decoding="async">
+            </figure>
+            <div class="painel__info">
+              <p class="painel__ato"><span class="selo-mini" data-selo="E"></span>Ato I · Esgotos do Mercado</p>
+              <h3>Bairro das Forjas</h3>
+              <p>Onde fica a Forja da Odete. Embaixo, Lodos que pulam e Espectros que atravessam paredes.</p>
+              <button class="botao botao--linha botao--pequeno" type="button" aria-pressed="false" data-virar>Ver a Brecha</button>
+            </div>
+          </article>
+
+          <article class="painel" data-bairro>
+            <div class="painel__nome" aria-hidden="true">Pomar</div>
+            <figure class="painel__quadro">
+              <img class="painel__img" src="img/mapa/pomar-alto-800.webp" srcset="img/mapa/pomar-alto-800.webp 800w, img/mapa/pomar-alto-1600.webp 1600w" sizes="(min-width: 900px) 70vw, 92vw" alt="Mapa pintado do Pomar Alto, com macieiras e canteiros" loading="lazy" decoding="async">
+              <img class="painel__img painel__img--avesso" src="img/mapa/pomar-arena-800.webp" srcset="img/mapa/pomar-arena-800.webp 800w, img/mapa/pomar-arena-1600.webp 1600w" sizes="(min-width: 900px) 70vw, 92vw" alt="A arena do Pomar Podre, tomada por raízes retorcidas" loading="lazy" decoding="async">
+            </figure>
+            <div class="painel__info">
+              <p class="painel__ato"><span class="selo-mini" data-selo="D"></span>Ato II · Pomar Podre</p>
+              <h3>Pomar Alto</h3>
+              <p>As macieiras da Dona Celeste apodrecem de dentro. Lá embaixo, Carrapichos e Ratos-Lanterna.</p>
+              <button class="botao botao--linha botao--pequeno" type="button" aria-pressed="false" data-virar>Ver a Brecha</button>
+            </div>
+          </article>
+
+          <article class="painel" data-bairro>
+            <div class="painel__nome" aria-hidden="true">Marés</div>
+            <figure class="painel__quadro">
+              <img class="painel__img" src="img/mapa/mares-800.webp" srcset="img/mapa/mares-800.webp 800w, img/mapa/mares-1600.webp 1600w" sizes="(min-width: 900px) 70vw, 92vw" alt="Mapa pintado do Mercado das Marés, com barracas e o porto" loading="lazy" decoding="async">
+              <img class="painel__img painel__img--avesso" src="img/mapa/cais-arena-800.webp" srcset="img/mapa/cais-arena-800.webp 800w, img/mapa/cais-arena-1600.webp 1600w" sizes="(min-width: 900px) 70vw, 92vw" alt="A arena do Cais Afogado, cercada por ondas que quebram" loading="lazy" decoding="async">
+            </figure>
+            <div class="painel__info">
+              <p class="painel__ato"><span class="selo-mini" data-selo="C"></span>Ato III · Cais Afogado</p>
+              <h3>Mercado das Marés</h3>
+              <p>O porto na noite da Festa das Lanternas, do lado de baixo. Afogados, Ancoreiros e uma sala alagada.</p>
+              <button class="botao botao--linha botao--pequeno" type="button" aria-pressed="false" data-virar>Ver a Brecha</button>
+            </div>
+          </article>
+
+          <article class="painel" data-bairro>
+            <div class="painel__nome" aria-hidden="true">Cemitério</div>
+            <figure class="painel__quadro">
+              <img class="painel__img" src="img/mapa/cemiterio-800.webp" srcset="img/mapa/cemiterio-800.webp 800w, img/mapa/cemiterio-1600.webp 1600w" sizes="(min-width: 900px) 70vw, 92vw" alt="Mapa pintado do Cemitério das Lanternas, com túmulos iluminados" loading="lazy" decoding="async">
+              <img class="painel__img painel__img--avesso" src="img/mapa/cemiterio-arena-800.webp" srcset="img/mapa/cemiterio-arena-800.webp 800w, img/mapa/cemiterio-arena-1600.webp 1600w" sizes="(min-width: 900px) 70vw, 92vw" alt="A arena do cemitério do Avesso, com centenas de velas acesas" loading="lazy" decoding="async">
+            </figure>
+            <div class="painel__info">
+              <p class="painel__ato"><span class="selo-mini" data-selo="B"></span>Ato IV · Cemitério das Lanternas</p>
+              <h3>Cemitério das Lanternas</h3>
+              <p>O cemitério de antes do Ano Sem Sol, de cabeça para baixo. Carpideiras, Cães-de-Vigília e Velinhas.</p>
+              <button class="botao botao--linha botao--pequeno" type="button" aria-pressed="false" data-virar>Ver a Brecha</button>
+            </div>
+          </article>
+
+          <article class="painel" data-bairro>
+            <div class="painel__nome" aria-hidden="true">Torre</div>
+            <figure class="painel__quadro">
+              <img class="painel__img" src="img/mapa/torre-800.webp" srcset="img/mapa/torre-800.webp 800w, img/mapa/torre-1600.webp 1600w" sizes="(min-width: 900px) 70vw, 92vw" alt="Mapa pintado da Torre do Sino e do largo em volta" loading="lazy" decoding="async">
+              <img class="painel__img painel__img--avesso" src="img/mapa/torre-arena-800.webp" srcset="img/mapa/torre-arena-800.webp 800w, img/mapa/torre-arena-1600.webp 1600w" sizes="(min-width: 900px) 70vw, 92vw" alt="A arena da Torre do Sino Mudo, com papéis flutuando no escuro" loading="lazy" decoding="async">
+            </figure>
+            <div class="painel__info">
+              <p class="painel__ato"><span class="selo-mini" data-selo="A"></span>Ato V · Sino Mudo</p>
+              <h3>Torre do Sino</h3>
+              <p>A Torre na noite do ritual. Tem uma Sala do Silêncio: sem som nenhum, só avisos visuais.</p>
+              <button class="botao botao--linha botao--pequeno" type="button" aria-pressed="false" data-virar>Ver a Brecha</button>
+            </div>
+          </article>
+
+          <article class="painel" data-bairro>
+            <div class="painel__nome" aria-hidden="true">Ruas</div>
+            <figure class="painel__quadro">
+              <img class="painel__img" src="img/mapa/ruas-baixas-800.webp" srcset="img/mapa/ruas-baixas-800.webp 800w, img/mapa/ruas-baixas-1600.webp 1600w" sizes="(min-width: 900px) 70vw, 92vw" alt="Mapa pintado das Ruas Baixas, com casas apertadas e varais" loading="lazy" decoding="async">
+              <img class="painel__img painel__img--avesso" src="img/mapa/ruas-arena-800.webp" srcset="img/mapa/ruas-arena-800.webp 800w, img/mapa/ruas-arena-1600.webp 1600w" sizes="(min-width: 900px) 70vw, 92vw" alt="A arena das Ruas Invertidas, cercada de móveis e lanternas" loading="lazy" decoding="async">
+            </figure>
+            <div class="painel__info">
+              <p class="painel__ato"><span class="selo-mini" data-selo="S"></span>Ato VI · Ruas Invertidas</p>
+              <h3>Ruas Baixas</h3>
+              <p>As Ruas Baixas de antes das demolições, com casas penduradas do teto. Varais, Despejados e Rasgos.</p>
+              <button class="botao botao--linha botao--pequeno" type="button" aria-pressed="false" data-virar>Ver a Brecha</button>
+            </div>
+          </article>
+
+          <article class="painel painel--avesso">
+            <div class="painel__nome" aria-hidden="true">Avesso</div>
+            <figure class="painel__quadro">
+              <img class="painel__img" src="img/mapa/avesso-800.webp" srcset="img/mapa/avesso-800.webp 800w, img/mapa/avesso-1600.webp 1600w" sizes="(min-width: 900px) 70vw, 92vw" alt="O Avesso profundo: uma praça circular cercada de ruínas e cristais magenta" loading="lazy" decoding="async">
+            </figure>
+            <div class="painel__info">
+              <p class="painel__ato"><span class="selo-mini" data-selo="SS"></span>Ato VII · e o Final</p>
+              <h3>O Avesso profundo</h3>
+              <p>A fenda da praça desce para bairros misturados. Lá embaixo, os ecos dos Guardiões. O resto é com você.</p>
+            </div>
+          </article>
+        </div>
+
+        <div class="cacador-anda" aria-hidden="true"><div class="sprite" data-sprite="lamina" data-anim="parado"></div></div>
+        <div class="bairros__barra" aria-hidden="true"><span></span></div>
+      </div>
+    </section>
+
+    <!-- ============ GUARDIÕES ============ -->
+    <section class="guardioes" id="guardioes" aria-labelledby="guardioes-titulo">
+      <header class="cabeca revelar">
+        <p class="sobretitulo"><b>✦</b> Os Guardiões</p>
+        <h2 class="titulo-secao" id="guardioes-titulo">Cada Brecha termina num Guardião.</h2>
+        <p class="cabeca__texto">Quando ele cai, deixa um <strong>Eco</strong>, uma habilidade só dele, e pode deixar peças do seu conjunto de armadura. Passe o mouse ou toque para provocar.</p>
+      </header>
+      <div class="guardioes__grade" id="guardioes-grade">
+        <!-- preenchido por js/secoes.js a partir de VESPERA.guardioes -->
+      </div>
+    </section>
+
+    <!-- ============ RANKS ============ -->
+    <section class="ranks" id="ranks" aria-labelledby="ranks-titulo">
+      <div class="ranks__palco">
+        <div class="ranks__luz" aria-hidden="true"></div>
+        <div class="ranks__explosao" aria-hidden="true"></div>
+        <div class="ranks__texto">
+          <p class="sobretitulo"><b>✦</b> A escada de ranks</p>
+          <h2 class="titulo-secao" id="ranks-titulo">Do selo E ao Alvor.</h2>
+          <p class="ranks__intro">O selo é a marca do rank no pulso. Cada rank pede experiência e conquista.</p>
+          <div class="ranks__ficha" aria-live="polite">
+            <p class="ficha__rank"><span class="ficha__selo"></span><span class="ficha__id">E</span></p>
+            <h3 class="ficha__titulo">Aprendiz</h3>
+            <p class="ficha__texto">O recém-chegado.</p>
+            <dl class="ficha__dados">
+              <div><dt>Raridade</dt><dd class="ficha__raridade">Comum</dd></div>
+              <div><dt>Guardião do selo</dt><dd class="ficha__guardiao">Lodo-Mãe</dd></div>
+              <div><dt>Exame da Ordem</dt><dd class="ficha__exame">Não</dd></div>
+              <div><dt>Visual do caçador</dt><dd class="ficha__estagio">Estágio 1 de 5</dd></div>
+            </dl>
+          </div>
+        </div>
+        <ol class="escada" id="escada" aria-label="Os nove ranks, do E ao Alvor">
+          <!-- preenchido por js/secoes.js a partir de VESPERA.ranks -->
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ CO-OP ============ -->
+    <section class="coop" id="coop" aria-labelledby="coop-titulo">
+      <div class="coop__grade">
+        <div class="coop__tela revelar">
+          <div class="filme" data-filme>
+            <img src="img/jogo/coop-chefe-800.webp" srcset="img/jogo/coop-chefe-800.webp 800w, img/jogo/coop-chefe-1600.webp 1600w" sizes="(min-width: 1000px) 58vw, 100vw" alt="Captura do co-op local: dois caçadores enfrentam a Lodo-Mãe na arena" loading="lazy" decoding="async">
+            <img src="img/jogo/coop-reanimando-800.webp" srcset="img/jogo/coop-reanimando-800.webp 800w, img/jogo/coop-reanimando-1600.webp 1600w" sizes="(min-width: 1000px) 58vw, 100vw" alt="Captura do co-op local: o jogador 2 segura o botão para reanimar o parceiro" loading="lazy" decoding="async">
+            <img src="img/jogo/coop-corredor-800.webp" srcset="img/jogo/coop-corredor-800.webp 800w, img/jogo/coop-corredor-1600.webp 1600w" sizes="(min-width: 1000px) 58vw, 100vw" alt="Captura do co-op local: os dois caçadores lutam no corredor do esgoto" loading="lazy" decoding="async">
+            <img src="img/jogo/coop-entrada-800.webp" srcset="img/jogo/coop-entrada-800.webp 800w, img/jogo/coop-entrada-1600.webp 1600w" sizes="(min-width: 1000px) 58vw, 100vw" alt="Captura da tela de entrada do co-op local, com J1 e J2 escolhendo a classe" loading="lazy" decoding="async">
+          </div>
+          <span class="tag-jogador tag-jogador--j1" aria-hidden="true">J1</span>
+          <span class="tag-jogador tag-jogador--j2" aria-hidden="true">J2</span>
+        </div>
+        <div class="coop__texto revelar">
+          <p class="sobretitulo"><b>✦</b> Co-op local</p>
+          <h2 class="titulo-secao" id="coop-titulo">Duas lanternas, um PC.</h2>
+          <p>Chame alguém para o seu lado: 2 jogadores no mesmo PC, com teclado e controle, metade do teclado para cada um ou dois controles.</p>
+          <ul class="lista-check">
+            <li>No título, escolha <strong>Co-op local</strong>. No meio do jogo, pause e use <strong>Chamar J2</strong>.</li>
+            <li>Cada um tem a própria progressão, conjuntos e Ecos.</li>
+            <li>Caiu? O parceiro chega perto e segura o botão para reanimar.</li>
+          </ul>
+          <div class="em-breve">
+            <span class="em-breve__selo" aria-hidden="true"><svg viewBox="0 0 100 100"><defs><path id="circ" d="M50,50 m-36,0 a36,36 0 1,1 72,0 a36,36 0 1,1 -72,0"/></defs><text><textPath href="#circ">NOVO · BETA · NOVO · BETA ·</textPath></text></svg><b>On<br>line</b></span>
+            <p><strong>Co-op online: já dá para jogar em rede (beta).</strong> No título, escolha <strong>Online</strong>: um jogador hospeda e o outro entra pelo IP. É uma versão inicial e ainda está sendo polida.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CITAÇÃO ============ -->
+    <section class="citacao" aria-label="Uma fala do jogo">
+      <img class="citacao__fundo" src="img/cena/odete-800.webp" srcset="img/cena/odete-800.webp 800w, img/cena/odete-1600.webp 1600w" sizes="100vw" alt="" loading="lazy" decoding="async">
+      <figure class="citacao__corpo revelar">
+        <blockquote><p>“Lâmina não quebra. Caçador quebra. <em>Vai buscar.</em>”</p></blockquote>
+        <figcaption><img src="img/retratos/odete.webp" width="56" height="56" alt="" loading="lazy">Odete, a ferreira</figcaption>
+      </figure>
+    </section>
+
+    <!-- ============ GENTE DE LUMEIRA ============ -->
+    <section class="gente" aria-labelledby="gente-titulo">
+      <header class="cabeca revelar">
+        <p class="sobretitulo"><b>✦</b> Gente de Lumeira</p>
+        <h2 class="titulo-secao" id="gente-titulo">Cada um guarda um segredo.</h2>
+      </header>
+      <ul class="gente__lista">
+        <li class="pessoa revelar"><img src="img/retratos/benicio.webp" width="96" height="96" alt="Retrato do Mestre Benício" loading="lazy"><div><h3>Mestre Benício</h3><p>“Fecha ela. Mata o que tem dentro e ela fecha sozinha.”</p></div></li>
+        <li class="pessoa revelar"><img src="img/retratos/odete.webp" width="96" height="96" alt="Retrato da Odete" loading="lazy"><div><h3>Odete</h3><p>“Sem Fragmento, sem forja. Fecha a Brecha primeiro.”</p></div></li>
+        <li class="pessoa revelar"><img src="img/retratos/nilza.webp" width="96" height="96" alt="Retrato da Tia Nilza" loading="lazy"><div><h3>Tia Nilza</h3><p>“Primeira Brecha e já volta inteiro. Come.”</p></div></li>
+        <li class="pessoa revelar"><img src="img/retratos/ravi.webp" width="96" height="96" alt="Retrato do Ravi" loading="lazy"><div><h3>Ravi</h3><p>“Aposto a sopa que eu fecho mais salas que você.”</p></div></li>
+        <li class="pessoa revelar"><img src="img/retratos/lis.webp" width="96" height="96" alt="Retrato da Lis" loading="lazy"><div><h3>Lis</h3><p>“Hoje abre no Bairro das Forjas.”</p></div></li>
+        <li class="pessoa revelar"><img src="img/retratos/celeste.webp" width="96" height="96" alt="Retrato da Dona Celeste" loading="lazy"><div><h3>Dona Celeste</h3><p>“Lá dentro é o pomar de antes. Não come nada.”</p></div></li>
+        <li class="pessoa revelar"><img src="img/retratos/severo.webp" width="96" height="96" alt="Retrato do Capitão Severo" loading="lazy"><div><h3>Capitão Severo</h3><p>“Sabe nadar? Lá dentro não adianta.”</p></div></li>
+        <li class="pessoa revelar"><img src="img/retratos/vigia.webp" width="96" height="96" alt="Retrato do Vigia, encapuzado" loading="lazy"><div><h3>O Vigia</h3><p>“Quando um Guardião cai, às vezes deixa um pedaço. Chama Eco.”</p></div></li>
+      </ul>
+    </section>
+
+    <!-- ============ TRAILER ============ -->
+    <section class="trailer" id="trailer" aria-labelledby="trailer-titulo">
+      <header class="cabeca cabeca--centro revelar">
+        <p class="sobretitulo"><b>✦</b> Trailer oficial em breve</p>
+        <h2 class="titulo-secao" id="trailer-titulo">Enquanto isso, veja Lumeira.</h2>
+        <p class="cabeca__texto">Uma prévia montada no seu navegador com a abertura, o prólogo, as ilustrações, os mapas e as capturas reais do jogo, ao som da trilha original.</p>
+      </header>
+      <div class="cinema revelar" id="cinema-pagina"></div>
+      <div class="trailer__acoes">
+        <a class="botao botao--linha" href="https://github.com/NasckDev/vespera/releases" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a6 6 0 0 0-6 6v4l-2 3v2h16v-2l-2-3V8a6 6 0 0 0-6-6zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/></svg>
+          Me avise no GitHub
+        </a>
+        <button class="botao botao--vidro" type="button" data-abrir-modal="prologo"><span class="icone-play" aria-hidden="true"></span>Ver o prólogo com som</button>
+      </div>
+      <p class="trailer__nota">No GitHub, use <strong>Watch → Custom → Releases</strong> para receber um aviso quando o trailer e as novas versões saírem.</p>
+    </section>
+
+    <!-- ============ CARROSSEL / GALERIA ============ -->
+    <section class="galeria" id="galeria" aria-labelledby="galeria-titulo">
+      <header class="cabeca revelar">
+        <p class="sobretitulo"><b>✦</b> Direto do jogo</p>
+        <h2 class="titulo-secao" id="galeria-titulo">Capturas reais da versão atual.</h2>
+        <p class="cabeca__texto">Clique para ampliar. Use as setas do teclado ou arraste para passar.</p>
+      </header>
+      <div class="carrossel">
+        <button class="carrossel__seta carrossel__seta--esq" type="button" aria-label="Capturas anteriores">←</button>
+        <ul class="carrossel__trilho" id="carrossel" tabindex="0" aria-label="Capturas do jogo">
+          <!-- preenchido por js/secoes.js a partir de VESPERA.capturas e dos vídeos extras -->
+        </ul>
+        <button class="carrossel__seta carrossel__seta--dir" type="button" aria-label="Próximas capturas">→</button>
+      </div>
+    </section>
+
+    <!-- ============ CTA FINAL ============ -->
+    <section class="final" id="baixar" aria-labelledby="final-titulo">
+      <img class="final__fundo" src="img/cena/noite-800.webp" srcset="img/cena/noite-800.webp 800w, img/cena/noite-1600.webp 1600w" sizes="100vw" alt="" loading="lazy" decoding="async">
+      <canvas class="brasas" data-brasas="34" aria-hidden="true"></canvas>
+      <div class="final__conteudo revelar">
+        <img class="final__icone" src="img/icone-256.webp" width="120" height="120" alt="" loading="lazy">
+        <p class="sobretitulo"><b>✦</b> Beta grátis</p>
+        <h2 class="titulo-final" id="final-titulo">Feche a sua primeira Brecha.</h2>
+        <p>A Parte 1 está completa: Atos I a VII e o Final. Para Windows, feito com Godot 4 e C#, com o código aberto no GitHub.</p>
+        <div class="hero__acoes">
+          <a class="botao botao--primario botao--grande magnetico" href="https://github.com/NasckDev/vespera/releases" target="_blank" rel="noopener">
+            <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11 3h2v10.2l3.6-3.6 1.4 1.4-6 6-6-6 1.4-1.4 3.6 3.6zM4 19h16v2H4z"/></svg>
+            Baixar beta para Windows
+          </a>
+          <a class="botao botao--vidro botao--grande magnetico" href="https://github.com/NasckDev/vespera" target="_blank" rel="noopener">Ver o código</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ RODAPÉ ============ -->
+  <footer class="rodape" aria-labelledby="rodape-titulo">
+    <h2 class="visualmente-oculto" id="rodape-titulo">Guia de estilo, press kit e créditos</h2>
+    <div class="rodape__grade">
+      <div class="rodape__bloco rodape__marca">
+        <p class="rodape__logo">Véspera</p>
+        <p>Toda véspera, Brechas se abrem em Lumeira. Alguém precisa fechá-las.</p>
+        <ul class="rodape__links">
+          <li><a href="https://github.com/NasckDev/vespera/releases" target="_blank" rel="noopener">Baixar (Releases)</a></li>
+          <li><a href="https://github.com/NasckDev/vespera" target="_blank" rel="noopener">Código no GitHub</a></li>
+          <li><a href="https://github.com/NasckDev/vespera/issues" target="_blank" rel="noopener">Reportar um problema</a></li>
+        </ul>
+      </div>
+
+      <div class="rodape__bloco">
+        <h3>Paleta de Lumeira</h3>
+        <ul class="paleta">
+          <li><button type="button" data-copiar="#1B1D37" style="--c:#1B1D37"><span></span>Noite<code>#1B1D37</code></button></li>
+          <li><button type="button" data-copiar="#372C4F" style="--c:#372C4F"><span></span>Crepúsculo<code>#372C4F</code></button></li>
+          <li><button type="button" data-copiar="#5C3C5C" style="--c:#5C3C5C"><span></span>Ameixa<code>#5C3C5C</code></button></li>
+          <li><button type="button" data-copiar="#E64A8E" style="--c:#E64A8E"><span></span>Brecha<code>#E64A8E</code></button></li>
+          <li><button type="button" data-copiar="#F2A541" style="--c:#F2A541"><span></span>Lanterna<code>#F2A541</code></button></li>
+          <li><button type="button" data-copiar="#F4E7C6" style="--c:#F4E7C6"><span></span>Pergaminho<code>#F4E7C6</code></button></li>
+        </ul>
+        <p class="rodape__nota">Cores dos selos e da arte do jogo. Clique para copiar.</p>
+      </div>
+
+      <div class="rodape__bloco">
+        <h3>Tipografia</h3>
+        <ul class="tipos">
+          <li><span class="tipos__aa f-cinzel">Aa</span>Cinzel <small>Logotipo e títulos</small></li>
+          <li><span class="tipos__aa f-pixel">Aa</span>Pixelify Sans <small>Rótulos e números</small></li>
+          <li><span class="tipos__aa f-vt">Aa</span>VT323 <small>Falas e HUD</small></li>
+          <li><span class="tipos__aa f-inter">Aa</span>Inter <small>Texto corrido</small></li>
+        </ul>
+        <h3 class="rodape__sub">Botões</h3>
+        <div class="rodape__botoes">
+          <span class="botao botao--primario botao--pequeno">Primário</span>
+          <span class="botao botao--vidro botao--pequeno">Vidro</span>
+          <span class="botao botao--linha botao--pequeno">Linha</span>
+        </div>
+      </div>
+
+      <div class="rodape__bloco">
+        <h3>Press kit</h3>
+        <ul class="press">
+          <li><a href="press/vespera-key-art.png" download><img src="img/key-art-800.webp" alt="" loading="lazy">Key art com logo <small>PNG · 1672×941</small></a></li>
+          <li><a href="press/vespera-tela-de-titulo.jpg" download><img src="video/hero-poster.webp" alt="" loading="lazy">Tela de título <small>JPG · 1920×1080</small></a></li>
+          <li><a href="press/vespera-icone-512.png" download><img src="img/icone-256.webp" alt="" loading="lazy">Ícone da lanterna <small>PNG · 512×512</small></a></li>
+          <li><a href="press/selos/rank-alvor.svg" download><img src="press/selos/rank-alvor.svg" alt="" loading="lazy">Selo do Alvor <small>SVG</small></a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="rodape__base">
+      <p class="credito">Véspera — arte por Alexandre Nascimento e contribuidores (<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.pt_BR" target="_blank" rel="noopener license">CC BY-NC-SA 4.0</a>)</p>
+      <p>Código do jogo sob licença MIT em <a href="https://github.com/NasckDev/vespera" target="_blank" rel="noopener">github.com/NasckDev/vespera</a>. Trilha original de Véspera. Fontes Pixelify Sans e VT323 sob <a href="fonts/PixelifySans-OFL.txt">SIL Open Font License 1.1</a>; Cinzel e Inter via Google Fonts.</p>
+      <p class="rodape__fim">Feito em Lumeira. Mantenha as lanternas acesas. <a href="#inicio">Voltar ao topo ↑</a></p>
+    </div>
+  </footer>
+
+  <!-- ============ PLAYER DA TRILHA ============ -->
+  <div class="player" id="player" data-estado="parado">
+    <button class="player__play" type="button" aria-label="Tocar a trilha original" aria-pressed="false">
+      <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+    </button>
+    <div class="player__info">
+      <span class="player__rotulo">Trilha original</span>
+      <span class="player__faixa">Começa mudo · toque para ouvir</span>
+    </div>
+    <button class="player__prox" type="button" aria-label="Próxima faixa">
+      <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 5l9 7-9 7zM16 5h2v14h-2z"/></svg>
+    </button>
+    <audio preload="none"></audio>
+  </div>
+
+  <!-- ============ MODAIS ============ -->
+  <div class="modal" id="modal-video" role="dialog" aria-modal="true" aria-labelledby="modal-video-titulo" hidden>
+    <div class="modal__fundo" data-fechar></div>
+    <div class="modal__caixa">
+      <div class="modal__topo">
+        <h2 id="modal-video-titulo" class="modal__titulo">Véspera</h2>
+        <div class="abas" role="tablist" aria-label="O que assistir">
+          <button type="button" role="tab" aria-selected="true" data-aba="trailer">Trailer montado</button>
+          <button type="button" role="tab" aria-selected="false" data-aba="prologo">Prólogo (vídeo)</button>
+        </div>
+        <button class="modal__fechar" type="button" data-fechar aria-label="Fechar">✕</button>
+      </div>
+      <div class="modal__corpo">
+        <div class="cinema" id="cinema-modal"></div>
+        <video class="modal__video" controls playsinline preload="none" poster="video/prologo-poster.webp" hidden>
+          <source data-src="video/prologo-720.webm" type="video/webm">
+          <source data-src="video/prologo-720.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+  </div>
+
+  <div class="caixa-luz" id="caixa-luz" role="dialog" aria-modal="true" aria-label="Captura ampliada" hidden>
+    <button class="caixa-luz__fechar" type="button" aria-label="Fechar">✕</button>
+    <button class="caixa-luz__seta caixa-luz__seta--esq" type="button" aria-label="Anterior">←</button>
+    <figure class="caixa-luz__figura">
+      <div class="caixa-luz__midia"></div>
+      <figcaption><span class="caixa-luz__legenda"></span><span class="caixa-luz__contador"></span></figcaption>
+    </figure>
+    <button class="caixa-luz__seta caixa-luz__seta--dir" type="button" aria-label="Próxima">→</button>
+  </div>
+
+  <p class="toast" role="status" aria-live="polite"></p>
+
+  <!-- Bibliotecas por CDN (versões fixas). Se falharem, o site segue funcionando sem elas. -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
+  <script src="video/extra/videos.js" defer></script>
+  <script src="js/dados.js" defer></script>
+  <script src="js/nucleo.js" defer></script>
+  <script src="js/sprites.js" defer></script>
+  <script src="js/trailer.js" defer></script>
+  <script src="js/secoes.js" defer></script>
+</body>
+</html>

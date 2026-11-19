@@ -1,0 +1,7 @@
+# O site fica fora do Git LFS para abrir direto do GitHub (Pages, raw, clones sem LFS)
+* -filter -diff -merge -text
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.svg text eol=lf
+*.txt text eol=lf
