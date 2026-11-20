@@ -327,4 +327,31 @@ public class HistoriaDialoguesTest
         AssertThat(texts.Any(t => t.Contains("peixe", StringComparison.Ordinal))).IsFalse();
         AssertThat(texts).Contains("Toma antes de entrar. Se cair lá dentro, levanta uma vez.");
     }
+
+    [TestCase]
+    public void Final_EpilogueBetLineOnlyOnRouteA()
+    {
+        foreach (var id in new[] { "final/epilogo", "final/epilogo_sem_benicio" })
+        {
+            var routeA = Play(id, NewEngine(null, "ravi_rota_a"));
+            AssertThat(routeA).Contains("Você venceu a aposta. Todas.");
+            AssertThat(routeA).Contains("Eu vou tentar o exame C amanhã. Sem medo. Jura.");
+
+            var routeB = Play(id, NewEngine(null, "ravi_rota_b"));
+            AssertThat(routeB.Any(t => t.Contains("aposta", StringComparison.Ordinal))).IsFalse();
+            AssertThat(routeB).Contains("Eu vou tentar o exame C amanhã. Sem medo. Jura.");
+            AssertThat(routeB).Contains("Quer ver por dentro antes?");
+        }
+    }
+
+    [TestCase]
+    public void Ato6Nilza_AsksAboutCelesteOnlyAfterCelesteRevealsHerself()
+    {
+        var engine = NewEngine(null, "pescou");
+        Play("ato6/nilza", engine);
+        AssertThat(ChoiceTextsOnStart("ato6/nilza", engine)).NotContains("E a Celeste?");
+
+        AssertThat(Play("ato6/celeste", engine)).Contains("Eu morri no Pomar. O que voltou fui eu também. Não sei explicar melhor.");
+        AssertThat(Play("ato6/nilza", engine, pick: "E a Celeste?")).Contains("Meu marido não voltou. Mas a Celeste voltou.");
+    }
 }

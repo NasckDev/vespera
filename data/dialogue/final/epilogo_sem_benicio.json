@@ -16,7 +16,15 @@
       "speaker": "nilza",
       "text": "Pra deus, pelo menos.",
       "expression": 2,
-      "next": "r1"
+      "next": "r1",
+      "branches": [
+        {
+          "if": [
+            "ravi_rota_b"
+          ],
+          "node": "r2b"
+        }
+      ]
     },
     "r1": {
       "speaker": "ravi",
@@ -28,6 +36,12 @@
     "r2": {
       "speaker": "ravi",
       "text": "Eu vou tentar o exame C amanhã. Sem medo. Jura.",
+      "next": "l1"
+    },
+    "r2b": {
+      "speaker": "ravi",
+      "text": "Eu vou tentar o exame C amanhã. Sem medo. Jura.",
+      "look": "ravi",
       "next": "l1"
     },
     "l1": {
