@@ -27,7 +27,7 @@ public sealed class BindingTable
 
     // Teclado numérico (Godot.Key: KpEnter, KpMultiply, KpSubtract, KpPeriod, KpAdd, Kp0..Kp3) e Enter.
     public const int KeyEnter = 4194309, KeyKpEnter = 4194310, KeyKpMultiply = 4194433, KeyKpSubtract = 4194435;
-    public const int KeyKpPeriod = 4194436, KeyKpAdd = 4194437, KeyKp0 = 4194438, KeyKp1 = 4194439, KeyKp2 = 4194440, KeyKp3 = 4194441, KeyKp4 = 4194442;
+    public const int KeyKpPeriod = 4194436, KeyKpAdd = 4194437, KeyKp0 = 4194438, KeyKp1 = 4194439, KeyKp2 = 4194440, KeyKp3 = 4194441, KeyKp4 = 4194442, KeyKp5 = 4194443;
 
     private readonly Dictionary<string, string[]> _slots = [];
 
@@ -42,7 +42,7 @@ public sealed class BindingTable
         t.Set("heavy", $"key:{KeyK}", "mouse:2", "pad:3");
         t.Set("dodge", $"key:{KeySpace}", $"key:{KeyShift}", "pad:1");
         t.Set("skill", $"key:{KeyQ}", Empty, "axis:5+");
-        t.Set("skill2", $"key:{KeyZ}", Empty, "pad:5");
+        t.Set("skill2", $"key:{KeyZ}", Empty, "pad:8");
         t.Set("interact", $"key:{KeyE}", Empty, "pad:0");
         t.Set("lantern", $"key:{KeyF}", Empty, "pad:10");
         t.Set("potion", $"key:{KeyR}", Empty, "axis:4+");
@@ -67,10 +67,10 @@ public sealed class BindingTable
         t.Set("heavy", $"key:{KeyKp2}", Empty, "pad:3");
         t.Set("dodge", $"key:{KeyKp0}", Empty, "pad:1");
         t.Set("skill", $"key:{KeyKp3}", Empty, "axis:5+");
-        t.Set("skill2", $"key:{KeyKp4}", Empty, "pad:5");
+        t.Set("skill2", $"key:{KeyKp4}", Empty, "pad:8");
         t.Set("interact", $"key:{KeyKpEnter}", $"key:{KeyEnter}", "pad:0");
         t.Set("lantern", $"key:{KeyKpAdd}", Empty, "pad:10");
-        t.Set("potion", $"key:{KeyKp4}", Empty, "axis:4+");
+        t.Set("potion", $"key:{KeyKp5}", Empty, "axis:4+");
         t.Set("inventory", $"key:{KeyKpPeriod}", Empty, "pad:4");
         t.Set("journal", $"key:{KeyKpSubtract}", Empty, "pad:9");
         t.Set("pause", $"key:{KeyKpMultiply}", Empty, "pad:6");

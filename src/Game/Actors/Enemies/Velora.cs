@@ -73,7 +73,7 @@ public partial class Velora(LevelWorld world) : Enemy("velora", world)
     public bool Melted => _melt >= 0f;
 
     /// <summary>Escondida numa das velas (fase 3, fora da janela em que ressurgiu).</summary>
-    public bool Hidden { get; private set; }
+    public new bool Hidden { get; private set; }
 
     /// <summary>Velas acesas da fase 3 (capturas e testes).</summary>
     public IReadOnlyList<VeloraCandle> Candles => _candles;
@@ -385,7 +385,7 @@ public partial class Velora(LevelWorld world) : Enemy("velora", world)
 
     // ---------------------------------------------------------------- fase 3: uma vela
 
-    private void Hide()
+    private new void Hide()
     {
         Hidden = true;
         Sprite.Visible = false;

@@ -75,6 +75,12 @@ public sealed partial class CombatBot
                 break;
             }
 
+            if (!director.Cleared)
+            {
+                // Sala presa (já registrada como falha): parar aqui, sem seguir para a coleta e a saída (evita falhas em cascata).
+                break;
+            }
+
             rooms++;
             await WaitUntil(() => !host.GetTree().Paused && BlessingScreen.Active is null, 1200, "bênção escolhida ou celebração fechada");
             var hpLeaving = World.Player.Combat.Hp;
@@ -138,6 +144,10 @@ public sealed partial class CombatBot
             }
 
             idle = 0;
+            if (frames % ProgressLogFrames == 0)
+            {
+                Log.Info($"bot: sala {index + 1} ({room}) há {frames / 60} s; {director.Describe()}{DescribeVelora(director)}");
+            }
 
             if (TryDodge() || TryPotion())
             {
@@ -148,8 +158,7 @@ public sealed partial class CombatBot
             var aim = target.GlobalPosition;
             var aimRadius = target.HitRadius;
             // Velória escondida (fase 3): apaga as velas acesas, a mais perto primeiro, até sobrar a que não treme.
-            if (target is Velora { Hidden: true } velora
-                && velora.Candles.Where(c => GodotObject.IsInstanceValid(c) && c.Lit).OrderBy(c => c.GlobalPosition.DistanceTo(World.Player.GlobalPosition)).FirstOrDefault() is { } candle)
+            if (target is Velora { Hidden: true } velora && PickCandle(velora) is { } candle)
             {
                 aim = candle.GlobalPosition;
                 aimRadius = candle.HitRadius;
@@ -184,12 +193,35 @@ public sealed partial class CombatBot
         {
             if (!director.Cleared)
             {
-                Log.Info($"bot: sala {index + 1} ({room}) presa; {director.Describe()}");
+                Log.Info($"bot: sala {index + 1} ({room}) presa; {director.Describe()}{DescribeVelora(director)}");
             }
 
             Check(director.Cleared, $"sala {index + 1} ({room}) não ficou limpa em {RoomFrameLimit / 60} s");
         }
     }
+
+    /// <summary>
+    /// Vela a apagar na fase 3 da Velória, como um jogador: as erradas tremem quando a lanterna passa perto, então vela que
+    /// tremeu é descartada (não gasta golpe nem solta labareda) e a que não treme de perto é a Velória. Antes o bot apagava
+    /// a mais próxima, errada ou não: cada ciclo de 8 s custava até quatro labaredas e o tempo da luta variava muito.
+    /// </summary>
+    private VeloraCandle? PickCandle(Velora velora)
+    {
+        var lit = velora.Candles.Where(c => GodotObject.IsInstanceValid(c) && c.Lit).ToList();
+        foreach (var candle in lit.Where(c => c.Trembling))
+        {
+            _wrongCandles.Add(candle);
+        }
+
+        var origin = World.Player.GlobalPosition;
+        return lit.Where(c => !_wrongCandles.Contains(c)).OrderBy(c => c.GlobalPosition.DistanceTo(origin)).FirstOrDefault()
+            ?? lit.OrderBy(c => c.GlobalPosition.DistanceTo(origin)).FirstOrDefault();
+    }
+
+    /// <summary>Estado da Velória (fase, escondida, velas acesas) para o registro de progresso e de sala presa.</summary>
+    private static string DescribeVelora(RoomDirector director) => director.Guardian is Velora v
+        ? $"; Velória fase {v.Phase} escondida {v.Hidden} derretida {v.Melted} velas acesas {v.Candles.Count(c => GodotObject.IsInstanceValid(c) && c.Lit)}/{v.Candles.Count}"
+        : string.Empty;
 
     /// <summary>Esquiva de um aviso novo de monstro perto (com a chance da habilidade do bot).</summary>
     private bool TryDodge()

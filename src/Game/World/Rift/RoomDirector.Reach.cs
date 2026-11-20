@@ -77,6 +77,14 @@ public partial class RoomDirector
         return new Vector2(x, y);
     }
 
+    /// <summary>
+    /// Quem precisa estar ao alcance a pé: a onda e, nas salas de Guardião, os invocados dele (Velinhas da Velória etc.),
+    /// que também contam como vivos. O Guardião e o parceiro ficam de fora (se escondem e se movem de propósito).
+    /// </summary>
+    private IEnumerable<Enemy> TrackedForReach() => _wave
+        .Concat(_world.Enemies.Where(e => IsInstanceValid(e) && !e.Dead && e != Guardian && e != Partner))
+        .Distinct();
+
     /// <summary>Traz de volta ao chão alcançável o monstro da onda que ficou fora por mais de <see cref="OutOfReachGrace"/> s.</summary>
     private void KeepWaveReachable(float dt)
     {
@@ -93,12 +101,13 @@ public partial class RoomDirector
 
         var step = ReachCheckPeriod - _reachClock;
         _reachClock = ReachCheckPeriod;
-        foreach (var enemy in _outOfReach.Keys.Where(e => !_wave.Contains(e)).ToList())
+        var tracked = TrackedForReach().ToList();
+        foreach (var enemy in _outOfReach.Keys.Where(e => !tracked.Contains(e)).ToList())
         {
             _outOfReach.Remove(enemy);
         }
 
-        foreach (var enemy in _wave)
+        foreach (var enemy in tracked)
         {
             if (!IsInstanceValid(enemy) || enemy.Dead || IsReachable(enemy.GlobalPosition))
             {

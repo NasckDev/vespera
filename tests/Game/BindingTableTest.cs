@@ -65,4 +65,64 @@ public class BindingTableTest
         AssertThat(table.Get("attack", BindingSlot.Primary)).IsEqual("key:74");
         AssertThat(BindingTable.FromDictionary(table.ToDictionary()).Get("dodge", BindingSlot.Primary)).IsEqual("key:32");
     }
+
+    private const string GuideButton = "pad:5";
+
+
+    // Regressão #69: nenhuma ação do mesmo jogador divide tecla/mouse/botão/eixo (Eco 2 e Poção do J2 dividiam o Num 4).
+    [TestCase]
+    public void Defaults_NoTwoActionsOfSamePlayerShareACode()
+    {
+        foreach (var (name, table) in new[] { ("J1", BindingTable.Defaults()), ("J2", BindingTable.DefaultsPlayer2()) })
+        {
+            foreach (var group in new[] { new[] { BindingSlot.Primary, BindingSlot.Alternate }, new[] { BindingSlot.Gamepad } })
+            {
+                var seen = new Dictionary<string, string>();
+                foreach (var action in table.Actions)
+                {
+                    foreach (var slot in group)
+                    {
+                        var code = table.Get(action, slot);
+                        if (code.Length == 0)
+                        {
+                            continue;
+                        }
+
+                        var owner = seen.TryGetValue(code, out var other) ? other : null;
+                        AssertThat(owner).OverrideFailureMessage($"{name}: '{code}' usado por '{owner}' e '{action}'").IsNull();
+                        seen[code] = action;
+                    }
+                }
+            }
+        }
+    }
+
+    // O J1 no teclado dividido lê a coluna Principal; ela não pode bater com nenhuma tecla do J2.
+    [TestCase]
+    public void Defaults_Player1PrimaryKeysDoNotCollideWithPlayer2Keys()
+    {
+        var p1 = BindingTable.Defaults();
+        var p2 = BindingTable.DefaultsPlayer2();
+        foreach (var action in p1.Actions)
+        {
+            var code = p1.Get(action, BindingSlot.Primary);
+            AssertThat(p2.UsesKeyboardCode(code)).OverrideFailureMessage($"J1 '{action}' ({code}) colide com o J2").IsFalse();
+        }
+    }
+
+    // Regressão #69: o botão Guide (pad:5) é capturado pelo sistema e falta em muitos controles.
+    [TestCase]
+    public void Defaults_NothingUsesTheGuideButton()
+    {
+        foreach (var table in new[] { BindingTable.Defaults(), BindingTable.DefaultsPlayer2() })
+        {
+            foreach (var action in table.Actions)
+            {
+                foreach (var slot in new[] { BindingSlot.Primary, BindingSlot.Alternate, BindingSlot.Gamepad })
+                {
+                    AssertThat(table.Get(action, slot)).OverrideFailureMessage($"'{action}' usa o botão Guide").IsNotEqual(GuideButton);
+                }
+            }
+        }
+    }
 }
