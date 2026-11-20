@@ -44,6 +44,7 @@
     <None Include="..\data\horta\*.json" Link="Horta/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\data\coop.json" Link="Coop/coop.json" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\data\dialogue\*.json" Link="Dialogue/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\data\dialogue\ato3\*.json" Link="Dialogue/ato3/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\data\dialogue\ato4\*.json" Link="Dialogue/ato4/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\data\dialogue\ato5\*.json" Link="Dialogue/ato5/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\data\dialogue\final\*.json" Link="Dialogue/final/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />

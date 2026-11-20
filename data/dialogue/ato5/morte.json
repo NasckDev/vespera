@@ -1,6 +1,6 @@
 {
   "id": "ato5/morte",
-  "_doc": "Falas de morte do Ato V (ROTEIRO-V2 §13), uma por queda, em ordem (flags sino_mudo:fell_N -> ato5_morte_N), tocadas na volta à Torre. A do Vigia faz a pergunta três (vigia_p3_*). Duas frases por balão (§2.1).",
+  "_doc": "Falas de morte do Ato V (ROTEIRO-V2 §13), uma por queda, em ordem (flags sino_mudo:fell_N -> ato5_morte_N), tocadas na volta à Torre. A do Vigia faz a pergunta três (vigia_p3_*) se ainda não foi respondida na visita noturna (ato4/vigia, q3). Duas frases por balão (§2.1).",
   "entries": [
     {
       "if": [
@@ -75,7 +75,15 @@
       "set": [
         "morte_torre_3"
       ],
-      "next": "m3_2"
+      "next": "m3_2",
+      "branches": [
+        {
+          "if": [
+            "vigia_p3_toco|vigia_p3_naosei"
+          ],
+          "node": "m3_3"
+        }
+      ]
     },
     "m3_2": {
       "speaker": "vigia",
@@ -121,6 +129,10 @@
       "set": [
         "morte_torre_6"
       ]
+    },
+    "m3_3": {
+      "speaker": "vigia",
+      "text": "Pergunta três você já respondeu. Eu guardei."
     }
   }
 }

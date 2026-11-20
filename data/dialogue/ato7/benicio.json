@@ -9,12 +9,6 @@
       "node": "f1"
     },
     {
-      "if": [
-        "ato7_benicio"
-      ],
-      "node": "h1"
-    },
-    {
       "node": "a1"
     }
   ],
@@ -60,28 +54,6 @@
           "text": "Descanse, Mestre."
         }
       ]
-    },
-    "h1": {
-      "speaker": "benicio",
-      "text": "Pergunte.",
-      "choices": [
-        {
-          "text": "Por que deu o badalo ao Severo?",
-          "next": "pm1_1",
-          "if": [
-            "ato7_badalo"
-          ]
-        },
-        {
-          "text": "Até logo."
-        }
-      ]
-    },
-    "pm1_1": {
-      "speaker": "benicio",
-      "text": "Eu passei o badalo pro Severo porque, se fosse eu de novo, eu não puxava.",
-      "expression": 2,
-      "next": "h1"
     }
   }
 }

@@ -3,9 +3,9 @@
   "entries": [
     {
       "if": [
-        "vigia_e_marisa"
+        "vigia_p5_feita"
       ],
-      "node": "h1"
+      "node": "h7"
     },
     {
       "if": [
@@ -23,6 +23,24 @@
         "!vigia_p2_nao"
       ],
       "node": "s1"
+    },
+    {
+      "if": [
+        "ato5_confissao",
+        "!vigia_perguntou_hoje",
+        "!vigia_p3_toco",
+        "!vigia_p3_naosei"
+      ],
+      "node": "q3"
+    },
+    {
+      "if": [
+        "act5_done",
+        "!vigia_perguntou_hoje",
+        "!vigia_p4_fechava",
+        "!vigia_p4_nao"
+      ],
+      "node": "q4"
     },
     {
       "if": [
@@ -131,7 +149,8 @@
           "next": "nome1"
         },
         {
-          "text": "(Ficar em silêncio)"
+          "text": "(Ficar em silêncio)",
+          "next": "sil"
         }
       ]
     },
@@ -152,6 +171,14 @@
       "speaker": "vigia",
       "text": "Volte à noite. Eu lembro do que você disse.",
       "choices": [
+        {
+          "text": "Qual é o seu nome?",
+          "if": [
+            "vigia_lanterna",
+            "!vigia_e_marisa"
+          ],
+          "next": "nome1"
+        },
         {
           "text": "Por que o capuz?",
           "next": "pm1_1"
@@ -178,8 +205,92 @@
     "pm2_2": {
       "speaker": "vigia",
       "text": "Ele não leva o que devolveu.",
-      "next": "h1"
+      "next": "h1",
+      "branches": [
+        {
+          "if": [
+            "vigia_p5_feita"
+          ],
+          "node": "h7"
+        }
+      ]
+    },
+    "sil": {
+      "speaker": "vigia",
+      "text": "Você não pergunta. Eu digo mesmo assim.",
+      "expression": 2,
+      "next": "nome1"
+    },
+    "q3": {
+      "speaker": "vigia",
+      "text": "Você esteve onde o sino bate. Eu ouvi daqui.",
+      "look": "vigia",
+      "next": "q3_2"
+    },
+    "q3_2": {
+      "speaker": "vigia",
+      "text": "Pergunta três: você toca?",
+      "choices": [
+        {
+          "text": "Toco.",
+          "set": [
+            "vigia_p3_toco"
+          ],
+          "next": "h1"
+        },
+        {
+          "text": "Não sei.",
+          "set": [
+            "vigia_p3_naosei"
+          ],
+          "next": "h1"
+        }
+      ]
+    },
+    "q4": {
+      "speaker": "vigia",
+      "text": "Pergunta quatro: se você pudesse fechar tudo e não voltar, fechava?",
+      "look": "vigia",
+      "choices": [
+        {
+          "text": "Fechava.",
+          "set": [
+            "vigia_p4_fechava"
+          ],
+          "next": "h1"
+        },
+        {
+          "text": "Não.",
+          "set": [
+            "vigia_p4_nao"
+          ],
+          "next": "h1"
+        }
+      ]
+    },
+    "h7": {
+      "speaker": "vigia",
+      "text": "Vá. Eu seguro a porta mais uma noite.",
+      "choices": [
+        {
+          "text": "E a Odete?",
+          "next": "pm7_1"
+        },
+        {
+          "text": "E a Lis?",
+          "next": "pm2_1"
+        },
+        {
+          "text": "Até amanhã."
+        }
+      ]
+    },
+    "pm7_1": {
+      "speaker": "vigia",
+      "text": "Odete sabe onde eu fico. Ela não vem. Ela tem razão.",
+      "expression": 2,
+      "next": "h7"
     }
   },
-  "_doc": "Uma pergunta por noite: 'vigia_perguntou_hoje' é calculada (NightFlags). O Vigia só está no banco com 'noite'."
+  "_doc": "Uma pergunta por noite: 'vigia_perguntou_hoje' é calculada (NightFlags). O Vigia só está no banco com 'noite'. Ordem: P5 feita = hub final; revelação 'Eu era a Marisa' (r1, depois da Velória; o silêncio não a esconde); P2 (visita seguinte, se ainda pendente); P3 (depois da confissão do Benício); P4 (Ato VI); hub. As cenas de morte de ato5/morte e ato6/morte só repetem P3/P4 se ainda não foram respondidas."
 }

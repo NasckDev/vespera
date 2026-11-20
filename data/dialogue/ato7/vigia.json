@@ -2,12 +2,6 @@
   "id": "ato7/vigia",
   "entries": [
     {
-      "if": [
-        "vigia_p5_feita"
-      ],
-      "node": "h1"
-    },
-    {
       "node": "a1"
     }
   ],
@@ -39,25 +33,6 @@
           ]
         }
       ]
-    },
-    "h1": {
-      "speaker": "vigia",
-      "text": "Vá. Eu seguro a porta mais uma noite.",
-      "choices": [
-        {
-          "text": "E a Odete?",
-          "next": "pm1_1"
-        },
-        {
-          "text": "Até amanhã."
-        }
-      ]
-    },
-    "pm1_1": {
-      "speaker": "vigia",
-      "text": "Odete sabe onde eu fico. Ela não vem. Ela tem razão.",
-      "expression": 2,
-      "next": "h1"
     }
   }
 }

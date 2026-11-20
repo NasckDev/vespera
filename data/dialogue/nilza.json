@@ -48,7 +48,15 @@
     "nm2": {
       "speaker": "nilza",
       "expression": 2,
-      "text": "Abri isso aqui com o que a Ordem pagou. Come."
+      "text": "Abri isso aqui com o que a Ordem pagou. Come.",
+      "branches": [
+        {
+          "if": [
+            "ato7_lis_dia"
+          ],
+          "node": "nm3"
+        }
+      ]
     },
     "hub": {
       "speaker": "nilza",
@@ -105,6 +113,10 @@
     "tchau": {
       "speaker": "nilza",
       "text": "Então vai. A sopa esfria rápido."
+    },
+    "nm3": {
+      "speaker": "nilza",
+      "text": "Se o sol parar de nascer de novo, eu abro a taverna no escuro. Já fiz."
     }
   }
 }

@@ -65,6 +65,14 @@
           "next": "troca"
         },
         {
+          "text": "E se a Marisa voltar diferente?",
+          "if": [
+            "vigia_e_marisa",
+            "arma_duas_vesperas"
+          ],
+          "next": "pm_marisa"
+        },
+        {
           "text": "Só passei.",
           "next": "olhar"
         }
@@ -121,6 +129,16 @@
         "odete_marisa"
       ],
       "objective": "dormir"
+    },
+    "pm_marisa": {
+      "speaker": "odete",
+      "text": "Se a Marisa voltar diferente? Eu aceito.",
+      "next": "pm_marisa2"
+    },
+    "pm_marisa2": {
+      "speaker": "odete",
+      "text": "Já aceitei no dia em que ela entrou.",
+      "next": "hub"
     }
   }
 }

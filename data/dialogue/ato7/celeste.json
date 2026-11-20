@@ -2,12 +2,6 @@
   "id": "ato7/celeste",
   "entries": [
     {
-      "if": [
-        "lis_revelada"
-      ],
-      "node": "h1"
-    },
-    {
       "node": "a1"
     }
   ],
@@ -25,24 +19,6 @@
       "speaker": "celeste",
       "text": "O Avesso não ataca o que ele devolveu. Por isso ela anda sozinha.",
       "expression": 2
-    },
-    "h1": {
-      "speaker": "celeste",
-      "text": "A horta tá bonita, apesar do escuro.",
-      "choices": [
-        {
-          "text": "Se fechar tudo, você some?",
-          "next": "pm1_1"
-        },
-        {
-          "text": "Até mais."
-        }
-      ]
-    },
-    "pm1_1": {
-      "speaker": "celeste",
-      "text": "Se fechar tudo, eu sumo? Talvez. Eu plantei mesmo assim.",
-      "next": "h1"
     }
   }
 }

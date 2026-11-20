@@ -3,6 +3,13 @@
   "entries": [
     {
       "if": [
+        "ato7_lis_noite",
+        "!lis_lembra_som"
+      ],
+      "node": "som"
+    },
+    {
+      "if": [
         "odete_marisa",
         "!maca_done"
       ],
@@ -109,6 +116,14 @@
         "maca_done"
       ],
       "objective": "ato2"
+    },
+    "som": {
+      "speaker": "lis",
+      "text": "Eu lembro do som. Juro.",
+      "set": [
+        "lis_lembra_som"
+      ],
+      "next": "hub"
     }
   }
 }

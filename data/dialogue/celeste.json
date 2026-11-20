@@ -4,9 +4,23 @@
   "entries": [
     {
       "if": [
-        "act2_done"
+        "lis_revelada"
+      ],
+      "node": "h7"
+    },
+    {
+      "if": [
+        "act2_done",
+        "!ato2_fim_done",
+        "!ato2_fim_falta_c"
       ],
       "node": "fim_again"
+    },
+    {
+      "if": [
+        "act2_done"
+      ],
+      "node": "pos"
     },
     {
       "if": [
@@ -131,6 +145,39 @@
     "fim_again": {
       "speaker": "celeste",
       "text": "O Benício quer te ver na praça. Desce a escada, ao sul."
+    },
+    "pos": {
+      "speaker": "celeste",
+      "text": "As raízes pararam de doer. A horta é sua quando quiser.",
+      "choices": [
+        {
+          "text": "Tá bom.",
+          "next": "end"
+        },
+        {
+          "text": "Perguntar mais",
+          "next": "q"
+        }
+      ]
+    },
+    "h7": {
+      "speaker": "celeste",
+      "text": "A horta tá bonita, apesar do escuro.",
+      "choices": [
+        {
+          "text": "Se fechar tudo, você some?",
+          "next": "pm7_1"
+        },
+        {
+          "text": "Até mais.",
+          "next": "end"
+        }
+      ]
+    },
+    "pm7_1": {
+      "speaker": "celeste",
+      "text": "Se fechar tudo, eu sumo? Talvez. Eu plantei mesmo assim.",
+      "next": "h7"
     }
   }
 }
