@@ -3,6 +3,7 @@ using System.Linq;
 using Godot;
 using Vespera.Core.Hunt;
 using Vespera.Core.Ranks;
+using Vespera.Game.Boot;
 using Vespera.Game.Hunter;
 using Vespera.Game.Story;
 using Vespera.Game.UI;
@@ -21,7 +22,10 @@ public partial class RunResultScreen(RunSummary summary, bool brechaClosed) : Hu
     private static readonly Color Good = new("8fe39a");
     private static readonly Color Bad = new("ff8a7a");
 
+    private const int ScrollStep = 90;
+
     private Button _continue = null!;
+    private ScrollContainer? _scroll;
 
     /// <summary>Tela aberta agora (testes).</summary>
     public static RunResultScreen? Active { get; private set; }
@@ -53,28 +57,59 @@ public partial class RunResultScreen(RunSummary summary, bool brechaClosed) : Hu
         var report = summary.Report;
         Headline = !report.Survived ? "Você caiu" : brechaClosed ? "Brecha fechada!" : "Caçada concluída!";
         var panel = BuildPage(Headline, out var column, sideMargin: 180);
+        // Só a lista rola (colunas, fala e próximo passo); barra de XP e botão ficam fixos no rodapé, sempre à vista (#78).
+        _scroll = UiKit.MakeScroll();
+        panel.AddChild(_scroll);
+        var content = UiKit.MakeColumn(24);
+        content.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+        _scroll.AddChild(UiKit.PadForGlow(content));
         var body = UiKit.MakeRow(60);
-        panel.AddChild(UiKit.PadForGlow(body));
+        content.AddChild(body);
         body.AddChild(BuildStats(report));
         body.AddChild(BuildLoot(report));
         body.AddChild(BuildContracts());
-        column.AddChild(BuildXp());
         if (summary.Line is { } line)
         {
-            var quote = UiKit.MakeLabel($"{line.Who}: \"{line.Text}\"", UiTheme.ReadingVariation, HorizontalAlignment.Center);
+            var quote = UiKit.MakeWrapped($"{line.Who}: \"{line.Text}\"", UiTheme.ReadingVariation);
+            quote.HorizontalAlignment = HorizontalAlignment.Center;
             quote.AddThemeColorOverride("font_color", Palette.Cream);
-            column.AddChild(quote);
+            content.AddChild(quote);
             LineText = quote.Text;
         }
 
         if (StoryService.Engine.CurrentObjective is { Locked: false } objective)
         {
-            column.AddChild(UiKit.MakeLabel($"Próximo passo: {objective.Title}", UiTheme.HeadingVariation, HorizontalAlignment.Center));
+            var next = UiKit.MakeWrapped($"Próximo passo: {objective.Title}", UiTheme.HeadingVariation);
+            next.HorizontalAlignment = HorizontalAlignment.Center;
+            content.AddChild(next);
         }
 
+        column.AddChild(BuildXp());
         _continue = UiKit.MakeButton("Voltar à Praça", Close, 520);
         _continue.SizeFlagsHorizontal = SizeFlags.ShrinkCenter;
         column.AddChild(_continue);
+    }
+
+    /// <summary>Botão de rodapé (testes: precisa estar dentro da tela).</summary>
+    public Button ContinueButton => _continue;
+
+    /// <summary>Cima/baixo rolam a lista mesmo com o foco no botão do rodapé.</summary>
+    public override void _Input(InputEvent @event)
+    {
+        base._Input(@event);
+        if (_scroll is null || !SceneRouter.Instance.IsActive(this))
+        {
+            return;
+        }
+
+        var dir = @event.IsActionPressed("ui_down", true) ? 1 : @event.IsActionPressed("ui_up", true) ? -1 : 0;
+        if (dir == 0)
+        {
+            return;
+        }
+
+        GetViewport().SetInputAsHandled();
+        _scroll.ScrollVertical = Mathf.Max(0, _scroll.ScrollVertical + dir * ScrollStep);
     }
 
     private Control BuildStats(RunReport r)
@@ -188,7 +223,9 @@ public partial class RunResultScreen(RunSummary summary, bool brechaClosed) : Hu
         var text = after.Progress >= 1f && after.Next is not null
             ? $"+{gained} XP · XP do rank {after.Next} completo. Falta: {string.Join(", ", after.Missing.Select(m => m.Text))}"
             : $"+{gained} XP · {after.XpIntoRank}/{after.XpSpan} até {next}";
-        row.AddChild(UiKit.MakeLabel(text, UiTheme.ReadingVariation, HorizontalAlignment.Center));
+        var xpLabel = UiKit.MakeWrapped(text, UiTheme.ReadingVariation);
+        xpLabel.HorizontalAlignment = HorizontalAlignment.Center;
+        row.AddChild(xpLabel);
         var bar = new ProgressBar
         {
             MinValue = 0,

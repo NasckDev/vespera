@@ -35,6 +35,19 @@ public partial class HelpScreen : UiScreen
         "Para jogar em dupla, abra a pausa e escolha Chamar J2 (co-op). O J2 joga com setas e teclado numérico, ou num segundo controle, " +
         "e a câmera acompanha os dois.";
 
+    private const string OnlineText =
+        "Online: um jogador escolhe Hospedar e mostra o IP e a porta; o amigo escolhe Entrar, digita o endereço e a classe. " +
+        "O amigo entra ao seu lado na cidade, quando vocês estiverem fora da Brecha. Se a conexão cair, o título avisa.";
+
+    private const string HortaText =
+        "Horta: são 6 canteiros. Cada volta da Brecha conta um dia: o que você planta vira ingrediente. " +
+        "Depois de colhido, a Nilza cozinha na feira.";
+
+    private const string BlessingsText =
+        "Ao limpar uma sala, a Lanterna oferece 3 bênçãos e você escolhe 1; ela vale até o fim da caçada. " +
+        "As famílias são Chama (Odete), Vigília (Benício), Sopa (Nilza), Mapa (Lis) e Aposta (Ravi). " +
+        "Famílias diferentes se combinam e dão um bônus extra.";
+
     private const string MenuTip = "Menus: setas e Enter, ou direcional e A. Esc ou B volta.";
 
     private Label _heading = null!;
@@ -52,7 +65,13 @@ public partial class HelpScreen : UiScreen
         ("Brechas e loot", () => TopText(LootText)),
         ("A Lanterna", () => TopText(LanternText)),
         ("Ecos e co-op", () => TopText(EchoCoopText)),
+        ("Online", () => TopText(OnlineText)),
+        ("Horta", () => TopText(HortaText)),
+        ("Bênçãos", () => TopText(BlessingsText)),
     ];
+
+    /// <summary>Texto da página mostrada (testes).</summary>
+    public string BodyText { get; private set; } = string.Empty;
 
     protected override Control? DefaultFocus() => _next;
 
@@ -86,21 +105,28 @@ public partial class HelpScreen : UiScreen
         return label;
     }
 
+    /// <summary>Tabela gerada de <see cref="InputActions.Remappable"/>: toda ação remapeável aparece, com os nomes do controle em uso.</summary>
     private static Control BuildControlsPage()
     {
         var family = GlyphNames.DetectFamily();
-        var column = UiKit.MakeColumn(24);
-        var grid = new GridContainer { Columns = 2 };
+        var column = UiKit.MakeColumn(14);
+        column.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+        var grid = new GridContainer { Columns = 2, SizeFlagsHorizontal = SizeFlags.ExpandFill };
         grid.AddThemeConstantOverride("h_separation", 40);
-        grid.AddThemeConstantOverride("v_separation", 10);
+        grid.AddThemeConstantOverride("v_separation", 4);
         column.AddChild(grid);
 
         AddEntry(grid, "Mover", "WASD", "analógico");
-        foreach (var id in new[] { InputActions.Attack, InputActions.Heavy, InputActions.Dodge, InputActions.Skill, InputActions.Skill2, InputActions.Interact, InputActions.Potion, InputActions.Journal, InputActions.Pause })
+        foreach (var info in InputActions.Remappable)
         {
-            var keyboard = GlyphNames.Describe(InputSetup.Table.Get(id, BindingSlot.Primary), family);
-            var pad = GlyphNames.Describe(InputSetup.Table.Get(id, BindingSlot.Gamepad), family);
-            AddEntry(grid, InputActions.LabelOf(id), keyboard, pad);
+            if (info.GamepadFixed)
+            {
+                continue;
+            }
+
+            var keyboard = GlyphNames.Describe(InputSetup.Table.Get(info.Id, BindingSlot.Primary), family);
+            var pad = GlyphNames.Describe(InputSetup.Table.Get(info.Id, BindingSlot.Gamepad), family);
+            AddEntry(grid, info.Label, keyboard, pad);
         }
 
         column.AddChild(UiKit.MakeWrapped(MenuTip, UiTheme.DimVariation));
@@ -109,9 +135,31 @@ public partial class HelpScreen : UiScreen
 
     private static void AddEntry(GridContainer grid, string label, string keyboard, string pad)
     {
-        var text = UiKit.MakeLabel($"{label}: {keyboard} / {pad}", UiTheme.ReadingVariation);
+        var text = UiKit.MakeWrapped($"{label}: {keyboard} / {pad}", UiTheme.ReadingVariation);
         text.SizeFlagsHorizontal = SizeFlags.ExpandFill;
         grid.AddChild(text);
+    }
+
+    private static string CollectText(Node root)
+    {
+        var parts = new List<string>();
+        var stack = new Stack<Node>();
+        stack.Push(root);
+        while (stack.Count > 0)
+        {
+            var node = stack.Pop();
+            if (node is Label label)
+            {
+                parts.Add(label.Text);
+            }
+
+            foreach (var child in node.GetChildren())
+            {
+                stack.Push(child);
+            }
+        }
+
+        return string.Join(System.Environment.NewLine, parts);
     }
 
     private void ShowPage(int index)
@@ -123,7 +171,10 @@ public partial class HelpScreen : UiScreen
             child.QueueFree();
         }
 
-        _body.AddChild(pages[_page].Body());
+        var page = pages[_page].Body();
+        page.SizeFlagsVertical = SizeFlags.ShrinkBegin;
+        _body.AddChild(page);
+        BodyText = CollectText(page);
         _heading.Text = $"{pages[_page].Title} ({_page + 1}/{pages.Count})";
     }
 }

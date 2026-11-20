@@ -19,7 +19,7 @@ public partial class SmokeTest : Node
     private const double WatchdogSeconds = 90;
     private const double BotWatchdogSeconds = 900;
     private const double ActOneWatchdogSeconds = 3600;
-    private const int HelpPages = 7;
+    private const int HelpPages = 10;
     private const double ShotSettleSeconds = 1.4;
     private const int ExitFailed = 1;
     private const int ExitTimeout = 2;
@@ -139,16 +139,47 @@ public partial class SmokeTest : Node
         await CloseWithEscape("Opções");
     }
 
-    /// <summary>Liga "Tamanho do texto: Grande", fotografa título e controles (os mais apertados) e desliga de novo.</summary>
+    /// <summary>Passa por "Grande" e "Muito grande": fotografa título e controles (os mais apertados), confere o título e volta ao normal.</summary>
     private async Task VisitLargeText()
     {
-        await ToggleLargeText();
-        await Shot("02b_titulo_texto_grande");
-        await OpenFromTitle("Controles");
-        await Shot("03b_controles_texto_grande");
-        await CloseWithEscape("Controles");
+        for (var size = GameSettings.TextLarge; size <= GameSettings.TextHuge; size++)
+        {
+            await ToggleLargeText();
+            Check(GameSettings.Current.TextSize == size, $"o texto deveria ir a {size}, foi {GameSettings.Current.TextSize}");
+            await Shot($"02b_titulo_texto_{size}");
+            CheckTitleButtonsFit($"título (texto {size})");
+            await OpenFromTitle("Controles");
+            await Shot($"03b_controles_texto_{size}");
+            await CloseWithEscape("Controles");
+        }
+
         await ToggleLargeText();
         Check(GameSettings.Current.TextSize == GameSettings.TextNormal, "texto deveria voltar ao normal");
+        CheckTitleButtonsFit("título (texto normal)");
+    }
+
+    /// <summary>Todos os botões do menu do título (inclusive Sair e Créditos) inteiros dentro do painel, sem precisar rolar (#82).</summary>
+    private void CheckTitleButtonsFit(string where)
+    {
+        foreach (var name in new[] { "Nova história", "Créditos", "Sair" })
+        {
+            var button = FindButton(name);
+            if (button is null)
+            {
+                Check(false, $"{where}: botão '{name}' não encontrado");
+                continue;
+            }
+
+            Node? node = button.GetParent();
+            while (node is not null and not ScrollContainer)
+            {
+                node = node.GetParent();
+            }
+
+            var view = node is ScrollContainer scroll ? new Rect2(scroll.GlobalPosition, scroll.Size) : GetTree().Root.GetVisibleRect();
+            var rect = new Rect2(button.GlobalPosition, button.Size);
+            Check(view.Encloses(rect), $"{where}: botão '{name}' {rect} cortado pelo painel {view}");
+        }
     }
 
     private async Task ToggleLargeText()
@@ -193,10 +224,32 @@ public partial class SmokeTest : Node
         for (var page = 1; page <= HelpPages; page++)
         {
             await Shot($"05_ajuda_{page}");
+            if (_router.Current is HelpScreen help)
+            {
+                CheckHelpPage(help, page);
+            }
+
             await Tap(Key.Enter);
         }
 
         await CloseWithEscape("Ajuda");
+    }
+
+    /// <summary>A página de controles lista todas as ações (inclusive Lanterna e Inventário) sem "Botão N" cru; todas as páginas têm texto (#82).</summary>
+    private void CheckHelpPage(HelpScreen help, int page)
+    {
+        Check(help.BodyText.Length > 0, $"ajuda página {page}: sem texto");
+        if (page != 3)
+        {
+            return;
+        }
+
+        foreach (var label in new[] { "Lanterna", "Inventário", "Diário", "Pausa", "Beber poção", "Eco 2" })
+        {
+            Check(help.BodyText.Contains(label, StringComparison.Ordinal), $"ajuda (controles): falta '{label}'");
+        }
+
+        Check(!help.BodyText.Contains("Botão", StringComparison.Ordinal), "ajuda (controles): botão sem nome ('Botão N')");
     }
 
     private async Task VisitCredits()
@@ -247,6 +300,7 @@ public partial class SmokeTest : Node
         Check(level.Player.CurrentAnimation.StartsWith("andar", StringComparison.Ordinal) || level.Player.CurrentAnimation.StartsWith("parado", StringComparison.Ordinal),
             $"animação inesperada: {level.Player.CurrentAnimation}");
         await Shot("08_jogo");
+        await VisitResultWorstCase();
         level = await LeaveRoad(level);
         await VisitMouseDialogue(level);
         await RunLevelExtras(level);

@@ -22,11 +22,11 @@ public static class UiTheme
     private const int ButtonContentY = 6;
     private const int PanelContent = 36;
 
-    private static readonly int[] BodySizes = [36, 44];
-    private static readonly int[] TitleSizes = [96, 108];
-    private static readonly int[] ReadingSizes = [46, 54];
-    private static readonly int[] MenuSizes = [50, 58];
-    private static readonly int[] LogoSizes = [176, 176];
+    private static readonly int[] BodySizes = [36, 44, 52];
+    private static readonly int[] TitleSizes = [96, 108, 116];
+    private static readonly int[] ReadingSizes = [46, 54, 62];
+    private static readonly int[] MenuSizes = [50, 58, 64];
+    private static readonly int[] LogoSizes = [176, 176, 176];
 
     private static readonly Color Ink = new("0F1230");
     private static readonly Color Night = new("1B1F3B");

@@ -12,6 +12,7 @@ public sealed class GameSettings
     public static readonly int[] WindowHeights = [540, 720, 900, 1080, 1440];
     public const int TextNormal = 0;
     public const int TextLarge = 1;
+    public const int TextHuge = 2;
 
     private const string MusicBus = "Music";
     private const string SfxBus = "SFX";
@@ -105,7 +106,7 @@ public sealed class GameSettings
         SfxVolume = Math.Clamp(SfxVolume, 0, 100);
         WindowSize = Math.Clamp(WindowSize, 0, WindowHeights.Length - 1);
         ScreenShake = Math.Clamp(ScreenShake, 0, 100);
-        TextSize = Math.Clamp(TextSize, TextNormal, TextLarge);
+        TextSize = Math.Clamp(TextSize, TextNormal, TextHuge);
         Version = FileVersion;
     }
 

@@ -10,8 +10,16 @@ public partial class TitleScreen : UiScreen
     private const string Version = "v0.2.0-dev";
     private const float MenuFadeSeconds = 0.7f;
     private const float MenuFadeDelay = 0.25f;
-    private static readonly Rect2 MenuRect = new(1150, 340, 730, 680);
+    private const float MenuX = 1150f;
+    private const float MenuWidth = 730f;
+    private const float MenuBottom = 1020f;
+    private const float MenuMaxHeight = 940f;
+    private const float PanelPadding = 72f;
+    private static readonly Rect2 MenuRect = new(MenuX, 340, MenuWidth, 680);
 
+    private PanelContainer _panel = null!;
+    private ScrollContainer _scroll = null!;
+    private Control _menuBox = null!;
     private Button _newGame = null!;
     private Button _continue = null!;
 
@@ -25,12 +33,17 @@ public partial class TitleScreen : UiScreen
 
         var panel = new PanelContainer { Position = MenuRect.Position, Size = MenuRect.Size, Modulate = Colors.Transparent };
         AddChild(panel);
+        _panel = panel;
         CreateTween().TweenProperty(panel, "modulate:a", 1f, MenuFadeSeconds).SetDelay(MenuFadeDelay);
         var scroll = UiKit.MakeScroll();
         panel.AddChild(scroll);
-        var menu = UiKit.MakeColumn(10);
+        var menu = UiKit.MakeColumn(6);
         menu.SizeFlagsHorizontal = SizeFlags.ExpandFill;
-        scroll.AddChild(UiKit.PadForGlow(menu));
+        _scroll = scroll;
+        _menuBox = UiKit.PadForGlow(menu);
+        scroll.AddChild(_menuBox);
+        _menuBox.MinimumSizeChanged += FitMenu;
+        CallDeferred(nameof(FitMenu));
 
         var buttons = new List<Control>();
         _newGame = AddMenuButton(menu, buttons, "Nova história", () => SceneRouter.Instance.Push(ScreenKeys.SlotsNew));
@@ -60,6 +73,15 @@ public partial class TitleScreen : UiScreen
             label.Modulate = new Color("f2a541");
             AddChild(label);
         }
+    }
+
+    /// <summary>O painel acompanha a altura dos botões (texto grande aumenta) e cresce para cima, ancorado no rodapé: nenhum botão fica cortado.</summary>
+    private void FitMenu()
+    {
+        var need = Mathf.Min(_menuBox.GetCombinedMinimumSize().Y, MenuMaxHeight - PanelPadding);
+        _scroll.CustomMinimumSize = new Vector2(0, need);
+        _panel.Size = new Vector2(MenuWidth, need + PanelPadding);
+        _panel.Position = new Vector2(MenuX, MenuBottom - _panel.Size.Y);
     }
 
     /// <summary>Último aviso mostrado no título (queda do online), para os bots.</summary>

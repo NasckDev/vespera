@@ -82,6 +82,14 @@ public partial class HintHud : Control
     public override void _Process(double delta)
     {
         var dt = (float)delta;
+        if (Hunt.BlessingScreen.Active is not null)
+        {
+            // A tela de bênção cobre tudo: dica nenhuma pode aparecer atrás do título (#82).
+            _box.Visible = false;
+            _box.Modulate = new Color(1, 1, 1, 0);
+            return;
+        }
+
         var blocked = _level.DialogueOpen || _level.SceneBusy || !Progression.IsActive || GetTree().Paused;
         if (_current is null && !blocked)
         {

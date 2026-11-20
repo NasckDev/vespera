@@ -74,7 +74,7 @@ public partial class BlessingScreen(IReadOnlyList<BlessingDef> offer, Action<str
 
     protected override void Build()
     {
-        var veil = new ColorRect { Color = new Color(0.03f, 0.03f, 0.1f, 0.78f), MouseFilter = MouseFilterEnum.Ignore };
+        var veil = new ColorRect { Color = new Color(0.03f, 0.03f, 0.1f, 0.94f), MouseFilter = MouseFilterEnum.Ignore };
         veil.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
         AddChild(veil);
         var center = new CenterContainer();

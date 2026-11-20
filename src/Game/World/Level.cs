@@ -146,6 +146,7 @@ public partial class Level : Control
             Hunter.HuntService.AddSeconds(delta);
         }
 
+        CombatHud.Visible = Hunt.BlessingScreen.Active is null;
         UpdateReading(dt);
         UpdateStory();
         if (_noticeTimer > 0f && (_noticeTimer -= dt) <= 0f && _reading is null)
