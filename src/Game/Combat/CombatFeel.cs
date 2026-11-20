@@ -1,5 +1,6 @@
 using System;
 using Godot;
+using Vespera.Core.Net;
 using Vespera.Game.Boot;
 using Vespera.Game.World;
 
@@ -34,6 +35,20 @@ public partial class CombatFeel : Node
     public event Action<string>? ToastRequested;
 
     public static bool ReduceFlashes => GameSettings.Current.ReduceFlashes;
+
+    /// <summary>
+    /// Online (host): cada efeito de combate nasce aqui e o <c>NetSession</c> o manda ao convidado, que só toca o efeito.
+    /// Sem ouvinte (jogo normal, sem hospedar) não custa nada.
+    /// </summary>
+    public static event Action<NetEffect>? EffectEmitted;
+
+    /// <summary>Rastro do corte (o <c>SlashTrail</c> nasce em <c>WeaponMoves</c>; o convidado desenha o mesmo).</summary>
+    public static void EmitSlash(Vector2 origin, Vector2 dir, float radius, float arc, float thickness, int tier) =>
+        EffectEmitted?.Invoke(new NetEffect(NetEffectKind.Slash, origin.X, origin.Y, dir.Angle(), Mathf.Clamp(radius, 1f, 5000f), Mathf.Clamp(arc, 0.6f, 2.9f),
+            Mathf.Clamp(thickness, 0f, 5000f), N: Math.Clamp(tier, 1, NetEffect.MaxTier)));
+
+    private static (byte R, byte G, byte B) Rgb(Color c) =>
+        ((byte)Mathf.Clamp(Mathf.RoundToInt(c.R * 255f), 0, 255), (byte)Mathf.Clamp(Mathf.RoundToInt(c.G * 255f), 0, 255), (byte)Mathf.Clamp(Mathf.RoundToInt(c.B * 255f), 0, 255));
 
     public override void _Ready() => ProcessMode = ProcessModeEnum.Always;
 
@@ -75,15 +90,39 @@ public partial class CombatFeel : Node
         _slowUntil = Time.GetTicksMsec() + (ulong)(seconds * 1000);
     }
 
-    public void Shake(float trauma) => Camera?.AddTrauma(trauma);
+    public void Shake(float trauma)
+    {
+        if (trauma > 0f)
+        {
+            EffectEmitted?.Invoke(new NetEffect(NetEffectKind.Shake, A: Mathf.Min(trauma, 2f)));
+        }
 
-    public void Number(Vector2 world, string text, Color color, float size = 1f) => NumberRequested?.Invoke(world, text, color, size);
+        Camera?.AddTrauma(trauma);
+    }
+
+    public void Number(Vector2 world, string text, Color color, float size = 1f)
+    {
+        if (EffectEmitted is { } emit && text.Length > 0)
+        {
+            var (r, g, b) = Rgb(color);
+            emit(new NetEffect(NetEffectKind.Number, world.X, world.Y, Mathf.Clamp(size, 0f, 10f), R: r, G: g, Blue: b, Text: text));
+        }
+
+        NumberRequested?.Invoke(world, text, color, size);
+    }
 
     public void Toast(string text) => ToastRequested?.Invoke(text);
 
     /// <summary>Estouro de faíscas: <paramref name="amount"/> pontos que saem em leque de <paramref name="dir"/>.</summary>
     public void Spark(Vector2 at, Color color, int amount, float speed, Vector2 dir = default, float spread = 180f)
     {
+        if (EffectEmitted is { } emit)
+        {
+            var (r, g, b) = Rgb(color);
+            emit(new NetEffect(NetEffectKind.Spark, at.X, at.Y, Mathf.Clamp(speed, 0f, 5000f), (dir == Vector2.Zero ? Vector2.Up : dir).Angle(),
+                Mathf.Clamp(spread, 0f, 360f), 0f, r, g, b, Math.Clamp(amount, 1, NetEffect.MaxSparks)));
+        }
+
         var s = ActorScale;
         var particles = new CpuParticles2D
         {
@@ -113,6 +152,12 @@ public partial class CombatFeel : Node
     /// <summary>Anel que se expande no chão (pouso do Guardião, onda do Martelo).</summary>
     public void Ring(Vector2 at, float radius, Color color, float seconds = 0.35f, float width = 6f)
     {
+        if (EffectEmitted is { } emit)
+        {
+            var (r, g, b) = Rgb(color);
+            emit(new NetEffect(NetEffectKind.Ring, at.X, at.Y, Mathf.Clamp(radius, 0f, 5000f), Mathf.Clamp(seconds, 0.05f, 5f), Mathf.Clamp(width, 0f, 100f), 0f, r, g, b));
+        }
+
         var ring = new ImpactRing(radius, color, seconds, width * ActorScale) { Position = at };
         FxLayer.AddChild(ring);
     }

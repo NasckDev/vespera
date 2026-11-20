@@ -36,6 +36,7 @@ public partial class LevelWorld : Node2D
     private readonly List<Npc> _npcs = [];
     private readonly List<Breakable> _breakables = [];
     private readonly List<Player> _players = [];
+    private readonly List<Arrow> _projectiles = [];
     private Node2D _groundFx = null!;
     private Node2D _fx = null!;
 
@@ -200,8 +201,13 @@ public partial class LevelWorld : Node2D
     public void AddProjectile(Arrow arrow)
     {
         arrow.World = this;
+        _projectiles.Add(arrow);
+        arrow.TreeExited += () => _projectiles.Remove(arrow);
         _fx.AddChild(arrow);
     }
+
+    /// <summary>Flechas em voo (o online manda a posição delas ao convidado).</summary>
+    public IReadOnlyList<Arrow> Projectiles => _projectiles;
 
     /// <summary>Espalha <paramref name="count"/> Fragmentos em volta do ponto (cada um vale 1); no co-op só o dono os recolhe.</summary>
     public void DropFragments(Vector2 at, int count, float spread = 60f, int owner = 0)
@@ -384,17 +390,21 @@ public partial class LevelWorld : Node2D
     }
 
     /// <summary>Textura do chão: a primeira variante cujas condições de história valem, senão a do JSON.</summary>
-    private string GroundTexture()
+    private string GroundTexture() => GroundVariantIndex() is var index and >= 0 ? _data.Ground.Variants[index].Texture : _data.Ground.Texture;
+
+    /// <summary>Índice da variante do chão em vigor (a primeira cujas condições valem), ou -1 para o chão padrão do JSON.</summary>
+    public int GroundVariantIndex()
     {
-        foreach (var variant in _data.Ground.Variants)
+        for (var i = 0; i < _data.Ground.Variants.Count; i++)
         {
+            var variant = _data.Ground.Variants[i];
             if (variant.Texture.Length > 0 && Vespera.Core.Story.StoryConditions.Evaluate(variant.Conditions, Story.StoryService.Engine))
             {
-                return variant.Texture;
+                return i;
             }
         }
 
-        return _data.Ground.Texture;
+        return -1;
     }
 
     private Rect2 WalkableBounds()
