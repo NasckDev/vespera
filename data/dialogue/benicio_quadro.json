@@ -47,6 +47,13 @@
           "next": "m2"
         },
         {
+          "text": "Por que deu o badalo ao Severo?",
+          "if": [
+            "ato7_badalo"
+          ],
+          "next": "m3"
+        },
+        {
           "text": "Até mais.",
           "next": "tchau"
         }
@@ -80,6 +87,11 @@
     "tchau": {
       "speaker": "benicio",
       "text": "Vai. A véspera não espera."
+    },
+    "m3": {
+      "speaker": "benicio",
+      "text": "Eu passei o badalo pro Severo porque, se fosse eu de novo, eu não puxava.",
+      "next": "hub"
     }
   }
 }

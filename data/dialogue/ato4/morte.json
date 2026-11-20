@@ -55,7 +55,17 @@
       "set": [
         "morte_cem_1"
       ],
-      "next": "m1_2"
+      "next": "m1_2",
+      "branches": [
+        {
+          "if": [
+            "!vigia_p2_sim",
+            "!vigia_p2_naosei",
+            "!vigia_p2_nao"
+          ],
+          "node": "m1_2d"
+        }
+      ]
     },
     "m1_2": {
       "speaker": "vigia",
@@ -113,6 +123,10 @@
       "set": [
         "morte_cem_6"
       ]
+    },
+    "m1_2d": {
+      "speaker": "vigia",
+      "text": "Pergunta dois fica pra próxima."
     }
   }
 }

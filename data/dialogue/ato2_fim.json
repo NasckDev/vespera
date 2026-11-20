@@ -1,6 +1,6 @@
 {
   "id": "ato2_fim",
-  "_doc": "Fecho do Ato II na Praça (falas principais 8, 9 e 10 exatas). O selo só queima se a progressão já deu o C.",
+  "_doc": "Fecho do Ato II na Praça (falas principais 8, 9 e 10 exatas). O selo só queima se a progressão já deu o C. Sem o C, só o Benício fala, uma vez ('ato2_fim_falta_c'); com o C, a cena inteira toca uma vez ('ato2_fim_done').",
   "entries": [
     {
       "if": [
@@ -27,7 +27,9 @@
       "speaker": "benicio",
       "look": "benicio",
       "text": "A Macieira caiu. Falta pouco para o C: volta ao Pomar e caça mais um pouco.",
-      "next": "r1"
+      "set": [
+        "ato2_fim_falta_c"
+      ]
     },
     "r1": {
       "speaker": "ravi",

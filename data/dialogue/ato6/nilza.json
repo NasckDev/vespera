@@ -8,7 +8,13 @@
       "node": "h1"
     },
     {
+      "if": [
+        "pescou"
+      ],
       "node": "a1"
+    },
+    {
+      "node": "a1n"
     }
   ],
   "nodes": {
@@ -66,6 +72,20 @@
       "text": "Eu vou aceitar o que der.",
       "expression": 2,
       "next": "h1"
+    },
+    "a1n": {
+      "speaker": "nilza",
+      "text": "Minha mãe fazia isso. Eu não lembrava a receita.",
+      "look": "nilza",
+      "set": [
+        "ato6_sopa"
+      ],
+      "next": "a2n"
+    },
+    "a2n": {
+      "speaker": "nilza",
+      "text": "Lembrei de repente, mexendo a panela.",
+      "next": "a3"
     }
   }
 }

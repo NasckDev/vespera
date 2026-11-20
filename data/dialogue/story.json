@@ -795,7 +795,8 @@
       "npc": "benicio",
       "if": [
         "act2_done",
-        "!ato2_fim_done"
+        "!ato2_fim_done",
+        "rank>=C|!ato2_fim_falta_c"
       ]
     },
     {
@@ -1324,6 +1325,32 @@
     },
     {
       "level": "cemiterio",
+      "dialogue": "ato4/vigia",
+      "npc": "vigia",
+      "if": [
+        "noite",
+        "met_vigia",
+        "ato5_confissao",
+        "!vigia_perguntou_hoje",
+        "!vigia_p3_toco",
+        "!vigia_p3_naosei"
+      ]
+    },
+    {
+      "level": "cemiterio",
+      "dialogue": "ato4/vigia",
+      "npc": "vigia",
+      "if": [
+        "noite",
+        "met_vigia",
+        "act5_done",
+        "!vigia_perguntou_hoje",
+        "!vigia_p4_fechava",
+        "!vigia_p4_nao"
+      ]
+    },
+    {
+      "level": "cemiterio",
       "dialogue": "ato7/vigia",
       "npc": "vigia",
       "if": [
@@ -1477,6 +1504,22 @@
         "ato5_confissao"
       ],
       "text": "Por que o sino emudeceu? Foi o Benício que tocou."
+    },
+    {
+      "if": [
+        "ato5_confissao",
+        "!vigia_p3_toco",
+        "!vigia_p3_naosei"
+      ],
+      "text": "Qual é a pergunta três do Vigia? Espere a noite no banco do Cemitério."
+    },
+    {
+      "if": [
+        "act5_done",
+        "!vigia_p4_fechava",
+        "!vigia_p4_nao"
+      ],
+      "text": "Qual é a pergunta quatro do Vigia? Espere a noite no banco do Cemitério."
     },
     {
       "if": [

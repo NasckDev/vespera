@@ -11,6 +11,14 @@
     {
       "if": [
         "ato6_morte_5",
+        "!morte_ruas_5",
+        "vigia_p4_fechava|vigia_p4_nao"
+      ],
+      "node": "m5b"
+    },
+    {
+      "if": [
+        "ato6_morte_5",
         "!morte_ruas_5"
       ],
       "node": "m5"
@@ -102,6 +110,13 @@
       "text": "Caiu com selo SS. A Ordem não tem página pra isso. Eu fiz uma.",
       "set": [
         "morte_ruas_6"
+      ]
+    },
+    "m5b": {
+      "speaker": "vigia",
+      "text": "Pergunta quatro você já respondeu. Eu guardei.",
+      "set": [
+        "morte_ruas_5"
       ]
     }
   }

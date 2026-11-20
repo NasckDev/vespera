@@ -46,6 +46,20 @@
       "text": "Cada vez que cai, ele acende uma a mais. Para de cair.",
       "set": [
         "morte_final_1"
+      ],
+      "branches": [
+        {
+          "if": [
+            "vigia_p5_volto"
+          ],
+          "node": "m1v"
+        },
+        {
+          "if": [
+            "vigia_p5_fico"
+          ],
+          "node": "m1f"
+        }
       ]
     },
     "m2": {
@@ -75,6 +89,14 @@
       "set": [
         "morte_final_5"
       ]
+    },
+    "m1v": {
+      "speaker": "vigia",
+      "text": "Você me disse que voltava. Eu anotei."
+    },
+    "m1f": {
+      "speaker": "vigia",
+      "text": "Você me disse que ficava. Eu anotei também."
     }
   }
 }

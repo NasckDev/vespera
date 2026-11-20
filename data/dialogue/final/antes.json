@@ -25,9 +25,25 @@
         {
           "text": "Mãe do Ravi",
           "if": [
-            "met_mae_ravi"
+            "met_mae_ravi",
+            "ravi_rota_b"
           ],
           "next": "m"
+        },
+        {
+          "text": "Mãe do Ravi",
+          "if": [
+            "met_mae_ravi",
+            "!ravi_rota_b"
+          ],
+          "next": "ma"
+        },
+        {
+          "text": "Ravi",
+          "if": [
+            "ravi_rota_a"
+          ],
+          "next": "ra"
         },
         {
           "text": "Entrar.",
@@ -61,6 +77,22 @@
       "events": [
         "EnterBreach:primeira_brecha"
       ]
+    },
+    "ma": {
+      "speaker": "mae_ravi",
+      "text": "Ele falava de você todo dia. Agora fala de você e da sopa.",
+      "next": "a"
+    },
+    "ra": {
+      "speaker": "ravi",
+      "text": "Eu disse que ia junto, e vou: até a porta.",
+      "expression": 2,
+      "next": "ra2"
+    },
+    "ra2": {
+      "speaker": "ravi",
+      "text": "Dali pra frente é você.",
+      "next": "a"
     }
   }
 }

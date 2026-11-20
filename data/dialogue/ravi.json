@@ -10,9 +10,17 @@
     },
     {
       "if": [
-        "ato1_fim_done"
+        "ato1_fim_done",
+        "!ravi_viu_selo",
+        "rank==D"
       ],
       "node": "rg1"
+    },
+    {
+      "if": [
+        "ravi_rota_b"
+      ],
+      "node": "hubb"
     },
     {
       "if": [
@@ -90,11 +98,28 @@
       "speaker": "ravi",
       "expression": 2,
       "text": "Selo D! E eu aqui no E.",
-      "next": "hub"
+      "next": "hub",
+      "set": [
+        "ravi_viu_selo"
+      ]
     },
     "hub": {
       "speaker": "ravi",
       "text": "A aposta continua. Vai caçar.",
+      "choices": [
+        {
+          "text": "Perguntar mais",
+          "next": "rm1"
+        },
+        {
+          "text": "Até mais.",
+          "next": ""
+        }
+      ]
+    },
+    "hubb": {
+      "speaker": "ravi",
+      "text": "Aposta eu não faço mais. Eu espero aqui.",
       "choices": [
         {
           "text": "Perguntar mais",

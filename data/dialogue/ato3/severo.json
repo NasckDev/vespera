@@ -3,6 +3,13 @@
   "entries": [
     {
       "if": [
+        "ato5_confissao",
+        "!severo_nao_foi_farol"
+      ],
+      "node": "f1"
+    },
+    {
+      "if": [
         "severo_viu_lanterna"
       ],
       "node": "h1"
@@ -125,6 +132,13 @@
       "text": "Eu fui pra festa.",
       "expression": 2,
       "objective": "ato3_odete"
+    },
+    "f1": {
+      "speaker": "severo",
+      "text": "Então não foi o farol.",
+      "set": [
+        "severo_nao_foi_farol"
+      ]
     }
   }
 }

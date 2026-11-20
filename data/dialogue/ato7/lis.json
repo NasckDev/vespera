@@ -3,12 +3,6 @@
   "entries": [
     {
       "if": [
-        "ato7_lis_noite"
-      ],
-      "node": "c"
-    },
-    {
-      "if": [
         "ato7_vespera_final"
       ],
       "node": "b1"
@@ -62,10 +56,6 @@
       "set": [
         "act7_done"
       ]
-    },
-    "c": {
-      "speaker": "lis",
-      "text": "Eu lembro do som. Juro."
     }
   }
 }
