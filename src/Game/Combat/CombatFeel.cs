@@ -7,7 +7,7 @@ using Vespera.Game.World;
 namespace Vespera.Game.Combat;
 
 /// <summary>
-/// "Peso" do combate de uma sala (PLANO-V2 §2): pausa no impacto (escala de tempo global por alguns ms reais),
+/// "Peso" do combate de uma sala (PLANO-V2 §2): pausa no impacto (escala de tempo global por alguns ms de relógio),
 /// tremor de câmera (respeita a opção de tremor), faíscas, anéis de impacto e pedidos de número de dano para a
 /// camada de interface. Um por <see cref="LevelWorld"/>.
 /// </summary>
@@ -16,6 +16,9 @@ public partial class CombatFeel : Node
     private const float StopScale = 0.04f;
 
     private static GradientTexture2D? _dot;
+    // Relógio em ticks de física (60 por segundo de relógio, 1 por quadro com --fixed-fps), não Time.GetTicksMsec: o bot roda
+    // com --fixed-fps e o runner do CI renderiza ~3x mais quadros por segundo que um PC; com milissegundos reais a mesma
+    // pausa de impacto virava 3x mais quadros de jogo quase parado e o bot batia muito menos por quadro (Guardiões "presos").
     private ulong _stopUntil;
     private ulong _slowUntil;
     private float _slowScale = 1f;
@@ -56,7 +59,7 @@ public partial class CombatFeel : Node
 
     public override void _Process(double delta)
     {
-        var now = Time.GetTicksMsec();
+        var now = Engine.GetPhysicsFrames();
         if (_stopUntil > 0 && now >= _stopUntil)
         {
             _stopUntil = 0;
@@ -71,7 +74,7 @@ public partial class CombatFeel : Node
         Engine.TimeScale = _stopUntil > 0 ? StopScale : _slowScale;
     }
 
-    /// <summary>Congela o jogo por <paramref name="seconds"/> de tempo real (0,04-0,12 s).</summary>
+    /// <summary>Congela o jogo por <paramref name="seconds"/> de relógio (0,04-0,12 s), contados em ticks de física.</summary>
     public void HitStop(double seconds)
     {
         if (seconds <= 0)
@@ -79,7 +82,7 @@ public partial class CombatFeel : Node
             return;
         }
 
-        _stopUntil = Math.Max(_stopUntil, Time.GetTicksMsec() + (ulong)(seconds * 1000));
+        _stopUntil = Math.Max(_stopUntil, Engine.GetPhysicsFrames() + TicksFor(seconds));
         Engine.TimeScale = StopScale;
     }
 
@@ -87,8 +90,14 @@ public partial class CombatFeel : Node
     public void SlowMotion(float scale, double seconds)
     {
         _slowScale = scale;
-        _slowUntil = Time.GetTicksMsec() + (ulong)(seconds * 1000);
+        _slowUntil = Engine.GetPhysicsFrames() + TicksFor(seconds);
     }
+
+    /// <summary>Segundos de relógio em ticks de física (ao menos um, para a pausa nunca ser pulada).</summary>
+    public static ulong TicksFor(double seconds) => Math.Max(1UL, (ulong)Math.Ceiling(seconds * Engine.PhysicsTicksPerSecond));
+
+    /// <summary>Verdadeiro enquanto a pausa de impacto ou a câmera lenta estão valendo (usado pelo smoke para provar a duração).</summary>
+    public bool Slowed => _stopUntil > 0 || _slowUntil > 0;
 
     public void Shake(float trauma)
     {
