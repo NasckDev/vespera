@@ -32,6 +32,7 @@ public partial class SmokeTest
         }
 
         await CheckInteractions(level);
+        await CheckHitStopIsFrameBased(level);
         if (Array.IndexOf(_args, BotFlag) >= 0)
         {
             level.World.SetNpcsActive(false);
