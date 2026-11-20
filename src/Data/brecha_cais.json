@@ -53,7 +53,7 @@
     },
     "farol_afogado": {
       "name": "FAROL AFOGADO",
-      "hp": 1500,
+      "hp": 4050,
       "damage": 22,
       "speed": 45,
       "xp": 120,

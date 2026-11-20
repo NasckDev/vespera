@@ -144,6 +144,7 @@ public partial class Level : Control
         if (RiftSession.InRift && !_switching)
         {
             Hunter.HuntService.AddSeconds(delta);
+            ExamRun.OnTick(CombatHud.Toast);
         }
 
         CombatHud.Visible = Hunt.BlessingScreen.Active is null;

@@ -35,6 +35,11 @@ public sealed partial class CombatBot
     private int _potionsDrunk;
     private int _potionCooldown;
     private int _kills;
+    private int _ultimates;
+    private bool _ultimateWasActive;
+
+    /// <summary>Golpes Supremos que dispararam de verdade durante as caçadas deste bot.</summary>
+    public int UltimatesCast => _ultimates;
 
     /// <summary>Chance de esquivar de um aviso (0 = nunca, 1 = sempre). Um jogador novo razoável fica perto de 0,5.</summary>
     public double DodgeSkill { get; init; } = 0.5;
@@ -122,7 +127,9 @@ public sealed partial class CombatBot
         var bow = World.Player.Hunter == HunterClass.Arco;
         var room = World.Data.Id;
         var idle = 0;
-        while (!director.Cleared && frames++ < RoomFrameLimit && !World.Player.Combat.IsDead)
+        var limit = director.Guardian is null ? RoomFrameLimit : GuardianRoomFrameLimit;
+        var duel = director.Guardian is null ? null : DuelGear.Equip(World.Player.Combat);
+        while (!director.Cleared && frames++ < limit && !World.Player.Combat.IsDead)
         {
             if (RankUpScreen.Active is not null || host.GetTree().Paused)
             {
@@ -175,6 +182,7 @@ public sealed partial class CombatBot
                 stuck = 0;
             }
 
+            TrackAndUseUltimate();
             var inReach = bow ? distance < 6f * human : distance < (AttackReach + aimRadius) * S * 1.6f;
             _input.Move = distance > keep ? to.Normalized() : bow && distance < keep * 0.7f ? -to.Normalized() : Vector2.Zero;
             if (inReach && frames % 8 == 0)
@@ -189,6 +197,7 @@ public sealed partial class CombatBot
         }
 
         _input.Move = Vector2.Zero;
+        duel?.Restore();
         if (!World.Player.Combat.IsDead)
         {
             if (!director.Cleared)
@@ -196,7 +205,24 @@ public sealed partial class CombatBot
                 Log.Info($"bot: sala {index + 1} ({room}) presa; {director.Describe()}{DescribeVelora(director)}");
             }
 
-            Check(director.Cleared, $"sala {index + 1} ({room}) não ficou limpa em {RoomFrameLimit / 60} s");
+            Check(director.Cleared, $"sala {index + 1} ({room}) não ficou limpa em {limit / 60} s");
+        }
+    }
+
+    /// <summary>Golpe Supremo (issue #80): o bot o solta quando está pronto e conta quantas vezes ele de fato disparou (fora da medição de duelo).</summary>
+    private void TrackAndUseUltimate()
+    {
+        var combat = World.Player.Combat;
+        var active = combat.Moves.UltimateActive;
+        if (active && !_ultimateWasActive)
+        {
+            _ultimates++;
+        }
+
+        _ultimateWasActive = active;
+        if (!RiftSession.BossDuel && !active && combat.UltimateCooldownFraction <= 0f)
+        {
+            _input.Tap(InputActions.Supremo);
         }
     }
 

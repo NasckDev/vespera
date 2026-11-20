@@ -39,6 +39,7 @@ public partial class Level
     {
         RiftSession.Hunter = hunter;
         var recovered = RiftSession.BeginRun();
+        ExamRun.Begin(CombatHud.Toast);
         _carriedHp = null;
         _ = EnterFirstRoom(recovered);
     }

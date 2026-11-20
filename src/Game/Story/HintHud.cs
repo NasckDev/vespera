@@ -60,6 +60,7 @@ public partial class HintHud : Control
         new("heavy", InputActions.Heavy, k => $"Segure {k}: golpe forte (mais lento, bate mais)", () => RiftSession.InRift && RiftSession.RoomIndex >= 1 && AnyEnemy(), 1),
         new("potion", InputActions.Potion, k => $"{k}: beber poção (cura vida)", LowHpWithPotion, 1),
         new("eco2", InputActions.Skill2, k => $"{k}: segundo Eco ({SecondEcoName()}). Cada Eco recarrega sozinho", () => SecondEcoName().Length > 0 && RiftSession.InRift, 1),
+        new("supremo", InputActions.Supremo, k => $"{k}: Golpe Supremo da sua arma (recarrega devagar; usa quando a luta apertar)", () => RiftSession.InRift && RiftSession.RoomIndex >= 1 && AnyEnemy(), 1),
         new("eco", InputActions.Skill, k => $"{k}: Eco Viscoso (avanço com rastro de lodo)", () => HuntService.HasEcoViscoso, 1),
     ];
 

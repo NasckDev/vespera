@@ -26,6 +26,20 @@ public class BlessingsTest
     }
 
     [TestCase]
+    public void UltimateBlessingsExistAndAreSummed()
+    {
+        var supreme = Catalog.Blessings.Single(x => x.Id == "brasa_suprema");
+        var thirst = Catalog.Blessings.Single(x => x.Id == "sede_de_vespera");
+        AssertThat(supreme.UltDamagePct).IsGreater(0);
+        AssertThat(supreme.UltCooldownPct).IsGreater(0);
+        AssertThat(thirst.UltKillSeconds).IsGreater(0);
+
+        var total = supreme.Plus(thirst);
+        AssertThat(total.UltDamagePct).IsEqual(supreme.UltDamagePct);
+        AssertThat(total.UltKillSeconds).IsEqual(thirst.UltKillSeconds);
+    }
+
+    [TestCase]
     public void EveryBlessingHasATextAndAtLeastOneEffect()
     {
         foreach (var b in Catalog.Blessings)
@@ -33,7 +47,8 @@ public class BlessingsTest
             AssertThat(b.Text.Length).IsGreaterEqual(10);
             var effect = b.DamagePct != 0 || b.CritPct != 0 || b.PartPct != 0 || b.DodgeDistancePct != 0 || b.DodgeInvulnerable != 0
                 || b.DodgeCostPct != 0 || b.HurtInvulnerable != 0 || b.MaxHp != 0 || b.HealOnClearPct != 0 || b.HealOnKill != 0
-                || b.PotionPct != 0 || b.FragmentPct != 0 || b.LumesPerBreakable != 0 || b.SpeedPct != 0 || b.LowHpDamagePct != 0;
+                || b.PotionPct != 0 || b.FragmentPct != 0 || b.LumesPerBreakable != 0 || b.SpeedPct != 0 || b.LowHpDamagePct != 0
+                || b.UltDamagePct != 0 || b.UltCooldownPct != 0 || b.UltKillSeconds != 0;
             AssertThat(effect).IsTrue();
         }
     }

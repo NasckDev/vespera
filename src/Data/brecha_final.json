@@ -16,7 +16,7 @@
   "monsters": {
     "reflexo": {
       "name": "O REFLEXO",
-      "hp": 2000,
+      "hp": 38000,
       "damage": 22,
       "speed": 150,
       "xp": 600,

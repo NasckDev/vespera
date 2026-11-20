@@ -20,7 +20,8 @@ namespace Vespera.Game.Testing;
 public partial class SmokeTest
 {
     public const string FinalFlag = "--final";
-    private const int FightFrameLimit = 60 * 180;
+    /// <summary>Limite da luta do Reflexo: 7 min. Com o dano real (<c>--bot-duelo</c>) a luta mais longa do jogo passa de 2 min (issue #75).</summary>
+    private const int FightFrameLimit = 60 * 420;
 
     private async Task RunFinal(Level start)
     {
@@ -73,6 +74,7 @@ public partial class SmokeTest
         var keyboard = level.Player.Input;
         level.Player.Input = input;
         RiftSession.Cheat = true;
+        var gear = DuelGear.Equip(level.Player.Combat);
         var sawWarning = false;
         for (var i = 0; i < 60 * 8 && !sawWarning; i++)
         {
@@ -87,9 +89,11 @@ public partial class SmokeTest
 
         var attacks = new System.Collections.Generic.HashSet<Core.Final.ReflexoAttack>();
         var maxPhase = 1;
+        var frameSeconds = 0.0;
         for (var frame = 0; frame < FightFrameLimit && !reflexo.Dead; frame++)
         {
             attacks.Add(reflexo.CurrentAttack);
+            frameSeconds = frame / 60.0;
             maxPhase = Mathf.Max(maxPhase, reflexo.Phase);
             var to = reflexo.GlobalPosition - level.Player.GlobalPosition;
             input.Move = to.Length() > 60f * level.World.Data.ActorScale ? to.Normalized() : to.Normalized() * 0.3f;
@@ -109,6 +113,8 @@ public partial class SmokeTest
         input.Move = Vector2.Zero;
         level.Player.Input = keyboard;
         RiftSession.Cheat = false;
+        gear?.Restore();
+        Log.Info($"final: luta do Reflexo de {frameSeconds:0.0} s");
         Check(reflexo.Dead, $"o bot deveria vencer o Reflexo em {FightFrameLimit / 60} s (vida {reflexo.Hp:0}/{reflexo.MaxHp:0})");
         Log.Info($"final: Reflexo caiu na fase {maxPhase}; golpes vistos [{string.Join(",", attacks)}]; esquivas {reflexo.Dodges}");
     }

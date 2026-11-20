@@ -62,6 +62,8 @@ public sealed partial class HunterCombat : Node, IHittable
     private double _velaHealCarry;
     private int _velaCut;
     private float _slimeTimer;
+    private float _ultCooldown;
+    private float _ultTotal;
 
     public HunterCombat(Player player)
     {
@@ -134,6 +136,7 @@ public sealed partial class HunterCombat : Node, IHittable
     public override void _Ready()
     {
         _tuning = RiftSession.Brecha.Hunter;
+        _ultCooldown = (float)RiftSession.Db.UltimateData.InitialCooldown;
         _damage = new DamageCalculator(RiftSession.Db.Rules.Combat);
         _stamina = new StaminaMeter(_tuning.StaminaMax, _tuning.StaminaRegen, _tuning.StaminaRegenDelay);
         RefreshStats(fullHeal: true);
@@ -172,6 +175,7 @@ public sealed partial class HunterCombat : Node, IHittable
         }
 
         _sheltered = Mathf.Max(0f, _sheltered - dt);
+        TickUltimateCooldown(dt);
         TickVela(dt);
         TickSetEffects(dt);
         _knock = _knock.MoveToward(Vector2.Zero, 1800f * Scale * dt);
@@ -214,7 +218,12 @@ public sealed partial class HunterCombat : Node, IHittable
             DrinkPotion();
         }
 
-        var order = Moves.Tick(dt, move);
+        if (!Moves.UltimateActive && input.IsJustPressed(InputActions.Supremo))
+        {
+            TryUltimate(move);
+        }
+
+        var order = Moves.UltimateActive ? Moves.TickUltimate(dt, move) : Moves.Tick(dt, move);
         return _knock.LengthSquared() > 1f ? order with { Velocity = (order.Velocity ?? Vector2.Zero) + _knock } : order;
     }
 
@@ -229,6 +238,11 @@ public sealed partial class HunterCombat : Node, IHittable
         Hp = Math.Max(0, Hp - damage);
         Hunter.HuntService.HunterHit(damage);
         var feel = _player.Feel;
+        if (feel is not null)
+        {
+            ExamRun.OnHit(feel.Toast);
+        }
+
         feel?.Number(HitCenter, damage.ToString(), new Color("ff6b6b"), 1.1f);
         feel?.Shake(0.45f);
         feel?.HitStop(0.07);
@@ -456,6 +470,45 @@ public sealed partial class HunterCombat : Node, IHittable
             _player.Feel?.Toast("A vela apagou: o rank volta.");
         }
     }
+
+    /// <summary>Golpe Supremo da arma (tecla Supremo): recarga de ultimates.json; a primeira só depois de <c>initialCooldown</c>.</summary>
+    private bool TryUltimate(Vector2 move)
+    {
+        if (_ultCooldown > 0f || IsDead || !Moves.BeginUltimate(move))
+        {
+            return false;
+        }
+
+        RiftSession.Db.Ultimates.TryGetValue(HunterSprites.WeaponId(_player.Hunter), out var def);
+        _ultTotal = (float)((def?.Cooldown ?? 40) * Math.Max(0.3, 1 - (Hunter.HuntService.Bless.UltCooldownPct / 100)));
+        _ultCooldown = _ultTotal;
+        _player.Feel?.Toast($"Golpe Supremo: {def?.Name ?? "Supremo"}!");
+        return true;
+    }
+
+    private void TickUltimateCooldown(float dt)
+    {
+        if (_ultCooldown <= 0f)
+        {
+            return;
+        }
+
+        _ultCooldown -= dt;
+        if (_ultCooldown <= 0f && _ultTotal > 0f && _player.Slot == 0 && RiftSession.InRift)
+        {
+            var key = InputDevices.KeyName(InputActions.Supremo);
+            _player.Feel?.Toast($"Golpe Supremo pronto ({key}).");
+        }
+    }
+
+    /// <summary>Recarga do Golpe Supremo: 0 = pronto, 1 = recém-usado (HUD).</summary>
+    public float UltimateCooldownFraction => _ultCooldown <= 0f || _ultTotal <= 0f ? 0f : Mathf.Clamp(_ultCooldown / _ultTotal, 0f, 1f);
+
+    /// <summary>Bênção que encurta a recarga do Golpe Supremo a cada monstro vencido.</summary>
+    public void ShortenUltimateCooldown(float seconds) => _ultCooldown = Mathf.Max(0f, _ultCooldown - seconds);
+
+    /// <summary>Invulnerável por pelo menos <paramref name="seconds"/> (Golpe Supremo).</summary>
+    public void GrantInvulnerable(float seconds) => _invulnerable = Mathf.Max(_invulnerable, seconds);
 
     private bool TryDodge(Vector2 move)
     {

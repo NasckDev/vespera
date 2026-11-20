@@ -39,6 +39,7 @@ public partial class RoomDirector : Node
     private int _pending;
     private bool _waveOut;
     private double _bossSeconds;
+    private double _guardianSeconds;
     private string _eliteModifier = string.Empty;
     private static readonly string[] EliteModifiers = ["blindado", "veloz", "faminto", "gemeo"];
     private Interactable? _rest;
@@ -337,6 +338,11 @@ public partial class RoomDirector : Node
             _bossSeconds += dt;
         }
 
+        if (Guardian is { Dead: false } && Boss is null or { Engaged: true })
+        {
+            _guardianSeconds += dt;
+        }
+
         if (Cleared && !_exitSent && _data.Exit is { } exit)
         {
             // Qualquer caçador de pé na passagem leva o grupo inteiro para a próxima sala.
@@ -588,7 +594,8 @@ public partial class RoomDirector : Node
 
     private void OnBossDefeated()
     {
-        HuntService.GuardianFight(_bossSeconds, RiftSession.Brecha.Boss.Cores, Boss?.CoresBroken ?? 0);
+        Vespera.Game.Boot.Log.Info($"guardião {RiftSession.Brecha.GuardianId}: luta de {_guardianSeconds:0.0} s (dano do bot x{(RiftSession.Cheat ? RiftSession.CheatDamageMultiplier : 1)})");
+        HuntService.GuardianFight(Boss is null ? _guardianSeconds : _bossSeconds, RiftSession.Brecha.Boss.Cores, Boss?.CoresBroken ?? 0);
         RiftLoot.GuardianDefeated(_world, Guardian?.GlobalPosition ?? _world.Player.GlobalPosition);
         Cleared = true;
         var timer = GetTree().CreateTimer(1.4, processAlways: false);

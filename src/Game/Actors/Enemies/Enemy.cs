@@ -336,6 +336,11 @@ public abstract partial class Enemy : CharacterBody2D, IHittable
         {
             hunter.Combat.Heal(Hunter.HuntService.Bless.HealOnKill);
         }
+
+        if (Hunter.HuntService.Bless.UltKillSeconds > 0 && World.Player is { } ultHunter)
+        {
+            ultHunter.Combat.ShortenUltimateCooldown((float)Hunter.HuntService.Bless.UltKillSeconds);
+        }
         if (DropsLoot)
         {
             RiftLoot.MonsterKilled(World, MonsterId, GlobalPosition, Stats.Def.Boss, XpMult, LootRolls);

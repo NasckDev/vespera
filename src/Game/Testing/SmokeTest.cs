@@ -16,12 +16,15 @@ namespace Vespera.Game.Testing;
 public partial class SmokeTest : Node
 {
     private const string ShotsPrefix = "--shots=";
+    private const string BotDamagePrefix = "--bot-dano=";
+    private const string BossDuelFlag = "--bot-duelo";
     private const double WatchdogSeconds = 90;
     private const double BotWatchdogSeconds = 900;
     private const double ActOneWatchdogSeconds = 3600;
 
     /// <summary>Bot online: o teto de verdade é em tempo REAL (<c>SmokeTest.Online.cs</c>); este só evita o cronômetro de jogo derrubar a prova.</summary>
     private const double OnlineGameWatchdogSeconds = 86400;
+    private const double DuelWatchdogSeconds = 3600;
     private const int HelpPages = 10;
     private const double ShotSettleSeconds = 1.4;
     private const int ExitFailed = 1;
@@ -33,6 +36,8 @@ public partial class SmokeTest : Node
     private readonly string[] _args;
     private SceneRouter _router = null!;
 
+    private static bool RiftSessionDuel => Vespera.Game.World.Rift.RiftSession.BossDuel;
+
     public SmokeTest(string[] args)
     {
         _withIntro = Array.IndexOf(args, Boot.Boot.WithIntroFlag) >= 0;
@@ -40,6 +45,16 @@ public partial class SmokeTest : Node
         ConfigureStory();
         foreach (var arg in args)
         {
+            if (arg == BossDuelFlag)
+            {
+                Vespera.Game.World.Rift.RiftSession.BossDuel = true;
+            }
+
+            if (arg.StartsWith(BotDamagePrefix, StringComparison.Ordinal) && int.TryParse(arg[BotDamagePrefix.Length..], out var mult) && mult >= 1)
+            {
+                Vespera.Game.World.Rift.RiftSession.CheatDamageMultiplier = mult;
+            }
+
             if (arg.StartsWith(ShotsPrefix, StringComparison.Ordinal))
             {
                 _shotsDir = arg[ShotsPrefix.Length..];
@@ -50,7 +65,7 @@ public partial class SmokeTest : Node
     public override void _Ready()
     {
         _router = SceneRouter.Instance;
-        var watchdog = GetTree().CreateTimer(Array.IndexOf(_args, BotFlag) >= 0 || Array.IndexOf(_args, QaFlag) >= 0 || Array.IndexOf(_args, CombatBotFlag) >= 0 || Array.IndexOf(_args, CombatQaFlag) >= 0 || Array.IndexOf(_args, ScaleFlag) >= 0 || Array.IndexOf(_args, StoryFlag) >= 0 || Array.IndexOf(_args, CameraFlag) >= 0 || Array.IndexOf(_args, ClicksFlag) >= 0 || Array.IndexOf(_args, Ato45Flag) >= 0 || Array.IndexOf(_args, HortaFlag) >= 0 || Array.IndexOf(_args, FinalFlag) >= 0 || Array.IndexOf(_args, Atos67Flag) >= 0 || Array.IndexOf(_args, CoopBotFlag) >= 0 || Array.IndexOf(_args, VisualQaFlag) >= 0 ? BotWatchdogSeconds
+        var watchdog = GetTree().CreateTimer(Array.IndexOf(_args, BotFlag) >= 0 || Array.IndexOf(_args, QaFlag) >= 0 || Array.IndexOf(_args, CombatBotFlag) >= 0 || Array.IndexOf(_args, CombatQaFlag) >= 0 || Array.IndexOf(_args, ScaleFlag) >= 0 || Array.IndexOf(_args, StoryFlag) >= 0 || Array.IndexOf(_args, CameraFlag) >= 0 || Array.IndexOf(_args, ClicksFlag) >= 0 || Array.IndexOf(_args, Ato45Flag) >= 0 || Array.IndexOf(_args, HortaFlag) >= 0 || Array.IndexOf(_args, FinalFlag) >= 0 || Array.IndexOf(_args, Atos67Flag) >= 0 || Array.IndexOf(_args, CoopBotFlag) >= 0 || Array.IndexOf(_args, VisualQaFlag) >= 0 ? (RiftSessionDuel ? DuelWatchdogSeconds : BotWatchdogSeconds)
             : IsOnlineBot ? OnlineGameWatchdogSeconds
             : Array.IndexOf(_args, ActOneFlag) >= 0 ? ActOneWatchdogSeconds : WatchdogSeconds);
         watchdog.Timeout += () =>
