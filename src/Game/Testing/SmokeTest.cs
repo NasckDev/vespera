@@ -170,6 +170,7 @@ public partial class SmokeTest : Node
             await OpenFromTitle("Controles");
             await Shot($"03b_controles_texto_{size}");
             await CloseWithEscape("Controles");
+            await VisitHelpControlsAt(size);
         }
 
         await ToggleLargeText();
@@ -243,9 +244,14 @@ public partial class SmokeTest : Node
         for (var page = 1; page <= HelpPages; page++)
         {
             await Shot($"05_ajuda_{page}");
-            if (_router.Current is HelpScreen help)
+            // A Ajuda abre como sobreposição: o _router.Current continua sendo o título.
+            if (FindInTree<HelpScreen>(GetTree().Root) is { } help)
             {
                 CheckHelpPage(help, page);
+            }
+            else
+            {
+                Check(false, $"ajuda página {page}: tela da Ajuda não encontrada");
             }
 
             await Tap(Key.Enter);
@@ -263,7 +269,7 @@ public partial class SmokeTest : Node
             return;
         }
 
-        foreach (var label in new[] { "Lanterna", "Inventário", "Diário", "Pausa", "Beber poção", "Eco 2" })
+        foreach (var label in new[] { "Lanterna", "Inventário", "Diário", "Pausa", "Beber poção", "Eco 2", "Golpe Supremo" })
         {
             Check(help.BodyText.Contains(label, StringComparison.Ordinal), $"ajuda (controles): falta '{label}'");
         }

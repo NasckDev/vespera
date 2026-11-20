@@ -72,4 +72,71 @@ public partial class SmokeTest
         var blessings = HuntService.BlessingCatalog.Blessings.Take(8).Select(b => b.Id).ToList();
         return new RunSummary(report, contracts, status, status, 12, true, new CharacterLine("Ravi", "Você demorou, mas trouxe o bastante para a semana inteira, e isso conta."), 3, 2, blessings);
     }
+
+    /// <summary>Página de controles da Ajuda (3ª) no tamanho de texto <paramref name="size"/>: toda linha, inclusive o Golpe Supremo, acima dos botões e dentro da tela.</summary>
+    private async Task VisitHelpControlsAt(int size)
+    {
+        await OpenFromTitle("Ajuda");
+        await Tap(Key.Enter);
+        await Tap(Key.Enter);
+        await Frames(4);
+        await Shot($"05b_ajuda_controles_texto_{size}");
+        var where = $"ajuda (controles, texto {size})";
+        var help = FindInTree<HelpScreen>(GetTree().Root);
+        var next = help is null ? null : FindInTree<Button>(help, b => b.Text == "Próxima");
+        if (help is null || next is null)
+        {
+            Check(false, $"{where}: tela ou botão 'Próxima' não encontrado");
+        }
+        else
+        {
+            Check(help.BodyText.Contains("Golpe Supremo", System.StringComparison.Ordinal), $"{where}: falta 'Golpe Supremo'");
+            var view = GetTree().Root.GetVisibleRect();
+            var lowest = 0f;
+            var stack = new Stack<Node>();
+            stack.Push(help);
+            while (stack.Count > 0)
+            {
+                var node = stack.Pop();
+                if (node is Label { Text.Length: > 0 } label && label.IsVisibleInTree())
+                {
+                    var rect = new Rect2(label.GlobalPosition, label.Size);
+                    lowest = Mathf.Max(lowest, rect.End.Y);
+                    Check(view.Encloses(rect) && rect.End.Y <= next.GlobalPosition.Y, $"{where}: '{label.Text}' {rect} cortado (tela {view}, botões em y {next.GlobalPosition.Y})");
+                }
+
+                foreach (var child in node.GetChildren())
+                {
+                    stack.Push(child);
+                }
+            }
+
+            Log.Info($"{where}: texto vai até y {lowest:0}, botões em y {next.GlobalPosition.Y:0}, tela {view.Size.Y:0}");
+        }
+
+        await CloseWithEscape("Ajuda");
+    }
+
+    /// <summary>Primeiro nó do tipo <typeparamref name="T"/> sob <paramref name="root"/> (inclusive sobreposições, que não são o <c>_router.Current</c>).</summary>
+    private static T? FindInTree<T>(Node root, System.Func<T, bool>? match = null)
+        where T : Node
+    {
+        var stack = new Stack<Node>();
+        stack.Push(root);
+        while (stack.Count > 0)
+        {
+            var node = stack.Pop();
+            if (node is T found && (match is null || match(found)))
+            {
+                return found;
+            }
+
+            foreach (var child in node.GetChildren())
+            {
+                stack.Push(child);
+            }
+        }
+
+        return null;
+    }
 }
