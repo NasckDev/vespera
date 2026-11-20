@@ -13,7 +13,7 @@ namespace Vespera.Game.Combat;
 /// e com que peso. A base cuida da animação de ataque, da mira (com leve ajuda para o alvo à frente), do avanço no
 /// golpe e de resolver o acerto com pausa, tremor, faíscas e som.
 /// </summary>
-public abstract class WeaponMoves
+public abstract partial class WeaponMoves
 {
     private const float AssistAngle = 0.9f;
     private const float AssistReach = 1.4f;
@@ -28,12 +28,16 @@ public abstract class WeaponMoves
     protected WeaponMoves(HunterCombat combat, string weaponId)
     {
         C = combat;
+        WeaponId = weaponId;
         Set = RiftSession.Brecha.Moves[weaponId];
         var tuning = RiftSession.Brecha.Hunter;
         Combo = new ComboChain(Set.Light.Count, tuning.ComboBuffer, tuning.ComboWindow);
     }
 
     protected HunterCombat C { get; }
+
+    /// <summary>Id da arma (= id da classe: sword, bow, hammer).</summary>
+    protected string WeaponId { get; }
 
     protected MoveSet Set { get; }
 
@@ -101,6 +105,7 @@ public abstract class WeaponMoves
 
     public virtual void Cancel()
     {
+        EndUltimate();
         CurrentAnim = null;
         Combo.Reset();
         _lunge = 0f;
@@ -172,7 +177,7 @@ public abstract class WeaponMoves
     protected Vector2 Chest => P.GlobalPosition - new Vector2(0, ChestHeight * S);
 
     protected double BaseDamage(double mult) =>
-        C.Stats.Atk * mult * (RiftSession.Cheat ? 10 : 1) * Hunter.HuntService.Bless.DamageMultiplier(C.Hp < C.MaxHp / 2);
+        C.Stats.Atk * mult * (RiftSession.Cheat ? RiftSession.CheatDamageMultiplier : 1) * Hunter.HuntService.Bless.DamageMultiplier(C.Hp < C.MaxHp / 2);
 
     /// <summary>Crítico com as bênçãos da caçada.</summary>
     protected int Crit => C.Stats.Crit + (int)Hunter.HuntService.Bless.CritPct;
@@ -230,7 +235,7 @@ public abstract class WeaponMoves
     /// Puxa a mira para o alvo vivo mais próximo dentro de um cone à frente (parado, sem direção no controle, vale
     /// qualquer lado: o golpe vira para o monstro mais perto).
     /// </summary>
-    private Vector2 Assist(Vector2 aim, float range, float cone)
+    protected Vector2 Assist(Vector2 aim, float range, float cone)
     {
         var world = P.World;
         if (world is null || range <= 0f)

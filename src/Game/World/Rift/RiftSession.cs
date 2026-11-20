@@ -111,6 +111,12 @@ public static class RiftSession
     /// <summary>Bot de combate: caçador invulnerável e dano ×10 para a caçada automática caber no teste.</summary>
     public static bool Cheat { get; set; }
 
+    /// <summary>Multiplicador de dano do bot enquanto <see cref="Cheat"/> está ligado (padrão 10; <c>--bot-dano=1</c> mede a luta com dano real).</summary>
+    public static int CheatDamageMultiplier { get; set; } = 10;
+
+    /// <summary>Medição de luta de Guardião (<c>--bot-duelo</c>): o bot luta contra o Guardião com dano real e a arma do degrau dele.</summary>
+    public static bool BossDuel { get; set; }
+
     /// <summary>Classe do caçador, guardada no save como arma atual.</summary>
     public static HunterClass Hunter
     {

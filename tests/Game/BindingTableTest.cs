@@ -15,6 +15,23 @@ public class BindingTableTest
     }
 
     [TestCase]
+    public void UltimateHasItsOwnKeyAndPadButtonForBothPlayers()
+    {
+        foreach (var table in new[] { BindingTable.Defaults(), BindingTable.DefaultsPlayer2() })
+        {
+            var key = table.Get("supremo", BindingSlot.Primary);
+            var pad = table.Get("supremo", BindingSlot.Gamepad);
+            AssertThat(key).IsNotEmpty();
+            AssertThat(pad).IsNotEmpty();
+            foreach (var action in table.Actions.Where(a => a != "supremo"))
+            {
+                AssertThat(table.Get(action, BindingSlot.Primary)).IsNotEqual(key);
+                AssertThat(table.Get(action, BindingSlot.Gamepad)).IsNotEqual(pad);
+            }
+        }
+    }
+
+    [TestCase]
     public void Assign_SwapsWithConflictingAction()
     {
         var table = BindingTable.Defaults();

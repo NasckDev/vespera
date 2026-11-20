@@ -124,6 +124,9 @@ public static class Progression
     /// <summary>Registra a aprovação no exame da Ordem do rank (a sala do exame é jogada por fora).</summary>
     public static ExamResult TryPassExam(Rank rank) => Commit(Engine.TryPassExam(rank), r => r.RankChange);
 
+    /// <summary>Como <see cref="TryPassExam(Rank)"/>, conferindo os desafios do exame contra a caçada jogada (golpes, tempo, objetivo).</summary>
+    public static ExamResult TryPassExam(Rank rank, ExamRunStats run) => Commit(Engine.TryPassExam(rank, run), r => r.RankChange);
+
     /// <summary>Entra numa Brecha do bairro; devolve os Fragmentos recolhidos de uma Lanterna perdida ali.</summary>
     public static int BeginRun(string neighborhoodId)
     {

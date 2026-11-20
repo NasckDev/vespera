@@ -17,6 +17,7 @@ public static class InputActions
     public const string Dodge = "dodge";
     public const string Skill = "skill";
     public const string Skill2 = "skill2";
+    public const string Supremo = "supremo";
     public const string Interact = "interact";
     public const string Lantern = "lantern";
     public const string Potion = "potion";
@@ -35,6 +36,7 @@ public static class InputActions
         new(Dodge, "Esquiva"),
         new(Skill, "Eco 1 (habilidade)"),
         new(Skill2, "Eco 2"),
+        new(Supremo, "Golpe Supremo"),
         new(Interact, "Interagir"),
         new(Lantern, "Lanterna"),
         new(Potion, "Beber poção"),

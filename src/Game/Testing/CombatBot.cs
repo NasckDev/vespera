@@ -25,6 +25,12 @@ namespace Vespera.Game.Testing;
 public sealed partial class CombatBot(Level level, SmokeTest host)
 {
     private const int RoomFrameLimit = 60 * 120;
+
+    /// <summary>
+    /// Sala de Guardião tem limite próprio: com a vida dos chefes subindo a cada ato (issue #75), o Reflexo leva ~2,5 min só na
+    /// luta, e o bot ainda precisa chegar até ele. Sete minutos cobrem a luta mais longa com folga e ainda pegam um chefe travado.
+    /// </summary>
+    private const int GuardianRoomFrameLimit = 60 * 420;
     private const int StuckFrames = 75;
     private const float AttackReach = 48f;
 
@@ -104,6 +110,8 @@ public sealed partial class CombatBot(Level level, SmokeTest host)
         var metrics = await PlayRooms();
         var gained = RiftSession.WalletFragments - shardsBefore;
         Check(!RiftSession.InRift && !Progression.Engine.InRun, "depois do portal de saída a caçada deveria ter acabado");
+        Check(RiftSession.BossDuel || _ultimates > 0, "o Golpe Supremo deveria disparar ao menos uma vez durante a caçada");
+        Log.Info($"bot de combate: Golpe Supremo disparou {_ultimates} vez(es)");
         Check(save.BrechasClosed == closedBefore + 1, $"Brecha deveria contar como fechada ({save.BrechasClosed})");
         Check(gained > 0, $"a carteira deveria receber Fragmentos (ganhou {gained})");
         Check(Progression.State.GuardiansDefeated.Contains(RiftSession.Brecha.GuardianId), "a progressão deveria registrar a Lodo-Mãe");

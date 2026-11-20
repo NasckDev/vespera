@@ -20,14 +20,14 @@ public sealed class BindingTable
     public const string Empty = "";
 
     // Códigos de tecla (Godot.Key como inteiro) usados nos padrões.
-    private const int KeyW = 87, KeyA = 65, KeyS = 83, KeyD = 68, KeyJ = 74, KeyK = 75, KeyQ = 81, KeyE = 69, KeyZ = 90;
+    private const int KeyW = 87, KeyA = 65, KeyS = 83, KeyD = 68, KeyJ = 74, KeyK = 75, KeyQ = 81, KeyE = 69, KeyZ = 90, KeyX = 88;
     private const int KeyF = 70, KeyI = 73, KeyP = 80, KeySpace = 32, KeyL = 76, KeyR = 82;
     private const int KeyEscape = 4194305, KeyTab = 4194306, KeyShift = 4194325;
     private const int KeyLeft = 4194319, KeyUp = 4194320, KeyRight = 4194321, KeyDown = 4194322;
 
     // Teclado numérico (Godot.Key: KpEnter, KpMultiply, KpSubtract, KpPeriod, KpAdd, Kp0..Kp3) e Enter.
     public const int KeyEnter = 4194309, KeyKpEnter = 4194310, KeyKpMultiply = 4194433, KeyKpSubtract = 4194435;
-    public const int KeyKpPeriod = 4194436, KeyKpAdd = 4194437, KeyKp0 = 4194438, KeyKp1 = 4194439, KeyKp2 = 4194440, KeyKp3 = 4194441, KeyKp4 = 4194442;
+    public const int KeyKpPeriod = 4194436, KeyKpAdd = 4194437, KeyKp0 = 4194438, KeyKp1 = 4194439, KeyKp2 = 4194440, KeyKp3 = 4194441, KeyKp4 = 4194442, KeyKp5 = 4194443;
 
     private readonly Dictionary<string, string[]> _slots = [];
 
@@ -43,6 +43,7 @@ public sealed class BindingTable
         t.Set("dodge", $"key:{KeySpace}", $"key:{KeyShift}", "pad:1");
         t.Set("skill", $"key:{KeyQ}", Empty, "axis:5+");
         t.Set("skill2", $"key:{KeyZ}", Empty, "pad:5");
+        t.Set("supremo", $"key:{KeyX}", Empty, "pad:8");
         t.Set("interact", $"key:{KeyE}", Empty, "pad:0");
         t.Set("lantern", $"key:{KeyF}", Empty, "pad:10");
         t.Set("potion", $"key:{KeyR}", Empty, "axis:4+");
@@ -68,6 +69,7 @@ public sealed class BindingTable
         t.Set("dodge", $"key:{KeyKp0}", Empty, "pad:1");
         t.Set("skill", $"key:{KeyKp3}", Empty, "axis:5+");
         t.Set("skill2", $"key:{KeyKp4}", Empty, "pad:5");
+        t.Set("supremo", $"key:{KeyKp5}", Empty, "pad:8");
         t.Set("interact", $"key:{KeyKpEnter}", $"key:{KeyEnter}", "pad:0");
         t.Set("lantern", $"key:{KeyKpAdd}", Empty, "pad:10");
         t.Set("potion", $"key:{KeyKp4}", Empty, "axis:4+");

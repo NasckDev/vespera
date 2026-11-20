@@ -21,9 +21,12 @@ public enum ExamStatus
     AlreadyPassed,
     NoExamForRank,
     RankTooLow,
+
+    /// <summary>A prova foi jogada, mas não cumpriu os desafios do exame (golpes, tempo ou objetivo); o selo não sai.</summary>
+    Failed,
 }
 
-public sealed record ExamResult(ExamStatus Status, ExamDef? Exam, int XpAwarded, RankChange? RankChange)
+public sealed record ExamResult(ExamStatus Status, ExamDef? Exam, int XpAwarded, RankChange? RankChange, IReadOnlyList<string>? Failures = null)
 {
     public bool Passed => Status == ExamStatus.Passed;
 }
@@ -141,7 +144,14 @@ public sealed partial class ProgressionEngine
     }
 
     /// <summary>Registra a aprovação no exame da Ordem do rank (a sala do exame é jogada por fora; aqui só vale a regra).</summary>
-    public ExamResult TryPassExam(Rank rank)
+    public ExamResult TryPassExam(Rank rank) => TryPassExam(rank, null);
+
+    /// <summary>
+    /// Como <see cref="TryPassExam(Rank)"/>, mas confere os desafios do exame (<see cref="ExamJudge"/>) contra o que foi jogado:
+    /// golpes demais, tempo estourado ou objetivo não cumprido = <see cref="ExamStatus.Failed"/> e nada é gravado. Sem
+    /// <paramref name="run"/> (bot de teste, progressão direta) vale só a regra de rank.
+    /// </summary>
+    public ExamResult TryPassExam(Rank rank, ExamRunStats? run)
     {
         var exam = Catalog.ExamFor(rank);
         if (exam is null)
@@ -157,6 +167,11 @@ public sealed partial class ProgressionEngine
         if (Catalog.RankIndex(Rank) < Catalog.RankIndex(rank))
         {
             return new ExamResult(ExamStatus.RankTooLow, exam, 0, null);
+        }
+
+        if (run is { } stats && ExamJudge.Judge(exam, stats) is { Passed: false } verdict)
+        {
+            return new ExamResult(ExamStatus.Failed, exam, 0, null, verdict.Failures);
         }
 
         var before = Ladder.CurrentIndex(Progress);

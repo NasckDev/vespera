@@ -53,7 +53,7 @@
     },
     "sineiro_mudo": {
       "name": "SINEIRO MUDO",
-      "hp": 2200,
+      "hp": 6000,
       "damage": 30,
       "speed": 60,
       "xp": 250,

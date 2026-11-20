@@ -78,12 +78,13 @@ public static class RiftLoot
         }
 
         // O exame da Ordem de um rank é a própria Brecha do Guardião daquele rank (C: cais, B: cemitério, S e SSS idem);
-        // o catálogo diz quais ranks têm exame (ROTEIRO-V2 §13).
+        // o catálogo diz quais ranks têm exame (ROTEIRO-V2 §13) e ExamRun confere os desafios dele antes de gravar o selo.
+        var examNote = string.Empty;
         foreach (var step in Progression.Catalog.Ranks)
         {
             if (step.Exam && step.Guardian == guardianId)
             {
-                Progression.TryPassExam(step.Id);
+                examNote = ExamRun.Message(ExamRun.Resolve(step.Id, guardianId));
             }
         }
 
@@ -107,7 +108,7 @@ public static class RiftLoot
             "inquilino" => "A casa deita no terreno",
             _ => "A Macieira Oca racha e cai",
         };
-        world.Feel.Toast(Summary(fall, result.Loot.Loot) + echo + GuestSummary(grants));
+        world.Feel.Toast(Summary(fall, result.Loot.Loot) + echo + examNote + GuestSummary(grants));
     }
 
     private static void ShowAll(LevelWorld world, Vector2 at, System.Collections.Generic.IReadOnlyList<OwnedLoot> grants, float spread)

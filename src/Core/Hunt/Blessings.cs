@@ -58,6 +58,15 @@ public class BlessingDef
 
     public double LowHpDamagePct { get; set; }
 
+    /// <summary>Dano extra do Golpe Supremo (pontos percentuais).</summary>
+    public double UltDamagePct { get; set; }
+
+    /// <summary>Recarga do Golpe Supremo mais curta (pontos percentuais).</summary>
+    public double UltCooldownPct { get; set; }
+
+    /// <summary>Segundos tirados da recarga do Golpe Supremo a cada monstro vencido.</summary>
+    public double UltKillSeconds { get; set; }
+
     /// <summary>Soma dos efeitos de duas bênçãos (o prato da Horta entra na soma da caçada). Não muda nenhuma das duas.</summary>
     public BlessingDef Plus(BlessingDef o) => new()
     {
@@ -77,6 +86,9 @@ public class BlessingDef
         LumesPerBreakable = LumesPerBreakable + o.LumesPerBreakable,
         SpeedPct = SpeedPct + o.SpeedPct,
         LowHpDamagePct = LowHpDamagePct + o.LowHpDamagePct,
+        UltDamagePct = UltDamagePct + o.UltDamagePct,
+        UltCooldownPct = UltCooldownPct + o.UltCooldownPct,
+        UltKillSeconds = UltKillSeconds + o.UltKillSeconds,
     };
 
     /// <summary>Multiplicador de dano (com <paramref name="lowHp"/> = menos de metade da vida).</summary>

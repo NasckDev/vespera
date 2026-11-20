@@ -53,7 +53,7 @@
     },
     "inquilino": {
       "name": "INQUILINO",
-      "hp": 2600,
+      "hp": 6000,
       "damage": 34,
       "speed": 70,
       "xp": 400,
