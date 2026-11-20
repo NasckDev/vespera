@@ -142,4 +142,21 @@ public class BindingTableTest
             }
         }
     }
+
+    // O direcional move o caçador fixo em InputSetup/LocalInputSource (fora da tabela); nenhuma ação pode usar pad:11..14.
+    [TestCase]
+    public void Defaults_NothingUsesTheDpadReservedForMovement()
+    {
+        foreach (var table in new[] { BindingTable.Defaults(), BindingTable.DefaultsPlayer2() })
+        {
+            foreach (var action in table.Actions)
+            {
+                var pad = table.Get(action, BindingSlot.Gamepad);
+                foreach (var dpad in new[] { "pad:11", "pad:12", "pad:13", "pad:14" })
+                {
+                    AssertThat(pad).OverrideFailureMessage($"'{action}' usa o direcional ({dpad})").IsNotEqual(dpad);
+                }
+            }
+        }
+    }
 }

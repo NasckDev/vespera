@@ -37,7 +37,7 @@ Branch `f/equilibrio`, base v2 = d41bd08. Issues #75, #79, #80 e #84.
 
 ## #80 Golpe Supremo e bênçãos
 
-- Golpe Supremo ligado: nova ação `supremo` (X no teclado, Kp5 no J2, R3 no controle; remapeável; aparece na Ajuda e numa dica), botão no comando do co-op (`CommandButtons.Supremo`). Recarga e nome de `ultimates.json`, números de `UltimateNumbers`, escala de alcance 2,5 (alcance da Lâmina 120 px / 48 px do protótipo). Só efeitos que já existiam:
+- Golpe Supremo ligado: nova ação `supremo` (X no teclado do J1, Num 6 no J2, L3 no controle; ver "Teclas na integração" abaixo; remapeável; aparece na Ajuda e numa dica), botão no comando do co-op (`CommandButtons.Supremo`). Recarga e nome de `ultimates.json`, números de `UltimateNumbers`, escala de alcance 2,5 (alcance da Lâmina 120 px / 48 px do protótipo). Só efeitos que já existiam:
   - Lâmina, Fenda Rubra: 3 investidas cortantes, invulnerável durante.
   - Arco, Chuva de Vésperas: chuva de flechas por 2,5 s na área marcada à frente.
   - Martelo, Terremoto da Forja: 3 ondas de choque que ferem e atordoam (chefe, metade do atordoamento).
@@ -50,3 +50,15 @@ Branch `f/equilibrio`, base v2 = d41bd08. Issues #75, #79, #80 e #84.
 - Medido (grade da máscara; humano = 0,75 x doorHeight): arena do esgoto 10,2 x 9,5 humanos, 54 humanos²; outras arenas 113 a 171 humanos² (Torre 113, Pomar 116, Cemitério 121, Cais 133, Ruas 171).
 - A máscara já é a plataforma de pedra inteira pintada no chão; em volta é água de lodo e entulho. Alargar a máscara faria o caçador andar sobre água/entulho pintados. Mudar a escala (`doorHeight`) quebraria a régua do PLANO-V2 (arcos gradeados). Não há ampliação segura sem arte.
 - Briefing de arte: repintar `assets/v2/cenarios/definitivos/chao_esgoto_arena.png` (1672x941) com plataforma central de ~14 humanos (~1100 px) de largura por ~10,5 de altura (~830 px), mantendo a escada de entrada e o arco gradeado da régua; depois ampliar `grid` em `data/levels/esgoto_arena.json` para a nova plataforma e reposicionar `spawn`, `doorAt` e `rift.boss`. Atenuante do QA: o roteiro quer a Lodo-Mãe pequena e de 1 fase; a arena ainda não foi medida em jogo com o co-op.
+
+## Teclas na integração (20/11/2026)
+
+A frente usava Kp5 (J2) e R3 (`pad:8`) para o Supremo, mas a f/bugs (#69) já tinha posto a Poção do J2 em Num 5 e o Eco 2 do
+controle em R3, tirando tudo do Guia (`pad:5`). Na integração o Supremo ficou em teclas livres:
+
+- J1 teclado: **X** (ao lado do Z do Eco 2).
+- J2 teclado: **Num 6** (fileira 4-5-6 do teclado numérico: Eco 2, Poção, Supremo).
+- Controle (J1 e J2): **L3** (`pad:7`, clique do analógico esquerdo), par do R3 do Eco 2. O direcional não serve: ele move o
+  caçador fixo em `InputSetup`/`LocalInputSource`, fora da tabela. O Guia (`pad:5`) segue proibido.
+
+`BindingTableTest` cobre: nenhuma ação do mesmo jogador divide código, J1 não colide com J2, nada usa o Guia nem o direcional.
