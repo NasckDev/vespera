@@ -1,0 +1,45 @@
+name: Preparar Godot
+description: Instala .NET, baixa o Godot .NET (com cache), compila a solução e importa os assets.
+
+inputs:
+  godot-version:
+    description: Versão do Godot
+    default: "4.7.2"
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-dotnet@v6
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Cache do Godot
+      id: cache-godot
+      uses: actions/cache@v6
+      with:
+        path: ~/godot
+        key: godot-${{ inputs.godot-version }}-mono-linux
+
+    - name: Baixar Godot ${{ inputs.godot-version }} .NET
+      if: steps.cache-godot.outputs.cache-hit != 'true'
+      shell: bash
+      env:
+        GODOT_VERSION: ${{ inputs.godot-version }}
+      run: |
+        mkdir -p ~/godot
+        curl -sSL -o /tmp/godot.zip "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_mono_linux_x86_64.zip"
+        unzip -q /tmp/godot.zip -d ~/godot
+
+    - name: Configurar caminho do Godot
+      shell: bash
+      env:
+        GODOT_VERSION: ${{ inputs.godot-version }}
+      run: echo "GODOT=$HOME/godot/Godot_v${GODOT_VERSION}-stable_mono_linux_x86_64/Godot_v${GODOT_VERSION}-stable_mono_linux.x86_64" >> "$GITHUB_ENV"
+
+    - name: Compilar solução
+      shell: bash
+      run: dotnet build Vespera.sln -warnaserror
+
+    - name: Importar assets
+      shell: bash
+      run: timeout 600 "$GODOT" --headless --path . --import

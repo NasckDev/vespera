@@ -21,7 +21,7 @@ public partial class FeiraScreen : HunterScreen
 
     public static FeiraScreen? Active { get; private set; }
 
-    public static void Show() => Open(new FeiraScreen());
+    public static new void Show() => Open(new FeiraScreen());
 
     /// <summary>Última frase mostrada ao jogador (testes e capturas).</summary>
     public string StatusText => _status.Text;

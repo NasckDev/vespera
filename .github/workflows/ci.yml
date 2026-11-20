@@ -5,6 +5,8 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * *" # noturno (03h em Brasília): roda também os bots longos
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -22,8 +24,11 @@ jobs:
   core:
     name: Core (testes GdUnit4)
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
+        with:
+          lfs: true # os testes de máscara/mapa leem arte guardada no LFS
 
       - uses: actions/setup-dotnet@v6
         with:
@@ -40,39 +45,134 @@ jobs:
           path: TestResults/*.trx
 
   godot:
-    name: Godot (import, build e smoke test)
+    name: Godot (build, import e smoke básico)
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
         with:
           lfs: true
 
-      - uses: actions/setup-dotnet@v6
+      - uses: ./.github/actions/godot-setup
         with:
-          dotnet-version: 8.0.x
+          godot-version: ${{ env.GODOT_VERSION }}
 
-      - name: Cache do Godot
-        id: cache-godot
-        uses: actions/cache@v6
-        with:
-          path: ~/godot
-          key: godot-${{ env.GODOT_VERSION }}-mono-linux
-
-      - name: Baixar Godot ${{ env.GODOT_VERSION }} .NET
-        if: steps.cache-godot.outputs.cache-hit != 'true'
+      - name: Smoke test (menus, título, pausa)
         run: |
-          mkdir -p ~/godot
-          curl -sSL -o /tmp/godot.zip "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_mono_linux_x86_64.zip"
-          unzip -q /tmp/godot.zip -d ~/godot
+          mkdir -p tmp/logs
+          timeout 600 "$GODOT" --headless --path . --fixed-fps 60 --user-dir "$PWD/tmp/ud" -- --smoke-test 2>&1 | tee tmp/logs/basico.log
+          exit "${PIPESTATUS[0]}"
 
-      - name: Configurar caminho do Godot
-        run: echo "GODOT=$HOME/godot/Godot_v${GODOT_VERSION}-stable_mono_linux_x86_64/Godot_v${GODOT_VERSION}-stable_mono_linux.x86_64" >> "$GITHUB_ENV"
+      - name: Logs do smoke
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: logs-basico
+          path: |
+            tmp/logs
+            tmp/ud/logs
+          if-no-files-found: ignore
 
-      - name: Compilar solução
-        run: dotnet build Vespera.sln -warnaserror
+  # Bots de jogo: cada modo roda num job próprio, em paralelo. O watchdog interno dos bots é de 900 s.
+  bots:
+    name: Bot ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: colisao, args: "--bot" }
+          - { name: combate, args: "--combat-bot" }
+          - { name: cliques, args: "--cliques" }
+          - { name: progressao, args: "--progression" }
+          - { name: historia, args: "--story" }
+          - { name: ato45, args: "--ato45" }
+          - { name: atos67, args: "--atos67" }
+          - { name: final, args: "--final" }
+          - { name: escala-camera, args: "--escala --camera" }
+          - { name: coop, args: "--coop-bot" }
+          - { name: horta, args: "--horta" }
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          lfs: true
 
-      - name: Importar assets
-        run: timeout 600 "$GODOT" --headless --path . --import
+      - uses: ./.github/actions/godot-setup
+        with:
+          godot-version: ${{ env.GODOT_VERSION }}
 
-      - name: Smoke test (joga o jogo sozinho)
-        run: timeout 600 "$GODOT" --headless --path . -- --smoke-test
+      - name: Bot ${{ matrix.name }}
+        env:
+          BOT_ARGS: ${{ matrix.args }}
+        run: |
+          mkdir -p tmp/logs
+          # BOT_ARGS é intencionalmente sem aspas: vira uma flag por palavra.
+          timeout 1200 "$GODOT" --headless --path . --fixed-fps 60 --user-dir "$PWD/tmp/ud" -- --smoke-test $BOT_ARGS 2>&1 | tee "tmp/logs/${{ matrix.name }}.log"
+          exit "${PIPESTATUS[0]}"
+
+      - name: Logs do bot
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: logs-bot-${{ matrix.name }}
+          path: |
+            tmp/logs
+            tmp/ud/logs
+          if-no-files-found: ignore
+
+  # Co-op online: host e convidado headless na mesma máquina (127.0.0.1).
+  online:
+    name: Bot online (host + convidado)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          lfs: true
+
+      - uses: ./.github/actions/godot-setup
+        with:
+          godot-version: ${{ env.GODOT_VERSION }}
+
+      - name: Online bot
+        run: timeout 1200 bash tools/online-bot.sh "$GODOT" "$PWD/tmp/online"
+
+      - name: Logs do online
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: logs-online
+          path: tmp/online
+          if-no-files-found: ignore
+
+  # Só no noturno ou manual: o Ato I completo tem watchdog de 3600 s.
+  ato1:
+    name: Bot ato1 (longo)
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          lfs: true
+
+      - uses: ./.github/actions/godot-setup
+        with:
+          godot-version: ${{ env.GODOT_VERSION }}
+
+      - name: Bot ato1
+        run: |
+          mkdir -p tmp/logs
+          timeout 4000 "$GODOT" --headless --path . --fixed-fps 60 --user-dir "$PWD/tmp/ud" -- --smoke-test --ato1 2>&1 | tee tmp/logs/ato1.log
+          exit "${PIPESTATUS[0]}"
+
+      - name: Logs do ato1
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: logs-bot-ato1
+          path: |
+            tmp/logs
+            tmp/ud/logs
+          if-no-files-found: ignore
