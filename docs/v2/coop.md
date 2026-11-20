@@ -117,10 +117,27 @@ snapshot passou a levar a classe de cada caçador (`NetHunter.Kind`) e o tipo de
 Relógio: com `--fixed-fps` os dois processos rodam sem sincronia com o tempo real; por isso o ritmo dos snapshots e a
 interpolação usam o relógio do jogo (`NetSession.GameNow`) e só a queda por silêncio usa o relógio de parede.
 
+### 2.7 Entrada protegida, cenário e golpes no convidado (20/11/2026, branch `f/online`, issues #70, #71, #72)
+
+Protocolo na versão **4**. Tudo abaixo é validado na leitura (pacote ruim vira `false`, nunca exceção).
+
+| Tema | Como funciona | Onde |
+|---|---|---|
+| Código da sala (#71) | "Hospedar" mostra um código de 4 dígitos sorteado (o host pode trocar por 4 a 6 números ou apagar para deixar a sala aberta). O convidado digita em "Entrar". O Hello leva o código; o `JoinGate` confere versão → código (tempo constante) → vaga e classe. 5 códigos errados seguidos travam a sala por 30 s (`Locked`). Quem erra o código não descobre se o grupo está cheio. A conexão **não é criptografada**: o código barra curiosos e tentativas às cegas, não quem escuta a rede. | `Core/Net/JoinGate.cs`, `NetSession.Host.cs`, `UI/OnlineScreen.cs` |
+| Vaga presa (#71) | O ENet aceita 3 conexões além do grupo (o 2º convidado recebe "grupo cheio" em vez do erro de conexão) e uma conexão sem Hello válido é derrubada em 3 s (`NetProtocol.HelloTimeoutSeconds`). | `NetSession.Host.cs` |
+| Ids e tamanhos (#71) | Ids de rede só aceitam letras ASCII, dígitos, `_` e `-` (nada de `/`, `.` ou `..`: o id da sala e o tipo do monstro viram nome de arquivo no convidado). Cada tipo de pacote tem teto de bytes (`NetProtocol.MaxPacketBytes`), checado antes de ler. | `NetProtocol.cs` |
+| Mensagens (#71) | Porta ocupada aparece na tela Online (`HostError`); código errado, versão diferente, grupo cheio, trancado e "host fechou antes de aceitar" têm texto próprio em pt-BR; IP começa vazio com dica; o convidado que entra na Brecha vê "Esperando o host sair da Brecha...". Porta e código do host são campos da tela. | `OnlineScreen.cs`, `NetProtocol.Describe` |
+| Cenário (#70) | Mensagem confiável `Scene`: id da sala, variante do chão e os objetos que **existem agora** no host (props do JSON, o que a sala montou em código e quebráveis ainda inteiros), mandada só quando muda (conferida 4×/s) e quando um convidado entra. O convidado carrega o chão e o catálogo pelo id e desenha os objetos com sombra de contato. | `Core/Net/SceneSnapshot.cs`, `Net/SceneBuilder.cs`, `OnlineGuestView.ApplyScene` |
+| Golpes e dano (#70) | `CombatFeel` ganhou um gancho estático (`EffectEmitted`): faíscas, anéis, números de dano, tremor e o rastro do corte do host viram `NetEffect` e saem em lote confiável a cada snapshot. O convidado só toca o efeito (`CombatFeel` e `FloatingNumbers` próprios, câmera treme respeitando a opção). Sem convidado o gancho não tem ouvinte e não custa nada. | `Core/Net/NetEvents.cs`, `Combat/CombatFeel.cs`, `Combat/WeaponMoves.cs` |
+| Pose (#70) | O snapshot leva a animação (índice na lista ordenada de animações da folha, 1 byte) e o quadro de cada caçador e monstro, o espelhamento do monstro, as flechas em voo e os NPCs (id, posição, direção, andando). O convidado troca de animação junto com o host e corrige deriva de mais de 1 quadro. | `WorldSnapshot.cs`, `Net/AnimTable.cs`, `ArrowGhost.cs` |
+| HUD (#70) | Barra e texto de vida, barra de fôlego, "Caído!" e o aviso "O host pausou o jogo." (bandeira do snapshot). | `OnlineGuestView.cs` |
+| Bot determinístico (#72) | `tools/online-bot.sh`: porta UDP livre por execução, convidado só sobe quando o `host.log` registra "online: hospedando na porta"; as esperas do bot são por estado (tempo REAL só como teto, porque com `--fixed-fps` o relógio do jogo dos dois processos anda em ritmos diferentes); host e convidado se sincronizam por arquivos marcadores; o convidado erra o código antes de acertar e confere cenário, NPCs, números de dano, HUD e o aviso de pausa. | `tools/online-bot.sh`, `Testing/SmokeTest.Online.cs` |
+
 **Ainda falta (próximas fatias):**
 
-1. Efeitos no convidado: golpes, flechas, números de dano, tremor, animação de ataque/esquiva e o anel de reanimação
-   (hoje ele vê posições, vida, queda, monstros e falas). Vêm como eventos confiáveis (§2.2).
+1. Efeitos no convidado que ainda faltam: anel de reanimação, avisos de ataque dos monstros (telegrafias no chão), brilho de
+   dano nos monstros, portais/barreiras/baú/fenda de saída da Brecha, luzes e o clima da sala (a cena do convidado não
+   tem iluminação), poções e Fragmentos na HUD, objetos que piscam por condição da história depois que a sala abriu.
 2. Saque e progresso do convidado: hoje o J2 online usa o `SaveData.Guest` do save do host (como no co-op local); o
    resumo do caçador do convidado (§2.3) e o saque por dono mandado como evento ainda não existem.
 3. Convidado entrando no meio de uma Brecha: espera o grupo voltar à cidade (vê a sala, mas o caçador só nasce fora dela).
