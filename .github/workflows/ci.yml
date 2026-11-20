@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, v2]
   pull_request:
   workflow_dispatch:
   schedule:
@@ -21,14 +21,38 @@ env:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
 
 jobs:
-  core:
-    name: Core (testes GdUnit4)
+  # Baixa o LFS uma única vez por versão dos assets; os demais jobs só restauram o cache.
+  lfs:
+    name: Assets do LFS (cache)
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
+
+      - name: Gerar chave dos assets
+        run: |
+          git lfs install --local
+          git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
+
+      - name: Cache do LFS
+        id: cache-lfs
+        uses: actions/cache@v6
         with:
-          lfs: true # os testes de máscara/mapa leem arte guardada no LFS
+          path: .git/lfs
+          key: lfs-${{ hashFiles('.lfs-assets-id') }}
+
+      - name: Baixar LFS (só se faltar cache)
+        if: steps.cache-lfs.outputs.cache-hit != 'true'
+        run: git lfs pull
+
+  core:
+    name: Core (testes GdUnit4)
+    needs: lfs
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/lfs-restore # os testes de máscara/mapa leem arte guardada no LFS
 
       - uses: actions/setup-dotnet@v6
         with:
@@ -46,12 +70,12 @@ jobs:
 
   godot:
     name: Godot (build, import e smoke básico)
+    needs: lfs
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
-        with:
-          lfs: true
+      - uses: ./.github/actions/lfs-restore
 
       - uses: ./.github/actions/godot-setup
         with:
@@ -76,6 +100,7 @@ jobs:
   # Bots de jogo: cada modo roda num job próprio, em paralelo. O watchdog interno dos bots é de 900 s.
   bots:
     name: Bot ${{ matrix.name }}
+    needs: lfs
     runs-on: ubuntu-latest
     timeout-minutes: 30
     strategy:
@@ -95,8 +120,7 @@ jobs:
           - { name: horta, args: "--horta" }
     steps:
       - uses: actions/checkout@v7
-        with:
-          lfs: true
+      - uses: ./.github/actions/lfs-restore
 
       - uses: ./.github/actions/godot-setup
         with:
@@ -124,12 +148,12 @@ jobs:
   # Co-op online: host e convidado headless na mesma máquina (127.0.0.1).
   online:
     name: Bot online (host + convidado)
+    needs: lfs
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
-        with:
-          lfs: true
+      - uses: ./.github/actions/lfs-restore
 
       - uses: ./.github/actions/godot-setup
         with:
@@ -149,13 +173,13 @@ jobs:
   # Só no noturno ou manual: o Ato I completo tem watchdog de 3600 s.
   ato1:
     name: Bot ato1 (longo)
+    needs: lfs
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 90
     steps:
       - uses: actions/checkout@v7
-        with:
-          lfs: true
+      - uses: ./.github/actions/lfs-restore
 
       - uses: ./.github/actions/godot-setup
         with:

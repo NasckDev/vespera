@@ -1,0 +1,22 @@
+name: Restaurar assets do LFS
+description: Restaura .git/lfs do cache (preenchido pelo job lfs) e materializa os arquivos sem baixar nada da rede.
+
+runs:
+  using: composite
+  steps:
+    - name: Gerar chave dos assets
+      shell: bash
+      run: |
+        git lfs install --local
+        git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
+
+    - name: Restaurar cache do LFS
+      uses: actions/cache/restore@v6
+      with:
+        path: .git/lfs
+        key: lfs-${{ hashFiles('.lfs-assets-id') }}
+        fail-on-cache-miss: true
+
+    - name: Materializar arquivos do LFS
+      shell: bash
+      run: git lfs pull
