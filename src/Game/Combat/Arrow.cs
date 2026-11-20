@@ -39,6 +39,22 @@ public partial class Arrow : Node2D
 
     public LevelWorld World { get; set; } = null!;
 
+    /// <summary>Flecha de luz carregada (atravessa os alvos); o convidado online a desenha igual.</summary>
+    public bool Pierce => _pierce;
+
+    /// <summary>Desenha a flecha (haste, pena, ponta e brilho) em <paramref name="item"/>, apontando para +X, na escala dada.</summary>
+    public static void DrawShape(CanvasItem item, float s, bool pierce)
+    {
+        var shaft = 46f * s;
+        var glow = pierce ? new Color(1f, 0.82f, 0.4f, 0.55f) : new Color(1f, 0.9f, 0.7f, 0.22f);
+        item.DrawLine(new Vector2(-shaft * (pierce ? 2.6f : 1.6f), 0), Vector2.Zero, glow, (pierce ? 9f : 5f) * s, true);
+        item.DrawLine(new Vector2(-shaft, 0), new Vector2(-4f * s, 0), new Color("6b4a2e"), 3f * s, true);
+        item.DrawLine(new Vector2(-shaft, 0), new Vector2(-shaft + (9f * s), -5f * s), new Color("e64a8e"), 2.5f * s, true);
+        item.DrawLine(new Vector2(-shaft, 0), new Vector2(-shaft + (9f * s), 5f * s), new Color("e64a8e"), 2.5f * s, true);
+        item.DrawColoredPolygon([new Vector2(0, -4.5f * s), new Vector2(11f * s, 0), new Vector2(0, 4.5f * s)],
+            pierce ? new Color("fff1c4") : new Color("d8d2c4"));
+    }
+
     public override void _PhysicsProcess(double delta)
     {
         var dt = (float)delta;
@@ -71,18 +87,7 @@ public partial class Arrow : Node2D
         QueueRedraw();
     }
 
-    public override void _Draw()
-    {
-        var s = _scale;
-        var shaft = 46f * s;
-        var glow = _pierce ? new Color(1f, 0.82f, 0.4f, 0.55f) : new Color(1f, 0.9f, 0.7f, 0.22f);
-        DrawLine(new Vector2(-shaft * (_pierce ? 2.6f : 1.6f), 0), Vector2.Zero, glow, (_pierce ? 9f : 5f) * s, true);
-        DrawLine(new Vector2(-shaft, 0), new Vector2(-4f * s, 0), new Color("6b4a2e"), 3f * s, true);
-        DrawLine(new Vector2(-shaft, 0), new Vector2(-shaft + (9f * s), -5f * s), new Color("e64a8e"), 2.5f * s, true);
-        DrawLine(new Vector2(-shaft, 0), new Vector2(-shaft + (9f * s), 5f * s), new Color("e64a8e"), 2.5f * s, true);
-        DrawColoredPolygon([new Vector2(0, -4.5f * s), new Vector2(11f * s, 0), new Vector2(0, 4.5f * s)],
-            _pierce ? new Color("fff1c4") : new Color("d8d2c4"));
-    }
+    public override void _Draw() => DrawShape(this, _scale, _pierce);
 
     private void Advance()
     {

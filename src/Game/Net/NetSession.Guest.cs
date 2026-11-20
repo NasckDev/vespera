@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Godot;
 using Vespera.Core.Coop;
 using Vespera.Core.Net;
@@ -35,7 +36,17 @@ public partial class NetSession
 
     public string ClassId { get; private set; } = string.Empty;
 
+    private string _joinCode = string.Empty;
+
     public SnapshotInterpolator? Interpolator { get; private set; }
+
+    /// <summary>Último cenário que o host mandou (objetos e variante do chão da sala); <see cref="SceneSerial"/> sobe a cada um.</summary>
+    public SceneSnapshot? LatestScene { get; private set; }
+
+    public int SceneSerial { get; private set; }
+
+    /// <summary>Efeitos de combate vindos do host (faíscas, anéis, números, tremor, rastros): a tela do convidado os toca.</summary>
+    public event Action<IReadOnlyList<NetEffect>>? EffectsReceived;
 
     public WorldSnapshot? LatestSnapshot => Interpolator?.Latest;
 
@@ -49,10 +60,17 @@ public partial class NetSession
     /// <summary>Entrou (Welcome) ou falhou (texto do motivo).</summary>
     public event Action<bool, string>? JoinResult;
 
-    /// <summary>Conecta ao host e pede a entrada com a classe (id da arma).</summary>
-    public Error Join(string address, int port, string classId)
+    /// <summary>Conecta ao host e pede a entrada com a classe (id da arma) e o código da sala (vazio se o host não usa).</summary>
+    public Error Join(string address, int port, string classId, string code = "")
     {
         Stop();
+        if (!NetProtocol.IsValidCode(code))
+        {
+            Status = $"O código da sala tem de {NetProtocol.MinCodeLength} a {NetProtocol.MaxCodeLength} números.";
+            return Error.InvalidParameter;
+        }
+
+        _joinCode = code;
         var peer = new ENetMultiplayerPeer();
         var error = peer.CreateClient(address.Trim(), port, ChannelCount);
         if (error != Error.Ok)
@@ -101,14 +119,14 @@ public partial class NetSession
         _guestWatch = new LinkWatch(Tuning.TimeoutSeconds);
         _guestWatch.Touch(Now);
         Status = "Conectado. Esperando o host aceitar…";
-        Send(NetProtocol.WriteHello(new HelloMessage(NetProtocol.Version, ClassId)), 1, MultiplayerPeer.TransferModeEnum.Reliable, ReliableChannel);
+        Send(NetProtocol.WriteHello(new HelloMessage(NetProtocol.Version, ClassId, _joinCode)), 1, MultiplayerPeer.TransferModeEnum.Reliable, ReliableChannel);
     }
 
     private void OnConnectionFailed()
     {
         if (Role == NetRole.Guest)
         {
-            FailGuest("Não deu para conectar ao host. Confira o IP, a porta e se ele abriu a porta no roteador/firewall.");
+            FailGuest("Não deu para conectar ao host. Confira o IP e a porta, e se o host já está hospedando (pela internet, a porta UDP precisa estar aberta no roteador e no firewall).");
         }
     }
 
@@ -116,18 +134,22 @@ public partial class NetSession
     {
         if (Role == NetRole.Guest)
         {
-            FailGuest(GuestState == GuestState.Joined ? "A conexão com o host caiu (ou ele encerrou a partida)." : "O host fechou a conexão.");
+            FailGuest(GuestState == GuestState.Joined
+                ? "A conexão com o host caiu (ou ele encerrou a partida)."
+                : "O host fechou a conexão antes de aceitar você. Ele pode ter parado de hospedar ou não respondeu ao pedido a tempo.");
         }
     }
 
     private void OnGuestPacket(byte[] packet)
     {
         _guestWatch?.Touch(Now);
-        switch (NetProtocol.KindOf(packet))
+        switch (NetProtocol.KindOfBounded(packet))
         {
             case NetMessageKind.Welcome when NetProtocol.TryReadWelcome(packet, out var slot):
                 Slot = slot;
                 GuestState = GuestState.Joined;
+                LatestScene = null;
+                SceneSerial = 0;
                 Interpolator = new SnapshotInterpolator(Tuning.InterpolationMs / 1000.0);
                 _guestCommands = new LocalCommandProvider(GuestInputOverride ?? MergedInput.LocalSolo(), slot);
                 Status = $"Dentro do grupo como {CoopSession.TagOf(slot)}.";
@@ -137,6 +159,13 @@ public partial class NetSession
                 break;
             case NetMessageKind.Reject when NetProtocol.TryReadReject(packet, out var reason):
                 FailGuest(NetProtocol.Describe(reason));
+                break;
+            case NetMessageKind.Events when GuestState == GuestState.Joined && EffectBatch.TryRead(packet, out var effects):
+                EffectsReceived?.Invoke(effects);
+                break;
+            case NetMessageKind.Scene when GuestState == GuestState.Joined && SceneSnapshot.TryRead(packet, out var scene):
+                LatestScene = scene;
+                SceneSerial++;
                 break;
             case NetMessageKind.Snapshot when GuestState == GuestState.Joined && WorldSnapshot.TryRead(packet, out var snapshot):
                 if (Interpolator?.Add(GameNow, snapshot) == true)

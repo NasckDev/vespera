@@ -196,6 +196,7 @@ public abstract class WeaponMoves
         {
             // Rastro do corte na cor do nível da arma (aço → âmbar → âmbar vivo).
             world.AddFx(new SlashTrail(origin, dir, range * 0.92f, arc, range * (heavy ? 0.34f : 0.26f), look));
+            CombatFeel.EmitSlash(origin, dir, range * 0.92f, arc, range * (heavy ? 0.34f : 0.26f), look.Level);
         }
 
         foreach (var target in world.Combat.InSector(origin, dir, range, arc, Team.Hunters))

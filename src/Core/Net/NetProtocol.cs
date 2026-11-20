@@ -21,6 +21,12 @@ public enum NetMessageKind : byte
 
     /// <summary>Host → convidado: estado do mundo (~20/s).</summary>
     Snapshot = 5,
+
+    /// <summary>Host → convidado: eventos de combate (confiável): faíscas, anéis, números de dano, tremor, golpes.</summary>
+    Events = 6,
+
+    /// <summary>Host → convidado: cenário da sala (objetos, quebráveis, NPCs, variante do chão), confiável.</summary>
+    Scene = 7,
 }
 
 /// <summary>Por que o host recusou a entrada.</summary>
@@ -30,10 +36,16 @@ public enum RejectReason : byte
     Full = 2,
     BadClass = 3,
     Malformed = 4,
+
+    /// <summary>Código da sala ausente ou errado.</summary>
+    BadCode = 5,
+
+    /// <summary>Tentativas demais com o código errado: o host fecha a porta para códigos por um tempo.</summary>
+    Locked = 6,
 }
 
-/// <summary>Pedido de entrada do convidado.</summary>
-public readonly record struct HelloMessage(ushort Version, string ClassId);
+/// <summary>Pedido de entrada do convidado: versão do protocolo, classe e o código da sala (vazio se o host não pediu).</summary>
+public readonly record struct HelloMessage(ushort Version, string ClassId, string Code = "");
 
 /// <summary>
 /// Protocolo do co-op online (host autoritativo, ENet). Puro, sem Godot: só bytes. Toda leitura valida tamanho, limites e
@@ -42,10 +54,47 @@ public readonly record struct HelloMessage(ushort Version, string ClassId);
 public static class NetProtocol
 {
     /// <summary>Muda quando o formato muda: host e convidado precisam da mesma.</summary>
-    public const ushort Version = 2;
+    public const ushort Version = 4;
 
     /// <summary>Teto de um id de texto (classe, sala) em bytes UTF-8.</summary>
     public const int MaxIdBytes = 64;
+
+    /// <summary>Código da sala: de <see cref="MinCodeLength"/> a <see cref="MaxCodeLength"/> dígitos (ou vazio = sala aberta).</summary>
+    public const int MinCodeLength = 4;
+
+    public const int MaxCodeLength = 6;
+
+    /// <summary>Segundos que uma conexão tem para mandar um Hello válido antes de o host derrubá-la (não prende a vaga).</summary>
+    public const double HelloTimeoutSeconds = 3;
+
+    /// <summary>Teto do pacote de cada tipo (bytes): o que passar disso é descartado antes de ser lido.</summary>
+    public const int MaxHelloBytes = 1 + 2 + 1 + MaxIdBytes + 1 + MaxCodeLength;
+
+    public const int MaxSnapshotBytes = 64 * 1024;
+
+    public const int MaxEventBytes = 16 * 1024;
+
+    public const int MaxSceneBytes = 32 * 1024;
+
+    /// <summary>Maior tamanho aceito para o pacote desse tipo.</summary>
+    public static int MaxPacketBytes(NetMessageKind kind) => kind switch
+    {
+        NetMessageKind.Hello => MaxHelloBytes,
+        NetMessageKind.Welcome or NetMessageKind.Reject => 2,
+        NetMessageKind.Command => 1 + PlayerCommand.WireSize,
+        NetMessageKind.Snapshot => MaxSnapshotBytes,
+        NetMessageKind.Events => MaxEventBytes,
+        NetMessageKind.Scene => MaxSceneBytes,
+        _ => 0,
+    };
+
+    /// <summary>Tipo do pacote, ou null se vazio, desconhecido ou maior que o teto do tipo (lixo/ataque de tamanho).</summary>
+    public static NetMessageKind? KindOfBounded(ReadOnlySpan<byte> packet) =>
+        KindOf(packet) is { } kind && packet.Length <= MaxPacketBytes(kind) ? kind : null;
+
+    /// <summary>Código válido: vazio (sala aberta) ou 4 a 6 dígitos.</summary>
+    public static bool IsValidCode(string? code) =>
+        code is not null && (code.Length == 0 || (code.Length is >= MinCodeLength and <= MaxCodeLength && code.All(char.IsAsciiDigit)));
 
     public static NetMessageKind? KindOf(ReadOnlySpan<byte> packet) =>
         packet.Length == 0 || !Enum.IsDefined(typeof(NetMessageKind), packet[0]) ? null : (NetMessageKind)packet[0];
@@ -56,6 +105,7 @@ public static class NetProtocol
         w.Byte((byte)NetMessageKind.Hello);
         w.UShort(hello.Version);
         w.Id(hello.ClassId);
+        w.Code(hello.Code);
         return w.ToArray();
     }
 
@@ -63,12 +113,12 @@ public static class NetProtocol
     {
         hello = default;
         var r = new NetReader(packet);
-        if (r.Byte() != (byte)NetMessageKind.Hello || !r.TryUShort(out var version) || !r.TryId(out var classId) || !r.AtEnd)
+        if (r.Byte() != (byte)NetMessageKind.Hello || !r.TryUShort(out var version) || !r.TryId(out var classId) || !r.TryCode(out var code) || !r.AtEnd)
         {
             return false;
         }
 
-        hello = new HelloMessage(version, classId);
+        hello = new HelloMessage(version, classId, code);
         return true;
     }
 
@@ -119,9 +169,12 @@ public static class NetProtocol
     /// <summary>Texto do aviso no convidado (pt-BR).</summary>
     public static string Describe(RejectReason reason) => reason switch
     {
-        RejectReason.Version => "O host está numa versão diferente do jogo.",
+        RejectReason.Version => "O host está numa versão diferente do jogo. Atualizem os dois para a mesma versão.",
         RejectReason.Full => "O grupo do host já está cheio.",
-        RejectReason.BadClass => "Classe inválida.",
+        RejectReason.BadClass => "Essa classe não existe na versão do host.",
+        RejectReason.BadCode => "Código da sala incorreto. Peça ao host o código que aparece em \"Hospedar\".",
+        RejectReason.Locked => "Muitas tentativas com o código errado. Espere um pouco ou peça ao host para hospedar de novo.",
+        RejectReason.Malformed => "O host não entendeu o pedido de entrada (versão diferente do jogo?).",
         _ => "O host recusou a entrada.",
     };
 
@@ -167,8 +220,12 @@ public static class NetProtocol
         return t.All(c => char.IsAsciiLetterOrDigit(c) || c is '.' or '-') && !t.StartsWith('-') && !t.StartsWith('.');
     }
 
-    internal static bool IsValidId(string id) =>
-        id.Length > 0 && Encoding.UTF8.GetByteCount(id) <= MaxIdBytes && id.All(c => char.IsAsciiLetterOrDigit(c) || c is '_' or '-' or '/' or '.');
+    /// <summary>
+    /// Id de texto (classe, sala, monstro): só letras ASCII, dígitos, <c>_</c> e <c>-</c>. Nada de barra nem ponto: o id vira
+    /// nome de arquivo no outro lado (<c>res://data/levels/{id}.json</c>), então <c>..</c> e <c>/</c> são recusados.
+    /// </summary>
+    public static bool IsValidId(string id) =>
+        id.Length > 0 && Encoding.UTF8.GetByteCount(id) <= MaxIdBytes && id.All(c => char.IsAsciiLetterOrDigit(c) || c is '_' or '-');
 }
 
 /// <summary>Escreve little-endian num buffer que cresce.</summary>
@@ -211,6 +268,21 @@ internal sealed class NetWriter
         var bytes = Encoding.UTF8.GetBytes(id);
         Byte((byte)bytes.Length);
         _bytes.AddRange(bytes);
+    }
+
+    /// <summary>Código da sala: tamanho + dígitos (vazio = tamanho 0).</summary>
+    public void Code(string code)
+    {
+        if (!NetProtocol.IsValidCode(code))
+        {
+            throw new ArgumentException("código da sala inválido para a rede", nameof(code));
+        }
+
+        Byte((byte)code.Length);
+        foreach (var c in code)
+        {
+            Byte((byte)c);
+        }
     }
 
     /// <summary>Id que pode ser vazio (tamanho 0): tipo de monstro desconhecido.</summary>
@@ -314,6 +386,42 @@ internal ref struct NetReader(ReadOnlySpan<byte> data)
         id = Encoding.UTF8.GetString(_data.Slice(_pos, length));
         _pos += length;
         if (!NetProtocol.IsValidId(id))
+        {
+            Failed = true;
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>Lê exatamente <paramref name="count"/> bytes (falha se faltar).</summary>
+    public bool TryBytes(int count, out byte[] bytes)
+    {
+        bytes = [];
+        if (!Has(count))
+        {
+            return false;
+        }
+
+        bytes = _data.Slice(_pos, count).ToArray();
+        _pos += count;
+        return true;
+    }
+
+    /// <summary>Código da sala: vazio ou 4 a 6 dígitos.</summary>
+    public bool TryCode(out string code)
+    {
+        code = string.Empty;
+        var length = Byte();
+        if (Failed || length > NetProtocol.MaxCodeLength || !Has(length))
+        {
+            Failed = true;
+            return false;
+        }
+
+        code = Encoding.ASCII.GetString(_data.Slice(_pos, length));
+        _pos += length;
+        if (!NetProtocol.IsValidCode(code))
         {
             Failed = true;
             return false;

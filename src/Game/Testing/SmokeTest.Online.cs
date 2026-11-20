@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Godot;
@@ -22,21 +23,68 @@ namespace Vespera.Game.Testing;
 /// ele anda, leva o grupo à Brecha, espera um monstro morrer pelas mãos do convidado e para de hospedar (segue sozinho).
 /// <c>--online-bot-join</c> entra pelo título → Online → Entrar (Martelo), anda, vê a troca de sala, mata um monstro
 /// (some do snapshot) e volta ao título com o aviso quando o host encerra.
+/// Roteiro determinístico: nenhuma espera é "tempo fixo". Cada passo espera o estado/evento que o próximo precisa (tempo
+/// REAL só como teto, porque com <c>--fixed-fps</c> o relógio do jogo dos dois processos anda em ritmos diferentes) e os
+/// dois lados se sincronizam por arquivo marcador em <c>--online-sync=</c> (o convidado avisa "vi o monstro morrer").
+/// <c>--online-port=</c> escolhe a porta (uma livre por execução) e o convidado erra o código da sala antes de acertar.
 /// </summary>
 public partial class SmokeTest
 {
     public const string OnlineHostFlag = "--online-bot-host";
     public const string OnlineJoinFlag = "--online-bot-join";
 
-    private const string OnlineGuestClass = "hammer";
+    public const string OnlinePortPrefix = "--online-port=";
+    public const string OnlineSyncPrefix = "--online-sync=";
 
-    /// <summary>Tempo real (ms) que o host espera depois da morte antes de fechar a porta, para o convidado ver o snapshot.</summary>
-    private const ulong KillGraceMs = 3000;
+    private const string OnlineGuestClass = "hammer";
+    private const string OnlineRoomCode = "4821";
+    private const string OnlineWrongCode = "0000";
+    private const string KillSeenMarker = "guest-saw-kill";
+    private const string PauseSeenMarker = "guest-saw-pause";
+
+    /// <summary>Tetos em tempo REAL (s): só para não travar a prova se algo quebrar; o fluxo normal espera estados, não relógio.</summary>
+    private const double JoinSeconds = 120;
+    private const double WorldSeconds = 240;
+    private const double KillSeconds = 300;
+    private const double OnlineRealWatchdogSeconds = 900;
+
+    private ulong _onlineDeadlineMs;
+    private string? _onlineSyncDir;
 
     private bool IsOnlineBot => Array.IndexOf(_args, OnlineHostFlag) >= 0 || Array.IndexOf(_args, OnlineJoinFlag) >= 0;
 
+    /// <summary>Teto de tempo real do bot online (o cronômetro do jogo anda no ritmo do <c>--fixed-fps</c>, não do relógio).</summary>
+    public override void _Process(double delta)
+    {
+        if (_onlineDeadlineMs > 0 && Time.GetTicksMsec() > _onlineDeadlineMs)
+        {
+            _onlineDeadlineMs = 0;
+            Log.Error("smoke: tempo real esgotado");
+            GetTree().Quit(ExitTimeout);
+        }
+    }
+
+    private void ApplyOnlineArgs()
+    {
+        _onlineDeadlineMs = Time.GetTicksMsec() + (ulong)(OnlineRealWatchdogSeconds * 1000);
+        foreach (var arg in _args)
+        {
+            if (arg.StartsWith(OnlinePortPrefix, StringComparison.Ordinal) && int.TryParse(arg[OnlinePortPrefix.Length..], out var port))
+            {
+                CoopSession.Rules.Online.Port = port;
+            }
+            else if (arg.StartsWith(OnlineSyncPrefix, StringComparison.Ordinal))
+            {
+                _onlineSyncDir = arg[OnlineSyncPrefix.Length..];
+            }
+        }
+    }
+
+    private string SyncPath(string marker) => Path.Combine(_onlineSyncDir ?? Path.GetTempPath(), marker);
+
     private async Task RunOnlineBot()
     {
+        ApplyOnlineArgs();
         await WaitFor(() => _router.Current is TitleScreen && !_router.IsBusy && FocusText() is not null, "título");
         if (Array.IndexOf(_args, OnlineHostFlag) >= 0)
         {
@@ -74,13 +122,15 @@ public partial class SmokeTest
         await FocusButton("Online");
         await Tap(Key.Enter);
         await WaitFor(() => FindOverlay<OnlineScreen>() is not null, "tela Online na pausa");
+        var screen = FindOverlay<OnlineScreen>()!;
+        screen.SetHostCode(OnlineRoomCode);
         await FocusButton("Hospedar");
         await Tap(Key.Enter);
-        var screen = FindOverlay<OnlineScreen>()!;
         var port = CoopSession.Rules.Online.Port;
         Check(NetSession.Instance?.Role == NetRole.Host, "Hospedar deveria abrir a porta");
         Check(screen.HostInfo.Contains(port.ToString(), StringComparison.Ordinal) && screen.HostInfo.Contains("IP local", StringComparison.Ordinal),
             $"a tela deveria mostrar IP local e porta, mostrou '{screen.HostInfo}'");
+        Check(screen.HostInfo.Contains($"Código da sala: {OnlineRoomCode}", StringComparison.Ordinal), $"a tela deveria mostrar o código da sala, mostrou '{screen.HostInfo}'");
         Log.Info($"online-host: {screen.HostInfo.Split('\n')[0]}");
         await Tap(Key.Escape);
         await Tap(Key.Escape);
@@ -91,8 +141,11 @@ public partial class SmokeTest
         }
 
         // Convidado entra (a outra instância tenta conectar até o host abrir a porta).
-        await WaitFrames(() => level.Players.Count == 2, 60 * 150, "o convidado nascer na Praça");
+        await WaitReal(() => level.Players.Count == 2, JoinSeconds, "o convidado nascer na Praça");
         await PhysicsFrames(10);
+        var hostSession = NetSession.Instance!;
+        Check(hostSession.RefusalCount >= 1 && hostSession.LastRefusal == Vespera.Core.Net.RejectReason.BadCode,
+            $"o host deveria ter recusado a tentativa com código errado antes (recusas: {hostSession.RefusalCount}, última: {hostSession.LastRefusal})");
         var guest = level.World.PlayerAt(1);
         Check(guest is not null && guest.Hunter == HunterClass.Martelo, $"o J2 online deveria entrar com o Martelo ({guest?.Hunter})");
         Check(CoopSession.Online && level.CombatHud.GuestPanelVisible, "o grupo deveria ser online e a HUD mostrar o painel do J2");
@@ -102,7 +155,7 @@ public partial class SmokeTest
         }
 
         var start = guest.GlobalPosition;
-        await WaitFrames(() => IsInstanceValid(guest) && guest.GlobalPosition.DistanceTo(start) > 0.6f * level.World.Data.HumanHeight, 60 * 40, "o J2 andar pelos comandos da rede");
+        await WaitReal(() => IsInstanceValid(guest) && guest.GlobalPosition.DistanceTo(start) > 0.6f * level.World.Data.HumanHeight, WorldSeconds, "o J2 andar pelos comandos da rede");
         Log.Info($"online-host: J2 andou {start} → {guest.GlobalPosition} ({NetSession.CommandsFor(1).Received} comandos recebidos)");
 
         await HostEntersRift(level, lead);
@@ -125,13 +178,13 @@ public partial class SmokeTest
             await PhysicsFrames(20);
         }
 
-        await WaitFrames(() => !level.Switching && level.World.Director is not null && level.World.Players.Count == 2, 60 * 20, "primeira sala da Brecha em grupo");
+        await WaitReal(() => !level.Switching && level.World.Director is not null && level.World.Players.Count == 2, WorldSeconds, "primeira sala da Brecha em grupo");
         Log.Info($"online-host: grupo na sala '{level.World.Data.Id}'");
     }
 
     private async Task HostWaitsForKill(Level level)
     {
-        await WaitFrames(() => level.World.Enemies.Any(e => IsInstanceValid(e) && !e.Dead), 60 * 30, "monstros na primeira sala");
+        await WaitReal(() => level.World.Enemies.Any(e => IsInstanceValid(e) && !e.Dead), WorldSeconds, "monstros na primeira sala");
         // O J1 fica parado (o bot não aperta nada): quem mata é o convidado, pelos comandos da rede. Ondas novas entram na lista.
         var seen = new List<Enemy>();
         bool AnyDied()
@@ -147,21 +200,18 @@ public partial class SmokeTest
             return seen.Any(e => !IsInstanceValid(e) || e.Dead);
         }
 
-        await WaitFrames(AnyDied, 60 * 180, "o convidado matar um monstro");
+        await WaitReal(AnyDied, KillSeconds, "o convidado matar um monstro");
         Log.Info($"online-host: monstro morto pelo J2 ({NetSession.Instance?.SnapshotsSent} snapshots mandados)");
-        // Com --fixed-fps os dois processos não andam no mesmo ritmo; com o PC ocupado o convidado pode ficar atrás.
-        // Dá tempo real para os snapshots sem o monstro chegarem antes de fechar a porta.
-        await PhysicsFrames(60);
-        var until = Time.GetTicksMsec() + KillGraceMs;
-        while (Time.GetTicksMsec() < until)
-        {
-            await PhysicsFrames(1);
-        }
+        // Sem tempo fixo: só fecha a porta quando o convidado avisar (arquivo marcador) que viu o monstro sumir do snapshot.
+        await WaitReal(() => File.Exists(SyncPath(KillSeenMarker)), WorldSeconds, "o convidado ver o monstro morrer no snapshot");
+        Log.Info("online-host: convidado confirmou que viu a morte no snapshot");
     }
 
     private async Task HostStops(Level level)
     {
         await Tap(Key.Escape);
+        // O jogo do host está pausado (e continua hospedando): o convidado precisa mostrar "O host pausou o jogo".
+        await WaitReal(() => File.Exists(SyncPath(PauseSeenMarker)), WorldSeconds, "o convidado ver o aviso de pausa do host");
         await FocusButton("Online");
         await Tap(Key.Enter);
         await WaitFor(() => FindOverlay<OnlineScreen>() is not null, "tela Online na pausa (Brecha)");
@@ -188,34 +238,41 @@ public partial class SmokeTest
         var screen = FindOverlay<OnlineScreen>()!;
         Check(!screen.InGame, "do título a tela Online deveria ter Entrar");
         var port = CoopSession.Rules.Online.Port.ToString();
-        screen.Fill("127.0.0.1", port, OnlineGuestClass);
+        var session = NetSession.Instance!;
+        string? failure = null;
+        void OnResult(bool ok, string text) => failure = ok ? null : text;
+        session.JoinResult += OnResult;
+
+        // 1) Código errado: o host recusa e o convidado vê o aviso em pt-BR (e continua na tela Online).
+        screen.Fill("127.0.0.1", port, OnlineGuestClass, OnlineWrongCode);
         Check(screen.ClassId == OnlineGuestClass, "a classe escolhida deveria ser o Martelo");
+        await PressButton(screen, "Entrar");
+        await WaitReal(() => failure is not null, JoinSeconds, "a recusa do host pelo código errado");
+        Check(failure?.Contains("Código da sala incorreto", StringComparison.Ordinal) == true, $"o aviso deveria falar do código errado, foi '{failure}'");
+        Check(session.GuestState != GuestState.Joined && _router.Current is TitleScreen, "com o código errado o convidado não deveria entrar");
+        Log.Info($"online-guest: código errado recusado: '{failure}'");
 
-        var deadline = Time.GetTicksMsec() + 150_000UL;
-        while (NetSession.Instance?.GuestState != GuestState.Joined && Time.GetTicksMsec() < deadline)
-        {
-            if (NetSession.Instance?.Role != NetRole.Guest && FindOverlay<OnlineScreen>() is { } open)
-            {
-                await PressButton(open, "Entrar");
-            }
-
-            await Seconds(1.0);
-        }
-
-        Check(NetSession.Instance?.GuestState == GuestState.Joined, $"o convidado deveria entrar (estado: {NetSession.Instance?.Status})");
-        await WaitFrames(() => _router.Current is OnlineGuestView && !_router.IsBusy, 600, "tela do convidado");
+        // 2) Código certo: entra.
+        failure = null;
+        screen = FindOverlay<OnlineScreen>()!;
+        screen.Fill("127.0.0.1", port, OnlineGuestClass, OnlineRoomCode);
+        await PressButton(screen, "Entrar");
+        await WaitReal(() => session.GuestState == GuestState.Joined || failure is not null, JoinSeconds, "o host aceitar o convidado");
+        session.JoinResult -= OnResult;
+        Check(session.GuestState == GuestState.Joined, $"o convidado deveria entrar (recusa: '{failure}', estado: {session.Status})");
+        await WaitReal(() => _router.Current is OnlineGuestView && !_router.IsBusy, JoinSeconds, "tela do convidado");
         if (_failures.Count > 0 || _router.Current is not OnlineGuestView view)
         {
             return;
         }
 
-        var session = NetSession.Instance!;
-        await WaitFrames(() => session.LatestSnapshot?.Hunter(session.Slot) is not null, 60 * 120, "o próprio caçador no snapshot");
+        await WaitReal(() => session.LatestSnapshot?.Hunter(session.Slot) is not null, WorldSeconds, "o próprio caçador no snapshot");
+        await GuestChecksScene(view, session);
         var levelBefore = session.LatestSnapshot!.LevelId;
         var startX = session.LatestSnapshot.Hunter(session.Slot)!.Value.X;
         // Os dois processos rodam sem sincronia com o relógio (--fixed-fps): anda até o snapshot do host mostrar o passo.
         input.Move = new Vector2(1, 0);
-        await WaitFrames(() => (session.LatestSnapshot?.Hunter(session.Slot)?.X ?? startX) > startX + 40f, 60 * 30, "o passo do convidado voltar no snapshot");
+        await WaitReal(() => (session.LatestSnapshot?.Hunter(session.Slot)?.X ?? startX) > startX + 40f, WorldSeconds, "o passo do convidado voltar no snapshot");
         input.Move = Vector2.Zero;
         await PhysicsFrames(20);
         var movedX = session.LatestSnapshot!.Hunter(session.Slot)?.X ?? startX;
@@ -223,15 +280,44 @@ public partial class SmokeTest
         Check(view.HunterDrawnAt(session.Slot) is not null && view.HunterDrawnAt(0) is not null, "o convidado deveria desenhar os dois caçadores");
         Log.Info($"online-guest: andou {startX:0} → {movedX:0} na sala '{levelBefore}' ({session.SnapshotsReceived} snapshots)");
 
-        await WaitFrames(() => session.LatestSnapshot?.LevelId != levelBefore && view.LevelId == session.LatestSnapshot?.LevelId, 60 * 120, "troca de sala vinda do host");
+        await WaitReal(() => session.LatestSnapshot?.LevelId != levelBefore && view.LevelId == session.LatestSnapshot?.LevelId, WorldSeconds, "troca de sala vinda do host");
         Log.Info($"online-guest: sala trocou para '{view.LevelId}'");
         await GuestHunts(view, session, input);
+        await GuestChecksCombatView(view);
+        await WaitReal(() => view.HostPausedShown, WorldSeconds, "o aviso de que o host pausou");
+        File.WriteAllText(SyncPath(PauseSeenMarker), "1");
+        Log.Info("online-guest: viu o aviso 'host pausou'");
 
-        await WaitFrames(() => _router.Current is TitleScreen && !_router.IsBusy, 60 * 400, "volta ao título quando o host encerra");
+        await WaitReal(() => _router.Current is TitleScreen && !_router.IsBusy, WorldSeconds, "volta ao título quando o host encerra");
         Check(NetSession.Instance?.Role == NetRole.None, "a conexão deveria estar fechada");
         Check(TitleScreen.LastNotice.Length > 0, "o título deveria mostrar o aviso da queda");
         Log.Info($"online-guest: de volta ao título com aviso '{TitleScreen.LastNotice}'");
         NetSession.GuestInputOverride = null;
+    }
+
+    /// <summary>Cenário do host na tela do convidado: objetos e NPCs da sala, na mesma conta do que o host mandou.</summary>
+    private async Task GuestChecksScene(OnlineGuestView view, NetSession session)
+    {
+        await WaitReal(() => session.LatestScene is { Entries.Count: > 0 } && view.SceneryDrawn > 0, WorldSeconds, "o cenário (objetos) da sala do host");
+        var scene = session.LatestScene!;
+        Check(scene.LevelId == view.LevelId, $"o cenário deveria ser da sala desenhada ({scene.LevelId} x {view.LevelId})");
+        Check(view.SceneryDrawn == scene.Entries.Count, $"o convidado deveria desenhar todos os objetos do host ({view.SceneryDrawn} de {scene.Entries.Count})");
+        var npcs = session.LatestSnapshot!.NpcList.Count;
+        if (npcs > 0)
+        {
+            await WaitReal(() => view.NpcsDrawn > 0, WorldSeconds, "os NPCs da sala do host");
+        }
+
+        Log.Info($"online-guest: cenário '{scene.LevelId}': {view.SceneryDrawn} objetos, {view.NpcsDrawn} NPCs (host tem {npcs})");
+    }
+
+    /// <summary>Golpes e dano do host na tela do convidado (números/efeitos tocados) e o HUD de vida e fôlego.</summary>
+    private async Task GuestChecksCombatView(OnlineGuestView view)
+    {
+        await WaitReal(() => view.DamageNumbersPlayed > 0, JoinSeconds, "números de dano vindos do host");
+        Check(view.EffectsPlayed > 0, "o convidado deveria ter tocado efeitos de golpe do host");
+        Check(view.HudLifeText.Contains("Vida", StringComparison.Ordinal) && view.HudLifeFraction > 0.05f, $"o HUD deveria mostrar a vida do convidado ('{view.HudLifeText}', {view.HudLifeFraction:0.00})");
+        Log.Info($"online-guest: {view.EffectsPlayed} efeitos de golpe ({view.DamageNumbersPlayed} números de dano); HUD '{view.HudLifeText}'");
     }
 
     /// <summary>Anda até o monstro mais perto e bate até um monstro visto sumir do snapshot (morto no host).</summary>
@@ -240,7 +326,8 @@ public partial class SmokeTest
         var seen = new HashSet<int>();
         var killed = 0;
         var reach = 0.7f * (view.HumanHeight > 0 ? view.HumanHeight : 100f);
-        for (var frame = 0; frame < 60 * 120 && killed == 0 && session.LatestSnapshot is { } snap; frame += 2)
+        var deadline = Time.GetTicksMsec() + (ulong)(KillSeconds * 1000);
+        for (var frame = 0; Time.GetTicksMsec() < deadline && killed == 0 && session.LatestSnapshot is { } snap; frame += 2)
         {
             var ids = snap.Enemies.Select(e => e.Id).ToHashSet();
             killed += seen.Count(id => !ids.Contains(id));
@@ -268,6 +355,8 @@ public partial class SmokeTest
         input.Move = Vector2.Zero;
         Check(killed > 0, "um monstro deveria morrer no host e sumir do snapshot do convidado");
         Log.Info($"online-guest: {killed} monstro(s) morto(s) vistos no snapshot");
+        // Avisa o host (que espera este arquivo, sem tempo fixo) que o snapshot já mostrou a morte.
+        File.WriteAllText(SyncPath(KillSeenMarker), killed.ToString());
     }
 
     // ---------------------------------------------------------------- ajudas
@@ -291,6 +380,22 @@ public partial class SmokeTest
                 stack.Push(child);
             }
         }
+    }
+
+    /// <summary>
+    /// Espera o estado em tempo REAL (até <paramref name="seconds"/>, teto de segurança): com <c>--fixed-fps</c> o relógio do jogo
+    /// dos dois processos anda em ritmos diferentes, então quadros e <c>CreateTimer</c> não medem a espera pelo outro lado.
+    /// </summary>
+    private async Task WaitReal(Func<bool> condition, double seconds, string what)
+    {
+        var deadline = Time.GetTicksMsec() + (ulong)(seconds * 1000);
+        while (!condition() && Time.GetTicksMsec() < deadline)
+        {
+            await Frames(1);
+            OS.DelayMsec(2);
+        }
+
+        Check(condition(), $"tempo esgotado esperando: {what}");
     }
 
     /// <summary>Espera em quadros de física (até <paramref name="limit"/>); falha com o texto se não acontecer.</summary>

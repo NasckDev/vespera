@@ -5,6 +5,7 @@ using Godot;
 using Vespera.Core.Coop;
 using Vespera.Core.Net;
 using Vespera.Game.Boot;
+using Vespera.Game.Combat;
 using Vespera.Game.Coop;
 
 namespace Vespera.Game.Net;
@@ -128,7 +129,10 @@ public partial class NetSession : Node
         var wasHost = Role == NetRole.Host;
         Role = NetRole.None;
         _guests.Clear();
+        _effects.Clear();
+        CombatFeel.EffectEmitted -= OnFeelEffect;
         _guestWatch = null;
+        LatestScene = null;
         _peer?.Close();
         _peer = null;
         if (_mp is not null && IsInstanceValid(_mp))

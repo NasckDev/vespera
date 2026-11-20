@@ -20,8 +20,11 @@ public partial class OnlineScreen(bool inGame) : UiScreen
     private Button _stopHost = null!;
     private Button? _play;
     private Label _hostInfo = null!;
+    private LineEdit _hostCode = null!;
+    private LineEdit _hostPort = null!;
     private LineEdit? _address;
     private LineEdit? _port;
+    private LineEdit? _joinCode;
     private Button? _classButton;
     private Button? _join;
     private Label? _joinInfo;
@@ -51,6 +54,20 @@ public partial class OnlineScreen(bool inGame) : UiScreen
         column.AddChild(UiKit.MakeWrapped(inGame
             ? "Seu jogo vira a partida: o amigo entra ao seu lado quando vocês estiverem fora da Brecha."
             : "Abre a porta para um amigo. Depois escolha o espaço de save; ele entra ao seu lado na cidade.", UiTheme.DimVariation));
+        var hostRow = UiKit.MakeRow(12);
+        _hostCode = new LineEdit
+        {
+            PlaceholderText = "Código da sala (4 a 6 números; vazio = sala aberta)",
+            CustomMinimumSize = new Vector2(FieldWidth, 0),
+            Text = RoomCodes.Generate(),
+            MaxLength = NetProtocol.MaxCodeLength,
+        };
+        _hostPort = new LineEdit { PlaceholderText = "Porta", CustomMinimumSize = new Vector2(180, 0), Text = CoopSession.Rules.Online.Port.ToString() };
+        hostRow.AddChild(_hostCode);
+        hostRow.AddChild(_hostPort);
+        column.AddChild(hostRow);
+        buttons.Add(_hostCode);
+        buttons.Add(_hostPort);
         _host = Add(column, buttons, "Hospedar", StartHosting);
         _stopHost = Add(column, buttons, "Parar de hospedar", StopHosting);
         if (!inGame)
@@ -87,15 +104,23 @@ public partial class OnlineScreen(bool inGame) : UiScreen
     private void BuildJoin(VBoxContainer column, List<Control> buttons)
     {
         column.AddChild(UiKit.MakeLabel("Entrar", UiTheme.TitleVariation));
-        column.AddChild(UiKit.MakeWrapped("Digite o IP e a porta que o host mostra em \"Hospedar\" e escolha a classe.", UiTheme.DimVariation));
+        column.AddChild(UiKit.MakeWrapped("Digite o IP, a porta e o código que o host mostra em \"Hospedar\" e escolha a classe.", UiTheme.DimVariation));
         var row = UiKit.MakeRow(12);
-        _address = new LineEdit { PlaceholderText = "IP do host (ex.: 192.168.0.10)", CustomMinimumSize = new Vector2(FieldWidth, 0), Text = "127.0.0.1" };
+        _address = new LineEdit { PlaceholderText = "IP do host (ex.: 192.168.0.10)", CustomMinimumSize = new Vector2(FieldWidth, 0) };
         _port = new LineEdit { PlaceholderText = "Porta", CustomMinimumSize = new Vector2(180, 0), Text = CoopSession.Rules.Online.Port.ToString() };
+        _joinCode = new LineEdit
+        {
+            PlaceholderText = "Código da sala (se o host usa)",
+            CustomMinimumSize = new Vector2(FieldWidth, 0),
+            MaxLength = NetProtocol.MaxCodeLength,
+        };
         row.AddChild(_address);
         row.AddChild(_port);
         column.AddChild(row);
+        column.AddChild(_joinCode);
         buttons.Add(_address);
         buttons.Add(_port);
+        buttons.Add(_joinCode);
         _classButton = Add(column, buttons, ClassText(), () =>
         {
             _classIndex = (_classIndex + 1) % CoopSession.ClassIds.Length;
@@ -106,16 +131,23 @@ public partial class OnlineScreen(bool inGame) : UiScreen
         column.AddChild(_joinInfo);
     }
 
+    /// <summary>Bots e testes: define o código da sala do host como um jogador digitaria.</summary>
+    public void SetHostCode(string code) => _hostCode.Text = code;
+
+    /// <summary>Bots e testes: define a porta do host.</summary>
+    public void SetHostPort(string port) => _hostPort.Text = port;
+
     /// <summary>Bots e testes: preenche os campos como um jogador digitaria.</summary>
-    public void Fill(string address, string port, string classId)
+    public void Fill(string address, string port, string classId, string code = "")
     {
-        if (_address is null || _port is null)
+        if (_address is null || _port is null || _joinCode is null)
         {
             return;
         }
 
         _address.Text = address;
         _port.Text = port;
+        _joinCode.Text = code;
         var index = System.Array.IndexOf(CoopSession.ClassIds, classId);
         _classIndex = index >= 0 ? index : _classIndex;
         _classButton!.Text = ClassText();
@@ -139,7 +171,25 @@ public partial class OnlineScreen(bool inGame) : UiScreen
             return;
         }
 
-        session.Host(CoopSession.Rules.Online.Port);
+        var code = _hostCode.Text.Trim();
+        if (!NetProtocol.IsValidCode(code))
+        {
+            _hostInfo.Text = $"O código da sala deve ter de {NetProtocol.MinCodeLength} a {NetProtocol.MaxCodeLength} números (ou ficar vazio para sala aberta).";
+            return;
+        }
+
+        if (!NetProtocol.TryParsePort(_hostPort.Text, out var port))
+        {
+            _hostInfo.Text = "Porta inválida: use um número de 1024 a 65535.";
+            return;
+        }
+
+        if (session.Host(port, code) != Error.Ok)
+        {
+            Refresh();
+            return;
+        }
+
         Refresh();
         _stopHost.GrabFocus();
     }
@@ -158,9 +208,21 @@ public partial class OnlineScreen(bool inGame) : UiScreen
             return;
         }
 
+        if (string.IsNullOrWhiteSpace(_address.Text))
+        {
+            _joinInfo.Text = "Digite o IP que o host mostra em \"Hospedar\" (ex.: 192.168.0.10).";
+            return;
+        }
+
         if (!NetProtocol.IsValidAddress(_address.Text))
         {
             _joinInfo.Text = "Endereço inválido. Use o IP que o host mostra (ex.: 192.168.0.10).";
+            return;
+        }
+
+        if (!NetProtocol.IsValidCode(_joinCode?.Text.Trim()))
+        {
+            _joinInfo.Text = $"O código da sala tem de {NetProtocol.MinCodeLength} a {NetProtocol.MaxCodeLength} números (ou ficar vazio se o host não usa).";
             return;
         }
 
@@ -170,7 +232,7 @@ public partial class OnlineScreen(bool inGame) : UiScreen
             return;
         }
 
-        session.Join(_address.Text, port, ClassId);
+        session.Join(_address.Text, port, ClassId, _joinCode?.Text.Trim() ?? string.Empty);
         _joinInfo.Text = session.Status;
         Refresh();
     }
@@ -198,9 +260,13 @@ public partial class OnlineScreen(bool inGame) : UiScreen
             _play.Visible = hosting;
         }
 
+        var codeLine = session?.RoomCode is { Length: > 0 } code ? $"Código da sala: {code}" : "Sala aberta: qualquer um com o IP e a porta entra.";
+        var codeHint = session?.RoomCode.Length > 0 ? " e o código" : string.Empty;
         _hostInfo.Text = hosting
-            ? $"{session!.Status}\nO amigo digita o IP e a porta {session.Port} em \"Entrar\". Pela internet, abra a porta {session.Port} (UDP) no roteador e no firewall e passe o seu IP público."
-            : string.Empty;
+            ? $"{session!.Status}\n{codeLine}\nO amigo digita o IP, a porta {session.Port}{codeHint} em \"Entrar\". Pela internet, abra a porta {session.Port} (UDP) no roteador e no firewall e passe o seu IP público."
+            : session?.HostError ?? string.Empty;
+        _hostCode.Editable = !hosting;
+        _hostPort.Editable = !hosting;
         if (_join is not null)
         {
             _join.Disabled = hosting || guest;
