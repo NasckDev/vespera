@@ -83,9 +83,23 @@ public sealed class LocalInputSource : IInputSource
         return pressed || (axisNow && !axisBefore);
     }
 
-    private string[] Codes(string action) => DeviceId == KeyboardMouse
-        ? [InputSetup.Table.Get(action, BindingSlot.Primary), InputSetup.Table.Get(action, BindingSlot.Alternate)]
-        : [InputSetup.Table.Get(action, BindingSlot.Gamepad)];
+    /// <summary>Códigos que valem para esta fonte, lidos da tabela DELA (não da do J1) e só das colunas dela.</summary>
+    internal string[] Codes(string action)
+    {
+        var table = _table();
+        if (DeviceId != KeyboardMouse)
+        {
+            return [table.Get(action, BindingSlot.Gamepad)];
+        }
+
+        var codes = new string[_keyboardSlots.Length];
+        for (var i = 0; i < codes.Length; i++)
+        {
+            codes[i] = table.Get(action, _keyboardSlots[i]);
+        }
+
+        return codes;
+    }
 
     private float AxisStrength(string action)
     {
@@ -94,7 +108,7 @@ public sealed class LocalInputSource : IInputSource
             return 0f;
         }
 
-        var code = InputSetup.Table.Get(action, BindingSlot.Gamepad);
+        var code = _table().Get(action, BindingSlot.Gamepad);
         return code.StartsWith("axis:", StringComparison.Ordinal) ? PadStrength(code) : 0f;
     }
 

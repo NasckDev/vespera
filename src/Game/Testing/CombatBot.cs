@@ -26,9 +26,11 @@ public sealed partial class CombatBot(Level level, SmokeTest host)
 {
     private const int RoomFrameLimit = 60 * 120;
     private const int StuckFrames = 75;
+    private const int ProgressLogFrames = 60 * 15;
     private const float AttackReach = 48f;
 
     private readonly List<string> _failures = [];
+    private readonly HashSet<VeloraCandle> _wrongCandles = [];
 
     public IReadOnlyList<string> Failures => _failures;
     private readonly ScriptedInput _input = new();

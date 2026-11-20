@@ -322,9 +322,13 @@ public partial class RoomDirector : Node
     public override void _Process(double delta)
     {
         var dt = (float)delta;
-        if (!Cleared && Guardian is null)
+        if (!Cleared)
         {
-            TickWaves(dt);
+            if (Guardian is null)
+            {
+                TickWaves(dt);
+            }
+
             KeepWaveReachable(dt);
         }
 
@@ -367,8 +371,12 @@ public partial class RoomDirector : Node
             : $"{e.MonsterId}{(e.Elite ? " (elite)" : string.Empty)} em ({e.GlobalPosition.X:0},{e.GlobalPosition.Y:0}) vida {e.Hp:0}/{e.MaxHp:0} estado {e.State} visível {e.Visible} " +
               $"golpeável {e.CanBeHit} na árvore {e.IsInsideTree()} na lista {_world.Enemies.Contains(e)} alcançável {IsReachable(e.GlobalPosition)}"));
         return $"limpa {Cleared}, onda {_nextWave}/{_data.Waves.Count}, pendentes {_pending}, fora {_waveOut}, timer {_timer:0.00}, " +
-               $"vivos no mundo {Alive.Count()}, onda [{wave}]";
+               $"vivos no mundo {Alive.Count()} [{string.Join("; ", Alive.Select(DescribeEnemy))}], onda [{wave}]";
     }
+
+    private string DescribeEnemy(Enemy e) =>
+        $"{e.MonsterId}{(e == Guardian ? " (guardião)" : string.Empty)} em ({e.GlobalPosition.X:0},{e.GlobalPosition.Y:0}) vida {e.Hp:0}/{e.MaxHp:0} " +
+        $"estado {e.State} visível {e.Visible} golpeável {e.CanBeHit} alcançável {IsReachable(e.GlobalPosition)}";
 
     private void TickWaves(float dt)
     {

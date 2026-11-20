@@ -23,6 +23,7 @@ public partial class SmokeTest
     private async Task RunCoop(Level level)
     {
         CheckNumpadCodes();
+        await CheckPlayer2KeyboardActions();
         await CaptureFreshJoinScreen();
         var bot = new CoopBot(level, this) { Shots = _shotsDir is not null && DisplayServer.GetName() != "headless" };
         CoopSession.SourceOverride = bot.SourceFor;
@@ -38,8 +39,37 @@ public partial class SmokeTest
         Check(BindingTable.KeyKp0 == (long)Key.Kp0 && BindingTable.KeyKp1 == (long)Key.Kp1 && BindingTable.KeyKp2 == (long)Key.Kp2
             && BindingTable.KeyKp3 == (long)Key.Kp3 && BindingTable.KeyKpEnter == (long)Key.KpEnter && BindingTable.KeyEnter == (long)Key.Enter
             && BindingTable.KeyKpAdd == (long)Key.KpAdd && BindingTable.KeyKpSubtract == (long)Key.KpSubtract
+            && BindingTable.KeyKp4 == (long)Key.Kp4 && BindingTable.KeyKp5 == (long)Key.Kp5
             && BindingTable.KeyKpMultiply == (long)Key.KpMultiply && BindingTable.KeyKpPeriod == (long)Key.KpPeriod,
             "códigos do teclado numérico do J2 não batem com Godot.Key");
+    }
+
+    /// <summary>
+    /// Regressão #68: a fonte de teclado do J2 (tabela dele) tem de enxergar o "acabou de apertar" das teclas do bloco numérico
+    /// (antes procurava a tecla do J1 e dava sempre falso), e a do J1 não pode reagir a elas.
+    /// </summary>
+    private async Task CheckPlayer2KeyboardActions()
+    {
+        var member = new CoopMember(1, InputDevice.KeyboardRight, HunterClass.Arco, false);
+        var guest = CoopSession.DeviceSource(member);
+        var host = new LocalInputSource(LocalInputSource.KeyboardMouse, () => InputSetup.TableFor(0), [BindingSlot.Primary]);
+        (string Action, Key Key)[] keys =
+        [
+            (InputActions.Attack, Key.Kp1), (InputActions.Heavy, Key.Kp2), (InputActions.Dodge, Key.Kp0), (InputActions.Skill, Key.Kp3),
+            (InputActions.Skill2, Key.Kp4), (InputActions.Potion, Key.Kp5), (InputActions.Interact, Key.KpEnter),
+        ];
+        await Frames(6);
+        foreach (var (action, key) in keys)
+        {
+            guest.IsJustPressed(action);
+            host.IsJustPressed(action);
+            Input.ParseInputEvent(MakeKey(key, pressed: true));
+            await Frames(1);
+            Check(guest.IsJustPressed(action), $"J2: {key} deveria disparar '{action}' na fonte do J2");
+            Check(!host.IsJustPressed(action), $"J1: {key} (tecla do J2) não deveria disparar '{action}' no J1");
+            Input.ParseInputEvent(MakeKey(key, pressed: false));
+            await Frames(1);
+        }
     }
 
     /// <summary>Tela de entrada como vem do título: J1 no teclado (esquerda), J2 na metade direita, classes iguais.</summary>
