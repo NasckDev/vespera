@@ -50,8 +50,8 @@ public partial class OptionsScreen : UiScreen
             d => Change(() => s.WindowSize = Wrap(s.WindowSize + d, GameSettings.WindowHeights.Length - 1)));
         yield return new StepRow("Tremor de tela", () => $"{s.ScreenShake}%", d => Change(() => s.ScreenShake = Step(s.ScreenShake, d, ShakeStep)));
         yield return new StepRow("Reduzir flashes", () => YesNo(s.ReduceFlashes), _ => Change(() => s.ReduceFlashes = !s.ReduceFlashes));
-        yield return new StepRow("Tamanho do texto", () => s.TextSize == GameSettings.TextLarge ? "Grande" : "Normal",
-            _ => Change(() => s.TextSize = s.TextSize == GameSettings.TextLarge ? GameSettings.TextNormal : GameSettings.TextLarge));
+        yield return new StepRow("Tamanho do texto", () => TextSizeName(s.TextSize),
+            d => Change(() => s.TextSize = Wrap(s.TextSize + d, GameSettings.TextHuge)));
     }
 
     private void Change(Action mutate)
@@ -70,6 +70,13 @@ public partial class OptionsScreen : UiScreen
         var height = GameSettings.WindowHeights[index];
         return $"{height * 16 / 9}x{height}";
     }
+
+    private static string TextSizeName(int size) => size switch
+    {
+        GameSettings.TextLarge => "Grande",
+        GameSettings.TextHuge => "Muito grande",
+        _ => "Normal",
+    };
 
     private static string YesNo(bool value) => value ? "Sim" : "Não";
 }

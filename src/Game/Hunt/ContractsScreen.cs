@@ -14,7 +14,7 @@ public partial class ContractsScreen : HunterScreen
 
     public static ContractsScreen? Active { get; private set; }
 
-    public static void Show() => Open(new ContractsScreen());
+    public static new void Show() => Open(new ContractsScreen());
 
     protected override Control? DefaultFocus() => _close;
 

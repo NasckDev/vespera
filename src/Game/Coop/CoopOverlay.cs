@@ -63,7 +63,7 @@ public partial class CoopOverlay(Level level) : Control
 
     private void DrawTag(Vector2 at, string text, Color color)
     {
-        var size = _font.GetStringSize(text, HorizontalAlignment.Center, -1, TagFontSize);
+        var size = _font.GetStringSize(text, HorizontalAlignment.Center, -1, HudText.Px(TagFontSize));
         var box = new Rect2(at - new Vector2((size.X / 2f) + 10f, size.Y + 4f), new Vector2(size.X + 20f, size.Y + 4f));
         DrawRect(box, new Color(Palette.Indigo, 0.82f));
         DrawRect(box, color, filled: false, width: 2f);
@@ -71,7 +71,7 @@ public partial class CoopOverlay(Level level) : Control
         // Pontinha apontando para a cabeça do caçador.
         var tip = new Vector2(at.X, at.Y + 7f);
         DrawColoredPolygon([new Vector2(at.X - 6f, box.End.Y), new Vector2(at.X + 6f, box.End.Y), tip], color);
-        DrawString(_font, new Vector2(box.Position.X + 10f, box.End.Y - 7f), text, HorizontalAlignment.Left, -1, TagFontSize, color);
+        DrawString(_font, new Vector2(box.Position.X + 10f, box.End.Y - 7f), text, HorizontalAlignment.Left, -1, HudText.Px(TagFontSize), color);
     }
 
     private void DrawDowned(LevelWorld world, Player downed, Color color)
@@ -103,9 +103,9 @@ public partial class CoopOverlay(Level level) : Control
             ? $"{tag} caiu! Chegue perto para reanimar"
             : $"{CoopSession.TagOf(helper.Slot)}: segure {InputGlyphs.Describe(helper.Input, InputActions.Interact)} para reanimar";
         var hintColor = helper is null ? Palette.Cream : CoopSession.ColorOf(helper.Slot);
-        var size = _font.GetStringSize(text, HorizontalAlignment.Center, -1, HintFontSize);
+        var size = _font.GetStringSize(text, HorizontalAlignment.Center, -1, HudText.Px(HintFontSize));
         var at = feet + new Vector2(-size.X / 2f, size.Y + 18f);
         DrawRect(new Rect2(at - new Vector2(10f, size.Y - 2f), new Vector2(size.X + 20f, size.Y + 8f)), new Color(Palette.Indigo, 0.78f));
-        DrawString(_font, at, text, HorizontalAlignment.Left, -1, HintFontSize, hintColor);
+        DrawString(_font, at, text, HorizontalAlignment.Left, -1, HudText.Px(HintFontSize), hintColor);
     }
 }

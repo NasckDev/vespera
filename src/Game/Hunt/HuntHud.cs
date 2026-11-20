@@ -59,18 +59,18 @@ public partial class HuntHud : Control
         }
         _room = RightLabel(40, Palette.Amber, RoomY);
         _goal = RightLabel(34, Palette.Cream, GoalY);
-        _contracts = RightLabel(28, Palette.CreamDim, ContractsY);
+        _contracts = RightLabel(28, Palette.Cream, ContractsY);
         _contracts.AutowrapMode = TextServer.AutowrapMode.Off;
         _lumes = MakeLabel(30, Palette.Amber);
         _lumes.Position = new Vector2(160, 180);
         AddChild(_lumes);
         _soup = MakeLabel(30, Slime);
-        _soup.Position = new Vector2(160, 222);
+        _soup.Position = new Vector2(160, 180 + HudText.Px(30) + 12);
         _soup.Text = Core.Hunt.RunPerks.SoupLabel;
         AddChild(_soup);
         _map = RightLabel(28, MapBlue, MapY);
         _map.AutowrapMode = TextServer.AutowrapMode.WordSmart;
-        _map.Size = new Vector2(870, 80);
+        _map.Size = new Vector2(870, HudText.Px(28) * 2 + 16);
     }
 
     private Label RightLabel(int size, Color color, float y)
@@ -78,7 +78,7 @@ public partial class HuntHud : Control
         var label = MakeLabel(size, color);
         label.HorizontalAlignment = HorizontalAlignment.Right;
         label.Position = new Vector2(1020, y);
-        label.Size = new Vector2(870, size + 10);
+        label.Size = new Vector2(870, HudText.Px(size) + 10);
         AddChild(label);
         return label;
     }
@@ -88,6 +88,8 @@ public partial class HuntHud : Control
     private const float GoalY = 76f;
     private const float ContractsY = 124f;
     private const float MapY = 254f;
+    private const float LineGap = 8f;
+    private const int ContractLines = 3;
 
     /// <summary>No co-op o painel do J2 ocupa o topo à direita: sala, objetivo e contratos descem para baixo dele.</summary>
     private const float GuestPanelShift = 150f;
@@ -108,12 +110,17 @@ public partial class HuntHud : Control
             return;
         }
 
-        Visible = true;
+        Visible = BlessingScreen.Active is null;
         var shift = Coop.CoopSession.Active ? GuestPanelShift : 0f;
+        // Com texto maior as linhas empilham pela altura de cada uma, sem se sobrepor.
+        var goalY = RoomY + HudText.Px(40) + LineGap;
+        var contractsY = goalY + HudText.Px(34) + LineGap;
+        var contractsH = ContractLines * (HudText.Px(28) + LineGap);
         _room.Position = new Vector2(1020, RoomY + shift);
-        _goal.Position = new Vector2(1020, GoalY + shift);
-        _contracts.Position = new Vector2(1020, ContractsY + shift);
-        _map.Position = new Vector2(1020, MapY + shift);
+        _goal.Position = new Vector2(1020, goalY + shift);
+        _contracts.Position = new Vector2(1020, contractsY + shift);
+        _contracts.Size = new Vector2(870, contractsH);
+        _map.Position = new Vector2(1020, contractsY + contractsH + LineGap + shift);
         var state = HuntService.State;
         var potionKey = (state.Potions, HuntService.Config.Potions.Max, InputDevices.KeyName(InputActions.Potion));
         if (potionKey != _potionKey)
@@ -204,13 +211,12 @@ public partial class HuntHud : Control
         var plan = HuntService.Plan!;
         var director = _world!.Director;
         var waves = director is { WaveCount: > 0 } d ? $"  ·  Onda {System.Math.Max(1, d.WavesReleased)}/{d.WaveCount}" : string.Empty;
-        _room.Text = $"Sala {RiftSession.RoomIndex + 1}/{plan.Rooms.Count}{waves}";
+        _room.Text = $"Sala {RiftSession.RoomIndex + 1} de {plan.Rooms.Count}{waves}";
         _goal.Text = RoomGoal(director);
         var board = HuntService.Board;
         var lines = HuntService.Contracts.Select(c => board.Evaluate(c, HuntService.Report))
             .Select(p => $"{(p.Done ? "✔" : "·")} {p.Title} {p.Have}/{p.Need}");
         _contracts.Text = string.Join('\n', lines);
-        _contracts.Size = new Vector2(870, 40 * 3);
     }
 
     /// <summary>O que fazer nesta sala, numa linha.</summary>
@@ -254,10 +260,14 @@ public partial class HuntHud : Control
     {
         var label = new Label { MouseFilter = MouseFilterEnum.Ignore };
         label.AddThemeFontOverride("font", GD.Load<Font>(FontPath));
-        label.AddThemeFontSizeOverride("font_size", size);
+        HudText.Bind(label, size);
         label.AddThemeColorOverride("font_color", color);
+        // Contorno forte e sombra: o texto não pode sumir sobre cenário claro (#82).
         label.AddThemeColorOverride("font_outline_color", new Color(0.05f, 0.04f, 0.1f));
-        label.AddThemeConstantOverride("outline_size", 8);
+        label.AddThemeConstantOverride("outline_size", 12);
+        label.AddThemeColorOverride("font_shadow_color", new Color(0f, 0f, 0f, 0.7f));
+        label.AddThemeConstantOverride("shadow_offset_x", 2);
+        label.AddThemeConstantOverride("shadow_offset_y", 3);
         return label;
     }
 
@@ -305,6 +315,21 @@ public partial class HuntHud : Control
             ["eco_avesso"] = new Color("b88cff"),
         };
 
+        /// <summary>Sigla de cada Eco no ícone: a cor sozinha não distingue (daltonismo, #82).</summary>
+        private static readonly System.Collections.Generic.Dictionary<string, string> EcoGlyphs = new()
+        {
+            ["eco_viscoso"] = "Vi",
+            ["eco_semente"] = "Se",
+            ["eco_farol"] = "Fa",
+            ["eco_vela"] = "Ve",
+            ["eco_sino"] = "Si",
+            ["eco_lar"] = "La",
+            ["eco_avesso"] = "Av",
+        };
+
+        private const int GlyphFontSize = 36;
+        private static Font? _glyphFont;
+
         private Label? _key;
 
         /// <summary>0 = pronto; 1 = recém-usado.</summary>
@@ -329,16 +354,31 @@ public partial class HuntHud : Control
         {
             // Embaixo do ícone e centrada: "Num 4" e "Num Enter" são mais largos que o ícone e não podem sair de lado.
             _key = MakeLabel(KeyFontSize, Palette.Cream);
+            var keyHeight = HudText.Px(KeyFontSize) + 8;
             _key.Text = string.Empty;
             _key.HorizontalAlignment = HorizontalAlignment.Center;
             _key.Position = new Vector2(-KeyOverhang, Size.Y - KeyLift);
-            _key.Size = new Vector2(Size.X + (2 * KeyOverhang), KeyFontSize + 8);
+            _key.Size = new Vector2(Size.X + (2 * KeyOverhang), keyHeight);
             AddChild(_key);
         }
 
         private Color BaseColor => EcoColors.TryGetValue(EcoId, out var tint) ? tint : Palette.Amber;
 
         public override void _Process(double delta) => QueueRedraw();
+
+        private void DrawGlyph(Vector2 center)
+        {
+            if (!EcoGlyphs.TryGetValue(EcoId, out var glyph))
+            {
+                return;
+            }
+
+            _glyphFont ??= GD.Load<Font>(FontPath);
+            var width = _glyphFont.GetStringSize(glyph, HorizontalAlignment.Left, -1, GlyphFontSize).X;
+            var at = new Vector2(center.X - (width / 2f), center.Y + (GlyphFontSize * 0.34f));
+            DrawStringOutline(_glyphFont, at, glyph, HorizontalAlignment.Left, -1, GlyphFontSize, 6, new Color(1f, 1f, 1f, 0.85f));
+            DrawString(_glyphFont, at, glyph, HorizontalAlignment.Left, -1, GlyphFontSize, new Color(0.05f, 0.04f, 0.1f));
+        }
 
         public override void _Draw()
         {
@@ -347,6 +387,7 @@ public partial class HuntHud : Control
             DrawCircle(c, r + 4f, new Color(0.05f, 0.04f, 0.1f));
             DrawCircle(c, r, Fraction <= 0f ? BaseColor : BaseColor.Darkened(0.55f));
             DrawCircle(c + new Vector2(-r * 0.25f, -r * 0.2f), r * 0.32f, new Color(0.85f, 1f, 0.8f, 0.85f));
+            DrawGlyph(c);
             if (Fraction > 0f)
             {
                 var points = new System.Collections.Generic.List<Vector2> { c };

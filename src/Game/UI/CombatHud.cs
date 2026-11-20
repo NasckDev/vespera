@@ -19,6 +19,15 @@ public partial class CombatHud : Control
     private const float TitleSeconds = 2.0f;
     private const float BossBarWidth = 960f;
     private const float ScreenWidth = 1920f;
+    private const float BarTextMaxFactor = 1.25f;
+    private const float PanelBackdropLeft = 10f;
+    private const float PanelBackdropTop = 10f;
+    private const float PanelBackdropWidth = 700f;
+    private const float PanelBackdropHeight = 218f;
+
+    /// <summary>Título e avisos ficam abaixo da linha de XP/Lumes da caçada (y 180-260), que antes eles cortavam.</summary>
+    private const float TitleY = 300f;
+    private const float ToastY = 470f;
 
     private readonly Queue<string> _toasts = new();
     private readonly PlayerPanel[] _panels = new PlayerPanel[2];
@@ -193,13 +202,14 @@ public partial class CombatHud : Control
         var root = new Control { Name = $"Panel{slot + 1}", MouseFilter = MouseFilterEnum.Ignore, Visible = slot == 0 };
         root.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
         AddChild(root);
+        root.AddChild(MakeBackdrop(X(PanelBackdropLeft, PanelBackdropWidth)));
         var seal = new RankSealIcon { Position = new Vector2(X(28, 116), 24), Size = new Vector2(116, 116) };
         root.AddChild(seal);
         var hp = UiAssets.MakeBar(UiAssets.BarKind.Vida);
         hp.Position = new Vector2(X(150, 512), 30);
         hp.FillMode = right ? (int)TextureProgressBar.FillModeEnum.RightToLeft : (int)TextureProgressBar.FillModeEnum.LeftToRight;
         root.AddChild(hp);
-        var hpText = HudLabel(32, Palette.Cream);
+        var hpText = HudLabel(32, Palette.Cream, BarTextMaxFactor);
         hpText.Position = new Vector2(X(150, 512), 30);
         hpText.Size = new Vector2(512, 48);
         hpText.HorizontalAlignment = HorizontalAlignment.Center;
@@ -211,12 +221,12 @@ public partial class CombatHud : Control
         stamina.FillMode = hp.FillMode;
         root.AddChild(stamina);
         root.AddChild(new FragmentIcon { Position = new Vector2(X(160, 40), 124), Size = new Vector2(40, 50) });
-        var fragments = HudLabel(52, Palette.Cream);
+        var fragments = HudLabel(52, Palette.Cream, BarTextMaxFactor);
         fragments.Position = new Vector2(right ? X(208, 90) : 208, 116);
         fragments.Size = new Vector2(90, 60);
         fragments.HorizontalAlignment = right ? HorizontalAlignment.Right : HorizontalAlignment.Left;
         root.AddChild(fragments);
-        var className = HudLabel(32, Palette.CreamDim);
+        var className = HudLabel(32, Palette.Cream);
         className.Position = new Vector2(right ? X(300, 760) : 300, 130);
         className.Size = new Vector2(760, 40);
         className.HorizontalAlignment = right ? HorizontalAlignment.Right : HorizontalAlignment.Left;
@@ -247,7 +257,7 @@ public partial class CombatHud : Control
         AddChild(_bossBox);
         _bossName = new Label { HorizontalAlignment = HorizontalAlignment.Center, Size = new Vector2(BossBarWidth, 56) };
         _bossName.AddThemeFontOverride("font", GD.Load<Font>("res://assets/v2/fonts/PixelifySans.ttf"));
-        _bossName.AddThemeFontSizeOverride("font_size", 46);
+        HudText.Bind(_bossName, 46, BarTextMaxFactor);
         _bossName.AddThemeColorOverride("font_color", Palette.Cream);
         _bossName.AddThemeColorOverride("font_outline_color", Palette.Indigo);
         _bossName.AddThemeConstantOverride("outline_size", 10);
@@ -270,12 +280,12 @@ public partial class CombatHud : Control
     {
         _toast = HudLabel(36, Palette.Cream);
         _toast.HorizontalAlignment = HorizontalAlignment.Center;
-        _toast.Position = new Vector2(0, 360);
+        _toast.Position = new Vector2(0, ToastY);
         _toast.Size = new Vector2(1920, 50);
         AddChild(_toast);
-        _title = new Label { HorizontalAlignment = HorizontalAlignment.Center, Position = new Vector2(0, 150), Size = new Vector2(1920, 80) };
+        _title = new Label { HorizontalAlignment = HorizontalAlignment.Center, Position = new Vector2(0, TitleY), Size = new Vector2(1920, 80) };
         _title.AddThemeFontOverride("font", GD.Load<Font>("res://assets/v2/fonts/PixelifySans.ttf"));
-        _title.AddThemeFontSizeOverride("font_size", 60);
+        HudText.Bind(_title, 60);
         _title.AddThemeColorOverride("font_color", Palette.Cream);
         _title.AddThemeColorOverride("font_outline_color", Palette.Indigo);
         _title.AddThemeConstantOverride("outline_size", 14);
@@ -283,19 +293,29 @@ public partial class CombatHud : Control
         AddChild(_title);
         _subtitle = HudLabel(38, Palette.Amber);
         _subtitle.HorizontalAlignment = HorizontalAlignment.Center;
-        _subtitle.Position = new Vector2(0, 226);
+        _subtitle.Position = new Vector2(0, TitleY + 76);
         _subtitle.Size = new Vector2(1920, 50);
         _subtitle.Modulate = Colors.Transparent;
         AddChild(_subtitle);
     }
 
-    private static Label HudLabel(int size, Color color)
+    /// <summary>Fundo translúcido atrás do painel do caçador: texto creme sobre cenário claro não pode se perder (#82).</summary>
+    private static Panel MakeBackdrop(float x)
+    {
+        var style = new StyleBoxFlat { BgColor = new Color(0.05f, 0.04f, 0.1f, 0.58f), AntiAliasing = true };
+        style.SetCornerRadiusAll(12);
+        var panel = new Panel { MouseFilter = MouseFilterEnum.Ignore, Position = new Vector2(x, PanelBackdropTop), Size = new Vector2(PanelBackdropWidth, PanelBackdropHeight) };
+        panel.AddThemeStyleboxOverride("panel", style);
+        return panel;
+    }
+
+    private static Label HudLabel(int size, Color color, float maxFactor = float.MaxValue)
     {
         var label = new Label { MouseFilter = MouseFilterEnum.Ignore };
-        label.AddThemeFontSizeOverride("font_size", size);
+        HudText.Bind(label, size, maxFactor);
         label.AddThemeColorOverride("font_color", color);
         label.AddThemeColorOverride("font_outline_color", new Color(0.06f, 0.05f, 0.12f, 0.95f));
-        label.AddThemeConstantOverride("outline_size", 8);
+        label.AddThemeConstantOverride("outline_size", 12);
         return label;
     }
 }

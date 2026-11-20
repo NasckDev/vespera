@@ -12,6 +12,7 @@ public partial class SlotRow : PanelContainer
 {
     private const int LeadSize = 80;
     private const int MinHeight = 90;
+    private const int MaxNameLines = 2;
 
     private static StyleBoxTexture? _idle;
     private static StyleBoxTexture? _focused;
@@ -48,8 +49,9 @@ public partial class SlotRow : PanelContainer
         _caption.AddThemeFontSizeOverride("font_size", 26);
         _name = UiKit.MakeLabel(name);
         _name.AddThemeColorOverride("font_color", nameColor);
-        _name.ClipText = true;
-        _name.TextOverrunBehavior = TextServer.OverrunBehavior.TrimEllipsis;
+        // Duas linhas em vez de reticências: "Botas Remendadas do Ferrão" e "Botas Remendadas da Guarda" não podem ficar iguais (#82).
+        _name.AutowrapMode = TextServer.AutowrapMode.WordSmart;
+        _name.MaxLinesVisible = MaxNameLines;
         _name.SizeFlagsHorizontal = SizeFlags.ExpandFill;
         text.AddChild(_caption);
         text.AddChild(_name);
